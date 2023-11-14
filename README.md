@@ -3,7 +3,7 @@
 <h3>About the procect -  
   It is my first web application build with Java and Spring Boot</h3>
 
-<img src="https://i.ibb.co/X5Dg095/02.png" alt="02" border="0">
+<img src="[https://i.ibb.co/X5Dg095/02.png](https://ibb.co/X5Dg095)">
 
 
 
