@@ -15,7 +15,7 @@ A platform that allows the registration of both home owners and residential enti
   <li>User can register as Resident or Manager</li>
   <li>As a first step the manager have to register in the platform and register a Residential entity</li>
   <li>When the entity is registered an 8-digit residential entity code (ID) is generated. Together, with an access code
-  created by the manager, an user (resident) can register in this residential entity.</li>
+  created by the manager, an user (resident) can register in the platform. The resident cannot register withour at least one active residential entity</li>
   <li>After the registration, the resident can register his apartment (property) in the existing residential entity. Every request for registration has to be approved by the manager</li>
   <li>The manager has the option to reject registration or accept it. If the request is rejected, the resident can edit it and resend it agan.</li>
   <li>If the manager approve the request, the resident is now free to see available data for his property. The manager can perform changes to properties and taxes whenever he needs to.</li>
