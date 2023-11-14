@@ -1,13 +1,12 @@
 <h1> OurHome - Residential entities management platform</h1>
 
-<h3>About the procect -  
-  It is my first web application build with Java and Spring Boot</h3>
+<h3>My first web application build with Java and Spring Boot</h3>
 
 <img src="https://i.ibb.co/nrPpPyy/04.png">
 
 
 <h2> About the project </h2>
-- The idea behind this project is for residential entities management platform. 
+The idea behind this project is for residential entities management platform. 
 The platform allows the registration of both home owners and residential entity managers. The platform provides an opportunity to receive notifications for various events, different user roles, validation of data, and verification by a moderator/manager after user registration, data on amounts due and etc.
 
 
