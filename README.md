@@ -25,10 +25,10 @@ A platform that allows the registration of both home owners and residential enti
   <li>Manager can change residential entity data whenever he needs. Also, can delete an residential entity if there are no registered residents in it.</li>
   <li>Messages (notifications) can be archived or deleted.</li>
   <li>Manager or Moderator can add, edit and delete residential entities and residents</li>
-  <li>Only Manager can edin number of people living in apartment and monthly taxes</li>
+  <li>Only Residential entity manager can edit some apartment (property) data as number of adults living in apartment, number of children, number of pets and the amount of monthly taxes</li>
   <li>Manager and Moderator receive emails for every new property registration request</li>
-  <li>Moderator can see all registered users, can change their roles and delete them</li>
-  <li>On next stage admin will be able to update and delete all managers in the platform.</li>
+  <li>Moderator can see all registered users, and have limited access to available modifications and actions</li>
+  <li>On next stage admin will be able to update and delete all managers in the platform via user interface and a news feed will be created. Will be added an option to personalize avatars and some pictures.</li>
 </ul>
 
 <h2> How to start the app</h2>
