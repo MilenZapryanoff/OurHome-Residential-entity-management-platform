@@ -19,7 +19,7 @@ A platform that allows the registration of both home owners and residential enti
   <li>After the registration, the resident can register his apartment (property) in the existing residential entity. Every request for registration has to be approved by the manager</li>
   <li>The manager has the option to reject registration or accept it. If the request is rejected, the resident can edit it and resend it agan.</li>
   <li>If the manager approve the request, the resident is now free to see available data for his property. The manager can perform changes to properties and taxes whenever he needs to.</li>
-  <li>There are integrated some automatic notifications (messages) for some events, and there will be also an option for messages from person to person.</li>
+  <li>There are integrated some automatic messages (notifications) for some events, and on next stage there will be also an option for messages from person to person.</li>
   <li>There are no limits of apartments (properties) that one user can have, even in different residential entities. 
   There is also a possibility, one manager to manage different residential entities.</li>
   <li>Manager can change residential entity data whenever he needs. Also, can delete an residential entity if there are no registered residents in it.</li>
