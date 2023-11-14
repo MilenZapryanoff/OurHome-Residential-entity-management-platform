@@ -28,7 +28,7 @@ public class AuthenticationController {
 
     @GetMapping("/register/auth")
     public ModelAndView authenticateUser(@ModelAttribute("userAuthBindingModel")
-                                             UserAuthBindingModel userAuthBindingModel) {
+                                         UserAuthBindingModel userAuthBindingModel) {
         return new ModelAndView("auth-user");
     }
 
@@ -36,20 +36,16 @@ public class AuthenticationController {
     public ModelAndView authenticateUser(@ModelAttribute("userAuthBindingModel")
                                          @Valid UserAuthBindingModel userAuthBindingModel,
                                          BindingResult bindingResult) {
-        Long residentialEntityId = userAuthBindingModel.parseResidentialIdToLong();
-
-        String validationCode = userAuthBindingModel.getResidentialAccessCode();
-
-        ModelAndView modelAndView = new ModelAndView("auth-user");
 
         if (bindingResult.hasErrors()) {
-            return modelAndView;
-        } else if (!userService.residentialValidation(residentialEntityId, validationCode)) {
-            modelAndView.addObject("badResidentialEntity", true);
-            return modelAndView;
+            return new ModelAndView("auth-user");
+        } else if (!userService.residentialValidation(userAuthBindingModel.parseResidentialIdToLong(),
+                userAuthBindingModel.getResidentialAccessCode())) {
+            return new ModelAndView("auth-user")
+                    .addObject("badResidentialEntity", true);
         }
 
-        residentialEntityToken.setTokenId(residentialEntityId);
+        residentialEntityToken.setTokenId(userAuthBindingModel.parseResidentialIdToLong());
         residentialEntityToken.setValid(true);
 
         return new ModelAndView("redirect:/register/auth/user");

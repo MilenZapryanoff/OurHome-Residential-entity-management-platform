@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -19,7 +20,6 @@ public class MessageServiceImpl implements MessageService {
 
     public MessageServiceImpl(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
-
     }
 
     /**
@@ -126,6 +126,8 @@ public class MessageServiceImpl implements MessageService {
                         false));
     }
 
+
+
     /**
      * Mark message as read method
      *
@@ -163,5 +165,49 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void deleteMessage(Long id) {
         messageRepository.deleteById(id);
+    }
+
+    /**
+     * Delete ALL messages method
+     * @param id
+     */
+    @Override
+    public void deleteAllMessages(Long id) {
+        List<Message> notArchivedMessages = messageRepository.findArchivedMessagesById(id);
+        if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
+            for (Message message : notArchivedMessages) {
+                messageRepository.deleteById(message.getId());
+            }
+        }
+    }
+
+    /**
+     * Read ALL messages method
+     * @param id
+     */
+    @Override
+    public void readAllMessages(Long id) {
+        List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesById(id);
+        if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
+            for (Message message : notArchivedMessages) {
+                message.setRead(true);
+                messageRepository.save(message);
+            }
+        }
+    }
+
+    /**
+     * Archive ALL messages method
+     * @param id
+     */
+    @Override
+    public void archiveAllMessages(Long id) {
+        List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesById(id);
+        if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
+            for (Message message : notArchivedMessages) {
+                message.setArchived(true);
+                messageRepository.save(message);
+            }
+        }
     }
 }

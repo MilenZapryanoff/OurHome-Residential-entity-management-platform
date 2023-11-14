@@ -121,15 +121,6 @@
                                 <div class="row">
                                     <div class="nav-wrapper ">
                                         <ul class="nav nav-tabs" role="tablist">
-
-
-                                            <!--                                                </button>-->
-                                            <!--                                                <button class="nav-link" id="residents"><a-->
-                                            <!--                                                        th:href="@{/administration}">-->
-                                            <!--                                                    <h7 class="text-light">Cancel</h7>-->
-                                            <!--                                                </a>-->
-                                            <!--                                                </button>-->
-
                                             <div class="col-lg-12">
                                                 <br></br>
                                                 <div class="messages">
@@ -151,9 +142,11 @@
                                                                         </select>
                                                                     </fieldset>
                                                                     <small th:if="${#fields.hasErrors('city')}"
-                                                                           th:errors="*{city}" class="text-danger">City error message</small>
+                                                                           th:errors="*{city}" class="text-danger">City
+                                                                        error message</small>
                                                                     <fieldset>
-                                                                        <label for="streetName"><b>Street Name</b></label>
+                                                                        <label for="streetName"><b>Street
+                                                                            Name</b></label>
                                                                         <br>
                                                                         <small th:if="${#fields.hasErrors('streetName')}"
                                                                                th:errors="*{streetName}"
@@ -167,11 +160,13 @@
                                                                                th:value="${residentialEntityEditBindingModel.streetName}">
                                                                     </fieldset>
                                                                     <fieldset>
-                                                                        <label for="streetNumber"><b>Street №</b></label>
+                                                                        <label for="streetNumber"><b>Street
+                                                                            №</b></label>
                                                                         <br>
                                                                         <small th:if="${#fields.hasErrors('streetNumber')}"
                                                                                th:errors="*{streetNumber}"
-                                                                               class="text-danger">Street number error message</small>
+                                                                               class="text-danger">Street number error
+                                                                            message</small>
                                                                         <input type="text" id="streetNumber"
                                                                                placeholder="Enter street №..."
                                                                                autocomplete="on" required
@@ -184,7 +179,8 @@
                                                                         <br>
                                                                         <small th:if="${#fields.hasErrors('entrance')}"
                                                                                th:errors="*{entrance}"
-                                                                               class="text-danger">Entrance error message</small>
+                                                                               class="text-danger">Entrance error
+                                                                            message</small>
                                                                         <input type="text" id="entrance"
                                                                                placeholder="Enter Entrance №..."
                                                                                th:field="*{entrance}"
@@ -192,7 +188,8 @@
                                                                                th:value="${residentialEntityEditBindingModel.entrance}">
                                                                     </fieldset>
                                                                     <fieldset>
-                                                                        <label for="numberOfApartments"><b>Number of properties</b></label>
+                                                                        <label for="numberOfApartments"><b>Number of
+                                                                            properties</b></label>
                                                                         <br>
                                                                         <small th:if="${#fields.hasErrors('numberOfApartments')}"
                                                                                th:errors="*{numberOfApartments}"
@@ -207,13 +204,16 @@
                                                                                th:value="${residentialEntityEditBindingModel.numberOfApartments}">
                                                                     </fieldset>
                                                                     <fieldset>
-                                                                        <label for="accessCode"><b>Access code</b> (optional)</label>
+                                                                        <label for="accessCode"><b>Access code</b>
+                                                                            (optional)</label>
                                                                         <br>
                                                                         <small th:if="${#fields.hasErrors('accessCode')}"
                                                                                th:errors="*{accessCode}"
-                                                                               class="text-danger">Access code error</small>
+                                                                               class="text-danger">Access code
+                                                                            error</small>
                                                                         <small th:if="${bad_accessCode}"
-                                                                               class="text-danger">Access code must be between 3 and 20 symbols!</small>
+                                                                               class="text-danger">Access code must be
+                                                                            between 3 and 20 symbols!</small>
                                                                         <input type="password" id="accessCode"
                                                                                placeholder="Enter new access code..."
                                                                                autocomplete="on"
@@ -221,13 +221,16 @@
                                                                                th:errorclass="bg-danger">
                                                                     </fieldset>
                                                                     <fieldset>
-                                                                        <label for="confirmAccessCode"><b>Confirm access code</b> (optional)</label>
+                                                                        <label for="confirmAccessCode"><b>Confirm access
+                                                                            code</b> (optional)</label>
                                                                         <br>
                                                                         <small th:if="${#fields.hasErrors('confirmAccessCode')}"
                                                                                th:errors="*{confirmAccessCode}"
-                                                                               class="text-danger">Confirm access code error</small>
+                                                                               class="text-danger">Confirm access code
+                                                                            error</small>
                                                                         <small th:if="${noAccessCodeMatch}"
-                                                                               class="text-danger">Confirm access code do not match!</small>
+                                                                               class="text-danger">Confirm access code
+                                                                            do not match!</small>
                                                                         <input type="password" id="confirmAccessCode"
                                                                                placeholder="Confirm access code..."
                                                                                autocomplete="on"

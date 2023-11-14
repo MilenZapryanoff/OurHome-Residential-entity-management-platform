@@ -24,32 +24,54 @@ public class MessageController {
     @GetMapping("/messages")
     public ModelAndView messages() {
 
-        UserViewModel userViewModel = getUserViewModel();
-        return new ModelAndView("messages", "userViewModel", userViewModel);
+        return new ModelAndView("messages", "userViewModel", getUserViewModel());
     }
 
     @GetMapping("/messages/archives")
     public ModelAndView messageArchives() {
 
-        UserViewModel userViewModel = getUserViewModel();
-        return new ModelAndView("messages-archives", "userViewModel", userViewModel);
+        return new ModelAndView("messages-archives", "userViewModel", getUserViewModel());
     }
 
-    @PostMapping("/messages/remove/{id}")
-    public ModelAndView messageRemove(@PathVariable("id") Long id) {
+    @PostMapping("/messages/delete/{id}")
+    public ModelAndView messageDelete(@PathVariable("id") Long id) {
+
         messageService.deleteMessage(id);
+        return new ModelAndView("redirect:/messages/archives");
+    }
+
+    @PostMapping("/messages/delete/all/{id}")
+    public ModelAndView messageDeleteAll(@PathVariable("id") Long id) {
+
+        messageService.deleteAllMessages(id);
         return new ModelAndView("redirect:/messages/archives");
     }
 
     @PostMapping("/messages/read/{id}")
     public ModelAndView messageRead(@PathVariable("id") Long id) {
+
         messageService.readMessage(id);
+        return new ModelAndView("redirect:/messages");
+    }
+
+    @PostMapping("/messages/read/all/{id}")
+    public ModelAndView messageReadAll(@PathVariable("id") Long id) {
+
+        messageService.readAllMessages(id);
         return new ModelAndView("redirect:/messages");
     }
 
     @PostMapping("/messages/archive/{id}")
     public ModelAndView messageArchive(@PathVariable("id") Long id) {
+
         messageService.archiveMessage(id);
+        return new ModelAndView("redirect:/messages");
+    }
+
+    @PostMapping("/messages/archive/all/{id}")
+    public ModelAndView messageArchiveAll(@PathVariable("id") Long id) {
+
+        messageService.archiveAllMessages(id);
         return new ModelAndView("redirect:/messages");
     }
 

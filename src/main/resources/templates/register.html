@@ -20,10 +20,7 @@
     <link rel="stylesheet" href="/css/owl.css">
     <link rel="stylesheet" href="/css/animate.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-    <!--
 
-
-    -->
 </head>
 
 <body>
@@ -59,13 +56,16 @@
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                         <li><a th:href="@{/}">Home</a></li>
-                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a></li>
-                       <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your property</a></li>
+                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a>
+                        </li>
+                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your
+                            property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
-                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="active">Register</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="active">Register</a>
+                        </li>
                         <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
-                            <li> <a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
+                            <li><a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
                         </form>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
                     </ul>
@@ -121,33 +121,8 @@
     </div>
 </div>
 
-
-<!--<div align="center" class="input-content">-->
-<!--    <div class="col-lg-4">-->
-<!--        <form id="input-form" action="" method="post">-->
-<!--            <div class="row">-->
-<!--                <div class="col-lg-12">-->
-<!--                    <fieldset>-->
-<!--                        <label for="residentialId"><b>Residential ID</b></label>-->
-<!--                        <input type="name" name="residentialId" id="residentialId" placeholder="Enter residential ID..."-->
-<!--                               autocomplete="on" required>-->
-<!--                    </fieldset>-->
-<!--                </div>-->
-
-<!--                <div class="col-lg-12">-->
-<!--                    <fieldset>-->
-<!--                        <button type="submit" id="form-submit" class="orange-button">Next step</button>-->
-<!--                    </fieldset>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-
-
-<!--</div>-->
-
 <!-- Footer -->
-<footer th:replace ="~{fragments/footer}">
+<footer th:replace="~{fragments/footer}">
 </footer>
 
 <!-- Scripts -->

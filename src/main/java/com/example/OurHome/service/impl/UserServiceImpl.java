@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * method : Find UserEntity by email
+     * method : Finds UserEntity by email from DB
      *
      * @return : UserEntity
      */

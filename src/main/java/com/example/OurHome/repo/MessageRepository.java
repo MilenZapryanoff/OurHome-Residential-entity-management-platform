@@ -29,4 +29,5 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query("SELECT m FROM messages m where m.isArchived = false AND m.user.id=:id ORDER BY m.date, m.time DESC")
     List<Message> findNotArchivedMessagesById(Long id);
+
 }

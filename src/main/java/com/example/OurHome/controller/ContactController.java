@@ -13,23 +13,21 @@ public class ContactController {
 
     private final UserService userService;
 
-
     public ContactController(UserService userService) {
         this.userService = userService;
-
     }
 
     @GetMapping("/contact")
     public ModelAndView contact() {
-
-        String loggedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (loggedUserEmail.equals("anonymousUser")) {
+        if (SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser")) {
             return new ModelAndView("contact");
         }
+        return new ModelAndView("contact", "userViewModel", getUserViewModel());
+    }
 
-        UserEntity loggedUser = userService.findUserByEmail(loggedUserEmail);
-        UserViewModel userViewModel = userService.getUserViewData(loggedUser);
 
-        return new ModelAndView("contact", "userViewModel", userViewModel);
+    private UserViewModel getUserViewModel() {
+        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        return userService.getUserViewData(loggedUser);
     }
 }

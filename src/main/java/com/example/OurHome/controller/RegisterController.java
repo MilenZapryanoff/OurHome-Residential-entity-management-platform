@@ -18,12 +18,10 @@ public class RegisterController {
     private final UserService userService;
     private final ResidentialEntityToken residentialEntityToken;
 
-
     public RegisterController(UserService userService, ResidentialEntityToken residentialEntityToken) {
         this.userService = userService;
         this.residentialEntityToken = residentialEntityToken;
     }
-
 
     @GetMapping("/register")
     public ModelAndView preRegistration() {
@@ -82,7 +80,8 @@ public class RegisterController {
     }
 
     @PostMapping("/register/manager")
-    public ModelAndView register(@ModelAttribute("managerRegisterBindingModel") @Valid ManagerRegisterBindingModel managerRegisterBindingModel, BindingResult bindingResult) {
+    public ModelAndView register(@ModelAttribute("managerRegisterBindingModel")
+                                     @Valid ManagerRegisterBindingModel managerRegisterBindingModel, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView("register-manager");
 
         if (bindingResult.hasErrors()) {

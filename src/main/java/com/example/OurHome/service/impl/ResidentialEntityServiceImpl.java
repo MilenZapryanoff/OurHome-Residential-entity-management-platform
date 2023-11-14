@@ -78,18 +78,17 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     }
 
     @Override
-    public void editResidentialEntity(Long entityId, ResidentialEntityEditBindingModel residentialEntityEditBindingModel) {
+    public void editResidentialEntity(Long entityId, ResidentialEntityEditBindingModel bindingModel) {
 
         ResidentialEntity residentialEntity = residentialEntityRepository.findById(entityId).orElse(null);
-
         if (residentialEntity != null) {
-            String accessCode = residentialEntityEditBindingModel.getAccessCode();
+            String accessCode = bindingModel.getAccessCode();
 
-            residentialEntity.setCity(cityRepository.findByName(residentialEntityEditBindingModel.getCity()));
-            residentialEntity.setStreetName(residentialEntityEditBindingModel.getStreetName());
-            residentialEntity.setStreetNumber(residentialEntityEditBindingModel.getStreetNumber());
-            residentialEntity.setEntrance(residentialEntityEditBindingModel.getEntrance());
-            residentialEntity.setNumberOfApartments(residentialEntityEditBindingModel.getNumberOfApartments());
+            residentialEntity.setCity(cityRepository.findByName(bindingModel.getCity()));
+            residentialEntity.setStreetName(bindingModel.getStreetName());
+            residentialEntity.setStreetNumber(bindingModel.getStreetNumber());
+            residentialEntity.setEntrance(bindingModel.getEntrance());
+            residentialEntity.setNumberOfApartments(bindingModel.getNumberOfApartments());
 
             if (accessCode.length() >= 3) {
                 residentialEntity.setAccessCode(passwordEncoder.encode(accessCode));

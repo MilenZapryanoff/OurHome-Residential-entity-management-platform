@@ -27,7 +27,6 @@ public interface UserService {
 
     UserEntity findUserByEmail(String email);
 
-
     void createModerator(Long residentId, Long entityId);
 
     void removeModerator(Long residentId, Long entityId);

@@ -17,10 +17,9 @@ public class UserController {
     @PostMapping("/login/error")
     public ModelAndView onFailure(@ModelAttribute("email") String email) {
 
-        ModelAndView modelAndView = new ModelAndView("login");
-        modelAndView.addObject("email", email);
-        modelAndView.addObject("bad_credentials", true);
-        return modelAndView;
+        return new ModelAndView("login")
+                .addObject("email", email)
+                .addObject("bad_credentials", true);
     }
 }
 

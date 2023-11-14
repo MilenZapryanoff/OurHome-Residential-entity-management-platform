@@ -28,17 +28,16 @@ public class HomeController {
 
     private ModelAndView getIndexModelAndView() {
 
-        String loggedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        if (loggedUserEmail.equals("anonymousUser")) {
+        if (SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser")) {
             return new ModelAndView("index");
         }
 
-        //Find user by Email
-        UserEntity loggedUser = userService.findUserByEmail(loggedUserEmail);
-        //Create userViewModel
-        UserViewModel userViewModel = userService.getUserViewData(loggedUser);
+        return new ModelAndView("index", "userViewModel", getUserViewModel());
+    }
 
-        return new ModelAndView("index", "userViewModel", userViewModel);
+
+    private UserViewModel getUserViewModel() {
+        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        return userService.getUserViewData(loggedUser);
     }
 }

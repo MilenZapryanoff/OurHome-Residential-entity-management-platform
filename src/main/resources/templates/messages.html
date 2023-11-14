@@ -3,9 +3,6 @@
       xmlns:th='http://www.thymeleaf.org'
       xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
 
-<!--username visualization thymeeaf-->
-<!--<th:block sec:authentication='name'-->
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -65,8 +62,10 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a></li>
-                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your property</a></li>
+                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a>
+                        </li>
+                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your
+                            property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
@@ -85,7 +84,30 @@
     </div>
 </header>
 
-
+<!--BANNER start-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="column-gap-2">
+                        <br>
+                        <!--                        <span class="breadcrumb">-->
+                        <!--            <a href="/">Create new message</a>-->
+                        <!--          </span>-->
+                    </div>
+                </div>
+                <h3 th:if="${@messageRepository.countUnreadMessages(userViewModel.getId()) == 0}">
+                    No new messages</h3>
+                <h3 th:if="${@messageRepository.countUnreadMessages(userViewModel.getId()) == 1}"
+                    th:text="'1 new message'"></h3>
+                <h3 th:if="${@messageRepository.countUnreadMessages(userViewModel.getId()) > 1}"
+                    th:text="${@messageRepository.countUnreadMessages(userViewModel.getId())} + ' new messages'"></h3>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
 <!-- ***** Message content section ***** -->
 <div class="section messages">
     <div class="container">
@@ -102,6 +124,31 @@
                                     <div class="container">
                                         <div class="row">
                                             <div class="col-lg-12">
+                                                <!--READ ALL, ARCHIVE ALL & DELETE ALL ACTIVE BUTTONS START-->
+                                                <div th:if="${@messageRepository.countNotArchivedMessages(userId) > 0}"
+                                                     class="row">
+                                                    <div class="col-lg-2">
+                                                        <form th:action="@{/messages/read/all/{id}(id=${userViewModel.getId()})}"
+                                                              method="POST">
+                                                            <input type="hidden"
+                                                                   name="archiveAllMessages"
+                                                                   th:value="${userViewModel.getId()}"/>
+                                                            <input type="submit" value="Mark all as read"
+                                                                   class="form-control text-bg-dark"/>
+                                                        </form>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <form th:action="@{/messages/archive/all/{id}(id=${userViewModel.getId()})}"
+                                                              method="POST">
+                                                            <input type="hidden"
+                                                                   name="readAllMessages"
+                                                                   th:value="${userViewModel.getId()}"/>
+                                                            <input type="submit" value="Archive all"
+                                                                   class="form-control text-bg-dark"/>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <!--END OF READ ALL, ARCHIVE ALL & DELETE ALL BUTTONS-->
                                                 <div class="tabs-content">
                                                     <div class="row">
                                                         <div class="nav-wrapper ">
@@ -111,22 +158,25 @@
                                                                             data-bs-toggle="tab"
                                                                             data-bs-target="#inbox" type="button"
                                                                             role="tab"
-                                                                            aria-controls="inbox" aria-selected="true">
+                                                                            aria-controls="inbox" aria-selected="false">
                                                                         Inbox
                                                                     </button>
                                                                 </li>
-                                                                <li class="nav-item" role="presentation">
-                                                                    <button class="nav-link" id="archive-tab"
-                                                                            data-bs-toggle="tab"
-                                                                            data-bs-target="#archive" type="button"
-                                                                            role="tab"
-                                                                            aria-controls="archive"
-                                                                            aria-selected="false">Archive messages
-                                                                    </button>
-                                                                </li>
+                                                                <a th:href="@{/messages/archives}">
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <button class="nav-link" id="archive-tab"
+                                                                                data-bs-toggle="tab"
+                                                                                data-bs-target="#archive" type="button"
+                                                                                role="tab"
+                                                                                aria-controls="archive"
+                                                                                aria-selected="true">Archive messages
+                                                                        </button>
+                                                                    </li>
+                                                                </a>
                                                             </ul>
                                                         </div>
                                                         <div class="tab-content" id="messageBody">
+                                                            <br></br>
                                                             <div class="tab-pane fade show active" id="inbox"
                                                                  role="tabpanel"
                                                                  aria-labelledby="inbox-tab">
@@ -141,7 +191,7 @@
                                                                              class="col-lg-10">
                                                                             <div class="form-control">
                                                                                 <div class="mt-3 rounded badge-warning">
-                                                                                    <small class="text-danger"
+                                                                                    <small class="text-secondary"
                                                                                            th:text="'Received on : ' + ${message.getDate()} + ', ' + ${message.getTime()}"></small>
                                                                                     <hr></hr>
                                                                                 </div>
@@ -153,7 +203,7 @@
                                                                              class="col-lg-10">
                                                                             <div class="form-control">
                                                                                 <div class="mt-3 rounded badge-warning">
-                                                                                    <small class="text-danger"
+                                                                                    <small class="text-secondary"
                                                                                            th:text="'Received on : ' + ${message.getDate()} + ', ' + ${message.getTime()}"></small>
                                                                                     <hr></hr>
                                                                                 </div>
@@ -194,47 +244,6 @@
                                                                         </img>
                                                                         <!--END OF MESSAGE BODY-->
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--ARCHIVE MESSAGE BEGIN-->
-                                                            <div class="tab-pane fade" id="archive" role="tabpanel"
-                                                                 aria-labelledby="archive-tab">
-                                                                <div class="row">
-                                                                    <!--MESSAGE BODY-->
-                                                                    <p th:if="${@messageRepository.countArchivedMessages(userId) == 0}"
-                                                                       align="center">No archived messages</p>
-                                                                    <div th:if="${@messageRepository.countArchivedMessages(userId) > 0}"
-                                                                         th:each="message: ${@messageRepository.findArchivedMessagesById(userId)}"
-                                                                         class="row">
-                                                                        <div class="col-lg-10">
-                                                                            <div class="form-control">
-                                                                                <div class="mt-3 rounded badge-warning">
-                                                                                    <small class="text-danger"
-                                                                                           th:text="'Received on : ' + ${message.getDate()} + ', ' + ${message.getTime()}"></small>
-                                                                                    <hr></hr>
-                                                                                </div>
-                                                                                <h7 th:text="${message.getText()}"></h7>
-                                                                                <br>
-                                                                                <br>
-                                                                            </div>
-                                                                        </div>
-                                                                        <!--DELETE MESSAGE BUTTON-->
-                                                                        <div class="col-lg-2">
-                                                                            <form th:action="@{'/messages/remove/' + ${message.getId()} + '?tab=archive'}"
-                                                                                  method="POST">
-                                                                                <input type="hidden"
-                                                                                       name="deleteNotification"
-                                                                                       th:value="${message.getId()}"/>
-                                                                                <input type="submit" value="Delete"
-                                                                                       class="form-control text-danger"/>
-                                                                            </form>
-                                                                        </div>
-                                                                        <!--END OF DELETE MESSAGE BUTTON-->
-                                                                        <div class="col-lg-12">
-                                                                            <hr></hr>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!--END OF MESSAGE BODY-->
                                                                 </div>
                                                             </div>
                                                         </div>

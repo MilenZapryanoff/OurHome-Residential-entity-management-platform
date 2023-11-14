@@ -20,11 +20,13 @@ public class ProfileController {
 
     @GetMapping("/profile")
     public ModelAndView profile() {
-        UserEntity loggedUser = userService.findUserByEmail(
-                SecurityContextHolder.getContext().getAuthentication().getName());
 
-        UserViewModel userViewModel = userService.getUserViewData(loggedUser);
+        return new ModelAndView("profile", "userViewModel", getUserViewModel());
+    }
 
-        return new ModelAndView("profile", "userViewModel", userViewModel);
+
+    private UserViewModel getUserViewModel() {
+        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        return userService.getUserViewData(loggedUser);
     }
 }

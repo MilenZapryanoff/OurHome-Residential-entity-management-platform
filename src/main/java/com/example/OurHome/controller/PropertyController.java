@@ -30,36 +30,32 @@ public class PropertyController {
     @GetMapping("/property")
     public ModelAndView property() {
 
-        UserViewModel userViewModel = getUserViewModel();
-        return new ModelAndView("property", "userViewModel", userViewModel);
+        return new ModelAndView("property", "userViewModel", getUserViewModel());
     }
 
     @GetMapping("/property/add")
     public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel") PropertyRegisterBindingModel propertyRegisterBindingModel) {
 
-        UserViewModel userViewModel = getUserViewModel();
-        return new ModelAndView("property-add", "userViewModel", userViewModel);
+        return new ModelAndView("property-add", "userViewModel", getUserViewModel());
     }
 
     @PostMapping("/property/add")
-    public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel") @Valid PropertyRegisterBindingModel propertyRegisterBindingModel, BindingResult bindingResult) {
+    public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel")
+                                    @Valid PropertyRegisterBindingModel propertyRegisterBindingModel, BindingResult bindingResult) {
 
-        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        UserViewModel userViewModel = getUserViewModel();
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("property-add", "userViewModel", userViewModel);
+            return new ModelAndView("property-add", "userViewModel", getUserViewModel());
         }
+        propertyService.newProperty(propertyRegisterBindingModel, getLoggedUser());
 
-        propertyService.newProperty(propertyRegisterBindingModel, loggedUser);
         return new ModelAndView("redirect:/property");
     }
 
     @GetMapping("/property/add/new")
     public ModelAndView addPropertyInNewEntity(@ModelAttribute("userAuthRegisterBindingModel") UserAuthBindingModel userAuthBindingModel) {
 
-        UserViewModel userViewModel = getUserViewModel();
-        return new ModelAndView("property-add-new-entity", "userViewModel", userViewModel);
+        return new ModelAndView("property-add-new-entity", "userViewModel", getUserViewModel());
     }
 
     @PostMapping("/property/add/new")
@@ -67,26 +63,26 @@ public class PropertyController {
                                                @Valid UserAuthBindingModel userAuthBindingModel,
                                                BindingResult bindingResult) {
 
-        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        UserViewModel userViewModel = getUserViewModel();
-
         Long residentialEntityId = userAuthBindingModel.parseResidentialIdToLong();
         String validationCode = userAuthBindingModel.getResidentialAccessCode();
 
-
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("property-add-new-entity", "userViewModel", userViewModel);
+            return new ModelAndView("property-add-new-entity", "userViewModel", getUserViewModel());
         } else if (!userService.residentialValidation(residentialEntityId, validationCode)) {
-            return new ModelAndView("property-add-new-entity", "userViewModel", userViewModel)
+            return new ModelAndView("property-add-new-entity", "userViewModel", getUserViewModel())
                     .addObject("badResidentialEntity", true);
 
         }
-        userService.joinUserToNewResidentialEntity(userAuthBindingModel, loggedUser);
+        userService.joinUserToNewResidentialEntity(userAuthBindingModel, getLoggedUser());
+
         return new ModelAndView("redirect:/property/add");
     }
 
+    private UserEntity getLoggedUser() {
+        return userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
     private UserViewModel getUserViewModel() {
-        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        return userService.getUserViewData(loggedUser);
+        return userService.getUserViewData(getLoggedUser());
     }
 }

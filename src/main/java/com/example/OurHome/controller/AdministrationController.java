@@ -33,27 +33,25 @@ public class AdministrationController {
     @GetMapping("/administration")
     public ModelAndView administration() {
 
-        UserViewModel userViewModel = getUserViewModel();
-        return new ModelAndView("administration", "userViewModel", userViewModel);
+        return new ModelAndView("administration", "userViewModel", getUserViewModel());
     }
 
     @GetMapping("/administration/add")
     public ModelAndView addResidence(@ModelAttribute("residentialEntityRegisterBindingModel") ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel) {
 
-        UserViewModel userViewModel = getUserViewModel();
-        return new ModelAndView("administration-add-residence", "userViewModel", userViewModel);
+        return new ModelAndView("administration-add-residence", "userViewModel", getUserViewModel());
     }
 
     @PostMapping("/administration/add")
     public ModelAndView addResidence(@ModelAttribute("residentialEntityRegisterBindingModel") @Valid ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel, BindingResult bindingResult) {
 
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        UserViewModel userViewModel = getUserViewModel();
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-add-residence", "userViewModel", userViewModel);
+            return new ModelAndView("administration-add-residence", "userViewModel", getUserViewModel());
         } else if (!residentialEntityService.accessCodesMatchCheck(residentialEntityRegisterBindingModel.getAccessCode(), residentialEntityRegisterBindingModel.getConfirmAccessCode())) {
-            return new ModelAndView("administration-add-residence", "userViewModel", userViewModel).addObject("noAccessCodeMatch", true);
+            return new ModelAndView("administration-add-residence", "userViewModel", getUserViewModel())
+                    .addObject("noAccessCodeMatch", true);
         }
         residentialEntityService.newResidentialEntity(residentialEntityRegisterBindingModel, loggedUser);
 
@@ -63,13 +61,13 @@ public class AdministrationController {
     @PostMapping("/administration/remove/{id}")
     public ModelAndView residentialEntityRemove(@PathVariable("id") Long id) {
 
-        UserViewModel userViewModel = getUserViewModel();
 
         if (residentialEntityService.checkIfResidentialEntityDeletable(id)) {
             residentialEntityService.removeResidentialEntity(id);
-            return new ModelAndView("administration", "userViewModel", userViewModel).addObject("deleted", true);
+            return new ModelAndView("administration", "userViewModel", getUserViewModel()).addObject("deleted", true);
         }
-        return new ModelAndView("administration", "userViewModel", userViewModel).addObject("notDeleted", true);
+        return new ModelAndView("administration", "userViewModel", getUserViewModel())
+                .addObject("notDeleted", true);
     }
 
     /**
@@ -78,10 +76,10 @@ public class AdministrationController {
     @GetMapping("/administration/residents/{id}")
     public ModelAndView residentialEntityResidentsDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
 
-        ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityById(id).orElse(null);
+        ResidentialEntity residentialEntity = getResidentialEntity(id);
 
-        UserViewModel userViewModel = getUserViewModel();
-        return new ModelAndView("administration-residents", "userViewModel", userViewModel).addObject("residentialEntity", residentialEntity);
+        return new ModelAndView("administration-residents", "userViewModel", getUserViewModel())
+                .addObject("residentialEntity", residentialEntity);
     }
 
     /**
@@ -108,10 +106,8 @@ public class AdministrationController {
     @GetMapping("/administration/details/{id}")
     public ModelAndView residentialEntityDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
 
-        ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityById(id).orElse(null);
-
-        UserViewModel userViewModel = getUserViewModel();
-        return new ModelAndView("administration-details", "userViewModel", userViewModel).addObject("residentialEntity", residentialEntity);
+        return new ModelAndView("administration-details", "userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
     }
 
     /**
@@ -121,11 +117,10 @@ public class AdministrationController {
     @GetMapping("/administration/property/{id}")
     public ModelAndView residentialEntityPropertyDetails(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
-        ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityById(id).orElse(null);
-
-        UserViewModel userViewModel = getUserViewModel();
-        return new ModelAndView("administration-property", "userViewModel", userViewModel).addObject("residentialEntity", residentialEntity);
+        return new ModelAndView("administration-property", "userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
     }
+
 
     /**
      * Property approval
@@ -170,14 +165,11 @@ public class AdministrationController {
     @GetMapping("/administration/details/edit/{id}")
     public ModelAndView residentialEntityEditDetails(@PathVariable("id") Long id) {
 
-        ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityById(id).orElse(null);
-        UserViewModel userViewModel = getUserViewModel();
-        ResidentialEntityEditBindingModel residentialEntityEditBindingModel = mapEntityToEditBindingModel(residentialEntity);
 
         return new ModelAndView("administration-details-edit")
-                .addObject("userViewModel", userViewModel)
-                .addObject("residentialEntity", residentialEntity)
-                .addObject("residentialEntityEditBindingModel", residentialEntityEditBindingModel);
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id))
+                .addObject("residentialEntityEditBindingModel", mapEntityToEditBindingModel(getResidentialEntity(id)));
     }
 
 
@@ -186,13 +178,13 @@ public class AdministrationController {
      * PostMapping
      */
     @PostMapping("/administration/details/edit/{entityId}")
-    public ModelAndView residentialEntityEditDetailsPost(@ModelAttribute("residentialEntityEditBindingModel") @Valid ResidentialEntityEditBindingModel residentialEntityEditBindingModel, @PathVariable("entityId") Long entityId, BindingResult bindingResult) {
+    public ModelAndView residentialEntityEditDetailsPost(@ModelAttribute("residentialEntityEditBindingModel")
+                                                             @Valid ResidentialEntityEditBindingModel residentialEntityEditBindingModel, @PathVariable("entityId") Long entityId, BindingResult bindingResult) {
 
-        ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityById(entityId).orElse(null);
-        UserViewModel userViewModel = getUserViewModel();
+
         ModelAndView modelAndView = new ModelAndView("administration-details-edit")
-                .addObject("userViewModel", userViewModel)
-                .addObject("residentialEntity", residentialEntity)
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(entityId))
                 .addObject("residentialEntityEditBindingModel", residentialEntityEditBindingModel);
 
 
@@ -210,17 +202,28 @@ public class AdministrationController {
             }
         }
         residentialEntityService.editResidentialEntity(entityId, residentialEntityEditBindingModel);
+
         return new ModelAndView("redirect:/administration/details/" + entityId);
     }
 
     /**
-     * This private method finds currently logged user
+     * This private method returns currently logged user
      *
      * @return UserEntity
      */
     private UserViewModel getUserViewModel() {
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         return userService.getUserViewData(loggedUser);
+    }
+
+    /**
+     * This private method finds a ResidentialEntity by residential entity Id
+     *
+     * @param id
+     * @return ResidentialEntity
+     */
+    private ResidentialEntity getResidentialEntity(Long id) {
+        return residentialEntityService.findResidentialEntityById(id).orElse(null);
     }
 
     /**

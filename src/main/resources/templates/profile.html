@@ -3,9 +3,6 @@
       xmlns:th='http://www.thymeleaf.org'
       xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
 
-<!--username visualization thymeeaf-->
-<!--<th:block sec:authentication='name'-->
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -65,8 +62,10 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a></li>
-                       <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your property</a></li>
+                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a>
+                        </li>
+                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your
+                            property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}" class="active">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
@@ -84,6 +83,23 @@
         </div>
     </div>
 </header>
+
+<!--BANNER start-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="column-gap-2">
+                        <br>
+                    </div>
+                </div>
+                <h3>Profile details</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
 
 <!-- ***** Profile section ***** -->
 <div class="section messages">

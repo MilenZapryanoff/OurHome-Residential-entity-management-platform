@@ -20,4 +20,10 @@ public interface MessageService {
     void propertyApprovedMessage(Property property, UserEntity userEntity, ResidentialEntity residentialEntity);
     void propertyRejectedMessage(Property property, UserEntity userEntity, ResidentialEntity residentialEntity);
     void propertyDeletedMessage(Property property, UserEntity userEntity, ResidentialEntity residentialEntity);
+
+    void deleteAllMessages(Long id);
+
+    void readAllMessages(Long id);
+
+    void archiveAllMessages(Long id);
 }

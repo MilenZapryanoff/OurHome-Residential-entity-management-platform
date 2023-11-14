@@ -17,13 +17,7 @@
     <link rel="stylesheet" href="/css/owl.css">
     <link rel="stylesheet" href="/css/animate.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-    <!--
 
-    TemplateMo 591 villa agency
-
-    https://templatemo.com/tm-591-villa-agency
-
-    -->
 </head>
 
 <body>
@@ -67,10 +61,12 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a></li>
-                       <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}" class="active">Your property</a>
+                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a>
                         </li>
-                       <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
+                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}" class="active">Your
+                            property</a>
+                        </li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
                         <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
@@ -93,9 +89,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
-                    <!--                    <strong th:if="${notDeleted}" class="text-danger">Cannot delete entity with already registered residents!</strong>-->
-                    <!--                    <strong th:if="${deleted}" class="text-success">Residential entity successfully deleted!</strong>-->
-                    <div class="column-gap-2">
+                  <div class="column-gap-2">
                         <br>
                         <span class="breadcrumb">
             <a th:href="@{/property/add}">Add new Property</a>
@@ -130,37 +124,6 @@
 
 
 <div th:if="${userViewModel.getProperties().size() > 0}">
-
-
-    <!--    <div th:if="${userViewModel.getProperties().size() == 0}" class="section properties">-->
-    <!--        <div class="container">-->
-    <!--            <br>-->
-    <!--            <ul class="properties-filter-non-verified">-->
-    <!--                <li>-->
-    <!--                    <a href="#">General</a>-->
-    <!--                </li>-->
-    <!--                <li>-->
-    <!--                    <a href="#">Duties</a>-->
-    <!--                </li>-->
-    <!--                <li>-->
-    <!--                    <a href="#">Residential entity</a>-->
-    <!--                </li>-->
-    <!--                <li>-->
-    <!--                    <a href="#">Documents and links</a>-->
-    <!--                </li>-->
-    <!--            </ul>-->
-    <!--            <div class="row properties-box">-->
-    <!--                <div class="col-lg-12">-->
-    <!--                    <p align="center" class="text-danger">TODO.-->
-    <!--                    </p>-->
-    <!--                    <p align="center">TODO-->
-    <!--                        <br>TODO</p>-->
-    <!--                </div>-->
-
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
-
     <div class="container">
         <div class="row properties-box">
             <div th:each="property: ${userViewModel.getProperties()}" class="section properties">
@@ -186,7 +149,14 @@
                                                 </li>
                                             </ul>
                                             <div align="center" class="main-button">
-                                                <a class="text-light">View details</a>
+                                                <form th:action="@{/messages/read/all/{id}(id=${userViewModel.getId()})}"
+                                                      method="POST">
+                                                    <input type="hidden"
+                                                           name="archiveAllMessages"
+                                                           th:value="${userViewModel.getId()}"/>
+                                                    <input type="submit" value="Details"
+                                                           class="form-control text-bg-dark"/>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -195,7 +165,8 @@
                         </div>
                         <div th:unless="${property.isValidated()}">
                             <br></br>
-                            <div class="container">
+<!--Property pending START-->
+                            <div th:unless="${property.isRejected()}" class="container">
                                 <div class="row properties-box">
                                     <div class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 adv">
                                         <div class="item">
@@ -211,7 +182,6 @@
                                                          <title>Document</title>
                                             </head>
                                             <body>
-                                            
                                             </body>
                                             </html></span>
                                             <h6></h6>
@@ -220,9 +190,15 @@
                             ${property.getResidentialEntity().getStreetNumber()} + ' ' +
                             ${property.getResidentialEntity().getEntrance()}"></a></h4>
                                             <ul>
-                                                <li class="text-secondary">Property №: <span class="text-secondary" th:text="${property.getNumber()}"></span></li>
-                                                <li class="text-secondary">Floor №: <span class="text-secondary" th:text="${property.getFloor()}"></span>                                                </li>
-                                                <li class="text-secondary">Owner: <span class="text-secondary" th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span></li>
+                                                <li class="text-secondary">Property №: <span class="text-secondary"
+                                                                                             th:text="${property.getNumber()}"></span>
+                                                </li>
+                                                <li class="text-secondary">Floor №: <span class="text-secondary"
+                                                                                          th:text="${property.getFloor()}"></span>
+                                                </li>
+                                                <li class="text-secondary">Owner: <span class="text-secondary"
+                                                                                        th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span>
+                                                </li>
                                             </ul>
                                             <div align="center" class="main-button-inactive">
                                                 <a class="text-light">View details</a>
@@ -231,6 +207,50 @@
                                     </div>
                                 </div>
                             </div>
+<!--END OF Property pending-->
+<!--Property rejected START-->
+                            <div th:if="${property.isRejected()}" class="container">
+                                <div class="row properties-box">
+                                    <div class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 adv">
+                                        <div class="item">
+                                            <a href="profile.html"><img src="/images/property-plan-BW.jpg" alt=""></a>
+                                            <span class="category text-danger">Rejected<!doctype html>
+                                            <html lang="en">
+                                            <head>
+                                            <meta charset="UTF-8">
+                                                         <meta name="viewport"
+                                                               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+                                                                     <meta http-equiv="X-UA-Compatible"
+                                                                           content="ie=edge">
+                                                         <title>Document</title>
+                                            </head>
+                                            <body>
+                                            </body>
+                                            </html></span>
+                                            <h6></h6>
+                                            <h4><a class="text-secondary" th:text="${property.getResidentialEntity().getCity().getName()} + ', ' +
+                            ${property.getResidentialEntity().getStreetName()} + ' ' +
+                            ${property.getResidentialEntity().getStreetNumber()} + ' ' +
+                            ${property.getResidentialEntity().getEntrance()}"></a></h4>
+                                            <ul>
+                                                <li class="text-secondary">Property №: <span class="text-secondary"
+                                                                                             th:text="${property.getNumber()}"></span>
+                                                </li>
+                                                <li class="text-secondary">Floor №: <span class="text-secondary"
+                                                                                          th:text="${property.getFloor()}"></span>
+                                                </li>
+                                                <li class="text-secondary">Owner: <span class="text-secondary"
+                                                                                        th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span>
+                                                </li>
+                                            </ul>
+                                            <div align="center" class="main-button-inactive">
+                                                <a class="text-light">Edit</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+<!--END OF Property rejected-->
                         </div>
                     </div>
                 </div>
