@@ -6,77 +6,41 @@
 <img src="https://i.ibb.co/nrPpPyy/04.png">
 
 
-
-<h3>Content</h3>
-<ul>
-  <li>About the project</li>
-  <li>Requirements</li>
-  <li>How to start it</li>
-  <li>License</li>
-  <li>Pictures</li>
-</ul>
-
 <h2> About the project </h2>
 - The idea behind this project is for residential entities management platform. 
 The platform allows the registration of both home owners and residential entity managers. The platform provides an opportunity to receive notifications for various events, different user roles, validation of data, and verification by a moderator/manager after user registration, data on amounts due and etc.
 
-<ul>
-  <li>All can view all contacts, regulations, links, events, dogs</li>
-  <li>All can view dog details and download pedigree</li>
-  <li>All can browse and search for all approved dogs</li>
-  <hr>
-  <li>Member can add newborn dog and its parents</li>
-  <li>Member can add dog with pedigree and its parents</li>
-  <li>Member can create a query for change ownership. When the request is submitted the system automatically sends an email to the current owner. There is a button in the email with which he can confirm the change of ownership</li>
-  <li>Member and User can view and edit user profile and owned dogs</li>
-  <hr>
-  <li>Admin or Moderator can add, edit and delete users, dogs, contacts, regulations, links and events</li>
-  <li>Admin or Moderator can approve dog registration</li>
-  <li>Admin and Moderator received an email for every new dog registration</li>
-  <li>Admin can see all registered users, can change their roles and delete them</li>
-    <hr>
-  <li>User-friendly interface</li>
-  <li>Responsiveness support for all devices</li>
 
+<h2> Some of the functionalities </h2>
+<ul>
+  <li>User can register as Resident or Manager</li>
+  <li>As a first step the manager have to register in the platform and register a Residential entity</li>
+  <li>When the entity is registered an 8-digit residential entity code (ID) is generated. Together, with an access code
+  created by the manager, an user (resident) can register in this residential entity.</li>
+  <li>After the registration, the resident can register his apartment (property) in the existing residential entity. Every request for registration has to be approved by the manager</li>
+  <li>The manager has the option to reject registration or accept it. If the request is rejected, the resident can edit it and resend it agan.</li>
+  <li>If the manager approve the request, the resident is now free to see available data for his property. The manager can perform changes to properties and taxes whenever he needs to.</li>
+  <li>There are integrated some automatic notifications (messages) for some events, and there will be also an option for messages from person to person.</li>
+  <li>There are no limits of apartments (properties) that one user can have, even in different residential entities. 
+  There is also a possibility, one manager to manage different residential entities.</li>
+  <li>Manager can change residential entity data whenever he needs. Also, can delete an residential entity if there are no registered residents in it.</li>
+  <li>Messages (notifications) can be archived or deleted.</li>
+  <li>Manager or Moderator can add, edit and delete residential entities and residents</li>
+  <li>Only Manager can edin number of people living in apartment and monthly taxes</li>
+  <li>Manager and Moderator receive emails for every new property registration request</li>
+  <li>Moderator can see all registered users, can change their roles and delete them</li>
+  <li>On next stage admin will be able to update and delete all managers in the platform.</li>
 </ul>
 
-<h2> Project requirements </h2>
-<p>The actual site is bilingual (BG & EN) and consists of:
-Public area:
-News Section, containing info on upcoming shows and results of past shows
-Standard of the breed
-Working exam regulations
-Links to boxer clubs worldwide, as well as canine organizations, where the BG boxer club is member.
-Contacts
-Gallery
-In the BG Version only there is an additional Library menu containing a numerous boxer related articles about the anatomy, the breeding etc.
-Private area for registered users adds to the above content in Bulgarian only:
-Articles of association of the Boxer club
-Breeding rules
-Information on how to become a member
-List of actual members (Members with paid fees)
-Database of the club
-
-Creating a stud book Database for the Bulgarian boxer Club
-
-The database should be available for:
-Viewing only for the registered users of the main site
-Adding a record for club members and, or kennels
-Review and approval are allowed by Mods and Administrators only
-Additional option is the possibility to upload image/pdf of the Pedigree/export Pedigree of the dog in order to verify the data.
-
-</p>
-
-<h2> How to start</h2>
+<h2> How to start the app</h2>
 <ol>
-  <li>First clone the repository to your local machine.</li>
+  <li>First clone the repository to your local machine</li>
   <li>Configure your MySQL database by updating the application.yml file.</li>
-  <li>Configure environment variables by updating the application.yml file.</li>
-  <li>Build and run the project boxerclub-bg-rest-server using Gradle.</li>
-  <li>Build and run the project boxerclub-bg-rest-client using npm. Follow these step first: 1) npm install 2) go to \boxerclub-bg-rest-client 3) npm start.</li>
-  <li>Access the web application by visiting http://localhost:3000 in your web browser.</li>
-  <li>Create user accounts, manage products, and place orders as needed.</li>
-  <li>Enjoy</li>
+  <li>Configure 2 environment variables for database as - db_password and db_username and 1 environment variable - admin_pass used for the default admin user in the DB</li>
+  <li>Run the project in IntelliJ Idea</li>
+  <li>Access the web application by visiting http://localhost:8080 in your web browser.</li>
+  <li>Create a manager account, then create a Residential Entity. Now you can create a resident and new property.</li>
+  <li>Follow the steps and Enjoy</li>
 </ol>
 
 <h2> Used technologies</h2>
@@ -89,10 +53,6 @@ Additional option is the possibility to upload image/pdf of the Pedigree/export 
   <li>HTML, CSS, JavaScript</li>
   <li>MySQL</li>
 </ul>
-
-<h2> Demo </h2>
-<p>Deployed to : <a href="https://www.boxerclub-bg.org/"\></p>
-<p> **Note:** It will be deployed soon</p>
 
 <h2> License </h2>
 <ul>
