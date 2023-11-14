@@ -3,7 +3,9 @@
 <h3>About the procect -  
   It is my first web application build with Java and Spring Boot</h3>
 
-<img src="https://ibb.co/wBckG0t" style="width: 700px"/>
+<img src="https://i.ibb.co/X5Dg095/02.png" style="width: 700px"/>
+
+
 
 <h3>Content</h3>
 <ul>
