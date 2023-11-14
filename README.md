@@ -3,7 +3,7 @@
 <h3>About the procect -  
   It is my first web application build with Java and Spring Boot</h3>
 
-<img src="https://i.ibb.co/09KS4k9/02.png">
+<img src="https://i.ibb.co/nrPpPyy/04.png">
 
 
 
@@ -100,13 +100,14 @@ Additional option is the possibility to upload image/pdf of the Pedigree/export 
 </ul>
 
 <h2> More pictures: </h2>
-<img src="https://ibb.co/X5Dg095" style="width: 700px"/>
-<img src="https://ibb.co/WKwgyxg" style="width: 700px"/>
-<img src="https://ibb.co/dBmZmvv" style="width: 700px"/>
-<img src="https://ibb.co/2kCHLYx" style="width: 700px"/>
-<img src="https://ibb.co/s3XVg8x" style="width: 700px"/>
-<img src="https://ibb.co/bXmJYsz" style="width: 700px"/>
-<img src="https://ibb.co/cy2qMWW" style="width: 700px"/>
-<img src="https://ibb.co/ws9gr9f" style="width: 700px"/>
+<img src="https://i.ibb.co/nrPpPyy/04.png">
+<img src="https://i.ibb.co/FmHrZxp/01.png">
+<img src="https://i.ibb.co/x50JjCJ/03.png">
+<img src="https://i.ibb.co/nLYtV89/05.png">
+<img src="https://i.ibb.co/C0SHwRC/06.png">
+<img src="https://i.ibb.co/hV9frBD/07.png">
+<img src="https://i.ibb.co/kGqZkLL/08.png">
+<img src="https://i.ibb.co/tX7KP79/09.png">
+
 
 
