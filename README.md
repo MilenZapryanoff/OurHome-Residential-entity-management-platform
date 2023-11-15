@@ -36,9 +36,9 @@ A platform that allows the registration of both home owners and residential enti
   <li>Not logged in users have access to login page, register page and contact page.</li>
   <li>Users with Moderator role can access Messages and Administration sections</li>
   <li>USers with Resident role can access Messages and Property section</li>
-  <li>A moderator is able to manage only his residential entities. All Get and PostRequests are prohibited in case of another user with moderator rights tries to execute a request.</li>
-  <li>User with role Resident is able to manage only his own properties. All Get and PostRequests are prohibited in case of another resident tries to execute a request for another user property.</li>
-  <li>User with role Resident is able to manage only his own messages (notifications). All Get and PostRequests are prohibited in case of another resident tries to execute a request for another user messages (notifications).</li>
+  <li>A moderator is able to manage his own residential entities. All Get and PostRequests are prohibited in case of another user with moderator rights tries to execute a request.</li>
+  <li>User with role Resident is able to manage his own properties. All Get and PostRequests are prohibited in case of another resident tries to execute a request for another user property.</li>
+  <li>User with role Resident is able to manage his own messages (notifications). All Get and PostRequests are prohibited in case of another resident tries to execute a request for another user messages (notifications).</li>
 
   
 </ul>
