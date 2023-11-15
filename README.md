@@ -24,11 +24,23 @@ A platform that allows the registration of both home owners and residential enti
   There is also a possibility, one manager to manage different residential entities.</li>
   <li>Manager can change residential entity data whenever he needs. Also, can delete an residential entity if there are no registered residents in it.</li>
   <li>Messages (notifications) can be archived or deleted.</li>
-  <li>Manager or Moderator can add, edit and delete residential entities and residents</li>
   <li>Only Residential entity manager can edit some apartment (property) data as number of adults living in apartment, number of children, number of pets and the amount of monthly taxes</li>
   <li>Manager and Moderator receive emails for every new property registration request</li>
   <li>Moderator can see all registered users, and have limited access to available modifications and actions</li>
   <li>On next stage admin will be able to update and delete all managers in the platform via user interface and a news feed will be created. Will be added an option to personalize avatars and some pictures.</li>
+</ul>
+
+<h2>Security</h2>
+<ul>
+
+  <li>Not logged in users have access to login page, register page and contact page.</li>
+  <li>Users with Moderator role can access Messages and Administration sections</li>
+  <li>USers with Resident role can access Messages and Property section</li>
+  <li>A moderator is able to manage only his residential entities. All Get and PostRequests are prohibited in case of another user with moderator rights tries to execute a request.</li>
+  <li>User with role Resident is able to manage only his own properties. All Get and PostRequests are prohibited in case of another resident tries to execute a request for another user property.</li>
+  <li>User with role Resident is able to manage only his own messages (notifications). All Get and PostRequests are prohibited in case of another resident tries to execute a request for another user messages (notifications).</li>
+
+  
 </ul>
 
 <h2> How to start the app</h2>
