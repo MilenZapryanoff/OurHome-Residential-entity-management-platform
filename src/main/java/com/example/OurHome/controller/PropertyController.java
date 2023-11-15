@@ -1,7 +1,10 @@
 package com.example.OurHome.controller;
 
+import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyRegisterBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.ResidentManageBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.UserAuthBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.PropertyService;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -78,10 +82,38 @@ public class PropertyController {
         return new ModelAndView("redirect:/property/add");
     }
 
-    private UserEntity getLoggedUser() {
+    /**
+     * Property summary
+     * GetMapping
+     */
+    @GetMapping("/property/summary/{id}")
+    public ModelAndView residentialEntityDetails(
+            @ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
+
+        return new ModelAndView("property-summary", "userViewModel", getUserViewModel())
+                .addObject("property", getProperty(id));
+    }
+
+
+    /**
+     * This private method returns a Property by id
+     *
+     * @param id
+     * @return Property
+     */
+    private Property getProperty(Long id) {
+        return propertyService.findPropertyById(id);
+    }
+
+        private UserEntity getLoggedUser() {
         return userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
+    /**
+     * This private method returns currently logged user
+     *
+     * @return UserEntity
+     */
     private UserViewModel getUserViewModel() {
         return userService.getUserViewData(getLoggedUser());
     }

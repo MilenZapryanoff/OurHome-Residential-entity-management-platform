@@ -145,6 +145,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email).orElse(null);
     }
 
+    @Override
+    public UserEntity findUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     /**
      * This method gives the user MODERATOR rights in residential entities.
      */

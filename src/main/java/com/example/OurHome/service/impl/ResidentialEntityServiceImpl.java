@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -98,10 +99,11 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
         }
 
 
+    }
 
-
-
-
+    @Override
+    public List<ResidentialEntity> findResidentialEntitiesByManagerId(Long id) {
+        return residentialEntityRepository.findAllByManager_Id(id);
     }
 
     /**

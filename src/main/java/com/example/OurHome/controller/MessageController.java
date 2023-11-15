@@ -4,6 +4,7 @@ import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,7 @@ public class MessageController {
     }
 
     @PostMapping("/messages/delete/{id}")
+    @PreAuthorize("@securityService.checkMessageUserAccess(#id, authentication)")
     public ModelAndView messageDelete(@PathVariable("id") Long id) {
 
         messageService.deleteMessage(id);
@@ -41,6 +43,7 @@ public class MessageController {
     }
 
     @PostMapping("/messages/delete/all/{id}")
+    @PreAuthorize("@securityService.checkMassMessagesUserAccess(#id, authentication)")
     public ModelAndView messageDeleteAll(@PathVariable("id") Long id) {
 
         messageService.deleteAllMessages(id);
@@ -48,6 +51,7 @@ public class MessageController {
     }
 
     @PostMapping("/messages/read/{id}")
+    @PreAuthorize("@securityService.checkMessageUserAccess(#id, authentication)")
     public ModelAndView messageRead(@PathVariable("id") Long id) {
 
         messageService.readMessage(id);
@@ -55,6 +59,7 @@ public class MessageController {
     }
 
     @PostMapping("/messages/read/all/{id}")
+    @PreAuthorize("@securityService.checkMassMessagesUserAccess(#id, authentication)")
     public ModelAndView messageReadAll(@PathVariable("id") Long id) {
 
         messageService.readAllMessages(id);
@@ -62,6 +67,7 @@ public class MessageController {
     }
 
     @PostMapping("/messages/archive/{id}")
+    @PreAuthorize("@securityService.checkMessageUserAccess(#id, authentication)")
     public ModelAndView messageArchive(@PathVariable("id") Long id) {
 
         messageService.archiveMessage(id);
@@ -69,6 +75,7 @@ public class MessageController {
     }
 
     @PostMapping("/messages/archive/all/{id}")
+    @PreAuthorize("@securityService.checkMassMessagesUserAccess(#id, authentication)")
     public ModelAndView messageArchiveAll(@PathVariable("id") Long id) {
 
         messageService.archiveAllMessages(id);

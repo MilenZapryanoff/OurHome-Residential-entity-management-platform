@@ -173,7 +173,7 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void deleteAllMessages(Long id) {
-        List<Message> notArchivedMessages = messageRepository.findArchivedMessagesById(id);
+        List<Message> notArchivedMessages = messageRepository.findArchivedMessagesByUserId(id);
         if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
             for (Message message : notArchivedMessages) {
                 messageRepository.deleteById(message.getId());
@@ -187,7 +187,7 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void readAllMessages(Long id) {
-        List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesById(id);
+        List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesByUserId(id);
         if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
             for (Message message : notArchivedMessages) {
                 message.setRead(true);
@@ -202,12 +202,18 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void archiveAllMessages(Long id) {
-        List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesById(id);
+        List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesByUserId(id);
         if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
             for (Message message : notArchivedMessages) {
                 message.setArchived(true);
+                message.setRead(true);
                 messageRepository.save(message);
             }
         }
+    }
+
+    @Override
+    public Message findMessageById(Long messageId) {
+        return messageRepository.findById(messageId).orElse(null);
     }
 }

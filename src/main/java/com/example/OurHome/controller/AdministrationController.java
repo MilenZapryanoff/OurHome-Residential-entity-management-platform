@@ -7,10 +7,12 @@ import com.example.OurHome.model.Entity.dto.BindingModels.ResidentManageBindingM
 import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntityEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntityRegisterBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
+import com.example.OurHome.security.SecurityService;
 import com.example.OurHome.service.PropertyService;
 import com.example.OurHome.service.ResidentialEntityService;
 import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,17 +25,19 @@ public class AdministrationController {
     private final UserService userService;
     private final ResidentialEntityService residentialEntityService;
     private final PropertyService propertyService;
+    private final SecurityService securityService;
 
-    public AdministrationController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService) {
+    public AdministrationController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, SecurityService securityService) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
+        this.securityService = securityService;
     }
 
     @GetMapping("/administration")
     public ModelAndView administration() {
 
-        return new ModelAndView("administration", "userViewModel", getUserViewModel());
+         return new ModelAndView("administration", "userViewModel", getUserViewModel());
     }
 
     @GetMapping("/administration/add")
@@ -59,6 +63,7 @@ public class AdministrationController {
     }
 
     @PostMapping("/administration/remove/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityRemove(@PathVariable("id") Long id) {
 
 
@@ -74,12 +79,12 @@ public class AdministrationController {
      * GetMapping of Property residents details
      */
     @GetMapping("/administration/residents/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityResidentsDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
 
-        ResidentialEntity residentialEntity = getResidentialEntity(id);
 
         return new ModelAndView("administration-residents", "userViewModel", getUserViewModel())
-                .addObject("residentialEntity", residentialEntity);
+                .addObject("residentialEntity", getResidentialEntity(id));
     }
 
     /**
@@ -88,6 +93,7 @@ public class AdministrationController {
      * PostMapping
      */
     @PostMapping("/administration/residents/edit_role/{id}")
+    @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
     public ModelAndView changeUserRole(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
 
         if (residentManageBindingModel.getUserId() != null && residentManageBindingModel.getEntityId() != null) {
@@ -104,6 +110,7 @@ public class AdministrationController {
      * GetMapping
      */
     @GetMapping("/administration/details/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
 
         return new ModelAndView("administration-details", "userViewModel", getUserViewModel())
@@ -115,6 +122,7 @@ public class AdministrationController {
      * GetMapping
      */
     @GetMapping("/administration/property/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyDetails(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
         return new ModelAndView("administration-property", "userViewModel", getUserViewModel())
@@ -127,6 +135,7 @@ public class AdministrationController {
      * PostMapping
      */
     @PostMapping("/administration/property/approve/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyApprove(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
         propertyService.approveProperty(id);
@@ -139,6 +148,7 @@ public class AdministrationController {
      * PostMapping
      */
     @PostMapping("/administration/property/reject/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyDecline(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
         propertyService.rejectProperty(id);
@@ -151,6 +161,7 @@ public class AdministrationController {
      * PostMapping
      */
     @PostMapping("/administration/property/delete/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyDelete(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
         propertyService.deleteProperty(id);
@@ -163,6 +174,7 @@ public class AdministrationController {
      * GetMapping
      */
     @GetMapping("/administration/details/edit/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityEditDetails(@PathVariable("id") Long id) {
 
 
@@ -178,6 +190,7 @@ public class AdministrationController {
      * PostMapping
      */
     @PostMapping("/administration/details/edit/{entityId}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityEditDetailsPost(@ModelAttribute("residentialEntityEditBindingModel")
                                                              @Valid ResidentialEntityEditBindingModel residentialEntityEditBindingModel, @PathVariable("entityId") Long entityId, BindingResult bindingResult) {
 
@@ -217,7 +230,7 @@ public class AdministrationController {
     }
 
     /**
-     * This private method finds a ResidentialEntity by residential entity Id
+     * This private method finds a ResidentialEntity by residential entity id
      *
      * @param id
      * @return ResidentialEntity

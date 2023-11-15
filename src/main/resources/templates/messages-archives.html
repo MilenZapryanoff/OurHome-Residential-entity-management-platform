@@ -176,7 +176,7 @@
                                                                     <p th:if="${@messageRepository.countArchivedMessages(userId) == 0}"
                                                                        align="center">No archived messages</p>
                                                                     <div th:if="${@messageRepository.countArchivedMessages(userId) > 0}"
-                                                                         th:each="message: ${@messageRepository.findArchivedMessagesById(userId)}"
+                                                                         th:each="message: ${@messageRepository.findArchivedMessagesByUserId(userId)}"
                                                                          class="row">
                                                                         <div class="col-lg-10">
                                                                             <div class="form-control">

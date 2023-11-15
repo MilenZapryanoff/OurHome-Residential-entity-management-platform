@@ -25,9 +25,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     Long countArchivedMessages(Long id);
 
     @Query("SELECT m FROM messages m where m.isArchived = true AND m.user.id=:id ORDER BY m.date, m.time DESC")
-    List<Message> findArchivedMessagesById(Long id);
+    List<Message> findArchivedMessagesByUserId(Long id);
 
     @Query("SELECT m FROM messages m where m.isArchived = false AND m.user.id=:id ORDER BY m.date, m.time DESC")
-    List<Message> findNotArchivedMessagesById(Long id);
+    List<Message> findNotArchivedMessagesByUserId(Long id);
 
 }

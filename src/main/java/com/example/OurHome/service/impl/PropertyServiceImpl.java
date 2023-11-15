@@ -11,6 +11,8 @@ import com.example.OurHome.service.ResidentialEntityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PropertyServiceImpl implements PropertyService {
 
@@ -94,5 +96,10 @@ public class PropertyServiceImpl implements PropertyService {
 
             messageService.propertyRejectedMessage(property, property.getOwner(), property.getResidentialEntity());
         }
+    }
+
+    @Override
+    public Property findPropertyById(Long id) {
+        return propertyRepository.findById(id).orElse(null);
     }
 }

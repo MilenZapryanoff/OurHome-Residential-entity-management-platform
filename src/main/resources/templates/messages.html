@@ -185,7 +185,7 @@
                                                                     <p th:if="${@messageRepository.countNotArchivedMessages(userId) == 0}"
                                                                        align="center">No new messages</p>
                                                                     <div th:if="${@messageRepository.countByUser_Id(userId) > 0}"
-                                                                         th:each="message: ${@messageRepository.findNotArchivedMessagesById(userId)}"
+                                                                         th:each="message: ${@messageRepository.findNotArchivedMessagesByUserId(userId)}"
                                                                          class="row">
                                                                         <div th:if="${message.isRead() == true}"
                                                                              class="col-lg-10">

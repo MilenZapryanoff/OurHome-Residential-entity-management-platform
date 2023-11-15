@@ -1,6 +1,7 @@
 package com.example.OurHome.repo;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
+import com.example.OurHome.model.Entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,6 +30,4 @@ public interface ResidentialEntityRepository extends JpaRepository<ResidentialEn
 
     @Query("SELECT COUNT(u) FROM residential_entities r JOIN r.moderators u WHERE r.id = :residentialEntityId AND u.id = :residentId")
     Long isUserModeratorOfResidentialEntity(@Param("residentialEntityId") Long residentialEntityId, @Param("residentId") Long residentId);
-
-
 }

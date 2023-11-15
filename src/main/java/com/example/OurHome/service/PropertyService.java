@@ -1,7 +1,11 @@
 package com.example.OurHome.service;
 
+import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyRegisterBindingModel;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface PropertyService {
     void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser);
@@ -12,4 +16,5 @@ public interface PropertyService {
 
     void rejectProperty(Long id);
 
+    Property findPropertyById(Long id);
 }
