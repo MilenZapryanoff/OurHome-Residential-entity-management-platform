@@ -32,7 +32,8 @@ A platform that allows the registration of both home owners and residential enti
 
 <h2>Security</h2>
 <ul>
-
+  Due to the nature of the platform, security settings require additional than standard security checks. The variety of options for property registrations in different Residential entities requires multiple additional checks so that a user or moderator cannot manipulate someone else's data.
+  
   <li>Not logged in users have access to login page, register page and contact page.</li>
   <li>Users with Moderator role can access Messages and Administration sections</li>
   <li>USers with Resident role can access Messages and Property section</li>
