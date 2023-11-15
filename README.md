@@ -6,8 +6,8 @@
 
 
 <h2> About the project </h2>
-The idea behind this project is for residential entities management platform. 
-A platform that allows the registration of both home owners and residential entity managers. The platform provides an opportunity to receive messages (notifications) for various events, different user roles, validation of data and user registration verification by a moderator/manager, data on amounts due, monthly taxes, statements, news and etc.
+<li>The idea behind this project is for residential entities management platform. 
+A platform that allows the registration of both home owners and residential entity managers. The platform provides an opportunity to receive messages (notifications) for various events, different user roles, validation of data and user registration verification by a moderator/manager, data on amounts due, monthly taxes, statements, news and etc.</li>
 
 
 <h2> Some of the functionalities </h2>
@@ -32,7 +32,7 @@ A platform that allows the registration of both home owners and residential enti
 
 <h2>Security</h2>
 <ul>
-  Due to the nature of the platform, security settings require additional than standard security checks. The variety of options for property registrations in different Residential entities requires multiple additional checks so that a user or moderator cannot manipulate someone else's data.
+<li>Due to the nature of the platform, security settings require additional than standard security checks. The variety of options for property registrations in different Residential entities requires multiple additional checks to ensure that a user or moderator cannot manipulate someone else's data.</li>
   
   <li>Not logged in users have access to login page, register page and contact page.</li>
   <li>Users with Moderator role can access Messages and Administration sections</li>
