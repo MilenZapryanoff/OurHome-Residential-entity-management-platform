@@ -23,6 +23,7 @@ public class UserEntity {
     @Column(nullable = false)
     @Size(min = 3, max = 20)
     private String username;
+
     @Column
     private String phoneNumber;
 
@@ -30,13 +31,13 @@ public class UserEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     private List<ResidentialEntity> residentialEntities;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     private List<ResidentialEntity> moderatedResidentialEntities;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Property> properties;
 
     @NotNull
@@ -47,7 +48,7 @@ public class UserEntity {
     @ManyToOne
     private Role role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Message> messages;
 
     private boolean validated;
@@ -163,4 +164,5 @@ public class UserEntity {
     public void setModeratedResidentialEntities(List<ResidentialEntity> moderatedResidentialEntities) {
         this.moderatedResidentialEntities = moderatedResidentialEntities;
     }
+
 }

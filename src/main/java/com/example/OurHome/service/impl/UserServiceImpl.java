@@ -1,10 +1,8 @@
 package com.example.OurHome.service.impl;
 
-import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.ManagerRegisterBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.UserAuthBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.UserRegisterBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
@@ -185,10 +183,38 @@ public class UserServiceImpl implements UserService {
                 ResidentialEntity entity = iterator.next();
                 if (entity.getId().equals(entityId)) {
                     iterator.remove();
-                    break; // Assuming IDs are unique, no need to continue the loop
+                    break;
                 }
             }
             userRepository.save(userEntity);
+        }
+    }
+
+    /**
+     * This method removes the user from residential entities. Also removes owner's property from the
+     * residential entity.
+     * @param id, residentialEntity
+     */
+    @Override
+    public void removeResidentFromResidentialEntity(Long id, ResidentialEntity residentialEntity) {
+        UserEntity userEntity = userRepository.findById(id).orElse(null);
+
+        if (userEntity != null) {
+            removeModerator(id,residentialEntity.getId());
+
+            List<ResidentialEntity> residentialEntities = userEntity.getResidentialEntities();
+            // Iterate through the list and remove the entity with the matching ID
+                Iterator<ResidentialEntity> iterator = residentialEntities.iterator();
+                while (iterator.hasNext()) {
+                    ResidentialEntity entity = iterator.next();
+                    if (entity.getId().equals(residentialEntity.getId())) {
+                        iterator.remove();
+                        break;
+                    }
+                }
+                userRepository.save(userEntity);
+
+
         }
     }
 

@@ -138,12 +138,12 @@
                                                                             <option th:each="cityOption : ${T(com.example.OurHome.model.Entity.enums.CityName).values()}"
                                                                                     th:value="${cityOption}"
                                                                                     th:text="${cityOption}"
-                                                                                    th:selected="${cityOption == residentialEntityEditBindingModel.city}"></option>
+                                                                                    th:selected="${cityOption == residentialEntityEditBindingModel.getCity()}">
+                                                                            </option>
                                                                         </select>
                                                                     </fieldset>
                                                                     <small th:if="${#fields.hasErrors('city')}"
-                                                                           th:errors="*{city}" class="text-danger">City
-                                                                        error message</small>
+                                                                           th:errors="*{city}" class="text-danger">City error message</small>
                                                                     <fieldset>
                                                                         <label for="streetName"><b>Street
                                                                             Name</b></label>

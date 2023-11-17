@@ -5,13 +5,12 @@ import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyRegisterBindingModel;
 
-import java.util.List;
-import java.util.Optional;
-
 public interface PropertyService {
     void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser);
 
     void deleteProperty(Long id);
+
+    void deletePropertiesWhenResidentRemoved(Long residentId, Long residentialEntityId);
 
     void approveProperty(Long id);
 

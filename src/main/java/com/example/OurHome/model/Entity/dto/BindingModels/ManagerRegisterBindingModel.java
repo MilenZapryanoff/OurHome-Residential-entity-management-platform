@@ -2,6 +2,7 @@ package com.example.OurHome.model.Entity.dto.BindingModels;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public class ManagerRegisterBindingModel {
@@ -16,6 +17,9 @@ public class ManagerRegisterBindingModel {
     @Email
     @NotEmpty(message = "Email cannot be empty!")
     private String email;
+
+    @Positive(message = "Phone number must be only digits")
+    private String phoneNumber;
 
     @Size(min = 3, max = 20, message = "Password length must be between 3 and 20 characters!")
     private String password;
@@ -70,5 +74,13 @@ public class ManagerRegisterBindingModel {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

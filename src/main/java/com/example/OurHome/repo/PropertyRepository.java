@@ -30,6 +30,8 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     List<Property> findValidatedProperties(Long residentialEntityId);
 
     @Query("SELECT p FROM properties p where p.isRejected = true AND p.residentialEntity.id=:residentialEntityId ORDER BY p.number")
-    List<Property> findRejecteedProperties(Long residentialEntityId);
+    List<Property> findRejectedProperties(Long residentialEntityId);
 
+    @Query("SELECT p FROM properties p where p.owner.id=:residentId AND p.residentialEntity.id=:residentialEntityId")
+    List<Property> findAllUserProperties(Long residentId, Long residentialEntityId);
 }

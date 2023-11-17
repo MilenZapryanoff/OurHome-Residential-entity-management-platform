@@ -1,9 +1,8 @@
 package com.example.OurHome.service;
 
-import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.ManagerRegisterBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.UserAuthBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.UserRegisterBindingModel;
@@ -33,4 +32,6 @@ public interface UserService {
     void createModerator(Long residentId, Long entityId);
 
     void removeModerator(Long residentId, Long entityId);
+
+    void removeResidentFromResidentialEntity(Long id, ResidentialEntity residentialEntity);
 }

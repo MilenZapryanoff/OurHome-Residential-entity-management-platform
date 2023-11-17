@@ -120,6 +120,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
 
         if (residentialEntity != null) {
             residentialEntityEditBindingModel = modelMapper.map(residentialEntity, ResidentialEntityEditBindingModel.class);
+            residentialEntityEditBindingModel.setCity(residentialEntity.getCity().getName());
         }
         return residentialEntityEditBindingModel;
     }

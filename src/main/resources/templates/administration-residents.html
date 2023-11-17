@@ -193,7 +193,7 @@
                                                         <th>Phone number</th>
                                                         <th>Role</th>
                                                         <th>Message</th>
-                                                        <th>Remove</th>
+                                                        <th>Delete</th>
                                                     </tr>
 
                                                     <tr align="center"
@@ -250,10 +250,19 @@
                                                             </form>
                                                         </td>
                                                         <td>
-                                                            <form th:action="@{/administration/{id} (id=${resident.getId()})}"
-                                                                  th:method="POST">
+                                                            <form th:action="@{/administration/residents/delete/{id} (id=${resident.getId()})}"
+                                                                  th:method="POST"
+                                                            th:object="${residentManageBindingModel}">
+                                                                <select class="form-control hidden"
+                                                                        id="entityIdDeleteResident"
+                                                                        th:field="*{entityId}">
+                                                                    <option
+                                                                            th:value="${residentialEntity.getId()}"
+                                                                            th:text="${residentialEntity.getId()}">
+                                                                    </option>
+                                                                </select>
                                                                 <button type="submit">
-                                                                    <img title="Remove resident"
+                                                                    <img title="Delete owner"
                                                                          src="/images/delete.jpg"
                                                                          style="max-width: 111px;"></button>
                                                             </form>

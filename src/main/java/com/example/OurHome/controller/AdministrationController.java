@@ -37,7 +37,7 @@ public class AdministrationController {
     @GetMapping("/administration")
     public ModelAndView administration() {
 
-         return new ModelAndView("administration", "userViewModel", getUserViewModel());
+        return new ModelAndView("administration", "userViewModel", getUserViewModel());
     }
 
     @GetMapping("/administration/add")
@@ -101,6 +101,22 @@ public class AdministrationController {
         } else {
             userService.removeModerator(id, residentManageBindingModel.getEntityId());
         }
+
+        return new ModelAndView("redirect:/administration/residents/" + residentManageBindingModel.getEntityId());
+    }
+
+    /**
+     * Remove resident from RE.
+     * PostMapping
+     */
+    @PostMapping("/administration/residents/delete/{id}")
+    @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
+    public ModelAndView deleteResident(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
+
+        //remove user form RE
+        userService.removeResidentFromResidentialEntity(id, getResidentialEntity(residentManageBindingModel.getEntityId()));
+        //delete user's properties in this RE
+        propertyService.deletePropertiesWhenResidentRemoved(id, residentManageBindingModel.getEntityId());
 
         return new ModelAndView("redirect:/administration/residents/" + residentManageBindingModel.getEntityId());
     }
@@ -177,7 +193,6 @@ public class AdministrationController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityEditDetails(@PathVariable("id") Long id) {
 
-
         ResidentialEntityEditBindingModel residentialEntityEditBindingModel = residentialEntityService.mapEntityToEditBindingModel(getResidentialEntity(id));
 
         return new ModelAndView("administration-details-edit")
@@ -194,7 +209,7 @@ public class AdministrationController {
     @PostMapping("/administration/details/edit/{entityId}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#entityId, authentication)")
     public ModelAndView residentialEntityEditDetailsPost(@ModelAttribute("residentialEntityEditBindingModel")
-                                                             @Valid ResidentialEntityEditBindingModel residentialEntityEditBindingModel, @PathVariable("entityId") Long entityId, BindingResult bindingResult) {
+                                                         @Valid ResidentialEntityEditBindingModel residentialEntityEditBindingModel, @PathVariable("entityId") Long entityId, BindingResult bindingResult) {
 
 
         ModelAndView modelAndView = new ModelAndView("administration-details-edit")

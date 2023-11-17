@@ -352,7 +352,7 @@
                                                             </div>
                                                             <hr>
                                                             <tr align="center"
-                                                                th:each="property: ${@propertyRepository.findRejecteedProperties(residentialEntity.getId())}">
+                                                                th:each="property: ${@propertyRepository.findRejectedProperties(residentialEntity.getId())}">
                                                                 <td class="text-black"
                                                                     th:text="${property.getNumber()}"></td>
                                                                 <td class="text-black"

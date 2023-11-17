@@ -138,6 +138,15 @@
                            th:errorclass="bg-danger">
                 </fieldset>
                 <fieldset>
+                    <label for="phoneNumber"><b>Phone number</b></label>
+                    <br>
+                    <small th:if="${#fields.hasErrors('phoneNumber')}"
+                           th:errors="*{phoneNumber}" class="text-danger">Phone number error message</small>
+                    <input type="text" name="phoneNumber" id="phoneNumber" placeholder="Enter your phone number..."
+                           th:field="*{phoneNumber}"
+                           th:errorclass="bg-danger">
+                </fieldset>
+                <fieldset>
                     <label for="password"><b>Password</b></label>
                     <br>
                     <small th:if="${#fields.hasErrors('password')}"

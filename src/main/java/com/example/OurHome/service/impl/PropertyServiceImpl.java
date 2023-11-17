@@ -12,6 +12,8 @@ import com.example.OurHome.service.ResidentialEntityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PropertyServiceImpl implements PropertyService {
 
@@ -64,6 +66,16 @@ public class PropertyServiceImpl implements PropertyService {
 
             messageService.propertyDeletedMessage(property, property.getOwner(), property.getResidentialEntity());
         }
+    }
+
+    /**
+     * Property remove from RE method
+     * Performed by MANAGER
+     */
+    @Override
+    public void deletePropertiesWhenResidentRemoved(Long residentId, Long residentialEntityId) {
+        List<Property> allUserProperties = propertyRepository.findAllUserProperties(residentId, residentialEntityId);
+        propertyRepository.deleteAll(allUserProperties);
     }
 
 
