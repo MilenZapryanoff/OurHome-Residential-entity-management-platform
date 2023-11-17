@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="/css/owl.css">
     <link rel="stylesheet" href="/css/animate.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <script src="../static/js/isotope.min.js"></script>
 
 </head>
 
@@ -108,9 +109,9 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="main-content">
-                    <span th:text="'Residential entity: ' + ${residentialEntity.getId()}"
+                    <span th:text="'Propery №: ' + ${property.getNumber()}"
                           class="category text-black"></span>
-                    <h4 th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>
+                    <h4 th:text="${property.getResidentialEntity().getStreetName()} + ' №' + ${property.getResidentialEntity().getStreetNumber()}"></h4>
                 </div>
             </div>
             <div class="section administration" id="details">
@@ -128,114 +129,91 @@
                                                         <div class="col-lg-6">
                                                             <form id="input-form"
                                                                   th:method="POST"
-                                                                  th:action="@{/administration/details/edit/{entityId}(entityId=${residentialEntity.getId()})}"
-                                                                  th:object="${residentialEntityEditBindingModel}">
+                                                                  th:action="@{/property/details/edit/{id}(id=${property.getId()})}"
+                                                                  th:object="${propertyEditBindingModel}">
                                                                 <div class="col-lg-12">
+                                                                    <p>Please note, that some property  <br>changes may affect your
+                                                                    monthly fees. Because of this, every change request must be approved by your manager.
+                                                                        After You submit the form, your property status will be changed to <b>Pending validation</b>
+                                                                        and some of your data won't be visible. <br>
+                                                                        You will get back your full access as soon as your manager approve the change.</p>
+                                                                    <hr>
                                                                     <fieldset>
-                                                                        <label for="city"><b>City</b></label>
-                                                                        <select class="form-control" id="city"
-                                                                                th:field="*{city}">
-                                                                            <option th:each="cityOption : ${T(com.example.OurHome.model.Entity.enums.CityName).values()}"
-                                                                                    th:value="${cityOption}"
-                                                                                    th:text="${cityOption}"
-                                                                                    th:selected="${cityOption == residentialEntityEditBindingModel.city}"></option>
-                                                                        </select>
-                                                                    </fieldset>
-                                                                    <small th:if="${#fields.hasErrors('city')}"
-                                                                           th:errors="*{city}" class="text-danger">City
-                                                                        error message</small>
-                                                                    <fieldset>
-                                                                        <label for="streetName"><b>Street
-                                                                            Name</b></label>
+                                                                        <label for="number"><b>Property №</b></label>
                                                                         <br>
-                                                                        <small th:if="${#fields.hasErrors('streetName')}"
-                                                                               th:errors="*{streetName}"
+                                                                        <small th:if="${#fields.hasErrors('number')}"
+                                                                               th:errors="*{number}"
                                                                                class="text-danger">Street name error
                                                                             message</small>
-                                                                        <input type="text" id="streetName"
+                                                                        <input type="text" id="number"
                                                                                placeholder="Enter street name..."
                                                                                autocomplete="on"
-                                                                               required th:field="*{streetName}"
+                                                                               required th:field="*{number}"
                                                                                th:errorclass="bg-danger"
-                                                                               th:value="${residentialEntityEditBindingModel.streetName}">
+                                                                               th:value="${propertyEditBindingModel.getNumber()}">
+                                                                    </fieldset>
+                                                                    <small th:if="${#fields.hasErrors('number')}"
+                                                                           th:errors="*{number}" class="text-danger">Number
+                                                                        error message</small>
+                                                                    <fieldset>
+                                                                        <label for="floor"><b>Floor</b></label>
+                                                                        <br>
+                                                                        <small th:if="${#fields.hasErrors('floor')}"
+                                                                               th:errors="*{floor}"
+                                                                               class="text-danger">Floor error message</small>
+                                                                        <input type="text" id="floor"
+                                                                               placeholder="Enter floor..."
+                                                                               autocomplete="on"
+                                                                               required th:field="*{floor}"
+                                                                               th:errorclass="bg-danger"
+                                                                               th:value="${propertyEditBindingModel.getFloor()}">
                                                                     </fieldset>
                                                                     <fieldset>
-                                                                        <label for="streetNumber"><b>Street
-                                                                            №</b></label>
+                                                                        <label for="numberOfAdults"><b>Number of adults</b></label>
                                                                         <br>
-                                                                        <small th:if="${#fields.hasErrors('streetNumber')}"
-                                                                               th:errors="*{streetNumber}"
-                                                                               class="text-danger">Street number error
+                                                                        <small th:if="${#fields.hasErrors('numberOfAdults')}"
+                                                                               th:errors="*{numberOfAdults}"
+                                                                               class="text-danger">Adults number error
                                                                             message</small>
-                                                                        <input type="text" id="streetNumber"
-                                                                               placeholder="Enter street №..."
+                                                                        <input type="text" id="numberOfAdults"
+                                                                               placeholder="Enter number of adults..."
                                                                                autocomplete="on" required
-                                                                               th:field="*{streetNumber}"
+                                                                               th:field="*{numberOfAdults}"
                                                                                th:errorclass="bg-danger"
-                                                                               th:value="${residentialEntityEditBindingModel.streetNumber}">
+                                                                               th:value="${propertyEditBindingModel.getNumberOfAdults()}">
                                                                     </fieldset>
                                                                     <fieldset>
-                                                                        <label for="entrance"><b>Entrance №</b></label>
+                                                                        <label for="numberOfChildren"><b>Number of children</b></label>
                                                                         <br>
-                                                                        <small th:if="${#fields.hasErrors('entrance')}"
-                                                                               th:errors="*{entrance}"
-                                                                               class="text-danger">Entrance error
+                                                                        <small th:if="${#fields.hasErrors('numberOfChildren')}"
+                                                                               th:errors="*{numberOfChildren}"
+                                                                               class="text-danger">Children error
                                                                             message</small>
-                                                                        <input type="text" id="entrance"
-                                                                               placeholder="Enter Entrance №..."
-                                                                               th:field="*{entrance}"
+                                                                        <input type="text" id="numberOfChildren"
+                                                                               placeholder="Enter number of children..."
+                                                                               th:field="*{numberOfChildren}"
                                                                                th:errorclass="bg-danger"
-                                                                               th:value="${residentialEntityEditBindingModel.entrance}">
+                                                                               th:value="${propertyEditBindingModel.getNumberOfChildren()}">
                                                                     </fieldset>
                                                                     <fieldset>
-                                                                        <label for="numberOfApartments"><b>Number of
-                                                                            properties</b></label>
+                                                                        <label for="numberOfPets"><b>Number of pets</b></label>
                                                                         <br>
-                                                                        <small th:if="${#fields.hasErrors('numberOfApartments')}"
-                                                                               th:errors="*{numberOfApartments}"
-                                                                               class="text-danger">Number of properties
-                                                                            error
-                                                                            message</small>
-                                                                        <input type="text" id="numberOfApartments"
-                                                                               placeholder="Enter number of properties ..."
+                                                                        <small th:if="${#fields.hasErrors('numberOfPets')}"
+                                                                               th:errors="*{numberOfPets}"
+                                                                               class="text-danger">Number of pets message</small>
+                                                                        <input type="text" id="numberOfPets"
+                                                                               placeholder="Enter number of pets ..."
                                                                                required
-                                                                               th:field="*{numberOfApartments}"
+                                                                               th:field="*{numberOfPets}"
                                                                                th:errorclass="bg-danger"
-                                                                               th:value="${residentialEntityEditBindingModel.numberOfApartments}">
+                                                                               th:value="${propertyEditBindingModel.getNumberOfPets()}">
                                                                     </fieldset>
                                                                     <fieldset>
-                                                                        <label for="accessCode"><b>Access code</b>
-                                                                            (optional)</label>
-                                                                        <br>
-                                                                        <small th:if="${#fields.hasErrors('accessCode')}"
-                                                                               th:errors="*{accessCode}"
-                                                                               class="text-danger">Access code
-                                                                            error</small>
-                                                                        <small th:if="${bad_accessCode}"
-                                                                               class="text-danger">Access code must be
-                                                                            between 3 and 20 symbols!</small>
-                                                                        <input type="password" id="accessCode"
-                                                                               placeholder="Enter new access code..."
-                                                                               autocomplete="on"
-                                                                               th:field="*{accessCode}"
-                                                                               th:errorclass="bg-danger">
-                                                                    </fieldset>
-                                                                    <fieldset>
-                                                                        <label for="confirmAccessCode"><b>Confirm access
-                                                                            code</b> (optional)</label>
-                                                                        <br>
-                                                                        <small th:if="${#fields.hasErrors('confirmAccessCode')}"
-                                                                               th:errors="*{confirmAccessCode}"
-                                                                               class="text-danger">Confirm access code
-                                                                            error</small>
-                                                                        <small th:if="${noAccessCodeMatch}"
-                                                                               class="text-danger">Confirm access code
-                                                                            do not match!</small>
-                                                                        <input type="password" id="confirmAccessCode"
-                                                                               placeholder="Confirm access code..."
-                                                                               autocomplete="on"
-                                                                               th:field="*{confirmAccessCode}"
-                                                                               th:errorclass="bg-danger">
+                                                                        <label for="isNotHabitable"><b>Property is not habitable</b></label>
+                                                                        <input name="isNotHabitable" id="isNotHabitable"
+                                                                               type="checkbox"
+                                                                               th:field="*{notHabitable}"
+                                                                               th:value="${property.notHabitable}">
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <button type="submit" id="form-submit"
@@ -243,7 +221,7 @@
                                                                         </button>
                                                                         <button class="orange-button" id="form-cancel">
                                                                             <a
-                                                                                    th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
+                                                                                    th:href="@{/property/details/{id}(id=${property.getId()})}">
                                                                                 <h7 class="text-light">Back</h7>
                                                                             </a>
                                                                         </button>

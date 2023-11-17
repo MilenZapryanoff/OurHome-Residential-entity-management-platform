@@ -110,35 +110,28 @@
             <ul class="nav nav-tabs">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="summaryButton"><a
-                            th:href="@{/administration}">
+                            th:href="@{/property/summary/{id}(id=${property.getId()})}">
                         <h5>Summary</h5>
                     </a>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="residentsButton"><a
-                            th:href="@{/administration/residents/{id}(id=${residentialEntity.getId()})}">
+                    <button th:if="${property.isValidated()}" class="nav-link" id="residentsBtnValid"><a
+                            th:href="@{/property/residents/{id}(id=${property.getId()})}">
                         <h5>Residents</h5>
                     </a>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="propertiesButton"><a
-                            th:href="@{/administration/property/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Properties</h5>
-                    </a>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="texesButton"><a
-                            th:href="@{/}">
-                        <h5>Taxes</h5>
+                    <button th:if="${property.isValidated()}" class="nav-link" id="propertiesBtnValid"><a
+                            th:href="@{/property/taxes/{id}(id=${property.getId()})}">
+                        <h5>Monthly fees</h5>
                     </a>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="detailsButton"><a
-                            th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
+                            th:href="@{/property/details/{id}(id=${property.getId()})}">
                         <h5>Details</h5>
                     </a>
                     </button>
@@ -148,13 +141,13 @@
         <!--end of buttons-->
         <div class="row">
             <div class="col-lg-4">
-            <div class="main-content">
-                    <span th:text="'Residential entity: ' + ${residentialEntity.getId()}"
-                          class="category text-black"></span>
-                <h4 th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>
+                <div class="main-content">
+                    <!--                    <span th:text="'Residential entity: ' + ${residentialEntity.getId()}"-->
+                    <!--                          class="category text-black"></span>-->
+                    <!--                <h4 th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>-->
+                </div>
             </div>
-            </div>
-            <div class="section administration" id="details">
+            <div class="section property" id="details">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
@@ -163,17 +156,18 @@
                                     <div class="nav-wrapper ">
                                         <ul class="nav nav-tabs" role="tablist">
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="inbox-tab"
+                                                <button th:if="${property.isValidated()} or ${property.isRejected()}"
+                                                        class="nav-link active" id="editBtnActive"
                                                         data-bs-toggle="tab"
                                                         data-bs-target="#inbox" type="button"
                                                         role="tab"
                                                         aria-controls="inbox" aria-selected="true"><a
-                                                        th:href="@{/administration/details/edit/{id}(id=${residentialEntity.getId()})}">
+                                                        th:href="@{/property/details/edit/{id}(id=${property.getId()})}">
                                                     <h7 class="text-light">Edit</h7>
                                                 </a>
                                                 </button>
                                                 <button class="nav-link" id="residents"><a
-                                                        th:href="@{/administration}">
+                                                        th:href="@{/property}">
                                                     <h7 class="text-light">Back</h7>
                                                 </a>
                                                 </button>
@@ -183,37 +177,45 @@
                                                 <div class="info-table">
                                                     <div>
                                                         <ul>
+                                                            <li th:if="${property.isValidated()}" class="text-black">
+                                                                Status: <b>Validated</b>
+                                                            <li th:unless="${property.isValidated() or property.isRejected()}"
+                                                                class="text-black">Status: <b>Pending validation</b>
+                                                            <li th:if="${property.isRejected()}" class="text-black">
+                                                                Status: <b>Rejected</b>
+                                                            </li>
+                                                            <li class="text-black">Property №: <b
+                                                                    th:text="${property.getNumber()}"></b></li>
+                                                            <li class="text-black">Floor: <b
+                                                                    th:text="${property.getFloor()}"></b>
+                                                            </li>
+                                                            <li class="text-black">Number of adults: <b
+                                                                    th:text="${property.getNumberOfAdults()}"></b>
+                                                            </li>
+                                                            <li class="text-black">Number of children: <b
+                                                                    th:text="${property.getNumberOfChildren()}"></b>
+                                                            </li>
+                                                            <li class="text-black">Number of pets: <b
+                                                                    th:text="${property.getNumberOfPets()}"></b>
+                                                            </li>
+                                                            <li class="text-black">Property is habitable:
+                                                                <b th:if="${property.isNotHabitable()}">NO</b>
+                                                                <b th:unless="${property.isNotHabitable()}">YES</b>
+                                                            </li>
+                                                            <li class="text-black">Address: <b
+                                                                    th:text="${property.getResidentialEntity().getStreetName()} + ' ' +
+                                                                    ${property.getResidentialEntity().getStreetNumber()}"></b>
+                                                            </li>
+                                                            <li class="text-black">Property owner: <b
+                                                                    th:text="${property.getOwner().getFirstName()} + ' '
+                                                                    + ${property.getOwner().getLastName()}"></b>
+                                                            </li>
                                                             <li class="text-black">Residential entity ID: <b
-                                                                    th:text="${residentialEntity.getId()}"></b></li>
-                                                            <li class="text-black">City: <b
-                                                                    th:text="${residentialEntity.getCity().getName()}"></b>
+                                                                    th:text="${property.getResidentialEntity().getId()}"></b>
                                                             </li>
-                                                            <li class="text-black">Street: <b
-                                                                    th:text="${residentialEntity.getStreetName()}"></b>
-                                                            </li>
-                                                            <li class="text-black">№: <b
-                                                                    th:text="${residentialEntity.getStreetNumber()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Entrance: <b
-                                                                    th:text="${residentialEntity.getEntrance()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Number of apartments: <b
-                                                                    th:text="${residentialEntity.getNumberOfApartments()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Manager: <b
-                                                                    th:text="${residentialEntity.getManager().getFirstName()} + ' ' + ${residentialEntity.getManager().getLastName()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Access code hint: <b
-                                                                    th:text="${residentialEntity.getAccessCodeHint()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Registered apartments: <b
-                                                                    th:text="${residentialEntity.getProperties().size()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Registered residents: <b
-                                                                    th:text="${residentialEntity.getResidents().size()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Number of moderators: <b
-                                                                    th:text="${residentialEntity.getModerators().size()}"></b>
+                                                            <li class="text-black">Residential entity manager: <b
+                                                                    th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +
+                                                                    ${property.getResidentialEntity().getManager().getLastName()}"></b>
                                                             </li>
                                                         </ul>
                                                     </div>

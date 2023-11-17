@@ -3,13 +3,12 @@ package com.example.OurHome.controller;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyRegisterBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.ResidentManageBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.UserAuthBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.*;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.PropertyService;
 import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -94,6 +93,50 @@ public class PropertyController {
                 .addObject("property", getProperty(id));
     }
 
+    /**
+     * Property details
+     * GetMapping
+     */
+    @GetMapping("/property/details/{id}")
+    public ModelAndView propertyDetails(@ModelAttribute("propertyManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
+
+        return new ModelAndView("property-details", "userViewModel", getUserViewModel())
+                .addObject("property", getProperty(id));
+    }
+
+    /**
+     * Property edit view
+     * GetMapping
+     */
+    @GetMapping("/property/details/edit/{id}")
+    public ModelAndView residentialEntityEditDetails(@PathVariable("id") Long id) {
+
+        PropertyEditBindingModel propertyEditBindingModel = propertyService.mapPropertyToEditBindingModel(getProperty(id));
+
+        return new ModelAndView("property-details-edit")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("property", getProperty(id))
+                .addObject("propertyEditBindingModel", propertyEditBindingModel);
+    }
+
+
+    /**
+     * Property data edit method
+     * PostMapping
+     */
+    @PostMapping("/property/details/edit/{id}")
+    public ModelAndView residentialEntityEditDetailsPost(@ModelAttribute("propertyEditBindingModel")
+                                                         @Valid PropertyEditBindingModel propertyEditBindingModel,
+                                                         @PathVariable("id") Long id, BindingResult bindingResult) {
+
+        ModelAndView modelAndView = new ModelAndView("administration-details-edit")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("propertyEditBindingModel", propertyEditBindingModel);
+
+        propertyService.editProperty(id, propertyEditBindingModel);
+        return new ModelAndView("redirect:/property/details/" + id);
+    }
+
 
     /**
      * This private method returns a Property by id
@@ -105,7 +148,7 @@ public class PropertyController {
         return propertyService.findPropertyById(id);
     }
 
-        private UserEntity getLoggedUser() {
+    private UserEntity getLoggedUser() {
         return userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 

@@ -134,7 +134,7 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="residentsButton"><a
                                 th:href="@{/administration/residents/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Residents</h5>
+                            <h5>Owners</h5>
                         </a>
                         </button>
                     </li>
@@ -146,16 +146,23 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="texesButton"><a
-                                th:href="@{/}">
-                            <h5>Taxes</h5>
+                        <button class="nav-link" id="detailsButton"><a
+                                th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
+                            <h5>Details</h5>
                         </a>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="detailsButton"><a
-                                th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Details</h5>
+                        <button class="nav-link" id="feesButton"><a
+                                th:href="@{/}">
+                            <h5>Monthly fees</h5>
+                        </a>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="incomeButton"><a
+                                th:href="@{/}">
+                            <h5>Income</h5>
                         </a>
                         </button>
                     </li>

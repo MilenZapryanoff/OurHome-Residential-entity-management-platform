@@ -2,6 +2,7 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.Entity.dto.BindingModels.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntityEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntityRegisterBindingModel;
 import com.example.OurHome.repo.CityRepository;
@@ -104,6 +105,23 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     @Override
     public List<ResidentialEntity> findResidentialEntitiesByManagerId(Long id) {
         return residentialEntityRepository.findAllByManager_Id(id);
+    }
+
+    /**
+     * Method maps ResidentialEntity to ResidentialEntityEditBindingModel used for edit of residential
+     * entity data.
+     *
+     * @param residentialEntity
+     * @return ResidentialEntityEditBindingModel
+     */
+    @Override
+    public ResidentialEntityEditBindingModel mapEntityToEditBindingModel(ResidentialEntity residentialEntity) {
+        ResidentialEntityEditBindingModel residentialEntityEditBindingModel = new ResidentialEntityEditBindingModel();
+
+        if (residentialEntity != null) {
+            residentialEntityEditBindingModel = modelMapper.map(residentialEntity, ResidentialEntityEditBindingModel.class);
+        }
+        return residentialEntityEditBindingModel;
     }
 
     /**

@@ -178,10 +178,12 @@ public class AdministrationController {
     public ModelAndView residentialEntityEditDetails(@PathVariable("id") Long id) {
 
 
+        ResidentialEntityEditBindingModel residentialEntityEditBindingModel = residentialEntityService.mapEntityToEditBindingModel(getResidentialEntity(id));
+
         return new ModelAndView("administration-details-edit")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
-                .addObject("residentialEntityEditBindingModel", mapEntityToEditBindingModel(getResidentialEntity(id)));
+                .addObject("residentialEntityEditBindingModel", residentialEntityEditBindingModel);
     }
 
 
@@ -190,7 +192,7 @@ public class AdministrationController {
      * PostMapping
      */
     @PostMapping("/administration/details/edit/{entityId}")
-    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#entityId, authentication)")
     public ModelAndView residentialEntityEditDetailsPost(@ModelAttribute("residentialEntityEditBindingModel")
                                                              @Valid ResidentialEntityEditBindingModel residentialEntityEditBindingModel, @PathVariable("entityId") Long entityId, BindingResult bindingResult) {
 
@@ -237,24 +239,5 @@ public class AdministrationController {
      */
     private ResidentialEntity getResidentialEntity(Long id) {
         return residentialEntityService.findResidentialEntityById(id).orElse(null);
-    }
-
-    /**
-     * This private method maps ResidentialEntity to ResidentialEntityEditBindingModel used for edit of residential
-     * entity data.
-     *
-     * @param residentialEntity
-     * @return ResidentialEntityEditBindingModel
-     */
-    private ResidentialEntityEditBindingModel mapEntityToEditBindingModel(ResidentialEntity residentialEntity) {
-        ResidentialEntityEditBindingModel formModel = new ResidentialEntityEditBindingModel();
-        if (residentialEntity != null) {
-            formModel.setCity(residentialEntity.getCity().getName());
-            formModel.setStreetName(residentialEntity.getStreetName());
-            formModel.setStreetNumber(residentialEntity.getStreetNumber());
-            formModel.setEntrance(residentialEntity.getEntrance());
-            formModel.setNumberOfApartments(residentialEntity.getNumberOfApartments());
-        }
-        return formModel;
     }
 }

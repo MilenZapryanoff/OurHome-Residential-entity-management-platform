@@ -23,4 +23,6 @@ public interface ResidentialEntityService {
     void editResidentialEntity(Long entityId, ResidentialEntityEditBindingModel residentialEntityEditBindingModel);
 
     List<ResidentialEntity> findResidentialEntitiesByManagerId(Long id);
+
+    ResidentialEntityEditBindingModel mapEntityToEditBindingModel(ResidentialEntity residentialEntity);
 }

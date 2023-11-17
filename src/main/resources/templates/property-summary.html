@@ -120,16 +120,16 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="residentsButton"><a
+                        <button th:if="${property.isValidated()}" class="nav-link" id="residentsBtnValid"><a
                                 th:href="@{/property/residents/{id}(id=${property.getId()})}">
                             <h5>Residents</h5>
                         </a>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="propertiesButton"><a
+                        <button th:if="${property.isValidated()}" class="nav-link" id="propertiesBtnValid"><a
                                 th:href="@{/property/taxes/{id}(id=${property.getId()})}">
-                            <h5>Taxes</h5>
+                            <h5>Monthly fees</h5>
                         </a>
                         </button>
                     </li>
@@ -164,12 +164,30 @@
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
                              data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <a th:if="${property.isValidated()}" class="text-success">This property is Validated
+                                <a th:if="${property.isValidated()}">This property is <a
+                                        class="text-success">Validated</a>
                                     from your manager!
-                                <br>
-                                This means that you have full access to your data and reports.<br>
-                                You can access property info in Details section. <br>
-                                If you need to change some of your data, you have to contact your Manager.</a>
+                                    <br>
+                                    This status means that you have full access to your data and reports.<br>
+                                    You can access property info in Details section. <br>
+                                    If you need to change some of your data, you have to contact your Manager.</a>
+                                <a th:unless="${property.isValidated() or property.isRejected()}">This property is still
+                                    waiting for <a class="text-secondary">Validation</a>
+                                    from your manager!
+                                    <br>
+                                    This status means that at this moment You still have no access to data and reports
+                                    related to you property.<br>
+                                    If your registration does not get confirmed in a few days, you can contact You can
+                                    contact your Residential entity Manager.<br>
+                                    As soon as your registration gets approved you will get access property data.</a>
+                                <a th:if="${property.isRejected()}">This property is <a class="text-danger">REJECTED</a>
+                                    from your manager!
+                                    <br>
+                                    This status means that at this moment You do not have access to data and reports
+                                    related to your property.<br>
+                                    You can contact your Manager to find out the reason for the rejection.<br>
+                                    You are able to edit your property data and resend the request again, or to delete
+                                    it and add new property.</a>
                             </div>
                         </div>
                     </div>
@@ -182,29 +200,29 @@
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                              data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                You can manage the list of <a
+                            <div th:if="${property.isValidated()}" class="accordion-body">
+                                You can manage your list of <a
                                     th:href="@{/property/residents/{id}(id=${property.getId()})}">residents</a>
                                 in your property by adding and removing them.
                             </div>
+                            <div th:unless="${property.isValidated()}" class="accordion-body">
+                                Residents management is available only for Validated properties.
+                            </div>
                         </div>
                     </div>
-
-
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingThree">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapseThree" aria-expanded="false"
                                     aria-controls="collapseThree">
-                                <a>Delete Residential entity</a>
+                                <a>Delete Property</a>
                             </button>
                         </h2>
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
                              data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                Every residential entity could be deleted by it's <strong>Manager</strong>.<br>
-                                To be able to delete an entity you have to be sure that there are no residents in this
-                                residential entity.
+                                Property can be deleted by it's <strong>owner</strong>.<br>
+                                If you delete your property you will loose the date related to this property
                                 <div class="col-lg-2">
                                     <form th:action="@{/property/delete/{id}(id=${property.getId()})}"
                                           method="POST">
@@ -223,9 +241,18 @@
             <div class="col-lg-5">
                 <div align="center" class="info-table">
                     <a th:href="@{/property/details/{id}(id=${property.getId()})}"><img
-                            src="/images/building-avatar.jpg" alt="" style="max-width: 150px;"></a>
+                            src="/images/property-avatar.jpg" alt="" style="max-width: 150px;"></a>
                     <br></br>
                     <div class="mt-3 rounded badge-warning">
+                        <li th:if="${property.isValidated()}" class="text-center">Registration status:
+                            <a class="text-success">Validated</a></li>
+                        <li th:unless="${property.isValidated() or property.isRejected()}" class="text-center">
+                            Registration status:
+                            <a class="text-secondary">Pending validation</a></li>
+                        <li th:if="${property.isRejected()}" class="text-center">Registration status:
+                            <a class="text-danger">Rejected</a></li>
+                        <hr>
+
                         <li class="text-center">City:
                             <a class="text-black"
                                th:text="${property.getResidentialEntity().getCity().getName()}"></a></li>

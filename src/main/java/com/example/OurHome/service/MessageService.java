@@ -10,7 +10,8 @@ public interface MessageService {
 
     void deleteMessage(Long id);
 
-    void sendRegistrationMessageToManager(ResidentialEntity residentialEntity);
+    void propertyRegistrationMessageToManager(ResidentialEntity residentialEntity);
+    void propertyModificationMessageToManager(Property property, ResidentialEntity residentialEntity);
 
     void readMessage(Long id);
 

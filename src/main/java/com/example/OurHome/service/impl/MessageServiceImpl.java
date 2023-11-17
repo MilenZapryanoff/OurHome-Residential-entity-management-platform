@@ -44,7 +44,7 @@ public class MessageServiceImpl implements MessageService {
      * happens.
      */
     @Override
-    public void sendRegistrationMessageToManager(ResidentialEntity residentialEntity) {
+    public void propertyRegistrationMessageToManager(ResidentialEntity residentialEntity) {
         messageRepository.save(
                 new Message(
                         LocalDate.now(),
@@ -55,6 +55,23 @@ public class MessageServiceImpl implements MessageService {
                         false,
                         false));
     }
+
+    /**
+     * This method sends a message to the manager of the Residential entity when new property modification
+     */
+    @Override
+    public void propertyModificationMessageToManager(Property property, ResidentialEntity residentialEntity) {
+        messageRepository.save(
+                new Message(
+                        LocalDate.now(),
+                        Time.valueOf(LocalTime.now()),
+                        "Data change for property № " + property.getNumber() + " in Residential entity ID: "
+                                + residentialEntity.getId() + ". You can access the request via Administration panel",
+                        residentialEntity.getManager(),
+                        false,
+                        false));
+    }
+
 
     /**
      * This method sends a message to the user, when his role has been changed to Moderator of a Residential entity.

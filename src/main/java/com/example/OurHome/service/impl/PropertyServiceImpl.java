@@ -3,6 +3,7 @@ package com.example.OurHome.service.impl;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.Entity.dto.BindingModels.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyRegisterBindingModel;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.service.MessageService;
@@ -10,8 +11,6 @@ import com.example.OurHome.service.PropertyService;
 import com.example.OurHome.service.ResidentialEntityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PropertyServiceImpl implements PropertyService {
@@ -50,7 +49,7 @@ public class PropertyServiceImpl implements PropertyService {
         propertyRepository.save(newProperty);
 
         //sending message to residential entity manager
-        messageService.sendRegistrationMessageToManager(residentialEntity);
+        messageService.propertyRegistrationMessageToManager(residentialEntity);
     }
 
 
@@ -101,5 +100,47 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public Property findPropertyById(Long id) {
         return propertyRepository.findById(id).orElse(null);
+    }
+
+
+    /**
+     * Method maps Property to PropertyEditBindingModel used for edit of property data.
+     *
+     * @param property
+     * @return PropertyEditBindingModel
+     */
+    @Override
+    public PropertyEditBindingModel mapPropertyToEditBindingModel(Property property) {
+
+        PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
+        if (property != null) {
+            propertyEditBindingModel = modelMapper.map(property, PropertyEditBindingModel.class);
+        }
+        return propertyEditBindingModel;
+    }
+
+    /**
+     * Method for edit of property data.
+     *
+     * @param id, propertyEditBindingModel
+     */
+    @Override
+    public void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel) {
+        Property property = propertyRepository.findById(id).orElse(null);
+        if (property != null) {
+            property.setNumber(propertyEditBindingModel.getNumber());
+            property.setFloor(propertyEditBindingModel.getFloor());
+            property.setNumberOfAdults(propertyEditBindingModel.getNumberOfAdults());
+            property.setNumberOfChildren(propertyEditBindingModel.getNumberOfChildren());
+            property.setNumberOfPets(propertyEditBindingModel.getNumberOfPets());
+            property.setNotHabitable(propertyEditBindingModel.isNotHabitable());
+
+            property.setValidated(false);
+            property.setRejected(false);
+            propertyRepository.save(property);
+
+            //sending message (notification) to manager
+            messageService.propertyModificationMessageToManager(property, property.getResidentialEntity());
+        }
     }
 }
