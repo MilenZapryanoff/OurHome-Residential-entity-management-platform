@@ -129,11 +129,7 @@ public class PropertyController {
                                                          @Valid PropertyEditBindingModel propertyEditBindingModel,
                                                          @PathVariable("id") Long id, BindingResult bindingResult) {
 
-        ModelAndView modelAndView = new ModelAndView("administration-details-edit")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("propertyEditBindingModel", propertyEditBindingModel);
-
-        propertyService.editProperty(id, propertyEditBindingModel);
+        propertyService.editProperty(id, propertyEditBindingModel, false);
         return new ModelAndView("redirect:/property/details/" + id);
     }
 

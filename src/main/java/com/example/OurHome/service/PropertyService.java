@@ -20,5 +20,5 @@ public interface PropertyService {
 
     PropertyEditBindingModel mapPropertyToEditBindingModel(Property property);
 
-    void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel);
+    void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange);
 }

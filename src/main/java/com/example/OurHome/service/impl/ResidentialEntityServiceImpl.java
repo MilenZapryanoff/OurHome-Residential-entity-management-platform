@@ -125,6 +125,11 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
         return residentialEntityEditBindingModel;
     }
 
+    @Override
+    public ResidentialEntity findResidentialEntityByPropertyId(Long id) {
+       return residentialEntityRepository.findResidentialEntityByPropertyId(id);
+    }
+
     /**
      * Access code hint creation method
      *

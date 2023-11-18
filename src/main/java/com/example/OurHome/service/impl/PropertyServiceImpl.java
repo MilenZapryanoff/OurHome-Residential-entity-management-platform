@@ -31,8 +31,19 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     /**
-     * Property creation method
-     * Performed by USER
+     * Find property by id
+     * @param id property id
+     * @return Property
+     */
+    @Override
+    public Property findPropertyById(Long id) {
+        return propertyRepository.findById(id).orElse(null);
+    }
+
+    /**
+     * Property creation. Performed by USER
+     * @param propertyRegisterBindingModel carries property registration information.
+     * @param loggedUser logged user.
      */
     @Override
     public void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser) {
@@ -54,23 +65,25 @@ public class PropertyServiceImpl implements PropertyService {
         messageService.propertyRegistrationMessageToManager(residentialEntity);
     }
 
-
     /**
-     * Property deletion method
+     * Single Property deletion
      * Performed by USER or MANAGER
+     * @param id property id
      */
     public void deleteProperty(Long id) {
         Property property = propertyRepository.findById(id).orElse(null);
         if (property != null) {
             propertyRepository.delete(property);
 
-            messageService.propertyDeletedMessage(property, property.getOwner(), property.getResidentialEntity());
+            messageService.propertyDeletedMessage(property);
         }
     }
 
     /**
-     * Property remove from RE method
+     * Delete existing in RE owned properties when owner is removed from RE
      * Performed by MANAGER
+     * @param residentId owner(resident) id
+     * @param residentialEntityId residential entity id
      */
     @Override
     public void deletePropertiesWhenResidentRemoved(Long residentId, Long residentialEntityId) {
@@ -80,8 +93,9 @@ public class PropertyServiceImpl implements PropertyService {
 
 
     /**
-     * Property approval method.
-     * Performed by Residential entity MANAGER
+     *  Property approval.
+     *  Performed by Residential entity MANAGER
+     * @param id property id
      */
     @Override
     public void approveProperty(Long id) {
@@ -90,13 +104,15 @@ public class PropertyServiceImpl implements PropertyService {
             property.setValidated(true);
             propertyRepository.save(property);
 
-            messageService.propertyApprovedMessage(property, property.getOwner(), property.getResidentialEntity());
+            messageService.propertyApprovedMessage(property);
         }
     }
 
     /**
-     * Property reject method.
+     * Property reject.
      * Performed by Residential entity MANAGER
+     *
+     * @param id property id
      */
     @Override
     public void rejectProperty(Long id) {
@@ -105,20 +121,14 @@ public class PropertyServiceImpl implements PropertyService {
             property.setRejected(true);
             propertyRepository.save(property);
 
-            messageService.propertyRejectedMessage(property, property.getOwner(), property.getResidentialEntity());
+            messageService.propertyRejectedMessage(property);
         }
     }
-
-    @Override
-    public Property findPropertyById(Long id) {
-        return propertyRepository.findById(id).orElse(null);
-    }
-
 
     /**
      * Method maps Property to PropertyEditBindingModel used for edit of property data.
      *
-     * @param property
+     * @param property carries info about property
      * @return PropertyEditBindingModel
      */
     @Override
@@ -132,12 +142,13 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     /**
-     * Method for edit of property data.
-     *
-     * @param id, propertyEditBindingModel
+     * Edit property method
+     * @param id property id
+     * @param propertyEditBindingModel carries property new values
+     * @param moderatorChange TRUE if change is made by moderator, FALSE if change is made by owner
      */
     @Override
-    public void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel) {
+    public void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange) {
         Property property = propertyRepository.findById(id).orElse(null);
         if (property != null) {
             property.setNumber(propertyEditBindingModel.getNumber());
@@ -147,12 +158,17 @@ public class PropertyServiceImpl implements PropertyService {
             property.setNumberOfPets(propertyEditBindingModel.getNumberOfPets());
             property.setNotHabitable(propertyEditBindingModel.isNotHabitable());
 
-            property.setValidated(false);
+            if (moderatorChange) {
+                property.setValidated(true);
+                //sending message (notification) to owner/resident
+                messageService.propertyModificationMessageToResident(property);
+            } else {
+                property.setValidated(false);
+                //sending message (notification) to manager
+                messageService.propertyModificationMessageToManager(property);
+            }
             property.setRejected(false);
             propertyRepository.save(property);
-
-            //sending message (notification) to manager
-            messageService.propertyModificationMessageToManager(property, property.getResidentialEntity());
         }
     }
 }

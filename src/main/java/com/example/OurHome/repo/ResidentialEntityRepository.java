@@ -30,4 +30,7 @@ public interface ResidentialEntityRepository extends JpaRepository<ResidentialEn
 
     @Query("SELECT COUNT(u) FROM residential_entities r JOIN r.moderators u WHERE r.id = :residentialEntityId AND u.id = :residentId")
     Long isUserModeratorOfResidentialEntity(@Param("residentialEntityId") Long residentialEntityId, @Param("residentId") Long residentId);
+
+    @Query("SELECT r FROM residential_entities r JOIN r.properties p WHERE p.id = :id")
+    ResidentialEntity findResidentialEntityByPropertyId(Long id);
 }

@@ -10,18 +10,23 @@ public interface MessageService {
 
     void deleteMessage(Long id);
 
+    void newModeratorMessage(UserEntity userEntity, ResidentialEntity residentialEntity);
+
     void propertyRegistrationMessageToManager(ResidentialEntity residentialEntity);
-    void propertyModificationMessageToManager(Property property, ResidentialEntity residentialEntity);
+
+    void propertyModificationMessageToManager(Property property);
+
+    void propertyModificationMessageToResident(Property property);
+
+    void propertyApprovedMessage(Property property);
+
+    void propertyRejectedMessage(Property property);
+
+    void propertyDeletedMessage(Property property);
 
     void readMessage(Long id);
 
     void archiveMessage(Long id);
-
-    void newModeratorMessage(UserEntity userEntity, ResidentialEntity residentialEntity);
-
-    void propertyApprovedMessage(Property property, UserEntity userEntity, ResidentialEntity residentialEntity);
-    void propertyRejectedMessage(Property property, UserEntity userEntity, ResidentialEntity residentialEntity);
-    void propertyDeletedMessage(Property property, UserEntity userEntity, ResidentialEntity residentialEntity);
 
     void deleteAllMessages(Long id);
 
@@ -29,5 +34,5 @@ public interface MessageService {
 
     void archiveAllMessages(Long id);
 
-    Message findMessageById(Long messageId);
+    Message findMessageById(Long id);
 }

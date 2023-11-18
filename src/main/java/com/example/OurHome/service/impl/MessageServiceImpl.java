@@ -23,7 +23,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     /**
-     * This method sends a welcome message of each new user.
+     * Send a welcome message (notification) of each new user.
      */
     @Override
     public void sendRegistrationMessageToUser(UserEntity userEntity) {
@@ -40,7 +40,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     /**
-     * This method sends a message to the manager of the Residential entity when new registration of resident
+     * Send message (notification) to MANAGER of RE when new property registration
      * happens.
      */
     @Override
@@ -57,24 +57,41 @@ public class MessageServiceImpl implements MessageService {
     }
 
     /**
-     * This method sends a message to the manager of the Residential entity when new property modification
+     * Send message (notification) to MANAGER of RE when property modification performed by resident
      */
     @Override
-    public void propertyModificationMessageToManager(Property property, ResidentialEntity residentialEntity) {
+    public void propertyModificationMessageToManager(Property property) {
         messageRepository.save(
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
                         "Data change for property № " + property.getNumber() + " in Residential entity ID: "
-                                + residentialEntity.getId() + ". You can access the request via Administration panel",
-                        residentialEntity.getManager(),
+                                + property.getResidentialEntity().getId() + ". You can access the request via Administration panel",
+                        property.getResidentialEntity().getManager(),
                         false,
                         false));
     }
 
+    /**
+     * Send message (notification) to RESIDENT when manager changes property data
+     */
+    @Override
+    public void propertyModificationMessageToResident(Property property) {
+        messageRepository.save(
+                new Message(
+                        LocalDate.now(),
+                        Time.valueOf(LocalTime.now()),
+                        "Your Residential entity manager made changes for property №" + property.getNumber() + ". " +
+                                "You can track changes in Property section",
+                        property.getOwner(),
+                        false,
+                        false));
+    }
 
     /**
-     * This method sends a message to the user, when his role has been changed to Moderator of a Residential entity.
+     * Send message (notification) to the RESIDENT, when his role has been changed to Moderator of RE.
+     * @param userEntity carries information about the resident
+     * @param residentialEntity carries information about the RE
      */
     @Override
     public void newModeratorMessage(UserEntity userEntity, ResidentialEntity residentialEntity) {
@@ -90,65 +107,65 @@ public class MessageServiceImpl implements MessageService {
     }
 
     /**
-     * This method creates a message to the owner, when his apartment registration request is approved
-     * by the Residential entity Manager.
+     * Send message (notification) to the OWNER, when his property registration request is approved by RE Manager.
+     * @param property carries information about the property. Allows message extend.
      */
     @Override
-    public void propertyApprovedMessage(Property property, UserEntity userEntity, ResidentialEntity residentialEntity) {
+    public void propertyApprovedMessage(Property property) {
         messageRepository.save(
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
                         "Your registration request for property № " + property.getNumber() + " id Residential entity ID: "
-                                + residentialEntity.getId() + " has been APPROVED. You can now access your data and reports.",
-                        userEntity,
+                                + property.getResidentialEntity().getId() + " has been APPROVED. You can now access your data and reports.",
+                        property.getOwner(),
                         false,
                         false));
     }
 
     /**
-     * This method creates a message to the owner, when his apartment registration request is rejected
-     * by the Residential entity Manager.
+     * Send message (notification) to the OWNER, when his property is REJECTED from RE.
+     * @param property carries information about the property. Allows message extend.
      */
     @Override
-    public void propertyRejectedMessage(Property property, UserEntity userEntity, ResidentialEntity residentialEntity) {
+    public void propertyRejectedMessage(Property property) {
         messageRepository.save(
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
                         "Your registration request for property № " + property.getNumber() + " id Residential entity ID: "
-                                + residentialEntity.getId() + " has been REJECTED. You can contact your Residential entity manager for more details " +
+                                + property.getResidentialEntity().getId() + " has been REJECTED. You can contact your Residential entity manager for more details " +
                                 "about the reason for this action. If you still have an access to the Residential entity, You can edit the record and submit " +
                                 "it again.",
-                        userEntity,
+                        property.getOwner(),
                         false,
                         false));
     }
 
     /**
-     * This method creates a message to the owner, when his apartment is deleted from Residential entity.
+     * Send message (notification) to the OWNER, when his property is DELETED from RE.
+     * @param property carries information about the property. Allows message extend.
      */
     @Override
-    public void propertyDeletedMessage(Property property, UserEntity userEntity, ResidentialEntity residentialEntity) {
+    public void propertyDeletedMessage(Property property) {
         messageRepository.save(
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
                         "Your property № " + property.getNumber() + " has been REMOVED from Residential entity ID: "
-                                + residentialEntity.getId() + ". You can contact your Residential entity manager for more details " +
+                                + property.getResidentialEntity().getId() + ". You can contact your Residential entity manager for more details " +
                                 "about the reason for this action. If you still have an access to the Residential entity, You can submit new " +
                                 "property registration request.",
-                        userEntity,
+                        property.getOwner(),
                         false,
                         false));
     }
 
 
-
     /**
      * Mark message as read method
      *
-     * @param id
+     * @param id - message id
      */
     @Override
     public void readMessage(Long id) {
@@ -162,7 +179,7 @@ public class MessageServiceImpl implements MessageService {
     /**
      * Archive message method
      *
-     * @param id
+     * @param id  - message id
      */
     @Override
     public void archiveMessage(Long id) {
@@ -177,7 +194,7 @@ public class MessageServiceImpl implements MessageService {
     /**
      * Delete message method
      *
-     * @param id
+     * @param id  - message id
      */
     @Override
     public void deleteMessage(Long id) {
@@ -186,7 +203,8 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * Delete ALL messages method
-     * @param id
+     *
+     * @param id  - UserEntity id
      */
     @Override
     public void deleteAllMessages(Long id) {
@@ -200,7 +218,8 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * Read ALL messages method
-     * @param id
+     *
+     * @param id - UserEntity id
      */
     @Override
     public void readAllMessages(Long id) {
@@ -215,7 +234,8 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * Archive ALL messages method
-     * @param id
+     *
+     * @param id - UserEntity id
      */
     @Override
     public void archiveAllMessages(Long id) {
@@ -230,7 +250,9 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message findMessageById(Long messageId) {
-        return messageRepository.findById(messageId).orElse(null);
+    public Message findMessageById(Long id) {
+        return messageRepository.findById(id).orElse(null);
     }
 }
+
+

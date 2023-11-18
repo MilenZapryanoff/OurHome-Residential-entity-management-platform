@@ -17,7 +17,6 @@ import java.util.List;
 @Service("securityService")
 public class SecurityServiceImpl implements SecurityService {
 
-
     private final UserService userService;
     private final ResidentialEntityService residentialEntityService;
     private final PropertyService propertyService;
