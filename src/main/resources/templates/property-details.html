@@ -175,10 +175,10 @@
                                             <div class="col-lg-12">
                                                 <br></br>
                                                 <div align="center" class="row">
-
                                                     <p th:if="${property.isRejected()}">You can edit your property data and resend the registration request to your Manager by submitting data changes.</p>
                                                 </div>
                                                 <br></br>
+                                                <h4 align="center">Your property details</h4>
                                                 <div class="info-table">
                                                     <div>
                                                         <ul>
@@ -215,18 +215,28 @@
                                                                     th:text="${property.getOwner().getFirstName()} + ' '
                                                                     + ${property.getOwner().getLastName()}"></b>
                                                             </li>
-                                                            <li class="text-black">Residential entity ID: <b
-                                                                    th:text="${property.getResidentialEntity().getId()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Residential entity manager: <b
-                                                                    th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +
-                                                                    ${property.getResidentialEntity().getManager().getLastName()}"></b>
-                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </div>
                                         </ul>
+                                        <h4 th:if="${property.isValidated()}" align="center" class="text-secondary">Your Residential entity details</h4>
+                                        <div th:if="${property.isValidated()}" class="info-table text-dark">
+                                            <div>
+                                                <ul>
+                                                    <li class="text-secondary">Residential entity ID: <b
+                                                            th:text="${property.getResidentialEntity().getId()}"></b>
+                                                    </li>
+                                                    <li class="text-secondary">Residential entity manager: <b
+                                                            th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +
+                                                                    ${property.getResidentialEntity().getManager().getLastName()}"></b>
+                                                    </li>
+                                                    <li class="text-secondary">Residential entity manager phone: <b
+                                                            th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

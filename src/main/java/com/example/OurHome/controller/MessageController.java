@@ -1,6 +1,7 @@
 package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.Entity.dto.BindingModels.SendMessageBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.UserService;
@@ -8,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,10 +25,35 @@ public class MessageController {
     }
 
     @GetMapping("/messages")
-    public ModelAndView messages() {
+    public ModelAndView messages(@ModelAttribute("sendMessageBindingModel")
+                                 SendMessageBindingModel sendMessageBindingModel) {
 
-        return new ModelAndView("messages", "userViewModel", getUserViewModel());
+        return new ModelAndView("messages", "userViewModel", getUserViewModel())
+                .addObject("sendMessageBindingModel", sendMessageBindingModel);
     }
+
+    @PostMapping("/messages/send/{id}")
+    @PreAuthorize("@securityService.checkMessageSender(#id, #sendMessageBindingModel.getSenderId() ,authentication)")
+    public ModelAndView sendMessage(@ModelAttribute("sendMessageBindingModel")
+                                    SendMessageBindingModel sendMessageBindingModel,
+                                    @PathVariable("id") Long id) {
+
+        ModelAndView modelAndView = new ModelAndView("messages")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("sendMessageBindingModel", sendMessageBindingModel);
+
+        if (sendMessageBindingModel.getMessage().length() > 2000) {
+            return modelAndView.addObject("messageError", true);
+        }
+
+        messageService.sendMessage(
+                userService.findUserById(sendMessageBindingModel.getReceiverId()),
+                userService.findUserById(sendMessageBindingModel.getSenderId()),
+                sendMessageBindingModel.getMessage());
+
+        return modelAndView.addObject("messageSent", true);
+    }
+
 
     @GetMapping("/messages/archives")
     public ModelAndView messageArchives() {

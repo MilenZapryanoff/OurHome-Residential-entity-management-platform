@@ -21,18 +21,30 @@ public class Message {
     @NotNull
     private String text;
     @ManyToOne
-    private UserEntity user;
+    private UserEntity receiver;
+    @ManyToOne
+    private UserEntity sender;
     private boolean isRead;
     private boolean isArchived;
 
     public Message() {
     }
 
-    public Message(LocalDate date, Time time, String text, UserEntity user, boolean isRead, boolean isArchived) {
+    public Message(LocalDate date, Time time, String text, UserEntity receiver, boolean isRead, boolean isArchived) {
         this.date = date;
         this.time = time;
         this.text = text;
-        this.user = user;
+        this.receiver = receiver;
+        this.isRead = isRead;
+        this.isArchived = isArchived;
+    }
+
+    public Message(LocalDate date, Time time, String text, UserEntity receiver, UserEntity sender, boolean isRead, boolean isArchived) {
+        this.date = date;
+        this.time = time;
+        this.text = text;
+        this.receiver = receiver;
+        this.sender = sender;
         this.isRead = isRead;
         this.isArchived = isArchived;
     }
@@ -61,12 +73,12 @@ public class Message {
         this.text = text;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public UserEntity getReceiver() {
+        return receiver;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setReceiver(UserEntity user) {
+        this.receiver = user;
     }
 
     public boolean isRead() {
@@ -91,5 +103,13 @@ public class Message {
 
     public void setTime(Time time) {
         this.time = time;
+    }
+
+    public UserEntity getSender() {
+        return sender;
+    }
+
+    public void setSender(UserEntity sender) {
+        this.sender = sender;
     }
 }

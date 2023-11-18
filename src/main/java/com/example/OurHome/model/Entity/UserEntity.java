@@ -48,14 +48,17 @@ public class UserEntity {
     @ManyToOne
     private Role role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private List<Message> messages;
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<Message> receivedMessages;
+
+    @OneToMany(mappedBy = "sender", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<Message> sentMessages;
 
     private boolean validated;
 
     public UserEntity() {
         properties = new ArrayList<>();
-        messages = new ArrayList<>();
+        receivedMessages = new ArrayList<>();
         residentialEntities = new ArrayList<>();
         moderatedResidentialEntities = new ArrayList<>();
     }
@@ -116,12 +119,12 @@ public class UserEntity {
         this.residentialEntities = residentialEntities;
     }
 
-    public List<Message> getMessages() {
-        return messages;
+    public List<Message> getReceivedMessages() {
+        return receivedMessages;
     }
 
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
+    public void setReceivedMessages(List<Message> messages) {
+        this.receivedMessages = messages;
     }
 
     public List<Property> getProperties() {
@@ -165,4 +168,11 @@ public class UserEntity {
         this.moderatedResidentialEntities = moderatedResidentialEntities;
     }
 
+    public List<Message> getSentMessages() {
+        return sentMessages;
+    }
+
+    public void setSentMessages(List<Message> sentMessages) {
+        this.sentMessages = sentMessages;
+    }
 }

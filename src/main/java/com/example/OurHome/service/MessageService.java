@@ -35,4 +35,6 @@ public interface MessageService {
     void archiveAllMessages(Long id);
 
     Message findMessageById(Long id);
+
+    void sendMessage(UserEntity receiver, UserEntity sender, String message);
 }

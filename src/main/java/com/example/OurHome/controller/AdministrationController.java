@@ -5,6 +5,7 @@ import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.*;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
+import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.PropertyService;
 import com.example.OurHome.service.ResidentialEntityService;
 import com.example.OurHome.service.UserService;
@@ -25,15 +26,18 @@ public class AdministrationController {
     private final UserService userService;
     private final ResidentialEntityService residentialEntityService;
     private final PropertyService propertyService;
+    private final MessageService messageService;
 
-    public AdministrationController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService) {
+    public AdministrationController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, MessageService messageService) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
+        this.messageService = messageService;
     }
 
     /**
      * Administration section
+     *
      * @return view administration
      */
     @GetMapping("/administration")
@@ -44,18 +48,21 @@ public class AdministrationController {
 
     /**
      * Create new Residential entity
+     *
      * @return view administration-add-residence
      */
     @GetMapping("/administration/add")
-    public ModelAndView addResidence() {
+    public ModelAndView addNewResidence(@ModelAttribute("residentialEntityRegisterBindingModel")
+                                        ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel) {
 
         return new ModelAndView("administration-add-residence", "userViewModel", getUserViewModel());
     }
 
     /**
      * Create new Residential entity
+     *
      * @param residentialEntityRegisterBindingModel carries register information
-     * @param bindingResult result
+     * @param bindingResult                         result
      * @return redirect:/administration
      */
     @PostMapping("/administration/add")
@@ -76,6 +83,7 @@ public class AdministrationController {
 
     /**
      * Residential entity (RE) deletion
+     *
      * @param id RE id
      * @return view administration
      */
@@ -99,7 +107,8 @@ public class AdministrationController {
      */
     @GetMapping("/administration/residents/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityResidentsDetails(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityResidentsDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
+                                                          @PathVariable("id") Long id) {
 
         return new ModelAndView("administration-residents")
                 .addObject("userViewModel", getUserViewModel())
@@ -116,7 +125,10 @@ public class AdministrationController {
 
     @PostMapping("/administration/residents/edit_role/{id}")
     @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
-    public ModelAndView changeUserRole(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
+    public ModelAndView changeUserRole(@ModelAttribute("residentManageBindingModel")
+                                       @Valid ResidentManageBindingModel residentManageBindingModel,
+                                       @PathVariable("id") Long id) {
+
 
         if (residentManageBindingModel.getUserId() != null && residentManageBindingModel.getEntityId() != null) {
             userService.createModerator(residentManageBindingModel.getUserId(), residentManageBindingModel.getEntityId());
@@ -132,7 +144,7 @@ public class AdministrationController {
      *
      * @param residentManageBindingModel carries information about the RE id
      * @param id                         resident(owner) id
-     * @return redirect:/administration/residents/{entityId}
+     * @return administration-residents
      */
     @PostMapping("/administration/residents/delete/{id}")
     @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
@@ -143,10 +155,13 @@ public class AdministrationController {
         //delete user's properties in this RE
         propertyService.deletePropertiesWhenResidentRemoved(id, residentManageBindingModel.getEntityId());
 
-        return new ModelAndView("redirect:/administration/residents/" + residentManageBindingModel.getEntityId());
+        return new ModelAndView("administration-residents")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()))
+                .addObject("residentRemoved", true);
     }
 
-    //RESIDENTIAL ENTITY DETAILS(DATA) MANAGE (ADMINISTRATION SECTION)
+    //RESIDENTIAL ENTITY DETAILS MANAGE (ADMINISTRATION SECTION)
 
     /**
      * RE details in Administration
@@ -165,6 +180,7 @@ public class AdministrationController {
 
     /**
      * Residential entity edit form in Administration
+     *
      * @param id property id
      * @return view administration-details-edit
      */
@@ -182,9 +198,10 @@ public class AdministrationController {
 
     /**
      * Residential entity edit form in Administration
+     *
      * @param residentialEntityEditBindingModel carries info about new values
-     * @param entityId RE id
-     * @param bindingResult result
+     * @param entityId                          RE id
+     * @param bindingResult                     result
      * @return redirect:/administration/details/{entityId}
      */
     @PostMapping("/administration/details/edit/{entityId}")
@@ -225,7 +242,8 @@ public class AdministrationController {
      */
     @GetMapping("/administration/property/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityPropertyDetails(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityPropertyDetails(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
+                                                         @PathVariable("id") Long id) {
 
         return new ModelAndView("administration-property")
                 .addObject("userViewModel", getUserViewModel())
@@ -317,6 +335,36 @@ public class AdministrationController {
 
         return new ModelAndView("redirect:/administration/property/" + residentialEntity.getId());
     }
+
+    //RESIDENTIAL ENTITY SEND MESSAGE TO RESIDENT
+
+    /**
+     * Send message to resident
+     *
+     * @param id resident id
+     * @return view administration-residents
+     */
+    @PostMapping("/administration/residents/message/{id}")
+    @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
+    public ModelAndView sendMessage(@ModelAttribute("residentManageBindingModel")
+                                    ResidentManageBindingModel residentManageBindingModel,
+                                    @PathVariable("id") Long id) {
+
+        ModelAndView modelAndView = new ModelAndView("administration-residents")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()));
+
+        String message = residentManageBindingModel.getMessage();
+
+        if (residentManageBindingModel.getMessage().length() > 2000) {
+            return modelAndView.addObject("messageError", true);
+        }
+
+
+        messageService.sendMessage(userService.findUserById(id), userService.findUserById(getUserViewModel().getId()), residentManageBindingModel.getMessage());
+        return modelAndView.addObject("messageSent", true);
+    }
+
 
     /**
      * Method returns currently logged user

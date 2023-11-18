@@ -103,6 +103,9 @@
                     th:text="'1 new message'"></h3>
                 <h3 th:if="${@messageRepository.countUnreadMessages(userViewModel.getId()) > 1}"
                     th:text="${@messageRepository.countUnreadMessages(userViewModel.getId())} + ' new messages'"></h3>
+                <h4 th:if="${messageError   }" class="text-danger">Message not sent. Text length must be up to 2000
+                    symbols</h4>
+                <h4 th:if="${messageSent}" class="text-success">MESSAGE SENT</h4>
             </div>
         </div>
     </div>
@@ -184,15 +187,31 @@
                                                                     <!--MESSAGE BODY-->
                                                                     <p th:if="${@messageRepository.countNotArchivedMessages(userId) == 0}"
                                                                        align="center">No new messages</p>
-                                                                    <div th:if="${@messageRepository.countByUser_Id(userId) > 0}"
+                                                                    <div th:if="${@messageRepository.countByReceiver_Id(userId) > 0}"
                                                                          th:each="message: ${@messageRepository.findNotArchivedMessagesByUserId(userId)}"
                                                                          class="row">
                                                                         <div th:if="${message.isRead() == true}"
                                                                              class="col-lg-10">
                                                                             <div class="form-control">
                                                                                 <div class="mt-3 rounded badge-warning">
-                                                                                    <small class="text-secondary"
-                                                                                           th:text="'Received on : ' + ${message.getDate()} + ', ' + ${message.getTime()}"></small>
+                                                                                    <div class="row">
+                                                                                        <div class="col-lg-10">
+                                                                                            <div th:unless="${message.getSender() == null}">
+                                                                                                <small class="text-secondary"
+                                                                                                       th:text="'Sender: ' + ${message.getSender().getFirstName()} + ' '
+                                                                                                    + ${message.getSender().getLastName()}">
+                                                                                                </small>
+                                                                                                <br>
+                                                                                            </div>
+                                                                                            <small class="text-secondary"
+                                                                                                   th:text="'Received on : ' + ${message.getDate()} + ', ' + ${message.getTime()}"></small>
+                                                                                        </div>
+                                                                                        <div class="col-lg-2">
+                                                                                            <a><img src="/images/read.png"
+                                                                                                    title="Message read"
+                                                                                                    style="max-width: 109px;"></a>
+                                                                                        </div>
+                                                                                    </div>
                                                                                     <hr></hr>
                                                                                 </div>
                                                                                 <h7 th:text="${message.getText()}"></h7>
@@ -203,12 +222,28 @@
                                                                              class="col-lg-10">
                                                                             <div class="form-control">
                                                                                 <div class="mt-3 rounded badge-warning">
-                                                                                    <small class="text-secondary"
-                                                                                           th:text="'Received on : ' + ${message.getDate()} + ', ' + ${message.getTime()}"></small>
+                                                                                    <div class="row">
+                                                                                        <div class="col-lg-10">
+                                                                                            <div th:unless="${message.getSender() == null}">
+                                                                                                <small class="text-secondary"
+                                                                                                       th:text="'Sender: ' + ${message.getSender().getFirstName()} + ' '
+                                                                                                    + ${message.getSender().getLastName()}">
+                                                                                                </small>
+                                                                                                <br>
+                                                                                            </div>
+                                                                                            <small class="text-secondary"
+                                                                                                   th:text="'Received on : ' + ${message.getDate()} + ', ' + ${message.getTime()}"></small>
+                                                                                        </div>
+                                                                                        <div class="col-lg-2">
+                                                                                            <a><img src="/images/unread.png"
+                                                                                                    title="Message not read"
+                                                                                                    style="max-width: 111px;"></a>
+                                                                                        </div>
+                                                                                    </div>
                                                                                     <hr></hr>
                                                                                 </div>
                                                                                 <h6 th:text="${message.getText()}"></h6>
-                                                                                <br>
+                                                                                <br></br>
                                                                             </div>
                                                                         </div>
                                                                         <!--BUTTONS-->
@@ -224,25 +259,73 @@
                                                                                            value="Mark as read"
                                                                                            class="form-control"/>
                                                                                 </form>
+                                                                                <br style=“width:50%”/>
                                                                             </div>
-                                                                            <br></br>
                                                                             <div class="col-lg-12">
-                                                                                <form th:action="@{/messages/archive/{id}(id=${message.getId()})}"
-                                                                                      method="POST">
-                                                                                    <input type="hidden"
-                                                                                           name="archiveNotification"
-                                                                                           th:value="${message.getId()}"/>
-                                                                                    <input type="submit" value="Archive"
-                                                                                           class="form-control text-danger"/>
-                                                                                </form>
+                                                                                <button th:unless="${message.getSender() == null}"
+                                                                                        class="col-lg-12"
+                                                                                        onclick="openForm()">
+                                                                                    <input type="submit" value="Reply"
+                                                                                           class="form-control text-info-emphasis"/>
+                                                                                </button>
+                                                                                <br style=“width:50%”/>
+                                                                                <!-- send message dialog -->
+                                                                                <div th:unless="${message.getSender() == null}"
+                                                                                     class="form-popup" id="myForm">
+                                                                                    <form th:action="@{/messages/send/{id} (id=${message.getId()})}"
+                                                                                          th:method="POST"
+                                                                                          class="form-container"
+                                                                                          th:object="${sendMessageBindingModel}">
+                                                                                        <select class="form-control hidden"
+                                                                                                id="senderId"
+                                                                                                th:field="*{receiverId}">
+                                                                                            <option
+                                                                                                    th:value="${message.getSender().getId()}">
+                                                                                            </option>
+                                                                                        </select>
+                                                                                        <select class="form-control hidden"
+                                                                                                id="receiverId"
+                                                                                                th:field="*{senderId}">
+                                                                                            <option
+                                                                                                    th:value="${message.getReceiver().getId()}">
+                                                                                            </option>
+                                                                                        </select>
+                                                                                        <label for="messageText"><b>Message</b></label>
+                                                                                        <input type="text"
+                                                                                               placeholder="Enter message"
+                                                                                               id="messageText" required
+                                                                                               autocomplete="off"
+                                                                                               th:field="*{message}"
+                                                                                               th:errorclass="bg-danger">
+                                                                                        <button type="submit"
+                                                                                                class="btn">Send
+                                                                                        </button>
+                                                                                        <button type="button"
+                                                                                                class="btn cancel"
+                                                                                                onclick="closeForm()">
+                                                                                            Close
+                                                                                        </button>
+                                                                                    </form>
+                                                                                </div>
+                                                                                <br style=“width:50%”/>
+                                                                                <div class="col-lg-12">
+                                                                                    <form th:action="@{/messages/archive/{id}(id=${message.getId()})}"
+                                                                                          method="POST">
+                                                                                        <input type="hidden"
+                                                                                               name="archiveNotification"
+                                                                                               th:value="${message.getId()}"/>
+                                                                                        <input type="submit"
+                                                                                               value="Archive"
+                                                                                               class="form-control text-danger-emphasis"/>
+                                                                                    </form>
+                                                                                </div>
                                                                             </div>
+                                                                            <!--END OF BUTTONS-->
+                                                                            <!--END OF MESSAGE BODY-->
                                                                         </div>
-                                                                        <!--END OF BUTTONS-->
                                                                         <div class="col-lg-12">
-                                                                            <hr></hr>
+                                                                            <br></br>
                                                                         </div>
-                                                                        </img>
-                                                                        <!--END OF MESSAGE BODY-->
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -274,6 +357,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/message.js"></script>
 
 </body>
 </html>

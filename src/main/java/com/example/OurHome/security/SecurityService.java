@@ -9,6 +9,7 @@ public interface SecurityService {
     boolean checkPropertyModeratorAccess(Long propertyId, Authentication authentication);
     boolean checkResidentModeratorAccess(Long residentId, Authentication authentication);
     boolean checkMessageUserAccess(Long messageId, Authentication authentication);
+    boolean checkMessageSender(Long messageId, Long senderId, Authentication authentication);
     boolean checkMassMessagesUserAccess(Long userId, Authentication authentication);
 }
 

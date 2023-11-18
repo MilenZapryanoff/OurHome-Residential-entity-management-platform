@@ -1,11 +1,12 @@
 package com.example.OurHome.model.Entity.dto.BindingModels;
 
+import jakarta.validation.constraints.Size;
+
 public class ResidentManageBindingModel {
 
     private Long userId;
     private Long entityId;
-    private String action;
-
+    private String message;
 
     public Long getUserId() {
         return userId;
@@ -23,11 +24,11 @@ public class ResidentManageBindingModel {
         this.entityId = entityId;
     }
 
-    public String getAction() {
-        return action;
+    public String getMessage() {
+        return message;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

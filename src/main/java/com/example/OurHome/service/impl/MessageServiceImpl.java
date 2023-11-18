@@ -6,6 +6,7 @@ import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.repo.MessageRepository;
 import com.example.OurHome.service.MessageService;
+import com.example.OurHome.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -90,7 +91,8 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * Send message (notification) to the RESIDENT, when his role has been changed to Moderator of RE.
-     * @param userEntity carries information about the resident
+     *
+     * @param userEntity        carries information about the resident
      * @param residentialEntity carries information about the RE
      */
     @Override
@@ -108,6 +110,7 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * Send message (notification) to the OWNER, when his property registration request is approved by RE Manager.
+     *
      * @param property carries information about the property. Allows message extend.
      */
     @Override
@@ -125,6 +128,7 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * Send message (notification) to the OWNER, when his property is REJECTED from RE.
+     *
      * @param property carries information about the property. Allows message extend.
      */
     @Override
@@ -144,6 +148,7 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * Send message (notification) to the OWNER, when his property is DELETED from RE.
+     *
      * @param property carries information about the property. Allows message extend.
      */
     @Override
@@ -179,7 +184,7 @@ public class MessageServiceImpl implements MessageService {
     /**
      * Archive message method
      *
-     * @param id  - message id
+     * @param id - message id
      */
     @Override
     public void archiveMessage(Long id) {
@@ -194,7 +199,7 @@ public class MessageServiceImpl implements MessageService {
     /**
      * Delete message method
      *
-     * @param id  - message id
+     * @param id - message id
      */
     @Override
     public void deleteMessage(Long id) {
@@ -204,7 +209,7 @@ public class MessageServiceImpl implements MessageService {
     /**
      * Delete ALL messages method
      *
-     * @param id  - UserEntity id
+     * @param id - UserEntity id
      */
     @Override
     public void deleteAllMessages(Long id) {
@@ -247,6 +252,25 @@ public class MessageServiceImpl implements MessageService {
                 messageRepository.save(message);
             }
         }
+    }
+
+    /**
+     * User-to-user message
+     * @param receiver UserEntity
+     * @param sender UserEntity
+     * @param message message body
+     */
+    @Override
+    public void sendMessage(UserEntity receiver, UserEntity sender, String message) {
+        messageRepository.save(
+                new Message(
+                        LocalDate.now(),
+                        Time.valueOf(LocalTime.now()),
+                        message,
+                        receiver,
+                        sender,
+                        false,
+                        false));
     }
 
     @Override

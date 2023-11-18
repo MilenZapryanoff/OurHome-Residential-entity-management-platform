@@ -64,7 +64,20 @@ public class SecurityServiceImpl implements SecurityService {
     public boolean checkMessageUserAccess(Long messageId, Authentication authentication) {
         Message message = messageService.findMessageById(messageId);
 
-        return message != null && message.getUser().getId().equals(getUserEntity(authentication).getId());
+        return message != null && message.getReceiver().getId().equals(getUserEntity(authentication).getId());
+    }
+
+    /**
+     * Validation of message sender.
+     * @param messageId message id
+     * @param senderId sender id
+     * @param authentication UserEntity
+     * @return boolean
+     */
+    @Override
+    public boolean checkMessageSender(Long messageId, Long senderId, Authentication authentication) {
+        Message message = messageService.findMessageById(messageId);
+        return message != null && message.getReceiver().getId().equals(getUserEntity(authentication).getId());
     }
 
     @Override

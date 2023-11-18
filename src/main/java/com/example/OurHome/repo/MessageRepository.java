@@ -11,23 +11,23 @@ import java.util.Optional;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-    Long countByUser_Id(Long id);
+    Long countByReceiver_Id(Long id);
 
     Optional<Message> findById(Long id);
 
-    @Query("SELECT COUNT(m) FROM messages m where m.isRead = false AND m.user.id=:id")
+    @Query("SELECT COUNT(m) FROM messages m where m.isRead = false AND m.receiver.id=:id")
     Long countUnreadMessages(Long id);
 
-    @Query("SELECT COUNT(m) FROM messages m where m.isArchived = false AND m.user.id=:id")
+    @Query("SELECT COUNT(m) FROM messages m where m.isArchived = false AND m.receiver.id=:id")
     Long countNotArchivedMessages(Long id);
 
-    @Query("SELECT COUNT(m) FROM messages m where m.isArchived = true AND m.user.id=:id")
+    @Query("SELECT COUNT(m) FROM messages m where m.isArchived = true AND m.receiver.id=:id")
     Long countArchivedMessages(Long id);
 
-    @Query("SELECT m FROM messages m where m.isArchived = true AND m.user.id=:id ORDER BY m.date, m.time DESC")
+    @Query("SELECT m FROM messages m where m.isArchived = true AND m.receiver.id=:id ORDER BY m.date, m.time DESC")
     List<Message> findArchivedMessagesByUserId(Long id);
 
-    @Query("SELECT m FROM messages m where m.isArchived = false AND m.user.id=:id ORDER BY m.date, m.time DESC")
+    @Query("SELECT m FROM messages m where m.isArchived = false AND m.receiver.id=:id ORDER BY m.date, m.time DESC")
     List<Message> findNotArchivedMessagesByUserId(Long id);
 
 }

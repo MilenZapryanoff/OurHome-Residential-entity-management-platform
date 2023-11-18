@@ -193,6 +193,7 @@ public class UserServiceImpl implements UserService {
     /**
      * This method removes the user from residential entities. Also removes owner's property from the
      * residential entity.
+     *
      * @param id, residentialEntity
      */
     @Override
@@ -200,21 +201,19 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findById(id).orElse(null);
 
         if (userEntity != null) {
-            removeModerator(id,residentialEntity.getId());
+            removeModerator(id, residentialEntity.getId());
 
             List<ResidentialEntity> residentialEntities = userEntity.getResidentialEntities();
             // Iterate through the list and remove the entity with the matching ID
-                Iterator<ResidentialEntity> iterator = residentialEntities.iterator();
-                while (iterator.hasNext()) {
-                    ResidentialEntity entity = iterator.next();
-                    if (entity.getId().equals(residentialEntity.getId())) {
-                        iterator.remove();
-                        break;
-                    }
+            Iterator<ResidentialEntity> iterator = residentialEntities.iterator();
+            while (iterator.hasNext()) {
+                ResidentialEntity entity = iterator.next();
+                if (entity.getId().equals(residentialEntity.getId())) {
+                    iterator.remove();
+                    break;
                 }
-                userRepository.save(userEntity);
-
-
+            }
+            userRepository.save(userEntity);
         }
     }
 
