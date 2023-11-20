@@ -1,4 +1,16 @@
 spring:
+  mail:
+    host: smtp.gmail.com             # SMTP server host
+    port: 587                        # SMTP server port
+    username: office.ourhome@gmail.com # Email account username
+    password: 'qdqj alhl fbbd kitq'              # Email account password
+    protocol: smtp                   # Protocol to use (e.g., smtp, smtps)
+    properties:
+      mail:
+        smtp:
+          auth: true                  # Enable authentication
+          starttls:
+            enable: true              # Enable STARTTLS encryption
   jpa:
     properties:
       hibernate:
@@ -24,7 +36,6 @@ spring:
 
 OurHome:
   remember.me.key: ${REMEMBER_ME_KEY:key_pass}
-
 
 logging:
   level:
