@@ -1,10 +1,18 @@
 package com.example.OurHome.model.Entity.dto.BindingModels;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class ContactFormBindingModel {
 
+    @Size(min = 3, max = 50, message = "At least 3 and maximum 50 characters.")
     private String name;
+    @Email(message = "Enter a valid email address")
     private String email;
+    @NotNull (message = "Enter Subject")
     private String subject;
+    @NotNull(message = "Enter message")
     private String message;
 
     public String getName() {

@@ -5,8 +5,10 @@ import com.example.OurHome.model.Entity.dto.BindingModels.ContactFormBindingMode
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.EmailService;
 import com.example.OurHome.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,25 +26,39 @@ public class ContactController {
     }
 
     @GetMapping("/contact")
-    public ModelAndView contact(@ModelAttribute("ContactFormBindingModel") ContactFormBindingModel ContactFormBindingModel) {
-        if (SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser")) {
-            return new ModelAndView("contact").addObject(new ContactFormBindingModel());
-        }
+    public ModelAndView contact(@ModelAttribute("contactFormBindingModel") ContactFormBindingModel contactFormBindingModel) {
+        ModelAndView modelAndView = new ModelAndView("contact");
 
-        return new ModelAndView("contact", "userViewModel", getUserViewModel());
+        if (SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser")) {
+            return modelAndView;
+        }
+        return modelAndView.addObject("userViewModel", getUserViewModel());
     }
 
 
     @PostMapping("/contact")
-    public ModelAndView submitContactForm(@ModelAttribute("ContactFormBindingModel") ContactFormBindingModel ContactFormBindingModel) {
-        // Process the submitted contact form
-        // For example, you can access form fields like contactForm.getName(), contactForm.getEmail(), etc.
+    public ModelAndView submitContactForm(@ModelAttribute("contactFormBindingModel")
+                                          @Valid ContactFormBindingModel contactFormBindingModel,
+                                          BindingResult bindingResult) {
 
-        // Send an email notification
-        emailService.sendContactFormEmail(ContactFormBindingModel.getName(), ContactFormBindingModel.getEmail(), ContactFormBindingModel.getMessage());
+        boolean guestUser = SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser");
 
-        // Redirect to a success page or return to the contact page with a success message
-        return new ModelAndView("redirect:/contact?success=true");
+        ModelAndView modelAndView = new ModelAndView("contact");
+        if (bindingResult.hasErrors()) {
+            if (guestUser) {
+                return modelAndView;
+            }
+            return modelAndView.addObject("userViewModel", getUserViewModel());
+        }
+
+        emailService.sendContactFormEmail(contactFormBindingModel.getName(), contactFormBindingModel.getEmail(), contactFormBindingModel.getSubject(), contactFormBindingModel.getMessage());
+        modelAndView.addObject("mailSent", true);
+
+        if (guestUser) {
+            return modelAndView;
+        }
+        return modelAndView
+                .addObject("userViewModel", getUserViewModel());
     }
 
     private UserViewModel getUserViewModel() {

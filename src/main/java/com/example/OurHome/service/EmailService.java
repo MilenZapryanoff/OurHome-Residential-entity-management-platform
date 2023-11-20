@@ -13,19 +13,15 @@ public class EmailService {
         this.emailSender = emailSender;
     }
 
-    public void sendContactFormEmail(String name, String email, String message) {
-        // Prepare email content
-        String subject = "New Contact Form Submission";
-        String emailContent = "Name: " + name + "\nEmail: " + email + "\nMessage: " + message;
+    public void sendContactFormEmail(String name, String email, String subject, String message) {
+        String mailSubject = "New Contact Form Submission";
+        String emailContent = "Name: " + name + "\nEmail: " + email + "\nMessage: " + subject + "\nMessage: " + message;
 
-        // Set up email message
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo("office.ourhome@gmail.com"); // Set your recipient email address here
-        mailMessage.setSubject(subject);
+        mailMessage.setTo("office.ourhome@gmail.com");
+        mailMessage.setSubject(mailSubject);
         mailMessage.setText(emailContent);
 
-        // Send the email
         emailSender.send(mailMessage);
     }
-
 }
