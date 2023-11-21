@@ -51,6 +51,7 @@ public class ContactController {
             return modelAndView.addObject("userViewModel", getUserViewModel());
         }
 
+        //TODO: if contact via email feature is not used the next line of code must be commented.
         emailService.sendContactFormEmail(contactFormBindingModel.getName(), contactFormBindingModel.getEmail(), contactFormBindingModel.getSubject(), contactFormBindingModel.getMessage());
         modelAndView.addObject("mailSent", true);
 
