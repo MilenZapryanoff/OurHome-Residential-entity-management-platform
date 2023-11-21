@@ -53,7 +53,7 @@ A platform that allows the registration of both home owners and residential enti
   <li>  1) db_password=<your db password> [db username]  </li>
   <li>  2) db_username=<your db username> [db password] </li>
   <li>  3) admin_pass=[default admin user in the DB] </li>
-  <li> (Optional) if sending email via contact form used : </li>
+  <li> (Optional) if using contact email feature : </li>
   <li>  4) mail_username[email username] </li>
   <li>  5) mail_password[email password] </li>
   <li>Run the project in IntelliJ Idea</li>
