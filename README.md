@@ -51,13 +51,12 @@ A platform that allows the registration of both home owners and residential enti
   <li>First clone the repository to your local machine</li>
   <li>Configure your MySQL database by updating the application.yml file.</li>
   <li>You must configure the following environment variables in IntelliJ Idea before launching the app 
-    1) db_password=<your db password> (db username) 
-    2) db_username=<your db username> (db password)
-    3) admin_pass=<default admin user in the DB>
-  <Optional> if sending email via contact form used :
-    4) mail_username<email username>
-    5) mail_password<email password>
-  </li>
+  <li>  1) db_password=<your db password> (db username)  </li>
+  <li>  2) db_username=<your db username> (db password) </li>
+  <li>  3) admin_pass=<default admin user in the DB> </li>
+  <li><Optional> if sending email via contact form used : </li>
+  <li>  4) mail_username[email username] </li>
+  <li>  5) mail_password<email password> </li>
   <li>Run the project in IntelliJ Idea</li>
   <li>Access the web application by visiting http://localhost:8080 in your web browser.</li>
   <li>Create a manager account, then create a Residential Entity. Now you can create a resident and new property.</li>
