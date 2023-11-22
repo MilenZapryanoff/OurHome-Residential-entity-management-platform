@@ -1,10 +1,10 @@
 package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.*;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
+import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.PropertyService;
 import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;
@@ -23,11 +23,13 @@ public class PropertyController {
 
     private final UserService userService;
     private final PropertyService propertyService;
+    private final MessageService messageService;
 
 
-    public PropertyController(UserService userService, PropertyService propertyService) {
+    public PropertyController(UserService userService, PropertyService propertyService, MessageService messageService) {
         this.userService = userService;
         this.propertyService = propertyService;
+        this.messageService = messageService;
     }
 
     @GetMapping("/property")
@@ -87,10 +89,43 @@ public class PropertyController {
      */
     @GetMapping("/property/summary/{id}")
     public ModelAndView residentialEntityDetails(
-            @ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
+            @ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
+            @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel,
+            @PathVariable("id") Long id) {
 
         return new ModelAndView("property-summary", "userViewModel", getUserViewModel())
                 .addObject("property", getProperty(id));
+    }
+
+
+    /**
+     *
+     * @param sendMessageBindingModel
+     * @param propertyId
+     * @return
+     */
+
+    @PostMapping("/property/summary/messageToManager/{id}")
+    @PreAuthorize("@securityService.checkMessageSenderAndReceiver(#propertyId, #sendMessageBindingModel.getSenderId() ,#sendMessageBindingModel.getReceiverId())")
+    public ModelAndView sendMessageToPropertyManager(@ModelAttribute("sendMessageBindingModel")
+                                    SendMessageBindingModel sendMessageBindingModel,
+                                    @PathVariable("id") Long propertyId) {
+
+        ModelAndView modelAndView = new ModelAndView("property-summary")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("property", getProperty(propertyId))
+                .addObject("sendMessageBindingModel", sendMessageBindingModel);
+
+        if (sendMessageBindingModel.getMessage().length() > 2000) {
+            return modelAndView.addObject("messageError", true);
+        }
+
+        messageService.sendMessage(
+                userService.findUserById(sendMessageBindingModel.getReceiverId()),
+                userService.findUserById(sendMessageBindingModel.getSenderId()),
+                sendMessageBindingModel.getMessage());
+
+        return modelAndView.addObject("messageSent", true);
     }
 
     /**

@@ -4,12 +4,12 @@ import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.ManagerRegisterBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.UserAuthBindingModel;
-import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.UserRegisterBindingModel;
+import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 
 public interface UserService {
 
-    boolean preRegistrationPasswordMatchCheck(String password, String confirmPassword);
+    boolean passwordsMatch(String password, String confirmPassword);
 
     boolean preRegistrationEmailCheck(String email);
 
@@ -34,4 +34,11 @@ public interface UserService {
     void removeModerator(Long residentId, Long entityId);
 
     void removeResidentFromResidentialEntity(Long id, ResidentialEntity residentialEntity);
+
+    void sendVerificationCode(UserEntity user);
+
+    void resetPassword(UserEntity user, String newPassword);
+
+    boolean verificationCodeMatch(UserEntity user, String verificationCode);
+
 }

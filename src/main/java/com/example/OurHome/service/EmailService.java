@@ -24,4 +24,19 @@ public class EmailService {
 
         emailSender.send(mailMessage);
     }
+
+    public void sendResetPasswordEmail(String email, String validationCode) {
+        String mailSubject = "OurHome - Password reset request";
+        String emailContent = "You have submitted a password restore request!\n\n" +
+                "Your verification code is: " + validationCode +
+                "\n\nUse this code to set a new password in the platform.";
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setSubject(mailSubject);
+        mailMessage.setText(emailContent);
+
+        emailSender.send(mailMessage);
+    }
+
 }

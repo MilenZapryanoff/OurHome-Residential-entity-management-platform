@@ -56,6 +56,8 @@ public class UserEntity {
 
     private boolean validated;
 
+    private String validationCode;
+
     public UserEntity() {
         properties = new ArrayList<>();
         receivedMessages = new ArrayList<>();
@@ -166,6 +168,14 @@ public class UserEntity {
 
     public void setModeratedResidentialEntities(List<ResidentialEntity> moderatedResidentialEntities) {
         this.moderatedResidentialEntities = moderatedResidentialEntities;
+    }
+
+    public String getValidationCode() {
+        return validationCode;
+    }
+
+    public void setValidationCode(String validationCode) {
+        this.validationCode = validationCode;
     }
 
     public List<Message> getSentMessages() {

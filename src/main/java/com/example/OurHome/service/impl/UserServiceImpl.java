@@ -9,15 +9,18 @@ import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.repo.ResidentialEntityRepository;
 import com.example.OurHome.repo.RoleRepository;
 import com.example.OurHome.repo.UserRepository;
+import com.example.OurHome.service.EmailService;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.UserService;
 import com.example.OurHome.service.tokens.ResidentialEntityToken;
+import com.example.OurHome.service.tokens.UserToken;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,18 +29,22 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final ResidentialEntityToken residentialEntityToken;
+    private final UserToken userToken;
     private final ResidentialEntityRepository residentialEntityRepository;
     private final RoleRepository roleRepository;
     private final MessageService messageService;
+    private final EmailService emailService;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder, ModelMapper modelMapper, UserRepository userRepository, ResidentialEntityToken residentialEntityToken, ResidentialEntityRepository residentialEntityRepository, RoleRepository roleRepository, MessageService messageService) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, ModelMapper modelMapper, UserRepository userRepository, ResidentialEntityToken residentialEntityToken, UserToken userToken, ResidentialEntityRepository residentialEntityRepository, RoleRepository roleRepository, MessageService messageService, EmailService emailService) {
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.residentialEntityToken = residentialEntityToken;
+        this.userToken = userToken;
         this.residentialEntityRepository = residentialEntityRepository;
         this.roleRepository = roleRepository;
         this.messageService = messageService;
+        this.emailService = emailService;
     }
 
     /**
@@ -47,8 +54,8 @@ public class UserServiceImpl implements UserService {
      * @return boolean
      */
     @Override
-    public boolean preRegistrationPasswordMatchCheck(String password, String confirmPassword) {
-        return !password.equals(confirmPassword);
+    public boolean passwordsMatch(String password, String confirmPassword) {
+        return password.equals(confirmPassword);
     }
 
     /**
@@ -88,6 +95,7 @@ public class UserServiceImpl implements UserService {
         newUserEntity.setPassword(passwordEncoder.encode(userRegisterBindingModel.getPassword()));
         newUserEntity.getResidentialEntities().add(residentialEntity);
         newUserEntity.setRole(roleRepository.findRoleByName("RESIDENT"));
+        newUserEntity.setValidated(true);
 
         userRepository.save(newUserEntity);
 
@@ -120,8 +128,7 @@ public class UserServiceImpl implements UserService {
     public boolean residentialValidation(Long residentialId, String accessCode) {
         ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityById(residentialId);
 
-        return residentialEntityRepository.countById(residentialId) > 0 &&
-                passwordEncoder.matches(accessCode, residentialEntity.getAccessCode());
+        return residentialEntityRepository.countById(residentialId) > 0 && passwordEncoder.matches(accessCode, residentialEntity.getAccessCode());
     }
 
     /**
@@ -217,6 +224,33 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void sendVerificationCode(UserEntity user) {
+        Long verificationCode = new Random().nextLong(99999999, 1000000000);
+
+        user.setValidationCode(passwordEncoder.encode(String.valueOf(verificationCode)));
+        user.setValidated(false);
+        userRepository.save(user);
+
+        emailService.sendResetPasswordEmail(user.getEmail(), String.valueOf(verificationCode));
+    }
+
+    @Override
+    public void resetPassword(UserEntity user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setValidationCode(null);
+        user.setValidated(true);
+        userRepository.save(user);
+
+        invalidateUserToken();
+    }
+
+    @Override
+    public boolean verificationCodeMatch(UserEntity user, String verificationCode) {
+        return passwordEncoder.matches(verificationCode, user.getValidationCode());
+    }
+
+
     /**
      * Method for joining user to new Residential entity.
      */
@@ -239,7 +273,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Token invalidation method.
+     * Residential Entity Token invalidation method.
      * When registering as a resident the user have to provide valid ResidentialEntity ID.
      * It is an 8-digit randomly generated code used as residential entity id in the DB.
      * The ID is used as registration token in UserRegToken class which gets invalidated after
@@ -249,6 +283,17 @@ public class UserServiceImpl implements UserService {
     private void invalidateResidentialEntityToken() {
         residentialEntityToken.setValid(false);
     }
+
+    /**
+     * User Token invalidation method.
+     * Used in the process of resetting password
+     */
+
+
+    private void invalidateUserToken() {
+        userToken.setValid(false);
+    }
+
 }
 
 

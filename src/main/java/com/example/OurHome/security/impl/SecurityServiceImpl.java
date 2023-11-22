@@ -69,8 +69,9 @@ public class SecurityServiceImpl implements SecurityService {
 
     /**
      * Validation of message sender.
-     * @param messageId message id
-     * @param senderId sender id
+     *
+     * @param messageId      message id
+     * @param senderId       sender id
      * @param authentication UserEntity
      * @return boolean
      */
@@ -87,5 +88,14 @@ public class SecurityServiceImpl implements SecurityService {
 
     private UserEntity getUserEntity(Authentication authentication) {
         return userService.findUserByEmail(authentication.getName());
+    }
+
+    public boolean checkMessageSenderAndReceiver(Long propertyId, Long senderId, Long receivedId) {
+        Property property = propertyService.findPropertyById(propertyId);
+
+        if (property != null) {
+            return property.getOwner().getId().equals(senderId) && property.getResidentialEntity().getManager().getId().equals(receivedId);
+        }
+        return false;
     }
 }

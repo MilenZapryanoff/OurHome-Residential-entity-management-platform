@@ -101,7 +101,7 @@
                     th:text="'1 new message'"></h3>
                 <h3 th:if="${@messageRepository.countUnreadMessages(userViewModel.getId()) > 1}"
                     th:text="${@messageRepository.countUnreadMessages(userViewModel.getId())} + ' new messages'"></h3>
-                <h4 th:if="${messageError   }" class="text-danger">Message not sent. Text length must be up to 2000
+                <h4 th:if="${messageError}" class="text-danger">Message not sent. Text length must be up to 2000
                     symbols</h4>
                 <h4 th:if="${messageSent}" class="text-success">MESSAGE SENT</h4>
             </div>

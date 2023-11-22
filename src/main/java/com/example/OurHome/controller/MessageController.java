@@ -33,10 +33,10 @@ public class MessageController {
     }
 
     @PostMapping("/messages/send/{id}")
-    @PreAuthorize("@securityService.checkMessageSender(#id, #sendMessageBindingModel.getSenderId() ,authentication)")
+    @PreAuthorize("@securityService.checkMessageSender(#messageId, #sendMessageBindingModel.getSenderId() ,authentication)")
     public ModelAndView sendMessage(@ModelAttribute("sendMessageBindingModel")
                                     SendMessageBindingModel sendMessageBindingModel,
-                                    @PathVariable("id") Long id) {
+                                    @PathVariable("id") Long messageId) {
 
         ModelAndView modelAndView = new ModelAndView("messages")
                 .addObject("userViewModel", getUserViewModel())
@@ -50,6 +50,8 @@ public class MessageController {
                 userService.findUserById(sendMessageBindingModel.getReceiverId()),
                 userService.findUserById(sendMessageBindingModel.getSenderId()),
                 sendMessageBindingModel.getMessage());
+        messageService.readMessage(messageId);
+
 
         return modelAndView.addObject("messageSent", true);
     }

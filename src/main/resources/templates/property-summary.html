@@ -48,7 +48,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index"><hr><img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <a href="/index">
+                        <hr>
+                        <img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
                     <!-- ***** Logo End ***** -->
 
                     <!-- ***** Menu Start ***** -->
@@ -98,6 +100,9 @@
                     </div>
                 </div>
                 <h3>Property details</h3>
+                <h4 th:if="${messageError}" class="text-danger">Message not sent. Text length must be up to 2000
+                    symbols</h4>
+                <h4 th:if="${messageSent}" class="text-success">MESSAGE SENT</h4>
             </div>
         </div>
     </div>
@@ -263,9 +268,61 @@
                             <a class="text-black"
                                th:text="${property.getResidentialEntity().getStreetNumber()}"></a></li>
                         <hr>
-                        <li class="text-center">Manager:
-                            <a class="text-black"
-                               th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' + ${property.getResidentialEntity().getManager().getLastName()}"></a>
+                        <button
+                                class="col-lg-12"
+                                onclick="openForm()">
+                            <input type="submit"
+                                   th:value="'Manager: ' +${property.getResidentialEntity().getManager().getFirstName()} + ' ' + ${property.getResidentialEntity().getManager().getLastName()}"
+                                   class="form-control text-bg-danger"/>
+                        </button>
+                        <div class="form-popup" id="myForm">
+                            <form th:action="@{/property/summary/messageToManager/{id} (id=${property.getId()})}"
+                                  th:method="POST"
+                                  class="form-container"
+                                  th:object="${sendMessageBindingModel}">
+                                <select class="form-control hidden"
+                                        id="receiverId"
+                                        th:field="*{receiverId}">
+                                    <option
+                                            th:value="${property.getResidentialEntity().getManager().getId()}">
+                                    </option>
+                                </select>
+                                <select class="form-control hidden"
+                                        id="senderId"
+                                        th:field="*{senderId}">
+                                    <option
+                                            th:value="${userViewModel.getId()}">
+                                    </option>
+                                </select>
+                                <label for="messageText" class="small">Manager: <b
+                                        th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' + ${property.getResidentialEntity().getManager().getLastName()}"></b></label>
+                                <br>
+                                <label for="messageText" class="small">Phone number: <b
+                                        th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b></label>
+                                <br>
+                                <label for="messageText" class="small">Email: <b
+                                        th:text="${property.getResidentialEntity().getManager().getEmail()}"></b></label>
+                                <hr>
+                                <label for="messageText" class="small text-danger">Send a message to your
+                                    manager: </h8></label>
+                                <input type="text"
+                                       placeholder="Your message"
+                                       id="messageText" required
+                                       autocomplete="off"
+                                       th:field="*{message}"
+                                       th:errorclass="bg-danger">
+                                <button type="submit"
+                                        class="btn">Send
+                                </button>
+                                <button type="button"
+                                        class="btn cancel"
+                                        onclick="closeForm()">
+                                    Close
+                                </button>
+                            </form>
+                        </div>
+
+
                         </li>
                         <br/>
                         <div align="center" class="main-content">
@@ -301,6 +358,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/message.js"></script>
 
 </body>
 </html>

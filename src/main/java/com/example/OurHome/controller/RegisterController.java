@@ -60,7 +60,7 @@ public class RegisterController {
         } else if (userService.preRegistrationEmailCheck(userRegisterBindingModel.getEmail())) {
             modelAndView.addObject("duplicatedEmail", true);
             return modelAndView;
-        } else if (userService.preRegistrationPasswordMatchCheck(userRegisterBindingModel.getPassword(), userRegisterBindingModel.getConfirmPassword())) {
+        } else if (!userService.passwordsMatch(userRegisterBindingModel.getPassword(), userRegisterBindingModel.getConfirmPassword())) {
             modelAndView.addObject("noPasswordMatch", true);
             return modelAndView;
         } else {
@@ -92,7 +92,7 @@ public class RegisterController {
         } else if (userService.preRegistrationEmailCheck(managerRegisterBindingModel.getEmail())) {
             modelAndView.addObject("duplicatedEmail", true);
             return modelAndView;
-        } else if (userService.preRegistrationPasswordMatchCheck(managerRegisterBindingModel.getPassword(), managerRegisterBindingModel.getConfirmPassword())) {
+        } else if (!userService.passwordsMatch(managerRegisterBindingModel.getPassword(), managerRegisterBindingModel.getConfirmPassword())) {
             modelAndView.addObject("noPasswordMatch", true);
             return modelAndView;
         } else {
