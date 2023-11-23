@@ -65,7 +65,7 @@ public class RegisterController {
             return modelAndView;
         } else {
             userService.registerUser(userRegisterBindingModel, residentialEntityToken.getTokenId());
-            return new ModelAndView("redirect:/profile");
+            return new ModelAndView("redirect:/login");
         }
     }
 
@@ -97,7 +97,7 @@ public class RegisterController {
             return modelAndView;
         } else {
             userService.registerManager(managerRegisterBindingModel);
-            return new ModelAndView("redirect:/profile");
+            return new ModelAndView("redirect:/login");
         }
     }
 }

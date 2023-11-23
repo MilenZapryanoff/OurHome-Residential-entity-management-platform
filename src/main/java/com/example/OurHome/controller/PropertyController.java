@@ -163,7 +163,7 @@ public class PropertyController {
                                                          @Valid PropertyEditBindingModel propertyEditBindingModel,
                                                          @PathVariable("id") Long id, BindingResult bindingResult) {
 
-        propertyService.editProperty(id, propertyEditBindingModel, !propertyService.needOfModeration(id, propertyEditBindingModel));
+        propertyService.editProperty(id, propertyEditBindingModel, !propertyService.needOfVerification(id, propertyEditBindingModel));
 
         return new ModelAndView("redirect:/property/details/" + id);
     }

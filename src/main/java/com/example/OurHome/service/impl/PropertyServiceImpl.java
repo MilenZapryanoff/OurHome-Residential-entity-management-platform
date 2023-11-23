@@ -44,8 +44,8 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Property creation. Performed by USER
      *
-     * @param propertyRegisterBindingModel carries property registration information.
-     * @param loggedUser                   logged user.
+     * @param propertyRegisterBindingModel the binding model with the data from frontend
+     * @param loggedUser logged user.
      */
     @Override
     public void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser) {
@@ -137,9 +137,9 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     /**
-     * Method maps Property to PropertyEditBindingModel used for edit of property data.
+     * Mapping of Property to PropertyEditBindingModel used for edit of property data.
      *
-     * @param property carries info about property
+     * @param property Property entity
      * @return PropertyEditBindingModel
      */
     @Override
@@ -157,23 +157,17 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Edit property method
      *
-     * @param id                       property id
-     * @param propertyEditBindingModel carries property new values
+     * @param id property id
+     * @param propertyEditBindingModel the binding model with the data returning from frontend
      * @param moderatorChange          TRUE if change is made by moderator, FALSE if change is made by owner
      */
     @Override
     public void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange) {
+
         Property property = propertyRepository.findById(id).orElse(null);
+
         if (property != null) {
-            property.setNumber(propertyEditBindingModel.getNumber());
-            property.setFloor(propertyEditBindingModel.getFloor());
-            property.setNumberOfAdults(propertyEditBindingModel.getNumberOfAdults());
-            property.setNumberOfChildren(propertyEditBindingModel.getNumberOfChildren());
-            property.setNumberOfPets(propertyEditBindingModel.getNumberOfPets());
-            property.setNotHabitable(propertyEditBindingModel.isNotHabitable());
-            property.setNumberOfRooms(propertyEditBindingModel.getNumberOfRooms());
-            property.setParkingAvailable(propertyEditBindingModel.isParkingAvailable());
-            property.setTotalFlatSpace(propertyEditBindingModel.getTotalFlatSpace());
+            modelMapper.map(propertyEditBindingModel, property);
 
             if (moderatorChange) {
                 property.setValidated(true);
@@ -187,8 +181,15 @@ public class PropertyServiceImpl implements PropertyService {
         }
     }
 
+    /**
+     * Check if the modified property data needs manager/moderator verification.
+     * If some of the fields in the if statement of the method are changed property is set to verified=false
+     * @param id property id
+     * @param propertyEditBindingModel the binding model with the data returning from frontend
+     * @return TRUE if changes need verification from manager/moderator. FALSE if no need of verification
+     */
     @Override
-    public boolean needOfModeration(Long id, PropertyEditBindingModel propertyEditBindingModel) {
+    public boolean needOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel) {
         Property property = propertyRepository.findById(id).orElse(null);
         if (property != null) {
 
