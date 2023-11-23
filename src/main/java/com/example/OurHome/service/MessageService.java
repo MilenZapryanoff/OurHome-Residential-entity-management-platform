@@ -22,7 +22,9 @@ public interface MessageService {
 
     void propertyRejectedMessage(Property property);
 
-    void propertyDeletedMessage(Property property);
+    void propertyDeletedMessageToOwner(Property property);
+
+    void propertyDeletedMessageToManager(Property property);
 
     void readMessage(Long id);
 

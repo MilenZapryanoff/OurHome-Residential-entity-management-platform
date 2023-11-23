@@ -6,6 +6,7 @@ public class PropertyManageBindingModel {
     private Long entityId;
     private String action;
 
+
     public Long getPropertyId() {
         return propertyId;
     }

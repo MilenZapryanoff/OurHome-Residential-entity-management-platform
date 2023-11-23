@@ -47,7 +47,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index"><hr><img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <a href="/index">
+                        <hr>
+                        <img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
@@ -60,9 +62,11 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}" class="active">Administration</a>
+                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}"
+                                                                                 class="active">Administration</a>
                         </li>
-                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your property</a></li>
+                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your
+                            property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
@@ -109,6 +113,8 @@
               th:action="@{/property/add}"
               th:object="${propertyRegisterBindingModel}">
             <div class="col-lg-12">
+                <h5 class="text-danger">Property information</h5>
+                <br>
                 <fieldset>
                     <label for="residentialEntity"><b>Residential entity</b></label>
                     <select class="form-control" id="residentialEntity"
@@ -119,7 +125,7 @@
                                 ${residentialEntity.getStreetNumber()} + ' ' + ${residentialEntity.getEntrance()}">
                         </option>
                     </select>
-                    <a class="small"th:href="@{/property/add/new}">Add new residential entity</a>
+                    <a class="small" th:href="@{/property/add/new}">Add new residential entity</a>
                 </fieldset>
                 <fieldset>
                     <br>
@@ -132,9 +138,8 @@
                            th:errorclass="bg-danger">
                 </fieldset>
                 <fieldset>
-                    <label for="floor"><b>Floor</b></label>
+                    <label for="floor"><b>Floor number</b></label>
                     <br>
-                    <small th:if="${floorNonDigit}" class="text-danger">Please enter a digit</small>
                     <small th:if="${#fields.hasErrors('floor')}"
                            th:errors="*{floor}" class="text-danger">Floor error message</small>
                     <input type="text" id="floor" placeholder="Enter floor..." required
@@ -142,9 +147,34 @@
                            th:errorclass="bg-danger">
                 </fieldset>
                 <fieldset>
-                    <label for="numberOfAdults"><b>Number of adults</b></label>
+                    <label for="totalFlatSpace"><b>Total flat space </b>(square meters)</label>
                     <br>
-<!--                    <small th:if="${floorNonDigit}" class="text-danger">Please enter a digit</small>-->
+                    <small th:if="${#fields.hasErrors('totalFlatSpace')}"
+                           th:errors="*{totalFlatSpace}" class="text-danger">Floor error message</small>
+                    <input type="text" id="totalFlatSpace" placeholder="Enter total flat space..."
+                           th:field="*{totalFlatSpace}"
+                           th:errorclass="bg-danger">
+                </fieldset>
+                <fieldset>
+                    <label for="numberOfRooms"><b>Number of rooms</b></label>
+                    <br>
+                    <small th:if="${#fields.hasErrors('numberOfRooms')}"
+                           th:errors="*{numberOfRooms}" class="text-danger">Rooms error message</small>
+                    <input type="text" id="numberOfRooms" placeholder="Enter number of rooms..."
+                           th:field="*{numberOfRooms}"
+                           th:errorclass="bg-danger">
+                </fieldset>
+                <fieldset>
+                    <label for="parkingAvailable"><b>Parking available</b></label>
+                    <input name="parkingAvailable" id="parkingAvailable"
+                           type="checkbox">
+                </fieldset>
+                <br>
+                <h5 class="text-danger">Inhabitants information</h5>
+                <hr>
+                <fieldset>
+                    <label for="numberOfAdults"><b>Number of adults </b><small>(over 7yo)</small></label>
+                    <br>
                     <small th:if="${#fields.hasErrors('numberOfAdults')}"
                            th:errors="*{numberOfAdults}" class="text-danger">Adults error message</small>
                     <input type="text" id="numberOfAdults" placeholder="Enter number of adults..." required
@@ -152,9 +182,8 @@
                            th:errorclass="bg-danger">
                 </fieldset>
                 <fieldset>
-                    <label for="numberOfChildren"><b>Number of children </b>(under 7yo)</label>
+                    <label for="numberOfChildren"><b>Number of children </b><small>(under 7yo)</small></label>
                     <br>
-                    <!--                    <small th:if="${floorNonDigit}" class="text-danger">Please enter a digit</small>-->
                     <small th:if="${#fields.hasErrors('numberOfAdults')}"
                            th:errors="*{numberOfChildren}" class="text-danger">Adults error message</small>
                     <input type="text" id="numberOfChildren" placeholder="Enter number of children..."
@@ -164,7 +193,6 @@
                 <fieldset>
                     <label for="numberOfPets"><b>Number of pets</b></label>
                     <br>
-                    <!--                    <small th:if="${floorNonDigit}" class="text-danger">Please enter a digit</small>-->
                     <small th:if="${#fields.hasErrors('numberOfPets')}"
                            th:errors="*{numberOfPets}" class="text-danger">Adults error message</small>
                     <input type="text" id="numberOfPets" placeholder="Enter number of pets..."
@@ -172,6 +200,7 @@
                            th:errorclass="bg-danger">
                 </fieldset>
                 <div class="col-lg-12">
+
                     <fieldset>
                         <label for="notHabitable"><b>Property not habitable</b></label>
                         <input name="notHabitable" id="notHabitable"

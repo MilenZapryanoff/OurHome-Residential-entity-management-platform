@@ -25,10 +25,21 @@ public class Property {
     private String numberOfPets;
 
     @Column
+    private String totalFlatSpace;
+
+    @Column
+    private String numberOfRooms;
+
+    @Column
+    private boolean parkingAvailable;
+
+    @Column
     private boolean notHabitable;
 
     @Column
     private boolean isValidated;
+
+    @Column
     private boolean isRejected;
 
     @Column
@@ -148,5 +159,29 @@ public class Property {
 
     public void setResidentialEntity(ResidentialEntity residentialEntity) {
         this.residentialEntity = residentialEntity;
+    }
+
+    public String getTotalFlatSpace() {
+        return totalFlatSpace;
+    }
+
+    public void setTotalFlatSpace(String totalFlatSpace) {
+        this.totalFlatSpace = totalFlatSpace;
+    }
+
+    public String getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(String numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public boolean isParkingAvailable() {
+        return parkingAvailable;
+    }
+
+    public void setParkingAvailable(boolean parkingAvailable) {
+        this.parkingAvailable = parkingAvailable;
     }
 }

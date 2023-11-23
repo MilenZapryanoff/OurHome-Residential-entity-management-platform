@@ -3,6 +3,7 @@ package com.example.OurHome.model.Entity.dto.BindingModels;
 import com.example.OurHome.model.Entity.enums.CityName;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class PropertyEditBindingModel {
 
@@ -16,6 +17,14 @@ public class PropertyEditBindingModel {
     private String numberOfChildren;
     @NotNull
     private String numberOfPets;
+
+    @Positive(message = "Total flat space must be positive digit")
+    private String totalFlatSpace;
+
+    @Column
+    private String numberOfRooms;
+
+    private boolean parkingAvailable;
 
     private boolean notHabitable;
 
@@ -65,5 +74,29 @@ public class PropertyEditBindingModel {
 
     public void setNotHabitable(boolean notHabitable) {
         this.notHabitable = notHabitable;
+    }
+
+    public String getTotalFlatSpace() {
+        return totalFlatSpace;
+    }
+
+    public void setTotalFlatSpace(String totalFlatSpace) {
+        this.totalFlatSpace = totalFlatSpace;
+    }
+
+    public String getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(String numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public boolean isParkingAvailable() {
+        return parkingAvailable;
+    }
+
+    public void setParkingAvailable(boolean parkingAvailable) {
+        this.parkingAvailable = parkingAvailable;
     }
 }

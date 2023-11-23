@@ -32,6 +32,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     /**
      * Find property by id
+     *
      * @param id property id
      * @return Property
      */
@@ -42,8 +43,9 @@ public class PropertyServiceImpl implements PropertyService {
 
     /**
      * Property creation. Performed by USER
+     *
      * @param propertyRegisterBindingModel carries property registration information.
-     * @param loggedUser logged user.
+     * @param loggedUser                   logged user.
      */
     @Override
     public void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser) {
@@ -68,21 +70,29 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Single Property deletion
      * Performed by USER or MANAGER
+     *
      * @param id property id
      */
-    public void deleteProperty(Long id) {
+    public void deleteProperty(Long id, boolean deletedByManaged) {
         Property property = propertyRepository.findById(id).orElse(null);
         if (property != null) {
             propertyRepository.delete(property);
 
-            messageService.propertyDeletedMessage(property);
+            if (deletedByManaged) {
+                messageService.propertyDeletedMessageToOwner(property);
+            } else {
+                messageService.propertyDeletedMessageToManager(property);
+            }
+
+
         }
     }
 
     /**
      * Delete existing in RE owned properties when owner is removed from RE
      * Performed by MANAGER
-     * @param residentId owner(resident) id
+     *
+     * @param residentId          owner(resident) id
      * @param residentialEntityId residential entity id
      */
     @Override
@@ -93,8 +103,9 @@ public class PropertyServiceImpl implements PropertyService {
 
 
     /**
-     *  Property approval.
-     *  Performed by Residential entity MANAGER
+     * Property approval.
+     * Performed by Residential entity MANAGER
+     *
      * @param id property id
      */
     @Override
@@ -135,17 +146,20 @@ public class PropertyServiceImpl implements PropertyService {
     public PropertyEditBindingModel mapPropertyToEditBindingModel(Property property) {
 
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
+
         if (property != null) {
             propertyEditBindingModel = modelMapper.map(property, PropertyEditBindingModel.class);
         }
+
         return propertyEditBindingModel;
     }
 
     /**
      * Edit property method
-     * @param id property id
+     *
+     * @param id                       property id
      * @param propertyEditBindingModel carries property new values
-     * @param moderatorChange TRUE if change is made by moderator, FALSE if change is made by owner
+     * @param moderatorChange          TRUE if change is made by moderator, FALSE if change is made by owner
      */
     @Override
     public void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange) {
@@ -157,11 +171,12 @@ public class PropertyServiceImpl implements PropertyService {
             property.setNumberOfChildren(propertyEditBindingModel.getNumberOfChildren());
             property.setNumberOfPets(propertyEditBindingModel.getNumberOfPets());
             property.setNotHabitable(propertyEditBindingModel.isNotHabitable());
+            property.setNumberOfRooms(propertyEditBindingModel.getNumberOfRooms());
+            property.setParkingAvailable(propertyEditBindingModel.isParkingAvailable());
+            property.setTotalFlatSpace(propertyEditBindingModel.getTotalFlatSpace());
 
             if (moderatorChange) {
                 property.setValidated(true);
-                //sending message (notification) to owner/resident
-                messageService.propertyModificationMessageToResident(property);
             } else {
                 property.setValidated(false);
                 //sending message (notification) to manager
@@ -170,5 +185,20 @@ public class PropertyServiceImpl implements PropertyService {
             property.setRejected(false);
             propertyRepository.save(property);
         }
+    }
+
+    @Override
+    public boolean needOfModeration(Long id, PropertyEditBindingModel propertyEditBindingModel) {
+        Property property = propertyRepository.findById(id).orElse(null);
+        if (property != null) {
+
+            return !property.getNumber().equals(propertyEditBindingModel.getNumber()) ||
+                    !property.getFloor().equals(propertyEditBindingModel.getFloor()) ||
+                    !property.getNumberOfAdults().equals(propertyEditBindingModel.getNumberOfAdults()) ||
+                    !property.getNumberOfChildren().equals(propertyEditBindingModel.getNumberOfChildren()) ||
+                    !property.getNumberOfPets().equals(propertyEditBindingModel.getNumberOfPets()) ||
+                    property.isNotHabitable() != propertyEditBindingModel.isNotHabitable();
+        }
+        return false;
     }
 }

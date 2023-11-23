@@ -148,6 +148,8 @@ body {
   line-height: 56px;
 }
 
+
+
 .section-heading h2 em {
   font-style: normal;
   color: #0071f8;
@@ -1034,12 +1036,12 @@ POP-UP window
 
 /* Button used to open the contact form - fixed at the bottom of the page */
 .open-button {
-  background-color: #ff0000;
+  background-color: #f35525;
   color: white;
   padding: 16px 20px;
   border: none;
   cursor: pointer;
-  opacity: 0.8;
+  opacity: 0.7;
   position: fixed;
   bottom: 23px;
   right: 28px;

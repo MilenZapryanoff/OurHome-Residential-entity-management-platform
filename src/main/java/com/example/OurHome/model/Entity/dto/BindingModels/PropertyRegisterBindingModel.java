@@ -1,5 +1,6 @@
 package com.example.OurHome.model.Entity.dto.BindingModels;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -22,6 +23,14 @@ public class PropertyRegisterBindingModel {
 
     @PositiveOrZero(message = "Number of pets must be a positive digit or 0")
     private String numberOfPets;
+
+    @Positive(message = "Total flat space must be positive digit")
+    private String totalFlatSpace;
+
+    @Column
+    private String numberOfRooms;
+
+    private boolean parkingAvailable;
 
     private boolean notHabitable;
 
@@ -84,5 +93,29 @@ public class PropertyRegisterBindingModel {
 
     public void setNotHabitable(boolean notHabitable) {
         this.notHabitable = notHabitable;
+    }
+
+    public String getTotalFlatSpace() {
+        return totalFlatSpace;
+    }
+
+    public void setTotalFlatSpace(String totalFlatSpace) {
+        this.totalFlatSpace = totalFlatSpace;
+    }
+
+    public String getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(String numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public boolean isParkingAvailable() {
+        return parkingAvailable;
+    }
+
+    public void setParkingAvailable(boolean parkingAvailable) {
+        this.parkingAvailable = parkingAvailable;
     }
 }

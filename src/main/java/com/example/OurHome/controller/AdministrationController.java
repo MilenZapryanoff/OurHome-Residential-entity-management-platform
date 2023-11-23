@@ -294,7 +294,7 @@ public class AdministrationController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyDelete(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
-        propertyService.deleteProperty(id);
+        propertyService.deleteProperty(id, true);
 
         return new ModelAndView("redirect:/administration/property/" + propertyManageBindingModel.getEntityId());
     }
@@ -332,6 +332,8 @@ public class AdministrationController {
 
         ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityByPropertyId(id);
         propertyService.editProperty(id, propertyEditBindingModel, true);
+        //sending message (notification) to owner/resident
+        messageService.propertyModificationMessageToResident(propertyService.findPropertyById(id));
 
         return new ModelAndView("redirect:/administration/property/" + residentialEntity.getId());
     }

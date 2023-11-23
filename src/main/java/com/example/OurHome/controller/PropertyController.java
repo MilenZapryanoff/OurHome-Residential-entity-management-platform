@@ -99,7 +99,6 @@ public class PropertyController {
 
 
     /**
-     *
      * @param sendMessageBindingModel
      * @param propertyId
      * @return
@@ -108,8 +107,8 @@ public class PropertyController {
     @PostMapping("/property/summary/messageToManager/{id}")
     @PreAuthorize("@securityService.checkMessageSenderAndReceiver(#propertyId, #sendMessageBindingModel.getSenderId() ,#sendMessageBindingModel.getReceiverId())")
     public ModelAndView sendMessageToPropertyManager(@ModelAttribute("sendMessageBindingModel")
-                                    SendMessageBindingModel sendMessageBindingModel,
-                                    @PathVariable("id") Long propertyId) {
+                                                     SendMessageBindingModel sendMessageBindingModel,
+                                                     @PathVariable("id") Long propertyId) {
 
         ModelAndView modelAndView = new ModelAndView("property-summary")
                 .addObject("userViewModel", getUserViewModel())
@@ -164,10 +163,18 @@ public class PropertyController {
                                                          @Valid PropertyEditBindingModel propertyEditBindingModel,
                                                          @PathVariable("id") Long id, BindingResult bindingResult) {
 
-        propertyService.editProperty(id, propertyEditBindingModel, false);
+        propertyService.editProperty(id, propertyEditBindingModel, !propertyService.needOfModeration(id, propertyEditBindingModel));
+
         return new ModelAndView("redirect:/property/details/" + id);
     }
 
+    @PostMapping("/property/delete/{id}")
+    public ModelAndView propertyDelete(@PathVariable("id") Long id) {
+
+        propertyService.deleteProperty(id, false);
+
+        return new ModelAndView("redirect:/property");
+    }
 
     /**
      * This private method returns a Property by id

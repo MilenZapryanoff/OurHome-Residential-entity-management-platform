@@ -8,7 +8,7 @@ import com.example.OurHome.model.Entity.dto.BindingModels.PropertyRegisterBindin
 public interface PropertyService {
     void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser);
 
-    void deleteProperty(Long id);
+    void deleteProperty(Long id, boolean deletedByManaged);
 
     void deletePropertiesWhenResidentRemoved(Long residentId, Long residentialEntityId);
 
@@ -21,4 +21,6 @@ public interface PropertyService {
     PropertyEditBindingModel mapPropertyToEditBindingModel(Property property);
 
     void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange);
+
+    boolean needOfModeration(Long id, PropertyEditBindingModel propertyEditBindingModel);
 }

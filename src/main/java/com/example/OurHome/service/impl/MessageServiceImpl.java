@@ -119,7 +119,7 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Your registration request for property № " + property.getNumber() + " id Residential entity ID: "
+                        "Your registration/modification request for property № " + property.getNumber() + " id Residential entity ID: "
                                 + property.getResidentialEntity().getId() + " has been APPROVED. You can now access your data and reports.",
                         property.getOwner(),
                         false,
@@ -152,7 +152,7 @@ public class MessageServiceImpl implements MessageService {
      * @param property carries information about the property. Allows message extend.
      */
     @Override
-    public void propertyDeletedMessage(Property property) {
+    public void propertyDeletedMessageToOwner(Property property) {
         messageRepository.save(
                 new Message(
                         LocalDate.now(),
@@ -162,6 +162,19 @@ public class MessageServiceImpl implements MessageService {
                                 "about the reason for this action. If you still have an access to the Residential entity, You can submit new " +
                                 "property registration request.",
                         property.getOwner(),
+                        false,
+                        false));
+    }
+
+    @Override
+    public void propertyDeletedMessageToManager(Property property) {
+        messageRepository.save(
+                new Message(
+                        LocalDate.now(),
+                        Time.valueOf(LocalTime.now()),
+                        "Property № " + property.getNumber() + " has been REMOVED from Residential entity ID: "
+                                + property.getResidentialEntity().getId() + " by his owner.",
+                        property.getResidentialEntity().getManager(),
                         false,
                         false));
     }

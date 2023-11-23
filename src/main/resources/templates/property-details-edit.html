@@ -130,12 +130,14 @@
                                                                   th:action="@{/property/details/edit/{id}(id=${property.getId()})}"
                                                                   th:object="${propertyEditBindingModel}">
                                                                 <div class="col-lg-12">
-                                                                    <p>Please note, that some property  <br>changes may affect your
-                                                                    monthly fees. Because of this, every change request must be approved by your manager.
-                                                                        After You submit the form, your property status will be changed to <b>Pending validation</b>
+                                                                    <p>Please note, that some property <br>changes like <b>Inhabitants information, Property number and Floor number</b>  may affect your
+                                                                    monthly fees and your Residential entity. Such changes must be approved my your Manager.<br>
+                                                                        When You submit the form, if some of these fields are changed your property status will be changed to <b>Pending validation</b>
                                                                         and some of your data won't be visible. <br>
                                                                         You will get full access as soon as your manager approve the change.</p>
-                                                                    <hr>
+                                                                    <br>
+                                                                    <h5 class="text-danger">Property information</h5>
+                                                                    <br>
                                                                     <fieldset>
                                                                         <label for="number"><b>Property №</b></label>
                                                                         <br>
@@ -154,7 +156,7 @@
                                                                            th:errors="*{number}" class="text-danger">Number
                                                                         error message</small>
                                                                     <fieldset>
-                                                                        <label for="floor"><b>Floor</b></label>
+                                                                        <label for="floor"><b>Floor number</b></label>
                                                                         <br>
                                                                         <small th:if="${#fields.hasErrors('floor')}"
                                                                                th:errors="*{floor}"
@@ -166,6 +168,34 @@
                                                                                th:errorclass="bg-danger"
                                                                                th:value="${propertyEditBindingModel.getFloor()}">
                                                                     </fieldset>
+                                                                    <fieldset>
+                                                                        <label for="totalFlatSpace"><b>Total flat space </b>(square meters)</label>
+                                                                        <br>
+                                                                        <small th:if="${#fields.hasErrors('totalFlatSpace')}"
+                                                                               th:errors="*{totalFlatSpace}" class="text-danger">Floor error message</small>
+                                                                        <input type="text" id="totalFlatSpace" placeholder="Enter total flat space..."
+                                                                               th:field="*{totalFlatSpace}"
+                                                                               th:errorclass="bg-danger">
+                                                                    </fieldset>
+                                                                    <fieldset>
+                                                                        <label for="numberOfRooms"><b>Number of rooms</b></label>
+                                                                        <br>
+                                                                        <small th:if="${#fields.hasErrors('numberOfRooms')}"
+                                                                               th:errors="*{numberOfRooms}" class="text-danger">Rooms error message</small>
+                                                                        <input type="text" id="numberOfRooms" placeholder="Enter number of rooms..."
+                                                                               th:field="*{numberOfRooms}"
+                                                                               th:errorclass="bg-danger">
+                                                                    </fieldset>
+                                                                    <fieldset>
+                                                                        <label for="parkingAvailable"><b>Parking available</b></label>
+                                                                        <input name="parkingAvailable" id="parkingAvailable"
+                                                                               type="checkbox"
+                                                                               th:field="*{parkingAvailable}"
+                                                                               th:value="${property.parkingAvailable}">
+                                                                    </fieldset>
+                                                                    <br>
+                                                                    <h5 class="text-danger">Inhabitants information</h5>
+                                                                    <hr>
                                                                     <fieldset>
                                                                         <label for="numberOfAdults"><b>Number of adults</b></label>
                                                                         <br>
@@ -220,7 +250,7 @@
                                                                         <button class="orange-button" id="form-cancel">
                                                                             <a
                                                                                     th:href="@{/property/details/{id}(id=${property.getId()})}">
-                                                                                <h7 class="text-light">Back</h7>
+                                                                                <h7 class="text-light">Cancel</h7>
                                                                             </a>
                                                                         </button>
                                                                     </fieldset>
