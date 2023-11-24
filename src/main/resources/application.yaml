@@ -33,9 +33,24 @@ spring:
     mode: HTML
     encoding: UTF-8
     prefix: file:src/main/resources/templates/
+  web:
+    resources:
+      static-locations[0]: "file:src/main/resources/static/"
+      static-locations[1]: "classpath:/static/"
+  servlet:
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 50MB
+
+
+
+
+
 
 OurHome:
-  remember.me.key: ${REMEMBER_ME_KEY:key_pass}
+  remember:
+    me:
+      key: ${REMEMBER_ME_KEY:key_pass}
 
 logging:
   level:

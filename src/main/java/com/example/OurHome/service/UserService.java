@@ -3,9 +3,13 @@ package com.example.OurHome.service;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.ManagerRegisterBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.ProfileEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.UserAuthBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.UserRegisterBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface UserService {
 
@@ -13,7 +17,7 @@ public interface UserService {
 
     boolean preRegistrationEmailCheck(String email);
 
-    boolean preRegistrationUserCheck(String username);
+    boolean duplicatedUsernameCheck(String username);
 
     void registerUser(UserRegisterBindingModel userRegisterBindingModel, Long residentialEntityId);
 
@@ -41,4 +45,11 @@ public interface UserService {
 
     boolean verificationCodeMatch(UserEntity user, String verificationCode);
 
+    String saveAvatar(MultipartFile file, Long userId) throws IOException;
+
+    void updateUserAvatar(UserEntity loggedUser, String relativePath);
+
+    ProfileEditBindingModel getProfileEditBindingModel(Long id);
+
+    boolean editProfile(Long id, ProfileEditBindingModel profileEditBindingModel);
 }

@@ -16,13 +16,14 @@ public class UserViewModel {
     private String username;
     private Long pendingPropertyApproval;
     private String email;
-
     private String phoneNumber;
     private List<ResidentialEntity> residentialEntities;
     private List<Property> properties;
     private List<Message> messages;
     private Role role;
     private boolean validated;
+
+    private String avatarPath;
 
     public UserViewModel() {
         messages = new ArrayList<>();
@@ -124,5 +125,13 @@ public class UserViewModel {
 
     public void setValidated(boolean validated) {
         this.validated = validated;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
     }
 }

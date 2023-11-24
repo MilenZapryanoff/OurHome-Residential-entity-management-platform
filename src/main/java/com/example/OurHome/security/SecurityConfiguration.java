@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/", "/index", "/contact").permitAll()
                         .requestMatchers("/register", "/register/**").permitAll()
                         .requestMatchers("/login", "/login/error").permitAll()
-                        .requestMatchers("/profile").authenticated()
+                        .requestMatchers("/profile", "/profile/**").authenticated()
                         .requestMatchers("/messages", "/messages/**").authenticated()
                         .requestMatchers("/property", "/property/**").hasAnyRole("RESIDENT", "MODERATOR")
                         .requestMatchers("/administration", "/administration/**").hasAnyRole("ADMIN", "MANAGER")

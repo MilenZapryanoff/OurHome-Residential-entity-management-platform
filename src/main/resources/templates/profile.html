@@ -47,7 +47,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index"><hr><img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <a href="/index">
+                        <hr>
+                        <img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
@@ -93,6 +95,8 @@
                     </div>
                 </div>
                 <h3>Profile details</h3>
+                <h5 class="text-danger" th:if="${errorMessage}" th:text="${errorMessage.toString()}">
+                </h5>
             </div>
         </div>
     </div>
@@ -113,16 +117,14 @@
                         <div class="nav-wrapper">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="profile-tab" data-bs-toggle="tab"
-                                            data-bs-target="#profile" type="button" role="tab"
-                                            aria-controls="profile" aria-selected="true">Profile
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="residentialEntity-tab" data-bs-toggle="tab"
-                                            data-bs-target="#residential-entity"
-                                            type="button" role="tab" aria-controls="residentialEntity"
-                                            aria-selected="false">Residential entity
+                                    <button class="nav-link active" id="editBtnActive"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#inbox" type="button"
+                                            role="tab"
+                                            aria-controls="inbox" aria-selected="true"><a
+                                            th:href="@{/profile/edit/{id}(id=${userViewModel.getId()})}">
+                                        <h7 class="text-light">Edit profile</h7>
+                                    </a>
                                     </button>
                                 </li>
                             </ul>
@@ -131,87 +133,73 @@
                             <div class="tab-pane fade show active" id="profile" role="tabpanel"
                                  aria-labelledby="profile-tab">
                                 <div class="row">
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-4">
                                         <div class="info-table">
                                             <ul>
-                                                <th:block>
-                                                    <li th:unless="${userViewModel.isValidated()}" class="text-black">
-                                                        Status :
-                                                        <h6 class="text-danger"
-                                                        >NOT VALIDATED</h6></li>
-                                                </th:block>
-                                                <th:block>
-                                                    <li th:if="${userViewModel.isValidated()}" class="text-black">Status
-                                                        :
-                                                        <h6 class="text-success"
-                                                        >USER VALIDATED</h6></li>
-                                                </th:block>
-                                                <th:block>
-                                                    <li class="text-black">Fistname :
-                                                        <h7 class="text-success"
-                                                            th:text="${userViewModel.getFirstName()}"></h7>
-                                                    </li>
-                                                </th:block>
-                                                <th:block>
-                                                    <li class="text-black">Lastname :
-                                                        <h7 class="text-success"
-                                                            th:text="${userViewModel.getLastName()}"></h7>
-                                                    </li>
-                                                </th:block>
-                                                <th:block>
-                                                    <li class="text-black">Username :
-                                                        <h7 class="text-success"
-                                                            th:text="${userViewModel.getUsername()}"></h7>
-                                                    </li>
-                                                </th:block>
-                                                <th:block>
-                                                    <li class="text-black">Email :
-                                                        <h7 class="text-success"
-                                                            th:text="${userViewModel.getEmail()}"></h7>
-                                                    </li>
-                                                </th:block>
+                                                <img th:if="${userViewModel.avatarPath != null}"
+                                                     th:src="@{${userViewModel.avatarPath}}" alt="Avatar">
+                                                <img th:unless="${userViewModel.avatarPath != null}"
+                                                     src="/avatars/default.jpg" alt="Default Avatar">
+                                                <form th:action="@{/uploadAvatar}" method="post"
+                                                      enctype="multipart/form-data" id="avatarForm">
+                                                    <input type="file" id="avatarInput" name="avatar" accept="image/*"
+                                                           style="display: none;">
+                                                    <div align="center" class="col-lg-12">
+                                                        <button type="button" id="uploadButton"><p>Change picture</p>
+                                                        </button>
+                                                    </div>
+                                                    <button type="submit" style="display: none;">Submit</button>
+                                                </form>
+                                                <hr>
+                                                <li th:unless="${userViewModel.isValidated()}" class="text-black"><b>Status
+                                                    :</b>
+                                                    INACTIVE
+                                                </li>
+                                                <li th:if="${userViewModel.isValidated()}" class="text-black"><b>Status
+                                                    :</b>
+                                                    ACTIVE
+                                                </li>
+                                                <li class="text-black"><b>User type:</b>
+                                                    <h7 class="text-dark"
+                                                        th:text="${userViewModel.getRole().getName()}"></h7>
+                                                </li>
+                                                <li class="text-black"><b>Member of residential entities:</b>
+                                                    <h7 class="text-dark"
+                                                        th:text="${userViewModel.getResidentialEntities().size()}"></h7>
+                                                </li>
+                                                <li class="text-black"><b>Registered properties:</b>
+                                                    <h7 class="text-dark"
+                                                        th:text="${userViewModel.getProperties().size()}"></h7>
+                                                </li>
+
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <img src="/images/deal-01.jpg" alt="">
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <h4>All Info About Apartment</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, do eiusmod tempor
-                                            pack incididunt ut labore et dolore magna aliqua quised ipsum suspendisse.
-                                            <br><br>Swag fanny pack lyft blog twee. JOMO ethical copper mug, succulents
-                                            typewriter shaman DIY kitsch twee taiyaki fixie hella venmo after messenger
-                                            poutine next level humblebrag swag franzen.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="residential-entity" role="tabpanel"
-                                 aria-labelledby="residential-entity-tab">
-                                <div class="row">
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-8">
                                         <div class="info-table">
                                             <ul>
-                                                <li>Total Flat Space <span>250 m2</span></li>
-                                                <li>Floor number <span>26th</span></li>
-                                                <li>Number of rooms <span>5</span></li>
-                                                <li>Parking Available <span>Yes</span></li>
-                                                <li>Payment Process <span>Bank</span></li>
+                                                <li class="text-black"><b>Firstname :</b>
+                                                    <h7 class="text-dark"
+                                                        th:text="${userViewModel.getFirstName()}"></h7>
+                                                </li>
+                                                <li class="text-black"><b>Lastname :</b>
+                                                    <h7 class="text-dark"
+                                                        th:text="${userViewModel.getLastName()}"></h7>
+                                                </li>
+
+                                                <li class="text-black"><b>Username :</b>
+                                                    <h7 class="text-dark"
+                                                        th:text="${userViewModel.getUsername()}"></h7>
+                                                </li>
+                                                <li class="text-black"><b>Email :</b>
+                                                    <h7 class="text-dark"
+                                                        th:text="${userViewModel.getEmail()}"></h7>
+                                                </li>
+                                                <li class="text-black"><b>Phone number:</b>
+                                                    <h7 class="text-dark"
+                                                        th:text="${userViewModel.getPhoneNumber()}"></h7>
+                                                </li>
                                             </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <img src="/images/deal-02.jpg" alt="">
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <h4>Detail Info About New Villa</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, do eiusmod tempor
-                                            pack incididunt ut labore et dolore magna aliqua quised ipsum suspendisse.
-                                            <br><br>Swag fanny pack lyft blog twee. JOMO ethical copper mug, succulents
-                                            typewriter shaman DIY kitsch twee taiyaki fixie hella venmo after messenger
-                                            poutine next level humblebrag swag franzen.</p>
-                                        <div class="icon-button">
-                                            <a href="#"><i class="fa fa-calendar"></i> Schedule a visit</a>
                                         </div>
                                     </div>
                                 </div>
@@ -222,21 +210,20 @@
             </div>
         </div>
     </div>
-</div>
 
-<!-- Footer -->
-<footer th:replace="~{fragments/footer}">
-</footer>
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer}">
+    </footer>
 
-<!-- Scripts -->
-<!-- Bootstrap core JavaScript -->
-<script src="/jquery/jquery.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/isotope.min.js"></script>
-<script src="/js/owl-carousel.js"></script>
-<script src="/js/counter.js"></script>
-<script src="/js/custom.js"></script>
-
+    <!-- Scripts -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="/jquery/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/isotope.min.js"></script>
+    <script src="/js/owl-carousel.js"></script>
+    <script src="/js/counter.js"></script>
+    <script src="/js/custom.js"></script>
+    <script src="/js/avatar.js" defer></script>
 
 </body>
 </html>

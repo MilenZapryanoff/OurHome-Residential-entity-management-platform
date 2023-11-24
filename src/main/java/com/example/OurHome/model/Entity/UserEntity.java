@@ -27,6 +27,8 @@ public class UserEntity {
     @Column
     private String phoneNumber;
 
+    private String avatarPath;
+
     @Email
     @Column(unique = true, nullable = false)
     private String email;
@@ -184,5 +186,13 @@ public class UserEntity {
 
     public void setSentMessages(List<Message> sentMessages) {
         this.sentMessages = sentMessages;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
     }
 }

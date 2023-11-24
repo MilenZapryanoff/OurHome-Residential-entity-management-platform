@@ -3,6 +3,7 @@ package com.example.OurHome.service.impl;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.ManagerRegisterBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.ProfileEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.UserAuthBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.UserRegisterBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
@@ -17,7 +18,14 @@ import com.example.OurHome.service.tokens.UserToken;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -79,7 +87,7 @@ public class UserServiceImpl implements UserService {
      */
 
     @Override
-    public boolean preRegistrationUserCheck(String username) {
+    public boolean duplicatedUsernameCheck(String username) {
         UserEntity checkUser = userRepository.findByUsername(username).orElse(null);
         return checkUser != null;
     }
@@ -96,6 +104,7 @@ public class UserServiceImpl implements UserService {
         newUserEntity.getResidentialEntities().add(residentialEntity);
         newUserEntity.setRole(roleRepository.findRoleByName("RESIDENT"));
         newUserEntity.setValidated(true);
+        newUserEntity.setAvatarPath("/avatars/default.jpg");
 
         userRepository.save(newUserEntity);
 
@@ -115,6 +124,7 @@ public class UserServiceImpl implements UserService {
         newManager.setPassword(passwordEncoder.encode(managerRegisterBindingModel.getPassword()));
         newManager.setValidated(true);
         newManager.setRole(roleRepository.findRoleByName("MANAGER"));
+        newManager.setAvatarPath("/avatars/default-manager.jpg");
 
         userRepository.save(newManager);
     }
@@ -273,12 +283,108 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Residential Entity Token invalidation method.
-     * When registering as a resident the user have to provide valid ResidentialEntity ID.
-     * It is an 8-digit randomly generated code used as residential entity id in the DB.
-     * The ID is used as registration token in UserRegToken class which gets invalidated after
-     * registration.
+     * @param file   upload file
+     * @param userId logged user id
+     * @return String avatarPath
+     * @throws IOException IOException or IllegalArgumentException
      */
+    @Override
+    public String saveAvatar(MultipartFile file, Long userId) throws IOException {
+
+        UserEntity user = userRepository.findById(userId).orElse(null);
+
+        if (file != null && !file.isEmpty()) {
+
+            if (file.getSize() > 3 * 1024 * 1024) {
+                throw new IllegalArgumentException("File size exceeds the allowed limit (3MB)");
+            }
+
+            assert user != null;
+            String uploadDirectory = "src/main/resources/static/avatars/%s%d".formatted(user.getUsername(), userId);
+            File directory = new File(uploadDirectory);
+
+            if (!directory.exists()) {
+                if (!directory.mkdirs()) {
+                    throw new IOException("Failed to create directory!");
+                }
+            }
+
+            String originalFilename = file.getOriginalFilename();
+            if (originalFilename != null) {
+                String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+                // Validate file type (allow only image files)
+                if (!fileExtension.matches("\\.(jpg|jpeg|png|gif)$")) {
+                    throw new IllegalArgumentException("Invalid file type!");
+                }
+
+                String fileName = "avatar" + fileExtension;
+                Path filePath = Paths.get(uploadDirectory, fileName);
+
+                try {
+                    Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                    // Update the user's avatarPath in the database
+                    String avatarPath = "/avatars/" + user.getUsername() + userId + "/" + fileName;
+                    // Update user entity with the avatar path
+                    updateUserAvatar(userRepository.findById(userId).orElseThrow(), avatarPath);
+                    return avatarPath;
+                } catch (IOException e) {
+                    throw new IOException("Failed to save the file!");
+                }
+            } else {
+                throw new IOException("Invalid file name!");
+            }
+        } else {
+            throw new IllegalArgumentException("File is null or empty!");
+        }
+    }
+
+    /**
+     * Update of avatarPath in the DB.
+     *
+     * @param userEntity logged user
+     * @param avatarPath the path of the user picture stored in DB
+     */
+    @Override
+    public void updateUserAvatar(UserEntity userEntity, String avatarPath) {
+        if (userEntity != null) {
+            userEntity.setAvatarPath(avatarPath);
+            userRepository.save(userEntity);
+        } else {
+            throw new IllegalArgumentException("UserEntity is null!");
+        }
+    }
+
+    @Override
+    public ProfileEditBindingModel getProfileEditBindingModel(Long id) {
+        UserEntity userEntity = userRepository.findById(id).orElse(null);
+
+        if (userEntity != null) {
+            return modelMapper.map(userEntity, ProfileEditBindingModel.class);
+        }
+        return new ProfileEditBindingModel();
+    }
+
+    /**
+     * Profile edit method.
+     * @param id logged user id
+     * @param profileEditBindingModel bearing new data
+     * @return TRUE if data change successful, FALSE if not successful
+     */
+    @Override
+    public boolean editProfile(Long id, ProfileEditBindingModel profileEditBindingModel) {
+
+        UserEntity userEntity = userRepository.findById(id).orElse(null);
+        if (userEntity != null) {
+
+            modelMapper.map(profileEditBindingModel, userEntity);
+            userEntity.setPassword(passwordEncoder.encode(profileEditBindingModel.getNewPassword()));
+            userRepository.save(userEntity);
+            return true;
+        }
+        return false;
+    }
+
 
     private void invalidateResidentialEntityToken() {
         residentialEntityToken.setValid(false);

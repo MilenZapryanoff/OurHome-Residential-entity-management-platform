@@ -105,7 +105,7 @@
                         <small th:if="${#fields.hasErrors('firstName')}"
                                th:errors="*{firstName}" class="text-danger">First name error message</small>
                         <input type="text" id="firstName" placeholder="Enter your first Name..." autocomplete="on"
-                               required
+                               required="on"
                                th:field="*{firstName}"
                                th:errorclass="bg-danger">
                     </fieldset>
