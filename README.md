@@ -10,7 +10,7 @@
 A platform that allows the registration of both home owners and residential entity managers. The platform provides an opportunity to receive messages (notifications) for various events, different user roles, validation of data and user registration verification by a moderator/manager, data on amounts due, monthly taxes, statements, news and etc.</li>
 
 
-<h2> Some of the functionalities </h2>
+<h2> Some of the features </h2>
 <ul>
   <li>User can register as Resident or Manager</li>
   <li>As a first step the manager have to register in the platform and register a Residential entity</li>
@@ -24,13 +24,16 @@ A platform that allows the registration of both home owners and residential enti
   There is also a possibility, one manager to manage different residential entities.</li>
   <li>Manager can change residential entity data whenever he needs. Also, can delete an residential entity if there are no registered residents in it.</li>
   <li>Messages (notifications) can be archived or deleted.</li>
-  <li>Only Residential entity manager can edit some apartment (property) data as number of adults living in apartment, number of children, number of pets and the amount of monthly taxes</li>
+  <li>Only Residential entity manager can edit a part of property data as number of adults living in apartment, number of children, number of pets, property number and property floor. Also the amount of monthly taxes</li>
+  <li>Only owner can view and edin personal property data.</li>
   <li>Manager and Moderator receive emails for every new property registration request</li>
   <li>Moderator can see all registered users, and have limited access to available modifications and actions</li>
   <li>User-to-user messages</li>
   <li>Sending email via contact form</li>
   <li>Reset forgotten password functionality</li>
-  <li>On next stage admin will be able to update and delete all managers in the platform via user interface and a news feed will be created. Will be added an option to personalize avatars and some pictures.</li>
+  <li>On next stage admin will be able to update and delete all managers in the platform via user interface and a news feed will be created.</li>
+  <li>With the newest released version of the app all registered users can now upload their own pictures/avatars (max 3MB) and also edit personal data and password.</li>
+
 </ul>
 
 <h2>Security</h2>
