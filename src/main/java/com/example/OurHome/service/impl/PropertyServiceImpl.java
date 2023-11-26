@@ -49,7 +49,7 @@ public class PropertyServiceImpl implements PropertyService {
      * Property creation. Performed by USER
      *
      * @param propertyRegisterBindingModel the binding model with the data from frontend
-     * @param loggedUser logged user.
+     * @param loggedUser                   logged user.
      */
     @Override
     public void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser) {
@@ -162,7 +162,7 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Edit property method
      *
-     * @param id property id
+     * @param id                       property id
      * @param propertyEditBindingModel the binding model with the data returning from frontend
      * @param moderatorChange          TRUE if change is made by moderator, FALSE if change is made by owner
      */
@@ -192,7 +192,8 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Check if the modified property data needs manager/moderator verification.
      * If some of the fields in the if statement of the method are changed property is set to verified=false
-     * @param id property id
+     *
+     * @param id                       property id
      * @param propertyEditBindingModel the binding model with the data returning from frontend
      * @return TRUE if changes need verification from manager/moderator. FALSE if no need of verification
      */

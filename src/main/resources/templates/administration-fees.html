@@ -178,7 +178,7 @@
                                                         role="tab"
                                                         aria-controls="inbox" aria-selected="true"><a
                                                         th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
-                                                    <h7 class="text-light">Edit</h7>
+                                                    <h7 class="text-light">Edit monthly fees</h7>
                                                 </a>
                                                 </button>
                                                 <button class="nav-link" id="back"><a
@@ -197,18 +197,19 @@
                                                                     <ul>
                                                                         <li><h6 class="text-danger">SECTION A</h6></li>
                                                                         <li><h6 class="text-dark">Fee calculation of habitable property :</h6></li>
-                                                                        <li class="text-black">Fixed monthly fee: <b th:text="${residentialEntity.getFee().getFixedFeeHabitable()} + ' лв.'"></b>
+                                                                        <li class="text-black"><b>1.</b> Fixed monthly fee: <b th:text="${residentialEntity.getFee().getFixedFeeHabitable()} + ' лв.'"></b>
                                                                             <p class="text-secondary">Monthly fee for every property in this residential entity.
-                                                                        <li class="text-black">Adult fee: <b th:text="${residentialEntity.getFee().getAdultFee()} + ' лв.'"></b>
+                                                                        <li class="text-black"><b>2.</b> Adult fee: <b th:text="${residentialEntity.getFee().getAdultFee()} + ' лв.'"></b>
                                                                             <p class="text-secondary">Monthly fee for each adult person living in the property.
-                                                                        <li class="text-black">Child fee: <b th:text="${residentialEntity.getFee().getChildFee()} + ' лв.'"></b>
+                                                                        <li class="text-black"><b>3.</b> Child fee: <b th:text="${residentialEntity.getFee().getChildFee()} + ' лв.'"></b>
                                                                             <p class="text-secondary">Monthly fee for each child living in the property.
-                                                                        <li class="text-black">Pet fee: <b th:text="${residentialEntity.getFee().getPetFee()} + ' лв.'"></b>
+                                                                        <li class="text-black"><b>4.</b> Pet fee: <b th:text="${residentialEntity.getFee().getPetFee()} + ' лв.'"></b>
                                                                             <p class="text-secondary">Monthly fee for a pet living in the property.
-                                                                        <li class="text-black">Additional fee: <b th:text="${residentialEntity.getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
+                                                                        <li class="text-black"><b>5.</b> Additional fee: <b th:text="${residentialEntity.getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
                                                                             <p class="text-secondary">Additional property monthly fee.
                                                                         <li class="text-danger">Forming an individual property fee
-                                                                            <p class="text-secondary">The total monthly fee for each habitable property is calculated by summing the listed elements forming the monthly fee.
+                                                                            <p class="text-secondary">The total monthly fee for each habitable property is
+                                                                                calculated by summing the listed elements. They all together form the monthly fee.
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -228,12 +229,13 @@
                                                                     <ul>
                                                                         <li><h6 class="text-danger">SECTION B</h6></li>
                                                                         <li><h6 class="text-dark">Fee calculation of non-habitable property :</h6></li>
-                                                                        <li class="text-black">Fixed fee: <b th:text="${residentialEntity.getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
+                                                                        <li class="text-black"><b>1.</b> Fixed fee: <b th:text="${residentialEntity.getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
                                                                             <p class="text-secondary">Monthly fee charged for every property in this residential entity.
-                                                                        <li class="text-black">Additional fee: <b th:text="${residentialEntity.getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
+                                                                        <li class="text-black"><b>2.</b> Additional fee: <b th:text="${residentialEntity.getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
                                                                             <p class="text-secondary">Additional property monthly fee.
                                                                         <li class="text-danger">Forming an individual property fee
-                                                                            <p class="text-secondary">The total monthly fee for each non-habitable property is calculated by summing the listed elements forming the monthly fee.
+                                                                            <p class="text-secondary">The total monthly fee for each non-habitable property is
+                                                                                calculated by summing the listed elements. They all together form the monthly fee.
                                                                         </li>
                                                                     </ul>
                                                                 </div>
@@ -282,7 +284,6 @@
                                                                                                     <th>Property habitable</th>
                                                                                                     <th>Monthly fee</th>
                                                                                                     <th>Due fee</th>
-                                                                                                    <th>Edit</th>
                                                                                                 </tr>
                                                                                                 <div class="main-content">
                                                             <span th:if="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} == 1"

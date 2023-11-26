@@ -1,6 +1,5 @@
 package com.example.OurHome.service.impl;
 
-import com.example.OurHome.model.Entity.Fee;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntityEditBindingModel;

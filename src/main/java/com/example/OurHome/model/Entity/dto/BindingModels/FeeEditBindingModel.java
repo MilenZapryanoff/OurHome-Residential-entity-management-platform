@@ -1,32 +1,39 @@
-package com.example.OurHome.model.Entity;
+package com.example.OurHome.model.Entity.dto.BindingModels;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-@Entity
-public class Fee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class FeeEditBindingModel {
+
+    @NotNull(message = "Fixed Fee Habitable cannot be null")
+    @DecimalMin(value = "0.0", message = "Fixed Fee must be greater than or equal to zero")
     private BigDecimal fixedFeeHabitable;
+
+    @NotNull(message = "Adult Fee cannot be null")
+    @DecimalMin(value = "0.0", message = "Adult Fee must be greater than or equal to zero")
     private BigDecimal adultFee;
+
+    @NotNull(message = "Child Fee cannot be null")
+    @DecimalMin(value = "0.0", message = "Child Fee must be greater than or equal to zero")
     private BigDecimal childFee;
+
+    @NotNull(message = "Pet Fee cannot be null")
+    @DecimalMin(value = "0.0", message = "Pet Fee must be greater than or equal to zero")
     private BigDecimal petFee;
+
+    @NotNull(message = "Additional Fee Habitable cannot be null")
+    @DecimalMin(value = "0.0", message = "Additional Fee must be greater than or equal to zero")
     private BigDecimal additionalFeeHabitable;
+
+    @NotNull(message = "Fixed Fee Non-Habitable cannot be null")
+    @DecimalMin(value = "0.0", message = "Fixed Fee must be greater than or equal to zero")
     private BigDecimal fixedFeeNonHabitable;
+
+    @NotNull(message = "Additional Fee Non-Habitable cannot be null")
+    @DecimalMin(value = "0.0", message = "Additional Fee must be greater than or equal to zero")
     private BigDecimal additionalFeeNonHabitable;
-
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "fee")
-    private ResidentialEntity residentialEntity;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public BigDecimal getFixedFeeHabitable() {
         return fixedFeeHabitable;
@@ -82,13 +89,5 @@ public class Fee {
 
     public void setAdditionalFeeNonHabitable(BigDecimal additionalFeeNonHabitable) {
         this.additionalFeeNonHabitable = additionalFeeNonHabitable;
-    }
-
-    public ResidentialEntity getResidentialEntity() {
-        return residentialEntity;
-    }
-
-    public void setResidentialEntity(ResidentialEntity residentialEntity) {
-        this.residentialEntity = residentialEntity;
     }
 }

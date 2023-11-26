@@ -269,6 +269,7 @@
                                                             <tr align="center">
                                                                 <th>Property №</th>
                                                                 <th>Owner</th>
+                                                                <th>Username</th>
                                                                 <th>Floor</th>
                                                                 <th>Number of adults</th>
                                                                 <th>Number of children</th>
@@ -293,6 +294,7 @@
                                                                 th:each="property: ${@propertyRepository.findValidatedProperties(residentialEntity.getId())}">
                                                                 <td th:text="${property.getNumber()}"></td>
                                                                 <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
+                                                                <td th:text="${property.getOwner().getUsername()}"></td>
                                                                 <td th:text="${property.getFloor()}"></td>
                                                                 <td th:text="${property.getNumberOfAdults()}"></td>
                                                                 <td th:text="${property.getNumberOfChildren()}"></td>
@@ -322,7 +324,7 @@
                                                                         <button type="submit">
                                                                             <img title="Edit property"
                                                                                  src="/images/edit.png"
-                                                                                 style="max-width: 110px;"></button>
+                                                                                 style="max-width: 130px;"></button>
                                                                     </form>
                                                                 </td>
                                                                 <td>
@@ -341,7 +343,7 @@
                                                                         <button type="submit">
                                                                             <img title="Delete property"
                                                                                  src="/images/delete.jpg"
-                                                                                 style="max-width: 110px;"></button>
+                                                                                 style="max-width: 150px;"></button>
                                                                     </form>
                                                                 </td>
                                                             </tr>

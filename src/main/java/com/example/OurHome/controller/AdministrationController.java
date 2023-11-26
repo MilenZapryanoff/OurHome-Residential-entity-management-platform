@@ -5,10 +5,7 @@ import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.*;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
-import com.example.OurHome.service.MessageService;
-import com.example.OurHome.service.PropertyService;
-import com.example.OurHome.service.ResidentialEntityService;
-import com.example.OurHome.service.UserService;
+import com.example.OurHome.service.*;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,12 +24,14 @@ public class AdministrationController {
     private final ResidentialEntityService residentialEntityService;
     private final PropertyService propertyService;
     private final MessageService messageService;
+    private final FeeService feeService;
 
-    public AdministrationController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, MessageService messageService) {
+    public AdministrationController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, MessageService messageService, FeeService feeService) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
         this.messageService = messageService;
+        this.feeService = feeService;
     }
 
     /**
@@ -356,8 +355,6 @@ public class AdministrationController {
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()));
 
-        String message = residentManageBindingModel.getMessage();
-
         if (residentManageBindingModel.getMessage().length() > 2000) {
             return modelAndView.addObject("messageError", true);
         }
@@ -369,15 +366,59 @@ public class AdministrationController {
     }
 
 
+
     // MONTHLY FEES SECTION
+
 
     @GetMapping("/administration/fees/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityFees(@PathVariable("id") Long id) {
-        
+
         return new ModelAndView("administration-fees")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
+    }
+
+
+    @GetMapping("/administration/fees/edit/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView editResidentialEntityFees(@PathVariable("id") Long id) {
+
+        ResidentialEntity residentialEntity = getResidentialEntity(id);
+        if (getResidentialEntity(id) == null) {
+               return new ModelAndView("redirect:/administration/fees/" + id);
+        }
+
+        FeeEditBindingModel feeEditBindingModel = feeService.mapFeeToBindingModel(residentialEntity.getFee());
+
+        return new ModelAndView("administration-fees-edit")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id))
+                .addObject("feeEditBindingModel", feeEditBindingModel);
+    }
+
+    @PostMapping("/administration/fees/edit/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView editResidentialEntityFees(@PathVariable("id") Long id,
+                                              @Valid FeeEditBindingModel feeEditBindingModel,
+                                              BindingResult bindingResult) {
+
+        ModelAndView modelAndView = new ModelAndView("administration-fees-edit")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id))
+                .addObject("feeEditBindingModel", feeEditBindingModel);
+
+        if (bindingResult.hasErrors()){
+            return modelAndView;
+        }
+
+        ResidentialEntity residentialEntity = getResidentialEntity(id);
+        if (residentialEntity == null) {
+            return new ModelAndView("redirect:/administration/fees/" + id);
+        }
+        feeService.changeFee(residentialEntity, feeEditBindingModel);
+
+        return new ModelAndView("redirect:/administration/fees/" + id);
     }
 
     /**
