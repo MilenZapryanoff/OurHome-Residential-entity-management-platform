@@ -59,9 +59,9 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a>
                         </li>
-                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}" class="active">Your
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}" class="active">Your
                             property</a>
                         </li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
@@ -145,6 +145,7 @@
                                                 <li>Owner: <span
                                                         th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span>
                                                 </li>
+                                                <li>Monthly fee: <span class="text-danger" th:text="${property.getMonthlyFee()} + ' лв.'"></span></li>
                                             </ul>
                                             <div class="main-button">
                                                 <div align="center" class="main-button">

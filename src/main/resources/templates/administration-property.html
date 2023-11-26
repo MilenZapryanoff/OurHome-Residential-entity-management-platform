@@ -62,10 +62,10 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}"
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
                                                                                  class="active">Administration</a>
                         </li>
-                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
                             property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
@@ -113,7 +113,7 @@
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="residentsButton"><a
-                            th:href="@{/administration/residents/{id}(id=${residentialEntity.getId()})}">
+                            th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
                         <h5>Owners</h5>
                     </a>
                     </button>
@@ -134,7 +134,7 @@
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="feesButton"><a
-                            th:href="@{/}">
+                            th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
                         <h5>Monthly fees</h5>
                     </a>
                     </button>
@@ -190,6 +190,7 @@
                                                         <th>Number of children</th>
                                                         <th>Number of pets</th>
                                                         <th>Property habitable</th>
+                                                        <th>Monthly fee</th>
                                                         <th>Approve</th>
                                                         <th>Decline</th>
                                                     </tr>
@@ -220,7 +221,8 @@
                                                                 title="Property is habitable"
                                                                 src="/images/check_yes.png"
                                                                 style="max-width: 110px;"></td>
-                                                        <!-- START: Roles change button-->
+                                                        <!-- START: Approve/decline buttons-->
+                                                        <td th:text="${property.getMonthlyFee()}"></td>
                                                         <td>
                                                             <form class="form-container"
                                                                   th:action="@{/administration/property/approve/{id} (id=${property.getId()})}"
@@ -271,6 +273,8 @@
                                                                 <th>Number of adults</th>
                                                                 <th>Number of children</th>
                                                                 <th>Number of pets</th>
+                                                                <th>Monthly fee</th>
+                                                                <th>Due fee</th>
                                                                 <th>Property habitable</th>
                                                                 <th>Edit</th>
                                                                 <th>Delete</th>
@@ -293,6 +297,8 @@
                                                                 <td th:text="${property.getNumberOfAdults()}"></td>
                                                                 <td th:text="${property.getNumberOfChildren()}"></td>
                                                                 <td th:text="${property.getNumberOfPets()}"></td>
+                                                                <td th:text="${property.getMonthlyFee()}"></td>
+                                                                <td th:text="${property.getFeesDue()}"></td>
                                                                 <td th:if="${property.isNotHabitable()}">
                                                                     <img title="Property is not habitable"
                                                                          src="/images/check_no.png"
@@ -354,6 +360,7 @@
                                                                 <th class="text-black">Number of adults</th>
                                                                 <th class="text-black">Number of children</th>
                                                                 <th class="text-black">Number of pets</th>
+                                                                <th>Monthly fee</th>
                                                                 <th class="text-black">Property habitable</th>
                                                                 <th class="text-black">Delete</th>
                                                             </tr>
@@ -371,21 +378,14 @@
                                                                 th:each="property: ${@propertyRepository.findRejectedProperties(residentialEntity.getId())}">
                                                                 <td class="text-black"
                                                                     th:text="${property.getNumber()}"></td>
-                                                                <td class="text-black"
-                                                                    th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
-                                                                <td class="text-black"
-                                                                    th:text="${property.getFloor()}"></td>
-                                                                <td class="text-black"
-                                                                    th:text="${property.getNumberOfAdults()}"></td>
-                                                                <td class="text-black"
-                                                                    th:text="${property.getNumberOfChildren()}"></td>
-                                                                <td class="text-black"
-                                                                    th:text="${property.getNumberOfPets()}"></td>
+                                                                <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
+                                                                <td class="text-black" th:text="${property.getFloor()}"></td>
+                                                                <td class="text-black" th:text="${property.getNumberOfAdults()}"></td>
+                                                                <td class="text-black" th:text="${property.getNumberOfChildren()}"></td>
+                                                                <td class="text-black" th:text="${property.getNumberOfPets()}"></td>
+                                                                <td th:text="${property.getMonthlyFee()}"></td>
                                                                 <td th:if="${property.isNotHabitable()}">
-                                                                    <img title="Property is not habitable"
-                                                                         src="/images/check_no.png"
-                                                                         style="max-width: 110px;">
-                                                                </td>
+                                                                    <img title="Property is not habitable" src="/images/check_no.png" style="max-width: 110px;"></td>
                                                                 <td th:unless="${property.isNotHabitable()}"><img
                                                                         title="Property is habitable"
                                                                         src="/images/check_yes.png"

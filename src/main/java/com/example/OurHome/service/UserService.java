@@ -51,5 +51,5 @@ public interface UserService {
 
     ProfileEditBindingModel getProfileEditBindingModel(Long id);
 
-    boolean editProfile(Long id, ProfileEditBindingModel profileEditBindingModel);
+    void editProfile(Long id, ProfileEditBindingModel profileEditBindingModel, Boolean passwordChange);
 }

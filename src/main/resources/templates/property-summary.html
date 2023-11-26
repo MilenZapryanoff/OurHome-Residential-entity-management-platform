@@ -64,9 +64,9 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER', 'MODERATOR')"><a th:href="@{/administration}"
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
                                                                                   class="active">Administration</a></li>
-                        <li sec:authorize="hasAnyRole('RESIDENT', 'MODERATOR')"><a th:href="@{/property}">Your
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
                             property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
@@ -305,7 +305,7 @@
                                 <hr>
                                 <label for="messageText" class="small text-danger">Send a message to your
                                     manager: </h8></label>
-                                <input type="text"
+                                <input class="info-table" type="text"
                                        placeholder="Your message"
                                        id="messageText" required
                                        autocomplete="off"

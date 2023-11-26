@@ -48,7 +48,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index"><hr><img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <a href="/index">
+                        <hr>
+                        <img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
                     <!-- ***** Logo End ***** -->
 
                     <!-- ***** Menu Start ***** -->
@@ -62,10 +64,10 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}"
-                                                                                 class="active">Administration</a>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
+                                                                     class="active">Administration</a>
                         </li>
-                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
                             property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
@@ -115,7 +117,7 @@
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="residentsButton"><a
-                            th:href="@{/administration/residents/{id}(id=${residentialEntity.getId()})}">
+                            th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
                         <h5>Owners</h5>
                     </a>
                     </button>
@@ -136,7 +138,7 @@
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="feesButton"><a
-                            th:href="@{/}">
+                            th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
                         <h5>Monthly fees</h5>
                     </a>
                     </button>
@@ -153,11 +155,11 @@
         <!--end of buttons-->
         <div class="row">
             <div class="col-lg-4">
-            <div class="main-content">
+                <div class="main-content">
                     <span th:text="'Residential entity: ' + ${residentialEntity.getId()}"
                           class="category text-black"></span>
-                <h4 th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>
-            </div>
+                    <h4 th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>
+                </div>
             </div>
             <div class="section administration" id="details">
                 <div class="container">
@@ -214,7 +216,7 @@
                                                             <li class="text-black">Registered apartments: <b
                                                                     th:text="${residentialEntity.getProperties().size()}"></b>
                                                             </li>
-                                                            <li class="text-black">Registered residents: <b
+                                                            <li class="text-black">Registered owners: <b
                                                                     th:text="${residentialEntity.getResidents().size()}"></b>
                                                             </li>
                                                             <li class="text-black">Number of moderators: <b

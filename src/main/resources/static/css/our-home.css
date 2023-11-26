@@ -1069,9 +1069,9 @@ POP-UP window
 .form-container input[type=text], .form-container input[type=password] {
   width: 100%;
   padding: 15px;
-  margin: 5px 0 22px 0;
+  margin: 19px 0 22px 0;
   border: none;
-  background: #f1f1f1;
+    background: #f1f1f1;
 }
 
 /* When the inputs get focus, do something */
@@ -1104,6 +1104,27 @@ POP-UP window
 
 .hidden {
   display: none; }
+
+
+.custom-input {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.custom-button {
+  padding: 35px;
+  text-align: center;
+  margin-left: -70px;
+
+}
+
+.custom-button2 {
+  padding: 35px;
+  text-align: center;
+  margin-left: -40px;
+  margin-block: 20px;
+}
+
 /*
 ---------------------------------------------
 Video Style
@@ -1282,6 +1303,38 @@ Administration Style
   display: inline-block;
 }
 
+.administration .message {
+  border-radius: 50px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
+  padding: 35px 30px;
+}
+
+.administration .message ul li {
+  display: block;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  font-size: 15px;
+  color: #aaa;
+  font-weight: 400;
+}
+
+.administration .message ul li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.administration .message ul li span {
+  font-size: 20px;
+  color: #1e1e1e;
+  font-weight: 700;
+  float: right;
+  display: inline-block;
+}
+
+
 .administration .tabs-content {
   padding: 0px;
   background-color: transparent;
@@ -1439,7 +1492,7 @@ Messages Style
 .messages .info-table {
   border-radius: 10px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
-  padding: 35px 30px;
+  /*padding: 35px 30px;*/
 }
 
 .messages .info-table ul li {

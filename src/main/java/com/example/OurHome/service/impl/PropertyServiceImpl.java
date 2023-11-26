@@ -6,12 +6,14 @@ import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyRegisterBindingModel;
 import com.example.OurHome.repo.PropertyRepository;
+import com.example.OurHome.service.FeeService;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.PropertyService;
 import com.example.OurHome.service.ResidentialEntityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -21,13 +23,15 @@ public class PropertyServiceImpl implements PropertyService {
     private final ResidentialEntityService residentialEntityService;
     private final PropertyRepository propertyRepository;
     private final MessageService messageService;
+    private final FeeService feeService;
 
 
-    public PropertyServiceImpl(ModelMapper modelMapper, ResidentialEntityService residentialEntityService, PropertyRepository propertyRepository, MessageService messageService) {
+    public PropertyServiceImpl(ModelMapper modelMapper, ResidentialEntityService residentialEntityService, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService) {
         this.modelMapper = modelMapper;
         this.residentialEntityService = residentialEntityService;
         this.propertyRepository = propertyRepository;
         this.messageService = messageService;
+        this.feeService = feeService;
     }
 
     /**
@@ -60,6 +64,7 @@ public class PropertyServiceImpl implements PropertyService {
         newProperty.setResidentialEntity(residentialEntity);
         newProperty.setOwner(loggedUser);
         newProperty.setValidated(false);
+        newProperty.setMonthlyFee(feeService.calculateMonthlyFee(residentialEntity, newProperty));
 
         propertyRepository.save(newProperty);
 
@@ -168,6 +173,9 @@ public class PropertyServiceImpl implements PropertyService {
 
         if (property != null) {
             modelMapper.map(propertyEditBindingModel, property);
+
+            ResidentialEntity residentialEntity = property.getResidentialEntity();
+            property.setMonthlyFee(feeService.calculateMonthlyFee(residentialEntity, property));
 
             if (moderatorChange) {
                 property.setValidated(true);

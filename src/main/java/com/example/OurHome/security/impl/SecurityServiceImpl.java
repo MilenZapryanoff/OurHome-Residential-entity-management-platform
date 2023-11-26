@@ -73,12 +73,24 @@ public class SecurityServiceImpl implements SecurityService {
      * @param messageId      message id
      * @param senderId       sender id
      * @param authentication UserEntity
-     * @return boolean
+     * @return TRUE if message found and received id equals logged user. FALSE in other cases
      */
     @Override
     public boolean checkMessageSender(Long messageId, Long senderId, Authentication authentication) {
         Message message = messageService.findMessageById(messageId);
         return message != null && message.getReceiver().getId().equals(getUserEntity(authentication).getId());
+    }
+
+    /**
+     * @param userId id of the user that is going to be modified
+     * @param authentication logged user data
+     * @return TRUE if the id of the edited user equals the id of the logged user. FALSE if id do not match.
+     */
+    @Override
+    public boolean checkProfileEditAccess(Long userId, Authentication authentication) {
+
+        UserEntity user = userService.findUserById(userId);
+        return user.getId().equals(getUserEntity(authentication).getId());
     }
 
     @Override

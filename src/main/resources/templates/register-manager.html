@@ -53,8 +53,8 @@
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                         <li><a th:href="@{/}">Home</a></li>
-                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a></li>
-                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your property</a></li>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a></li>
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="active">Register</a></li>

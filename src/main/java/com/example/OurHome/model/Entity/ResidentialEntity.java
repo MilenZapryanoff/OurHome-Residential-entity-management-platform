@@ -50,6 +50,9 @@ public class ResidentialEntity {
     @JoinColumn(referencedColumnName = "id")
     private UserEntity manager;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Fee fee;
+
     public ResidentialEntity() {
         residents = new ArrayList<>();
         properties = new ArrayList<>();
@@ -150,5 +153,13 @@ public class ResidentialEntity {
 
     public void setModerators(List<UserEntity> moderators) {
         this.moderators = moderators;
+    }
+
+    public Fee getFee() {
+        return fee;
+    }
+
+    public void setFee(Fee fee) {
+        this.fee = fee;
     }
 }

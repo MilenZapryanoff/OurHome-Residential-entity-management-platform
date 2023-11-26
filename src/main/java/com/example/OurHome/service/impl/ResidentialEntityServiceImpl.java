@@ -1,12 +1,13 @@
 package com.example.OurHome.service.impl;
 
+import com.example.OurHome.model.Entity.Fee;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntityEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntityRegisterBindingModel;
 import com.example.OurHome.repo.CityRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
+import com.example.OurHome.service.FeeService;
 import com.example.OurHome.service.ResidentialEntityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,12 +22,14 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
 
     private final ModelMapper modelMapper;
     private final CityRepository cityRepository;
+    private final FeeService feeService;
     private final ResidentialEntityRepository residentialEntityRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public ResidentialEntityServiceImpl(ModelMapper modelMapper, CityRepository cityRepository, ResidentialEntityRepository residentialEntityRepository, PasswordEncoder passwordEncoder) {
+    public ResidentialEntityServiceImpl(ModelMapper modelMapper, CityRepository cityRepository, FeeService feeService, ResidentialEntityRepository residentialEntityRepository, PasswordEncoder passwordEncoder) {
         this.modelMapper = modelMapper;
         this.cityRepository = cityRepository;
+        this.feeService = feeService;
         this.residentialEntityRepository = residentialEntityRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -41,6 +44,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
 
         ResidentialEntity newResidentialEntity = modelMapper.map(residentialEntityRegisterBindingModel, ResidentialEntity.class);
 
+        newResidentialEntity.setFee(feeService.createFee(newResidentialEntity));
         newResidentialEntity.setManager(loggedUser);
         newResidentialEntity.setCity(cityRepository.findByName(residentialEntityRegisterBindingModel.getCity()));
 

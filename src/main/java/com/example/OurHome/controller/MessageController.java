@@ -51,7 +51,7 @@ public class MessageController {
                 userService.findUserById(sendMessageBindingModel.getSenderId()),
                 sendMessageBindingModel.getMessage());
         messageService.readMessage(messageId);
-
+        sendMessageBindingModel.setMessage("");
 
         return modelAndView.addObject("messageSent", true);
     }

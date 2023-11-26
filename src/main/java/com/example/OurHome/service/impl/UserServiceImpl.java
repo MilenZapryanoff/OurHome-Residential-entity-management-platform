@@ -367,22 +367,23 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Profile edit method.
-     * @param id logged user id
+     *
+     * @param id                      logged user id
      * @param profileEditBindingModel bearing new data
      * @return TRUE if data change successful, FALSE if not successful
      */
     @Override
-    public boolean editProfile(Long id, ProfileEditBindingModel profileEditBindingModel) {
+    public void editProfile(Long id, ProfileEditBindingModel profileEditBindingModel, Boolean passwordChange) {
 
         UserEntity userEntity = userRepository.findById(id).orElse(null);
         if (userEntity != null) {
 
             modelMapper.map(profileEditBindingModel, userEntity);
-            userEntity.setPassword(passwordEncoder.encode(profileEditBindingModel.getNewPassword()));
+            if (passwordChange) {
+                userEntity.setPassword(passwordEncoder.encode(profileEditBindingModel.getNewPassword()));
+            }
             userRepository.save(userEntity);
-            return true;
         }
-        return false;
     }
 
 

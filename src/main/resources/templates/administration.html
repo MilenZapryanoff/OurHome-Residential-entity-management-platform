@@ -62,9 +62,9 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER', 'MODERATOR')"><a th:href="@{/administration}"
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
                                                                                   class="active">Administration</a></li>
-                        <li sec:authorize="hasAnyRole('RESIDENT', 'MODERATOR')"><a th:href="@{/property}">Your
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
                             property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
@@ -131,7 +131,7 @@
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="residentsButton"><a
-                                th:href="@{/administration/residents/{id}(id=${residentialEntity.getId()})}">
+                                th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
                             <h5>Owners</h5>
                         </a>
                         </button>
@@ -152,7 +152,7 @@
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="feesButton"><a
-                                th:href="@{/}">
+                                th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
                             <h5>Monthly fees</h5>
                         </a>
                         </button>
@@ -212,14 +212,14 @@
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Residents registrations
+                                Owners
                             </button>
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                              data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 You can manage the list of <a
-                                    th:href="@{/administration/residents/{id}(id=${residentialEntity.getId()})}">residents</a>
+                                    th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">owners</a>
                                 in your residential entity by
                                 giving them
                                 different roles or removing them from the list. Make sure, that every registered

@@ -47,7 +47,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index"><hr><img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <a href="/index">
+                        <hr>
+                        <img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
@@ -60,9 +62,9 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a>
                         </li>
-                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
                             property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
@@ -214,6 +216,41 @@
                                                                                 </div>
                                                                                 <h7 th:text="${message.getText()}"></h7>
                                                                                 <br></br>
+                                                                                <div th:unless="${message.getSender() == null}">
+                                                                                    <form th:action="@{/messages/send/{id} (id=${message.getId()})}"
+                                                                                          th:method="POST"
+                                                                                          class="form-container"
+                                                                                          th:object="${sendMessageBindingModel}">
+                                                                                        <select class="form-control hidden"
+                                                                                                id="senderIdNotArchived"
+                                                                                                th:field="*{receiverId}">
+                                                                                            <option
+                                                                                                    th:value="${message.getSender().getId()}">
+                                                                                            </option>
+                                                                                        </select>
+                                                                                        <select class="form-control hidden"
+                                                                                                id="receiverId"
+                                                                                                th:field="*{senderId}">
+                                                                                            <option
+                                                                                                    th:value="${message.getReceiver().getId()}">
+                                                                                            </option>
+                                                                                        </select>
+                                                                                        <input class="info-table small"
+                                                                                               type="text"
+                                                                                               th:placeholder="'Reply to ' + ${message.getSender().getFirstName()}"
+                                                                                               id="messageText"
+                                                                                               required
+                                                                                               autocomplete="off"
+                                                                                               th:field="*{message}"
+                                                                                               th:errorclass="bg-danger">
+                                                                                        <div class="col-lg-3">
+                                                                                            <button type="submit"
+                                                                                                    class="form-control text-bg-success">
+                                                                                                <small>SEND</small>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                         <div th:if="${message.isRead() == false}"
@@ -242,6 +279,41 @@
                                                                                 </div>
                                                                                 <h6 th:text="${message.getText()}"></h6>
                                                                                 <br></br>
+                                                                                <div th:unless="${message.getSender() == null}">
+                                                                                    <form th:action="@{/messages/send/{id} (id=${message.getId()})}"
+                                                                                          th:method="POST"
+                                                                                          class="form-container"
+                                                                                          th:object="${sendMessageBindingModel}">
+                                                                                        <select class="form-control hidden"
+                                                                                                id="senderIdNotArchived"
+                                                                                                th:field="*{receiverId}">
+                                                                                            <option
+                                                                                                    th:value="${message.getSender().getId()}">
+                                                                                            </option>
+                                                                                        </select>
+                                                                                        <select class="form-control hidden"
+                                                                                                id="receiverIdNotArchived"
+                                                                                                th:field="*{senderId}">
+                                                                                            <option
+                                                                                                    th:value="${message.getReceiver().getId()}">
+                                                                                            </option>
+                                                                                        </select>
+                                                                                        <input class="info-table small"
+                                                                                               type="text"
+                                                                                               th:placeholder="'Reply to ' + ${message.getSender().getFirstName()}"
+                                                                                               id="messageTextNotRead"
+                                                                                               required
+                                                                                               autocomplete="off"
+                                                                                               th:field="*{message}"
+                                                                                               th:errorclass="bg-danger">
+                                                                                        <div class="col-lg-3">
+                                                                                        <button type="submit"
+                                                                                                class="form-control text-bg-success">
+                                                                                            <small>SEND</small>
+                                                                                        </button>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                         <!--BUTTONS-->
@@ -260,52 +332,7 @@
                                                                                 <br style=“width:50%”/>
                                                                             </div>
                                                                             <div class="col-lg-12">
-                                                                                <button th:unless="${message.getSender() == null}"
-                                                                                        class="col-lg-12"
-                                                                                        onclick="openForm()">
-                                                                                    <input type="submit" value="Reply"
-                                                                                           class="form-control text-info-emphasis"/>
-                                                                                </button>
-                                                                                <br style=“width:50%”/>
-                                                                                <!-- send message dialog -->
-                                                                                <div th:unless="${message.getSender() == null}"
-                                                                                     class="form-popup" id="myForm">
-                                                                                    <form th:action="@{/messages/send/{id} (id=${message.getId()})}"
-                                                                                          th:method="POST"
-                                                                                          class="form-container"
-                                                                                          th:object="${sendMessageBindingModel}">
-                                                                                        <select class="form-control hidden"
-                                                                                                id="senderId"
-                                                                                                th:field="*{receiverId}">
-                                                                                            <option
-                                                                                                    th:value="${message.getSender().getId()}">
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select class="form-control hidden"
-                                                                                                id="receiverId"
-                                                                                                th:field="*{senderId}">
-                                                                                            <option
-                                                                                                    th:value="${message.getReceiver().getId()}">
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <label for="messageText"><b>Message</b></label>
-                                                                                        <input type="text"
-                                                                                               placeholder="Your message"
-                                                                                               id="messageText" required
-                                                                                               autocomplete="off"
-                                                                                               th:field="*{message}"
-                                                                                               th:errorclass="bg-danger">
-                                                                                        <button type="submit"
-                                                                                                class="btn">Send
-                                                                                        </button>
-                                                                                        <button type="button"
-                                                                                                class="btn cancel"
-                                                                                                onclick="closeForm()">
-                                                                                            Close
-                                                                                        </button>
-                                                                                    </form>
-                                                                                </div>
-                                                                                <br style=“width:50%”/>
+
                                                                                 <div class="col-lg-12">
                                                                                     <form th:action="@{/messages/archive/{id}(id=${message.getId()})}"
                                                                                           method="POST">

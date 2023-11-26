@@ -5,6 +5,7 @@ import com.example.OurHome.model.Entity.dto.BindingModels.ProfileEditBindingMode
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -45,8 +46,7 @@ public class ProfileController {
      * @return modelAndView
      */
     @PostMapping("/uploadAvatar")
-    public ModelAndView uploadAvatar(ProfileEditBindingModel profileEditBindingModel,
-                                     @RequestParam("avatar") MultipartFile file) {
+    public ModelAndView uploadAvatar(@RequestParam("avatar") MultipartFile file) {
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 
         ModelAndView modelAndView = new ModelAndView("profile", "userViewModel", getUserViewModel());
@@ -61,6 +61,7 @@ public class ProfileController {
     }
 
     @GetMapping("/profile/edit/{id}")
+    @PreAuthorize("@securityService.checkProfileEditAccess(#id, authentication)")
     public ModelAndView profileEdit(@PathVariable("id") Long id) {
 
         return new ModelAndView("profile-edit", "userViewModel", getUserViewModel())
@@ -69,12 +70,14 @@ public class ProfileController {
 
     /**
      * User edit request
-     * @param id logged user id
+     *
+     * @param id                      logged user id
      * @param profileEditBindingModel binding model bearing new data
-     * @param bindingResult validation result
+     * @param bindingResult           validation result
      * @return modelAndView
      */
     @PostMapping("/profile/edit/{id}")
+    @PreAuthorize("@securityService.checkProfileEditAccess(#id, authentication)")
     public ModelAndView profileEdit(@PathVariable("id") Long id,
                                     @Valid ProfileEditBindingModel profileEditBindingModel,
                                     BindingResult bindingResult) {
@@ -84,23 +87,29 @@ public class ProfileController {
         if (bindingResult.hasErrors()) {
             return modelAndView;
         }
+
         if (!getUserViewModel().getUsername().equals(profileEditBindingModel.getUsername()) &&
                 userService.duplicatedUsernameCheck(profileEditBindingModel.getUsername())) {
             return modelAndView.addObject("duplicatedEmail", true);
         }
-        if (!profileEditBindingModel.getNewPassword().isEmpty() &&
-                !profileEditBindingModel.getConfirmPassword().isEmpty())
-            if (!userService.passwordsMatch(profileEditBindingModel.getNewPassword(), profileEditBindingModel.getConfirmPassword())) {
-                return modelAndView.addObject("noPasswordsMatch", true);
-            }
-        if (userService.editProfile(id, profileEditBindingModel)) {
+
+        if (profileEditBindingModel.getNewPassword().isEmpty() &&
+                profileEditBindingModel.getConfirmPassword().isEmpty()) {
+            userService.editProfile(id, profileEditBindingModel, false);
             return new ModelAndView("redirect:/profile");
         }
-        return modelAndView.addObject("unsuccessfulEdit", true);
+
+        if (!userService.passwordsMatch(profileEditBindingModel.getNewPassword(), profileEditBindingModel.getConfirmPassword())) {
+            return modelAndView.addObject("noPasswordsMatch", true);
+        }
+
+        userService.editProfile(id, profileEditBindingModel, true);
+        return new ModelAndView("redirect:/profile");
     }
 
     /**
      * Method returns information about logged user
+     *
      * @return userViewModel
      */
     private UserViewModel getUserViewModel() {

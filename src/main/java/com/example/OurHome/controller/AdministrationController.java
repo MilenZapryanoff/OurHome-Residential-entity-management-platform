@@ -99,18 +99,18 @@ public class AdministrationController {
         return modelAndView.addObject("notDeleted", true);
     }
 
-    //RESIDENTS MANAGE (ADMINISTRATION SECTION)
+    //OWNERS MANAGE (ADMINISTRATION SECTION)
 
     /**
      * @param id residential entity (RE) id
-     * @return view administration-residents
+     * @return view administration-owners
      */
-    @GetMapping("/administration/residents/{id}")
+    @GetMapping("/administration/owners/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityResidentsDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
+    public ModelAndView residentialEntityOwnersDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
                                                           @PathVariable("id") Long id) {
 
-        return new ModelAndView("administration-residents")
+        return new ModelAndView("administration-owners")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
     }
@@ -120,10 +120,10 @@ public class AdministrationController {
      *
      * @param residentManageBindingModel carries information about the RE id
      * @param id                         resident(owner) id
-     * @return redirect:/administration/residents/{entityId}
+     * @return redirect:/administration/owners/{entityId}
      */
 
-    @PostMapping("/administration/residents/edit_role/{id}")
+    @PostMapping("/administration/owners/edit_role/{id}")
     @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
     public ModelAndView changeUserRole(@ModelAttribute("residentManageBindingModel")
                                        @Valid ResidentManageBindingModel residentManageBindingModel,
@@ -136,7 +136,7 @@ public class AdministrationController {
             userService.removeModerator(id, residentManageBindingModel.getEntityId());
         }
 
-        return new ModelAndView("redirect:/administration/residents/" + residentManageBindingModel.getEntityId());
+        return new ModelAndView("redirect:/administration/owners/" + residentManageBindingModel.getEntityId());
     }
 
     /**
@@ -144,9 +144,9 @@ public class AdministrationController {
      *
      * @param residentManageBindingModel carries information about the RE id
      * @param id                         resident(owner) id
-     * @return administration-residents
+     * @return administration-owners
      */
-    @PostMapping("/administration/residents/delete/{id}")
+    @PostMapping("/administration/owners/delete/{id}")
     @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
     public ModelAndView deleteResident(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
 
@@ -155,7 +155,7 @@ public class AdministrationController {
         //delete user's properties in this RE
         propertyService.deletePropertiesWhenResidentRemoved(id, residentManageBindingModel.getEntityId());
 
-        return new ModelAndView("administration-residents")
+        return new ModelAndView("administration-owners")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()))
                 .addObject("residentRemoved", true);
@@ -344,15 +344,15 @@ public class AdministrationController {
      * Send message to resident
      *
      * @param id resident id
-     * @return view administration-residents
+     * @return view administration-owners
      */
-    @PostMapping("/administration/residents/message/{id}")
+    @PostMapping("/administration/owners/message/{id}")
     @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
     public ModelAndView sendMessage(@ModelAttribute("residentManageBindingModel")
                                     ResidentManageBindingModel residentManageBindingModel,
                                     @PathVariable("id") Long id) {
 
-        ModelAndView modelAndView = new ModelAndView("administration-residents")
+        ModelAndView modelAndView = new ModelAndView("administration-owners")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()));
 
@@ -362,11 +362,23 @@ public class AdministrationController {
             return modelAndView.addObject("messageError", true);
         }
 
-
         messageService.sendMessage(userService.findUserById(id), userService.findUserById(getUserViewModel().getId()), residentManageBindingModel.getMessage());
+        residentManageBindingModel.setMessage("");
+
         return modelAndView.addObject("messageSent", true);
     }
 
+
+    // MONTHLY FEES SECTION
+
+    @GetMapping("/administration/fees/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityFees(@PathVariable("id") Long id) {
+        
+        return new ModelAndView("administration-fees")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
+    }
 
     /**
      * Method returns currently logged user

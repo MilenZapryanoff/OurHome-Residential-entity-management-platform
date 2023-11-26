@@ -2,6 +2,8 @@ package com.example.OurHome.model.Entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity(name = "properties")
 public class Property {
 
@@ -43,10 +45,13 @@ public class Property {
     private boolean isRejected;
 
     @Column
-    private double feesDue;
+    private BigDecimal monthlyFee;
 
     @Column
-    private double overpayment;
+    private BigDecimal feesDue;
+
+    @Column
+    private BigDecimal overpayment;
 
     @ManyToOne
     private UserEntity owner;
@@ -129,22 +134,6 @@ public class Property {
         isRejected = rejected;
     }
 
-    public double getFeesDue() {
-        return feesDue;
-    }
-
-    public void setFeesDue(double feesDue) {
-        this.feesDue = feesDue;
-    }
-
-    public double getOverpayment() {
-        return overpayment;
-    }
-
-    public void setOverpayment(double overpayment) {
-        this.overpayment = overpayment;
-    }
-
     public UserEntity getOwner() {
         return owner;
     }
@@ -183,5 +172,29 @@ public class Property {
 
     public void setParkingAvailable(boolean parkingAvailable) {
         this.parkingAvailable = parkingAvailable;
+    }
+
+    public BigDecimal getMonthlyFee() {
+        return monthlyFee;
+    }
+
+    public void setMonthlyFee(BigDecimal monthlyFee) {
+        this.monthlyFee = monthlyFee;
+    }
+
+    public BigDecimal getFeesDue() {
+        return feesDue;
+    }
+
+    public void setFeesDue(BigDecimal feesDue) {
+        this.feesDue = feesDue;
+    }
+
+    public BigDecimal getOverpayment() {
+        return overpayment;
+    }
+
+    public void setOverpayment(BigDecimal overpayment) {
+        this.overpayment = overpayment;
     }
 }

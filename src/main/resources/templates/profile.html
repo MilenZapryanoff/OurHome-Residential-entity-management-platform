@@ -62,9 +62,9 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER','MODERATOR')"><a th:href="@{/administration}">Administration</a>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a>
                         </li>
-                        <li sec:authorize="hasAnyRole('RESIDENT','MODERATOR')"><a th:href="@{/property}">Your
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
                             property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}" class="active">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
@@ -163,15 +163,18 @@
                                                     <h7 class="text-dark"
                                                         th:text="${userViewModel.getRole().getName()}"></h7>
                                                 </li>
-                                                <li class="text-black"><b>Member of residential entities:</b>
+                                                <li th:if="${userViewModel.getRole().getName()} == 'RESIDENT'" class="text-black"><b>Member of residential entities:</b>
                                                     <h7 class="text-dark"
                                                         th:text="${userViewModel.getResidentialEntities().size()}"></h7>
                                                 </li>
-                                                <li class="text-black"><b>Registered properties:</b>
+                                                <li th:if="${userViewModel.getRole().getName()} == 'RESIDENT'" class="text-black"><b>Registered properties:</b>
                                                     <h7 class="text-dark"
                                                         th:text="${userViewModel.getProperties().size()}"></h7>
                                                 </li>
-
+                                                <li th:if="${userViewModel.getRole().getName()} == 'MANAGER'" class="text-black"><b>Managed Residential entities:</b>
+                                                    <h7 class="text-dark"
+                                                        th:text="${@residentialEntityRepository.countByManager_Id(userViewModel.getId())}"></h7>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -210,7 +213,7 @@
             </div>
         </div>
     </div>
-
+</div>
     <!-- Footer -->
     <footer th:replace="~{fragments/footer}">
     </footer>
