@@ -32,8 +32,9 @@ A platform that allows the registration of both home owners and residential enti
   <li>Sending email via contact form</li>
   <li>Reset forgotten password functionality</li>
   <li>On next stage admin will be able to update and delete all managers in the platform via user interface and a news feed will be created.</li>
+  UPDATE:
   <li>With the newest released version of the app all registered users can now upload their own pictures/avatars (max 3MB) and also edit personal data and password.</li>
-
+  <li>Monthly fees section added. 1. Every new property monthly fee is calculated and set automatically with registration. 2. Property monthly fee is automatically re-calculated when a change of the living in the property people/pets occures. 3. When a manager applies a change to monthly fees, all properties monthly fees are automatically re-calculated.</li>
 </ul>
 
 <h2>Security</h2>
