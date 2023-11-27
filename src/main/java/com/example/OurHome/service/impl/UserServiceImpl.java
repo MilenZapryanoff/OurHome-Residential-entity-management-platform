@@ -370,7 +370,6 @@ public class UserServiceImpl implements UserService {
      *
      * @param id                      logged user id
      * @param profileEditBindingModel bearing new data
-     * @return TRUE if data change successful, FALSE if not successful
      */
     @Override
     public void editProfile(Long id, ProfileEditBindingModel profileEditBindingModel, Boolean passwordChange) {
@@ -383,6 +382,22 @@ public class UserServiceImpl implements UserService {
                 userEntity.setPassword(passwordEncoder.encode(profileEditBindingModel.getNewPassword()));
             }
             userRepository.save(userEntity);
+        }
+    }
+
+    /**
+     * When user request password reset he receives a verification code on his email. Using this code the user can
+     * reset his password.
+     * This method cleans up issued and not user verification codes every night at 0:00 o`clock. If user request again a password
+     * restore a new verification code will be issued and send to user's email.
+     */
+    @Override
+    public void cleanUpPasswordRestoreVerificationCodes() {
+        List<UserEntity> allUsersWithVerificationCode = userRepository.findAllUsersWithVerificationCode();
+        for (UserEntity userEntity : allUsersWithVerificationCode) {
+            userEntity.setValidationCode(null);
+            userRepository.save(userEntity);
+            System.out.println("cleaned");
         }
     }
 

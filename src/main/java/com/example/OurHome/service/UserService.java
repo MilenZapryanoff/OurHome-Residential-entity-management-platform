@@ -29,8 +29,8 @@ public interface UserService {
 
     UserViewModel getUserViewData(UserEntity userEntity);
 
-
     UserEntity findUserByEmail(String email);
+
     UserEntity findUserById(Long id);
 
     void createModerator(Long residentId, Long entityId);
@@ -52,4 +52,6 @@ public interface UserService {
     ProfileEditBindingModel getProfileEditBindingModel(Long id);
 
     void editProfile(Long id, ProfileEditBindingModel profileEditBindingModel, Boolean passwordChange);
+
+    void cleanUpPasswordRestoreVerificationCodes();
 }
