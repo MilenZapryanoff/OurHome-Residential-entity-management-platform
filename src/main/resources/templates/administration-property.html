@@ -275,7 +275,6 @@
                                                                 <th>Number of children</th>
                                                                 <th>Number of pets</th>
                                                                 <th>Monthly fee</th>
-                                                                <th>Due fee</th>
                                                                 <th>Property habitable</th>
                                                                 <th>Edit</th>
                                                                 <th>Delete</th>
@@ -300,7 +299,6 @@
                                                                 <td th:text="${property.getNumberOfChildren()}"></td>
                                                                 <td th:text="${property.getNumberOfPets()}"></td>
                                                                 <td th:text="${property.getMonthlyFee()}"></td>
-                                                                <td th:text="${property.getFeesDue()}"></td>
                                                                 <td th:if="${property.isNotHabitable()}">
                                                                     <img title="Property is not habitable"
                                                                          src="/images/check_no.png"

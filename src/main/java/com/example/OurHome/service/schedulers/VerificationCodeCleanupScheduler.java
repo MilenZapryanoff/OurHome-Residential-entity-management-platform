@@ -1,5 +1,6 @@
 package com.example.OurHome.service.schedulers;
 
+import com.example.OurHome.service.PropertyFeeService;
 import com.example.OurHome.service.UserService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -8,22 +9,16 @@ import org.springframework.stereotype.Component;
 public class VerificationCodeCleanupScheduler {
 
     private final UserService userService;
+    private final PropertyFeeService propertyFeeService;
 
-    public VerificationCodeCleanupScheduler(UserService userService) {
+    public VerificationCodeCleanupScheduler(UserService userService, PropertyFeeService propertyFeeService) {
         this.userService = userService;
+        this.propertyFeeService = propertyFeeService;
     }
 
-    // This expression triggers the method everynight at 00:00 o`clock
+    // This expression triggers the method every night at 00:00 o`clock
     @Scheduled(cron = "0 0 0 * * ?")
     public void cleanUp() {
-
         userService.cleanUpPasswordRestoreVerificationCodes();
-
-        System.out.println("Test");
     }
-
-// This expression triggers the method on the first day of every month
-//    @Scheduled(cron = "0 0 0 * * ?")
-
-
 }

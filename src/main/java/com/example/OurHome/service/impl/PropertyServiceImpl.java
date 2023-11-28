@@ -1,19 +1,17 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.PropertyFee;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyRegisterBindingModel;
 import com.example.OurHome.repo.PropertyRepository;
-import com.example.OurHome.service.FeeService;
-import com.example.OurHome.service.MessageService;
-import com.example.OurHome.service.PropertyService;
-import com.example.OurHome.service.ResidentialEntityService;
+import com.example.OurHome.service.*;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -24,14 +22,16 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyRepository propertyRepository;
     private final MessageService messageService;
     private final FeeService feeService;
+    private final PropertyFeeService propertyFeeService;
 
 
-    public PropertyServiceImpl(ModelMapper modelMapper, ResidentialEntityService residentialEntityService, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService) {
+    public PropertyServiceImpl(ModelMapper modelMapper, ResidentialEntityService residentialEntityService, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService, PropertyFeeService propertyFeeService) {
         this.modelMapper = modelMapper;
         this.residentialEntityService = residentialEntityService;
         this.propertyRepository = propertyRepository;
         this.messageService = messageService;
         this.feeService = feeService;
+        this.propertyFeeService = propertyFeeService;
     }
 
     /**
@@ -52,6 +52,7 @@ public class PropertyServiceImpl implements PropertyService {
      * @param loggedUser                   logged user.
      */
     @Override
+    @Transactional
     public void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser) {
 
         Property newProperty = modelMapper.map(propertyRegisterBindingModel, Property.class);
@@ -67,6 +68,8 @@ public class PropertyServiceImpl implements PropertyService {
         newProperty.setMonthlyFee(feeService.calculateMonthlyFee(residentialEntity, newProperty));
 
         propertyRepository.save(newProperty);
+
+        propertyFeeService.createFirstFee(newProperty);
 
         //sending message to residential entity manager
         messageService.propertyRegistrationMessageToManager(residentialEntity);
@@ -210,5 +213,10 @@ public class PropertyServiceImpl implements PropertyService {
                     property.isNotHabitable() != propertyEditBindingModel.isNotHabitable();
         }
         return false;
+    }
+
+    @Override
+    public List<Property> findAllProperties() {
+        return propertyRepository.findAll();
     }
 }

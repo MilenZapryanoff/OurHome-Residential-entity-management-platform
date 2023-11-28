@@ -272,25 +272,17 @@
                                                                                                 <tr align="center">
                                                                                                     <th>Property №</th>
                                                                                                     <th>Owner</th>
-                                                                                                    <th>Floor</th>
-                                                                                                    <th>Number of
-                                                                                                        adults
-                                                                                                    </th>
-                                                                                                    <th>Number of
-                                                                                                        children
-                                                                                                    </th>
-                                                                                                    <th>Number of pets
-                                                                                                    </th>
-                                                                                                    <th>Property habitable</th>
                                                                                                     <th>Monthly fee</th>
                                                                                                     <th>Due fee</th>
+                                                                                                    <th>Overpayment</th>
+                                                                                                    <th>View details</th>
                                                                                                 </tr>
                                                                                                 <div class="main-content">
                                                             <span th:if="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} == 1"
-                                                                  th:text="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Active regisration'"
+                                                                  th:text="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Record found'"
                                                                   class="category text-bg-success"></span>
                                                                                                     <span th:if="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 1"
-                                                                                                          th:text="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Active regisrations'"
+                                                                                                          th:text="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Records found'"
                                                                                                           class="category text-bg-success"></span>
                                                                                                     <br></br>
                                                                                                 </div>
@@ -299,23 +291,16 @@
                                                                                                     th:each="property: ${@propertyRepository.findValidatedProperties(residentialEntity.getId())}">
                                                                                                     <td th:text="${property.getNumber()}"></td>
                                                                                                     <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
-                                                                                                    <td th:text="${property.getFloor()}"></td>
-                                                                                                    <td th:text="${property.getNumberOfAdults()}"></td>
-                                                                                                    <td th:text="${property.getNumberOfChildren()}"></td>
-                                                                                                    <td th:text="${property.getNumberOfPets()}"></td>
-                                                                                                    <td th:if="${property.isNotHabitable()}">
-                                                                                                        <img title="Property is not habitable"
-                                                                                                             src="/images/check_no.png"
+
+                                                                                                    <td th:text="${property.getMonthlyFee()}"></td>
+                                                                                                    <td th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())}"></td>
+                                                                                                    <td th:text="${property.getOverpayment()}"></td>
+                                                                                                    <td>
+                                                                                                        <img title="View details"
+                                                                                                             src="/images/magnifier.png"
                                                                                                              style="max-width: 110px;">
                                                                                                     </td>
-                                                                                                    <td th:unless="${property.isNotHabitable()}">
-                                                                                                        <img
-                                                                                                                title="Property is habitable"
-                                                                                                                src="/images/check_yes.png"
-                                                                                                                style="max-width: 110px;">
-                                                                                                    </td>
-                                                                                                    <td th:text="${property.getMonthlyFee()}"></td>
-                                                                                                    <td th:text="${property.getFeesDue()}"></td>
+
                                                                                                     <!--                                                                <td>-->
                                                                                                     <!--                                                                    <form class="form-container"-->
                                                                                                     <!--                                                                          th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"-->

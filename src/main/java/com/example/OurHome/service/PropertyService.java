@@ -26,4 +26,6 @@ public interface PropertyService {
     void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange);
 
     boolean needOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel);
+
+    List<Property> findAllProperties();
 }
