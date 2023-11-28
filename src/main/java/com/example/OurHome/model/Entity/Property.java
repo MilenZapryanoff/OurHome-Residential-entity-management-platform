@@ -3,6 +3,8 @@ package com.example.OurHome.model.Entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "properties")
 public class Property {
@@ -48,9 +50,6 @@ public class Property {
     private BigDecimal monthlyFee;
 
     @Column
-    private BigDecimal feesDue;
-
-    @Column
     private BigDecimal overpayment;
 
     @ManyToOne
@@ -59,7 +58,12 @@ public class Property {
     @ManyToOne
     private ResidentialEntity residentialEntity;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "property")
+    private List<PropertyFee> propertyFees;
+
     public Property() {
+        propertyFees = new ArrayList<>();
+        this.overpayment = BigDecimal.valueOf(0);
     }
 
     public Long getId() {
@@ -182,19 +186,19 @@ public class Property {
         this.monthlyFee = monthlyFee;
     }
 
-    public BigDecimal getFeesDue() {
-        return feesDue;
-    }
-
-    public void setFeesDue(BigDecimal feesDue) {
-        this.feesDue = feesDue;
-    }
-
     public BigDecimal getOverpayment() {
         return overpayment;
     }
 
     public void setOverpayment(BigDecimal overpayment) {
         this.overpayment = overpayment;
+    }
+
+    public List<PropertyFee> getPropertyFees() {
+        return propertyFees;
+    }
+
+    public void setPropertyFees(List<PropertyFee> propertyFees) {
+        this.propertyFees = propertyFees;
     }
 }
