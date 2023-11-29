@@ -1,11 +1,11 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.model.Entity.PropertyFee;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyEditBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyRegisterBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyEditBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyRegisterBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.service.*;
 import jakarta.transaction.Transactional;
@@ -218,5 +218,15 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public List<Property> findAllProperties() {
         return propertyRepository.findAll();
+    }
+
+    @Override
+    public void setOverpayment(PropertyFeeEditBindingModel propertyFeeEditBindingModel) {
+        Property property = propertyRepository.findById(propertyFeeEditBindingModel.getPropertyId()).orElse(null);
+
+        if (property != null){
+            property.setOverpayment(propertyFeeEditBindingModel.getOverPayment());
+            propertyRepository.save(property);
+        }
     }
 }

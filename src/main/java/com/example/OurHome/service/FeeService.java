@@ -3,7 +3,7 @@ package com.example.OurHome.service;
 import com.example.OurHome.model.Entity.Fee;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.FeeEditBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.Fee.FeeEditBindingModel;
 
 import java.math.BigDecimal;
 

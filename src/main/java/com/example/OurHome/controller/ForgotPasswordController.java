@@ -1,8 +1,8 @@
 package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.ForgotPasswordBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.ResetPasswordBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.User.ForgotPasswordBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.User.ResetPasswordBindingModel;
 import com.example.OurHome.service.UserService;
 import com.example.OurHome.service.tokens.UserToken;
 import jakarta.validation.Valid;

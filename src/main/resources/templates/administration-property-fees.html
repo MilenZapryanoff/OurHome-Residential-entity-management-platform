@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="/index">
+                        <hr>
+                        <img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <!-- ***** Logo End ***** -->
+
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/messages}">Messages</a></li>
+                        <small th:with="userId=${userViewModel.getId()}">
+                            <samp th:if="${@messageRepository.countUnreadMessages(userId) > 0}"
+                                  th:with="userId=${userViewModel.getId()}"
+                                  class="timer count-title text-danger"
+                                  th:data-to="${@messageRepository.countUnreadMessages(userId)}"
+                                  data-speed="1000"></samp>
+                        </small>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
+                                                                     class="active">Administration</a>
+                        </li>
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
+                            property</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
+                        <li><a th:href="@{/contact}">Contact Us</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
+                        <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
+                            <li><a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
+                        </form>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Property fees
+            </h3>
+        </div>
+    </div>
+</div>
+</div>
+
+<br><br>
+
+<!-- ***** Residential entity section ***** -->
+
+
+<div class="single-property section">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="main-content">
+                    <span th:text="'Property №: ' + ${property.getNumber()}" class="category text-black"></span>
+                    <h4 th:text="${property.getResidentialEntity().getStreetName()} + ' №' + ${property.getResidentialEntity().getStreetNumber()}"></h4>
+                </div>
+            </div>
+            <div class="section administration" id="fees">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="tabs-content">
+                                <div class="row">
+                                    <div class="nav-wrapper ">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="back"><a
+                                                        th:href="@{/administration/fees/{id}(id=${property.getResidentialEntity().getId()})}">
+                                                    <h7 class="text-light">Back</h7>
+                                                </a>
+                                                </button>
+                                            </li>
+                                            <div class="col-lg-12">
+                                                <br></br>
+                                                <div class="section administration" id="details">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="tabs-content">
+                                                                    <div class="row">
+                                                                        <p th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(property.getResidentialEntity().getId())} == 0"
+                                                                           align="center">No properties available in
+                                                                            this Residential entity</p>
+                                                                        <div class="tab-content" id="myTabContent">
+                                                                            <div class="tab-pane fade show active"
+                                                                                 id="Properties" role="tabpanel"
+                                                                                 aria-labelledby="properties-tab-tab">
+                                                                                <div class="row">
+                                                                                    <!--Active properties section-->
+                                                                                    <div th:if="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(property.getResidentialEntity().getId())} > 0"
+                                                                                         class="section administration"
+                                                                                         id="verified">
+                                                                                        <div class="row">
+                                                                                            <table>
+                                                                                                <tr align="center">
+                                                                                                    <th>Fee id</th>
+                                                                                                    <th>Fee amount</th>
+                                                                                                    <th>Start period</th>
+                                                                                                    <th>End period</th>
+                                                                                                    <th>Fee paid</th>
+                                                                                                    <th>Edit record</th>
+                                                                                                    <th>Delete</th>
+                                                                                                </tr>
+                                                                                                <div class="col-lg-12">
+                                                                                                    <br></br>
+                                                                                                    <div align="center">
+                                                                                                        <h5 class="category text-danger"> SUMMARIZED DATA</h5>
+                                                                                                    </div>
+                                                                                                    <div class="info-table">
+                                                                                                        <div>
+                                                                                                            <ul>
+                                                                                                                <li class="text-black">
+                                                                                                                    Monthly fee: <b th:text="${property.getMonthlyFee()} + ' лв.'"></b>
+                                                                                                                    <p>Monthly fee calculated according residential entity fee policy</p>
+                                                                                                                </li>
+                                                                                                                <li class="text-black">
+                                                                                                                    Overpayment:
+                                                                                                                    <b th:text="${property.getOverpayment() + ' лв.'}"></b>
+                                                                                                                    <p> In case of overpayment the over paid amount will be used for future payments of monthly fees.<br>
+                                                                                                                        This amount will automatically cover future fees and will be decreased with the amount
+                                                                                                                        of the covered fee until it get all spent</p>
+                                                                                                                </li>
+                                                                                                                <li class="text-black">
+                                                                                                                    Number of unpaid fees:
+                                                                                                                    <b th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
+                                                                                                                       class="text-danger"
+                                                                                                                       th:text="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())}"></b>
+                                                                                                                    <b th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
+                                                                                                                       th:text="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())}"></b>
+                                                                                                                    <p> Number of unpaid fees</p>
+                                                                                                                </li>
+                                                                                                                <li class="text-black">
+                                                                                                                    Total due amount:
+                                                                                                                    <b th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
+                                                                                                                       class="text-danger" th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId()) + ' лв.'}"></b>
+                                                                                                                    <b th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">0.00 лв.</b>
+                                                                                                                    <p> Total due amount is automatically calculated by summing all individual
+                                                                                                                        unpaid monthly fees.</p>
+                                                                                                                </li>
+                                                                                                            </ul>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <br></br>
+                                                                                                    <div align="center">
+                                                                                                        <h5 class="category text-danger">
+                                                                                                            PROPERTY FEES</h5>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="main-content">
+                                                                            <span th:if="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} == 1"
+                                                                                  th:text="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} + ' Record found'"
+                                                                                  class="category text-bg-success"></span>
+                                                                                                    <span th:if="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} > 1"
+                                                                                                          th:text="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} + ' Records found'"
+                                                                                                          class="category text-bg-success"></span>
+                                                                                                    <br></br>
+                                                                                                    <br>
+                                                                                                </div>
+                                                                                                <hr>
+                                                                                                <tr align="center"
+                                                                                                    th:each="propertyFee: ${@propertyFeeRepository.findAllFees(property.getId())}">
+                                                                                                    <td th:text="${propertyFee.getId()}"></td>
+                                                                                                    <td th:text="${propertyFee.getFeeAmount()} + ' лв.'"></td>
+                                                                                                    <td th:text="${propertyFee.getPeriodStart()}"></td>
+                                                                                                    <td th:text="${propertyFee.getPeriodEnd()}"></td>
+
+                                                                                                    <td th:if="${propertyFee.isPaid()}">
+                                                                                                        <img title="Fee is paid"
+                                                                                                             src="/images/check_yes.png"
+                                                                                                             style="max-width: 110px;">
+                                                                                                    </td>
+                                                                                                    <td th:unless="${propertyFee.isPaid()}">
+                                                                                                        <img title="Fee is not paid"
+                                                                                                             src="/images/check_no.png"
+                                                                                                             style="max-width: 110px;">
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <form class="form-container"
+                                                                                                              th:action="@{/administration/fees/details/edit/{id} (id=${propertyFee.getId()})}">
+                                                                                                            <button type="submit">
+                                                                                                                <img title="Edit property" src="/images/edit.png" style="max-width: 111px;">
+                                                                                                            </button>
+                                                                                                        </form>
+                                                                                                    </td>
+                                                                                                    <td class="text-black">
+                                                                                                        <form class="form-container"
+                                                                                                              th:action="@{/administration/fees/details/delete/{id} (id=${propertyFee.getId()})}"
+                                                                                                              th:method="POST">
+                                                                                                            <select class="form-control hidden"
+                                                                                                                    id="deletePropertyFee">
+                                                                                                                <option
+                                                                                                                        th:value="${propertyFee.getId()}">
+                                                                                                                </option>
+                                                                                                            </select>
+                                                                                                            <button type="submit">
+                                                                                                                <img title="Delete property"
+                                                                                                                     src="/images/delete.jpg"
+                                                                                                                     style="max-width: 110px;"></button>
+                                                                                                        </form>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+
+</body>
+</html>

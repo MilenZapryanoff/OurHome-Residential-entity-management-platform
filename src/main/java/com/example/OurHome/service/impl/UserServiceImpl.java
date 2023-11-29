@@ -2,10 +2,10 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.ManagerRegisterBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.ProfileEditBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.UserAuthBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.UserRegisterBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.User.ManagerRegisterBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.User.ProfileEditBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.User.UserAuthBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.User.UserRegisterBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.repo.ResidentialEntityRepository;
 import com.example.OurHome.repo.RoleRepository;

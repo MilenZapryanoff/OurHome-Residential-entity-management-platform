@@ -19,11 +19,11 @@ public class NewMonthlyFeeScheduler {
         this.propertyFeeService = propertyFeeService;
     }
 
-    // This expression triggers the method on the first day of every month at 06:00:00
+    // This expression triggers the method on the first day of every month at 06:00:00 (intended for PROD)
     // @Scheduled(cron = "0 0 6 1 * *")
 
-    //this one is for testing
-    @Scheduled(cron = "*/30 * * * * *")
+    // This expression triggers the method on the first day of every month at 06:00:00 (intended for TEST)
+    @Scheduled(cron = "*/50 * * * * *")
     public void newMonthlyFee() {
 
         List<Property> allProperties = propertyService.findAllProperties();

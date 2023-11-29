@@ -1,9 +1,7 @@
 package com.example.OurHome.config;
 
-import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyEditBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.UserRegisterBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.User.UserRegisterBindingModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

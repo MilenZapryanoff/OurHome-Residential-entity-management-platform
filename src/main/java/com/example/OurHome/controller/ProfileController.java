@@ -1,7 +1,7 @@
 package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.ProfileEditBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.User.ProfileEditBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;

@@ -1,14 +1,8 @@
 package com.example.OurHome.security.impl;
 
-import com.example.OurHome.model.Entity.Message;
-import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.Entity.*;
 import com.example.OurHome.security.SecurityService;
-import com.example.OurHome.service.MessageService;
-import com.example.OurHome.service.PropertyService;
-import com.example.OurHome.service.ResidentialEntityService;
-import com.example.OurHome.service.UserService;
+import com.example.OurHome.service.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +14,14 @@ public class SecurityServiceImpl implements SecurityService {
     private final UserService userService;
     private final ResidentialEntityService residentialEntityService;
     private final PropertyService propertyService;
+    private final PropertyFeeService propertyFeeService;
     private final MessageService messageService;
 
-    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, MessageService messageService) {
+    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, MessageService messageService) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
+        this.propertyFeeService = propertyFeeService;
         this.messageService = messageService;
     }
 
@@ -91,6 +87,12 @@ public class SecurityServiceImpl implements SecurityService {
 
         UserEntity user = userService.findUserById(userId);
         return user.getId().equals(getUserEntity(authentication).getId());
+    }
+
+    @Override
+    public boolean checkPropertyFeeModeratorAccess(Long propertyFeeId, Authentication authentication) {
+        PropertyFee propertyFee = propertyFeeService.findPropertyFeeById(propertyFeeId);
+        return propertyFee.getProperty().getResidentialEntity().getManager().getId().equals(getUserEntity(authentication).getId());
     }
 
     @Override
