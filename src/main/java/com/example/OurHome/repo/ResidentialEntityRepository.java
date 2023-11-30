@@ -1,7 +1,6 @@
 package com.example.OurHome.repo;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,15 +14,9 @@ public interface ResidentialEntityRepository extends JpaRepository<ResidentialEn
 
     Long countById(Long id);
 
-    @Override
-    Optional<ResidentialEntity> findById(Long id);
-
     Long countByManager_Id(Long id);
 
     List<ResidentialEntity> findAllByManager_Id(Long managerId);
-
-    @Query("SELECT r.manager.id FROM residential_entities r where r.id=:id")
-    Long findManagerIdByEntityId(Long id);
 
     @Query("SELECT r FROM residential_entities r where r.id=:id")
     ResidentialEntity findResidentialEntityById(Long id);

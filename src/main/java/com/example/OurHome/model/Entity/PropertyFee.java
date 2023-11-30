@@ -12,10 +12,20 @@ public class PropertyFee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private BigDecimal feeAmount;
+
+    @Column(nullable = false)
     private LocalDate periodStart;
+
+    @Column(nullable = false)
     private LocalDate periodEnd;
+
+    @Column
     private boolean isPaid;
+
+    @Column(length = 45)
+    private String description;
     @ManyToOne
     private Property property;
 
@@ -65,5 +75,13 @@ public class PropertyFee {
 
     public void setProperty(Property property) {
         this.property = property;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

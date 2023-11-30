@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class PropertyFeeEditBindingModel {
+public class PropertyFeeAddBindingModel {
 
     private Long id;
 
@@ -31,8 +31,6 @@ public class PropertyFeeEditBindingModel {
 
     @Size(max = 40, message = "Description must not be longer than 45 symbols")
     private String description;
-
-    private Long propertyId;
 
     public BigDecimal getFeeAmount() {
         return feeAmount;
@@ -72,14 +70,6 @@ public class PropertyFeeEditBindingModel {
 
     public void setPaid(boolean paid) {
         isPaid = paid;
-    }
-
-    public Long getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(Long propertyId) {
-        this.propertyId = propertyId;
     }
 
     public Long getId() {

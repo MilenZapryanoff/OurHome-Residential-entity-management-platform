@@ -11,10 +11,5 @@ import java.util.List;
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
     Role findRoleByName(String name);
-
     Long countRoleByName(String name);
-
-    @Query("SELECT r FROM roles r where r.name in ('RESIDENT', 'MODERATOR') AND r.name not in (:name)")
-    List<Role> findUserAvailableRoles(String name);
-
 }

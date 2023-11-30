@@ -18,8 +18,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByEmail(String Email);
 
-    Optional<UserEntity> findById(Long id);
-
     @Query("SELECT u FROM users u where u.validationCode != null")
     List<UserEntity> findAllUsersWithVerificationCode();
 }

@@ -124,14 +124,6 @@
                         <h5>Properties</h5>
                     </a>
                     </button>
-                </li>
-                                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="detailsButton"><a
-                            th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Details</h5>
-                    </a>
-                    </button>
-                </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="feesButton"><a
                             th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
@@ -140,9 +132,17 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="incomeButton"><a
-                            th:href="@{/}">
-                        <h5>Income</h5>
+                    <button class="nav-link" id="expensesButton"><a
+                            th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
+                        <h5>Expenses</h5>
+                    </a>
+                    </button>
+                </li>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="detailsButton"><a
+                            th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
+                        <h5>Details</h5>
                     </a>
                     </button>
                 </li>
@@ -190,7 +190,6 @@
                                                         <th>Number of children</th>
                                                         <th>Number of pets</th>
                                                         <th>Property habitable</th>
-                                                        <th>Monthly fee</th>
                                                         <th>Approve</th>
                                                         <th>Decline</th>
                                                     </tr>
@@ -221,8 +220,6 @@
                                                                 title="Property is habitable"
                                                                 src="/images/check_yes.png"
                                                                 style="max-width: 110px;"></td>
-                                                        <!-- START: Approve/decline buttons-->
-                                                        <td th:text="${property.getMonthlyFee()}"></td>
                                                         <td>
                                                             <form class="form-container"
                                                                   th:action="@{/administration/property/approve/{id} (id=${property.getId()})}"
@@ -274,7 +271,6 @@
                                                                 <th>Number of adults</th>
                                                                 <th>Number of children</th>
                                                                 <th>Number of pets</th>
-                                                                <th>Monthly fee</th>
                                                                 <th>Property habitable</th>
                                                                 <th>Edit</th>
                                                                 <th>Delete</th>
@@ -298,7 +294,6 @@
                                                                 <td th:text="${property.getNumberOfAdults()}"></td>
                                                                 <td th:text="${property.getNumberOfChildren()}"></td>
                                                                 <td th:text="${property.getNumberOfPets()}"></td>
-                                                                <td th:text="${property.getMonthlyFee()}"></td>
                                                                 <td th:if="${property.isNotHabitable()}">
                                                                     <img title="Property is not habitable"
                                                                          src="/images/check_no.png"
@@ -322,7 +317,7 @@
                                                                         <button type="submit">
                                                                             <img title="Edit property"
                                                                                  src="/images/edit.png"
-                                                                                 style="max-width: 130px;"></button>
+                                                                                 style="max-width: 111px;"></button>
                                                                     </form>
                                                                 </td>
                                                                 <td>
@@ -341,7 +336,7 @@
                                                                         <button type="submit">
                                                                             <img title="Delete property"
                                                                                  src="/images/delete.jpg"
-                                                                                 style="max-width: 150px;"></button>
+                                                                                 style="max-width: 111px;"></button>
                                                                     </form>
                                                                 </td>
                                                             </tr>

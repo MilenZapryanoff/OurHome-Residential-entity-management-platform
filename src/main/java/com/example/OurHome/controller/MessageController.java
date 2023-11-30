@@ -1,7 +1,7 @@
 package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.SendMessageBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.Message.SendMessageBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.UserService;

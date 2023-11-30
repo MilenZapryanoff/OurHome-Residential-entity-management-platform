@@ -30,8 +30,7 @@ public class NewMonthlyFeeScheduler {
         if (!allProperties.isEmpty()) {
             for (Property property : allProperties) {
                 if (property.isValidated() && !property.isRejected()) {
-                    propertyFeeService.createNewFee(property);
-                    System.out.println("Fees added to property of " + property.getOwner().getUsername());
+                    propertyFeeService.createMonthlyFee(property);
                 }
             }
         }

@@ -58,7 +58,7 @@ public class Property {
     @ManyToOne
     private ResidentialEntity residentialEntity;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "property")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "property",cascade = CascadeType.REMOVE)
     private List<PropertyFee> propertyFees;
 
     public Property() {

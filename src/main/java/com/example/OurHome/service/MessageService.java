@@ -5,6 +5,8 @@ import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 
+import java.math.BigDecimal;
+
 public interface MessageService {
     void sendRegistrationMessageToUser(UserEntity newUserEntity);
 
@@ -39,4 +41,6 @@ public interface MessageService {
     Message findMessageById(Long id);
 
     void sendMessage(UserEntity receiver, UserEntity sender, String message);
+
+    void newFeeMessageToPropertyOwner(Property property, BigDecimal monthlyFee, BigDecimal dueAmount);
 }

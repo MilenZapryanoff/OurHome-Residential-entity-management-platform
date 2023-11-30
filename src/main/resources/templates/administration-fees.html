@@ -130,13 +130,6 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="detailsButton"><a
-                            th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Details</h5>
-                    </a>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="feesButton"><a
                             th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
                         <h5>Monthly fees</h5>
@@ -144,9 +137,16 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="incomeButton"><a
-                            th:href="@{/}">
-                        <h5>Income</h5>
+                    <button class="nav-link" id="expensesButton"><a
+                            th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
+                        <h5>Expenses</h5>
+                    </a>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="detailsButton"><a
+                            th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
+                        <h5>Details</h5>
                     </a>
                     </button>
                 </li>
@@ -269,13 +269,6 @@
                                                                     </ul>
                                                                 </div>
                                                             </div>
-
-                                                            <br>
-                                                            <br>
-                                                            <br>
-                                                            <br>
-                                                            <br>
-                                                            <br>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -328,8 +321,7 @@
                                                                                                     <td th:text="${property.getOverpayment()} + ' лв.'"></td>
                                                                                                     <td th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
                                                                                                         class="text-danger" th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"></td>
-                                                                                                    <td th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
-                                                                                                        class="text-danger">0.00 лв.</td>
+                                                                                                    <td th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">0.00 лв.</td>
                                                                                                     <td><a th:href="@{/administration/fees/details/{id} (id=${property.getId()})}"><img
                                                                                                                 title="View details" src="/images/magnifier.png" style="max-width: 110px;"></a>
                                                                                                     </td>

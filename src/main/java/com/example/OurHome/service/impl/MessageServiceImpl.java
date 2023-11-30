@@ -6,12 +6,13 @@ import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.repo.MessageRepository;
 import com.example.OurHome.service.MessageService;
-import com.example.OurHome.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.util.List;
 
 @Service
@@ -269,9 +270,10 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * User-to-user message
+     *
      * @param receiver UserEntity
-     * @param sender UserEntity
-     * @param message message body
+     * @param sender   UserEntity
+     * @param message  message body
      */
     @Override
     public void sendMessage(UserEntity receiver, UserEntity sender, String message) {
@@ -282,6 +284,34 @@ public class MessageServiceImpl implements MessageService {
                         message,
                         receiver,
                         sender,
+                        false,
+                        false));
+    }
+
+    /**
+     * New message to property owner for new monthly fee.
+     * @param property Property
+     * @param monthlyFee Monthly fee amount
+     * @param dueAmount Total due amount
+     */
+    @Override
+    public void newFeeMessageToPropertyOwner(Property property, BigDecimal monthlyFee, BigDecimal dueAmount) {
+
+        Month month = LocalDate.now().getMonth();
+        int year = LocalDate.now().getYear();
+
+        String messageText = "You have new monthly fee for " + month + " " + year + " for the amount of " +
+                monthlyFee + "лв. for property № " + property.getNumber() + "." +
+                "\n" +
+                "You can check details in your Property section." +
+                "Total due amount for your property is " + dueAmount + "лв.";
+
+        messageRepository.save(
+                new Message(
+                        LocalDate.now(),
+                        Time.valueOf(LocalTime.now()),
+                        messageText,
+                        property.getOwner(),
                         false,
                         false));
     }

@@ -2,7 +2,7 @@ package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.*;
+import com.example.OurHome.model.Entity.dto.BindingModels.Message.SendMessageBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyRegisterBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntity.ResidentManageBindingModel;
