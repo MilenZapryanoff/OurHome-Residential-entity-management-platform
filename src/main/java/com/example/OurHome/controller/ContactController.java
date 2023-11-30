@@ -1,9 +1,9 @@
 package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.ContactFormBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.Contact.ContactFormBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
-import com.example.OurHome.service.EmailService;
+import com.example.OurHome.service.email.EmailService;
 import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.context.SecurityContextHolder;
