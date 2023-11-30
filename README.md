@@ -35,6 +35,8 @@ A platform that allows the registration of both home owners and residential enti
   UPDATE:
   <li>With the newest released version of the app all registered users can now upload their own pictures/avatars (max 3MB) and also edit personal data and password.</li>
   <li>Monthly fees section added. 1. Every new property monthly fee is calculated and set automatically with registration. 2. Property monthly fee is automatically re-calculated when a change of the living in the property people/pets occures. 3. When a manager applies a change to monthly fees, all properties monthly fees are automatically re-calculated.</li>
+  <li>Scheduled monthly fees apply for every Residential entity property.</li>
+  <li>Residential entity Expenses section added. Now Residential entity manager can add expenses and upload documents (invoices and etc. in picture formats)</li>
 </ul>
 
 <h2>Security</h2>
@@ -91,6 +93,6 @@ A platform that allows the registration of both home owners and residential enti
 <img src="https://i.ibb.co/hV9frBD/07.png">
 <img src="https://i.ibb.co/kGqZkLL/08.png">
 <img src="https://i.ibb.co/tX7KP79/09.png">
-
+<img src="https://i.ibb.co/rpC6mF3/Our-Home-database-architecture.jpg">
 
 
