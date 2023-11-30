@@ -7,6 +7,7 @@ import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.Fee.FeeEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyManageBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntity.ResidentManageBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntity.ResidentialEntityEditBindingModel;
@@ -471,6 +472,35 @@ public class AdministrationController {
         return new ModelAndView("redirect:/administration/fees/details/" + propertyFeeEditBindingModel.getPropertyId());
     }
 
+
+    @GetMapping("/administration/fees/details/add/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView addPropertyFee(@PathVariable("id") Long id) {
+
+        return new ModelAndView("administration-property-fees-add")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("propertyFeeAddBindingModel", new PropertyFeeAddBindingModel());
+    }
+
+    @PostMapping("/administration/fees/details/add/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView addPropertyFee(@PathVariable("id") Long id,
+                                       @Valid PropertyFeeAddBindingModel propertyFeeAddBindingModel,
+                                       BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()){
+            return new ModelAndView("administration-property-fees-add")
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("propertyFeeAddBindingModel", propertyFeeAddBindingModel);
+        }
+
+        Property property = propertyService.findPropertyById(id);
+        propertyFeeService.addFee(property, propertyFeeAddBindingModel);
+
+        return new ModelAndView("redirect:/administration/fees/details/" + id);
+    }
+
+
     @PostMapping("/administration/fees/details/delete/{id}")
     @PreAuthorize("@securityService.checkPropertyFeeModeratorAccess(#id, authentication)")
     public ModelAndView deletePropertyFee(@PathVariable("id") Long id) {
@@ -481,6 +511,18 @@ public class AdministrationController {
         propertyFeeService.deleteFee(propertyFee);
 
         return new ModelAndView("redirect:/administration/fees/details/" + propertyId);
+    }
+
+
+    // INCOME SECTION
+
+    @GetMapping("/administration/expenses/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityExpenses(@PathVariable("id") Long id) {
+
+        return new ModelAndView("administration-expenses")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
     }
 
 
