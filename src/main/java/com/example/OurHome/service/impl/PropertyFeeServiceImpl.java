@@ -2,9 +2,11 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyFee;
+import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
 import com.example.OurHome.repo.PropertyFeeRepository;
 import com.example.OurHome.repo.PropertyRepository;
+import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.PropertyFeeService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -19,11 +21,24 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     private final PropertyFeeRepository propertyFeeRepository;
     private final PropertyRepository propertyRepository;
     private final ModelMapper modelMapper;
+    private final MessageService messageService;
 
-    public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper) {
+    public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper, MessageService messageService) {
         this.propertyFeeRepository = propertyFeeRepository;
         this.propertyRepository = propertyRepository;
         this.modelMapper = modelMapper;
+        this.messageService = messageService;
+    }
+
+    /**
+     * Find PropertyFee by id
+     *
+     * @param propertyFeeId property Fee id
+     * @return PropertyFee
+     */
+    @Override
+    public PropertyFee findPropertyFeeById(Long propertyFeeId) {
+        return propertyFeeRepository.findById(propertyFeeId).orElse(null);
     }
 
     /**
@@ -53,7 +68,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
      */
     @Override
     @Transactional
-    public void createNewFee(Property property) {
+    public void createMonthlyFee(Property property) {
 
         PropertyFee newPropertyFee = new PropertyFee();
         LocalDate now = LocalDate.now();
@@ -61,64 +76,46 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
         BigDecimal overpayment = property.getOverpayment();
         BigDecimal monthlyFee = property.getMonthlyFee();
 
-        if (overpayment.compareTo(BigDecimal.ZERO) > 0) {
+        //if monthly fees in Residential entity are not set, no new fees will be created for the property
+        if (monthlyFee.compareTo(BigDecimal.ZERO) > 0) {
 
-            if (overpayment.compareTo(monthlyFee) > 0) {
-                newPropertyFee.setFeeAmount(BigDecimal.valueOf(0));
-                newPropertyFee.setPaid(true);
+            //Calculations of monthly fee in case of overpayment
+            if (overpayment.compareTo(BigDecimal.ZERO) > 0) {
 
-                property.setOverpayment(overpayment.subtract(monthlyFee));
-                propertyRepository.save(property);
+                if (overpayment.compareTo(monthlyFee) > 0) {
+                    newPropertyFee.setFeeAmount(BigDecimal.valueOf(0));
+                    newPropertyFee.setPaid(true);
+
+                    property.setOverpayment(overpayment.subtract(monthlyFee));
+                    propertyRepository.save(property);
+                }
+                if (overpayment.compareTo(monthlyFee) == 0) {
+                    newPropertyFee.setFeeAmount(BigDecimal.valueOf(0));
+                    newPropertyFee.setPaid(true);
+
+                    property.setOverpayment(BigDecimal.valueOf(0));
+                    propertyRepository.save(property);
+                }
+                if (overpayment.compareTo(monthlyFee) < 0) {
+                    newPropertyFee.setFeeAmount(monthlyFee.subtract(overpayment));
+
+                    property.setOverpayment(BigDecimal.valueOf(0));
+                    propertyRepository.save(property);
+                }
+            } else {
+                newPropertyFee.setFeeAmount(property.getMonthlyFee());
+                newPropertyFee.setPaid(false);
             }
-            if (overpayment.compareTo(monthlyFee) == 0) {
-                newPropertyFee.setFeeAmount(BigDecimal.valueOf(0));
-                newPropertyFee.setPaid(true);
 
-                property.setOverpayment(BigDecimal.valueOf(0));
-                propertyRepository.save(property);
-            }
-            if (overpayment.compareTo(monthlyFee) < 0) {
-                newPropertyFee.setFeeAmount(monthlyFee.subtract(overpayment));
+            newPropertyFee.setPeriodStart(now.withDayOfMonth(1));
+            newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
+            newPropertyFee.setProperty(property);
+            newPropertyFee.setDescription(now.getMonth() + " " + now.getYear());
+            propertyFeeRepository.save(newPropertyFee);
 
-                property.setOverpayment(BigDecimal.valueOf(0));
-                propertyRepository.save(property);
-            }
-        } else {
-            newPropertyFee.setFeeAmount(property.getMonthlyFee());
-            newPropertyFee.setPaid(false);
+            //send message to property owner
+            messageService.newFeeMessageToPropertyOwner(property, property.getMonthlyFee(), checkTotalDueAmount(property.getId()));
         }
-
-        newPropertyFee.setPeriodStart(now.withDayOfMonth(1));
-        newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
-        newPropertyFee.setProperty(property);
-        propertyFeeRepository.save(newPropertyFee);
-    }
-
-    /**
-     * Find PropertyFee by id
-     *
-     * @param propertyFeeId property Fee id
-     * @return PropertyFee
-     */
-    @Override
-    public PropertyFee findPropertyFeeById(Long propertyFeeId) {
-        return propertyFeeRepository.findById(propertyFeeId).orElse(null);
-    }
-
-    /**
-     * Mapping of PropertyFee to PropertyFeeEditBindingModel
-     *
-     * @param id property Fee id
-     * @return PropertyFeeEditBindingModel
-     */
-    @Override
-    public PropertyFeeEditBindingModel mapPropertyFeeToBindingModel(Long id) {
-        PropertyFee propertyFee = propertyFeeRepository.findById(id).orElse(null);
-
-        if (propertyFee != null) {
-            return modelMapper.map(propertyFee, PropertyFeeEditBindingModel.class);
-        }
-        return null;
     }
 
     /**
@@ -140,12 +137,39 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     }
 
     /**
-     *
      * @param propertyFee a property fee
      */
     @Override
     public void deleteFee(PropertyFee propertyFee) {
         propertyFeeRepository.delete(propertyFee);
+    }
+
+    @Override
+    public void addFee(Property property, PropertyFeeAddBindingModel propertyFeeAddBindingModel) {
+        PropertyFee propertyFee = modelMapper.map(propertyFeeAddBindingModel, PropertyFee.class);
+        propertyFee.setProperty(property);
+        propertyFeeRepository.save(propertyFee);
+    }
+
+    @Override
+    public BigDecimal checkTotalDueAmount(Long id) {
+        return propertyFeeRepository.sumOfUnpaidFees(id);
+    }
+
+    /**
+     * Mapping of PropertyFee to PropertyFeeEditBindingModel
+     *
+     * @param id property Fee id
+     * @return PropertyFeeEditBindingModel
+     */
+    @Override
+    public PropertyFeeEditBindingModel mapPropertyFeeToBindingModel(Long id) {
+        PropertyFee propertyFee = propertyFeeRepository.findById(id).orElse(null);
+
+        if (propertyFee != null) {
+            return modelMapper.map(propertyFee, PropertyFeeEditBindingModel.class);
+        }
+        return null;
     }
 }
 
