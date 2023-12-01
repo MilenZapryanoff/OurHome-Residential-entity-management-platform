@@ -13,5 +13,7 @@ public interface SecurityService {
     boolean checkMassMessagesUserAccess(Long userId, Authentication authentication);
     boolean checkProfileEditAccess(Long userId, Authentication authentication);
     boolean checkPropertyFeeModeratorAccess(Long propertyFeeId, Authentication authentication);
+    boolean checkExpenseModeratorAccess(Long expenseId, Authentication authentication);
+    boolean checkMessageSenderAndReceiver(Long propertyId, Long senderId, Long receivedId);
 }
 
