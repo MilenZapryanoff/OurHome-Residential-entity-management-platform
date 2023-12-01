@@ -103,9 +103,9 @@ public class PropertyController {
 
 
     /**
-     * @param sendMessageBindingModel
-     * @param propertyId
-     * @return
+     * @param sendMessageBindingModel Message parameters
+     * @param propertyId property id
+     * @return view
      */
 
     @PostMapping("/property/summary/messageToManager/{id}")
@@ -167,6 +167,13 @@ public class PropertyController {
                                                          @Valid PropertyEditBindingModel propertyEditBindingModel,
                                                          @PathVariable("id") Long id, BindingResult bindingResult) {
 
+        if (bindingResult.hasErrors()){
+            return new ModelAndView("property-details-edit")
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("property", getProperty(id))
+                    .addObject("propertyEditBindingModel", propertyEditBindingModel);
+        }
+
         propertyService.editProperty(id, propertyEditBindingModel, !propertyService.needOfVerification(id, propertyEditBindingModel));
 
         return new ModelAndView("redirect:/property/details/" + id);
@@ -183,7 +190,7 @@ public class PropertyController {
     /**
      * This private method returns a Property by id
      *
-     * @param id
+     * @param id property id
      * @return Property
      */
     private Property getProperty(Long id) {
