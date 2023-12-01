@@ -1,9 +1,12 @@
 package com.example.OurHome.controller;
 
+import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.Message.SendMessageBindingModel;
+import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntity.ResidentManageBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.MessageService;
+import com.example.OurHome.service.ResidentialEntityService;
 import com.example.OurHome.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,9 +22,12 @@ public class MessageController {
     private final UserService userService;
     private final MessageService messageService;
 
-    public MessageController(UserService userService, MessageService messageService) {
+    private final ResidentialEntityService residentialEntityService;
+
+    public MessageController(UserService userService, MessageService messageService, ResidentialEntityService residentialEntityService) {
         this.userService = userService;
         this.messageService = messageService;
+        this.residentialEntityService = residentialEntityService;
     }
 
     @GetMapping("/messages")
@@ -111,8 +117,51 @@ public class MessageController {
         return new ModelAndView("redirect:/messages");
     }
 
+    //ADMINISTRATION/OWNERS SEND MESSAGE TO RESIDENT
+
+    /**
+     * Send message to resident
+     *
+     * @param id resident id
+     * @return view administration-owners
+     */
+    @PostMapping("/administration/owners/message/{id}")
+    @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
+    public ModelAndView sendMessage(@ModelAttribute("residentManageBindingModel")
+                                    ResidentManageBindingModel residentManageBindingModel,
+                                    @PathVariable("id") Long id) {
+
+        ModelAndView modelAndView = new ModelAndView("administration-owners")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()));
+
+        if (residentManageBindingModel.getMessage().length() > 2000) {
+            return modelAndView.addObject("messageError", true);
+        }
+
+        messageService.sendMessage(userService.findUserById(id), userService.findUserById(getUserViewModel().getId()), residentManageBindingModel.getMessage());
+        residentManageBindingModel.setMessage("");
+
+        return modelAndView.addObject("messageSent", true);
+    }
+
+    /**
+     * Method returns currently logged user
+     *
+     * @return UserEntity
+     */
     private UserViewModel getUserViewModel() {
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         return userService.getUserViewData(loggedUser);
+    }
+
+    /**
+     * Method returns a ResidentialEntity
+     *
+     * @param id residential entity id
+     * @return ResidentialEntity
+     */
+    private ResidentialEntity getResidentialEntity(Long id) {
+        return residentialEntityService.findResidentialEntityById(id).orElse(null);
     }
 }
