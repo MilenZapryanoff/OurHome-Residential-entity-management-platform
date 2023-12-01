@@ -94,11 +94,12 @@
             <div class="column-gap-2">
                 <br>
                 <span class="breadcrumb">
-            <a th:href="@{/property/add}">Add new expense</a>
+            <a th:href="@{/administration/expenses/add/{id} (id=${residentialEntity.getId()})}">Add new expense</a>
           </span>
             </div>
             <h3>Residential entity Expenses
             </h3>
+            <h4 th:if="${expenseAdded}" class="text-success">Expense added</h4>
         </div>
     </div>
 </div>
@@ -182,17 +183,62 @@
                                                 </a>
                                                 </button>
                                             </li>
-                                            <div class="col-lg-12">
-                                                <br></br>
-                                                <div class="info-table">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="text-black">Sum of property fees income per month: <b
-                                                                    th:text="${residentialEntity.getId()}"></b></li>
-                                                            <li class="text-black">Sum of overpaid amount: <b
-                                                                    th:text="${residentialEntity.getCity().getName()}"></b>
-                                                            </li>
+                                            <div align="center" class="col-lg-12">
+                                                <br></br><br></br><br></br><br></br>
+                                                <div class="col-9">
+                                                    <div align="center" class="input-content">
+                                                        <div>
+                                                            <ul>
+                                                                <form id="input-form"
+                                                                      th:method="POST"
+                                                                      th:action="@{/administration/expenses/{id} (id=${id})}"
+                                                                      th:object="${expenseFilterBindingModel}">
+                                                                    <div class="input-group">
+                                                                        <div class="col-4">
+                                                                            <fieldset>
+                                                                                <span for="periodStart"><b>Start period</b></span>
+                                                                                <br>
+                                                                                <small th:if="${#fields.hasErrors('periodStart')}"
+                                                                                       th:errors="*{periodStart}"
+                                                                                       class="text-danger">Fee start period error...</small>
+                                                                                <input type="date"
+                                                                                       id="periodStart"
+                                                                                       th:field="*{periodStart}"
+                                                                                       th:errorclass="bg-danger"
+                                                                                       th:value="${expenseFilterBindingModel.getPeriodStart()}">
+                                                                            </fieldset>
+                                                                        </div>
+                                                                        <div class="col-4">
+                                                                            <fieldset>
+                                                                                <b>Total expenses</b><br>
+                                                                                <h5 class="text-danger "
+                                                                                    th:text="${expenseFilterBindingModel.getTotalExpensesAmount()} + ' лв.'"></h5>
+                                                                                <br>
+                                                                            </fieldset>
+                                                                        </div>
+                                                                        <div class="col-4">
+                                                                            <fieldset>
+                                                                                <span for="periodEnd"><b>End period</b></span>
+                                                                                <br>
+                                                                                <small th:if="${#fields.hasErrors('periodEnd')}"
+                                                                                       th:errors="*{periodEnd}"
+                                                                                class="text-danger">Fee end period error...</small>
+                                                                                <input type="date"
+                                                                                       id="periodEnd"
+                                                                                       th:field="*{periodEnd}"
+                                                                                       th:errorclass="bg-danger"
+                                                                                       th:value="${expenseFilterBindingModel.getPeriodEnd()}">
+                                                                            </fieldset>
+                                                                        </div>
+                                                                    </div>
+                                                                    <fieldset>
+                                                                        <button type="submit" id="form-submit"
+                                                                                class="orange-button col-lg-6">Filter
+                                                                        </button>
+                                                                    </fieldset>
+                                                                </form>
                                                             </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -219,6 +265,8 @@
                                         <th>Date</th>
                                         <th>Description</th>
                                         <th>Document</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
                                     </tr>
                                     <div class="main-content">
                                          <span th:if="${@expensesRepository.countExpenses(residentialEntity.getId())} == 0"
@@ -229,33 +277,49 @@
                                         <span th:if="${@expensesRepository.countExpenses(residentialEntity.getId())} > 1"
                                               th:text="${@expensesRepository.countExpenses(residentialEntity.getId())} + ' Records found'"
                                               class="category text-bg-success"></span>
+                                        <div class="navbar">
+                                            <form class="form-container"
+                                                  th:action="@{/administration/expenses/add/{id} (id=${residentialEntity.getId()})}">
+                                                <button type="submit">
+                                                    <img title="Add monthly fee" src="/images/add_button.png"
+                                                         style="max-width: 19px;">
+                                                    <p>Add expense</p>
+                                                </button>
+                                            </form>
+                                        </div>
+
                                         <br></br>
                                     </div>
                                     <hr>
                                     <tr align="center"
-                                        th:each="property: ${@propertyRepository.findValidatedProperties(residentialEntity.getId())}">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-<!--                                        <td>-->
-<!--                                            <form class="form-container"-->
-<!--                                                  th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"-->
-<!--                                                  th:method="POST"-->
-<!--                                                  th:object="${propertyManageBindingModel}">-->
-<!--                                                <select class="form-control hidden"-->
-<!--                                                        id="activeEntityIdDelete"-->
-<!--                                                        th:field="*{entityId}">-->
-<!--                                                    <option-->
-<!--                                                            th:value="${residentialEntity.getId()}"-->
-<!--                                                            th:text="${residentialEntity.getId()}">-->
-<!--                                                    </option>-->
-<!--                                                </select>-->
-<!--                                                <button type="submit">-->
-<!--                                                    <img title="Delete property"-->
-<!--                                                         src="/images/delete.jpg"-->
-<!--                                                         style="max-width: 111px;"></button>-->
-<!--                                            </form>-->
-<!--                                        </td>-->
+                                        th:each="expense: ${@expensesRepository.FindAllExpensesByResidentialEntity(residentialEntity.getId())}">
+                                        <td th:text="${expense.getAmount()} + ' лв.'"></td>
+                                        <td th:text="${expense.getExpenseDate()}"></td>
+                                        <td th:text="${expense.getDescription()}"></td>
+                                        <td th:if="${expense.getPicturePath()} == null">Upload document</td>
+                                        <td th:if="${expense.getPicturePath()} != null">View document</td>
+                                        <td>
+                                            <form class="form-container"
+                                                  th:action="@{/administration/expenses/edit/{id} (id=${expense.getId()})}"
+                                                  th:object="${expenseAddBindingModel}">
+                                                <button type="submit">
+                                                    <img title="Edit property"
+                                                         src="/images/edit.png"
+                                                         style="max-width: 19px;"></button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form class="form-container"
+                                                  th:action="@{/administration/expenses/delete/{id} (id=${expense.getId()})}"
+                                                  th:method="POST"
+                                                  th:object="${expenseAddBindingModel}">
+
+                                                <button type="submit">
+                                                    <img title="Delete property"
+                                                         src="/images/delete.jpg"
+                                                         style="max-width: 19px;"></button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
