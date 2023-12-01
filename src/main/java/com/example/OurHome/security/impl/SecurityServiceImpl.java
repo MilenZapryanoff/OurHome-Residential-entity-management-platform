@@ -16,13 +16,15 @@ public class SecurityServiceImpl implements SecurityService {
     private final PropertyService propertyService;
     private final PropertyFeeService propertyFeeService;
     private final MessageService messageService;
+    private final ExpensesService expensesService;
 
-    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, MessageService messageService) {
+    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, MessageService messageService, ExpensesService expensesService) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
         this.propertyFeeService = propertyFeeService;
         this.messageService = messageService;
+        this.expensesService = expensesService;
     }
 
     @Override
@@ -96,6 +98,12 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
+    public boolean checkExpenseModeratorAccess(Long expenseId, Authentication authentication) {
+        Expense expense = expensesService.findById(expenseId);
+        return expense.getResidentialEntity().getManager().getId().equals(getUserEntity(authentication).getId());
+    }
+
+    @Override
     public boolean checkMassMessagesUserAccess(Long userId, Authentication authentication) {
         return userId.equals(getUserEntity(authentication).getId());
     }
@@ -104,6 +112,7 @@ public class SecurityServiceImpl implements SecurityService {
         return userService.findUserByEmail(authentication.getName());
     }
 
+    @Override
     public boolean checkMessageSenderAndReceiver(Long propertyId, Long senderId, Long receivedId) {
         Property property = propertyService.findPropertyById(propertyId);
 
