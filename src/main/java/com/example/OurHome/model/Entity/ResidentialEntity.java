@@ -47,7 +47,7 @@ public class ResidentialEntity {
     private List<UserEntity> moderators;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "residentialEntity", cascade = CascadeType.REMOVE)
-    private List<Expense> expens;
+    private List<Expense> expenses;
 
     @ManyToOne(optional = false)
     @JoinColumn(referencedColumnName = "id")
@@ -60,7 +60,7 @@ public class ResidentialEntity {
         residents = new ArrayList<>();
         properties = new ArrayList<>();
         moderators = new ArrayList<>();
-        expens = new ArrayList<>();
+        expenses = new ArrayList<>();
     }
 
     public String getAccessCode() {
@@ -165,5 +165,13 @@ public class ResidentialEntity {
 
     public void setFee(Fee fee) {
         this.fee = fee;
+    }
+
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(List<Expense> expense) {
+        this.expenses = expense;
     }
 }
