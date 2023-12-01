@@ -6,10 +6,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Repository
 public interface ExpensesRepository extends JpaRepository<Expense, Long> {
 
     @Query("SELECT COUNT(e.id) FROM Expense e WHERE e.residentialEntity.id =:id")
     Long countExpenses(@Param("id") Long id);
 
+    @Query("SELECT e FROM Expense e WHERE e.residentialEntity.id =:id ORDER BY e.expenseDate DESC")
+    List<Expense> FindAllExpensesByResidentialEntity (@Param("id") Long id);
+
+
+    @Query("SELECT e FROM Expense e WHERE e.residentialEntity.id =:id AND e.expenseDate >= :startPeriod AND e.expenseDate <= :endPeriod")
+    List<Expense> findExpensesByDatesAndResidentialEntityId(LocalDate startPeriod, LocalDate endPeriod, Long id);
 }
