@@ -200,7 +200,8 @@
                                                                                 <br>
                                                                                 <small th:if="${#fields.hasErrors('periodStart')}"
                                                                                        th:errors="*{periodStart}"
-                                                                                       class="text-danger">Fee start period error...</small>
+                                                                                       class="text-danger">Fee start
+                                                                                    period error...</small>
                                                                                 <input type="date"
                                                                                        id="periodStart"
                                                                                        th:field="*{periodStart}"
@@ -222,7 +223,8 @@
                                                                                 <br>
                                                                                 <small th:if="${#fields.hasErrors('periodEnd')}"
                                                                                        th:errors="*{periodEnd}"
-                                                                                class="text-danger">Fee end period error...</small>
+                                                                                       class="text-danger">Fee end
+                                                                                    period error...</small>
                                                                                 <input type="date"
                                                                                        id="periodEnd"
                                                                                        th:field="*{periodEnd}"
@@ -265,6 +267,7 @@
                                         <th>Date</th>
                                         <th>Description</th>
                                         <th>Document</th>
+                                        <th>View details</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
@@ -294,26 +297,27 @@
                                     <tr align="center"
                                         th:each="expense: ${@expensesRepository.FindAllExpensesByResidentialEntity(residentialEntity.getId())}">
                                         <td th:text="${expense.getAmount()} + ' лв.'"></td>
-                                        <td th:text="${expense.getExpenseDate()}"></td>
+                                        <td th:text="${#temporals.format(expense.getExpenseDate(), 'dd MMM yyyy')}"></td>
                                         <td th:text="${expense.getDescription()}"></td>
-                                        <td th:if="${expense.getPicturePath()} == null">Upload document</td>
-                                        <td th:if="${expense.getPicturePath()} != null">View document</td>
+                                        <td><a th:if="${expense.getPicturePath()} != null"
+                                               th:href="@{/administration/expenses/details/{id} (id=${expense.getId()})}"><img
+                                                    title="View document" src="/images/invoice.png" style="max-width: 19px;"></a>
+                                        </td>
+                                        <td><a th:href="@{/administration/expenses/details/{id} (id=${expense.getId()})}"><img
+                                                    title="View details" src="/images/magnifier.png"
+                                                    style="max-width: 19px;"></a>
+                                        </td>
                                         <td>
                                             <form class="form-container"
-                                                  th:action="@{/administration/expenses/edit/{id} (id=${expense.getId()})}"
-                                                  th:object="${expenseAddBindingModel}">
+                                                  th:action="@{/administration/expenses/edit/{id} (id=${expense.getId()})}">
                                                 <button type="submit">
-                                                    <img title="Edit property"
-                                                         src="/images/edit.png"
-                                                         style="max-width: 19px;"></button>
+                                                    <img title="Edit property" src="/images/edit.png" style="max-width: 19px;"></button>
                                             </form>
                                         </td>
                                         <td>
                                             <form class="form-container"
                                                   th:action="@{/administration/expenses/delete/{id} (id=${expense.getId()})}"
-                                                  th:method="POST"
-                                                  th:object="${expenseAddBindingModel}">
-
+                                                  th:method="POST">
                                                 <button type="submit">
                                                     <img title="Delete property"
                                                          src="/images/delete.jpg"
@@ -345,7 +349,6 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
-
 
 </body>
 </html>
