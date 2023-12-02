@@ -87,13 +87,17 @@ A platform that allows the registration of both home owners and residential enti
 </ul>
 
 <h2> More pictures: </h2>
-<img src="https://i.ibb.co/nrPpPyy/04.png">
-<img src="https://i.ibb.co/FmHrZxp/01.png">
-<img src="https://i.ibb.co/x50JjCJ/03.png">
-<img src="https://i.ibb.co/nLYtV89/05.png">
-<img src="https://i.ibb.co/C0SHwRC/06.png">
-<img src="https://i.ibb.co/hV9frBD/07.png">
-<img src="https://i.ibb.co/kGqZkLL/08.png">
+<img src="https://i.ibb.co/DWyzPPN/01.jpg">
+<img src="https://i.ibb.co/Khbdr7F/02.jpg">
+<img src="https://i.ibb.co/ss8BdZz/03.jpg">
+<img src="https://i.ibb.co/fqGwqRJ/04.jpg">
+<img src="https://i.ibb.co/Fxvxxcg/05.jpg">
+<img src="https://i.ibb.co/yQVHK9b/06.jpg">
+<img src="https://i.ibb.co/NpGSbV2/07.jpg">
+<img src="https://i.ibb.co/LvTMqVQ/08.jpg">
+<img src="https://i.ibb.co/KxpXccC/09.jpg">
+<img src="https://i.ibb.co/zPvwkGJ/10.jpg">
+<img src="https://i.ibb.co/q9X8H8j/11.jpg">
 <img src="https://i.ibb.co/tX7KP79/09.png">
 OurHome Database architecture :
 <img src="https://i.ibb.co/rpC6mF3/Our-Home-database-architecture.jpg">
