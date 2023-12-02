@@ -2,7 +2,7 @@
 
 <h3>My first web application build with Java and Spring Boot</h3>
 
-<img src="https://i.ibb.co/nrPpPyy/04.png">
+<img src="https://i.ibb.co/DWyzPPN/01.jpg">
 
 
 <h2> About the project </h2>
@@ -87,7 +87,6 @@ A platform that allows the registration of both home owners and residential enti
 </ul>
 
 <h2> More pictures: </h2>
-<img src="https://i.ibb.co/DWyzPPN/01.jpg">
 <img src="https://i.ibb.co/Khbdr7F/02.jpg">
 <img src="https://i.ibb.co/ss8BdZz/03.jpg">
 <img src="https://i.ibb.co/fqGwqRJ/04.jpg">
