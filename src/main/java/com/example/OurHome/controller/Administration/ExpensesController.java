@@ -18,7 +18,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 public class ExpensesController {
@@ -58,8 +63,8 @@ public class ExpensesController {
                     .addObject("expenseFilterBindingModel", expenseFilter);
         }
 
-              expenseFilter = expensesService.createCustomExpenseFilter(expenseFilter.getPeriodStart(),
-                      expenseFilter.getPeriodEnd(), getResidentialEntity(id));
+        expenseFilter = expensesService.createCustomExpenseFilter(expenseFilter.getPeriodStart(),
+                expenseFilter.getPeriodEnd(), getResidentialEntity(id));
 
         return new ModelAndView("administration-expenses")
                 .addObject("userViewModel", getUserViewModel())
@@ -138,6 +143,72 @@ public class ExpensesController {
 
         return new ModelAndView("redirect:/administration/expenses/" + entityId);
     }
+
+    @GetMapping("/administration/expenses/details/{id}")
+    @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
+    public ModelAndView expenseDetails(@PathVariable("id") Long id) {
+
+        Expense expense = expensesService.findById(id);
+
+        return new ModelAndView("administration-expenses-details")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("expense", expense);
+    }
+
+
+    @PostMapping("/uploadDocument/{id}")
+    @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
+    public ModelAndView uploadDocument(@RequestParam("document") MultipartFile file,
+                                       @PathVariable("id") Long id) {
+
+        Expense expense = expensesService.findById(id);
+
+        ModelAndView modelAndView = new ModelAndView("administration-expenses-details")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("expense", expense);
+
+        try {
+            String relativePath = expensesService.saveDocument(file, id);
+            expensesService.updateExpenseDocument(expense, relativePath);
+        } catch (IllegalArgumentException | IOException e) {
+            modelAndView.addObject("errorMessage", e.getMessage());
+        }
+        return modelAndView;
+    }
+
+    @PostMapping("/deleteDocument/{id}")
+    @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
+    public ModelAndView deleteDocument(@PathVariable("id") Long id) {
+
+        Expense expense = expensesService.findById(id);
+
+        ModelAndView modelAndView = new ModelAndView("administration-expenses-details")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("expense", expense);
+
+        if (expense.getPicturePath() != null) {
+            String documentPath = expense.getPicturePath();
+
+            // Delete the document file from the file system
+            String absolutePath = "src/main/resources/static" + documentPath;
+            File file = new File(absolutePath);
+
+            if (file.exists()) {
+                if (file.delete()) {
+                    expensesService.deleteDocumentFromExpense(expense);
+                } else {
+                    modelAndView.addObject("deleteError", "Failed to delete the document!");
+                }
+            } else {
+                modelAndView.addObject("deleteError", "Document not found!");
+            }
+        } else {
+            modelAndView.addObject("deleteError", "No document associated with this expense!");
+        }
+
+        return new ModelAndView("redirect:/administration/expenses/details/" + expense.getId());
+    }
+
 
     /**
      * Method returns currently logged user
