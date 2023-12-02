@@ -9,8 +9,15 @@ import com.example.OurHome.repo.ExpensesRepository;
 import com.example.OurHome.service.ExpensesService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -98,5 +105,74 @@ public class ExpensesServiceImpl implements ExpensesService {
             return expenseFilterBindingModel;
         }
         return expenseFilterBindingModel;
+    }
+
+    @Override
+    public String saveDocument(MultipartFile file, Long id) throws IOException {
+
+        Expense expense = expensesRepository.findById(id).orElse(null);
+
+        if (file != null && !file.isEmpty()) {
+
+            if (file.getSize() > 3 * 1024 * 1024) {
+                throw new IllegalArgumentException("File size exceeds the allowed limit (3MB)");
+            }
+
+            assert expense != null;
+            String uploadDirectory = "src/main/resources/static/documents/%d%s".formatted(expense.getId(),expense.getExpenseDate());
+            File directory = new File(uploadDirectory);
+
+            if (!directory.exists()) {
+                if (!directory.mkdirs()) {
+                    throw new IOException("Failed to create directory!");
+                }
+            }
+
+            String originalFilename = file.getOriginalFilename();
+            if (originalFilename != null) {
+                String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+                // Validate file type (allow only image files)
+                if (!fileExtension.matches("\\.(jpg|jpeg|png|gif)$")) {
+                    throw new IllegalArgumentException("Invalid file type!");
+                }
+
+                String fileName = "document" + fileExtension;
+                Path filePath = Paths.get(uploadDirectory, fileName);
+
+                try {
+                    Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                    // Update the user's avatarPath in the database
+                    String avatarPath = "/documents/" + expense.getId() + expense.getExpenseDate() + "/" + fileName;
+                    // Update user entity with the avatar path
+                    updateExpenseDocument(expensesRepository.findById(id).orElseThrow(), avatarPath);
+                    return avatarPath;
+                } catch (IOException e) {
+                    throw new IOException("Failed to save the file!");
+                }
+            } else {
+                throw new IOException("Invalid file name!");
+            }
+        } else {
+            throw new IllegalArgumentException("File is null or empty!");
+        }
+    }
+
+    @Override
+    public void deleteDocumentFromExpense(Expense expense) {
+        if (expense != null) {
+            expense.setPicturePath(null);
+            expensesRepository.save(expense);
+        }
+    }
+
+    @Override
+    public void updateExpenseDocument(Expense expense, String relativePath) {
+        if (expense != null) {
+            expense.setPicturePath(relativePath);
+            expensesRepository.save(expense);
+        } else {
+            throw new IllegalArgumentException("Expense is null!");
+        }
     }
 }
