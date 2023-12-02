@@ -99,7 +99,7 @@ A platform that allows the registration of both home owners and residential enti
 <img src="https://i.ibb.co/zPvwkGJ/10.jpg">
 <img src="https://i.ibb.co/q9X8H8j/11.jpg">
 <img src="https://i.ibb.co/tX7KP79/09.png">
-OurHome Database architecture :
+Database architecture :
 <img src="https://i.ibb.co/rpC6mF3/Our-Home-database-architecture.jpg">
 
 
