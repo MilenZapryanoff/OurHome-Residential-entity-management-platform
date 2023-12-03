@@ -23,11 +23,17 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("SELECT COUNT(p) FROM properties p where p.residentialEntity.id=:id")
     Long countAllPropertiesByResidentialEntity(@Param("id") Long id);
 
+    @Query("SELECT COUNT(p) FROM properties p where p.residentialEntity.id=:id and p.monthlyFee is not null")
+    Long countAllPropertiesWithSetFeeByResidentialEntity(@Param("id") Long id);
+
     @Query("SELECT p FROM properties p where p.isValidated = false AND p.isRejected = false AND p.residentialEntity.id=:residentialEntityId ORDER BY p.number")
     List<Property> findNotValidatedProperties(Long residentialEntityId);
 
     @Query("SELECT p FROM properties p where p.isValidated = true AND p.isRejected =false AND p.residentialEntity.id=:residentialEntityId ORDER BY p.number")
     List<Property> findValidatedProperties(Long residentialEntityId);
+
+    @Query("SELECT p FROM properties p where p.residentialEntity.id=:residentialEntityId and p.monthlyFee is not null ORDER BY p.number")
+    List<Property> findAllPropertiesWithSetFee(Long residentialEntityId);
 
     @Query("SELECT p FROM properties p where p.isRejected = true AND p.residentialEntity.id=:residentialEntityId ORDER BY p.number")
     List<Property> findRejectedProperties(Long residentialEntityId);
