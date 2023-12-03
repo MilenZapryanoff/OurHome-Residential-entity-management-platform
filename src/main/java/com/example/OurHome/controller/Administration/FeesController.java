@@ -1,9 +1,6 @@
 package com.example.OurHome.controller.Administration;
 
-import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.model.Entity.PropertyFee;
-import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.Entity.*;
 import com.example.OurHome.model.Entity.dto.BindingModels.Fee.FeeEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
@@ -169,7 +166,19 @@ public class FeesController {
         return new ModelAndView("redirect:/administration/fees/details/" + propertyId);
     }
 
+    /**
+     * Changing property fee payment status Paid/Not Paid
+     * @param id propertyFee id
+     * @return redirect:/administration/fees/details/
+     */
+    @PostMapping("/administration/fees/changePaymentStatus/{id}")
+    @PreAuthorize("@securityService.checkPropertyFeeModeratorAccess(#id, authentication)")
+    public ModelAndView editPropertyFeesPaymentStatus(@PathVariable("id") Long id) {
 
+        PropertyFee propertyFee = propertyFeeService.findPropertyFeeById(id);
+        propertyFeeService.changePaymentStatus(propertyFee);
+        return new ModelAndView("redirect:/administration/fees/details/" + propertyFee.getProperty().getId());
+    }
 
     /**
      * Method returns currently logged user
