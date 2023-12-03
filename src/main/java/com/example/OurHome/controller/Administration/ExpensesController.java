@@ -206,7 +206,7 @@ public class ExpensesController {
             modelAndView.addObject("deleteError", "No document associated with this expense!");
         }
 
-        return new ModelAndView("redirect:/administration/expenses/details/" + expense.getId());
+        return new ModelAndView("redirect:/administration/expenses/details/ " + expense.getId());
     }
 
 
