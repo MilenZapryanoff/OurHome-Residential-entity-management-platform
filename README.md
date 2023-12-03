@@ -2,7 +2,7 @@
 
 <h3>My first web application build with Java and Spring Boot</h3>
 
-<img src="https://i.ibb.co/nrPpPyy/04.png">
+<img src="https://i.ibb.co/DWyzPPN/01.jpg">
 
 
 <h2> About the project </h2>
@@ -32,11 +32,13 @@ A platform that allows the registration of both home owners and residential enti
   <li>Sending email via contact form</li>
   <li>Reset forgotten password functionality</li>
   <li>On next stage admin will be able to update and delete all managers in the platform via user interface and a news feed will be created.</li>
+  
   UPDATE:
   <li>With the newest released version of the app all registered users can now upload their own pictures/avatars (max 3MB) and also edit personal data and password.</li>
   <li>Monthly fees section added. 1. Every new property monthly fee is calculated and set automatically with registration. 2. Property monthly fee is automatically re-calculated when a change of the living in the property people/pets occures. 3. When a manager applies a change to monthly fees, all properties monthly fees are automatically re-calculated.</li>
   <li>Scheduled monthly fees apply for every Residential entity property.</li>
   <li>Residential entity Expenses section added. Now Residential entity manager can add expenses and upload documents (invoices and etc. in picture formats)</li>
+  <li>Residential entity manager can now get data about residential entity expenses for a specific period (added filter).</li>
 </ul>
 
 <h2>Security</h2>
@@ -85,15 +87,18 @@ A platform that allows the registration of both home owners and residential enti
 </ul>
 
 <h2> More pictures: </h2>
-<img src="https://i.ibb.co/nrPpPyy/04.png">
-<img src="https://i.ibb.co/FmHrZxp/01.png">
-<img src="https://i.ibb.co/x50JjCJ/03.png">
-<img src="https://i.ibb.co/nLYtV89/05.png">
-<img src="https://i.ibb.co/C0SHwRC/06.png">
-<img src="https://i.ibb.co/hV9frBD/07.png">
-<img src="https://i.ibb.co/kGqZkLL/08.png">
+<img src="https://i.ibb.co/Khbdr7F/02.jpg">
+<img src="https://i.ibb.co/ss8BdZz/03.jpg">
+<img src="https://i.ibb.co/fqGwqRJ/04.jpg">
+<img src="https://i.ibb.co/Fxvxxcg/05.jpg">
+<img src="https://i.ibb.co/yQVHK9b/06.jpg">
+<img src="https://i.ibb.co/NpGSbV2/07.jpg">
+<img src="https://i.ibb.co/LvTMqVQ/08.jpg">
+<img src="https://i.ibb.co/KxpXccC/09.jpg">
+<img src="https://i.ibb.co/zPvwkGJ/10.jpg">
+<img src="https://i.ibb.co/q9X8H8j/11.jpg">
 <img src="https://i.ibb.co/tX7KP79/09.png">
-OurHome Database architecture :
+Database architecture :
 <img src="https://i.ibb.co/rpC6mF3/Our-Home-database-architecture.jpg">
 
 
