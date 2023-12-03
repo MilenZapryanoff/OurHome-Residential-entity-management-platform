@@ -134,18 +134,20 @@
                                     <div class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 adv">
                                         <div class="item">
                                             <a th:href="@{/property/summary/{id}(id=${property.getId()})}"><img src="/images/property-plan.jpg" alt=""></a>
-                                            <span class="category text-bg-dark text-light">Validated!</span>
+                                            <span class="category text-bg-success text-light">Validated!</span>
                                             <h4><a th:text="${property.getResidentialEntity().getCity().getName()} + ', ' +
-                            ${property.getResidentialEntity().getStreetName()} + ' ' +
-                            ${property.getResidentialEntity().getStreetNumber()} + ' ' +
-                            ${property.getResidentialEntity().getEntrance()}"></a></h4>
+                                                            ${property.getResidentialEntity().getStreetName()} + ' ' +
+                                                            ${property.getResidentialEntity().getStreetNumber()} + ' ' +
+                                                            ${property.getResidentialEntity().getEntrance()}"></a></h4>
                                             <ul>
                                                 <li>Property №: <span th:text="${property.getNumber()}"></span></li>
                                                 <li>Floor №: <span th:text="${property.getFloor()}"></span></li>
                                                 <li>Owner: <span
                                                         th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span>
                                                 </li>
-                                                <li>Monthly fee: <span class="text-danger" th:text="${property.getMonthlyFee()} + ' лв.'"></span></li>
+                                                <li>Monthly fee: <span th:text="${property.getMonthlyFee()} + ' лв.'"></span></li>
+                                                <li th:if="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} != null">Total due amount: <span class="text-danger" th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"></span></li>
+                                                <li th:unless="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} != null">Total due amount: <span class="text-info-emphasis">0.00 лв.</span></li>
                                             </ul>
                                             <div class="main-button">
                                                 <div align="center" class="main-button">
@@ -193,6 +195,10 @@
                                                 <li class="text-black">Owner: <span class="text-black"
                                                                                         th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span>
                                                 </li>
+                                                <br>
+                                                <li>Monthly fee: <span></span></li>
+                                                <br>
+                                                <li>Total due amount: <span></span></li>
                                             </ul>
                                             <div class="main-button">
                                                 <div align="center" class="main-button">
@@ -238,6 +244,10 @@
                                                 <li class="text-black">Owner: <span class="text-black"
                                                                                         th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span>
                                                 </li>
+                                                <br>
+                                                <li>Monthly fee: <span></span></li>
+                                                <br>
+                                                <li>Total due amount: <span></span></li>
                                             </ul>
                                             <div class="main-button">
                                                 <div align="center" class="main-button">

@@ -6,6 +6,7 @@ import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyEditB
 import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyRegisterBindingModel;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface PropertyService {
@@ -33,4 +34,5 @@ public interface PropertyService {
 
     void setOverpayment(PropertyFeeEditBindingModel propertyFeeEditBindingModel);
 
+    void setMonthlyFee(BigDecimal monthlyFee, Property property);
 }

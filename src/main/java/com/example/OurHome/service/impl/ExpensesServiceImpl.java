@@ -79,6 +79,7 @@ public class ExpensesServiceImpl implements ExpensesService {
             expenseFilterBindingModel.setPeriodStart(startPeriod);
             expenseFilterBindingModel.setPeriodEnd(endPeriod);
             expenseFilterBindingModel.setTotalExpensesAmount(expensesTotalSum);
+            expenseFilterBindingModel.setExpenseList(filteredExpenses);
 
             return expenseFilterBindingModel;
         }
@@ -101,6 +102,7 @@ public class ExpensesServiceImpl implements ExpensesService {
             expenseFilterBindingModel.setPeriodStart(startPeriod);
             expenseFilterBindingModel.setPeriodEnd(endPeriod);
             expenseFilterBindingModel.setTotalExpensesAmount(expensesTotalSum);
+            expenseFilterBindingModel.setExpenseList(filteredExpenses);
 
             return expenseFilterBindingModel;
         }

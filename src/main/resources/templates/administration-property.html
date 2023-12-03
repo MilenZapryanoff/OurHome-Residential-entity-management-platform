@@ -356,6 +356,7 @@
                                                                 <th class="text-black">Number of children</th>
                                                                 <th class="text-black">Number of pets</th>
                                                                 <th class="text-black">Property habitable</th>
+                                                                <th class="text-black">Edit</th>
                                                                 <th class="text-black">Delete</th>
                                                             </tr>
                                                             <div class="main-content">
@@ -383,6 +384,23 @@
                                                                         title="Property is habitable"
                                                                         src="/images/check_yes.png"
                                                                         style="max-width: 110px;"></td>
+                                                                <td>
+                                                                    <form class="form-container"
+                                                                          th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
+                                                                          th:object="${propertyManageBindingModel}">
+                                                                        <select class="form-control hidden" id="activeEntityIdEdit"
+                                                                                th:field="*{entityId}">
+                                                                            <option
+                                                                                    th:value="${residentialEntity.getId()}"
+                                                                                    th:text="${residentialEntity.getId()}">
+                                                                            </option>
+                                                                        </select>
+                                                                        <button type="submit">
+                                                                            <img title="Edit property"
+                                                                                 src="/images/edit.png"
+                                                                                 style="max-width: 111px;"></button>
+                                                                    </form>
+                                                                </td>
                                                                 <td class="text-black">
                                                                     <form class="form-container"
                                                                           th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"

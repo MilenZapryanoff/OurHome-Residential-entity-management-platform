@@ -2,7 +2,6 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Fee;
 import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.model.Entity.PropertyFee;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.Fee.FeeEditBindingModel;
 import com.example.OurHome.repo.FeeRepository;
@@ -95,9 +94,11 @@ public class FeeServiceImpl implements FeeService {
     private void updatePropertyFees(ResidentialEntity residentialEntity) {
         List<Property> properties = residentialEntity.getProperties();
         for (Property property : properties) {
-            BigDecimal calculatedMonthlyFee = calculateMonthlyFee(residentialEntity, property);
-            property.setMonthlyFee(calculatedMonthlyFee);
-            propertyRepository.save(property);
+            if (property.isValidated()) {
+                BigDecimal calculatedMonthlyFee = calculateMonthlyFee(residentialEntity, property);
+                property.setMonthlyFee(calculatedMonthlyFee);
+                propertyRepository.save(property);
+            }
         }
     }
 }

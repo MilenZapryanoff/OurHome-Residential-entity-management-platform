@@ -91,15 +91,8 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <div class="column-gap-2">
-                <br>
-                <span class="breadcrumb">
-            <a th:href="@{/administration/expenses/add/{id} (id=${residentialEntity.getId()})}">Add new expense</a>
-          </span>
-            </div>
-            <h3>Residential entity Expenses
+            <h3>Residential entity expenses data
             </h3>
-            <h4 th:if="${expenseAdded}" class="text-success">Expense added</h4>
         </div>
     </div>
 </div>
@@ -117,43 +110,29 @@
             <ul class="nav nav-tabs">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="summaryButton"><a
-                            th:href="@{/administration}">
+                            th:href="@{/property/summary/{id}(id=${property.getId()})}">
                         <h5>Summary</h5>
                     </a>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="residentsButton"><a
-                            th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Owners</h5>
-                    </a>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="propertiesButton"><a
-                            th:href="@{/administration/property/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Properties</h5>
-                    </a>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="feesButton"><a
-                            th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
+                    <button th:if="${property.isValidated()}" class="nav-link" id="propertiesBtnValid"><a
+                            th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">
                         <h5>Monthly fees</h5>
                     </a>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="expensesButton"><a
-                            th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Expenses</h5>
+                    <button class="nav-link" id="detailsButton"><a
+                            th:href="@{/property/details/{id}(id=${property.getId()})}">
+                        <h5>Details</h5>
                     </a>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="detailsButton"><a
-                            th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Details</h5>
+                    <button th:if="${property.isValidated()}" class="nav-link active" id="residentsBtnValid"><a
+                            th:href="@{/property/expenses/{id}(id=${property.getId()})}">
+                        <h5>Expenses<sup class="text-danger">RE</sup></h5>
                     </a>
                     </button>
                 </li>
@@ -161,14 +140,7 @@
         </div>
         <!--end of buttons-->
         <div class="row">
-            <div class="col-lg-4">
-                <div class="main-content">
-                    <span th:text="'Residential entity: ' + ${residentialEntity.getId()}"
-                          class="category text-black"></span>
-                    <h4 th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>
-                </div>
-            </div>
-            <div class="section administration" id="details">
+            <div class="section property" id="details">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
@@ -178,20 +150,29 @@
                                         <ul class="nav nav-tabs" role="tablist">
                                             <li class="nav-item" role="presentation">
                                                 <button class="nav-link" id="residents"><a
-                                                        th:href="@{/administration}">
+                                                        th:href="@{/property}">
                                                     <h7 class="text-light">Back</h7>
                                                 </a>
                                                 </button>
                                             </li>
+                                            <div align="center"
+                                                 class="col-lg-12">
+                                                <h5><span class="text-danger">R</span>esidential <span class="text-danger">E</span>ntity expenses report</h5>
+                                                <br>
+                                                <span class="text-secondary">In this section you will find data about your residential entity expenses.
+                                                <br>You can see your current month expenses, or select a specific period of time.</span>
+
+                                            </div>
+
                                             <div align="center" class="col-lg-12">
-                                                <br></br><br></br><br></br><br></br>
-                                                <div class="col-9">
+                                                <br></br><br></br><br></br>
+                                                <div class="col-10">
                                                     <div align="center" class="input-content">
                                                         <div>
                                                             <ul>
                                                                 <form id="input-form"
                                                                       th:method="POST"
-                                                                      th:action="@{/administration/expenses/{id} (id=${id})}"
+                                                                      th:action="@{/property/expenses/{id} (id=${property.getId()})}"
                                                                       th:object="${expenseFilterBindingModel}">
                                                                     <div class="input-group">
                                                                         <div class="col-4">
@@ -238,6 +219,59 @@
                                                                                 class="orange-button col-lg-6">Filter
                                                                         </button>
                                                                     </fieldset>
+                                                                    <br></br>
+                                                                    <div class="tab-content" id="myTabContent">
+                                                                        <div class="tab-pane fade show active"
+                                                                             id="Properties" role="tabpanel"
+                                                                             aria-labelledby="properties-tab-tab">
+                                                                            <br><br>
+
+                                                                            <div class="row">
+                                                                                <!--Expenses list section-->
+                                                                                <div class="section administration"
+                                                                                     id="verified">
+                                                                                    <div class="row">
+                                                                                        <table>
+                                                                                            <tr align="center">
+                                                                                                <th>Amount</th>
+                                                                                                <th>Date</th>
+                                                                                                <th>Description</th>
+                                                                                                <th>Document</th>
+                                                                                            </tr>
+                                                                                            <div class="main-content"><span
+                                                                                                    th:if="${expenseFilterBindingModel.getExpenseList().size()} == 0"
+                                                                                                    class="category text-bg-danger">0 Records found</span>
+                                                                                                <span th:if="${expenseFilterBindingModel.getExpenseList().size()} == 1"
+                                                                                                      th:text="${expenseFilterBindingModel.getExpenseList().size()} + ' Record found'"
+                                                                                                      class="category text-bg-success"></span>
+                                                                                                <span th:if="${expenseFilterBindingModel.getExpenseList().size()} > 1"
+                                                                                                      th:text="${expenseFilterBindingModel.getExpenseList().size()} + ' Records found'"
+                                                                                                      class="category text-bg-success"></span>
+                                                                                                <br></br>
+                                                                                            </div>
+                                                                                            <hr>
+
+                                                                                            <tr align="center"
+                                                                                                th:each="expense : ${expenseFilterBindingModel.getExpenseList()}">
+                                                                                                <td th:text="${expense.getAmount()} + ' лв.'"></td>
+                                                                                                <td th:text="${#temporals.format(expense.getExpenseDate(), 'dd MMM yyyy')}"></td>
+                                                                                                <td th:text="${expense.getDescription()}"></td>
+                                                                                                <td>
+                                                                                                    <a th:if="${expense.getPicturePath()} != null"
+                                                                                                       th:href="@{/expenses/details/{id} (id=${expense.getId()})}"
+                                                                                                       target="_blank">
+                                                                                                        <img title="View document"
+                                                                                                             src="/images/invoice.png"
+                                                                                                             style="max-width: 110px;">
+                                                                                                    </a>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </form>
                                                             </ul>
                                                         </div>
@@ -252,81 +286,11 @@
                     </div>
                 </div>
             </div>
-
-
-            <!--Expenses list section-->
-            <div class="section administration" id="verified">
-                <div class="row">
-                    <table>
-                        <tr align="center">
-                            <th>Amount</th>
-                            <th>Date</th>
-                            <th>Description</th>
-                            <th>Document</th>
-                            <th>View details</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                        <div class="main-content">
-                                         <span th:if="${@expensesRepository.countExpenses(residentialEntity.getId())} == 0"
-                                               class="category text-bg-danger">0 Records found</span>
-                            <span th:if="${@expensesRepository.countExpenses(residentialEntity.getId())} == 1"
-                                  th:text="${@expensesRepository.countExpenses(residentialEntity.getId())} + ' Record found'"
-                                  class="category text-bg-success"></span>
-                            <span th:if="${@expensesRepository.countExpenses(residentialEntity.getId())} > 1"
-                                  th:text="${@expensesRepository.countExpenses(residentialEntity.getId())} + ' Records found'"
-                                  class="category text-bg-success"></span>
-                            <div class="navbar">
-                                <form class="form-container"
-                                      th:action="@{/administration/expenses/add/{id} (id=${residentialEntity.getId()})}">
-                                    <button type="submit">
-                                        <img title="Add monthly fee" src="/images/add_button.png"
-                                             style="max-width: 19px;">
-                                        <p>Add expense</p>
-                                    </button>
-                                </form>
-                            </div>
-
-                        </div>
-                        <hr>
-                        <tr align="center"
-                            th:each="expense: ${expenseFilterBindingModel.getExpenseList()}">
-                            <td th:text="${expense.getAmount()} + ' лв.'"></td>
-                            <td th:text="${#temporals.format(expense.getExpenseDate(), 'dd MMM yyyy')}"></td>
-                            <td th:text="${expense.getDescription()}"></td>
-                            <td><a th:if="${expense.getPicturePath()} != null"
-                                   th:href="@{/administration/expenses/details/{id} (id=${expense.getId()})}"><img
-                                    title="View document" src="/images/invoice.png" style="max-width: 19px;"></a>
-                            </td>
-                            <td><a th:href="@{/administration/expenses/details/{id} (id=${expense.getId()})}"><img
-                                    title="View details" src="/images/magnifier.png"
-                                    style="max-width: 19px;"></a>
-                            </td>
-                            <td>
-                                <form class="form-container"
-                                      th:action="@{/administration/expenses/edit/{id} (id=${expense.getId()})}">
-                                    <button type="submit">
-                                        <img title="Edit property" src="/images/edit.png" style="max-width: 19px;">
-                                    </button>
-                                </form>
-                            </td>
-                            <td>
-                                <form class="form-container"
-                                      th:action="@{/administration/expenses/delete/{id} (id=${expense.getId()})}"
-                                      th:method="POST">
-                                    <button type="submit">
-                                        <img title="Delete property"
-                                             src="/images/delete.jpg"
-                                             style="max-width: 19px;"></button>
-                                </form>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
         </div>
     </div>
 </div>
+</div>
+
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
@@ -340,6 +304,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+
 
 </body>
 </html>

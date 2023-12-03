@@ -80,7 +80,7 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     /**
-     * @param userId id of the user that is going to be modified
+     * @param userId         id of the user that is going to be modified
      * @param authentication logged user data
      * @return TRUE if the id of the edited user equals the id of the logged user. FALSE if id do not match.
      */
@@ -104,6 +104,22 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
+    public boolean checkExpenseUserAccess(Long expenseId, Authentication authentication) {
+
+        Expense expense = expensesService.findById(expenseId);
+
+        //grant access if logged user has apartment in member of expense's residential entity
+        List<ResidentialEntity> residentialEntities = getUserEntity(authentication).getResidentialEntities();
+        for (ResidentialEntity residentialEntity : residentialEntities) {
+            if (residentialEntity.getId().equals(expense.getResidentialEntity().getId())) {
+                return true;
+            }
+        }
+        //grant access if logged user is residential entity manager
+        return getUserEntity(authentication).getId().equals(expense.getResidentialEntity().getManager().getId());
+    }
+
+    @Override
     public boolean checkMassMessagesUserAccess(Long userId, Authentication authentication) {
         return userId.equals(getUserEntity(authentication).getId());
     }
@@ -121,4 +137,5 @@ public class SecurityServiceImpl implements SecurityService {
         }
         return false;
     }
+
 }

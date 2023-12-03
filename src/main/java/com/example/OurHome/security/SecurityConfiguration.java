@@ -36,7 +36,10 @@ public class SecurityConfiguration {
                         .requestMatchers("/login", "/login/error").permitAll()
                         .requestMatchers("/profile", "/profile/**").authenticated()
                         .requestMatchers("/messages", "/messages/**").authenticated()
+                        .requestMatchers("/expenses/details/**").authenticated()
                         .requestMatchers("/property", "/property/**").hasAnyRole("RESIDENT")
+                        .requestMatchers("/uploadDocument/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/deleteDocument/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers("/administration", "/administration/**").hasAnyRole("ADMIN", "MANAGER")
                         .anyRequest().permitAll()
         ).formLogin(formLogin -> {

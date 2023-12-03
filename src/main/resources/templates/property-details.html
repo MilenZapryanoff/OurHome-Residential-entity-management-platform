@@ -91,7 +91,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Residential entity details
+            <h3>Property details
             </h3>
         </div>
     </div>
@@ -116,15 +116,8 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button th:if="${property.isValidated()}" class="nav-link" id="residentsBtnValid"><a
-                            th:href="@{/property/residents/{id}(id=${property.getId()})}">
-                        <h5>Residents</h5>
-                    </a>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
                     <button th:if="${property.isValidated()}" class="nav-link" id="propertiesBtnValid"><a
-                            th:href="@{/property/taxes/{id}(id=${property.getId()})}">
+                            th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">
                         <h5>Monthly fees</h5>
                     </a>
                     </button>
@@ -133,6 +126,13 @@
                     <button class="nav-link active" id="detailsButton"><a
                             th:href="@{/property/details/{id}(id=${property.getId()})}">
                         <h5>Details</h5>
+                    </a>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button th:if="${property.isValidated()}" class="nav-link" id="residentsBtnValid"><a
+                            th:href="@{/property/expenses/{id}(id=${property.getId()})}">
+                        <h5>Expenses<sup class="text-danger">RE</sup></h5>
                     </a>
                     </button>
                 </li>
@@ -220,6 +220,12 @@
                                                                     + ${property.getOwner().getLastName()}"></b>
                                                             </li>
                                                             <li><h5 class="text-danger">Inhabitants information</h5>
+                                                                <p class="text-secondary">Please note, that changes in this section may affect your
+                                                                    monthly fees according to the accepted by your residential entity fee policy.
+                                                                    Changes like this must be approved by your Manager.<br>
+                                                                    After submission of the form your property status will be changed to <b>Pending validation</b>
+                                                                    and some of your data won't be visible. <br>
+                                                                    You will get full access as soon as your manager validate the change.</p>
                                                             </li>
                                                             <li class="text-black">Number of adults: <b
                                                                     th:text="${property.getNumberOfAdults()}"></b>

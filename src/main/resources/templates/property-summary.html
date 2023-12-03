@@ -65,7 +65,7 @@
                                   data-speed="1000"></samp>
                         </small>
                         <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
-                                                                                  class="active">Administration</a></li>
+                                                                     class="active">Administration</a></li>
                         <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
                             property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
@@ -92,14 +92,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
-                    <!--                    <strong th:if="${notDeleted}" class="text-danger">Cannot delete entity with already registered-->
-                    <!--                        residents!</strong>-->
-                    <!--                    <strong th:if="${deleted}" class="text-success">Residential entity successfully deleted!</strong>-->
                     <div class="column-gap-2">
                         <br>
                     </div>
                 </div>
-                <h3>Property details</h3>
+                <h3>Property Summary</h3>
                 <h4 th:if="${messageError}" class="text-danger">Message not sent. Text length must be up to 2000
                     symbols</h4>
                 <h4 th:if="${messageSent}" class="text-success">MESSAGE SENT</h4>
@@ -123,15 +120,8 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button th:if="${property.isValidated()}" class="nav-link" id="residentsBtnValid"><a
-                                th:href="@{/property/residents/{id}(id=${property.getId()})}">
-                            <h5>Residents</h5>
-                        </a>
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
                         <button th:if="${property.isValidated()}" class="nav-link" id="propertiesBtnValid"><a
-                                th:href="@{/property/taxes/{id}(id=${property.getId()})}">
+                                th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">
                             <h5>Monthly fees</h5>
                         </a>
                         </button>
@@ -143,9 +133,31 @@
                         </a>
                         </button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button th:if="${property.isValidated()}" class="nav-link" id="residentsBtnValid"><a
+                                th:href="@{/property/expenses/{id}(id=${property.getId()})}">
+                            <h5>Expenses<sup class="text-danger">RE</sup></h5>
+                        </a>
+                        </button>
+                    </li>
                 </ul>
             </div>
             <!--        end of buttons-->
+            <div class="row">
+                <div class="section property" id="button">
+                    <div class="container">
+                        <div class="tabs-content">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <button class="nav-link" id="residents"><a
+                                        th:href="@{/property}">
+                                    <h7 class="text-light">Back</h7>
+                                </a>
+                                </button>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-lg-7">
                 <div class="section" id="details">
                 </div>
@@ -160,11 +172,13 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    data-bs-target="#collapseOne" aria-expanded="true"
+                                    aria-controls="collapseOne">
                                 Property status:
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        <div id="collapseOne" class="accordion-collapse collapse show"
+                             aria-labelledby="headingOne"
                              data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <a th:if="${property.isValidated()}">This property is <a
@@ -173,23 +187,30 @@
                                     <br>
                                     This status means that you have full access to your data and reports.<br>
                                     You can access property info in Details section. <br>
-                                    If you need to change some of your data, you have to contact your Manager.</a>
-                                <a th:unless="${property.isValidated() or property.isRejected()}">This property is still
+                                    If you need to change some of your data, you have to contact your
+                                    Manager.</a>
+                                <a th:unless="${property.isValidated() or property.isRejected()}">This property
+                                    is still
                                     waiting for <a class="text-secondary">Validation</a>
                                     from your manager!
                                     <br>
-                                    This status means that at this moment You still have no access to data and reports
+                                    This status means that at this moment You still have no access to data and
+                                    reports
                                     related to you property.<br>
-                                    If your registration does not get confirmed in a few days, you can contact You can
+                                    If your registration does not get confirmed in a few days, you can contact
+                                    You can
                                     contact your Residential entity Manager.<br>
-                                    As soon as your registration gets approved you will get access property data.</a>
+                                    As soon as your registration gets approved you will get access property
+                                    data.</a>
                                 <a th:if="${property.isRejected()}">This property is <a class="text-danger">REJECTED</a>
                                     from your manager!
                                     <br>
-                                    This status means that at this moment You do not have access to data and reports
+                                    This status means that at this moment You do not have access to data and
+                                    reports
                                     related to your property.<br>
                                     You can contact your Manager to find out the reason for the rejection.<br>
-                                    You are able to edit your property data and resend the request again, or to delete
+                                    You are able to edit your property data and resend the request again, or to
+                                    delete
                                     it and add new property.</a>
                             </div>
                         </div>
@@ -197,19 +218,21 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Residents registrations
+                                    data-bs-target="#collapseTwo" aria-expanded="false"
+                                    aria-controls="collapseTwo">
+                                Monthly fees
                             </button>
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                              data-bs-parent="#accordionExample">
                             <div th:if="${property.isValidated()}" class="accordion-body">
-                                You can manage your list of <a
-                                    th:href="@{/property/residents/{id}(id=${property.getId()})}">residents</a>
-                                in your property by adding and removing them.
+                                You can access your <a
+                                    th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">monthly fee</a> section to find out for more details
+                                about the fees your property is charged with. Fees are automatically applied in the beginning of every new month. Fees are
+                                calculated according to your residential entity fee policy.
                             </div>
                             <div th:unless="${property.isValidated()}" class="accordion-body">
-                                Residents management is available only for Validated properties.
+                                Monthly fees data is available only for Validated properties.
                             </div>
                         </div>
                     </div>
@@ -221,12 +244,20 @@
                                 <a>Delete Property</a>
                             </button>
                         </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                        <div id="collapseThree" class="accordion-collapse collapse"
+                             aria-labelledby="headingThree"
                              data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                Property can be deleted by it's <strong>owner</strong>.<br>
-                                If you delete your property you will loose the date related to this property
-                                <div class="col-lg-2">
+                                Property can be deleted by the <strong>owner</strong> only if it's in status <b>"Waiting
+                                for validation"</b> or <b>"Rejected"</b>
+                                and there is no data associated with this property. This will prevent any data
+                                lose.
+                                <br>
+                                You can still edit your property data <b>or</b> ask your manager to delete the
+                                property
+                                if you are both sure, that no important data will be lost.
+                                <div th:if="${!property.isValidated()} or ${property.isRejected()}"
+                                     class="col-lg-2">
                                     <form th:action="@{/property/delete/{id}(id=${property.getId()})}"
                                           method="POST">
                                         <input type="hidden"
@@ -234,6 +265,13 @@
                                                th:value="${property.getId()}"/>
                                         <input type="submit" value="Delete!"
                                                class="form-control text-bg-danger"/>
+                                    </form>
+                                </div>
+                                <div th:if="${property.isValidated()} and ${!property.isRejected()}"
+                                     class="col-lg-2">
+                                    <form>
+                                        <h5 align="center" type="text"
+                                            class="form-control text-bg-secondary"/>Delete!</h5>
                                     </form>
                                 </div>
                             </div>

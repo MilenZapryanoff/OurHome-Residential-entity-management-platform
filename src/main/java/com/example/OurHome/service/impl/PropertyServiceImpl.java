@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -22,16 +23,14 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyRepository propertyRepository;
     private final MessageService messageService;
     private final FeeService feeService;
-    private final PropertyFeeService propertyFeeService;
 
 
-    public PropertyServiceImpl(ModelMapper modelMapper, ResidentialEntityService residentialEntityService, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService, PropertyFeeService propertyFeeService) {
+    public PropertyServiceImpl(ModelMapper modelMapper, ResidentialEntityService residentialEntityService, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService) {
         this.modelMapper = modelMapper;
         this.residentialEntityService = residentialEntityService;
         this.propertyRepository = propertyRepository;
         this.messageService = messageService;
         this.feeService = feeService;
-        this.propertyFeeService = propertyFeeService;
     }
 
     /**
@@ -65,11 +64,8 @@ public class PropertyServiceImpl implements PropertyService {
         newProperty.setResidentialEntity(residentialEntity);
         newProperty.setOwner(loggedUser);
         newProperty.setValidated(false);
-        newProperty.setMonthlyFee(feeService.calculateMonthlyFee(residentialEntity, newProperty));
 
         propertyRepository.save(newProperty);
-
-        propertyFeeService.createFirstFee(newProperty);
 
         //sending message to residential entity manager
         messageService.propertyRegistrationMessageToManager(residentialEntity);
@@ -228,5 +224,11 @@ public class PropertyServiceImpl implements PropertyService {
             property.setOverpayment(propertyFeeEditBindingModel.getOverPayment());
             propertyRepository.save(property);
         }
+    }
+
+    @Override
+    public void setMonthlyFee(BigDecimal monthlyFee, Property property) {
+        property.setMonthlyFee(monthlyFee);
+        propertyRepository.save(property);
     }
 }
