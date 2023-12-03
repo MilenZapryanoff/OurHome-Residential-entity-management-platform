@@ -6,10 +6,7 @@ import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyManageBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
-import com.example.OurHome.service.MessageService;
-import com.example.OurHome.service.PropertyService;
-import com.example.OurHome.service.ResidentialEntityService;
-import com.example.OurHome.service.UserService;
+import com.example.OurHome.service.*;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,18 +17,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
+
 @Controller
 public class PropertyManageController {
 
     private final UserService userService;
     private final ResidentialEntityService residentialEntityService;
     private final PropertyService propertyService;
+    private final PropertyFeeService propertyFeeService;
+    private final FeeService feeService;
     private final MessageService messageService;
 
-    public PropertyManageController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, MessageService messageService) {
+    public PropertyManageController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, FeeService feeService, MessageService messageService) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
+        this.propertyFeeService = propertyFeeService;
+        this.feeService = feeService;
         this.messageService = messageService;
     }
 
@@ -64,6 +67,13 @@ public class PropertyManageController {
     public ModelAndView residentialEntityPropertyApprove(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
         propertyService.approveProperty(id);
+        propertyFeeService.createFirstFee(getProperty(id));
+
+        Property property = propertyService.findPropertyById(id);
+        BigDecimal monthlyFee = feeService.calculateMonthlyFee(property.getResidentialEntity(), property);
+
+        propertyService.setMonthlyFee(monthlyFee, property);
+
 
         return new ModelAndView("redirect:/administration/property/" + propertyManageBindingModel.getEntityId());
     }
