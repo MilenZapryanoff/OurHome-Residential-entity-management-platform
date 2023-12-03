@@ -6,14 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
     Long countByReceiver_Id(Long id);
-
-    Optional<Message> findById(Long id);
 
     @Query("SELECT COUNT(m) FROM messages m where m.isRead = false AND m.receiver.id=:id")
     Long countUnreadMessages(Long id);
