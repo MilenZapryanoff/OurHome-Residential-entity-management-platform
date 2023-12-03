@@ -119,7 +119,7 @@ public class ExpensesServiceImpl implements ExpensesService {
             }
 
             assert expense != null;
-            String uploadDirectory = "src/main/resources/static/documents/%d%s".formatted(expense.getId(),expense.getExpenseDate());
+            String uploadDirectory = "src/main/resources/static/documents";
             File directory = new File(uploadDirectory);
 
             if (!directory.exists()) {
@@ -137,13 +137,13 @@ public class ExpensesServiceImpl implements ExpensesService {
                     throw new IllegalArgumentException("Invalid file type!");
                 }
 
-                String fileName = "document" + fileExtension;
+                String fileName = "document-" + expense.getResidentialEntity().getId() + "-" + expense.getId() + "-" + expense.getExpenseDate() + fileExtension;
                 Path filePath = Paths.get(uploadDirectory, fileName);
 
                 try {
                     Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
                     // Update the user's avatarPath in the database
-                    String avatarPath = "/documents/" + expense.getId() + expense.getExpenseDate() + "/" + fileName;
+                    String avatarPath = "/documents/" + fileName;
                     // Update user entity with the avatar path
                     updateExpenseDocument(expensesRepository.findById(id).orElseThrow(), avatarPath);
                     return avatarPath;

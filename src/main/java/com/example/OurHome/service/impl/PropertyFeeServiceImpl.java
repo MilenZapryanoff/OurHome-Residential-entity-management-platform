@@ -58,6 +58,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
         newPropertyFee.setPeriodStart(now.withDayOfMonth(1));
         newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
         newPropertyFee.setProperty(property);
+        newPropertyFee.setDescription("Edit this record if old duties available");
         propertyFeeRepository.save(newPropertyFee);
     }
 

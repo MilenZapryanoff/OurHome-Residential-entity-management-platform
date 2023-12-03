@@ -300,7 +300,7 @@ public class UserServiceImpl implements UserService {
             }
 
             assert user != null;
-            String uploadDirectory = "src/main/resources/static/avatars/%s%d".formatted(user.getUsername(), userId);
+            String uploadDirectory = "src/main/resources/static/avatars";
             File directory = new File(uploadDirectory);
 
             if (!directory.exists()) {
@@ -318,13 +318,13 @@ public class UserServiceImpl implements UserService {
                     throw new IllegalArgumentException("Invalid file type!");
                 }
 
-                String fileName = "avatar" + fileExtension;
+                String fileName = "avatar-" + user.getId() + "-" + user.getUsername() + fileExtension;
                 Path filePath = Paths.get(uploadDirectory, fileName);
 
                 try {
                     Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
                     // Update the user's avatarPath in the database
-                    String avatarPath = "/avatars/" + user.getUsername() + userId + "/" + fileName;
+                    String avatarPath = "/avatars/" + fileName;
                     // Update user entity with the avatar path
                     updateUserAvatar(userRepository.findById(userId).orElseThrow(), avatarPath);
                     return avatarPath;

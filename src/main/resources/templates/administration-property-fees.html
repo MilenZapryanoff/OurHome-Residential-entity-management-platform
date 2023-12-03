@@ -176,100 +176,40 @@
                                                                                                                     fee:
                                                                                                                     <b th:text="${property.getMonthlyFee()} + ' лв.'"></b>
                                                                                                                     <p>
-                                                                                                                        Monthly
-                                                                                                                        fee
-                                                                                                                        calculated
-                                                                                                                        according
-                                                                                                                        residential
-                                                                                                                        entity
-                                                                                                                        fee
-                                                                                                                        policy</p>
+                                                                                                                        Monthly fee calculated according residential entity fee policy.<br>
+                                                                                                                        A new fee is applied on every 1<sup>st</sup> date of a new month.
+                                                                                                                    </br></p>
                                                                                                                 </li>
                                                                                                                 <li class="text-black">
                                                                                                                     Overpayment:
                                                                                                                     <b th:text="${property.getOverpayment() + ' лв.'}"></b>
                                                                                                                     <p>
-                                                                                                                        In
-                                                                                                                        case
-                                                                                                                        of
-                                                                                                                        overpayment
-                                                                                                                        the
-                                                                                                                        over
-                                                                                                                        paid
-                                                                                                                        amount
-                                                                                                                        will
-                                                                                                                        be
-                                                                                                                        used
-                                                                                                                        for
-                                                                                                                        future
-                                                                                                                        payments
-                                                                                                                        of
-                                                                                                                        monthly
-                                                                                                                        fees.<br>
-                                                                                                                        This
-                                                                                                                        amount
-                                                                                                                        will
-                                                                                                                        automatically
-                                                                                                                        cover
-                                                                                                                        future
-                                                                                                                        fees
-                                                                                                                        and
-                                                                                                                        will
-                                                                                                                        be
-                                                                                                                        decreased
-                                                                                                                        with
-                                                                                                                        the
-                                                                                                                        amount
-                                                                                                                        of
-                                                                                                                        the
-                                                                                                                        covered
-                                                                                                                        fee
-                                                                                                                        until
-                                                                                                                        it
-                                                                                                                        get
-                                                                                                                        all
-                                                                                                                        spent
+                                                                                                                        In case of overpayment the overpaid amount will be used
+                                                                                                                        for future payments of monthly fees.<br>
+                                                                                                                        This amount will automatically cover future fees and will be
+                                                                                                                        decreased with the amount of the covered fee until it gets all used.
                                                                                                                     </p>
                                                                                                                 </li>
                                                                                                                 <li class="text-black">
-                                                                                                                    Number
-                                                                                                                    of
-                                                                                                                    unpaid
-                                                                                                                    fees:
+                                                                                                                    Number of unpaid fees:
                                                                                                                     <b th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
                                                                                                                        class="text-danger"
                                                                                                                        th:text="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())}"></b>
                                                                                                                     <b th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
                                                                                                                        th:text="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())}"></b>
                                                                                                                     <p>
-                                                                                                                        Number
-                                                                                                                        of
-                                                                                                                        unpaid
-                                                                                                                        fees</p>
+                                                                                                                        Number of unpaid fees</p>
                                                                                                                 </li>
                                                                                                                 <li class="text-black">
-                                                                                                                    Total
-                                                                                                                    due
-                                                                                                                    amount:
+                                                                                                                    Total due amount:
                                                                                                                     <b th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
                                                                                                                        class="text-danger"
                                                                                                                        th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId()) + ' лв.'}"></b>
                                                                                                                     <b th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">0.00
                                                                                                                         лв.</b>
                                                                                                                     <p>
-                                                                                                                        Total
-                                                                                                                        due
-                                                                                                                        amount
-                                                                                                                        is
-                                                                                                                        automatically
-                                                                                                                        calculated
-                                                                                                                        by
-                                                                                                                        summing
-                                                                                                                        all
-                                                                                                                        individual
-                                                                                                                        unpaid
-                                                                                                                        monthly
-                                                                                                                        fees.</p>
+                                                                                                                        Total due amount is automatically calculated
+                                                                                                                        by summing all individual unpaid monthly fees.</p>
                                                                                                                 </li>
                                                                                                             </ul>
                                                                                                         </div>
@@ -295,10 +235,7 @@
                                                                                                                 <img title="Add monthly fee"
                                                                                                                      src="/images/add_button.png"
                                                                                                                      style="max-width: 111px;">
-                                                                                                                <p>
-                                                                                                                    Manually
-                                                                                                                    add
-                                                                                                                    fee</p>
+                                                                                                                <p>Manually add fee</p>
                                                                                                             </button>
                                                                                                         </form>
                                                                                                     </div>
