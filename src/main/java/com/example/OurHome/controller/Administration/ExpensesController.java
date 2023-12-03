@@ -209,6 +209,19 @@ public class ExpensesController {
         return new ModelAndView("redirect:/administration/expenses/details/ " + expense.getId());
     }
 
+    /**
+     * View residential entity expense doc by property owner
+     * @param id expense id
+     * @return expense-document
+     */
+    @GetMapping("/expenses/details/{id}")
+    @PreAuthorize("@securityService.checkExpenseUserAccess(#id, authentication)")
+    public ModelAndView residentialEntityExpenseDetails(@PathVariable("id") Long id) {
+
+        Expense expense = expensesService.findById(id);
+        return new ModelAndView("expense-document")
+                .addObject(expense);
+    }
 
     /**
      * Method returns currently logged user
