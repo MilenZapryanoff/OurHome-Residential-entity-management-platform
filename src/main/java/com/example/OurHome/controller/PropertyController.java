@@ -1,16 +1,17 @@
 package com.example.OurHome.controller;
 
+import com.example.OurHome.model.Entity.Expense;
 import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.Entity.dto.BindingModels.Expense.ExpenseFilterBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.Message.SendMessageBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyRegisterBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntity.ResidentManageBindingModel;
 import com.example.OurHome.model.Entity.dto.BindingModels.User.UserAuthBindingModel;
 import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
-import com.example.OurHome.service.MessageService;
-import com.example.OurHome.service.PropertyService;
-import com.example.OurHome.service.UserService;
+import com.example.OurHome.service.*;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,12 +29,16 @@ public class PropertyController {
     private final UserService userService;
     private final PropertyService propertyService;
     private final MessageService messageService;
+    private final ExpensesService expensesService;
+    private final ResidentialEntityService residentialEntityService;
 
 
-    public PropertyController(UserService userService, PropertyService propertyService, MessageService messageService) {
+    public PropertyController(UserService userService, PropertyService propertyService, MessageService messageService, ExpensesService expensesService, ResidentialEntityService residentialEntityService) {
         this.userService = userService;
         this.propertyService = propertyService;
         this.messageService = messageService;
+        this.expensesService = expensesService;
+        this.residentialEntityService = residentialEntityService;
     }
 
     @GetMapping("/property")
@@ -187,6 +192,54 @@ public class PropertyController {
         return new ModelAndView("redirect:/property");
     }
 
+
+    @GetMapping("/property/expenses/{id}")
+    public ModelAndView residentialEntityExpenses(
+            @ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
+            @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel,
+            @PathVariable("id") Long id) {
+
+
+        Property property = getProperty(id);
+        ResidentialEntity residentialEntity = getResidentialEntity(property.getResidentialEntity().getId());
+
+        ExpenseFilterBindingModel expenseFilter = expensesService
+                .createDefaultExpenseFilter(residentialEntity);
+
+
+        return new ModelAndView("property-expenses", "userViewModel", getUserViewModel())
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("property", property)
+                .addObject("expenseFilterBindingModel", expenseFilter);
+    }
+
+    @PostMapping("/property/expenses/{id}")
+//    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityFilterExpenses(@PathVariable("id") Long id,
+                                                  @Valid ExpenseFilterBindingModel expenseFilter,
+                                                  BindingResult bindingResult) {
+
+        Property property = getProperty(id);
+
+        ModelAndView modelAndView = new ModelAndView("property-expenses")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("property", property);
+
+        if (bindingResult.hasErrors()) {
+            return modelAndView.addObject("expenseFilterBindingModel", expenseFilter);
+        }
+
+        ResidentialEntity residentialEntity = getResidentialEntity(property.getResidentialEntity().getId());
+
+        expenseFilter = expensesService.createCustomExpenseFilter(expenseFilter.getPeriodStart(),
+                expenseFilter.getPeriodEnd(), residentialEntity);
+
+        return modelAndView.addObject("expenseFilterBindingModel", expenseFilter);
+    }
+
+
+
+
     /**
      * This private method returns a Property by id
      *
@@ -208,5 +261,15 @@ public class PropertyController {
      */
     private UserViewModel getUserViewModel() {
         return userService.getUserViewData(getLoggedUser());
+    }
+
+    /**
+     * Method returns a ResidentialEntity
+     *
+     * @param id residential entity id
+     * @return ResidentialEntity
+     */
+    private ResidentialEntity getResidentialEntity(Long id) {
+        return residentialEntityService.findResidentialEntityById(id).orElse(null);
     }
 }
