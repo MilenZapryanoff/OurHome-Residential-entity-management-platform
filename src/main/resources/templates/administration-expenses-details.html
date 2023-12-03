@@ -148,7 +148,8 @@
                                     <div align="center">
                                         <br>
                                         <h5>Document</h5>
-                                        <br>
+                                        <p class="text text-secondary">(Supported file types jpg, jpeg, png and gif)</p>
+                                        <br></br>
                                     </div>
 
                                     <div class="col-lg-12">
@@ -167,16 +168,20 @@
                                                                     <button th:if="${expense.picturePath == null}"
                                                                             type="button" id="uploadButton"
                                                                             class="text-info-emphasis">Upload document
-                                                                        <img title="Delete document" src="/images/add_button.png" style="max-width: 111px;">
+                                                                        <img title="Delete document" src="/images/upload.png" style="max-width: 111px;">
                                                                     </button>
                                                                     <button th:unless="${expense.picturePath == null}"
                                                                             type="button" id="uploadButton" class="text-info-emphasis">Replace document
+
                                                                         <img title="Delete document"
                                                                              src="/images/replace.png" style="max-width: 111px;">
                                                                     </button>
+
                                                                 </div>
+
                                                                 <button type="submit" style="display: none;">Submit
                                                                 </button>
+
                                                             </form>
                                                         </div>
                                                         <div align="center" class="col-lg-6">
@@ -199,6 +204,7 @@
                                                         </div>
                                                     </div>
                                                 </li>
+
                                                 <li class="text-black">
                                                     <div align="center">
                                                         <small th:if="${expense.getPicturePath() == null}"
