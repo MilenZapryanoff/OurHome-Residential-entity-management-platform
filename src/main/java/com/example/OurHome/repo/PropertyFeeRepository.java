@@ -24,7 +24,7 @@ public interface PropertyFeeRepository extends JpaRepository<PropertyFee, Long> 
     @Query("SELECT f FROM property_fees f WHERE f.property.id=:id ORDER BY f.id DESC, f.periodStart DESC, f.periodEnd DESC")
     List<PropertyFee> findAllFees(@Param("id") Long id);
 
-
-
+    @Query("SELECT COUNT(f.id) FROM property_fees f WHERE f.isPaid = true AND f.id=:id")
+    Long checkIfFeePaid(Long id);
 
 }
