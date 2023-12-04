@@ -36,6 +36,11 @@ public class ExpensesServiceImpl implements ExpensesService {
         return expensesRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Expense creating
+     * @param residentialEntity The ResidentialEntity which the Expense belongs to.
+     * @param expenseAddBindingModel data from Frontend
+     */
     @Override
     public void createExpense(ResidentialEntity residentialEntity, ExpenseAddBindingModel expenseAddBindingModel) {
         Expense expense = modelMapper.map(expenseAddBindingModel, Expense.class);
@@ -44,71 +49,80 @@ public class ExpensesServiceImpl implements ExpensesService {
         expensesRepository.save(expense);
     }
 
+    /**
+     * Mapping between Expense and ExpenseEditBindingModel
+     * @param expense Expense
+     * @return mapped ExpenseEditBindingModel
+     */
     @Override
     public ExpenseEditBindingModel mapExpenseToBindingModel(Expense expense) {
         return modelMapper.map(expense, ExpenseEditBindingModel.class);
     }
 
+    /**
+     * Expense modification method
+     * @param expenseEditBindingModel data from Frontend
+     * @param expense Expense that has to be modified
+     */
     @Override
     public void editExpense(ExpenseEditBindingModel expenseEditBindingModel, Expense expense) {
         modelMapper.map(expenseEditBindingModel, expense);
         expensesRepository.save(expense);
     }
 
+    /**
+     * Expense deletion
+     * @param expense The expense that has to be deleted
+     */
     @Override
     public void deleteExpense(Expense expense) {
         expensesRepository.delete(expense);
     }
 
+
+    /**
+     * Default filter for expenses
+     * @param residentialEntity Residential entity
+     * @return ExpenseFilterBindingModel with start date the first day of the current month and end date, the last day
+     * of the current month
+     */
     @Override
     public ExpenseFilterBindingModel createDefaultExpenseFilter(ResidentialEntity residentialEntity) {
 
         ExpenseFilterBindingModel expenseFilterBindingModel = new ExpenseFilterBindingModel();
-
         if (residentialEntity != null) {
 
             LocalDate startPeriod = LocalDate.now().withDayOfMonth(1);
             LocalDate endPeriod = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
-            BigDecimal expensesTotalSum = BigDecimal.valueOf(0.0);
-
-            List<Expense> filteredExpenses = expensesRepository.findExpensesByDatesAndResidentialEntityId(startPeriod, endPeriod, residentialEntity.getId());
-            for (Expense expense : filteredExpenses) {
-                expensesTotalSum = expensesTotalSum.add(expense.getAmount());
-            }
-
-            expenseFilterBindingModel.setPeriodStart(startPeriod);
-            expenseFilterBindingModel.setPeriodEnd(endPeriod);
-            expenseFilterBindingModel.setTotalExpensesAmount(expensesTotalSum);
-            expenseFilterBindingModel.setExpenseList(filteredExpenses);
-
-            return expenseFilterBindingModel;
+            return getExpenseFilterBindingModel(startPeriod, endPeriod, residentialEntity, expenseFilterBindingModel);
         }
         return expenseFilterBindingModel;
     }
 
+    /**
+     * User selected filter for expenses
+     * @param startPeriod LocalDate start period
+     * @param endPeriod LocalDate end period
+     * @param residentialEntity Residential entity
+     * @return ExpenseFilterBindingModel with user selected start & end dates
+     */
     @Override
     public ExpenseFilterBindingModel createCustomExpenseFilter(LocalDate startPeriod, LocalDate endPeriod, ResidentialEntity residentialEntity) {
 
         ExpenseFilterBindingModel expenseFilterBindingModel = new ExpenseFilterBindingModel();
-
         if (residentialEntity != null) {
-            BigDecimal expensesTotalSum = BigDecimal.valueOf(0.0);
-
-            List<Expense> filteredExpenses = expensesRepository.findExpensesByDatesAndResidentialEntityId(startPeriod, endPeriod, residentialEntity.getId());
-            for (Expense expense : filteredExpenses) {
-                expensesTotalSum = expensesTotalSum.add(expense.getAmount());
-            }
-
-            expenseFilterBindingModel.setPeriodStart(startPeriod);
-            expenseFilterBindingModel.setPeriodEnd(endPeriod);
-            expenseFilterBindingModel.setTotalExpensesAmount(expensesTotalSum);
-            expenseFilterBindingModel.setExpenseList(filteredExpenses);
-
-            return expenseFilterBindingModel;
+            return getExpenseFilterBindingModel(startPeriod, endPeriod, residentialEntity, expenseFilterBindingModel);
         }
         return expenseFilterBindingModel;
     }
 
+    /**
+     * Storing the uploaded expense document (picture format) in the file system.
+     * @param file uploaded from manager document (picture)
+     * @param id Expense id
+     * @return String with documentPath
+     * @throws IOException If error occurs
+     */
     @Override
     public String saveDocument(MultipartFile file, Long id) throws IOException {
 
@@ -144,11 +158,11 @@ public class ExpensesServiceImpl implements ExpensesService {
 
                 try {
                     Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-                    // Update the user's avatarPath in the database
-                    String avatarPath = "/documents/" + fileName;
+                    // Update the user's documentPath in the database
+                    String documentPath = "/documents/" + fileName;
                     // Update user entity with the avatar path
-                    updateExpenseDocument(expensesRepository.findById(id).orElseThrow(), avatarPath);
-                    return avatarPath;
+                    updateExpenseDocument(expensesRepository.findById(id).orElseThrow(), documentPath);
+                    return documentPath;
                 } catch (IOException e) {
                     throw new IOException("Failed to save the file!");
                 }
@@ -160,6 +174,9 @@ public class ExpensesServiceImpl implements ExpensesService {
         }
     }
 
+    /**
+     *Delete expense document method
+     */
     @Override
     public void deleteDocumentFromExpense(Expense expense) {
         if (expense != null) {
@@ -168,6 +185,11 @@ public class ExpensesServiceImpl implements ExpensesService {
         }
     }
 
+    /**
+     * Update of expense picturePath field.
+     * @param expense Expense entity
+     * @param relativePath the path where the picture is stored
+     */
     @Override
     public void updateExpenseDocument(Expense expense, String relativePath) {
         if (expense != null) {
@@ -176,5 +198,30 @@ public class ExpensesServiceImpl implements ExpensesService {
         } else {
             throw new IllegalArgumentException("Expense is null!");
         }
+    }
+
+    /**
+     * Expense filter method.
+     * @param startPeriod LocalDate startPeriod
+     * @param endPeriod LocalDate startPeriod
+     * @param residentialEntity Residential entity
+     * @param expenseFilterBindingModel FrontEnd view
+     * @return ExpenseFilterBindingModel
+     */
+
+    private ExpenseFilterBindingModel getExpenseFilterBindingModel(LocalDate startPeriod, LocalDate endPeriod, ResidentialEntity residentialEntity, ExpenseFilterBindingModel expenseFilterBindingModel) {
+        BigDecimal expensesTotalSum = BigDecimal.valueOf(0.0);
+
+        List<Expense> filteredExpenses = expensesRepository.findExpensesByDatesAndResidentialEntityId(startPeriod, endPeriod, residentialEntity.getId());
+        for (Expense expense : filteredExpenses) {
+            expensesTotalSum = expensesTotalSum.add(expense.getAmount());
+        }
+
+        expenseFilterBindingModel.setPeriodStart(startPeriod);
+        expenseFilterBindingModel.setPeriodEnd(endPeriod);
+        expenseFilterBindingModel.setTotalExpensesAmount(expensesTotalSum);
+        expenseFilterBindingModel.setExpenseList(filteredExpenses);
+
+        return expenseFilterBindingModel;
     }
 }

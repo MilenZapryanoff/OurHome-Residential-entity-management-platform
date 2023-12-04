@@ -138,4 +138,10 @@ public class SecurityServiceImpl implements SecurityService {
         return false;
     }
 
+    @Override
+    public boolean checkPropertyOwnerAccess(Long propertyId, Authentication authentication) {
+        Property property = propertyService.findPropertyById(propertyId);
+        UserEntity loggedUser = getUserEntity(authentication);
+        return property.getOwner().getId().equals(loggedUser.getId());
+    }
 }

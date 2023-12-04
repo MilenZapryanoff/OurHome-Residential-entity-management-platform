@@ -66,10 +66,6 @@ public class RegisterController {
         } else {
             userService.registerUser(userRegisterBindingModel, residentialEntityToken.getTokenId());
             return new ModelAndView("redirect:/login");
-//
-//            modelAndView.addObject("successfulRegistration", true);
-//            return modelAndView;
-
         }
     }
 

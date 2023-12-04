@@ -9,8 +9,6 @@ public class UserAuthBindingModel {
     @Length(min = 3, max = 20, message = "Access code must be at least 3 symbols long")
     private String residentialAccessCode;
 
-
-
     public String getResidentialId() {
         return residentialId;
     }

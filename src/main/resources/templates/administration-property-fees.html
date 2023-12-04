@@ -246,8 +246,8 @@
                                                                                                     th:each="propertyFee: ${@propertyFeeRepository.findAllFees(property.getId())}">
                                                                                                     <td th:text="${propertyFee.getId()}"></td>
                                                                                                     <td th:text="${propertyFee.getFeeAmount()} + ' лв.'"></td>
-                                                                                                    <td th:text="${#temporals.format(propertyFee.getPeriodStart(), 'dd MMM yyyy')}"></td>
-                                                                                                    <td th:text="${#temporals.format(propertyFee.getPeriodEnd(), 'dd MMM yyyy')}"></td>
+                                                                                                    <td th:text="${#temporals.format(propertyFee.getPeriodStart(), 'dd-MMM-yyyy')}"></td>
+                                                                                                    <td th:text="${#temporals.format(propertyFee.getPeriodEnd(), 'dd-MMM-yyyy')}"></td>
                                                                                                     <td th:text="${propertyFee.getDescription()}"></td>
                                                                                                     <td>
                                                                                                         <form class="form-container"

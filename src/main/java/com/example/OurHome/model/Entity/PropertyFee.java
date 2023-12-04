@@ -26,6 +26,7 @@ public class PropertyFee {
 
     @Column(length = 45)
     private String description;
+
     @ManyToOne
     private Property property;
 

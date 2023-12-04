@@ -38,6 +38,10 @@ public class ExpensesController {
         this.expensesService = expensesService;
     }
 
+    /**
+     * Administration -> Expenses
+     * @param id Residential entity Id
+     */
     @GetMapping("/administration/expenses/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityExpenses(@PathVariable("id") Long id) {
@@ -50,6 +54,10 @@ public class ExpensesController {
                 .addObject("expenseFilterBindingModel", expenseFilter);
     }
 
+    /**
+     * Administration -> Expenses -> Custom filter
+     * @param id Residential entity Id
+     */
     @PostMapping("/administration/expenses/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityExpenses(@PathVariable("id") Long id,
@@ -72,7 +80,10 @@ public class ExpensesController {
                 .addObject("expenseFilterBindingModel", expenseFilter);
     }
 
-
+    /**
+     * Administration -> Expenses -> Add expense
+     * @param id Residential entity Id
+     */
     @GetMapping("/administration/expenses/add/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView addExpense(@PathVariable("id") Long id) {
@@ -84,7 +95,11 @@ public class ExpensesController {
                 .addObject("expenseAddBindingModel", new ExpenseAddBindingModel());
     }
 
-
+    /**
+     * Administration -> Expenses -> Add expense
+     * @param id Residential entity id
+     * POST
+     */
     @PostMapping("/administration/expenses/add/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView addExpense(@PathVariable("id") Long id,
@@ -102,6 +117,10 @@ public class ExpensesController {
         return new ModelAndView("redirect:/administration/expenses/" + id);
     }
 
+    /**
+     * Administration -> Expenses -> Edit expense
+     * @param id Residential entity Id
+     */
     @GetMapping("/administration/expenses/edit/{id}")
     @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
     public ModelAndView editExpense(@PathVariable("id") Long id) {
@@ -115,6 +134,11 @@ public class ExpensesController {
                 .addObject("entityId", expense.getResidentialEntity().getId());
     }
 
+    /**
+     * Administration -> Expenses -> Edit expense
+     * @param id Residential entity id
+     * POST
+     */
     @PostMapping("/administration/expenses/edit/{id}")
     @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
     public ModelAndView editExpense(@PathVariable("id") Long id,
@@ -133,6 +157,11 @@ public class ExpensesController {
         return new ModelAndView("redirect:/administration/expenses/" + expense.getResidentialEntity().getId());
     }
 
+    /**
+     * Administration -> Expenses -> Delete expense
+     * @param id Residential entity id
+     * POST
+     */
     @PostMapping("/administration/expenses/delete/{id}")
     @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
     public ModelAndView deleteExpense(@PathVariable("id") Long id) {
@@ -144,6 +173,10 @@ public class ExpensesController {
         return new ModelAndView("redirect:/administration/expenses/" + entityId);
     }
 
+    /**
+     * Administration -> Expenses -> Expense details
+     * @param id Residential Expense id
+     */
     @GetMapping("/administration/expenses/details/{id}")
     @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
     public ModelAndView expenseDetails(@PathVariable("id") Long id) {
@@ -155,7 +188,10 @@ public class ExpensesController {
                 .addObject("expense", expense);
     }
 
-
+    /**
+     * Administration -> Expenses -> Expense details -> Upload document
+     * @param id Residential Expense id
+     */
     @PostMapping("/uploadDocument/{id}")
     @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
     public ModelAndView uploadDocument(@RequestParam("document") MultipartFile file,
@@ -176,6 +212,10 @@ public class ExpensesController {
         return modelAndView;
     }
 
+    /**
+     * Administration -> Expenses -> Expense details -> Delete document
+     * @param id Residential Expense id
+     */
     @PostMapping("/deleteDocument/{id}")
     @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
     public ModelAndView deleteDocument(@PathVariable("id") Long id) {
@@ -210,7 +250,8 @@ public class ExpensesController {
     }
 
     /**
-     * View residential entity expense doc by property owner
+     * View residential entity expense doc by property owner (member of this Residential entity)
+     * Used in Property -> ExpensesRE -> Doc
      * @param id expense id
      * @return expense-document
      */
@@ -242,5 +283,4 @@ public class ExpensesController {
     private ResidentialEntity getResidentialEntity(Long id) {
         return residentialEntityService.findResidentialEntityById(id).orElse(null);
     }
-
 }

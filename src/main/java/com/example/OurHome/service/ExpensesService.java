@@ -16,18 +16,19 @@ public interface ExpensesService {
 
     void createExpense(ResidentialEntity residentialEntity, ExpenseAddBindingModel expenseAddBindingModel);
 
-    ExpenseEditBindingModel mapExpenseToBindingModel(Expense expense);
-
     void editExpense(ExpenseEditBindingModel expenseEditBindingModel, Expense expense);
 
     void deleteExpense(Expense expense);
+
+    void updateExpenseDocument(Expense expense, String relativePath);
+
+    void deleteDocumentFromExpense(Expense expense);
+
+    ExpenseEditBindingModel mapExpenseToBindingModel(Expense expense);
 
     ExpenseFilterBindingModel createDefaultExpenseFilter(ResidentialEntity residentialEntity);
 
     ExpenseFilterBindingModel createCustomExpenseFilter(LocalDate startPeriod, LocalDate endPeriod, ResidentialEntity residentialEntity);
 
     String saveDocument(MultipartFile file, Long id) throws IOException;
-
-    void updateExpenseDocument(Expense expense, String relativePath);
-    void deleteDocumentFromExpense(Expense expense);
 }

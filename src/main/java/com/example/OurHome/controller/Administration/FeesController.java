@@ -33,7 +33,10 @@ public class FeesController {
         this.propertyFeeService = propertyFeeService;
     }
 
-
+    /**
+     * Administration -> Monthly Fees
+     * @param id Residential entity ID
+     */
     @GetMapping("/administration/fees/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityFees(@PathVariable("id") Long id) {
@@ -43,7 +46,10 @@ public class FeesController {
                 .addObject("residentialEntity", getResidentialEntity(id));
     }
 
-
+    /**
+     * Administration -> Monthly Fees -> Edit
+     * @param id Residential entity ID
+     */
     @GetMapping("/administration/fees/edit/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView editResidentialEntityFees(@PathVariable("id") Long id) {
@@ -61,6 +67,11 @@ public class FeesController {
                 .addObject("feeEditBindingModel", feeEditBindingModel);
     }
 
+    /**
+     * Administration -> Monthly Fees -> Edit
+     * @param id Residential entity ID
+     * POST
+     */
     @PostMapping("/administration/fees/edit/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView editResidentialEntityFees(@PathVariable("id") Long id,
@@ -83,7 +94,10 @@ public class FeesController {
         return new ModelAndView("redirect:/administration/fees/" + id);
     }
 
-
+    /**
+     * Administration -> Monthly Fees -> PropertyFees by property ID
+     * @param id property ID
+     */
     @GetMapping("/administration/fees/details/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView propertyFees(@PathVariable("id") Long id) {
@@ -93,6 +107,10 @@ public class FeesController {
                 .addObject("property", getProperty(id));
     }
 
+    /**
+     * Administration -> Monthly Fees -> PropertyFees by property ID -> Edit fee
+     * @param id PropertyFee ID
+     */
     @GetMapping("/administration/fees/details/edit/{id}")
     @PreAuthorize("@securityService.checkPropertyFeeModeratorAccess(#id, authentication)")
     public ModelAndView editPropertyFee(@PathVariable("id") Long id) {
@@ -106,6 +124,12 @@ public class FeesController {
                 .addObject("propertyFeeEditBindingModel", propertyFeeEditBindingModel);
     }
 
+
+    /**
+     * Administration -> Monthly Fees -> PropertyFees by property ID -> Edit fee
+     * @param id PropertyFee ID
+     * POST
+     */
     @PostMapping("/administration/fees/details/edit/{id}")
     @PreAuthorize("@securityService.checkPropertyFeeModeratorAccess(#id, authentication)")
     public ModelAndView editPropertyFee(@PathVariable("id") Long id,
@@ -125,7 +149,10 @@ public class FeesController {
         return new ModelAndView("redirect:/administration/fees/details/" + propertyFeeEditBindingModel.getPropertyId());
     }
 
-
+    /**
+     * Administration -> Monthly Fees -> PropertyFees by property ID -> Manually add fee
+     * @param id PropertyFee ID
+     */
     @GetMapping("/administration/fees/details/add/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView addPropertyFee(@PathVariable("id") Long id) {
@@ -135,6 +162,11 @@ public class FeesController {
                 .addObject("propertyFeeAddBindingModel", new PropertyFeeAddBindingModel());
     }
 
+    /**
+     * Administration -> Monthly Fees -> PropertyFees by property ID -> Manually add fee
+     * @param id PropertyFee ID
+     * POST
+     */
     @PostMapping("/administration/fees/details/add/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView addPropertyFee(@PathVariable("id") Long id,
@@ -154,6 +186,11 @@ public class FeesController {
     }
 
 
+    /**
+     * Administration -> Monthly Fees -> PropertyFees by property ID -> Delete fee
+     * @param id PropertyFee ID
+     * POST
+     */
     @PostMapping("/administration/fees/details/delete/{id}")
     @PreAuthorize("@securityService.checkPropertyFeeModeratorAccess(#id, authentication)")
     public ModelAndView deletePropertyFee(@PathVariable("id") Long id) {
@@ -167,9 +204,9 @@ public class FeesController {
     }
 
     /**
-     * Changing property fee payment status Paid/Not Paid
-     * @param id propertyFee id
-     * @return redirect:/administration/fees/details/
+     * Administration -> Monthly Fees -> PropertyFees by property ID -> Change payment status
+     * @param id PropertyFee ID
+     * POST
      */
     @PostMapping("/administration/fees/changePaymentStatus/{id}")
     @PreAuthorize("@securityService.checkPropertyFeeModeratorAccess(#id, authentication)")

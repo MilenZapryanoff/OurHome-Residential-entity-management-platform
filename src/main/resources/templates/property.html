@@ -147,7 +147,7 @@
                                                 </li>
                                                 <li>Monthly fee: <span th:text="${property.getMonthlyFee()} + ' лв.'"></span></li>
                                                 <li th:if="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} != null">Total due amount: <span class="text-danger" th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"></span></li>
-                                                <li th:unless="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} != null">Total due amount: <span class="text-info-emphasis">0.00 лв.</span></li>
+                                                <li th:unless="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} != null">Total due amount: <span class="text-success">0.00 лв.</span></li>
                                             </ul>
                                             <div class="main-button">
                                                 <div align="center" class="main-button">

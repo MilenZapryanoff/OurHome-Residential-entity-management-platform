@@ -29,8 +29,6 @@ public class ResidentialEntityController {
 
     /**
      * Administration section
-     *
-     * @return view administration
      */
     @GetMapping("/administration")
     public ModelAndView administration() {
@@ -40,8 +38,6 @@ public class ResidentialEntityController {
 
     /**
      * Create new Residential entity
-     *
-     * @return view administration-add-residence
      */
     @GetMapping("/administration/add")
     public ModelAndView addNewResidence(@ModelAttribute("residentialEntityRegisterBindingModel")
@@ -55,7 +51,6 @@ public class ResidentialEntityController {
      *
      * @param residentialEntityRegisterBindingModel carries register information
      * @param bindingResult                         result
-     * @return redirect:/administration
      */
     @PostMapping("/administration/add")
     public ModelAndView addResidence(@ModelAttribute("residentialEntityRegisterBindingModel") @Valid ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel, BindingResult bindingResult) {
@@ -76,8 +71,7 @@ public class ResidentialEntityController {
     /**
      * Residential entity (RE) deletion
      *
-     * @param id RE id
-     * @return view administration
+     * @param id Residential entity id
      */
     @PostMapping("/administration/remove/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")

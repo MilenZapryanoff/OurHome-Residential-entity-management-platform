@@ -13,21 +13,15 @@ public class ExpenseEditBindingModel {
     @NotNull
     @DecimalMin(value = "0.0", message = "Expense amount must be greater than or equal to zero")
     private BigDecimal expenseAmount;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "End period date cannot be null")
     private LocalDate expenseDate;
-
     @Size(max = 100, message = "Description must not be longer than 100 symbols")
     private String description;
-
     private String picturePath;
-
-
     public BigDecimal getExpenseAmount() {
         return expenseAmount;
     }
-
     public void setExpenseAmount(BigDecimal expenseAmount) {
         this.expenseAmount = expenseAmount;
     }

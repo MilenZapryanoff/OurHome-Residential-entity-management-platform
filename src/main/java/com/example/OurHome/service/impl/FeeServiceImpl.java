@@ -31,6 +31,11 @@ public class FeeServiceImpl implements FeeService {
         return feeRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Default fee creating - 0.00 values set.
+     * @param newResidentialEntity Residential Entity of the new fee
+     * @return Fee
+     */
     @Override
     public Fee createFee(ResidentialEntity newResidentialEntity) {
 
@@ -47,11 +52,16 @@ public class FeeServiceImpl implements FeeService {
         return fee;
     }
 
+    /**
+     * Individual property monthly fee calculation method
+     * @param residentialEntity Residential entity
+     * @param property Property
+     * @return BigDecimal value
+     */
     @Override
     public BigDecimal calculateMonthlyFee(ResidentialEntity residentialEntity, Property property) {
 
         Fee fee = residentialEntity.getFee();
-
         if (property.isNotHabitable()) {
             BigDecimal fixedFeeNonHabitable = fee.getFixedFeeNonHabitable();
             BigDecimal additionalFeeNonHabitable = fee.getAdditionalFeeNonHabitable();
@@ -75,11 +85,11 @@ public class FeeServiceImpl implements FeeService {
                 .add(additionalFeeHabitable);
     }
 
-    @Override
-    public FeeEditBindingModel mapFeeToBindingModel(Fee fee) {
-        return modelMapper.map(fee, FeeEditBindingModel.class);
-    }
-
+    /**
+     * Residential entity Fee modification method.
+     * @param residentialEntity Residential entity
+     * @param feeEditBindingModel FeeEditBindingModel carries data form user input
+     */
     @Override
     @Transactional
     public void changeFee(ResidentialEntity residentialEntity, FeeEditBindingModel feeEditBindingModel) {
@@ -87,10 +97,25 @@ public class FeeServiceImpl implements FeeService {
         if (fee != null) {
             modelMapper.map(feeEditBindingModel, fee);
             feeRepository.save(fee);
+            //Applying new fees to all properties in this residential entity
             updatePropertyFees(residentialEntity);
         }
     }
 
+    /**
+     * Mapping of Fee to FeeEditBindingModel
+     * @param fee Fee
+     * @return FeeEditBindingModel
+     */
+    @Override
+    public FeeEditBindingModel mapFeeToBindingModel(Fee fee) {
+        return modelMapper.map(fee, FeeEditBindingModel.class);
+    }
+
+    /**
+     * Private method for applying new set Fee to all properties in this Residential entity
+     * @param residentialEntity Residential entity
+     */
     private void updatePropertyFees(ResidentialEntity residentialEntity) {
         List<Property> properties = residentialEntity.getProperties();
         for (Property property : properties) {

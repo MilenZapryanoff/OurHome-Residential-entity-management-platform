@@ -8,7 +8,6 @@ import java.time.LocalDate;
 @Entity
 public class Expense {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

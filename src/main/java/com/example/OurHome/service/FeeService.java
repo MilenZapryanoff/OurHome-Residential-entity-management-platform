@@ -18,4 +18,5 @@ public interface FeeService {
     Fee findById(Long id);
 
     void changeFee(ResidentialEntity residentialEntity, FeeEditBindingModel feeEditBindingModel);
+
 }

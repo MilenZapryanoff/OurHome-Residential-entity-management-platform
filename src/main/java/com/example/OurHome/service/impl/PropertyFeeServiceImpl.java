@@ -152,13 +152,20 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
         propertyFeeRepository.save(propertyFee);
     }
 
+    /**
+     * Mark as paid/unpaid
+     */
     @Override
     public void changePaymentStatus(PropertyFee propertyFee) {
         propertyFee.setPaid(!propertyFee.isPaid());
         propertyFeeRepository.save(propertyFee);
     }
 
-
+    /**
+     * Unpaid property fees sum
+     * @param id Property id
+     * @return BigDecimal value of all unpaid fees
+     */
     @Override
     public BigDecimal checkTotalDueAmount(Long id) {
         return propertyFeeRepository.sumOfUnpaidFees(id);

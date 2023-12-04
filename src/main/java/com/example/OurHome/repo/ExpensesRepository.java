@@ -11,14 +11,8 @@ import java.util.List;
 
 @Repository
 public interface ExpensesRepository extends JpaRepository<Expense, Long> {
-
     @Query("SELECT COUNT(e.id) FROM Expense e WHERE e.residentialEntity.id =:id")
     Long countExpenses(@Param("id") Long id);
-
-    @Query("SELECT e FROM Expense e WHERE e.residentialEntity.id =:id ORDER BY e.expenseDate DESC")
-    List<Expense> FindAllExpensesByResidentialEntity (@Param("id") Long id);
-
-
     @Query("SELECT e FROM Expense e WHERE e.residentialEntity.id =:id AND e.expenseDate >= :startPeriod AND e.expenseDate <= :endPeriod")
     List<Expense> findExpensesByDatesAndResidentialEntityId(LocalDate startPeriod, LocalDate endPeriod, Long id);
 }

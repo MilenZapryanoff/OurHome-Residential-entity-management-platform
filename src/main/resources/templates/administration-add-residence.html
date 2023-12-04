@@ -164,6 +164,8 @@
                 </fieldset>
                 <fieldset>
                     <label for="accessCode"><b>Access code</b></label>
+                    <p class="text-danger-emphasis">To be able to register in this Residential entity every new user must enter a valid Residential entity ID and Access code.
+                    <b>You can now create Access code.</b> Residential entity ID will be automatically generated when you submit this form.</p>
                     <br>
                     <small th:if="${#fields.hasErrors('accessCode')}"
                            th:errors="*{accessCode}" class="text-danger">Access code error</small>

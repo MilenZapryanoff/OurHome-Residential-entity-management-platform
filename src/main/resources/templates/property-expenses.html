@@ -254,7 +254,7 @@
                                                                                             <tr align="center"
                                                                                                 th:each="expense : ${expenseFilterBindingModel.getExpenseList()}">
                                                                                                 <td th:text="${expense.getAmount()} + ' лв.'"></td>
-                                                                                                <td th:text="${#temporals.format(expense.getExpenseDate(), 'dd MMM yyyy')}"></td>
+                                                                                                <td th:text="${#temporals.format(expense.getExpenseDate(), 'dd-MMM-yyyy')}"></td>
                                                                                                 <td th:text="${expense.getDescription()}"></td>
                                                                                                 <td>
                                                                                                     <a th:if="${expense.getPicturePath()} != null"

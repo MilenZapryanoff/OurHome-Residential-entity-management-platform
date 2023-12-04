@@ -16,6 +16,5 @@ public interface PropertyFeeService {
     void modifyFee(Long propertyFeeId, PropertyFeeEditBindingModel propertyFeeEditBindingModel);
     void deleteFee(PropertyFee propertyFee);
     void addFee(Property property, PropertyFeeAddBindingModel propertyFeeAddBindingModel);
-
     void changePaymentStatus(PropertyFee propertyFee);
 }

@@ -13,9 +13,11 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Size(min = 3, max = 20)
     @Column(nullable = false)
     private String firstName;
+
     @Column(nullable = false)
     @Size(min = 3, max = 20)
     private String lastName;
@@ -33,6 +35,18 @@ public class UserEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @NotNull
+    @Column(nullable = false)
+    private String password;
+
+    @NotNull
+    @ManyToOne
+    private Role role;
+
+    private boolean validated;
+
+    private String validationCode;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     private List<ResidentialEntity> residentialEntities;
 
@@ -42,27 +56,17 @@ public class UserEntity {
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Property> properties;
 
-    @NotNull
-    @Column(nullable = false)
-    private String password;
-
-    @NotNull
-    @ManyToOne
-    private Role role;
-
     @OneToMany(mappedBy = "receiver", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Message> receivedMessages;
 
     @OneToMany(mappedBy = "sender", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Message> sentMessages;
 
-    private boolean validated;
-
-    private String validationCode;
 
     public UserEntity() {
         properties = new ArrayList<>();
         receivedMessages = new ArrayList<>();
+        sentMessages = new ArrayList<>();
         residentialEntities = new ArrayList<>();
         moderatedResidentialEntities = new ArrayList<>();
     }

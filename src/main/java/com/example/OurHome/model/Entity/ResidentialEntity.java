@@ -23,7 +23,6 @@ public class ResidentialEntity {
     @Column(name = "accesscode_hint")
     private String accessCodeHint;
 
-
     @Column(name = "street_name", nullable = false)
     private String streetName;
 
@@ -33,9 +32,15 @@ public class ResidentialEntity {
     @Column
     private String entrance;
 
-
     @Column(nullable = false)
     private Long numberOfApartments;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(referencedColumnName = "id")
+    private UserEntity manager;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Fee fee;
 
     @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
     private List<Property> properties;
@@ -48,13 +53,6 @@ public class ResidentialEntity {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "residentialEntity", cascade = CascadeType.REMOVE)
     private List<Expense> expenses;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(referencedColumnName = "id")
-    private UserEntity manager;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private Fee fee;
 
     public ResidentialEntity() {
         residents = new ArrayList<>();

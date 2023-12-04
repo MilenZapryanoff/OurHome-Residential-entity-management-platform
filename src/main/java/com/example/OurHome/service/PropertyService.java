@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface PropertyService {
 
-
     void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser);
 
     void deleteProperty(Long id, boolean deletedByManaged);
@@ -22,17 +21,17 @@ public interface PropertyService {
 
     void rejectProperty(Long id);
 
-    Property findPropertyById(Long id);
-
-    PropertyEditBindingModel mapPropertyToEditBindingModel(Property property);
-
     void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange);
-
-    boolean needOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel);
-
-    List<Property> findAllProperties();
 
     void setOverpayment(PropertyFeeEditBindingModel propertyFeeEditBindingModel);
 
     void setMonthlyFee(BigDecimal monthlyFee, Property property);
+
+    Property findPropertyById(Long id);
+
+    PropertyEditBindingModel mapPropertyToEditBindingModel(Property property);
+
+    boolean needOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel);
+
+    List<Property> findAllProperties();
 }

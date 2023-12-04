@@ -1,6 +1,5 @@
 package com.example.OurHome.controller;
 
-import com.example.OurHome.model.Entity.Expense;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
@@ -41,18 +40,28 @@ public class PropertyController {
         this.residentialEntityService = residentialEntityService;
     }
 
+    /**
+     * PROPERTY section
+     */
     @GetMapping("/property")
     public ModelAndView property() {
 
         return new ModelAndView("property", "userViewModel", getUserViewModel());
     }
 
+    /**
+     * PROPERTY -> Add property
+     */
     @GetMapping("/property/add")
     public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel") PropertyRegisterBindingModel propertyRegisterBindingModel) {
 
         return new ModelAndView("property-add", "userViewModel", getUserViewModel());
     }
 
+    /**
+     * PROPERTY -> Add property
+     * POST
+     */
     @PostMapping("/property/add")
     public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel")
                                     @Valid PropertyRegisterBindingModel propertyRegisterBindingModel, BindingResult bindingResult) {
@@ -66,12 +75,19 @@ public class PropertyController {
         return new ModelAndView("redirect:/property");
     }
 
+    /**
+     * PROPERTY -> Add property -> Add new RE
+     */
     @GetMapping("/property/add/new")
     public ModelAndView addPropertyInNewEntity(@ModelAttribute("userAuthRegisterBindingModel") UserAuthBindingModel userAuthBindingModel) {
 
         return new ModelAndView("property-add-new-entity", "userViewModel", getUserViewModel());
     }
 
+    /**
+     * PROPERTY -> Add property
+     * POST
+     */
     @PostMapping("/property/add/new")
     public ModelAndView addPropertyInNewEntity(@ModelAttribute("userAuthRegisterBindingModel")
                                                @Valid UserAuthBindingModel userAuthBindingModel,
@@ -93,10 +109,10 @@ public class PropertyController {
     }
 
     /**
-     * Property summary
-     * GetMapping
+     * PROPERTY -> SUMMARY Section
      */
     @GetMapping("/property/summary/{id}")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView residentialEntityDetails(
             @ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
             @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel,
@@ -106,13 +122,10 @@ public class PropertyController {
                 .addObject("property", getProperty(id));
     }
 
-
     /**
-     * @param sendMessageBindingModel Message parameters
-     * @param propertyId property id
-     * @return view
+     * PROPERTY -> SUMMARY Section
+     * POST
      */
-
     @PostMapping("/property/summary/messageToManager/{id}")
     @PreAuthorize("@securityService.checkMessageSenderAndReceiver(#propertyId, #sendMessageBindingModel.getSenderId() ,#sendMessageBindingModel.getReceiverId())")
     public ModelAndView sendMessageToPropertyManager(@ModelAttribute("sendMessageBindingModel")
@@ -137,10 +150,10 @@ public class PropertyController {
     }
 
     /**
-     * Property details
-     * GetMapping
+     * PROPERTY -> DETAILS Section
      */
     @GetMapping("/property/details/{id}")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView propertyDetails(@ModelAttribute("propertyManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
 
         return new ModelAndView("property-details", "userViewModel", getUserViewModel())
@@ -148,10 +161,10 @@ public class PropertyController {
     }
 
     /**
-     * Property edit view
-     * GetMapping
+     * PROPERTY -> DETAILS -> Edit Section
      */
     @GetMapping("/property/details/edit/{id}")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView residentialEntityEditDetails(@PathVariable("id") Long id) {
 
         PropertyEditBindingModel propertyEditBindingModel = propertyService.mapPropertyToEditBindingModel(getProperty(id));
@@ -164,10 +177,11 @@ public class PropertyController {
 
 
     /**
-     * Property data edit method
-     * PostMapping
+     * PROPERTY -> DETAILS -> Edit Section
+     * POST
      */
     @PostMapping("/property/details/edit/{id}")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView residentialEntityEditDetailsPost(@ModelAttribute("propertyEditBindingModel")
                                                          @Valid PropertyEditBindingModel propertyEditBindingModel,
                                                          @PathVariable("id") Long id, BindingResult bindingResult) {
@@ -184,7 +198,12 @@ public class PropertyController {
         return new ModelAndView("redirect:/property/details/" + id);
     }
 
+    /**
+     * PROPERTY -> Delete property
+     * POST
+     */
     @PostMapping("/property/delete/{id}")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView propertyDelete(@PathVariable("id") Long id) {
 
         propertyService.deleteProperty(id, false);
@@ -192,8 +211,23 @@ public class PropertyController {
         return new ModelAndView("redirect:/property");
     }
 
+    /**
+     * PROPERTY -> MONTHLY FEES Section
+     * */
+    @GetMapping("/property/monthlyfees/{id}")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
+    public ModelAndView propertyFeesDetails(@PathVariable("id") Long id) {
 
+        return new ModelAndView("property-monthlyfees", "userViewModel", getUserViewModel())
+                .addObject("property", getProperty(id));
+    }
+
+
+    /**
+     * PROPERTY -> EXPENSES RE Section
+     */
     @GetMapping("/property/expenses/{id}")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView residentialEntityExpenses(
             @ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
             @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel,
@@ -214,13 +248,12 @@ public class PropertyController {
     }
 
     @PostMapping("/property/expenses/{id}")
-//    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView residentialEntityFilterExpenses(@PathVariable("id") Long id,
                                                   @Valid ExpenseFilterBindingModel expenseFilter,
                                                   BindingResult bindingResult) {
 
         Property property = getProperty(id);
-
         ModelAndView modelAndView = new ModelAndView("property-expenses")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("property", property);
@@ -236,9 +269,6 @@ public class PropertyController {
 
         return modelAndView.addObject("expenseFilterBindingModel", expenseFilter);
     }
-
-
-
 
     /**
      * This private method returns a Property by id
