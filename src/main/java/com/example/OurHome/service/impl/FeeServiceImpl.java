@@ -3,7 +3,7 @@ package com.example.OurHome.service.impl;
 import com.example.OurHome.model.Entity.Fee;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.Fee.FeeEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.Fee.FeeEditBindingModel;
 import com.example.OurHome.repo.FeeRepository;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.service.FeeService;

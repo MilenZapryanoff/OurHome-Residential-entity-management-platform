@@ -1,8 +1,8 @@
 package com.example.OurHome.controller.Administration;
 
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntity.ResidentialEntityRegisterBindingModel;
-import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
+import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityRegisterBindingModel;
+import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.ResidentialEntityService;
 import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;

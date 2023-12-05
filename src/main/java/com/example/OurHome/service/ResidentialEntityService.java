@@ -2,8 +2,8 @@ package com.example.OurHome.service;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntity.ResidentialEntityEditBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntity.ResidentialEntityRegisterBindingModel;
+import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityRegisterBindingModel;
 
 import java.util.List;
 import java.util.Optional;

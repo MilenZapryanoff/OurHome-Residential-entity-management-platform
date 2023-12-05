@@ -1,10 +1,10 @@
 package com.example.OurHome.controller.Administration;
 
 import com.example.OurHome.model.Entity.*;
-import com.example.OurHome.model.Entity.dto.BindingModels.Fee.FeeEditBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
-import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
+import com.example.OurHome.model.dto.BindingModels.Fee.FeeEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
+import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.*;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;

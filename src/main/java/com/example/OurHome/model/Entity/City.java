@@ -1,6 +1,6 @@
 package com.example.OurHome.model.Entity;
 
-import com.example.OurHome.model.Entity.enums.CityName;
+import com.example.OurHome.model.enums.CityName;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

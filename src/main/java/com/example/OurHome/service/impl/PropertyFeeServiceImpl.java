@@ -2,14 +2,16 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyFee;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
+import com.example.OurHome.model.events.PropertyApprovalEvent;
 import com.example.OurHome.repo.PropertyFeeRepository;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.PropertyFeeService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -42,24 +44,26 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     }
 
     /**
-     * Creation of first fee. It is by default set to paid and fee amount set to 0.
-     *
-     * @param property Property entity
+     * Creation of first fee. It is by default set to paid and fee amount set to 0.0
+     * @param propertyApprovalEvent property approval event
      */
     @Override
+    @EventListener(PropertyApprovalEvent.class)
     @Transactional
-    public void createFirstFee(Property property) {
+    public void createFirstFee(PropertyApprovalEvent propertyApprovalEvent) {
 
-        PropertyFee newPropertyFee = new PropertyFee();
-        LocalDate now = LocalDate.now();
+        if (propertyApprovalEvent.getProperty().getPropertyFees().isEmpty()){
+            PropertyFee newPropertyFee = new PropertyFee();
+            LocalDate now = LocalDate.now();
 
-        newPropertyFee.setFeeAmount(BigDecimal.valueOf(0.0));
-        newPropertyFee.setPaid(true);
-        newPropertyFee.setPeriodStart(now.withDayOfMonth(1));
-        newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
-        newPropertyFee.setProperty(property);
-        newPropertyFee.setDescription("Edit this record if old duties available");
-        propertyFeeRepository.save(newPropertyFee);
+            newPropertyFee.setFeeAmount(BigDecimal.valueOf(0.0));
+            newPropertyFee.setPaid(true);
+            newPropertyFee.setPeriodStart(now.withDayOfMonth(1));
+            newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
+            newPropertyFee.setProperty(propertyApprovalEvent.getProperty());
+            newPropertyFee.setDescription("Edit this record if old duties available");
+            propertyFeeRepository.save(newPropertyFee);
+        }
     }
 
     /**

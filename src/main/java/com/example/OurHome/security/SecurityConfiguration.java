@@ -1,7 +1,7 @@
 package com.example.OurHome.security;
 
 import com.example.OurHome.repo.UserRepository;
-import com.example.OurHome.service.impl.UserDetailServ;
+import com.example.OurHome.service.UserDetailServ;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

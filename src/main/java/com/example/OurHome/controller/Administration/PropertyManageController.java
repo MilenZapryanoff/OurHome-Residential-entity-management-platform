@@ -3,9 +3,9 @@ package com.example.OurHome.controller.Administration;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyEditBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyManageBindingModel;
-import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyManageBindingModel;
+import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.*;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -67,7 +67,6 @@ public class PropertyManageController {
     public ModelAndView residentialEntityPropertyApprove(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
         propertyService.approveProperty(id);
-        propertyFeeService.createFirstFee(getProperty(id));
 
         Property property = propertyService.findPropertyById(id);
         BigDecimal monthlyFee = feeService.calculateMonthlyFee(property.getResidentialEntity(), property);

@@ -1,7 +1,7 @@
 package com.example.OurHome.repo;
 
 import com.example.OurHome.model.Entity.City;
-import com.example.OurHome.model.Entity.enums.CityName;
+import com.example.OurHome.model.enums.CityName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

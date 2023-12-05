@@ -2,9 +2,9 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Expense;
 import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.Expense.ExpenseAddBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.Expense.ExpenseEditBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.Expense.ExpenseFilterBindingModel;
+import com.example.OurHome.model.dto.BindingModels.Expense.ExpenseAddBindingModel;
+import com.example.OurHome.model.dto.BindingModels.Expense.ExpenseEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.Expense.ExpenseFilterBindingModel;
 import com.example.OurHome.repo.ExpensesRepository;
 import com.example.OurHome.service.ExpensesService;
 import org.modelmapper.ModelMapper;

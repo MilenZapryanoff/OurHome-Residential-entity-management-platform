@@ -2,9 +2,9 @@ package com.example.OurHome.service;
 
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyEditBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyRegisterBindingModel;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
 
 import java.math.BigDecimal;
 import java.util.List;

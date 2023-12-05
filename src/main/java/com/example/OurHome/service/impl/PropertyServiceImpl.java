@@ -3,13 +3,15 @@ package com.example.OurHome.service.impl;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyEditBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.Property.PropertyRegisterBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
+import com.example.OurHome.model.events.PropertyApprovalEvent;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.service.*;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,14 +25,16 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyRepository propertyRepository;
     private final MessageService messageService;
     private final FeeService feeService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
-    public PropertyServiceImpl(ModelMapper modelMapper, ResidentialEntityService residentialEntityService, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService) {
+    public PropertyServiceImpl(ModelMapper modelMapper, ResidentialEntityService residentialEntityService, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService, ApplicationEventPublisher applicationEventPublisher) {
         this.modelMapper = modelMapper;
         this.residentialEntityService = residentialEntityService;
         this.propertyRepository = propertyRepository;
         this.messageService = messageService;
         this.feeService = feeService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     /**
@@ -118,6 +122,8 @@ public class PropertyServiceImpl implements PropertyService {
         if (property != null) {
             property.setValidated(true);
             propertyRepository.save(property);
+
+            applicationEventPublisher.publishEvent(new PropertyApprovalEvent("PropertyService", property));
 
             messageService.propertyApprovedMessage(property);
         }

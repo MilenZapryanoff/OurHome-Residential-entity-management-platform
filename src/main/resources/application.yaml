@@ -54,6 +54,7 @@ OurHome:
 
 logging:
   level:
+
     org:
       hibernate:
         type:

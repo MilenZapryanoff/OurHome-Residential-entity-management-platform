@@ -1,6 +1,6 @@
 package com.example.OurHome.controller;
 
-import com.example.OurHome.model.Entity.dto.BindingModels.User.UserAuthBindingModel;
+import com.example.OurHome.model.dto.BindingModels.User.UserAuthBindingModel;
 import com.example.OurHome.service.tokens.ResidentialEntityToken;
 import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;

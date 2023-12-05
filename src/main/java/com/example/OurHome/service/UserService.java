@@ -2,11 +2,11 @@ package com.example.OurHome.service;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.User.ManagerRegisterBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.User.ProfileEditBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.User.UserAuthBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.User.UserRegisterBindingModel;
-import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
+import com.example.OurHome.model.dto.BindingModels.User.ManagerRegisterBindingModel;
+import com.example.OurHome.model.dto.BindingModels.User.ProfileEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.User.UserAuthBindingModel;
+import com.example.OurHome.model.dto.BindingModels.User.UserRegisterBindingModel;
+import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

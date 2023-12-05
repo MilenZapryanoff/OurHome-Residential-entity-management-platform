@@ -1,0 +1,8 @@
+дек 05, 2023 4:15:32 СЛ.ОБ. com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:92DFCB6CAA6ED93EADADF344EEC2CFEA
+дек 05, 2023 4:16:07 СЛ.ОБ. com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:002AE338B241384A6E57DD6EB74604D9
+дек 05, 2023 4:16:17 СЛ.ОБ. com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/contact, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:002AE338B241384A6E57DD6EB74604D9
+дек 05, 2023 4:16:24 СЛ.ОБ. com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:002AE338B241384A6E57DD6EB74604D9

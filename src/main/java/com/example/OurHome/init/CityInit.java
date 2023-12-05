@@ -1,7 +1,7 @@
 package com.example.OurHome.init;
 
 import com.example.OurHome.model.Entity.City;
-import com.example.OurHome.model.Entity.enums.CityName;
+import com.example.OurHome.model.enums.CityName;
 import com.example.OurHome.repo.CityRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

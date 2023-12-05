@@ -2,9 +2,9 @@ package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.Entity.dto.BindingModels.Message.SendMessageBindingModel;
-import com.example.OurHome.model.Entity.dto.BindingModels.ResidentialEntity.ResidentManageBindingModel;
-import com.example.OurHome.model.Entity.dto.ViewModels.UserViewModel;
+import com.example.OurHome.model.dto.BindingModels.Message.SendMessageBindingModel;
+import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentManageBindingModel;
+import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.ResidentialEntityService;
 import com.example.OurHome.service.UserService;
