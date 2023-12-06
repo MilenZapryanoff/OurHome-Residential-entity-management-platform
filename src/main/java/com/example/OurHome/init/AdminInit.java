@@ -4,6 +4,7 @@ import com.example.OurHome.model.Entity.Role;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.repo.RoleRepository;
 import com.example.OurHome.repo.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -46,7 +47,7 @@ public class AdminInit implements CommandLineRunner {
             admin.setLastName("Administrator");
             admin.setUsername("admin");
             //TODO: to run this code on your local machine you should first create a password for your admin user. You can do this by adding environment variable 'admin_pass' in your IDE.
-            admin.setPassword(passwordEncoder.encode(System.getenv("admin_pass")));
+            admin.setPassword(passwordEncoder.encode("${OurHome.remember.me.key}"));
             admin.setValidated(true);
             admin.setRole(role);
             userRepository.save(admin);

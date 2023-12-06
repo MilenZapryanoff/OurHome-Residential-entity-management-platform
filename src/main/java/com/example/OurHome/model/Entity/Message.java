@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.sql.Time;
 import java.time.LocalDate;
 
-@Entity(name = "messages")
+@Entity
 public class Message {
 
     @Id

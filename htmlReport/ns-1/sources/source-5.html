@@ -1,0 +1,344 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1251"> 
+  <title>Coverage Report > PropertyServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.OurHome.service.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: PropertyServiceImpl (com.example.OurHome.service.impl)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PropertyServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/68)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.OurHome.service.impl;
+&nbsp;
+&nbsp;import com.example.OurHome.model.Entity.Property;
+&nbsp;import com.example.OurHome.model.Entity.ResidentialEntity;
+&nbsp;import com.example.OurHome.model.Entity.UserEntity;
+&nbsp;import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
+&nbsp;import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
+&nbsp;import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
+&nbsp;import com.example.OurHome.model.events.PropertyApprovalEvent;
+&nbsp;import com.example.OurHome.repo.PropertyRepository;
+&nbsp;import com.example.OurHome.service.*;
+&nbsp;import jakarta.transaction.Transactional;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.context.ApplicationEventPublisher;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Service
+&nbsp;public class PropertyServiceImpl implements PropertyService {
+&nbsp;
+&nbsp;    private final ModelMapper modelMapper;
+&nbsp;    private final ResidentialEntityService residentialEntityService;
+&nbsp;    private final PropertyRepository propertyRepository;
+&nbsp;    private final MessageService messageService;
+&nbsp;    private final FeeService feeService;
+&nbsp;    private final ApplicationEventPublisher applicationEventPublisher;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;    public PropertyServiceImpl(ModelMapper modelMapper, ResidentialEntityService residentialEntityService, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService, ApplicationEventPublisher applicationEventPublisher) {</b>
+<b class="nc">&nbsp;        this.modelMapper = modelMapper;</b>
+<b class="nc">&nbsp;        this.residentialEntityService = residentialEntityService;</b>
+<b class="nc">&nbsp;        this.propertyRepository = propertyRepository;</b>
+<b class="nc">&nbsp;        this.messageService = messageService;</b>
+<b class="nc">&nbsp;        this.feeService = feeService;</b>
+<b class="nc">&nbsp;        this.applicationEventPublisher = applicationEventPublisher;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Find property by id
+&nbsp;     *
+&nbsp;     * @param id property id
+&nbsp;     * @return Property
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public Property findPropertyById(Long id) {
+<b class="nc">&nbsp;        return propertyRepository.findById(id).orElse(null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Property creation. Performed by USER
+&nbsp;     *
+&nbsp;     * @param propertyRegisterBindingModel the binding model with the data from frontend
+&nbsp;     * @param loggedUser                   logged user.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser) {
+&nbsp;
+<b class="nc">&nbsp;        Property newProperty = modelMapper.map(propertyRegisterBindingModel, Property.class);</b>
+<b class="nc">&nbsp;        Long residentialEntityId = propertyRegisterBindingModel.getResidentialEntity();</b>
+&nbsp;
+<b class="nc">&nbsp;        ResidentialEntity residentialEntity = residentialEntityService</b>
+<b class="nc">&nbsp;                .findResidentialEntityById(residentialEntityId)</b>
+<b class="nc">&nbsp;                .orElse(null);</b>
+&nbsp;
+<b class="nc">&nbsp;        newProperty.setResidentialEntity(residentialEntity);</b>
+<b class="nc">&nbsp;        newProperty.setOwner(loggedUser);</b>
+<b class="nc">&nbsp;        newProperty.setValidated(false);</b>
+&nbsp;
+<b class="nc">&nbsp;        propertyRepository.save(newProperty);</b>
+&nbsp;
+&nbsp;        //sending message to residential entity manager
+<b class="nc">&nbsp;        messageService.propertyRegistrationMessageToManager(residentialEntity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Single Property deletion
+&nbsp;     * Performed by USER or MANAGER
+&nbsp;     *
+&nbsp;     * @param id property id
+&nbsp;     */
+&nbsp;    public void deleteProperty(Long id, boolean deletedByManaged) {
+<b class="nc">&nbsp;        Property property = propertyRepository.findById(id).orElse(null);</b>
+<b class="nc">&nbsp;        if (property != null) {</b>
+<b class="nc">&nbsp;            propertyRepository.delete(property);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (deletedByManaged) {</b>
+<b class="nc">&nbsp;                messageService.propertyDeletedMessageToOwner(property);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                messageService.propertyDeletedMessageToManager(property);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Delete existing in RE owned properties when owner is removed from RE
+&nbsp;     * Performed by MANAGER
+&nbsp;     *
+&nbsp;     * @param residentId          owner(resident) id
+&nbsp;     * @param residentialEntityId residential entity id
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void deletePropertiesWhenResidentRemoved(Long residentId, Long residentialEntityId) {
+<b class="nc">&nbsp;        List&lt;Property&gt; allUserProperties = propertyRepository.findAllUserProperties(residentId, residentialEntityId);</b>
+<b class="nc">&nbsp;        propertyRepository.deleteAll(allUserProperties);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Property approval.
+&nbsp;     * Performed by Residential entity MANAGER
+&nbsp;     *
+&nbsp;     * @param id property id
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void approveProperty(Long id) {
+<b class="nc">&nbsp;        Property property = propertyRepository.findById(id).orElse(null);</b>
+<b class="nc">&nbsp;        if (property != null) {</b>
+<b class="nc">&nbsp;            property.setValidated(true);</b>
+<b class="nc">&nbsp;            propertyRepository.save(property);</b>
+&nbsp;
+<b class="nc">&nbsp;            applicationEventPublisher.publishEvent(new PropertyApprovalEvent(&quot;PropertyService&quot;, property));</b>
+&nbsp;
+<b class="nc">&nbsp;            messageService.propertyApprovedMessage(property);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Property reject.
+&nbsp;     * Performed by Residential entity MANAGER
+&nbsp;     *
+&nbsp;     * @param id property id
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void rejectProperty(Long id) {
+<b class="nc">&nbsp;        Property property = propertyRepository.findById(id).orElse(null);</b>
+<b class="nc">&nbsp;        if (property != null) {</b>
+<b class="nc">&nbsp;            property.setRejected(true);</b>
+<b class="nc">&nbsp;            propertyRepository.save(property);</b>
+&nbsp;
+<b class="nc">&nbsp;            messageService.propertyRejectedMessage(property);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Mapping of Property to PropertyEditBindingModel used for edit of property data.
+&nbsp;     *
+&nbsp;     * @param property Property entity
+&nbsp;     * @return PropertyEditBindingModel
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public PropertyEditBindingModel mapPropertyToEditBindingModel(Property property) {
+&nbsp;
+<b class="nc">&nbsp;        PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (property != null) {</b>
+<b class="nc">&nbsp;            propertyEditBindingModel = modelMapper.map(property, PropertyEditBindingModel.class);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return propertyEditBindingModel;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Edit property method
+&nbsp;     *
+&nbsp;     * @param id                       property id
+&nbsp;     * @param propertyEditBindingModel the binding model with the data returning from frontend
+&nbsp;     * @param moderatorChange          TRUE if change is made by moderator, FALSE if change is made by owner
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange) {
+&nbsp;
+<b class="nc">&nbsp;        Property property = propertyRepository.findById(id).orElse(null);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (property != null) {</b>
+<b class="nc">&nbsp;            modelMapper.map(propertyEditBindingModel, property);</b>
+&nbsp;
+<b class="nc">&nbsp;            ResidentialEntity residentialEntity = property.getResidentialEntity();</b>
+<b class="nc">&nbsp;            property.setMonthlyFee(feeService.calculateMonthlyFee(residentialEntity, property));</b>
+&nbsp;
+<b class="nc">&nbsp;            if (moderatorChange) {</b>
+<b class="nc">&nbsp;                property.setValidated(true);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                property.setValidated(false);</b>
+&nbsp;                //sending message (notification) to manager
+<b class="nc">&nbsp;                messageService.propertyModificationMessageToManager(property);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            property.setRejected(false);</b>
+<b class="nc">&nbsp;            propertyRepository.save(property);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Check if the modified property data needs manager/moderator verification.
+&nbsp;     * If some of the fields in the if statement of the method are changed property is set to verified=false
+&nbsp;     *
+&nbsp;     * @param id                       property id
+&nbsp;     * @param propertyEditBindingModel the binding model with the data returning from frontend
+&nbsp;     * @return TRUE if changes need verification from manager/moderator. FALSE if no need of verification
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public boolean needOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel) {
+<b class="nc">&nbsp;        Property property = propertyRepository.findById(id).orElse(null);</b>
+<b class="nc">&nbsp;        if (property != null) {</b>
+&nbsp;
+<b class="nc">&nbsp;            return !property.getNumber().equals(propertyEditBindingModel.getNumber()) ||</b>
+<b class="nc">&nbsp;                    !property.getFloor().equals(propertyEditBindingModel.getFloor()) ||</b>
+<b class="nc">&nbsp;                    !property.getNumberOfAdults().equals(propertyEditBindingModel.getNumberOfAdults()) ||</b>
+<b class="nc">&nbsp;                    !property.getNumberOfChildren().equals(propertyEditBindingModel.getNumberOfChildren()) ||</b>
+<b class="nc">&nbsp;                    !property.getNumberOfPets().equals(propertyEditBindingModel.getNumberOfPets()) ||</b>
+<b class="nc">&nbsp;                    property.isNotHabitable() != propertyEditBindingModel.isNotHabitable();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;Property&gt; findAllProperties() {
+<b class="nc">&nbsp;        return propertyRepository.findAll();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void setOverpayment(PropertyFeeEditBindingModel propertyFeeEditBindingModel) {
+<b class="nc">&nbsp;        Property property = propertyRepository.findById(propertyFeeEditBindingModel.getPropertyId()).orElse(null);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (property != null){</b>
+<b class="nc">&nbsp;            property.setOverpayment(propertyFeeEditBindingModel.getOverPayment());</b>
+<b class="nc">&nbsp;            propertyRepository.save(property);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void setMonthlyFee(BigDecimal monthlyFee, Property property) {
+<b class="nc">&nbsp;        property.setMonthlyFee(monthlyFee);</b>
+<b class="nc">&nbsp;        propertyRepository.save(property);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-06 10:34</div>
+</div>
+</body>
+</html>

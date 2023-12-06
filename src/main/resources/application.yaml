@@ -41,29 +41,21 @@ spring:
     multipart:
       max-request-size: 50MB
       max-file-size: 50MB
-
-
-
-
-
-
 OurHome:
   remember:
     me:
       key: ${REMEMBER_ME_KEY:key_pass}
-
-logging:
-  level:
-
-    org:
-      hibernate:
-        type:
-          descriptor: TRACE
-        SQL: DEBUG
-      nodeValue: WARN
-      springframework:
-        security: TRACE
-    blog: WARN
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        type:
+#          descriptor: TRACE
+#        SQL: DEBUG
+#      nodeValue: WARN
+#      springframework:
+#        security: TRACE
+#    blog: WARN
 
 server:
   port: 8080

@@ -114,7 +114,7 @@
                     <label for="city"><b>City</b></label>
                     <select class="form-control" id="city"
                             th:field="*{city}">
-                        <option th:each="city : ${T(com.example.OurHome.model.Entity.enums.CityName).values()}"
+                        <option th:each="city : ${T(com.example.OurHome.model.enums.CityName).values()}"
                                 th:value="${city}"
                                 th:text="${city}">
                         </option>

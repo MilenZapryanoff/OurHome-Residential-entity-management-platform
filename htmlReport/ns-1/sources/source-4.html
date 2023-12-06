@@ -1,0 +1,298 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1251"> 
+  <title>Coverage Report > PropertyFeeServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.OurHome.service.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: PropertyFeeServiceImpl (com.example.OurHome.service.impl)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PropertyFeeServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/59)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.OurHome.service.impl;
+&nbsp;
+&nbsp;import com.example.OurHome.model.Entity.Property;
+&nbsp;import com.example.OurHome.model.Entity.PropertyFee;
+&nbsp;import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
+&nbsp;import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
+&nbsp;import com.example.OurHome.model.events.PropertyApprovalEvent;
+&nbsp;import com.example.OurHome.repo.PropertyFeeRepository;
+&nbsp;import com.example.OurHome.repo.PropertyRepository;
+&nbsp;import com.example.OurHome.service.MessageService;
+&nbsp;import com.example.OurHome.service.PropertyFeeService;
+&nbsp;import jakarta.transaction.Transactional;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.context.event.EventListener;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.time.LocalDate;
+&nbsp;
+&nbsp;@Service
+&nbsp;public class PropertyFeeServiceImpl implements PropertyFeeService {
+&nbsp;
+&nbsp;    private final PropertyFeeRepository propertyFeeRepository;
+&nbsp;    private final PropertyRepository propertyRepository;
+&nbsp;    private final ModelMapper modelMapper;
+&nbsp;    private final MessageService messageService;
+&nbsp;
+<b class="nc">&nbsp;    public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper, MessageService messageService) {</b>
+<b class="nc">&nbsp;        this.propertyFeeRepository = propertyFeeRepository;</b>
+<b class="nc">&nbsp;        this.propertyRepository = propertyRepository;</b>
+<b class="nc">&nbsp;        this.modelMapper = modelMapper;</b>
+<b class="nc">&nbsp;        this.messageService = messageService;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Find PropertyFee by id
+&nbsp;     *
+&nbsp;     * @param propertyFeeId property Fee id
+&nbsp;     * @return PropertyFee
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public PropertyFee findPropertyFeeById(Long propertyFeeId) {
+<b class="nc">&nbsp;        return propertyFeeRepository.findById(propertyFeeId).orElse(null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creation of first fee. It is by default set to paid and fee amount set to 0.0
+&nbsp;     * @param propertyApprovalEvent property approval event
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    @EventListener(PropertyApprovalEvent.class)
+&nbsp;    @Transactional
+&nbsp;    public void createFirstFee(PropertyApprovalEvent propertyApprovalEvent) {
+&nbsp;
+<b class="nc">&nbsp;        if (propertyApprovalEvent.getProperty().getPropertyFees().isEmpty()){</b>
+<b class="nc">&nbsp;            PropertyFee newPropertyFee = new PropertyFee();</b>
+<b class="nc">&nbsp;            LocalDate now = LocalDate.now();</b>
+&nbsp;
+<b class="nc">&nbsp;            newPropertyFee.setFeeAmount(BigDecimal.valueOf(0.0));</b>
+<b class="nc">&nbsp;            newPropertyFee.setPaid(true);</b>
+<b class="nc">&nbsp;            newPropertyFee.setPeriodStart(now.withDayOfMonth(1));</b>
+<b class="nc">&nbsp;            newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));</b>
+<b class="nc">&nbsp;            newPropertyFee.setProperty(propertyApprovalEvent.getProperty());</b>
+<b class="nc">&nbsp;            newPropertyFee.setDescription(&quot;Edit this record if old duties available&quot;);</b>
+<b class="nc">&nbsp;            propertyFeeRepository.save(newPropertyFee);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creation of new fee.
+&nbsp;     *
+&nbsp;     * @param property a property entity
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public void createMonthlyFee(Property property) {
+&nbsp;
+<b class="nc">&nbsp;        PropertyFee newPropertyFee = new PropertyFee();</b>
+<b class="nc">&nbsp;        LocalDate now = LocalDate.now();</b>
+&nbsp;
+<b class="nc">&nbsp;        BigDecimal overpayment = property.getOverpayment();</b>
+<b class="nc">&nbsp;        BigDecimal monthlyFee = property.getMonthlyFee();</b>
+&nbsp;
+&nbsp;        //if monthly fees in Residential entity are not set, no new fees will be created for the property
+<b class="nc">&nbsp;        if (monthlyFee.compareTo(BigDecimal.ZERO) &gt; 0) {</b>
+&nbsp;
+&nbsp;            //Calculations of monthly fee in case of overpayment
+<b class="nc">&nbsp;            if (overpayment.compareTo(BigDecimal.ZERO) &gt; 0) {</b>
+&nbsp;
+<b class="nc">&nbsp;                if (overpayment.compareTo(monthlyFee) &gt; 0) {</b>
+<b class="nc">&nbsp;                    newPropertyFee.setFeeAmount(BigDecimal.valueOf(0));</b>
+<b class="nc">&nbsp;                    newPropertyFee.setPaid(true);</b>
+&nbsp;
+<b class="nc">&nbsp;                    property.setOverpayment(overpayment.subtract(monthlyFee));</b>
+<b class="nc">&nbsp;                    propertyRepository.save(property);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (overpayment.compareTo(monthlyFee) == 0) {</b>
+<b class="nc">&nbsp;                    newPropertyFee.setFeeAmount(BigDecimal.valueOf(0));</b>
+<b class="nc">&nbsp;                    newPropertyFee.setPaid(true);</b>
+&nbsp;
+<b class="nc">&nbsp;                    property.setOverpayment(BigDecimal.valueOf(0));</b>
+<b class="nc">&nbsp;                    propertyRepository.save(property);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (overpayment.compareTo(monthlyFee) &lt; 0) {</b>
+<b class="nc">&nbsp;                    newPropertyFee.setFeeAmount(monthlyFee.subtract(overpayment));</b>
+&nbsp;
+<b class="nc">&nbsp;                    property.setOverpayment(BigDecimal.valueOf(0));</b>
+<b class="nc">&nbsp;                    propertyRepository.save(property);</b>
+&nbsp;                }
+&nbsp;            } else {
+<b class="nc">&nbsp;                newPropertyFee.setFeeAmount(property.getMonthlyFee());</b>
+<b class="nc">&nbsp;                newPropertyFee.setPaid(false);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            newPropertyFee.setPeriodStart(now.withDayOfMonth(1));</b>
+<b class="nc">&nbsp;            newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));</b>
+<b class="nc">&nbsp;            newPropertyFee.setProperty(property);</b>
+<b class="nc">&nbsp;            newPropertyFee.setDescription(now.getMonth() + &quot; &quot; + now.getYear());</b>
+<b class="nc">&nbsp;            propertyFeeRepository.save(newPropertyFee);</b>
+&nbsp;
+&nbsp;            //send message to property owner
+<b class="nc">&nbsp;            messageService.newFeeMessageToPropertyOwner(property, property.getMonthlyFee(), checkTotalDueAmount(property.getId()));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Modification of property fee
+&nbsp;     *
+&nbsp;     * @param propertyFeeId               property fee id
+&nbsp;     * @param propertyFeeEditBindingModel data from frontend
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void modifyFee(Long propertyFeeId, PropertyFeeEditBindingModel propertyFeeEditBindingModel) {
+&nbsp;
+<b class="nc">&nbsp;        PropertyFee propertyFee = propertyFeeRepository.findById(propertyFeeId).orElse(null);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (propertyFee != null) {</b>
+<b class="nc">&nbsp;            modelMapper.map(propertyFeeEditBindingModel, propertyFee);</b>
+&nbsp;
+<b class="nc">&nbsp;            propertyFeeRepository.save(propertyFee);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * @param propertyFee a property fee
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void deleteFee(PropertyFee propertyFee) {
+<b class="nc">&nbsp;        propertyFeeRepository.delete(propertyFee);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void addFee(Property property, PropertyFeeAddBindingModel propertyFeeAddBindingModel) {
+<b class="nc">&nbsp;        PropertyFee propertyFee = modelMapper.map(propertyFeeAddBindingModel, PropertyFee.class);</b>
+<b class="nc">&nbsp;        propertyFee.setProperty(property);</b>
+<b class="nc">&nbsp;        propertyFeeRepository.save(propertyFee);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Mark as paid/unpaid
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void changePaymentStatus(PropertyFee propertyFee) {
+<b class="nc">&nbsp;        propertyFee.setPaid(!propertyFee.isPaid());</b>
+<b class="nc">&nbsp;        propertyFeeRepository.save(propertyFee);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Unpaid property fees sum
+&nbsp;     * @param id Property id
+&nbsp;     * @return BigDecimal value of all unpaid fees
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public BigDecimal checkTotalDueAmount(Long id) {
+<b class="nc">&nbsp;        return propertyFeeRepository.sumOfUnpaidFees(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Mapping of PropertyFee to PropertyFeeEditBindingModel
+&nbsp;     *
+&nbsp;     * @param id property Fee id
+&nbsp;     * @return PropertyFeeEditBindingModel
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public PropertyFeeEditBindingModel mapPropertyFeeToBindingModel(Long id) {
+<b class="nc">&nbsp;        PropertyFee propertyFee = propertyFeeRepository.findById(id).orElse(null);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (propertyFee != null) {</b>
+<b class="nc">&nbsp;            return modelMapper.map(propertyFee, PropertyFeeEditBindingModel.class);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-06 10:34</div>
+</div>
+</body>
+</html>
