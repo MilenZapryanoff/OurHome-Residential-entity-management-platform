@@ -35,7 +35,6 @@ public class HomeController {
         return new ModelAndView("index", "userViewModel", getUserViewModel());
     }
 
-
     private UserViewModel getUserViewModel() {
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         return userService.getUserViewData(loggedUser);

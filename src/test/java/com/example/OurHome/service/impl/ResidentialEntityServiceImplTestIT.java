@@ -59,7 +59,7 @@ class ResidentialEntityServiceImplTestIT {
         residentialEntityRegisterBindingModel.setNumberOfApartments(100L);
         residentialEntityRegisterBindingModel.setCity(CityName.valueOf("София"));
 
-        residentialEntityServiceToTest.newResidentialEntity(residentialEntityRegisterBindingModel, getManagerEntity());
+        residentialEntityServiceToTest.newResidentialEntity(residentialEntityRegisterBindingModel, getManager());
 
         List<ResidentialEntity> all = residentialEntityRepository.findAll();
 
@@ -144,7 +144,7 @@ class ResidentialEntityServiceImplTestIT {
     }
 
     private ResidentialEntity createResidentialEntity() {
-        UserEntity manager = getManagerEntity();
+        UserEntity manager = getManager();
 
         ResidentialEntity residentialEntity = new ResidentialEntity();
         residentialEntity.setManager(manager);
@@ -158,8 +158,7 @@ class ResidentialEntityServiceImplTestIT {
         return residentialEntity;
     }
 
-
-    private UserEntity getManagerEntity() {
+    private UserEntity getManager() {
         UserEntity manager = new UserEntity();
         Role role = roleRepository.findRoleByName("MANAGER");
         roleRepository.save(role);

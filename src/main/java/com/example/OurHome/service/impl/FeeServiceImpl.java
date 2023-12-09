@@ -97,7 +97,7 @@ public class FeeServiceImpl implements FeeService {
         if (fee != null) {
             modelMapper.map(feeEditBindingModel, fee);
             feeRepository.save(fee);
-            //Applying new fees to all properties in this residential entity
+
             updatePropertyFees(residentialEntity);
         }
     }

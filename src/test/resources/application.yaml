@@ -85,7 +85,7 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
-    password: forever
+    password: ****
     url: jdbc:mysql://localhost:3306/ourhome_test?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
   thymeleaf: # Thymeleaf
     cache: false
@@ -104,17 +104,17 @@ OurHome:
   remember:
     me:
       key: test
-logging:
-  level:
-    org:
-      hibernate:
-        type:
-          descriptor: TRACE
-        SQL: DEBUG
-      nodeValue: WARN
-      springframework:
-        security: TRACE
-    blog: WARN
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        type:
+#          descriptor: TRACE
+#        SQL: DEBUG
+#      nodeValue: WARN
+#      springframework:
+#        security: TRACE
+#    blog: WARN
 server:
   port: 8080
 

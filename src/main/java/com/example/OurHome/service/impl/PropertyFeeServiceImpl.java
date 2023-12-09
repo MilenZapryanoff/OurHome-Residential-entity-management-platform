@@ -157,6 +157,8 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     public void addFee(Property property, PropertyFeeAddBindingModel propertyFeeAddBindingModel) {
         PropertyFee propertyFee = modelMapper.map(propertyFeeAddBindingModel, PropertyFee.class);
         propertyFee.setProperty(property);
+        propertyFee.setId(null);
+
         propertyFeeRepository.save(propertyFee);
     }
 

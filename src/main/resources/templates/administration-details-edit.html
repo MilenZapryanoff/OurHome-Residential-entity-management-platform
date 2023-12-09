@@ -133,7 +133,7 @@
                                                                         <label for="city"><b>City</b></label>
                                                                         <select class="form-control" id="city"
                                                                                 th:field="*{city}">
-                                                                            <option th:each="cityOption : ${T(com.example.OurHome.model.Entity.enums.CityName).values()}"
+                                                                            <option th:each="cityOption : ${T(com.example.OurHome.model.enums.CityName).values()}"
                                                                                     th:value="${cityOption}"
                                                                                     th:text="${cityOption}"
                                                                                     th:selected="${cityOption == residentialEntityEditBindingModel.getCity()}">

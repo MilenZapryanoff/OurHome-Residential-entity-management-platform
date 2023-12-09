@@ -2,8 +2,10 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.dto.BindingModels.User.ManagerRegisterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.User.UserRegisterBindingModel;
 import com.example.OurHome.repo.MessageRepository;
+import com.example.OurHome.repo.RoleRepository;
 import com.example.OurHome.repo.UserRepository;
 import com.example.OurHome.service.UserService;
 import org.junit.jupiter.api.AfterEach;
@@ -11,6 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,13 +30,16 @@ class UserServiceImplTestIT {
     @Autowired
     MessageRepository messageRepository;
 
+    @Autowired
+    RoleRepository roleRepository;
+
     @BeforeEach
     void setUp() {
         userRepository.deleteAll();
     }
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         userRepository.deleteAll();
     }
 
@@ -64,4 +71,22 @@ class UserServiceImplTestIT {
         assertNotNull(registeredUser, "User should be registered");
         assertEquals("testUser", registeredUser.getUsername(), "Username should match");
     }
+
+    @Test
+    void testRegisterManager() {
+        ManagerRegisterBindingModel managerRegisterBindingModel = new ManagerRegisterBindingModel();
+        managerRegisterBindingModel.setUsername("testUser");
+        managerRegisterBindingModel.setPassword("password");
+        managerRegisterBindingModel.setFirstName("Test");
+        managerRegisterBindingModel.setLastName("Test");
+        managerRegisterBindingModel.setEmail("Test@test.test");
+
+        userServiceToTest.registerManager(managerRegisterBindingModel);
+
+        List<UserEntity> users = userRepository.findAll();
+        UserEntity manager = users.get(0);
+
+        assertNotNull(manager);
+        assertEquals("MANAGER", manager.getRole().getName());
     }
+   }
