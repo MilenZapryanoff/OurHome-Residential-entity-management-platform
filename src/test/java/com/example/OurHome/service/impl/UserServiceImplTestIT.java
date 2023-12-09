@@ -1,34 +1,24 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.Role;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.User.UserRegisterBindingModel;
 import com.example.OurHome.repo.MessageRepository;
-import com.example.OurHome.repo.ResidentialEntityRepository;
 import com.example.OurHome.repo.UserRepository;
-import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class UserServiceImplTestIT {
 
     @Autowired
     private UserService userServiceToTest;
-
-    @Autowired
-    private MessageService messageServiceToTest;
 
     @Autowired
     UserRepository userRepository;
@@ -48,14 +38,11 @@ class UserServiceImplTestIT {
 
     @Test
     void testPasswordsMatch() {
-        // Given
         String password = "password";
         String confirmPassword = "password";
 
-        // When
         boolean result = userServiceToTest.passwordsMatch(password, confirmPassword);
 
-        // Then
         assertTrue(result, "Passwords should match");
     }
 

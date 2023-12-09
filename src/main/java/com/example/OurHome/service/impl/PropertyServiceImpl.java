@@ -81,12 +81,12 @@ public class PropertyServiceImpl implements PropertyService {
      *
      * @param id property id
      */
-    public void deleteProperty(Long id, boolean deletedByManaged) {
+    public void deleteProperty(Long id, boolean deletedByManager) {
         Property property = propertyRepository.findById(id).orElse(null);
         if (property != null) {
             propertyRepository.delete(property);
 
-            if (deletedByManaged) {
+            if (deletedByManager) {
                 messageService.propertyDeletedMessageToOwner(property);
             } else {
                 messageService.propertyDeletedMessageToManager(property);

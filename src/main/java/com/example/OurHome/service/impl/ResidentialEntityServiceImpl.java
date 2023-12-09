@@ -101,8 +101,6 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
             }
             residentialEntityRepository.save(residentialEntity);
         }
-
-
     }
 
     @Override
@@ -114,7 +112,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
      * Method maps ResidentialEntity to ResidentialEntityEditBindingModel used for edit of residential
      * entity data.
      *
-     * @param residentialEntity
+     * @param residentialEntity actual Residential entity from DB
      * @return ResidentialEntityEditBindingModel
      */
     @Override

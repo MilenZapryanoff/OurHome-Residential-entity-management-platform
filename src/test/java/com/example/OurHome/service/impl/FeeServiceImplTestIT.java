@@ -1,16 +1,9 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Fee;
-import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.dto.BindingModels.Fee.FeeEditBindingModel;
-import com.example.OurHome.model.dto.BindingModels.User.UserRegisterBindingModel;
 import com.example.OurHome.repo.FeeRepository;
-import com.example.OurHome.repo.ResidentialEntityRepository;
-import com.example.OurHome.repo.UserRepository;
 import com.example.OurHome.service.FeeService;
-import com.example.OurHome.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class FeeServiceImplTestIT {
@@ -29,9 +23,6 @@ class FeeServiceImplTestIT {
 
     @Autowired
     private FeeRepository feeRepository;
-
-    @Autowired
-    private ResidentialEntityRepository residentialEntityRepository;
 
     @BeforeEach
     void setUp() {

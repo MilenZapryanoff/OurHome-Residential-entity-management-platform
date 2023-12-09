@@ -315,7 +315,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testSaveAvatarValidImage() throws IOException {
+    public void testSaveDocument() throws IOException {
         Long userId = 1L;
         UserEntity user = new UserEntity();
         user.setId(userId);

@@ -135,7 +135,11 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
         PropertyFee propertyFee = propertyFeeRepository.findById(propertyFeeId).orElse(null);
 
         if (propertyFee != null) {
-            modelMapper.map(propertyFeeEditBindingModel, propertyFee);
+            propertyFee.setPeriodStart(propertyFeeEditBindingModel.getPeriodStart());
+            propertyFee.setPeriodEnd(propertyFeeEditBindingModel.getPeriodEnd());
+            propertyFee.setFeeAmount(propertyFeeEditBindingModel.getFeeAmount());
+            propertyFee.setPaid(propertyFeeEditBindingModel.isPaid());
+            propertyFee.setDescription(propertyFeeEditBindingModel.getDescription());
 
             propertyFeeRepository.save(propertyFee);
         }

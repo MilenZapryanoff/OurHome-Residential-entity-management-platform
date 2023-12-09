@@ -8,6 +8,7 @@ import com.example.OurHome.model.dto.BindingModels.Expense.ExpenseFilterBindingM
 import com.example.OurHome.repo.ExpensesRepository;
 import com.example.OurHome.service.ExpensesService;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +28,7 @@ public class ExpensesServiceImpl implements ExpensesService {
     private final ExpensesRepository expensesRepository;
     private final ModelMapper modelMapper;
 
-    public ExpensesServiceImpl(ExpensesRepository expensesRepository, ModelMapper modelMapper) {
+    public ExpensesServiceImpl(ExpensesRepository expensesRepository, ModelMapper modelMapper, PasswordEncoder mockPasswordEncoder) {
         this.expensesRepository = expensesRepository;
         this.modelMapper = modelMapper;
     }
