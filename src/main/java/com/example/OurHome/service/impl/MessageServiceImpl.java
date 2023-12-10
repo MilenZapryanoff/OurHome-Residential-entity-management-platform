@@ -300,11 +300,22 @@ public class MessageServiceImpl implements MessageService {
         Month month = LocalDate.now().getMonth();
         int year = LocalDate.now().getYear();
 
-        String messageText = "You have new monthly fee for " + month + " " + year + " for the amount of " +
-                monthlyFee + "лв. for property № " + property.getNumber() + "." +
-                "\n" +
-                "You can check details in your Property section." +
-                "Total due amount for your property is " + dueAmount + "лв.";
+        String messageText;
+
+        if(dueAmount != null){
+            messageText = "You have new monthly fee for " + month + " " + year + " for the amount of " +
+                    monthlyFee + "лв. for property № " + property.getNumber() + "." +
+                    "\n" +
+                    "You can check details in your Property section." +
+                    "Total due amount for your property is " + dueAmount + " лв.";
+        } else {
+            messageText = "You have new monthly fee for " + month + " " + year + " for the amount of " +
+                    monthlyFee + "лв. for property № " + property.getNumber() + "." +
+                    "\n" +
+                    "You can check details in your Property section." +
+                    "You have no due amount";
+        }
+
 
         messageRepository.save(
                 new Message(
