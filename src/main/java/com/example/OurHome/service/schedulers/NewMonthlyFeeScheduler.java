@@ -22,7 +22,7 @@ public class NewMonthlyFeeScheduler {
     // This expression triggers the method on the first day of every month at 06:00:00 (intended for PROD)
     //@Scheduled(cron = "0 0 6 1 * *")
 
-    // This expression triggers the method on the first day of every month at 06:00:00 (intended for TEST)
+    // This expression triggers the method on every 50 sec. (intended for TEST)
     @Scheduled(cron = "*/50 * * * * *")
     public void newMonthlyFee() {
 
