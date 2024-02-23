@@ -397,7 +397,6 @@ public class UserServiceImpl implements UserService {
         for (UserEntity userEntity : allUsersWithVerificationCode) {
             userEntity.setValidationCode(null);
             userRepository.save(userEntity);
-            System.out.println("cleaned");
         }
     }
 
