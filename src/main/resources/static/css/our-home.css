@@ -148,8 +148,6 @@ body {
   line-height: 56px;
 }
 
-
-
 .section-heading h2 em {
   font-style: normal;
   color: #0071f8;
@@ -232,8 +230,13 @@ body {
   color: #fff;
 }
 
+.logo-image {
+  padding: 30px 10px 10px 10px;
+}
 
-
+.cancel-button {
+  padding-top: 5px;
+}
 /* 
 ---------------------------------------------
 Pre-loader Style
@@ -546,17 +549,18 @@ Header Style
 .header-area .main-nav .menu-trigger {
   cursor: pointer;
   position: absolute;
-  top: 23px;
+  top: 32px;
+  right: 50px;
   width: 32px;
   height: 40px;
   text-indent: -9999em;
   z-index: 99;
-  right: 20px;
   display: none;
 }
 
 .background-header .main-nav .menu-trigger {
-  top: 22px;
+  top: 32px;
+  right: 50px;
 }
 
 .background-header .main-nav ul.nav {
@@ -775,9 +779,10 @@ Banner Style
 
 .main-banner .item {
   background-position: center center;
+
   background-repeat: no-repeat;
   background-size: cover;
-  padding: 220px 20% 220px 20%;
+  padding: 200px 10% 200px 10%;
   margin-top: 0px;
 }
 
@@ -2139,6 +2144,7 @@ body {
 }
 
 @media (max-width: 767px) {
+
   .header-area .main-nav .logo h1 {
     line-height: 80px !important;
   }
@@ -2177,9 +2183,7 @@ body {
     padding-left: 3px;
     padding-right: 3px;
   }
-  .header-area .main-nav .nav li:last-child a {
-    padding-right: 15px;
-  }
+
   .main-banner .item h2 {
     width: 100%;
   }
