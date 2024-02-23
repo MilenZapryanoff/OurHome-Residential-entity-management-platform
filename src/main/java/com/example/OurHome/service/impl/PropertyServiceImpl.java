@@ -207,7 +207,8 @@ public class PropertyServiceImpl implements PropertyService {
         Property property = propertyRepository.findById(id).orElse(null);
         if (property != null) {
 
-            return !property.getNumber().equals(propertyEditBindingModel.getNumber()) ||
+            return property.isRejected() ||
+                    !property.getNumber().equals(propertyEditBindingModel.getNumber()) ||
                     !property.getFloor().equals(propertyEditBindingModel.getFloor()) ||
                     !property.getNumberOfAdults().equals(propertyEditBindingModel.getNumberOfAdults()) ||
                     !property.getNumberOfChildren().equals(propertyEditBindingModel.getNumberOfChildren()) ||
