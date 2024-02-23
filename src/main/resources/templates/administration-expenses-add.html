@@ -48,9 +48,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index">
-                        <hr>
-                        <img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                    </div>
                     <!-- ***** Logo End ***** -->
 
                     <!-- ***** Menu Start ***** -->
@@ -72,9 +72,11 @@
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
-                        <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
-                            <li><a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
-                        </form>
+                        <li sec:authorize="isAuthenticated()">
+                            <form  id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
                     </ul>
                     <a class='menu-trigger'>
@@ -91,8 +93,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Add new expense
-            </h3>
+            <h3>Add new expense</h3>
         </div>
     </div>
 </div>
@@ -106,10 +107,10 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
-<!--                <div class="main-content">-->
-<!--                    <span th:text="'Property №: ' + ${property.getNumber()}" class="category text-black"></span>-->
-<!--                    <h4 th:text="${property.getResidentialEntity().getStreetName()} + ' №' + ${property.getResidentialEntity().getStreetNumber()}"></h4>-->
-<!--                </div>-->
+                <!--                <div class="main-content">-->
+                <!--                    <span th:text="'Property №: ' + ${property.getNumber()}" class="category text-black"></span>-->
+                <!--                    <h4 th:text="${property.getResidentialEntity().getStreetName()} + ' №' + ${property.getResidentialEntity().getStreetNumber()}"></h4>-->
+                <!--                </div>-->
             </div>
             <div class="section single-property" id="details">
                 <div class="container">
@@ -133,7 +134,8 @@
                                                                         <label for="expenseAmount"><b>Expense amount</b></label><br>
                                                                         <small th:if="${#fields.hasErrors('expenseAmount')}"
                                                                                th:errors="*{expenseAmount}"
-                                                                               class="text-danger">Expense amount error message</small>
+                                                                               class="text-danger">Expense amount error
+                                                                            message</small>
                                                                         <input type="number" step="any"
                                                                                id="expenseAmount"
                                                                                placeholder="Enter expense amount..."
@@ -143,11 +145,13 @@
                                                                                th:value="${expenseAddBindingModel.getExpenseAmount()}">
                                                                     </fieldset>
                                                                     <fieldset>
-                                                                        <label for="expenseDate"><b>Expense date</b></label>
+                                                                        <label for="expenseDate"><b>Expense
+                                                                            date</b></label>
                                                                         <br>
                                                                         <small th:if="${#fields.hasErrors('expenseDate')}"
                                                                                th:errors="*{expenseDate}"
-                                                                               class="text-danger">Expense date error...</small>
+                                                                               class="text-danger">Expense date
+                                                                            error...</small>
                                                                         <input type="date"
                                                                                id="expenseDate"
                                                                                th:field="*{expenseDate}"
@@ -159,7 +163,8 @@
                                                                         <br>
                                                                         <small th:if="${#fields.hasErrors('description')}"
                                                                                th:errors="*{description}"
-                                                                               class="text-danger">Description error message</small>
+                                                                               class="text-danger">Description error
+                                                                            message</small>
                                                                         <input type="text"
                                                                                id="description" required
                                                                                placeholder="Enter comment..."
@@ -169,11 +174,12 @@
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <button type="submit" id="form-submit"
-                                                                                class="orange-button">Submit
+                                                                                class="orange-button">Add
                                                                         </button>
-                                                                        <button class="orange-button" id="form-cancel">
-                                                                            <a th:href="@{/administration/expenses/{id}(id=${id})}">
-                                                                                <h7 class="text-light">Back</h7>
+                                                                        <button>
+                                                                            <a class="orange-button"
+                                                                               th:href="@{/administration/expenses/{id}(id=${id})}">
+                                                                                <p class="text-light">Cancel</p>
                                                                             </a>
                                                                         </button>
                                                                     </fieldset>
