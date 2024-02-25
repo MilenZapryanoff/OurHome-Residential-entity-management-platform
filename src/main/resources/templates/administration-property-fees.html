@@ -50,7 +50,7 @@
                     <!-- ***** Logo Start ***** -->
                     <div class="logo-image">
                         <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;"
-                                              alt="OurHome"></img></a>
+                                              alt="OurHome"></a>
                     </div>
                     <!-- ***** Logo End ***** -->
 
@@ -101,290 +101,215 @@
         </div>
     </div>
 </div>
-</div>
-
 <br><br>
 
 <!-- ***** Residential entity section ***** -->
 
-
-<div class="single-property section">
+<div class="section messages">
+    <div class="container tabs-content ">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link text-light"
+                   th:href="@{/administration/fees/{id}(id=${property.getResidentialEntity().getId()})}">Back</a>
+            </li>
+        </ul>
+    </div>
     <div class="container">
-        <br><br><br><br><br>
-        <div class="section administration" id="fees">
-            <div class="container">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active"
+                 id="Properties" aria-labelledby="properties-tab-tab">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="tabs-content">
-                            <div class="row">
-                                <div class="nav-wrapper ">
-                                    <ul class="nav nav-tabs" role="tablist">
-                                        <li class="nav-item" role="presentation">
-                                                <span class="buttons">
-                                                    <a class="nav-link"
-                                                       th:href="@{/administration/fees/{id}(id=${property.getResidentialEntity().getId()})}">
-                                                    <h7 class="text-light">Back</h7></a>
-                                                </span>
-                                        </li>
-                                        <div class="col-lg-12">
-
-                                            <div class="section administration" id="details">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="tabs-content">
-                                                                <div class="row">
-                                                                    <p th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(property.getResidentialEntity().getId())} == 0"
-                                                                       align="center">No properties available in
-                                                                        this Residential entity</p>
-                                                                    <div class="tab-content" id="myTabContent">
-                                                                        <div class="tab-pane fade show active"
-                                                                             id="Properties" role="tabpanel"
-                                                                             aria-labelledby="properties-tab-tab">
-                                                                            <div class="row">
-                                                                                <!--Active properties section-->
-                                                                                <div
-                                                                                        class="section administration"
-                                                                                        id="verified">
-                                                                                    <div class="row">
-                                                                                        <table>
-                                                                                            <tr align="center">
-                                                                                                <th>Fee id</th>
-                                                                                                <th>Fee amount</th>
-                                                                                                <th>Start period
-                                                                                                </th>
-                                                                                                <th>End period</th>
-                                                                                                <th>Description</th>
-                                                                                                <th>Fee paid</th>
-                                                                                                <th>Edit record</th>
-                                                                                                <th>Delete</th>
-                                                                                            </tr>
-                                                                                            <div class="col-lg-12">
-                                                                                                <br></br>
-                                                                                                <div align="center">
-                                                                                                    <h5 class="category text-danger">
-                                                                                                        MONTHLY FEE DETAILS</h5>
-                                                                                                </div>
-                                                                                                <div class="info-table">
-                                                                                                    <div>
-                                                                                                        <ul>
-                                                                                                            <li class="text-black">
-                                                                                                                Monthly
-                                                                                                                fee:
-                                                                                                                <b th:text="${property.getMonthlyFee()} + ' лв.'"></b>
-                                                                                                                <p>
-                                                                                                                    Monthly
-                                                                                                                    fee
-                                                                                                                    calculated
-                                                                                                                    according
-                                                                                                                    residential
-                                                                                                                    entity
-                                                                                                                    fee
-                                                                                                                    policy.<br>
-                                                                                                                    A
-                                                                                                                    new
-                                                                                                                    fee
-                                                                                                                    is
-                                                                                                                    applied
-                                                                                                                    on
-                                                                                                                    every
-                                                                                                                    1<sup>st</sup>
-                                                                                                                    date
-                                                                                                                    of a
-                                                                                                                    new
-                                                                                                                    month.
-                                                                                                                    </br>
-                                                                                                                </p>
-                                                                                                            </li>
-                                                                                                            <li class="text-black">
-                                                                                                                Overpayment:
-                                                                                                                <b th:text="${property.getOverpayment() + ' лв.'}"></b>
-                                                                                                                <p>
-                                                                                                                    In
-                                                                                                                    case
-                                                                                                                    of
-                                                                                                                    overpayment
-                                                                                                                    the
-                                                                                                                    overpaid
-                                                                                                                    amount
-                                                                                                                    will
-                                                                                                                    be
-                                                                                                                    used
-                                                                                                                    for
-                                                                                                                    future
-                                                                                                                    payments
-                                                                                                                    of
-                                                                                                                    monthly
-                                                                                                                    fees.<br>
-                                                                                                                    This
-                                                                                                                    amount
-                                                                                                                    will
-                                                                                                                    automatically
-                                                                                                                    cover
-                                                                                                                    future
-                                                                                                                    fees
-                                                                                                                    and
-                                                                                                                    will
-                                                                                                                    be
-                                                                                                                    decreased
-                                                                                                                    with
-                                                                                                                    the
-                                                                                                                    amount
-                                                                                                                    of
-                                                                                                                    the
-                                                                                                                    covered
-                                                                                                                    fee
-                                                                                                                    until
-                                                                                                                    it
-                                                                                                                    gets
-                                                                                                                    all
-                                                                                                                    used.
-                                                                                                                </p>
-                                                                                                            </li>
-                                                                                                            <li class="text-black">
-                                                                                                                Number
-                                                                                                                of
-                                                                                                                unpaid
-                                                                                                                fees:
-                                                                                                                <b th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
-                                                                                                                   class="text-danger"
-                                                                                                                   th:text="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())}"></b>
-                                                                                                                <b th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
-                                                                                                                   th:text="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())}"></b>
-                                                                                                                <p>
-                                                                                                                    Number
-                                                                                                                    of
-                                                                                                                    unpaid
-                                                                                                                    fees</p>
-                                                                                                            </li>
-                                                                                                            <li class="text-black">
-                                                                                                                Total
-                                                                                                                due
-                                                                                                                amount:
-                                                                                                                <b th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
-                                                                                                                   class="text-danger"
-                                                                                                                   th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId()) + ' лв.'}"></b>
-                                                                                                                <b th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">0.00
-                                                                                                                    лв.</b>
-                                                                                                                <p>
-                                                                                                                    Total
-                                                                                                                    due
-                                                                                                                    amount
-                                                                                                                    is
-                                                                                                                    automatically
-                                                                                                                    calculated
-                                                                                                                    by
-                                                                                                                    summing
-                                                                                                                    all
-                                                                                                                    individual
-                                                                                                                    unpaid
-                                                                                                                    monthly
-                                                                                                                    fees.</p>
-                                                                                                            </li>
-                                                                                                        </ul>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <br></br>
-                                                                                                <div align="center">
-                                                                                                    <h5 class="category text-danger">
-                                                                                                        DUE AMOUNTS & PAYMENTS MANAGEMENT</h5>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="main-content">
-                                                                            <span th:if="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} == 1"
-                                                                                  th:text="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} + ' Record found'"
-                                                                                  class="category text-bg-success"></span>
-                                                                                                <span th:if="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} > 1"
-                                                                                                      th:text="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} + ' Records found'"
-                                                                                                      class="category text-bg-success"></span>
-                                                                                                <div class="navbar">
-                                                                                                    <form class="form-container"
-                                                                                                          th:action="@{/administration/fees/details/add/{id} (id=${property.getId()})}">
-                                                                                                        <button type="submit">
-                                                                                                            <img title="Add monthly fee"
-                                                                                                                 src="/images/add_button.png"
-                                                                                                                 style="max-width: 111px;">
-                                                                                                            <p>Manually
-                                                                                                                add
-                                                                                                                fee</p>
-                                                                                                        </button>
-                                                                                                    </form>
-                                                                                                </div>
-                                                                                                <br>
-                                                                                            </div>
-                                                                                            <hr>
-                                                                                            <tr align="center"
-                                                                                                th:each="propertyFee: ${@propertyFeeRepository.findAllFees(property.getId())}">
-                                                                                                <td th:text="${propertyFee.getId()}"></td>
-                                                                                                <td th:text="${propertyFee.getFeeAmount()} + ' лв.'"></td>
-                                                                                                <td th:text="${#temporals.format(propertyFee.getPeriodStart(), 'dd-MMM-yyyy')}"></td>
-                                                                                                <td th:text="${#temporals.format(propertyFee.getPeriodEnd(), 'dd-MMM-yyyy')}"></td>
-                                                                                                <td th:text="${propertyFee.getDescription()}"></td>
-                                                                                                <td>
-                                                                                                    <form class="form-container"
-                                                                                                          th:action="@{/administration/fees/changePaymentStatus/{id} (id=${propertyFee.getId()})}"
-                                                                                                          th:method="POST">
-
-                                                                                                        <button title="Mark as paid"
-                                                                                                                th:if="${@propertyFeeRepository.checkIfFeePaid(propertyFee.getId()) == 0}"
-                                                                                                                type="submit">
-                                                                                                            <img title="Mark as paid"
-                                                                                                                 src="/images/check_no.png"
-                                                                                                                 style="max-width: 110px;">
-                                                                                                        </button>
-                                                                                                        <button title="Mark as unpaid"
-                                                                                                                th:if="${@propertyFeeRepository.checkIfFeePaid(propertyFee.getId()) > 0}"
-                                                                                                                type="submit">
-                                                                                                            <img title="Mark as not paid"
-                                                                                                                 src="/images/check_yes.png"
-                                                                                                                 style="max-width: 110px;">
-                                                                                                        </button>
-                                                                                                    </form>
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <form class="form-container"
-                                                                                                          th:action="@{/administration/fees/details/edit/{id} (id=${propertyFee.getId()})}">
-                                                                                                        <button type="submit">
-                                                                                                            <img title="Edit property"
-                                                                                                                 src="/images/edit.png"
-                                                                                                                 style="max-width: 111px;">
-                                                                                                        </button>
-                                                                                                    </form>
-                                                                                                </td>
-                                                                                                <td class="text-black">
-                                                                                                    <form class="form-container"
-                                                                                                          th:action="@{/administration/fees/details/delete/{id} (id=${propertyFee.getId()})}"
-                                                                                                          th:method="POST">
-                                                                                                        <select class="form-control hidden"
-                                                                                                                id="deletePropertyFee">
-                                                                                                            <option
-                                                                                                                    th:value="${propertyFee.getId()}">
-                                                                                                            </option>
-                                                                                                        </select>
-                                                                                                        <button type="submit">
-                                                                                                            <img title="Delete property"
-                                                                                                                 src="/images/delete.jpg"
-                                                                                                                 style="max-width: 110px;">
-                                                                                                        </button>
-                                                                                                    </form>
-                                                                                                </td>
-                                                                                            </tr>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </ul>
+                    <!--Property fee section-->
+                    <div class="section administration" id="verified">
+                        <div class="col-lg-12 monthly-fee-details">
+                            <h4 class="category text-danger text-center"> MONTHLY FEE DETAILS</h4>
+                            <div class="info-table">
+                                <ul>
+                                    <li class="text-black">
+                                        Monthly fee:
+                                        <b th:text="${property.getMonthlyFee()} + ' лв.'"></b>
+                                        <p> Monthly fee calculated according residential entity
+                                            fee policy.<br>
+                                            A new fee is applied on every 1<sup>st</sup> date of a new month.</p>
+                                    </li>
+                                    <li class="text-black">
+                                        Overpayment:
+                                        <b th:text="${property.getOverpayment() + ' лв.'}"></b>
+                                        <p>
+                                            In case of overpayment the
+                                            overpaid
+                                            amount
+                                            will
+                                            be
+                                            used for
+                                            future payments
+                                            of monthly fees.<br>
+                                            This
+                                            amount
+                                            will
+                                            automatically
+                                            cover
+                                            future
+                                            fees
+                                            and
+                                            will
+                                            be
+                                            decreased
+                                            with
+                                            the
+                                            amount
+                                            of
+                                            the
+                                            covered
+                                            fee
+                                            until
+                                            it
+                                            gets
+                                            all
+                                            used.
+                                        </p>
+                                    </li>
+                                    <li class="text-black">
+                                        Number
+                                        of
+                                        unpaid
+                                        fees:
+                                        <b th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
+                                           class="text-danger"
+                                           th:text="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())}"></b>
+                                        <b th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
+                                           th:text="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())}"></b>
+                                        <p>
+                                            Number
+                                            of
+                                            unpaid
+                                            fees</p>
+                                    </li>
+                                    <li class="text-black">
+                                        Total
+                                        due
+                                        amount:
+                                        <b th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
+                                           class="text-danger"
+                                           th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId()) + ' лв.'}"></b>
+                                        <b th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">0.00
+                                            лв.</b>
+                                        <p>
+                                            Total
+                                            due
+                                            amount
+                                            is
+                                            automatically
+                                            calculated
+                                            by
+                                            summing
+                                            all
+                                            individual
+                                            unpaid
+                                            monthly
+                                            fees.</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 due-amounts">
+                            <h4 class="category text-danger text-center"> DUE AMOUNTS & PAYMENTS MANAGEMENT</h4>
+                            <div class="due-amounts-header">
+                                <div class="records-counter">
+                                    <p th:if="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} == 1"
+                                       th:text="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} + ' Record found'"
+                                       class="records-counter text-bg-success"></p>
+                                    <p th:if="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} > 1"
+                                       th:text="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} + ' Records found'"
+                                       class="records-counter text-bg-success"></p>
+                                </div>
+                                <div class="add-fee">
+                                    <form class="form-container"
+                                          th:action="@{/administration/fees/details/add/{id} (id=${property.getId()})}">
+                                        <button type="submit">
+                                            <img title="Add monthly fee" src="/images/add_button.png"
+                                                 style="width: 110px;" alt="Add monthly fee">
+                                            <p class="text-dark"> Manually add fee
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
+                            <div class="due-amounts-table">
+                                <table class="text-center">
+                                    <tr>
+                                        <th>Fee id</th>
+                                        <th>Fee amount</th>
+                                        <th>Start period</th>
+                                        <th>End period</th>
+                                        <th>Description</th>
+                                        <th>Fee paid</th>
+                                        <th>Edit record</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                    <tr th:each="propertyFee: ${@propertyFeeRepository.findAllFees(property.getId())}">
+                                        <td th:text="${propertyFee.getId()}"></td>
+                                        <td th:text="${propertyFee.getFeeAmount()} + ' лв.'"></td>
+                                        <td th:text="${#temporals.format(propertyFee.getPeriodStart(), 'dd-MMM-yyyy')}"></td>
+                                        <td th:text="${#temporals.format(propertyFee.getPeriodEnd(), 'dd-MMM-yyyy')}"></td>
+                                        <td th:text="${propertyFee.getDescription()}"></td>
+                                        <td>
+                                            <form class="form-container"
+                                                  th:action="@{/administration/fees/changePaymentStatus/{id} (id=${propertyFee.getId()})}"
+                                                  th:method="POST">
+
+                                                <button title="Mark as paid"
+                                                        th:if="${@propertyFeeRepository.checkIfFeePaid(propertyFee.getId()) == 0}"
+                                                        type="submit">
+                                                    <img title="Mark as paid"
+                                                         src="/images/check_no.png"
+                                                         style="width: 110px;"
+                                                         alt="Mark as paid">
+                                                </button>
+                                                <button title="Mark as unpaid"
+                                                        th:if="${@propertyFeeRepository.checkIfFeePaid(propertyFee.getId()) > 0}"
+                                                        type="submit">
+                                                    <img title="Mark as not paid"
+                                                         src="/images/check_yes.png"
+                                                         style="width: 110px;"
+                                                         alt="Mark as not paid">
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form class="form-container"
+                                                  th:action="@{/administration/fees/details/edit/{id} (id=${propertyFee.getId()})}">
+                                                <button type="submit">
+                                                    <img title="Edit fee"
+                                                         src="/images/edit.png"
+                                                         style="width: 110px;"
+                                                         alt="Edit fee">
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form class="form-container"
+                                                  th:action="@{/administration/fees/details/delete/{id} (id=${propertyFee.getId()})}"
+                                                  th:method="POST">
+                                                <label for="deletePropertyFee"
+                                                       class="hidden"></label>
+                                                <select class="form-control hidden"
+                                                        id="deletePropertyFee">
+                                                    <option th:value="${propertyFee.getId()}"></option>
+                                                </select>
+                                                <button type="submit">
+                                                    <img title="Delete fee"
+                                                         src="/images/delete.jpg"
+                                                         style="width: 110px;"
+                                                         alt="Delete fee">
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <p class="text-center"
+                               th:if="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} == 0">No
+                                monthly fees found for this property</p>
                         </div>
                     </div>
                 </div>
@@ -392,7 +317,7 @@
         </div>
     </div>
 </div>
-</div>
+
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
