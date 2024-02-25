@@ -45,75 +45,72 @@
 <!-- ***** NavBar ***** -->
 <header class="header-area header-sticky">
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
-                    <a href="/index"><hr><img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                        <li><a th:href="@{/}">Home</a></li>
-                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a>
-                        </li>
-                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
-                            property</a></li>
-                        <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
-                        <li><a th:href="@{/contact}">Contact Us</a></li>
-                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="active">Register</a>
-                        </li>
-                        <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
-                            <li><a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
-                        </form>
-                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
-                    </ul>
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
-                    <!-- ***** Menu End ***** -->
-                </nav>
+        <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <div class="logo-image">
+                <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
             </div>
-        </div>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+                <li><a th:href="@{/}">Home</a></li>
+                <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a>
+                </li>
+                <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
+                    property</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/contact}">Contact Us</a></li>
+                <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="active">Register</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <form id="logout" th:action="@{/logout}" method="POST">
+                        <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                    </form>
+                </li>
+                <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
+            </ul>
+            <a class='menu-trigger'>
+                <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+        </nav>
     </div>
 </header>
 
 <div class="contact section">
     <div class="container">
         <div class="row">
-            <div class="col-lg-4 offset-lg-4">
-                <div class="section-heading text-center">
-                    <h6>| Register </h6>
-                    <hr></hr>
-                    <msg>Select your role
-                    </msg>
-                </div>
+            <div class="section-heading text-center">
+                <h6>| Register </h6>
+                <p class="text-white">Select your role</p>
             </div>
         </div>
     </div>
 </div>
 
+
 <div class="input-content">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="item phone">
+        <div class="section-role">
+            <div class="row">
+                <div class="col-lg-6">
+                    <a th:href="@{/register/auth}">
+                        <div class="item">
                             <img src="/images/resident.jpg" alt="" style="max-width: 52px;">
-                            <li><a th:href="@{/register/auth}">RESIDENT</a></li>
+                            <h5 class="text-info-emphasis">RESIDENT</h5>
                             <h6><span>Register as a resident</span></h6>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="item phone">
+                    </a>
+                </div>
+                <div class="col-lg-6">
+                    <a th:href="@{/register/manager}">
+                        <div class="item">
                             <img src="/images/manager.jpg" alt="" style="max-width: 52px;">
-                            <li><a th:href="@{/register/manager}">MANAGER</a></li>
+                            <h5 class="text-info-emphasis">MANAGER</h5>
                             <h6><span>Register as a residential manager</span></h6>
                         </div>
-                    </div>
+                    </a>
                 </div>
-            </div>
-            <div class="col-lg-6">
             </div>
         </div>
     </div>
