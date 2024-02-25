@@ -49,7 +49,7 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <div class="logo-image">
-                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
                     </div>
                     <!-- ***** Logo End ***** -->
 
@@ -73,7 +73,7 @@
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
                         <li sec:authorize="isAuthenticated()">
-                            <form  id="logout" th:action="@{/logout}" method="POST">
+                            <form id="logout" th:action="@{/logout}" method="POST">
                                 <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
                             </form>
                         </li>
@@ -95,7 +95,7 @@
         <div class="row">
             <h3>Owners data</h3>
             <div class="col-lg-12">
-            <span th:text="'Residential entity ID: ' + ${residentialEntity.getId()}"></span>
+                <span th:text="'Residential entity ID: ' + ${residentialEntity.getId()}"></span>
             </div>
             <h4 th:if="${messageError}" class="text-danger">Message not sent. Text length must be up to 2000
                 symbols</h4>
@@ -140,20 +140,20 @@
                 </li>
                 <li class="nav-item">
                     <div class="button">
-                        <a class="nav-link"th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
+                        <a class="nav-link" th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
                             <h5>Monthly fees</h5>
                             <p class="text-secondary">calculations & management</p></a>
                     </div>
                 </li>
                 <li class="nav-item">
                     <div class="button">
-                        <a class="nav-link"th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
+                        <a class="nav-link" th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
                             <h5>Expenses</h5>
                             <p class="text-secondary">reports & management</p></a>
                     </div>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <div class="button" >
+                    <div class="button">
                         <a class="nav-link" th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
                             <h5>Details</h5>
                             <p class="text-secondary">data & settings</p></a>
@@ -162,28 +162,34 @@
             </ul>
         </div>
         <!--        end of buttons-->
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="main-content">
-                    <span th:text="'Residential entity: ' + ${residentialEntity.getId()}"
-                          class="category text-black"></span>
-                    <h4 th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>
-                </div>
+        <div class="section-administration-owners">
+            <div class="text-center">
+                <h4 class="category text-danger">LIST OF PROPERTY OWNERS</h4>
             </div>
-            <div class="section administration" id="details">
+            <div class="section administration">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="tabs-content">
                                 <div class="row">
                                     <p th:if="${residentialEntity.getResidents().size()} == 0"
-                                       align="center">No residents available</p>
+                                       class="text-center">No residents available</p>
                                     <div class="tab-content" id="myTabContent">
                                         <div class="tab-pane fade show active" id="Properties" role="tabpanel"
                                              aria-labelledby="properties-tab-tab">
                                             <div class="row">
+                                                <div class="main-content">
+                                                        <span th:if="${residentialEntity.getResidents().size()} == 1"
+                                                              th:text="${residentialEntity.getResidents().size()} + ' record found'"
+                                                              class="category text-bg-success"></span>
+                                                    <span th:if="${residentialEntity.getResidents().size()} > 1"
+                                                          th:text="${residentialEntity.getResidents().size()} + ' records found'"
+                                                          class="category text-bg-success"></span>
+                                                    <hr>
+                                                </div>
                                                 <table th:if="${residentialEntity.getResidents().size()} > 0">
-                                                    <tr align="center">
+                                                    <tr class="text-center">
+                                                        <th>Property №</th>
                                                         <th>First name</th>
                                                         <th>Last name</th>
                                                         <th>Username</th>
@@ -193,20 +199,26 @@
                                                         <th>Message</th>
                                                         <th>Delete</th>
                                                     </tr>
-                                                    <tr align="center"
+                                                    <tr class="text-center"
                                                         th:each="resident : ${residentialEntity.getResidents()}">
+                                                        <td th:if="${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId()).size() > 0}">
+                                                            <p th:each="property : ${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId())}" th:text="'№'+ ${property.getNumber()}"></p>
+                                                        </td>
+                                                        <td th:if="${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId()).size() == 0}">
+                                                            <img title="No registered property" src="/images/attention.png" style="width: 111px;" alt="No registered property">
+                                                        </td>
                                                         <td th:text="${resident.getFirstName()}"></td>
                                                         <td th:text="${resident.getLastName()}"></td>
                                                         <td th:text="${resident.getUsername()}"></td>
                                                         <td th:text="${resident.getEmail()}"></td>
                                                         <td th:text="${resident.getPhoneNumber()}"></td>
+                                                        <!-- START: Roles change button-->
                                                         <td>
-                                                            <!-- START: Roles change button-->
                                                             <form class="form-container"
                                                                   th:action="@{/administration/owners/edit_role/{id} (id=${resident.getId()})}"
                                                                   th:method="POST"
                                                                   th:object="${residentManageBindingModel}">
-
+                                                                <label for="userId" class="hidden">Role change</label>
                                                                 <select class="form-control hidden" id="userId"
                                                                         th:field="*{userId}">
                                                                     <option th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}"
@@ -216,6 +228,7 @@
                                                                             value="">
                                                                     </option>
                                                                 </select>
+                                                                <label for="entityId" class="hidden"></label>
                                                                 <select class="form-control hidden" id="entityId"
                                                                         th:field="*{entityId}">
                                                                     <option th:value="${residentialEntity.getId()}"></option>
@@ -231,21 +244,21 @@
                                                                         type="submit">Moderator
                                                                 </button>
                                                             </form>
-                                                            <!-- END OF: Roles change button-->
                                                         </td>
+                                                        <!-- END OF: Roles change button-->
                                                         <td>
                                                             <form th:action="@{/administration/owners/message/{id}(id=${resident.getId()})}"
                                                                   th:method="POST" class="form-container"
                                                                   th:object="${residentManageBindingModel}">
-
+                                                                <label for="entityIdMessage" class="hidden"></label>
                                                                 <select class="form-control hidden"
                                                                         id="entityIdMessage"
                                                                         th:field="*{entityId}">
                                                                     <option th:value="${residentialEntity.getId()}"></option>
                                                                 </select>
-
                                                                 <div class="row">
                                                                     <div class="col-8">
+                                                                        <label for="messageText" class="hidden"></label>
                                                                         <input type="text" class="message small"
                                                                                th:placeholder="'Send message to ' + ${resident.getFirstName()}"
                                                                                id="messageText"
@@ -257,7 +270,8 @@
                                                                         <button type="submit" class="custom-button">
                                                                             <img class="text-dark" title="Send message"
                                                                                  src="/images/send-message.png"
-                                                                                 style="max-width: 111px">
+                                                                                 style="width: 108px"
+                                                                                 alt="Send message">
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -267,6 +281,8 @@
                                                             <form th:action="@{/administration/owners/delete/{id} (id=${resident.getId()})}"
                                                                   th:method="POST"
                                                                   th:object="${residentManageBindingModel}">
+                                                                <label for="entityIdDeleteResident"
+                                                                       class="hidden"></label>
                                                                 <select class="form-control hidden"
                                                                         id="entityIdDeleteResident"
                                                                         th:field="*{entityId}">
@@ -274,12 +290,11 @@
                                                                 </select>
                                                                 <button type="submit">
                                                                     <img title="Delete owner" src="/images/delete.jpg"
-                                                                         style="max-width: 111px;">
+                                                                         style="width: 111px;" alt="Delete owner">
                                                                 </button>
                                                             </form>
                                                         </td>
                                                     </tr>
-
                                                 </table>
                                             </div>
                                         </div>
