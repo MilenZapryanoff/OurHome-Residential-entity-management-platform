@@ -50,7 +50,7 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <div class="logo-image">
-                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
                     </div>
                     <!-- ***** Logo End ***** -->
 
@@ -66,7 +66,7 @@
                                   data-speed="1000"></samp>
                         </small>
                         <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
-                                                                                 class="active">Administration</a>
+                                                                     class="active">Administration</a>
                         </li>
                         <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
                             property</a></li>
@@ -74,7 +74,7 @@
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
                         <li sec:authorize="isAuthenticated()">
-                            <form  id="logout" th:action="@{/logout}" method="POST">
+                            <form id="logout" th:action="@{/logout}" method="POST">
                                 <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
                             </form>
                         </li>
@@ -98,7 +98,6 @@
             </h3>
         </div>
     </div>
-</div>
 </div>
 
 <br><br>
@@ -124,7 +123,7 @@
                                 <div class="row">
                                     <div class="nav-wrapper ">
                                         <ul class="nav nav-tabs" role="tablist">
-                                            <div class="col-lg-12">
+                                            <li class="col-lg-12">
                                                 <br></br>
                                                 <div class="messages">
                                                     <div align="center" class="input-content">
@@ -217,6 +216,8 @@
                                                                                th:value="${property.notHabitable}">
                                                                     </fieldset>
                                                                     <fieldset>
+                                                                        <label for="totalFlatSpace"
+                                                                               class="hidden"></label>
                                                                         <input hidden="hidden" type="text"
                                                                                id="totalFlatSpace"
                                                                                placeholder="Enter total flat space..."
@@ -225,6 +226,8 @@
                                                                                th:errorclass="bg-danger">
                                                                     </fieldset>
                                                                     <fieldset>
+                                                                        <label for="numberOfRooms"
+                                                                               class="hidden"></label>
                                                                         <input hidden="hidden" type="text"
                                                                                id="numberOfRooms"
                                                                                placeholder="Enter number of rooms..."
@@ -233,6 +236,8 @@
                                                                                th:errorclass="bg-danger">
                                                                     </fieldset>
                                                                     <fieldset>
+                                                                        <label for="parkingAvailable"
+                                                                               class="hidden"></label>
                                                                         <input hidden="hidden" name="parkingAvailable"
                                                                                id="parkingAvailable"
                                                                                type="checkbox"
@@ -245,7 +250,7 @@
                                                                         </button>
                                                                         <button class="orange-button" id="form-cancel">
                                                                             <a th:href="@{/administration/property/{id}(id=${property.getResidentialEntity().getId()})}">
-                                                                                <h7 class="text-light">Cancel</h7>
+                                                                                <div class="text-light">Cancel</div>
                                                                             </a>
                                                                         </button>
                                                                     </fieldset>
@@ -254,7 +259,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
