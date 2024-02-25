@@ -48,9 +48,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index">
-                        <hr>
-                        <img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                    </div>
                     <!-- ***** Logo End ***** -->
 
                     <!-- ***** Menu Start ***** -->
@@ -72,9 +72,11 @@
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
-                        <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
-                            <li><a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
-                        </form>
+                        <li sec:authorize="isAuthenticated()">
+                            <form  id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
                     </ul>
                     <a class='menu-trigger'>
@@ -91,8 +93,10 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Edit fee
-            </h3>
+            <h3>Edit fee</h3>
+            <div class="col-lg-12">
+                <span th:text="'Fee: ' + ${propertyFeeEditBindingModel.getDescription()}"></span>
+            </div>
         </div>
     </div>
 </div>
@@ -214,7 +218,7 @@
                                                                         </button>
                                                                         <button class="orange-button" id="form-cancel">
                                                                             <a th:href="@{/administration/fees/details/{id}(id=${propertyFeeEditBindingModel.getPropertyId()})}">
-                                                                                <h7 class="text-light">Back</h7>
+                                                                                <h7 class="text-light">Cancel</h7>
                                                                             </a>
                                                                         </button>
                                                                     </fieldset>
