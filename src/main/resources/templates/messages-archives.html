@@ -47,7 +47,10 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index"><hr><img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;"
+                                              alt="OurHome"></a>
+                    </div>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
@@ -67,9 +70,11 @@
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
-                        <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
-                            <li><a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
-                        </form>
+                        <li sec:authorize="isAuthenticated()">
+                            <form id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
                     </ul>
                     <a class='menu-trigger'>
@@ -140,18 +145,14 @@
                                                     <div class="row">
                                                         <div class="nav-wrapper ">
                                                             <ul class="nav nav-tabs" role="tablist">
-                                                                <a th:href="@{/messages}">
-                                                                    <li class="nav-item" role="presentation">
-                                                                        <button class="nav-link" id="inbox-tab"
-                                                                                data-bs-toggle="tab"
-                                                                                data-bs-target="#inbox" type="button"
-                                                                                role="tab"
-                                                                                aria-controls="inbox"
-                                                                                aria-selected="false">
-                                                                            Inbox
-                                                                        </button>
-                                                                    </li>
-                                                                </a>
+                                                                <li class="nav-item">
+                                                                    <div class="button">
+                                                                        <a class="nav-link"
+                                                                           th:href="@{/messages}">
+                                                                            <span class="text-light">Inbox</span>
+                                                                        </a>
+                                                                    </div>
+                                                                </li>
                                                                 <li class="nav-item" role="presentation">
                                                                     <button class="nav-link active" id="archive-tab"
                                                                             data-bs-toggle="tab"
@@ -164,15 +165,14 @@
                                                             </ul>
                                                         </div>
                                                         <div class="tab-content" id="messageBody">
-                                                            <br></br>
+                                                            <br>
                                                             <!--ARCHIVE MESSAGE BEGIN-->
                                                             <div class="tab-pane fade show active" id="archive"
                                                                  role="tabpanel"
                                                                  aria-labelledby="archive-tab">
                                                                 <div class="row">
                                                                     <!--MESSAGE BODY-->
-                                                                    <p th:if="${@messageRepository.countArchivedMessages(userId) == 0}"
-                                                                       align="center">No archived messages</p>
+                                                                    <p class="text-center" th:if="${@messageRepository.countArchivedMessages(userId) == 0}">No archived messages</p>
                                                                     <div th:if="${@messageRepository.countArchivedMessages(userId) > 0}"
                                                                          th:each="message: ${@messageRepository.findArchivedMessagesByUserId(userId)}"
                                                                          class="row">
@@ -180,17 +180,18 @@
                                                                             <div class="form-control">
                                                                                 <div class="mt-3 rounded badge-warning">
                                                                                     <div th:unless="${message.getSender() == null}">
-                                                                                        <small class="text-secondary"
-                                                                                               th:text="'Sender: ' + ${message.getSender().getFirstName()} + ' '
-                                                                                                    + ${message.getSender().getLastName()}">
-                                                                                        </small>
+                                                                                        <p class="text-secondary"
+                                                                                           th:text="'Sender: ' + ${message.getSender().getFirstName()} + ' '
+                                                                                                    + ${message.getSender().getLastName()}"></p>
+                                                                                        <p class="text-secondary"
+                                                                                           th:text="'Phone: ' + ${message.getSender().getPhoneNumber()} + ', e-mail: ' + ${message.getSender().getEmail()}"></p>
                                                                                         <br>
                                                                                     </div>
                                                                                     <small class="text-secondary"
                                                                                            th:text="'Received on : ' + ${message.getDate()} + ', ' + ${message.getTime()}"></small>
-                                                                                    <hr></hr>
+                                                                                    <hr>
                                                                                 </div>
-                                                                                <h7 th:text="${message.getText()}"></h7>
+                                                                                <div th:text="${message.getText()}"></div>
                                                                                 <br>
                                                                                 <br>
                                                                             </div>
@@ -208,7 +209,7 @@
                                                                         </div>
                                                                         <!--END OF DELETE MESSAGE BUTTON-->
                                                                         <div class="col-lg-12">
-                                                                            <hr></hr>
+                                                                            <hr>
                                                                         </div>
                                                                     </div>
                                                                     <!--END OF MESSAGE BODY-->
