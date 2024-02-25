@@ -49,10 +49,10 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <div class="logo-image">
-                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;"
+                                              alt="OurHome"></a>
                     </div>
                     <!-- ***** Logo End ***** -->
-
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                         <li><a th:href="@{/}">Home</a></li>
@@ -73,7 +73,7 @@
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
                         <li sec:authorize="isAuthenticated()">
-                            <form  id="logout" th:action="@{/logout}" method="POST">
+                            <form id="logout" th:action="@{/logout}" method="POST">
                                 <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
                             </form>
                         </li>
@@ -100,8 +100,6 @@
         </div>
     </div>
 </div>
-</div>
-
 <br><br>
 
 <!-- ***** Residential entity section ***** -->
@@ -136,20 +134,21 @@
                 </li>
                 <li class="nav-item">
                     <div class="button">
-                        <a class="nav-link active" th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
+                        <a class="nav-link active"
+                           th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
                             <h5 class="text-danger">Monthly fees</h5>
                             <p class="text-secondary">calculations & management</p></a>
                     </div>
                 </li>
                 <li class="nav-item">
                     <div class="button">
-                        <a class="nav-link"th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
+                        <a class="nav-link" th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
                             <h5>Expenses</h5>
                             <p class="text-secondary">reports & management</p></a>
                     </div>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <div class="button" >
+                    <div class="button">
                         <a class="nav-link" th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
                             <h5>Details</h5>
                             <p class="text-secondary">data & settings</p></a>
@@ -158,256 +157,195 @@
             </ul>
         </div>
         <!--end of buttons-->
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="main-content">
-                    <span th:text="'Residential entity: ' + ${residentialEntity.getId()}"
-                          class="category text-black"></span>
-                    <h4 th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>
+
+        <div class="section section-contact">
+            <div class="section administration" id="fees">
+                <div class="tabs-content">
+                    <div class="nav-wrapper ">
+                        <br>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <div class="button">
+                                    <a class="nav-link active"
+                                       th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
+                                        <div class="text-light">Modify monthly fees</div>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-
-
-            <div class="section administration" id="fees">
+            <div class="text-center">
+                <h4 class="text-danger">RESIDENTIAL ENTITY FEES</h4>
+            </div>
+            <div class="section administration">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="tabs-content">
                                 <div class="row">
                                     <div class="nav-wrapper ">
-                                        <ul class="nav nav-tabs">
-                                            <div class="button">
-                                                <a class="nav-link active"
-                                                   th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
-                                                    <h7 class="text-light">Modify monthly fees</h7>
-                                                </a>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <br></br>
-                                                <div class="row">
-                                                    <div align="center">
-                                                        <h5 class="category text-danger">RESIDENTIAL ENTITY FEE
-                                                            SETTINGS</h5>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="main-content">
-                                                            <div class="info-table">
-                                                                <div>
-                                                                    <ul>
-                                                                        <li><h6 class="text-danger">SECTION A</h6></li>
-                                                                        <li><h6 class="text-dark">Fee calculation of
-                                                                            habitable property :</h6></li>
-                                                                        <li class="text-black"><b>1.</b> Fixed monthly
-                                                                            fee:
-                                                                            <b th:text="${residentialEntity.getFee().getFixedFeeHabitable()} + ' лв.'"></b>
-                                                                            <p class="text-secondary">Monthly fee for
-                                                                                every property in this residential
-                                                                                entity.
-                                                                        <li class="text-black"><b>2.</b> Adult fee: <b
-                                                                                th:text="${residentialEntity.getFee().getAdultFee()} + ' лв.'"></b>
-                                                                            <p class="text-secondary">Monthly fee for
-                                                                                each adult person living in the
-                                                                                property.
-                                                                        <li class="text-black"><b>3.</b> Child fee: <b
-                                                                                th:text="${residentialEntity.getFee().getChildFee()} + ' лв.'"></b>
-                                                                            <p class="text-secondary">Monthly fee for
-                                                                                each child living in the property.
-                                                                        <li class="text-black"><b>4.</b> Pet fee: <b
-                                                                                th:text="${residentialEntity.getFee().getPetFee()} + ' лв.'"></b>
-                                                                            <p class="text-secondary">Monthly fee for a
-                                                                                pet living in the property.
-                                                                        <li class="text-black"><b>5.</b> Additional fee:
-                                                                            <b th:text="${residentialEntity.getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
-                                                                            <p class="text-secondary">Additional
-                                                                                property monthly fee.
-                                                                        <li class="text-danger">Forming an individual
-                                                                            property fee
-                                                                            <p class="text-secondary">The total monthly
-                                                                                fee for each habitable property is
-                                                                                calculated by summing the listed
-                                                                                elements. They all together form the
-                                                                                monthly fee.
-                                                                    </ul>
-                                                                </div>
+                                        <div class="col-lg-12">
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="main-content">
+                                                        <div class="info-table">
+                                                            <div>
+                                                                <ul>
+                                                                    <li><h6 class="text-danger">SECTION A</h6></li>
+                                                                    <li><h6 class="text-dark">Fee calculation of habitable property :</h6></li>
+                                                                    <li class="text-black"><b>1.</b> Fixed monthly fee:
+                                                                        <b th:text="${residentialEntity.getFee().getFixedFeeHabitable()} + ' лв.'"></b>
+                                                                        <p class="text-secondary">Monthly fee for every property in this residential entity.</p>
+                                                                    </li>
+                                                                    <li class="text-black"><b>2.</b> Adult fee: <b
+                                                                            th:text="${residentialEntity.getFee().getAdultFee()} + ' лв.'"></b>
+                                                                        <p class="text-secondary">Monthly fee for each adult person living in the property.</p>
+                                                                    </li>
+                                                                    <li class="text-black"><b>3.</b> Child fee: <b
+                                                                            th:text="${residentialEntity.getFee().getChildFee()} + ' лв.'"></b>
+                                                                        <p class="text-secondary">Monthly fee for each child living in the property.</p>
+                                                                    </li>
+                                                                    <li class="text-black"><b>4.</b> Pet fee: <b
+                                                                            th:text="${residentialEntity.getFee().getPetFee()} + ' лв.'"></b>
+                                                                        <p class="text-secondary">Monthly fee for a pet living in the property.</p>
+                                                                    </li>
+                                                                    <li class="text-black"><b>5.</b> Additional fee:
+                                                                        <b th:text="${residentialEntity.getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
+                                                                        <p class="text-secondary">Additional property monthly fee.</p>
+                                                                    </li>
+                                                                    <li class="text-danger">Forming an individual property fee
+                                                                        <p class="text-secondary">The total monthly fee for each habitable property is
+                                                                            calculated by summing the listed elements. They all together form the monthly fee.</p>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
-                                                            <br>
-                                                            <br>
-                                                            <br>
-                                                            <br>
-                                                            <br>
                                                         </div>
+                                                        <br><br><br><br>
                                                     </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="main-content">
-                                                            <div class="info-table">
-                                                                <div>
-                                                                    <ul>
-                                                                        <li><h6 class="text-danger">SECTION B</h6></li>
-                                                                        <li><h6 class="text-dark">Fee calculation of
-                                                                            non-habitable property :</h6></li>
-                                                                        <li class="text-black"><b>1.</b> Fixed fee: <b
-                                                                                th:text="${residentialEntity.getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
-                                                                            <p class="text-secondary">Monthly fee
-                                                                                charged for every property in this
-                                                                                residential entity.
-                                                                        <li class="text-black"><b>2.</b> Additional fee:
-                                                                            <b th:text="${residentialEntity.getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
-                                                                            <p class="text-secondary">Additional
-                                                                                property monthly fee.
-                                                                        <li class="text-danger">Forming an individual
-                                                                            property fee
-                                                                            <p class="text-secondary">The total monthly
-                                                                                fee for each non-habitable property is
-                                                                                calculated by summing the listed
-                                                                                elements. They all together form the
-                                                                                monthly fee.
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="main-content">
+                                                        <div class="info-table">
+                                                            <div>
+                                                                <ul>
+                                                                    <li><h6 class="text-danger">SECTION B</h6></li>
+                                                                    <li><h6 class="text-dark">Fee calculation of
+                                                                        non-habitable property :</h6>
+                                                                    </li>
+                                                                    <li class="text-black"><b>1.</b> Fixed fee: <b
+                                                                            th:text="${residentialEntity.getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
+                                                                        <p class="text-secondary">Monthly fee charged for every property in this residential entity.</p>
+                                                                    </li>
+                                                                    <li class="text-black"><b>2.</b> Additional fee:
+                                                                        <b th:text="${residentialEntity.getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
+                                                                        <p class="text-secondary">Additional property monthly fee.</p>
+                                                                    </li>
+                                                                    <li class="text-danger">Forming an individual property fee
+                                                                        <p class="text-secondary">The total monthly fee for each non-habitable property is
+                                                                            calculated by summing the listed elements. They all together form the monthly fee.</p>
+                                                                    </li>
+                                                                </ul>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="section administration" id="details">
-                                                    <div class="container">
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <div class="tabs-content">
-                                                                    <div class="row">
-                                                                        <div align="center">
-                                                                            <h5 class="category text-danger">DUE AMOUNTS
-                                                                                BY PROPERTY</h5>
-                                                                        </div>
-                                                                        <p th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} == 0"
-                                                                           align="center">No records found</p>
-                                                                        <div class="tab-content" id="myTabContent">
-                                                                            <div class="tab-pane fade show active"
-                                                                                 id="Properties" role="tabpanel"
-                                                                                 aria-labelledby="properties-tab-tab">
-                                                                                <div class="row">
-                                                                                    <!--Active properties section-->
-                                                                                    <div th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 0"
-                                                                                         class="section administration"
-                                                                                         id="verified">
-                                                                                        <div class="row">
-                                                                                            <table>
-                                                                                                <tr align="center">
-                                                                                                    <th>Property №</th>
-                                                                                                    <th>Owner</th>
-                                                                                                    <th>Monthly fee</th>
-                                                                                                    <th>Overpayment</th>
-                                                                                                    <th>Automatic fee
-                                                                                                        generation
-                                                                                                    </th>
-                                                                                                    <th>Additional
-                                                                                                        data
-                                                                                                    </th>
-                                                                                                    <th>Due amount</th>
-                                                                                                    <th>View details
-                                                                                                    </th>
-                                                                                                </tr>
-                                                                                                <div class="main-content">
-                                                            <span th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} == 1"
-                                                                  th:text="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} + ' Record found'"
-                                                                  class="category text-bg-success"></span>
-                                                                                                    <span th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 1"
-                                                                                                          th:text="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} + ' Records found'"
-                                                                                                          class="category text-bg-success"></span>
-                                                                                                    <br></br>
-                                                                                                </div>
-                                                                                                <hr>
-                                                                                                <tr align="center"
-                                                                                                    th:each="property: ${@propertyRepository.findAllPropertiesWithSetFee(residentialEntity.getId())}">
-                                                                                                    <td th:text="${property.getNumber()}"></td>
-                                                                                                    <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
-                                                                                                    <td th:text="${property.getMonthlyFee()} + ' лв.'"></td>
-                                                                                                    <td th:text="${property.getOverpayment()} + ' лв.'"></td>
-                                                                                                    </td>
-                                                                                                    <td>
-                                                                                                        <img th:if="${property.isValidated()}"
-                                                                                                             title="Automatic fee generation."
-                                                                                                             src="/images/check_yes.png"
-                                                                                                             style="max-width: 111px;">
-                                                                                                        <a class="text-danger"
-                                                                                                           th:href="@{/administration/property/{id} (id=${id})}">
-                                                                                                            <img th:if="${!property.isValidated()} or ${property.isRejected()}"
-                                                                                                                 title="No automatic monthly fee generation"
-                                                                                                                 src="/images/attention.png"
-                                                                                                                 style="max-width: 111px;"></a>
-                                                                                                    </td>
-                                                                                                    <td>
-                                                                                                        <small th:if="${property.isValidated()}"></small>
-                                                                                                        <small th:if="${!property.isValidated()} and ${!property.isRejected()}"
-                                                                                                               th:class="text-danger"><a
-                                                                                                                class="text-danger"
-                                                                                                                th:href="@{/administration/property/{id} (id=${id})}">
-                                                                                                            Property
-                                                                                                            status : Not
-                                                                                                            validated<br>
-                                                                                                            <small class="text-secondary">Please
-                                                                                                                validate
-                                                                                                                or edit
-                                                                                                                property
-                                                                                                                data to
-                                                                                                                activate
-                                                                                                                automatic
-                                                                                                                monthly
-                                                                                                                fee
-                                                                                                                generation!<br><b>
-                                                                                                                    Please
-                                                                                                                    check
-                                                                                                                    for
-                                                                                                                    skipped
-                                                                                                                    monthly
-                                                                                                                    fees!</b>
-                                                                                                            </small></a>
-                                                                                                        </small>
-
-                                                                                                        <small th:if="${property.isRejected()}"
-                                                                                                               th:class="text-danger"><a
-                                                                                                                class="text-danger"
-                                                                                                                th:href="@{/administration/property/{id} (id=${id})}">
-                                                                                                            Property
-                                                                                                            status :
-                                                                                                            Rejected<br>
-                                                                                                            <small class="text-secondary">Please
-                                                                                                                edit
-                                                                                                                property
-                                                                                                                or ask
-                                                                                                                owner to
-                                                                                                                correct
-                                                                                                                his
-                                                                                                                property
-                                                                                                                data to
-                                                                                                                be
-                                                                                                                activated
-                                                                                                                automatic
-                                                                                                                monthly
-                                                                                                                fee
-                                                                                                                generation!<br><b>
-                                                                                                                    Please
-                                                                                                                    check
-                                                                                                                    for
-                                                                                                                    skipped
-                                                                                                                    monthly
-                                                                                                                    fees!</b>
-                                                                                                            </small></a>
-                                                                                                        </small>
-                                                                                                    </td>
-                                                                                                    <td th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
-                                                                                                        class="text-danger"
-                                                                                                        th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"></td>
-                                                                                                    <td th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">
-                                                                                                        0.00 лв.
-                                                                                                    <td>
-                                                                                                        <a th:href="@{/administration/fees/details/{id} (id=${property.getId()})}"><img
-                                                                                                                title="View details"
-                                                                                                                src="/images/magnifier.png"
-                                                                                                                style="max-width: 110px;"></a>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            </table>
+                                            </div>
+                                            <div class="section administration" id="details">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="tabs-content">
+                                                                <div class="row">
+                                                                    <div class="text-center">
+                                                                        <h5 class="category text-danger">DUE AMOUNTS BY PROPERTY</h5>
+                                                                    </div>
+                                                                    <p th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} == 0"
+                                                                       class="text-center">No records found</p>
+                                                                    <div class="tab-content" id="myTabContent">
+                                                                        <div class="tab-pane fade show active"
+                                                                             id="Properties" role="tabpanel"
+                                                                             aria-labelledby="properties-tab-tab">
+                                                                            <div class="row">
+                                                                                <!--Active properties section-->
+                                                                                <div th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 0"
+                                                                                     class="section administration"
+                                                                                     id="verified">
+                                                                                    <div class="row">
+                                                                                        <div class="main-content">
+                                                                                            <span th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} == 1"
+                                                                                                th:text="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} + ' Record found'"
+                                                                                                class="category text-bg-success"></span>
+                                                                                            <span th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 1"
+                                                                                                  th:text="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} + ' Records found'"
+                                                                                                  class="category text-bg-success"></span>
+                                                                                            <hr>
                                                                                         </div>
+                                                                                        <table>
+                                                                                            <tr class="text-center">
+                                                                                                <th>Property №</th>
+                                                                                                <th>Owner</th>
+                                                                                                <th>Monthly fee</th>
+                                                                                                <th>Overpayment</th>
+                                                                                                <th>Automatic fee generation</th>
+                                                                                                <th>Additional data</th>
+                                                                                                <th>Due amount</th>
+                                                                                                <th>View details</th>
+                                                                                            </tr>
+                                                                                            <tr class="text-center"
+                                                                                                th:each="property: ${@propertyRepository.findAllPropertiesWithSetFee(residentialEntity.getId())}">
+                                                                                                <td th:text="${property.getNumber()}"></td>
+                                                                                                <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
+                                                                                                <td th:text="${property.getMonthlyFee()} + ' лв.'"></td>
+                                                                                                <td th:text="${property.getOverpayment()} + ' лв.'"></td>
+                                                                                                <td>
+                                                                                                    <img th:if="${property.isValidated()}"
+                                                                                                         title="Automatic fee generation"
+                                                                                                         src="/images/check_yes.png"
+                                                                                                         style="width: 111px;"
+                                                                                                         alt="Automatic fee generation">
+                                                                                                    <a class="text-danger"
+                                                                                                       th:href="@{/administration/property/{id} (id=${id})}">
+                                                                                                        <img th:if="${!property.isValidated()} or ${property.isRejected()}"
+                                                                                                             title="No automatic monthly fee generation"
+                                                                                                             src="/images/attention.png"
+                                                                                                             style="width: 111px;"
+                                                                                                             alt="No automatic monthly fee generation"></a>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <small th:if="${property.isValidated()}"></small>
+                                                                                                    <small th:if="${!property.isValidated()} and ${!property.isRejected()}"
+                                                                                                           th:class="text-danger"><a
+                                                                                                            class="text-danger"
+                                                                                                            th:href="@{/administration/property/{id} (id=${id})}">
+                                                                                                        Property status : Not validated<br>
+                                                                                                        <small class="text-secondary">Please validate or edit property data to activate automatic
+                                                                                                            monthly fee generation!<br><b> Please check for skipped monthly fees!</b>
+                                                                                                        </small></a>
+                                                                                                    </small>
+                                                                                                    <small th:if="${property.isRejected()}"
+                                                                                                           th:class="text-danger">
+                                                                                                        <a class="text-danger" th:href="@{/administration/property/{id} (id=${id})}">
+                                                                                                            Property status : Rejected<br>
+                                                                                                        <small class="text-secondary">Please edit property or ask owner to correct his property
+                                                                                                            data to be activated automatic monthly fee generation!<br><b>
+                                                                                                                Please check for skipped monthly fees!</b>
+                                                                                                        </small></a>
+                                                                                                    </small>
+                                                                                                </td>
+                                                                                                <td th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0"
+                                                                                                    class="text-danger"
+                                                                                                    th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"></td>
+                                                                                                <td th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">
+                                                                                                    0.00 лв.
+                                                                                                <td>
+                                                                                                    <a th:href="@{/administration/fees/details/{id} (id=${property.getId()})}"><img
+                                                                                                            title="View details" src="/images/magnifier.png" style="width: 110px;" alt="View details"></a>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -419,7 +357,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -430,6 +368,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
