@@ -47,9 +47,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index">
-                        <hr>
-                        <img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
+                    </div>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
@@ -69,9 +69,11 @@
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
-                        <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
-                            <li><a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
-                        </form>
+                        <li sec:authorize="isAuthenticated()">
+                            <form id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
                     </ul>
                     <a class='menu-trigger'>
@@ -165,28 +167,26 @@
                                                                         Inbox
                                                                     </button>
                                                                 </li>
-                                                                <a th:href="@{/messages/archives}">
-                                                                    <li class="nav-item" role="presentation">
-                                                                        <button class="nav-link" id="archive-tab"
-                                                                                data-bs-toggle="tab"
-                                                                                data-bs-target="#archive" type="button"
-                                                                                role="tab"
-                                                                                aria-controls="archive"
-                                                                                aria-selected="true">Archive messages
-                                                                        </button>
-                                                                    </li>
-                                                                </a>
+                                                                <li class="nav-item">
+                                                                    <div class="button">
+                                                                        <a class="nav-link"
+                                                                           th:href="@{/messages/archives}">
+                                                                            <span class="text-light">Archive messages</span>
+                                                                        </a>
+                                                                    </div>
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                         <div class="tab-content" id="messageBody">
-                                                            <br></br>
+                                                            <br>
                                                             <div class="tab-pane fade show active" id="inbox"
                                                                  role="tabpanel"
                                                                  aria-labelledby="inbox-tab">
                                                                 <div class="row">
                                                                     <!--MESSAGE BODY-->
-                                                                    <p th:if="${@messageRepository.countNotArchivedMessages(userId) == 0}"
-                                                                       align="center">No new messages</p>
+                                                                    <p class="text-center"
+                                                                       th:if="${@messageRepository.countNotArchivedMessages(userId) == 0}">
+                                                                        No new messages</p>
                                                                     <div th:if="${@messageRepository.countByReceiver_Id(userId) > 0}"
                                                                          th:each="message: ${@messageRepository.findNotArchivedMessagesByUserId(userId)}"
                                                                          class="row">
@@ -209,13 +209,14 @@
                                                                                         <div class="col-lg-2">
                                                                                             <a><img src="/images/read.png"
                                                                                                     title="Message read"
-                                                                                                    style="max-width: 109px;"></a>
+                                                                                                    style="max-width: 109px;"
+                                                                                                    alt="Message read"></a>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <hr></hr>
+                                                                                    <hr>
                                                                                 </div>
-                                                                                <h7 th:text="${message.getText()}"></h7>
-                                                                                <br></br>
+                                                                                <div th:text="${message.getText()}"></div>
+
                                                                                 <div th:unless="${message.getSender() == null}">
                                                                                     <form th:action="@{/messages/send/{id} (id=${message.getId()})}"
                                                                                           th:method="POST"
@@ -228,6 +229,8 @@
                                                                                                     th:value="${message.getSender().getId()}">
                                                                                             </option>
                                                                                         </select>
+                                                                                        <label for="receiverId"
+                                                                                               class="hidden"></label>
                                                                                         <select class="form-control hidden"
                                                                                                 id="receiverId"
                                                                                                 th:field="*{senderId}">
@@ -235,6 +238,8 @@
                                                                                                     th:value="${message.getReceiver().getId()}">
                                                                                             </option>
                                                                                         </select>
+                                                                                        <label for="messageText"
+                                                                                               class="hidden"></label>
                                                                                         <input class="info-table small"
                                                                                                type="text"
                                                                                                th:placeholder="'Reply to ' + ${message.getSender().getFirstName()}"
@@ -260,10 +265,11 @@
                                                                                     <div class="row">
                                                                                         <div class="col-lg-10">
                                                                                             <div th:unless="${message.getSender() == null}">
-                                                                                                <small class="text-secondary"
+                                                                                                <p class="text-secondary"
                                                                                                        th:text="'Sender: ' + ${message.getSender().getFirstName()} + ' '
-                                                                                                    + ${message.getSender().getLastName()}">
-                                                                                                </small>
+                                                                                                    + ${message.getSender().getLastName()}">/p>
+                                                                                                <p class="text-secondary"
+                                                                                                       th:text="'Phone: ' + ${message.getSender().getPhoneNumber()} + ', e-mail: ' + ${message.getSender().getEmail()}"></p>
                                                                                                 <br>
                                                                                             </div>
                                                                                             <small class="text-secondary"
@@ -272,18 +278,21 @@
                                                                                         <div class="col-lg-2">
                                                                                             <a><img src="/images/unread.png"
                                                                                                     title="Message not read"
-                                                                                                    style="max-width: 111px;"></a>
+                                                                                                    style="max-width: 111px;"
+                                                                                                    alt="Message not read"></a>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <hr></hr>
+                                                                                    <hr>
                                                                                 </div>
                                                                                 <h6 th:text="${message.getText()}"></h6>
-                                                                                <br></br>
+                                                                                <br>
                                                                                 <div th:unless="${message.getSender() == null}">
                                                                                     <form th:action="@{/messages/send/{id} (id=${message.getId()})}"
                                                                                           th:method="POST"
                                                                                           class="form-container"
                                                                                           th:object="${sendMessageBindingModel}">
+                                                                                        <label for="senderIdNotArchived"
+                                                                                               class="hidden"></label>
                                                                                         <select class="form-control hidden"
                                                                                                 id="senderIdNotArchived"
                                                                                                 th:field="*{receiverId}">
@@ -291,6 +300,8 @@
                                                                                                     th:value="${message.getSender().getId()}">
                                                                                             </option>
                                                                                         </select>
+                                                                                        <label for="receiverIdNotArchived"
+                                                                                               class="hidden"></label>
                                                                                         <select class="form-control hidden"
                                                                                                 id="receiverIdNotArchived"
                                                                                                 th:field="*{senderId}">
@@ -298,6 +309,8 @@
                                                                                                     th:value="${message.getReceiver().getId()}">
                                                                                             </option>
                                                                                         </select>
+                                                                                        <label for="messageTextNotRead"
+                                                                                               class="hidden"></label>
                                                                                         <input class="info-table small"
                                                                                                type="text"
                                                                                                th:placeholder="'Reply to ' + ${message.getSender().getFirstName()}"
@@ -307,10 +320,10 @@
                                                                                                th:field="*{message}"
                                                                                                th:errorclass="bg-danger">
                                                                                         <div class="col-lg-3">
-                                                                                        <button type="submit"
-                                                                                                class="form-control text-bg-success">
-                                                                                            <small>SEND</small>
-                                                                                        </button>
+                                                                                            <button type="submit"
+                                                                                                    class="form-control text-bg-success">
+                                                                                                <small>SEND</small>
+                                                                                            </button>
                                                                                         </div>
                                                                                     </form>
                                                                                 </div>
@@ -349,7 +362,7 @@
                                                                             <!--END OF MESSAGE BODY-->
                                                                         </div>
                                                                         <div class="col-lg-12">
-                                                                            <br></br>
+                                                                            <br>
                                                                         </div>
                                                                     </div>
                                                                 </div>
