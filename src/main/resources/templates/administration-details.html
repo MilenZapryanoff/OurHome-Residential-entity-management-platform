@@ -49,7 +49,7 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <div class="logo-image">
-                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
                     </div>
                     <!-- ***** Logo End ***** -->
 
@@ -73,7 +73,7 @@
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
                         <li sec:authorize="isAuthenticated()">
-                            <form  id="logout" th:action="@{/logout}" method="POST">
+                            <form id="logout" th:action="@{/logout}" method="POST">
                                 <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
                             </form>
                         </li>
@@ -100,12 +100,10 @@
         </div>
     </div>
 </div>
-</div>
 
 <br><br>
 
 <!-- ***** Residential entity section ***** -->
-
 
 <div class="single-property section">
     <div class="container">
@@ -149,8 +147,9 @@
                     </div>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <div class="button" >
-                        <a class="nav-link active" th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
+                    <div class="button">
+                        <a class="nav-link active"
+                           th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
                             <h5 class="text-danger">Details</h5>
                             <p class="text-secondary">data & settings</p></a>
                     </div>
@@ -158,74 +157,67 @@
             </ul>
         </div>
         <!--end of buttons-->
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="main-content">
-                    <span th:text="'Residential entity: ' + ${residentialEntity.getId()}"
-                          class="category text-black"></span>
-                    <h4 th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>
+
+        <div class="section section-contact">
+            <div class="section administration" id="details">
+                <div class="tabs-content">
+                    <div class="nav-wrapper ">
+                        <br>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <div class="button">
+                                    <a class="nav-link active"
+                                       th:href="@{/administration/details/edit/{id}(id=${residentialEntity.getId()})}">
+                                        <span class="text-light">Settings</span>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div class="section administration" id="details">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="tabs-content">
-                                <div class="row">
-                                    <div class="nav-wrapper ">
-                                        <ul class="nav nav-tabs" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <div class="button">
-                                                <a class="nav-link active" th:href="@{/administration/details/edit/{id}(id=${residentialEntity.getId()})}">
-                                                    <h7 class="text-light">Settings</h7>
-                                                </a>
-                                                </div>
-                                            </li>
-                                            <div class="col-lg-12">
-                                                <br></br>
-                                                <div class="info-table">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="text-black">Residential entity ID: <b
-                                                                    th:text="${residentialEntity.getId()}"></b></li>
-                                                            <li class="text-black">City: <b
-                                                                    th:text="${residentialEntity.getCity().getName()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Street: <b
-                                                                    th:text="${residentialEntity.getStreetName()}"></b>
-                                                            </li>
-                                                            <li class="text-black">№: <b
-                                                                    th:text="${residentialEntity.getStreetNumber()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Entrance: <b
-                                                                    th:text="${residentialEntity.getEntrance()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Number of apartments: <b
-                                                                    th:text="${residentialEntity.getNumberOfApartments()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Manager: <b
-                                                                    th:text="${residentialEntity.getManager().getFirstName()} + ' ' + ${residentialEntity.getManager().getLastName()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Access code hint: <b
-                                                                    th:text="${residentialEntity.getAccessCodeHint()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Registered apartments: <b
-                                                                    th:text="${residentialEntity.getProperties().size()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Registered owners: <b
-                                                                    th:text="${residentialEntity.getResidents().size()}"></b>
-                                                            </li>
-                                                            <li class="text-black">Number of moderators: <b
-                                                                    th:text="${residentialEntity.getModerators().size()}"></b>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+            <div align="center">
+                <h4 class="category text-danger">RESIDENTIAL ENTITY DETAILS</h4>
+            </div>
+            <div class="section administration">
+                <div class="tabs-content">
+                    <div class="nav-wrapper ">
+
+                        <div class="info-table">
+                            <ul>
+                                <li class="text-black">Residential entity ID: <b
+                                        th:text="${residentialEntity.getId()}"></b></li>
+                                <li class="text-black">City: <b
+                                        th:text="${residentialEntity.getCity().getName()}"></b>
+                                </li>
+                                <li class="text-black">Street: <b
+                                        th:text="${residentialEntity.getStreetName()}"></b>
+                                </li>
+                                <li class="text-black">№: <b
+                                        th:text="${residentialEntity.getStreetNumber()}"></b>
+                                </li>
+                                <li class="text-black">Entrance: <b
+                                        th:text="${residentialEntity.getEntrance()}"></b>
+                                </li>
+                                <li class="text-black">Number of apartments: <b
+                                        th:text="${residentialEntity.getNumberOfApartments()}"></b>
+                                </li>
+                                <li class="text-black">Manager: <b
+                                        th:text="${residentialEntity.getManager().getFirstName()} + ' ' + ${residentialEntity.getManager().getLastName()}"></b>
+                                </li>
+                                <li class="text-black">Access code hint: <b
+                                        th:text="${residentialEntity.getAccessCodeHint()}"></b>
+                                </li>
+                                <li class="text-black">Registered apartments: <b
+                                        th:text="${residentialEntity.getProperties().size()}"></b>
+                                </li>
+                                <li class="text-black">Registered owners: <b
+                                        th:text="${residentialEntity.getResidents().size()}"></b>
+                                </li>
+                                <li class="text-black">Number of moderators: <b
+                                        th:text="${residentialEntity.getModerators().size()}"></b>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -233,6 +225,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
