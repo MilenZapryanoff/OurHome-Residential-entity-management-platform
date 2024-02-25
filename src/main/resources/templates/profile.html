@@ -47,9 +47,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index">
-                        <hr>
-                        <img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
+                    </div>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
@@ -69,9 +69,11 @@
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}" class="active">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
-                        <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
-                            <li><a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
-                        </form>
+                        <li sec:authorize="isAuthenticated()">
+                            <form  id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
                     </ul>
                     <a class='menu-trigger'>
@@ -95,6 +97,8 @@
                     </div>
                 </div>
                 <h3>Profile details</h3>
+                <p class="category text-white"
+                   th:text="${userViewModel.getFirstName()} + ' ' + ${userViewModel.getLastName()}"></p>
                 <h5 class="text-danger" th:if="${errorMessage}" th:text="${errorMessage.toString()}">
                 </h5>
             </div>
@@ -114,21 +118,7 @@
             <div class="col-lg-12">
                 <div class="tabs-content">
                     <div class="row">
-                        <div class="nav-wrapper">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="editBtnActive"
-                                            data-bs-toggle="tab"
-                                            data-bs-target="#inbox" type="button"
-                                            role="tab"
-                                            aria-controls="inbox" aria-selected="true"><a
-                                            th:href="@{/profile/edit/{id}(id=${userViewModel.getId()})}">
-                                        <h7 class="text-light">Edit profile</h7>
-                                    </a>
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
+
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="profile" role="tabpanel"
                                  aria-labelledby="profile-tab">
@@ -136,6 +126,7 @@
                                     <div class="col-lg-4">
                                         <div class="info-table">
                                             <ul>
+                                                <li>
                                                 <img th:if="${userViewModel.avatarPath != null}"
                                                      th:src="@{${userViewModel.avatarPath}}" alt="Avatar">
                                                 <img th:unless="${userViewModel.avatarPath != null}"
@@ -144,36 +135,39 @@
                                                       enctype="multipart/form-data" id="avatarForm">
                                                     <input type="file" id="avatarInput" name="avatar" accept="image/*"
                                                            style="display: none;">
-                                                    <div align="center" class="col-lg-12">
-                                                        <button type="button" id="uploadButton"><p>Change picture</p>
+                                                    <div class="col-lg-12 text-center">
+                                                        <button type="button" id="uploadButton"><small class="text-info-emphasis">Change picture</small>
                                                         </button>
+                                                        <div class="buttons">
+                                                            <a th:href="@{/profile/edit/{id}(id=${userViewModel.getId()})}"
+                                                               class="text-danger small">Edit profile</a>
+                                                        </div>
                                                     </div>
                                                     <button type="submit" style="display: none;">Submit</button>
                                                 </form>
-                                                <hr>
+                                                </li>
                                                 <li th:unless="${userViewModel.isValidated()}" class="text-black"><b>Status
                                                     :</b>
-                                                    INACTIVE
+                                                    <p>INACTIVE</p>
                                                 </li>
                                                 <li th:if="${userViewModel.isValidated()}" class="text-black"><b>Status
                                                     :</b>
-                                                    ACTIVE
+                                                    <p>ACTIVE</p>
                                                 </li>
                                                 <li class="text-black"><b>User type:</b>
-                                                    <h7 class="text-dark"
-                                                        th:text="${userViewModel.getRole().getName()}"></h7>
+                                                    <p th:text="${userViewModel.getRole().getName()}"></p>
                                                 </li>
-                                                <li th:if="${userViewModel.getRole().getName()} == 'RESIDENT'" class="text-black"><b>Member of residential entities:</b>
-                                                    <h7 class="text-dark"
-                                                        th:text="${userViewModel.getResidentialEntities().size()}"></h7>
+                                                <li th:if="${userViewModel.getRole().getName()} == 'RESIDENT'"
+                                                    class="text-black"><b>Member of residential entities:</b>
+                                                    <p th:text="${userViewModel.getResidentialEntities().size()}"></p>
                                                 </li>
-                                                <li th:if="${userViewModel.getRole().getName()} == 'RESIDENT'" class="text-black"><b>Registered properties:</b>
-                                                    <h7 class="text-dark"
-                                                        th:text="${userViewModel.getProperties().size()}"></h7>
+                                                <li th:if="${userViewModel.getRole().getName()} == 'RESIDENT'"
+                                                    class="text-black"><b>Registered properties:</b>
+                                                    <p th:text="${userViewModel.getProperties().size()}"></p>
                                                 </li>
-                                                <li th:if="${userViewModel.getRole().getName()} == 'MANAGER'" class="text-black"><b>Managed Residential entities:</b>
-                                                    <h7 class="text-dark"
-                                                        th:text="${@residentialEntityRepository.countByManager_Id(userViewModel.getId())}"></h7>
+                                                <li th:if="${userViewModel.getRole().getName()} == 'MANAGER'"
+                                                    class="text-black"><b>Managed Residential entities:</b>
+                                                    <p th:text="${@residentialEntityRepository.countByManager_Id(userViewModel.getId())}"></p>
                                                 </li>
                                             </ul>
                                         </div>
@@ -182,25 +176,20 @@
                                         <div class="info-table">
                                             <ul>
                                                 <li class="text-black"><b>Firstname :</b>
-                                                    <h7 class="text-dark"
-                                                        th:text="${userViewModel.getFirstName()}"></h7>
+                                                    <p th:text="${userViewModel.getFirstName()}"></p>
                                                 </li>
                                                 <li class="text-black"><b>Lastname :</b>
-                                                    <h7 class="text-dark"
-                                                        th:text="${userViewModel.getLastName()}"></h7>
+                                                    <p th:text="${userViewModel.getLastName()}"></p>
                                                 </li>
 
                                                 <li class="text-black"><b>Username :</b>
-                                                    <h7 class="text-dark"
-                                                        th:text="${userViewModel.getUsername()}"></h7>
+                                                    <p th:text="${userViewModel.getUsername()}"></p>
                                                 </li>
                                                 <li class="text-black"><b>Email :</b>
-                                                    <h7 class="text-dark"
-                                                        th:text="${userViewModel.getEmail()}"></h7>
+                                                    <p th:text="${userViewModel.getEmail()}"></p>
                                                 </li>
                                                 <li class="text-black"><b>Phone number:</b>
-                                                    <h7 class="text-dark"
-                                                        th:text="${userViewModel.getPhoneNumber()}"></h7>
+                                                    <p th:text="${userViewModel.getPhoneNumber()}"></p>
                                                 </li>
                                             </ul>
                                         </div>
@@ -214,19 +203,19 @@
         </div>
     </div>
 </div>
-    <!-- Footer -->
-    <footer th:replace="~{fragments/footer}">
-    </footer>
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
 
-    <!-- Scripts -->
-    <!-- Bootstrap core JavaScript -->
-    <script src="/jquery/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/isotope.min.js"></script>
-    <script src="/js/owl-carousel.js"></script>
-    <script src="/js/counter.js"></script>
-    <script src="/js/custom.js"></script>
-    <script src="/js/avatar.js" defer></script>
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/avatar.js" defer></script>
 
 </body>
 </html>
