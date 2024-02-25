@@ -49,7 +49,7 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <div class="logo-image">
-                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
                     </div>
                     <!-- ***** Logo End ***** -->
 
@@ -73,7 +73,7 @@
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
                         <li sec:authorize="isAuthenticated()">
-                            <form  id="logout" th:action="@{/logout}" method="POST">
+                            <form id="logout" th:action="@{/logout}" method="POST">
                                 <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
                             </form>
                         </li>
@@ -97,21 +97,12 @@
         </div>
     </div>
 </div>
-</div>
-
 <br><br>
 
 <!-- ***** Residential entity section *****-->
-
 <div class="single-property section">
     <div class="container">
         <div class="row">
-            <div class="col-lg-4">
-                <!--                <div class="main-content">-->
-                <!--                    <span th:text="'Property №: ' + ${property.getNumber()}" class="category text-black"></span>-->
-                <!--                    <h4 th:text="${property.getResidentialEntity().getStreetName()} + ' №' + ${property.getResidentialEntity().getStreetNumber()}"></h4>-->
-                <!--                </div>-->
-            </div>
             <div class="section single-property" id="details">
                 <div class="container">
                     <div class="row">
@@ -119,9 +110,9 @@
                             <div class="tabs-content">
                                 <div class="row">
                                     <div class="nav-wrapper ">
-                                        <ul class="nav nav-tabs" role="tablist">
+                                        <div class="nav nav-tabs" role="tablist">
                                             <div class="col-lg-12">
-                                                <br></br>
+                                                <br>
                                                 <div class="messages">
                                                     <div align="center" class="input-content">
                                                         <div class="col-lg-6">
@@ -189,7 +180,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
