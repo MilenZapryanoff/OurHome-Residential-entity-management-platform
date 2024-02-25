@@ -50,7 +50,7 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <div class="logo-image">
-                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
                     </div>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
@@ -64,7 +64,7 @@
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
                         <li sec:authorize="isAuthenticated()">
-                            <form  id="logout" th:action="@{/logout}" method="POST">
+                            <form id="logout" th:action="@{/logout}" method="POST">
                                 <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
                             </form>
                         </li>
@@ -82,66 +82,65 @@
 
 <div class="contact section">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-4 offset-lg-4">
-                <div class="section-heading text-center">
-                    <h6>| Login </h6>
-                    <hr></hr>
-                    <strong th:if="${bad_credentials}" class="text-danger">Wrong username or password!</strong>
-                    <msg th:unless="${bad_credentials}">Please enter your email and password to access your residential
-                        entity
-                    </msg>
-
-                </div>
+        <div class="col-lg-4 offset-lg-4">
+            <div class="section-heading text-center">
+                <h6>| Login </h6>
+                <strong th:if="${bad_credentials}" class="text-danger">Wrong username or password!</strong>
+                <p class="text-white" th:unless="${bad_credentials}">Please enter your email and password to access your
+                    residential
+                    entity
+                </p>
             </div>
         </div>
     </div>
 </div>
 
-<div align="center" class="input-content">
-    <div class="col-lg-4">
-        <form id="input-form"
-              th:method="POST"
-              th:action="@{/login}">
-            <div class="row">
-                <div class="col-lg-12">
-                    <fieldset>
-                        <label for="email"><b>Email</b></label>
-                        <input type="email" name="email"
-                               th:value="${email}"
-                               id="email" placeholder="Enter your email..." pattern="[^ @]*@[^ @]*" required="on">
-                    </fieldset>
-                </div>
-                <div class="col-lg-12">
-                    <fieldset>
-                        <label for="password"><b>Password</b></label>
-                        <input type="password" name="password"
-                               th:value="${password}"
-                               id="password" placeholder="Enter your password..."
-                               required="on">
-                    </fieldset>
-                </div>
-                <div class="col-lg-12">
-                    <fieldset>
+<div class="login">
+    <div align="center" class="input-content">
+        <div class="col-lg-4">
+            <form id="input-form"
+                  th:method="POST"
+                  th:action="@{/login}">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <fieldset>
+                            <label for="email"><b>Email</b></label>
+                            <input type="email" name="email"
+                                   th:value="${email}"
+                                   id="email" placeholder="Enter your email..." pattern="[^ @]*@[^ @]*" required>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12">
+                        <fieldset>
+                            <label for="password"><b>Password</b></label>
+                            <input type="password" name="password"
+                                   th:value="${password}"
+                                   id="password" placeholder="Enter your password..." required>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12">
+                        <fieldset>
                             <label for="rememberMe"><b>Remember me</b></label>
                             <input name="rememberMe" id="rememberMe" type="checkbox">
-                    </fieldset>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12">
+                        <fieldset>
+                            <button type="submit" id="login" class="orange-button">Login</button>
+                        </fieldset>
+                        <fieldset>
+                            <br>
+                            <a class="small" th:href="@{/forgot-password}">Forgot password</a> | <a class="small"
+                                                                                                    th:href="@{/register}">Register
+                            now</a>
+                        </fieldset>
+                    </div>
                 </div>
-                <div class="col-lg-12">
-                    <fieldset>
-                        <button type="submit" id="login" class="orange-button">Login</button>
-                    </fieldset>
-                    <fieldset>
-                        <br>
-                        <a class="small" th:href="@{/forgot-password}">Forgot password</a> | <a class="small"
-                                                                                                th:href="@{/register}">Register
-                        now</a>
-                    </fieldset>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
+
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
