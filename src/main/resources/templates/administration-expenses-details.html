@@ -48,7 +48,8 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <div class="logo-image">
-                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;"
+                                              alt="OurHome"></a>
                     </div>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
@@ -70,7 +71,7 @@
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
                         <li sec:authorize="isAuthenticated()">
-                            <form  id="logout" th:action="@{/logout}" method="POST">
+                            <form id="logout" th:action="@{/logout}" method="POST">
                                 <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
                             </form>
                         </li>
@@ -116,8 +117,10 @@
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <div class="buttons">
-                                        <a class="nav-link" th:href="@{/administration/expenses/{id}(id=${expense.getResidentialEntity().getId()})}">
-                                        <div class="text-light">Back</div></a>
+                                        <a class="nav-link"
+                                           th:href="@{/administration/expenses/{id}(id=${expense.getResidentialEntity().getId()})}">
+                                            <div class="text-light">Back</div>
+                                        </a>
                                     </div>
                                 </li>
                             </ul>
@@ -146,11 +149,10 @@
                                         </div>
                                         <br>
                                     </div>
-                                    <div align="center">
+                                    <div class="text-center">
                                         <br>
                                         <h5>Document</h5>
                                         <p class="text text-secondary">(Supported file types jpg, jpeg, png and gif)</p>
-                                        <br></br>
                                     </div>
 
                                     <div class="col-lg-12">
@@ -169,37 +171,37 @@
                                                                     <button th:if="${expense.picturePath == null}"
                                                                             type="button" id="uploadButton"
                                                                             class="text-info-emphasis">Upload document
-                                                                        <img title="Delete document" src="/images/upload.png" style="max-width: 111px;">
+                                                                        <img title="Delete document"
+                                                                             src="/images/upload.png"
+                                                                             style="width: 111px;" alt="Delete document">
                                                                     </button>
                                                                     <button th:unless="${expense.picturePath == null}"
-                                                                            type="button" id="uploadButton" class="text-info-emphasis">Replace document
-
+                                                                            type="button" id="uploadButton"
+                                                                            class="text-info-emphasis">Replace document
                                                                         <img title="Delete document"
-                                                                             src="/images/replace.png" style="max-width: 111px;">
+                                                                             src="/images/replace.png"
+                                                                             style="width: 111px;" alt="Delete document">
                                                                     </button>
-
                                                                 </div>
-
                                                                 <button type="submit" style="display: none;">Submit
                                                                 </button>
-
                                                             </form>
                                                         </div>
                                                         <div align="center" class="col-lg-6">
-                                                            <h7 th:if="${expense.picturePath == null}">Delete document
-                                                                <img title="Delete document" src="/images/delete_inactive.png"
-                                                                                     style="max-width: 111px;"></h7>
+                                                            <div th:if="${expense.picturePath == null}">Delete document
+                                                                <img title="Delete document"
+                                                                     src="/images/delete_inactive.png"
+                                                                     style="width: 111px;" alt="Delete document"></div>
                                                             <form th:unless="${expense.picturePath == null}"
                                                                   th:action="@{/deleteDocument/{id} (id=${expense.getId()})}"
                                                                   th:method="POST">
-                                                                <select class="form-control hidden"
-                                                                        id="entityIdDeleteResident">
-                                                                </select>
+                                                                <label for="entityIdDeleteResident" class="hidden"></label>
+                                                                <select class="form-control hidden" id="entityIdDeleteResident"></select>
                                                                 <button type="submit" class="text-danger-emphasis">
                                                                     Delete document
                                                                     <img title="Delete document"
                                                                          src="/images/delete.jpg"
-                                                                         style="max-width: 111px;">
+                                                                         style="width: 111px;" alt="Delete document">
                                                                 </button>
                                                             </form>
                                                         </div>
@@ -207,10 +209,9 @@
                                                 </li>
 
                                                 <li class="text-black">
-                                                    <div align="center">
+                                                    <div class="text-center">
                                                         <small th:if="${expense.getPicturePath() == null}"
-                                                               class="text-secondary">No document available for this
-                                                            expense.</small>
+                                                               class="text-secondary">No document available for this expense.</small>
                                                     </div>
                                                     <img th:if="${expense.picturePath != null}"
                                                          th:src="@{${expense.picturePath}}" alt="Document">
