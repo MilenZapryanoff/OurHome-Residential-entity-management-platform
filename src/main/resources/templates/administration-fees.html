@@ -48,9 +48,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index">
-                        <hr>
-                        <img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                    </div>
                     <!-- ***** Logo End ***** -->
 
                     <!-- ***** Menu Start ***** -->
@@ -72,9 +72,11 @@
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
-                        <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
-                            <li><a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
-                        </form>
+                        <li sec:authorize="isAuthenticated()">
+                            <form  id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
                     </ul>
                     <a class='menu-trigger'>
@@ -91,8 +93,10 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Monthly fees
-            </h3>
+            <h3>Monthly fees</h3>
+            <div class="col-lg-12">
+                <span th:text="'Residential entity ID: ' + ${residentialEntity.getId()}"></span>
+            </div>
         </div>
     </div>
 </div>
@@ -108,47 +112,48 @@
         <!--        start of buttons-->
         <div class="tabs-content">
             <ul class="nav nav-tabs">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="summaryButton"><a
-                            th:href="@{/administration}">
-                        <h5>Summary</h5>
-                    </a>
-                    </button>
+                <li class="nav-item">
+                    <div class="button">
+                        <a class="nav-link" th:href="@{/administration}">
+                            <h5>Summary</h5>
+                            <p class="text-secondary">of residential entity</p></a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="button">
+                        <a class="nav-link"
+                           th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
+                            <h5>Owners</h5>
+                            <p class="text-secondary">data & management</p></a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="button">
+                        <a class="nav-link" th:href="@{/administration/property/{id}(id=${residentialEntity.getId()})}">
+                            <h5>Properties</h5>
+                            <p class="text-secondary">data & management</p></a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="button">
+                        <a class="nav-link active" th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
+                            <h5 class="text-danger">Monthly fees</h5>
+                            <p class="text-secondary">calculations & management</p></a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="button">
+                        <a class="nav-link"th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
+                            <h5>Expenses</h5>
+                            <p class="text-secondary">reports & management</p></a>
+                    </div>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="residentsButton"><a
-                            th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Owners</h5>
-                    </a>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="propertiesButton"><a
-                            th:href="@{/administration/property/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Properties</h5>
-                    </a>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="feesButton"><a
-                            th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Monthly fees</h5>
-                    </a>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="expensesButton"><a
-                            th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Expenses</h5>
-                    </a>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="detailsButton"><a
-                            th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Details</h5>
-                    </a>
-                    </button>
+                    <div class="button" >
+                        <a class="nav-link" th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
+                            <h5>Details</h5>
+                            <p class="text-secondary">data & settings</p></a>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -170,23 +175,13 @@
                             <div class="tabs-content">
                                 <div class="row">
                                     <div class="nav-wrapper ">
-                                        <ul class="nav nav-tabs" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="inbox-tab"
-                                                        data-bs-toggle="tab"
-                                                        data-bs-target="#inbox" type="button"
-                                                        role="tab"
-                                                        aria-controls="inbox" aria-selected="true"><a
-                                                        th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
-                                                    <h7 class="text-light">Edit monthly fees</h7>
+                                        <ul class="nav nav-tabs">
+                                            <div class="button">
+                                                <a class="nav-link active"
+                                                   th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
+                                                    <h7 class="text-light">Modify monthly fees</h7>
                                                 </a>
-                                                </button>
-                                                <button class="nav-link" id="back"><a
-                                                        th:href="@{/administration}">
-                                                    <h7 class="text-light">Back</h7>
-                                                </a>
-                                                </button>
-                                            </li>
+                                            </div>
                                             <div class="col-lg-12">
                                                 <br></br>
                                                 <div class="row">
