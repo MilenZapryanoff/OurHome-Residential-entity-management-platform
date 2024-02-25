@@ -48,7 +48,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index"><hr><img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
+                    </div>
                     <!-- ***** Logo End ***** -->
 
                     <!-- ***** Menu Start ***** -->
@@ -63,16 +65,18 @@
                                   data-speed="1000"></samp>
                         </small>
                         <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
-                                                                                 class="active">Administration</a>
+                                                                     class="active">Administration</a>
                         </li>
                         <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
                             property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
-                        <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
-                            <li><a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
-                        </form>
+                        <li sec:authorize="isAuthenticated()">
+                            <form id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
                     </ul>
                     <a class='menu-trigger'>
@@ -89,11 +93,12 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Property details
-            </h3>
+            <h3>Properties data</h3>
+            <div class="col-lg-12">
+                <span th:text="'Residential entity ID: ' + ${residentialEntity.getId()}"></span>
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 <br><br>
@@ -104,327 +109,322 @@
         <!--        start of buttons-->
         <div class="tabs-content">
             <ul class="nav nav-tabs">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="summaryButton"><a
-                            th:href="@{/administration}">
-                        <h5>Summary</h5>
-                    </a>
-                    </button>
+                <li class="nav-item">
+                    <div class="button">
+                        <a class="nav-link" th:href="@{/administration}">
+                            <h5>Summary</h5>
+                            <p class="text-secondary">of residential entity</p></a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="button">
+                        <a class="nav-link"
+                           th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
+                            <h5>Owners</h5>
+                            <p class="text-secondary">data & management</p></a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="button">
+                        <a class="nav-link active"
+                           th:href="@{/administration/property/{id}(id=${residentialEntity.getId()})}">
+                            <h5 class="text-danger">Properties</h5>
+                            <p class="text-secondary">data & management</p></a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="button">
+                        <a class="nav-link" th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
+                            <h5>Monthly fees</h5>
+                            <p class="text-secondary">calculations & management</p></a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="button">
+                        <a class="nav-link" th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
+                            <h5>Expenses</h5>
+                            <p class="text-secondary">reports & management</p></a>
+                    </div>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="residentsButton"><a
-                            th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Owners</h5>
-                    </a>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="propertiesButton"><a
-                            th:href="@{/administration/property/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Properties</h5>
-                    </a>
-                    </button>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="feesButton"><a
-                            th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Monthly fees</h5>
-                    </a>
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="expensesButton"><a
-                            th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Expenses</h5>
-                    </a>
-                    </button>
-                </li>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="detailsButton"><a
-                            th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Details</h5>
-                    </a>
-                    </button>
+                    <div class="button">
+                        <a class="nav-link" th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
+                            <h5>Details</h5>
+                            <p class="text-secondary">data & settings</p></a>
+                    </div>
                 </li>
             </ul>
         </div>
-        <!--        end of buttons-->
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="main-content">
-                    <span th:text="'Residential entity: ' + ${residentialEntity.getId()}"
-                          class="category text-black"></span>
-                    <h4 th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>
-                </div>
+        <!--end of buttons-->
+        <div class="section-administration-owners">
+            <div class="text-center">
+                <h4 class="category text-danger">LIST OF PROPERTIES</h4>
             </div>
             <div class="section administration" id="details">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="tabs-content">
-                                <div class="row">
-                                    <p th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} == 0"
-                                       align="center">No properties available</p>
-                                    <div class="nav-wrapper">
-                                        <ul class="nav nav-tabs" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="residents"><a
-                                                        th:href="@{/administration}">
-                                                    <h7 class="text-light">Back</h7>
-                                                </a>
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="Properties" role="tabpanel"
-                                             aria-labelledby="properties-tab-tab">
-                                            <div class="row">
-                                                <!--Pending registrations section-->
-                                                <table th:if="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 0">
-                                                    <tr align="center">
-                                                        <th>Property №</th>
-                                                        <th>Owner</th>
-                                                        <th>Floor</th>
-                                                        <th>Number of adults</th>
-                                                        <th>Number of children</th>
-                                                        <th>Number of pets</th>
-                                                        <th>Property habitable</th>
-                                                        <th>Approve</th>
-                                                        <th>Decline</th>
-                                                    </tr>
-                                                    <div class="main-content">
+                                <p th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} == 0"
+                                   class="text-center">No properties available</p>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="Properties" aria-labelledby="properties-tab-tab">
+                                        <!--Pending registrations section-->
+                                        <div th:if="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                             class="main-content">
                                                             <span th:if="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} == 1"
                                                                   th:text="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Pending approval'"
                                                                   class="category text-bg-secondary"></span>
-                                                        <span th:if="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 1"
-                                                              th:text="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Pending approvals'"
-                                                              class="category text-bg-secondary"></span>
-                                                        <br></br>
-                                                    </div>
-                                                    <hr>
-                                                    <tr align="center"
-                                                        th:each="property: ${@propertyRepository.findNotValidatedProperties(residentialEntity.getId())}">
-                                                        <td th:text="${property.getNumber()}"></td>
-                                                        <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
-                                                        <td th:text="${property.getFloor()}"></td>
-                                                        <td th:text="${property.getNumberOfAdults()}"></td>
-                                                        <td th:text="${property.getNumberOfChildren()}"></td>
-                                                        <td th:text="${property.getNumberOfPets()}"></td>
-                                                        <td th:if="${property.isNotHabitable()}">
-                                                            <img title="Property is not habitable"
-                                                                 src="/images/check_no.png"
-                                                                 style="max-width: 110px;">
-                                                        </td>
-                                                        <td th:unless="${property.isNotHabitable()}"><img
-                                                                title="Property is habitable"
-                                                                src="/images/check_yes.png"
-                                                                style="max-width: 110px;"></td>
-                                                        <td>
-                                                            <form class="form-container"
-                                                                  th:action="@{/administration/property/approve/{id} (id=${property.getId()})}"
-                                                                  th:method="POST"
-                                                                  th:object="${propertyManageBindingModel}">
-                                                                <select class="form-control hidden"
-                                                                        id="entityId-approve"
-                                                                        th:field="*{entityId}">
-                                                                    <option
-                                                                            th:value="${residentialEntity.getId()}">
-                                                                    </option>
-                                                                </select>
-                                                                <button type="submit">
-                                                                    <img title="Approve property"
-                                                                         src="/images/approve.jpg"
-                                                                         style="max-width: 160px;"></button>
-                                                            </form>
-                                                        </td>
-                                                        <td>
-                                                            <form class="form-container"
-                                                                  th:action="@{/administration/property/reject/{id} (id=${property.getId()})}"
-                                                                  th:method="POST"
-                                                                  th:object="${propertyManageBindingModel}">
-                                                                <select class="form-control hidden"
-                                                                        id="entityId-reject"
-                                                                        th:field="*{entityId}">
-                                                                    <option
-                                                                            th:value="${residentialEntity.getId()}">
-                                                                    </option>
-                                                                </select>
-                                                                <button type="submit">
-                                                                    <img title="Reject property"
-                                                                         src="/images/reject.jpg"
-                                                                         style="max-width: 160px;"></button>
-                                                            </form>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                                <!--Active registrations section-->
-                                                <div th:if="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
-                                                     class="section administration" id="verified">
-                                                    <div class="row">
-                                                        <table>
-                                                            <tr align="center">
-                                                                <th>Property №</th>
-                                                                <th>Owner</th>
-                                                                <th>Username</th>
-                                                                <th>Floor</th>
-                                                                <th>Number of adults</th>
-                                                                <th>Number of children</th>
-                                                                <th>Number of pets</th>
-                                                                <th>Property habitable</th>
-                                                                <th>Edit</th>
-                                                                <th>Delete</th>
-                                                            </tr>
-                                                            <div class="main-content">
+                                            <span th:if="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 1"
+                                                  th:text="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Pending approvals'"
+                                                  class="category text-bg-secondary"></span>
+                                            <hr>
+                                            <table class="text-center">
+                                                <tr>
+                                                    <th>Property №</th>
+                                                    <th>Owner</th>
+                                                    <th>Floor</th>
+                                                    <th>Number of adults</th>
+                                                    <th>Number of children</th>
+                                                    <th>Number of pets</th>
+                                                    <th>Property habitable</th>
+                                                    <th>Approve</th>
+                                                    <th>Decline</th>
+                                                </tr>
+                                                <tr th:each="property: ${@propertyRepository.findNotValidatedProperties(residentialEntity.getId())}">
+                                                    <td th:text="${property.getNumber()}"></td>
+                                                    <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
+                                                    <td th:text="${property.getFloor()}"></td>
+                                                    <td th:text="${property.getNumberOfAdults()}"></td>
+                                                    <td th:text="${property.getNumberOfChildren()}"></td>
+                                                    <td th:text="${property.getNumberOfPets()}"></td>
+                                                    <td th:if="${property.isNotHabitable()}">
+                                                        <img title="Property is not habitable" src="/images/check_no.png"
+                                                             style="width: 110px;" alt="Property is not habitable">
+                                                    </td>
+                                                    <td th:unless="${property.isNotHabitable()}">
+                                                        <img title="Property is habitable" src="/images/check_yes.png"
+                                                             style="width: 110px;" alt="Property is habitable">
+                                                    </td>
+                                                    <td>
+                                                        <form class="form-container"
+                                                              th:action="@{/administration/property/approve/{id} (id=${property.getId()})}"
+                                                              th:method="POST"
+                                                              th:object="${propertyManageBindingModel}">
+                                                            <label for="entityId-approve" class="hidden"></label>
+                                                            <select class="form-control hidden" id="entityId-approve"
+                                                                    th:field="*{entityId}">
+                                                                <option th:value="${residentialEntity.getId()}"></option>
+                                                            </select>
+                                                            <button type="submit">
+                                                                <img title="Approve property" src="/images/approve.jpg"
+                                                                     style="width: 150px;" alt="Approve property">
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                    <td>
+                                                        <form class="form-container"
+                                                              th:action="@{/administration/property/reject/{id} (id=${property.getId()})}"
+                                                              th:method="POST"
+                                                              th:object="${propertyManageBindingModel}">
+                                                            <label for="entityId-reject" class="hidden"></label>
+                                                            <select class="form-control hidden" id="entityId-reject"
+                                                                    th:field="*{entityId}">
+                                                                <option th:value="${residentialEntity.getId()}"></option>
+                                                            </select>
+                                                            <button type="submit">
+                                                                <img title="Reject property" src="/images/reject.jpg"
+                                                                     style="width: 150px;" alt="Reject property">
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <!--Active registrations section-->
+                                        <div th:if="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                             class="section administration" id="verified">
+                                            <div class="row">
+                                                <div class="main-content">
                                                             <span th:if="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} == 1"
                                                                   th:text="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Active regisration'"
                                                                   class="category text-bg-success"></span>
-                                                                <span th:if="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 1"
-                                                                      th:text="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Active regisrations'"
-                                                                      class="category text-bg-success"></span>
-                                                                <br></br>
-                                                            </div>
-                                                            <hr>
-                                                            <tr align="center"
-                                                                th:each="property: ${@propertyRepository.findValidatedProperties(residentialEntity.getId())}">
-                                                                <td th:text="${property.getNumber()}"></td>
-                                                                <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
-                                                                <td th:text="${property.getOwner().getUsername()}"></td>
-                                                                <td th:text="${property.getFloor()}"></td>
-                                                                <td th:text="${property.getNumberOfAdults()}"></td>
-                                                                <td th:text="${property.getNumberOfChildren()}"></td>
-                                                                <td th:text="${property.getNumberOfPets()}"></td>
-                                                                <td th:if="${property.isNotHabitable()}">
-                                                                    <img title="Property is not habitable"
-                                                                         src="/images/check_no.png"
-                                                                         style="max-width: 110px;">
-                                                                </td>
-                                                                <td th:unless="${property.isNotHabitable()}"><img
-                                                                        title="Property is habitable"
-                                                                        src="/images/check_yes.png"
-                                                                        style="max-width: 110px;"></td>
-                                                                <td>
-                                                                    <form class="form-container"
-                                                                          th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
-                                                                          th:object="${propertyManageBindingModel}">
-                                                                        <select class="form-control hidden" id="activeEntityIdEdit"
-                                                                                th:field="*{entityId}">
-                                                                            <option
-                                                                                    th:value="${residentialEntity.getId()}"
-                                                                                    th:text="${residentialEntity.getId()}">
-                                                                            </option>
-                                                                        </select>
-                                                                        <button type="submit">
-                                                                            <img title="Edit property"
-                                                                                 src="/images/edit.png"
-                                                                                 style="max-width: 111px;"></button>
-                                                                    </form>
-                                                                </td>
-                                                                <td>
-                                                                    <form class="form-container"
-                                                                          th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"
-                                                                          th:method="POST"
-                                                                          th:object="${propertyManageBindingModel}">
-                                                                        <select class="form-control hidden"
-                                                                                id="activeEntityIdDelete"
-                                                                                th:field="*{entityId}">
-                                                                            <option
-                                                                                    th:value="${residentialEntity.getId()}"
-                                                                                    th:text="${residentialEntity.getId()}">
-                                                                            </option>
-                                                                        </select>
-                                                                        <button type="submit">
-                                                                            <img title="Delete property"
-                                                                                 src="/images/delete.jpg"
-                                                                                 style="max-width: 111px;"></button>
-                                                                    </form>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
+                                                    <span th:if="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 1"
+                                                          th:text="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Active regisrations'"
+                                                          class="category text-bg-success"></span>
+                                                    <hr>
                                                 </div>
-                                                <!--Rejected registrations section-->
-                                                <div th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
-                                                     class="section administration" id="rejected">
-                                                    <div class="row">
-                                                        <table>
-                                                            <tr align="center">
-                                                                <th class="text-black">Property №</th>
-                                                                <th class="text-black">Owner</th>
-                                                                <th class="text-black">Floor</th>
-                                                                <th class="text-black">Number of adults</th>
-                                                                <th class="text-black">Number of children</th>
-                                                                <th class="text-black">Number of pets</th>
-                                                                <th class="text-black">Property habitable</th>
-                                                                <th class="text-black">Edit</th>
-                                                                <th class="text-black">Delete</th>
-                                                            </tr>
-                                                            <div class="main-content">
+                                            </div>
+                                            <table class="text-center">
+                                                <tr>
+                                                    <th>Property №</th>
+                                                    <th>Owner</th>
+                                                    <th>Username</th>
+                                                    <th>Floor</th>
+                                                    <th>Number of adults</th>
+                                                    <th>Number of children</th>
+                                                    <th>Number of pets</th>
+                                                    <th>Property habitable</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                                <tr th:each="property: ${@propertyRepository.findValidatedProperties(residentialEntity.getId())}">
+                                                    <td th:text="${property.getNumber()}"></td>
+                                                    <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
+                                                    <td th:text="${property.getOwner().getUsername()}"></td>
+                                                    <td th:text="${property.getFloor()}"></td>
+                                                    <td th:text="${property.getNumberOfAdults()}"></td>
+                                                    <td th:text="${property.getNumberOfChildren()}"></td>
+                                                    <td th:text="${property.getNumberOfPets()}"></td>
+                                                    <td th:if="${property.isNotHabitable()}">
+                                                        <img title="Property is not habitable"
+                                                             src="/images/check_no.png"
+                                                             style="width: 110px;"
+                                                             alt="Property is not habitable">
+                                                    </td>
+                                                    <td th:unless="${property.isNotHabitable()}"><img
+                                                            title="Property is habitable"
+                                                            src="/images/check_yes.png"
+                                                            style="width: 110px;"
+                                                            alt="Property is habitable"></td>
+                                                    <td>
+                                                        <form class="form-container"
+                                                              th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
+                                                              th:object="${propertyManageBindingModel}">
+                                                            <label for="activeEntityIdEdit"
+                                                                   class="hidden"></label>
+                                                            <select class="form-control hidden"
+                                                                    id="activeEntityIdEdit"
+                                                                    th:field="*{entityId}">
+                                                                <option
+                                                                        th:value="${residentialEntity.getId()}"
+                                                                        th:text="${residentialEntity.getId()}">
+                                                                </option>
+                                                            </select>
+                                                            <button type="submit">
+                                                                <img title="Edit property"
+                                                                     src="/images/edit.png"
+                                                                     style="width: 111px;"
+                                                                     alt="Edit property"></button>
+                                                        </form>
+                                                    </td>
+                                                    <td>
+                                                        <form class="form-container"
+                                                              th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"
+                                                              th:method="POST"
+                                                              th:object="${propertyManageBindingModel}">
+                                                            <label for="activeEntityIdDelete"
+                                                                   class="hidden"></label>
+                                                            <select class="form-control hidden"
+                                                                    id="activeEntityIdDelete"
+                                                                    th:field="*{entityId}">
+                                                                <option
+                                                                        th:value="${residentialEntity.getId()}"
+                                                                        th:text="${residentialEntity.getId()}">
+                                                                </option>
+                                                            </select>
+                                                            <button type="submit">
+                                                                <img title="Delete property"
+                                                                     src="/images/delete.jpg"
+                                                                     style="width: 111px;"
+                                                                     alt="Delete property"></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <!--Rejected registrations section-->
+                                        <div th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                             class="section administration" id="rejected">
+                                            <div class="row">
+                                                <div class="main-content">
                                                             <span th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} == 1"
                                                                   th:text="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Rejected regisration'"
                                                                   class="category text-bg-danger"></span>
-                                                                <span th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 1"
-                                                                      th:text="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Rejected     regisrations'"
-                                                                      class="category text-bg-danger"></span>
-                                                                <br></br>
-                                                            </div>
-                                                            <hr>
-                                                            <tr align="center"
-                                                                th:each="property: ${@propertyRepository.findRejectedProperties(residentialEntity.getId())}">
-                                                                <td class="text-black"
-                                                                    th:text="${property.getNumber()}"></td>
-                                                                <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
-                                                                <td class="text-black" th:text="${property.getFloor()}"></td>
-                                                                <td class="text-black" th:text="${property.getNumberOfAdults()}"></td>
-                                                                <td class="text-black" th:text="${property.getNumberOfChildren()}"></td>
-                                                                <td class="text-black" th:text="${property.getNumberOfPets()}"></td>
-                                                                <td th:if="${property.isNotHabitable()}">
-                                                                    <img title="Property is not habitable" src="/images/check_no.png" style="max-width: 110px;"></td>
-                                                                <td th:unless="${property.isNotHabitable()}"><img
-                                                                        title="Property is habitable"
-                                                                        src="/images/check_yes.png"
-                                                                        style="max-width: 110px;"></td>
-                                                                <td>
-                                                                    <form class="form-container"
-                                                                          th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
-                                                                          th:object="${propertyManageBindingModel}">
-                                                                        <select class="form-control hidden" id="activeEntityIdEdit"
-                                                                                th:field="*{entityId}">
-                                                                            <option
-                                                                                    th:value="${residentialEntity.getId()}"
-                                                                                    th:text="${residentialEntity.getId()}">
-                                                                            </option>
-                                                                        </select>
-                                                                        <button type="submit">
-                                                                            <img title="Edit property"
-                                                                                 src="/images/edit.png"
-                                                                                 style="max-width: 111px;"></button>
-                                                                    </form>
-                                                                </td>
-                                                                <td class="text-black">
-                                                                    <form class="form-container"
-                                                                          th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"
-                                                                          th:method="POST"
-                                                                          th:object="${propertyManageBindingModel}">
-                                                                        <select class="form-control hidden"
-                                                                                id="rejectedEntityIdDelete"
-                                                                                th:field="*{entityId}">
-                                                                            <option
-                                                                                    th:value="${residentialEntity.getId()}"
-                                                                                    th:text="${residentialEntity.getId()}">
-                                                                            </option>
-                                                                        </select>
-                                                                        <button type="submit">
-                                                                            <img title="Delete property"
-                                                                                 src="/images/delete.jpg"
-                                                                                 style="max-width: 110px;"></button>
-                                                                    </form>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
+                                                    <span th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 1"
+                                                          th:text="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} + ' Rejected     regisrations'"
+                                                          class="category text-bg-danger"></span>
+                                                    <hr>
                                                 </div>
                                             </div>
+                                            <table class="text-center">
+                                                <tr>
+                                                    <th class="text-black">Property №</th>
+                                                    <th class="text-black">Owner</th>
+                                                    <th class="text-black">Floor</th>
+                                                    <th class="text-black">Number of adults</th>
+                                                    <th class="text-black">Number of children</th>
+                                                    <th class="text-black">Number of pets</th>
+                                                    <th class="text-black">Property habitable</th>
+                                                    <th class="text-black">Edit</th>
+                                                    <th class="text-black">Delete</th>
+                                                </tr>
+                                                <tr class="text-center"
+                                                    th:each="property: ${@propertyRepository.findRejectedProperties(residentialEntity.getId())}">
+                                                    <td class="text-black"
+                                                        th:text="${property.getNumber()}"></td>
+                                                    <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
+                                                    <td class="text-black"
+                                                        th:text="${property.getFloor()}"></td>
+                                                    <td class="text-black"
+                                                        th:text="${property.getNumberOfAdults()}"></td>
+                                                    <td class="text-black"
+                                                        th:text="${property.getNumberOfChildren()}"></td>
+                                                    <td class="text-black"
+                                                        th:text="${property.getNumberOfPets()}"></td>
+                                                    <td th:if="${property.isNotHabitable()}">
+                                                        <img title="Property is not habitable"
+                                                             src="/images/check_no.png"
+                                                             style="width: 110px;"
+                                                             alt="Property is not habitable"></td>
+                                                    <td th:unless="${property.isNotHabitable()}"><img
+                                                            title="Property is habitable"
+                                                            src="/images/check_yes.png"
+                                                            style="width: 110px;"
+                                                            alt="Property is habitable"></td>
+                                                    <td>
+                                                        <form class="form-container"
+                                                              th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
+                                                              th:object="${propertyManageBindingModel}">
+                                                            <select class="form-control hidden"
+                                                                    id="activeEntityIdEdit"
+                                                                    th:field="*{entityId}">
+                                                                <option
+                                                                        th:value="${residentialEntity.getId()}"
+                                                                        th:text="${residentialEntity.getId()}">
+                                                                </option>
+                                                            </select>
+                                                            <button type="submit">
+                                                                <img title="Edit property"
+                                                                     src="/images/edit.png"
+                                                                     style="width: 111px;"
+                                                                     alt="Edit property"></button>
+                                                        </form>
+                                                    </td>
+                                                    <td class="text-black">
+                                                        <form class="form-container"
+                                                              th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"
+                                                              th:method="POST"
+                                                              th:object="${propertyManageBindingModel}">
+                                                            <label for="rejectedEntityIdDelete"
+                                                                   class="hidden"></label>
+                                                            <select class="form-control hidden"
+                                                                    id="rejectedEntityIdDelete"
+                                                                    th:field="*{entityId}">
+                                                                <option
+                                                                        th:value="${residentialEntity.getId()}"
+                                                                        th:text="${residentialEntity.getId()}">
+                                                                </option>
+                                                            </select>
+                                                            <button type="submit">
+                                                                <img title="Delete property"
+                                                                     src="/images/delete.jpg"
+                                                                     style="width: 110px;"
+                                                                     alt="Delete property"></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
