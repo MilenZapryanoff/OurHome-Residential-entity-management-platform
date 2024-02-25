@@ -48,7 +48,9 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/index"><hr><img src="/images/OurHome.png" style="max-width: 220px;"></br></a>
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
+                    </div>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
@@ -68,9 +70,11 @@
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}" class="active">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
-                        <form sec:authorize="isAuthenticated()" id="logout" th:action="@{/logout}" method="POST">
-                            <li><a onclick="logout.submit()" style="cursor: pointer;">Logout</a></li>
-                        </form>
+                        <li sec:authorize="isAuthenticated()">
+                            <form  id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
                     </ul>
                     <a class='menu-trigger'>
@@ -114,7 +118,7 @@
                     <div class="col-lg-12">
                         <div class="item email">
                             <img src="/images/email-icon.png" alt="" style="max-width: 52px;">
-                            <h7><b>office.ourhome@gmail.com</b><br><span>Business Email</span></h7>
+                            <div><b>office.ourhome@gmail.com</b><br><span>Business Email</span></div>
                         </div>
                     </div>
                 </div>
@@ -127,7 +131,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <fieldset>
-                                <label for="name">Full Name</label>
+                                <label for="name">Full name</label>
                                 <small th:if="${#fields.hasErrors('name')}"
                                        th:errors="*{name}"
                                        class="text-danger">Name error message</small>
@@ -192,8 +196,8 @@
             <div class="col-lg-12">
                 <div id="map">
                     <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA4dMp6ervBxmwa9av_R4vRj-RhYx22TGg&q=Software University,Sofia,Bulgaria"
-                            width="100%" height="500px" frameborder="0"
-                            style="border:0; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);"
+                            width="100%" height="500px"
+                            style="border:0; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);"
                             allowfullscreen=""></iframe>
                 </div>
             </div>
