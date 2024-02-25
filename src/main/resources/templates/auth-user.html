@@ -50,20 +50,22 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <div class="logo-image">
-                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;"
+                                              alt="OurHome"></img></a>
                     </div>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                         <li><a th:href="@{/}">Home</a></li>
-                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a></li>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a>
+                        </li>
                         <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="active">Register</a>
                         </li>
                         <li sec:authorize="isAuthenticated()">
-                            <form  id="logout" th:action="@{/logout}" method="POST">
+                            <form id="logout" th:action="@{/logout}" method="POST">
                                 <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
                             </form>
                         </li>
@@ -79,69 +81,67 @@
     </div>
 </header>
 
-
 <div class="contact section">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-4 offset-lg-4">
-                <div class="section-heading text-center">
-                    <h6>| PRE-AUTHENTICATION </h6>
-                    <hr>
-                    <msg>In order to register in your residential entity you have to provide a valid 8-digit Residential
-                        ID and Access code.
-                        If you do not have this information, you should contact your residential entity manager
-                    </msg>
-                </div>
+        <div class="col-lg-4 offset-lg-4">
+            <div class="section-heading text-center">
+                <h6>| PRE-AUTHENTICATION </h6>
+                <p class="text-light">In order to register in your residential entity you have to provide a valid
+                    8-digit Residential
+                    ID and Access code.
+                    If you do not have this information, you should contact your residential entity manager
+                </p>
             </div>
         </div>
     </div>
 </div>
-
-<div align="center" class="input-content">
-    <div class="col-lg-4">
-        <form id="input-form"
-              th:method="POST"
-              th:action="@{/register/auth}"
-              th:object="${userAuthBindingModel}">
-            <div class="row">
-                <div class="col-lg-12">
-                    <small th:if="${badResidentialEntity}" class="text-danger">Wrong residential entity ID or Access code!<br></br></small>
-                    <fieldset>
-                        <label for="residentialId"><b>Residential entity ID</b></label>
-                        <br>
-                        <small th:if="${#fields.hasErrors('residentialId')}"
-                               th:errors="*{residentialId}" class="text-danger">Residential Id error message</small>
-                        <input type="text" id="residentialId" placeholder="Enter residential ID..." autocomplete="on"
-                               required
-                               th:field="*{residentialId}"
-                               th:errorclass="bg-danger">
-                    </fieldset>
-                    <fieldset>
-                        <label for="residentialAccessCode"><b>Residential entity Access code</b></label>
-                        <br>
-                        <small th:if="${#fields.hasErrors('residentialAccessCode')}"
-                               th:errors="*{residentialAccessCode}" class="text-danger">Validation code error
-                            message</small>
-                        <input type="password" id="residentialAccessCode" placeholder="Enter Validation code..."
-                               autocomplete="on" required
-                               th:field="*{residentialAccessCode}"
-                               th:errorclass="bg-danger">
-                    </fieldset>
+<div class="register">
+    <div align="center" class="input-content">
+        <div class="col-lg-4">
+            <form id="input-form"
+                  th:method="POST"
+                  th:action="@{/register/auth}"
+                  th:object="${userAuthBindingModel}">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <small th:if="${badResidentialEntity}" class="text-danger">Wrong residential entity ID or Access
+                            code!<br></small>
+                        <fieldset>
+                            <label for="residentialId"><b>Residential entity ID</b></label>
+                            <br>
+                            <small th:if="${#fields.hasErrors('residentialId')}"
+                                   th:errors="*{residentialId}" class="text-danger">Residential Id error message</small>
+                            <input type="text" id="residentialId" placeholder="Enter residential ID..."
+                                   autocomplete="on"
+                                   required
+                                   th:field="*{residentialId}"
+                                   th:errorclass="bg-danger">
+                        </fieldset>
+                        <fieldset>
+                            <label for="residentialAccessCode"><b>Residential entity Access code</b></label>
+                            <br>
+                            <small th:if="${#fields.hasErrors('residentialAccessCode')}"
+                                   th:errors="*{residentialAccessCode}" class="text-danger">Validation code error
+                                message</small>
+                            <input type="password" id="residentialAccessCode" placeholder="Enter Validation code..."
+                                   autocomplete="on" required
+                                   th:field="*{residentialAccessCode}"
+                                   th:errorclass="bg-danger">
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12">
+                        <fieldset>
+                            <button th:href="@{/register/auth/userEntity}" type="submit" id="form-submit"
+                                    class="orange-button">Next step
+                            </button>
+                        </fieldset>
+                    </div>
                 </div>
-
-                <div class="col-lg-12">
-                    <fieldset>
-                        <button th:href="@{/register/auth/userEntity}" type="submit" id="form-submit"
-                                class="orange-button">Next step
-                        </button>
-                    </fieldset>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-
-
 </div>
+
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
