@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity(name ="property_fees")
+@Entity(name = "property_fees")
 public class PropertyFee {
 
     @Id
@@ -23,6 +23,9 @@ public class PropertyFee {
 
     @Column
     private boolean isPaid;
+
+    @Column
+    private boolean isManual;
 
     @Column(length = 45)
     private String description;
@@ -84,5 +87,13 @@ public class PropertyFee {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isManual() {
+        return isManual;
+    }
+
+    public void setManual(boolean manual) {
+        isManual = manual;
     }
 }
