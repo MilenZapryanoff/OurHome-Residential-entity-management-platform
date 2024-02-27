@@ -1,6 +1,6 @@
 <h1> OurHome - Residential entities management platform</h1>
 
-<h3>My first web application build with Java and Spring Boot</h3>
+<h3>Web application build with Java and Spring Boot</h3>
 
 <img src="https://i.ibb.co/DWyzPPN/01.jpg">
 
@@ -34,6 +34,7 @@ A platform that allows the registration of both home owners and residential enti
   <li>On next stage admin will be able to update and delete all managers in the platform via user interface and a news feed will be created.</li>
   
   UPDATE:
+  <li>v.1.24.0227 - Additional menus added. Global fee functionality added - now manager can manually create a monthly fee for all the entities in a residential entity. No need to do that one by one anymore. If fee is added manually there will be additional indicator in the list of property fees</li>
   <li>v.1.24.0225 - Some functionality improvemets and code rafactoring have been done with the newest version of the app.</li>
   <li>All registered users can now upload their own pictures/avatars (max 3MB) and also edit personal data and password.</li>
   <li>Monthly fees section added. 1. Every new property monthly fee is calculated and set automatically with registration. 2. Property monthly fee is automatically re-calculated when a change of the living in the property people/pets occures. 3. When a manager applies a change to monthly fees, all properties monthly fees are automatically re-calculated.</li>
