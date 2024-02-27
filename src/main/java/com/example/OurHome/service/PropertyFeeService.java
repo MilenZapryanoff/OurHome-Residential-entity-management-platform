@@ -2,7 +2,9 @@ package com.example.OurHome.service;
 
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyFee;
+import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddGlobalFeeBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
 import com.example.OurHome.model.events.PropertyApprovalEvent;
 
@@ -18,4 +20,5 @@ public interface PropertyFeeService {
     void deleteFee(PropertyFee propertyFee);
     void addFee(Property property, PropertyFeeAddBindingModel propertyFeeAddBindingModel);
     void changePaymentStatus(PropertyFee propertyFee);
+    boolean addGlobalFee(ResidentialEntity residentialEntity, PropertyFeeAddGlobalFeeBindingModel propertyFeeAddGlobalFeeBindingModel);
 }
