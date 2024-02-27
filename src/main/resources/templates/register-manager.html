@@ -49,19 +49,21 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <div class="logo-image">
-                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></img></a>
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
                     </div>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                         <li><a th:href="@{/}">Home</a></li>
-                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a></li>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a>
+                        </li>
                         <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
-                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="active">Register</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="active">Register</a>
+                        </li>
                         <li sec:authorize="isAuthenticated()">
-                            <form  id="logout" th:action="@{/logout}" method="POST">
+                            <form id="logout" th:action="@{/logout}" method="POST">
                                 <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
                             </form>
                         </li>
@@ -83,29 +85,27 @@
             <div class="col-lg-4 offset-lg-4">
                 <div class="section-heading text-center">
                     <h6>| Register </h6>
-                    <hr></hr>
-                    <msg>Complete your registration to access your residential entity
-                    </msg>
+                    <p class="text-white">Complete your registration to access your residential entity</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div align="center" class="input-content">
-    <div class="col-lg-4">
-        <form id="input-form"
-              th:method="POST"
-              th:action="@{/register/manager}"
-              th:object="${managerRegisterBindingModel}">
-
-            <div class="col-lg-12">
+<div class="register">
+    <div align="center" class="input-content">
+        <div class="col-lg-4">
+            <form id="input-form"
+                  th:method="POST"
+                  th:action="@{/register/manager}"
+                  th:object="${managerRegisterBindingModel}">
                 <fieldset>
                     <label for="firstName"><b>First Name</b></label>
                     <br>
                     <small th:if="${#fields.hasErrors('firstName')}"
                            th:errors="*{firstName}" class="text-danger">First name error message</small>
-                    <input type="text" id="firstName" placeholder="Enter your first Name..." autocomplete="on" required
+                    <input type="text" id="firstName" placeholder="Enter your first Name..." autocomplete="on"
+                           required
                            th:field="*{firstName}"
                            th:errorclass="bg-danger">
                 </fieldset>
@@ -114,7 +114,8 @@
                     <br>
                     <small th:if="${#fields.hasErrors('lastName')}"
                            th:errors="*{lastName}" class="text-danger">Last name error message</small>
-                    <input type="text" id="lastName" placeholder="Enter your last Name..." autocomplete="on" required
+                    <input type="text" id="lastName" placeholder="Enter your last Name..." autocomplete="on"
+                           required
                            th:field="*{lastName}"
                            th:errorclass="bg-danger">
                 </fieldset>
@@ -134,7 +135,8 @@
                     <small th:if="${#fields.hasErrors('email')}"
                            th:errors="*{email}" class="text-danger">Email error message</small>
                     <small th:if="${duplicatedEmail}" class="text-danger">Email already exists!</small>
-                    <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="Enter your Email..."
+                    <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*"
+                           placeholder="Enter your Email..."
                            required=""
                            th:field="*{email}"
                            th:errorclass="bg-danger">
@@ -169,16 +171,16 @@
                            th:errorclass="bg-danger">
                 </fieldset>
                 <fieldset>
-                    <button th:href="@{/register/manager}" type="submit" id="form-submit" class="orange-button">Register
+                    <button th:href="@{/register/manager}" type="submit" id="form-submit" class="orange-button">
+                        Register
                         now
                     </button>
                 </fieldset>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-
-
 </div>
+
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
