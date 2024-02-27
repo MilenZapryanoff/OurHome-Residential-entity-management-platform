@@ -33,7 +33,7 @@ A platform that allows the registration of both home owners and residential enti
   <li>Reset forgotten password functionality</li>
   <li>On next stage admin will be able to update and delete all managers in the platform via user interface and a news feed will be created.</li>
   
-  UPDATE:
+<h2>UPDATES</h2>
   <li>v.1.24.0227 - Additional menus added. Global fee functionality added - now manager can manually create a monthly fee for all the entities in a residential entity. No need to do that one by one anymore. If fee is added manually there will be additional indicator in the list of property fees</li>
   <li>v.1.24.0225 - Some functionality improvemets and code rafactoring have been done with the newest version of the app.</li>
   <li>All registered users can now upload their own pictures/avatars (max 3MB) and also edit personal data and password.</li>
