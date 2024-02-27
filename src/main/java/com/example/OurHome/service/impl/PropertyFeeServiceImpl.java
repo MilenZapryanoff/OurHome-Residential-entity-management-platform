@@ -2,7 +2,9 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyFee;
+import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddGlobalFeeBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
 import com.example.OurHome.model.events.PropertyApprovalEvent;
 import com.example.OurHome.repo.PropertyFeeRepository;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class PropertyFeeServiceImpl implements PropertyFeeService {
@@ -45,6 +48,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
 
     /**
      * Creation of first fee. It is by default set to paid and fee amount set to 0.0
+     *
      * @param propertyApprovalEvent property approval event
      */
     @Override
@@ -52,7 +56,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     @Transactional
     public void createFirstFee(PropertyApprovalEvent propertyApprovalEvent) {
 
-        if (propertyApprovalEvent.getProperty().getPropertyFees().isEmpty()){
+        if (propertyApprovalEvent.getProperty().getPropertyFees().isEmpty()) {
             PropertyFee newPropertyFee = new PropertyFee();
             LocalDate now = LocalDate.now();
 
@@ -156,6 +160,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     @Override
     public void addFee(Property property, PropertyFeeAddBindingModel propertyFeeAddBindingModel) {
         PropertyFee propertyFee = modelMapper.map(propertyFeeAddBindingModel, PropertyFee.class);
+        propertyFee.setManual(true);
         propertyFee.setProperty(property);
         propertyFee.setId(null);
 
@@ -172,7 +177,37 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     }
 
     /**
+     * Global fee add - Adds a fee to every single property in the common Residential entity.
+     *
+     * @param residentialEntity Residential entity data
+     * @param propertyFeeAddGlobalFeeBindingModel add global fee input data
+     * @return boolean
+     */
+    @Override
+    public boolean addGlobalFee(ResidentialEntity residentialEntity, PropertyFeeAddGlobalFeeBindingModel propertyFeeAddGlobalFeeBindingModel) {
+
+        if (residentialEntity == null) {
+            return false;
+        }
+
+        List<Property> properties = residentialEntity.getProperties();
+        if (properties.isEmpty()) {
+            return false;
+        }
+
+        for (Property property : properties) {
+            PropertyFee propertyFee = modelMapper.map(propertyFeeAddGlobalFeeBindingModel, PropertyFee.class);
+            propertyFee.setManual(true);
+            propertyFee.setProperty(property);
+            propertyFee.setId(null);
+            propertyFeeRepository.save(propertyFee);
+        }
+        return true;
+    }
+
+    /**
      * Unpaid property fees sum
+     *
      * @param id Property id
      * @return BigDecimal value of all unpaid fees
      */
