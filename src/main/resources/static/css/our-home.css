@@ -185,6 +185,7 @@ body {
     flex-grow: 1;
     flex-shrink: 1;
     height: auto;
+    width: min-content;
 }
 
 .monthly-fee-details h4 {
@@ -229,7 +230,7 @@ body {
 }
 
 .icon-button a i {
-    background-color: #f35525;
+    background-color: #DC3545;
     height: 50px;
     width: 50px;
     text-align: center;
@@ -241,7 +242,7 @@ body {
 }
 
 .icon-button a:hover {
-    color: #f35525;
+    color: #DC3545;
 }
 
 .icon-button a:hover i {
@@ -262,7 +263,7 @@ body {
 }
 
 .main-button a:hover {
-    background-color: #f35525;
+    background-color: #DC3545;
     color: #fff;
 }
 
@@ -366,7 +367,7 @@ Pre-loader Style
     height: 16px;
     top: 12px;
     left: 15px;
-    background: #f35525;
+    background: #DC3545;
     border-radius: 50%;
     -webkit-transform: translateX(0);
     transform: translateX(0);
@@ -389,7 +390,7 @@ Pre-loader Style
     width: 16px;
     height: 16px;
     margin-left: 16px;
-    background: #f35525;
+    background: #DC3545;
     border-radius: 50%;
 }
 
@@ -432,7 +433,7 @@ Header Style
 }
 
 .sub-header ul.social-links li a:hover {
-    background-color: #f35525;
+    background-color: #DC3545;
 }
 
 .sub-header ul.info li {
@@ -451,7 +452,7 @@ Header Style
 
 .sub-header ul.info li i {
     font-size: 20px;
-    color: #f35525;
+    color: #DC3545;
     margin-right: 8px;
 }
 
@@ -569,7 +570,7 @@ Header Style
 }
 
 .header-area .main-nav .nav li:last-child a i {
-    background-color: #f35525;
+    background-color: #DC3545;
     display: inline-block;
     width: 40px;
     height: 40px;
@@ -589,16 +590,16 @@ Header Style
 }
 
 .header-area .main-nav .nav li:hover a {
-    color: #f35525;
+    color: #DC3545;
 }
 
 .header-area .main-nav .nav li a.active {
-    color: #f35525;
+    color: #DC3545;
 }
 
 
 .background-header .main-nav .nav li a.active {
-    color: #f35525;
+    color: #DC3545;
 }
 
 .header-area .main-nav .menu-trigger {
@@ -778,7 +779,7 @@ Header Style
 
     .header-area.header-sticky .nav li a:hover,
     .header-area.header-sticky .nav li a.active {
-        color: #ee626b !important;
+        color: #DC3545 !important;
         opacity: 1;
     }
 
@@ -886,7 +887,7 @@ Banner Style
 
 .main-banner .item span.category em {
     font-style: normal;
-    color: #f35525;
+    color: #DC3545;
 }
 
 .main-banner .item h2 {
@@ -909,7 +910,7 @@ Banner Style
 }
 
 .main-banner .owl-dots .active {
-    background-color: #f35525;
+    background-color: #DC3545;
 }
 
 .main-banner .owl-nav {
@@ -969,7 +970,7 @@ Featured Style
     width: 110px;
     height: 110px;
     line-height: 110px;
-    background-color: #f35525;
+    background-color: #DC3545;
     border-radius: 50%;
     text-align: center;
     position: absolute;
@@ -1009,7 +1010,7 @@ Featured Style
 }
 
 .featured .accordion-button:not(.collapsed) {
-    color: #f35525;
+    color: #DC3545;
     background-color: #fafafa;
     outline: none;
 }
@@ -1119,7 +1120,7 @@ POP-UP window
 
 /* Button used to open the contact form - fixed at the bottom of the page */
 .open-button {
-    background-color: #f35525;
+    background-color: #DC3545;
     color: white;
     padding: 16px 20px;
     border: none;
@@ -1177,7 +1178,7 @@ POP-UP window
 
 /* Add a red background color to the cancel button */
 .form-container .cancel {
-    background-color: #f35525;
+    background-color: #DC3545;
 }
 
 /* Add some hover effects to buttons */
@@ -1253,7 +1254,7 @@ Video Style
     display: inline-block;
     text-align: center;
     line-height: 52px;
-    color: #f35525;
+    color: #DC3545;
     outline: 15px solid rgba(254, 85, 37, 0.5);
     font-size: 18px;
 }
@@ -1338,7 +1339,7 @@ Administration Style
 }
 
 .administration .tabs-content .nav-tabs .nav-link.active {
-    background-color: #f35525 !important;
+    background-color: #DC3545 !important;
     color: #fff;
 }
 
@@ -1462,7 +1463,7 @@ Property Style
 }
 
 .property .tabs-content .nav-tabs .nav-link.active {
-    background-color: #f35525 !important;
+    background-color: #DC3545 !important;
     color: #fff;
 }
 
@@ -1555,7 +1556,7 @@ Messages Style
 }
 
 .messages .tabs-content .nav-tabs .nav-link.active {
-    background-color: #f35525 !important;
+    background-color: #DC3545 !important;
     color: #fff;
 }
 
@@ -1801,7 +1802,7 @@ Contact Style
 }
 
 .input-content #input-form button:hover {
-    background-color: #f35525;
+    background-color: #DC3545;
 }
 
 
@@ -1910,7 +1911,7 @@ Properties Style
 }
 
 .properties ul.properties-filter li a.is_active {
-    background-color: #f35525;
+    background-color: #DC3545;
     color: #fff;
 }
 
@@ -1943,7 +1944,7 @@ Properties Style
 }
 
 .properties ul.properties-filter-non-verified li a.is_active {
-    background-color: #f35525;
+    background-color: #DC3545;
     color: #fff;
 }
 
@@ -1980,7 +1981,7 @@ Properties Style
 
 .properties ul.pagination li a:hover,
 .properties ul.pagination li a.is_active {
-    background-color: #f35525;
+    background-color: #DC3545;
     color: #fff;
 }
 
@@ -2037,7 +2038,7 @@ Single Page Style
 }
 
 .single-property .accordion-button:not(.collapsed) {
-    color: #f35525;
+    color: #DC3545;
     background-color: #fafafa;
     outline: none;
 }
@@ -2191,7 +2192,7 @@ Contact Page Style
 }
 
 .contact-page #contact-form button:hover {
-    background-color: #f35525;
+    background-color: #DC3545;
 }
 
 .expenses-report .input-content #input-form,
@@ -2210,6 +2211,10 @@ Contact Page Style
 
 .section-role {
     padding-top: 100px;
+}
+
+.table-image {
+    width: min-content;
 }
 
 /*
