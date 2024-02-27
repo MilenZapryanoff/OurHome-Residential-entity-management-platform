@@ -94,7 +94,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Edit fee
+            <h3>Add individual fee
             </h3>
         </div>
     </div>
@@ -116,9 +116,6 @@
                         <div class="col-lg-12">
                             <fieldset>
                                 <label for="feeAmount"><b>Monthly fee amount</b></label><br>
-                                <small class="text-secondary">The amount of monthly fee
-                                    calculated according your Residential entity fee
-                                    policy</small>
                                 <small th:if="${#fields.hasErrors('feeAmount')}"
                                        th:errors="*{feeAmount}"
                                        class="text-danger">Monthly fee error message</small>
@@ -166,10 +163,10 @@
                             </fieldset>
                             <fieldset>
                                 <label for="overPayment"><b>Overpayment</b></label>
-                                <small class="text-secondary">In case of overpayment for this
+                                <p class="text-secondary">In case of overpayment for this
                                     property,<br> you can enter overpaid amount here.
                                     The amount will be used to cover future monthly fees and
-                                    will automatically decrease until no money left.</small>
+                                    will automatically decrease until no money left.</p>
                                 <small th:if="${#fields.hasErrors('overPayment')}"
                                        th:errors="*{overPayment}"
                                        class="text-danger">Overpayment error message</small>
