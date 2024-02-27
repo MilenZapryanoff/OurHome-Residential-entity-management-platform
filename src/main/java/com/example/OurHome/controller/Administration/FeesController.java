@@ -3,6 +3,7 @@ package com.example.OurHome.controller.Administration;
 import com.example.OurHome.model.Entity.*;
 import com.example.OurHome.model.dto.BindingModels.Fee.FeeEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddGlobalFeeBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.*;
@@ -35,6 +36,7 @@ public class FeesController {
 
     /**
      * Administration -> Monthly Fees
+     *
      * @param id Residential entity ID
      */
     @GetMapping("/administration/fees/{id}")
@@ -46,8 +48,19 @@ public class FeesController {
                 .addObject("residentialEntity", getResidentialEntity(id));
     }
 
+    @GetMapping("/administration/fees/settings/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityFeeSettings(@PathVariable("id") Long id) {
+
+        return new ModelAndView("administration-fees-settings")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
+    }
+
+
     /**
      * Administration -> Monthly Fees -> Edit
+     *
      * @param id Residential entity ID
      */
     @GetMapping("/administration/fees/edit/{id}")
@@ -69,8 +82,9 @@ public class FeesController {
 
     /**
      * Administration -> Monthly Fees -> Edit
+     *
      * @param id Residential entity ID
-     * POST
+     *           POST
      */
     @PostMapping("/administration/fees/edit/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -87,15 +101,16 @@ public class FeesController {
 
         ResidentialEntity residentialEntity = getResidentialEntity(id);
         if (residentialEntity == null) {
-            return new ModelAndView("redirect:/administration/fees/" + id);
+            return new ModelAndView("redirect:/administration/fees/settings/" + id);
         }
         feeService.changeFee(residentialEntity, feeEditBindingModel);
 
-        return new ModelAndView("redirect:/administration/fees/" + id);
+        return new ModelAndView("redirect:/administration/fees/settings/" + id);
     }
 
     /**
      * Administration -> Monthly Fees -> PropertyFees by property ID
+     *
      * @param id property ID
      */
     @GetMapping("/administration/fees/details/{id}")
@@ -109,6 +124,7 @@ public class FeesController {
 
     /**
      * Administration -> Monthly Fees -> PropertyFees by property ID -> Edit fee
+     *
      * @param id PropertyFee ID
      */
     @GetMapping("/administration/fees/details/edit/{id}")
@@ -127,8 +143,9 @@ public class FeesController {
 
     /**
      * Administration -> Monthly Fees -> PropertyFees by property ID -> Edit fee
+     *
      * @param id PropertyFee ID
-     * POST
+     *           POST
      */
     @PostMapping("/administration/fees/details/edit/{id}")
     @PreAuthorize("@securityService.checkPropertyFeeModeratorAccess(#id, authentication)")
@@ -151,6 +168,7 @@ public class FeesController {
 
     /**
      * Administration -> Monthly Fees -> PropertyFees by property ID -> Manually add fee
+     *
      * @param id PropertyFee ID
      */
     @GetMapping("/administration/fees/details/add/{id}")
@@ -164,8 +182,9 @@ public class FeesController {
 
     /**
      * Administration -> Monthly Fees -> PropertyFees by property ID -> Manually add fee
+     *
      * @param id PropertyFee ID
-     * POST
+     *           POST
      */
     @PostMapping("/administration/fees/details/add/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
@@ -188,8 +207,9 @@ public class FeesController {
 
     /**
      * Administration -> Monthly Fees -> PropertyFees by property ID -> Delete fee
+     *
      * @param id PropertyFee ID
-     * POST
+     *           POST
      */
     @PostMapping("/administration/fees/details/delete/{id}")
     @PreAuthorize("@securityService.checkPropertyFeeModeratorAccess(#id, authentication)")
@@ -205,8 +225,9 @@ public class FeesController {
 
     /**
      * Administration -> Monthly Fees -> PropertyFees by property ID -> Change payment status
+     *
      * @param id PropertyFee ID
-     * POST
+     *           POST
      */
     @PostMapping("/administration/fees/changePaymentStatus/{id}")
     @PreAuthorize("@securityService.checkPropertyFeeModeratorAccess(#id, authentication)")
@@ -216,6 +237,52 @@ public class FeesController {
         propertyFeeService.changePaymentStatus(propertyFee);
         return new ModelAndView("redirect:/administration/fees/details/" + propertyFee.getProperty().getId());
     }
+
+
+    /**
+     * Administration -> Monthly Fees -> Add fee for all properties
+     *
+     * @param id Residential entity ID
+     */
+    @GetMapping("/administration/fees/addglobalfee/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView addGlobalFee(@PathVariable("id") Long id) {
+
+        return new ModelAndView("administration-fees-addglobalfee")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("propertyFeeAddGlobalFeeBindingModel", new PropertyFeeAddGlobalFeeBindingModel());
+    }
+
+    /**
+     * Administration -> Monthly Fees -> PropertyFees by property ID -> Manually add fee
+     *
+     * @param id residentialEntity ID
+     *           POST
+     */
+    @PostMapping("/administration/fees/addglobalfee/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView addGlobalFee(@PathVariable("id") Long id,
+                                     @Valid PropertyFeeAddGlobalFeeBindingModel propertyFeeAddGlobalFeeBindingModel,
+                                     BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("administration-fees-addglobalfee")
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("propertyFeeAddGlobalFeeBindingModel", propertyFeeAddGlobalFeeBindingModel);
+        }
+
+        ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityById(id).orElse(null);
+
+        if (propertyFeeService.addGlobalFee(residentialEntity, propertyFeeAddGlobalFeeBindingModel)) {
+            return new ModelAndView("administration-fees")
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("residentialEntity", getResidentialEntity(id))
+                    .addObject("globalFeeAdded", true);
+        }
+
+        return new ModelAndView("redirect:/administration/fees/" + id);
+    }
+
 
     /**
      * Method returns currently logged user
