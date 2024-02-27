@@ -33,16 +33,6 @@ A platform that allows the registration of both home owners and residential enti
   <li>Reset forgotten password functionality</li>
   <li>On next stage admin will be able to update and delete all managers in the platform via user interface and a news feed will be created.</li>
   
-<h2>UPDATES</h2>
-  <li>v.1.24.0227 - Additional menus added. Global fee functionality added - now manager can manually create a monthly fee for all the entities in a residential entity. No need to do that one by one anymore. If fee is added manually there will be additional indicator in the list of property fees</li>
-  <li>v.1.24.0225 - Some functionality improvemets and code rafactoring have been done with the newest version of the app.</li>
-  <li>All registered users can now upload their own pictures/avatars (max 3MB) and also edit personal data and password.</li>
-  <li>Monthly fees section added. 1. Every new property monthly fee is calculated and set automatically with registration. 2. Property monthly fee is automatically re-calculated when a change of the living in the property people/pets occures. 3. When a manager applies a change to monthly fees, all properties monthly fees are automatically re-calculated.</li>
-  <li>Scheduled monthly fees apply for every Residential entity property.</li>
-  <li>Residential entity Expenses section added. Now Residential entity manager can add expenses and upload documents (invoices and etc. in picture formats)</li>
-  <li>Residential entity manager can now get data about residential entity expenses for a specific period (added filter).</li>
-</ul>
-
 <h2>Security</h2>
 <ul>
 <li>Due to the nature of the platform, security settings require additional than standard security checks. The variety of options for property registrations in different Residential entities requires multiple additional checks to ensure that a user or moderator cannot manipulate someone else's data.</li>
@@ -86,6 +76,16 @@ A platform that allows the registration of both home owners and residential enti
 <h2> License </h2>
 <ul>
   <li>MIT License</li>
+</ul>
+
+<h2>Updates</h2>
+  <li>v.1.24.0227 - Additional menus added. Global fee functionality added - now manager can manually create a monthly fee for all the entities in a residential entity. No need to do that one by one anymore. If fee is added manually there will be additional indicator in the list of property fees</li>
+  <li>v.1.24.0225 - Some functionality improvemets and code rafactoring have been done with the newest version of the app.</li>
+  <li>All registered users can now upload their own pictures/avatars (max 3MB) and also edit personal data and password.</li>
+  <li>Monthly fees section added. 1. Every new property monthly fee is calculated and set automatically with registration. 2. Property monthly fee is automatically re-calculated when a change of the living in the property people/pets occures. 3. When a manager applies a change to monthly fees, all properties monthly fees are automatically re-calculated.</li>
+  <li>Scheduled monthly fees apply for every Residential entity property.</li>
+  <li>Residential entity Expenses section added. Now Residential entity manager can add expenses and upload documents (invoices and etc. in picture formats)</li>
+  <li>Residential entity manager can now get data about residential entity expenses for a specific period (added filter).</li>
 </ul>
 
 <h2> More pictures: </h2>
