@@ -15,6 +15,12 @@ public class PropertyFee {
     @Column(nullable = false)
     private BigDecimal feeAmount;
 
+    @Column()
+    private BigDecimal overpaidAmountStart;
+
+    @Column()
+    private BigDecimal overpaidAmountEnd;
+
     @Column(nullable = false)
     private LocalDate periodStart;
 
@@ -95,5 +101,21 @@ public class PropertyFee {
 
     public void setManual(boolean manual) {
         isManual = manual;
+    }
+
+    public BigDecimal getOverpaidAmountStart() {
+        return overpaidAmountStart;
+    }
+
+    public void setOverpaidAmountStart(BigDecimal overpaidAmountStart) {
+        this.overpaidAmountStart = overpaidAmountStart;
+    }
+
+    public BigDecimal getOverpaidAmountEnd() {
+        return overpaidAmountEnd;
+    }
+
+    public void setOverpaidAmountEnd(BigDecimal overpaidAmountEnd) {
+        this.overpaidAmountEnd = overpaidAmountEnd;
     }
 }
