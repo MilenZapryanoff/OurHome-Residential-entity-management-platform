@@ -65,7 +65,7 @@ public class OwnersController {
             userService.removeModerator(id, residentManageBindingModel.getEntityId());
         }
 
-        return new ModelAndView("redirect:/administration/owners/" + residentManageBindingModel.getEntityId());
+        return new ModelAndView("redirect:/administration/owners/" + residentManageBindingModel.getEntityId() + "#post-action-nav");
     }
 
     /**
