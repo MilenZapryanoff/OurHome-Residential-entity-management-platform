@@ -155,7 +155,7 @@
         </div>
         <!--end of buttons-->
 
-        <div class="section section-contact">
+        <div class="section section-contact" id="autoFee-post-nav">
             <div class="section administration" id="fees">
                 <div class="tabs-content">
                     <div class="nav-wrapper ">
@@ -231,13 +231,11 @@
                                 <tr class="text-center">
                                     <th>Property №</th>
                                     <th>Owner</th>
+                                    <th>Monthly fee amt.</th>
+                                    <th>Overpaid amt. left</th>
                                     <th>Monthly fee</th>
-                                    <th>Overpayment</th>
-                                    <th>Automatic fee
-                                        generation
-                                    </th>
                                     <th>Additional data</th>
-                                    <th>Due amount</th>
+                                    <th>Total due amt.</th>
                                     <th>View details</th>
                                 </tr>
                                 <tr class="text-center"
@@ -245,13 +243,40 @@
                                     <td th:text="${property.getNumber()}"></td>
                                     <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
                                     <td th:text="${property.getMonthlyFee()} + ' лв.'"></td>
-                                    <td th:text="${property.getOverpayment()} + ' лв.'"></td>
+                                    <td th:if="${property.getOverpayment()} > 0" th:text="${property.getOverpayment()} + ' лв.'"></td>
+                                    <td th:unless="${property.getOverpayment()} > 0">-</td>
                                     <td>
-                                        <img th:if="${property.isValidated()}"
-                                             title="Automatic fee generation"
-                                             src="/images/check_yes.png"
-                                             style="width: 111px;"
-                                             alt="Automatic fee generation">
+                                        <!--Turn on/off monthly fees buttons-->
+                                        <form class="form-container"
+                                              th:action="@{/administration/fees/changeAutoFeeButton/{id}(id=${property.getId()})}"
+                                              th:method="POST">
+
+                                            <div th:id="'customDialog_' + ${property.getId()}" class="custom-dialog" style="display: none;">
+                                                <p th:id="'customDialogText_' + ${property.getId()}"></p>
+                                                <button class="custom-dialog-ok" th:onclick="'closeCustomDialog(\'' + ${property.getId()} + '\')'">OK</button>
+                                            </div>
+
+                                            <button th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Monthly fee switched OFF!\nTurning monthly fee OFF will deactivate the creation of periodical fees for this property.\')'"
+                                                        title="auto-fee-on"
+                                                        th:if="${property.isValidated()} and ${property.isAutoFee()}"
+                                                        type="button">
+                                                <img title="Turn monthly fee OFF"
+                                                     src="/images/on.jpg"
+                                                     style="width: 109px;"
+                                                     alt="Turn monthly fee OFF">
+                                            </button>
+
+                                            <button th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Monthly fee switched ON!\nTurning monthly fee ON will activate the creation of periodical fees for this property. \n Fees will be calculated according to Residential entity fee policy..\')'"
+                                                        title="Mark as unpaid"
+                                                        th:if="${property.isValidated()} and ${!property.isAutoFee()}"
+                                                        type="button">
+                                                    <img title="Turn monthly fee ON" src="/images/off.jpg" style="width: 109px;" alt="Turn monthly fee ON">
+                                                </button>
+
+
+
+                                        </form>
+                                        <!--Attention button-->
                                         <a class="text-danger"
                                            th:href="@{/administration/property/{id} (id=${id})}">
                                             <img th:if="${!property.isValidated()} or ${property.isRejected()}"
@@ -261,7 +286,7 @@
                                                  alt="No automatic monthly fee generation"></a>
                                     </td>
                                     <td>
-                                        <small th:if="${property.isValidated()}"></small>
+                                        <small th:if="${property.isValidated()}">-</small>
                                         <small th:if="${!property.isValidated()} and ${!property.isRejected()}"
                                                th:class="text-danger"><a
                                                 class="text-danger"
@@ -321,7 +346,7 @@
                                         class="text-danger"
                                         th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"></td>
                                     <td th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">
-                                        0.00 лв.
+                                        0.00 лв.</td>
                                     <td>
                                         <a th:href="@{/administration/fees/details/{id} (id=${property.getId()})}"><img
                                                 title="View details"
@@ -351,7 +376,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
-
+<script src="/js/confirm.js"></script>
 
 </body>
 </html>
