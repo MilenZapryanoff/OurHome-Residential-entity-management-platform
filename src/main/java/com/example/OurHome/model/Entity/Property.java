@@ -47,6 +47,9 @@ public class Property {
     private boolean isRejected;
 
     @Column
+    private boolean autoFee;
+
+    @Column
     private BigDecimal monthlyFee;
 
     @Column
@@ -200,5 +203,13 @@ public class Property {
 
     public void setPropertyFees(List<PropertyFee> propertyFees) {
         this.propertyFees = propertyFees;
+    }
+
+    public boolean isAutoFee() {
+        return autoFee;
+    }
+
+    public void setAutoFee(boolean autoFee) {
+        this.autoFee = autoFee;
     }
 }
