@@ -153,13 +153,13 @@
                                        th:value="${propertyFeeAddGlobalFeeBindingModel.getPeriodEnd()}">
                             </fieldset>
                             <fieldset>
-                                <label for="description"><b>Comment</b></label>
+                                <label for="description"><b>Description</b></label>
                                 <p th:if="${#fields.hasErrors('description')}"
                                        th:errors="*{description}"
                                        class="text-danger">Description error message</p>
                                 <input type="text"
                                        id="description"
-                                       placeholder="Enter comment..."
+                                       placeholder="Enter description..."
                                        th:field="*{description}"
                                        th:errorclass="bg-danger"
                                        th:value="${propertyFeeAddGlobalFeeBindingModel.getDescription()}">
