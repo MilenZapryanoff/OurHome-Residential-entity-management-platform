@@ -311,8 +311,8 @@
                                    value="Contact manager"
                                    class="form-control text-bg-danger"/>
                         </button>
-                        <div class="form-popup" id="myForm">
-                            <form th:action="@{/property/summary/messageToManager/{id} (id=${property.getId()})}"
+                        <div class="form-popup" id="contactForm" style="border: none">
+                            <form style="padding: 10px; border: 1px solid grey; border-radius: 20px; box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5)" th:action="@{/property/summary/messageToManager/{id} (id=${property.getId()})}"
                                   th:method="POST"
                                   class="form-container"
                                   th:object="${sendMessageBindingModel}">
@@ -342,10 +342,10 @@
                                        autocomplete="off"
                                        th:field="*{message}"
                                        th:errorclass="bg-danger">
-                                <button type="submit"
+                                <button style="border-radius: 30px" type="submit"
                                         class="btn">Send
                                 </button>
-                                <button type="button"
+                                <button style="border-radius: 30px" type="button"
                                         class="btn text-bg-danger"
                                         onclick="closeForm()">
                                     Close
