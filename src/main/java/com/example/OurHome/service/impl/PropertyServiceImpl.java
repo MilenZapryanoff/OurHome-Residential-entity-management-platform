@@ -67,6 +67,7 @@ public class PropertyServiceImpl implements PropertyService {
 
         newProperty.setResidentialEntity(residentialEntity);
         newProperty.setOwner(loggedUser);
+        newProperty.setAutoFee(true);
         newProperty.setValidated(false);
 
         propertyRepository.save(newProperty);
@@ -224,10 +225,21 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    public void changeAutoFeeGeneration(Property property) {
+        if (property.isAutoFee()) {
+            property.setAutoFee(false);
+            propertyRepository.save(property);
+        } else {
+            property.setAutoFee(true);
+            propertyRepository.save(property);
+        }
+    }
+
+    @Override
     public void setOverpayment(PropertyFeeEditBindingModel propertyFeeEditBindingModel) {
         Property property = propertyRepository.findById(propertyFeeEditBindingModel.getPropertyId()).orElse(null);
 
-        if (property != null){
+        if (property != null) {
             property.setOverpayment(propertyFeeEditBindingModel.getOverPayment());
             propertyRepository.save(property);
         }
