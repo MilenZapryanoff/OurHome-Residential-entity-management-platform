@@ -2,6 +2,7 @@ package com.example.OurHome.controller.Administration;
 
 import com.example.OurHome.model.Entity.*;
 import com.example.OurHome.model.dto.BindingModels.Fee.FeeEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.OverpaymentBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddGlobalFeeBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
@@ -117,9 +118,69 @@ public class FeesController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView propertyFees(@PathVariable("id") Long id) {
 
+        Property property = propertyService.findPropertyById(id);
+        OverpaymentBindingModel overpaymentBindingModel = propertyFeeService.mapOverPaymentBindingModel(property);
+
         return new ModelAndView("administration-property-fees")
                 .addObject("userViewModel", getUserViewModel())
-                .addObject("property", getProperty(id));
+                .addObject("property", getProperty(id))
+                .addObject("overpaymentBindingModel", overpaymentBindingModel);
+    }
+
+
+    /**
+     * Switch monthly (auto) fee generation for a single property ON or OFF (Slide button in property fee details section)
+     *
+     * @param id property ID
+     */
+    @PostMapping("/administration/fees/changeAutoFeeSlider/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView changeAutoFeeSlider(@PathVariable("id") Long id) {
+
+        propertyService.changeAutoFeeGeneration(propertyService.findPropertyById(id));
+
+        return new ModelAndView("redirect:/administration/fees/details/" + id + "#autoFee-post-nav");
+    }
+
+    /**
+     * Switch monthly (auto) fee generation for a single property ON or OFF (Table buttons in Monthly fees section table)
+     *
+     * @param id property ID
+     */
+    @PostMapping("/administration/fees/changeAutoFeeButton/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView changeAutoFeeButton(@PathVariable("id") Long id) {
+
+        Property property = propertyService.findPropertyById(id);
+        propertyService.changeAutoFeeGeneration(property);
+
+        return new ModelAndView("redirect:/administration/fees/" + property.getResidentialEntity().getId() + "#autoFee-post-nav");
+    }
+
+    /**
+     * Updating overpayment amount
+     *
+     * @param id                      property ID
+     * @param overpaymentBindingModel input data
+     */
+
+    @PostMapping("/administration/fees/setOverPayment/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView setOverPayment(@PathVariable("id") Long id,
+                                       @Valid OverpaymentBindingModel overpaymentBindingModel,
+                                       BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("administration-property-fees")
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("property", getProperty(id))
+                    .addObject("overpaymentBindingModel", overpaymentBindingModel);
+        }
+
+        Property property = propertyService.findPropertyById(id);
+        propertyFeeService.updateOverpayment(property, overpaymentBindingModel.getOverPayment());
+
+        return new ModelAndView("redirect:/administration/fees/details/" + id + "#overpayment-post-nav");
     }
 
     /**
@@ -220,7 +281,7 @@ public class FeesController {
 
         propertyFeeService.deleteFee(propertyFee);
 
-        return new ModelAndView("redirect:/administration/fees/details/" + propertyId);
+        return new ModelAndView("redirect:/administration/fees/details/" + propertyId + "#delete-fee-post-nav");
     }
 
     /**
@@ -235,7 +296,7 @@ public class FeesController {
 
         PropertyFee propertyFee = propertyFeeService.findPropertyFeeById(id);
         propertyFeeService.changePaymentStatus(propertyFee);
-        return new ModelAndView("redirect:/administration/fees/details/" + propertyFee.getProperty().getId());
+        return new ModelAndView("redirect:/administration/fees/details/" + propertyFee.getProperty().getId() + "#delete-fee-post-nav");
     }
 
 
