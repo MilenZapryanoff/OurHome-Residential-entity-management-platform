@@ -79,6 +79,16 @@ A platform that allows the registration of both home owners and residential enti
 </ul>
 
 <h2>Updates</h2>
+  <li>v.1.24.0301 - 
+    - ON/OFF Switch for automatic monthly fee creation added for every property. 
+    - Overpayment amount is now accessible for modification for every property. 
+    - Additional information for overpaid amounts added to property monthly fees. This allows easier tracking and understanding of applied fees history.
+    - Pop-up confirmation prompts added when performing DELETE operations. This will prevent accidential deletions of records.
+    - Pop-up Alerts added for some user actions.
+    - Some additional fields validations have been added.
+    - Some link redirection improvements were done.
+    - Style and code improvements were done.
+  </li>
   <li>v.1.24.0227 - Additional menus added. Global fee functionality added - now manager can manually create a monthly fee for all the entities in a residential entity. No need to do that one by one anymore. If fee is added manually there will be additional indicator in the list of property fees</li>
   <li>v.1.24.0225 - Some functionality improvemets and code rafactoring have been done with the newest version of the app.</li>
   <li>All registered users can now upload their own pictures/avatars (max 3MB) and also edit personal data and password.</li>
