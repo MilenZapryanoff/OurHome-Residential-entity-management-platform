@@ -24,10 +24,10 @@ public class PropertyRegisterBindingModel {
     @PositiveOrZero(message = "Number of pets must be a positive digit or 0")
     private String numberOfPets;
 
-    @Positive(message = "Total flat space must be positive digit")
+    @PositiveOrZero(message = "Total flat space must be a positive digit")
     private String totalFlatSpace;
 
-    @Column
+    @PositiveOrZero(message = "Number of rooms must be a positive digit")
     private String numberOfRooms;
 
     private boolean parkingAvailable;
