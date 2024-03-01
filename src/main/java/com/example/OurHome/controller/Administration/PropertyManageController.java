@@ -73,8 +73,7 @@ public class PropertyManageController {
 
         propertyService.setMonthlyFee(monthlyFee, property);
 
-
-        return new ModelAndView("redirect:/administration/property/" + propertyManageBindingModel.getEntityId());
+        return new ModelAndView("redirect:/administration/property/" + propertyManageBindingModel.getEntityId() + "#post-action-nav");
     }
 
     /**
@@ -90,7 +89,7 @@ public class PropertyManageController {
 
         propertyService.rejectProperty(id);
 
-        return new ModelAndView("redirect:/administration/property/" + propertyManageBindingModel.getEntityId());
+        return new ModelAndView("redirect:/administration/property/" + propertyManageBindingModel.getEntityId() + "#post-action-nav");
     }
 
     /**
@@ -106,7 +105,7 @@ public class PropertyManageController {
 
         propertyService.deleteProperty(id, true);
 
-        return new ModelAndView("redirect:/administration/property/" + propertyManageBindingModel.getEntityId());
+        return new ModelAndView("redirect:/administration/property/" + propertyManageBindingModel.getEntityId() + "#post-action-nav");
     }
 
     /**
