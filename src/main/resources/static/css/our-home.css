@@ -161,6 +161,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: fit-content;
+    height: auto;
 }
 
 .due-amounts table {
@@ -292,6 +294,19 @@ body {
 
 .cancel-button {
     padding-top: 5px;
+}
+
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input {
+    border: none;
 }
 
 /*
@@ -1145,7 +1160,7 @@ POP-UP window
 /* Add styles to the form container */
 .form-container {
     max-width: 500px;
-    padding: 10px;
+    /*padding: 10px;*/
     background-color: white;
 }
 
@@ -1540,7 +1555,8 @@ Messages Style
 }
 
 .messages .tab-content img {
-    padding: 0 45px;
+    /*padding: 0 45px;*/
+    max-width: 18px;
 }
 
 .messages .tabs-content .nav-link {
@@ -2215,6 +2231,98 @@ Contact Page Style
 
 .table-image {
     width: min-content;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 47px;
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #198754;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(24px);
+    -ms-transform: translateX(24px);
+    transform: translateX(24px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+th {
+    padding: 0 10px;
+}
+
+
+.custom-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 300px;
+    transform: translate(-50%, -50%);
+    background-color: rgba(245, 245, 245, 0.93);
+    padding: 25px;
+    border: 2px solid grey;
+    border-radius: 5px;
+    border-radius: 20px; box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5)
+}
+.custom-dialog p {
+    margin: 0;
+    padding-bottom: 20px;
+}
+.custom-dialog button {
+    width: 100px;
+    padding: 5px 20px;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .4s;
+}
+.custom-dialog button:hover {
+    background-color: #DC3545;
+    transition: .4s;
 }
 
 /*
