@@ -123,33 +123,33 @@
                     <fieldset>
                         <br>
                         <label for="number"><b>Property №</b></label>
-                        <small th:if="${#fields.hasErrors('number')}"
-                               th:errors="*{number}" class="text-danger">Property № error message</small>
+                        <p th:if="${#fields.hasErrors('number')}"
+                               th:errors="*{number}" class="text-danger">Property № error message</p>
                         <input type="text" id="number" placeholder="Enter your property №..." required
                                th:field="*{number}"
                                th:errorclass="bg-danger">
                     </fieldset>
                     <fieldset>
                         <label for="floor"><b>Floor number</b></label>
-                        <small th:if="${#fields.hasErrors('floor')}"
-                               th:errors="*{floor}" class="text-danger">Floor error message</small>
+                        <p th:if="${#fields.hasErrors('floor')}"
+                               th:errors="*{floor}" class="text-danger">Floor error message</p>
                         <input type="text" id="floor" placeholder="Enter floor..." required
                                th:field="*{floor}"
                                th:errorclass="bg-danger">
                     </fieldset>
                     <fieldset>
                         <label for="totalFlatSpace"><b>Total flat space </b>(square meters)</label>
-                        <small th:if="${#fields.hasErrors('totalFlatSpace')}"
-                               th:errors="*{totalFlatSpace}" class="text-danger">Floor error message</small>
-                        <input type="text" id="totalFlatSpace" placeholder="Enter total flat space..."
+                        <p th:if="${#fields.hasErrors('totalFlatSpace')}"
+                               th:errors="*{totalFlatSpace}" class="text-danger">Floor error message</p>
+                        <input type="text" id="totalFlatSpace" placeholder="Enter total flat space..." required
                                th:field="*{totalFlatSpace}"
                                th:errorclass="bg-danger">
                     </fieldset>
                     <fieldset>
                         <label for="numberOfRooms"><b>Number of rooms</b></label>
-                        <small th:if="${#fields.hasErrors('numberOfRooms')}"
-                               th:errors="*{numberOfRooms}" class="text-danger">Rooms error message</small>
-                        <input type="text" id="numberOfRooms" placeholder="Enter number of rooms..."
+                        <p th:if="${#fields.hasErrors('numberOfRooms')}"
+                               th:errors="*{numberOfRooms}" class="text-danger">Rooms error message</p>
+                        <input type="text" id="numberOfRooms" placeholder="Enter number of rooms..." required
                                th:field="*{numberOfRooms}"
                                th:errorclass="bg-danger">
                     </fieldset>
@@ -162,25 +162,25 @@
                     <hr>
                     <fieldset>
                         <label for="numberOfAdults"><b>Number of adults </b><small>(over 7yo)</small></label>
-                        <small th:if="${#fields.hasErrors('numberOfAdults')}"
-                               th:errors="*{numberOfAdults}" class="text-danger">Adults error message</small>
+                        <p th:if="${#fields.hasErrors('numberOfAdults')}"
+                               th:errors="*{numberOfAdults}" class="text-danger">Adults error message</p>
                         <input type="text" id="numberOfAdults" placeholder="Enter number of adults..." required
                                th:field="*{numberOfAdults}"
                                th:errorclass="bg-danger">
                     </fieldset>
                     <fieldset>
                         <label for="numberOfChildren"><b>Number of children </b><small>(under 7yo)</small></label>
-                        <small th:if="${#fields.hasErrors('numberOfAdults')}"
-                               th:errors="*{numberOfChildren}" class="text-danger">Adults error message</small>
-                        <input type="text" id="numberOfChildren" placeholder="Enter number of children..."
+                        <p th:if="${#fields.hasErrors('numberOfAdults')}"
+                               th:errors="*{numberOfChildren}" class="text-danger">Children error message</p>
+                        <input type="text" id="numberOfChildren" placeholder="Enter number of children..." required
                                th:field="*{numberOfChildren}"
                                th:errorclass="bg-danger">
                     </fieldset>
                     <fieldset>
                         <label for="numberOfPets"><b>Number of pets</b></label>
-                        <small th:if="${#fields.hasErrors('numberOfPets')}"
-                               th:errors="*{numberOfPets}" class="text-danger">Adults error message</small>
-                        <input type="text" id="numberOfPets" placeholder="Enter number of pets..."
+                        <p th:if="${#fields.hasErrors('numberOfPets')}"
+                               th:errors="*{numberOfPets}" class="text-danger">Adults error message</p>
+                        <input type="text" id="numberOfPets" placeholder="Enter number of pets..." required
                                th:field="*{numberOfPets}"
                                th:errorclass="bg-danger">
                     </fieldset>
