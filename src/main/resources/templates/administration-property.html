@@ -104,7 +104,7 @@
 <br><br>
 
 <!-- ***** Residential entity section ***** -->
-<div class="single-property section">
+<div class="single-property section" id="post-action-nav">
     <div class="container">
         <!--        start of buttons-->
         <div class="tabs-content">
@@ -168,7 +168,8 @@
                                 <p th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} == 0"
                                    class="text-center">No properties available</p>
                                 <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="Properties" aria-labelledby="properties-tab-tab">
+                                    <div class="tab-pane fade show active" id="Properties"
+                                         aria-labelledby="properties-tab-tab">
                                         <!--Pending registrations section-->
                                         <div th:if="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
                                              class="main-content">
@@ -181,25 +182,46 @@
                                             <hr>
                                             <table class="text-center">
                                                 <tr>
-                                                    <th>Property №</th>
-                                                    <th>Owner</th>
-                                                    <th>Floor</th>
-                                                    <th>Number of adults</th>
-                                                    <th>Number of children</th>
-                                                    <th>Number of pets</th>
-                                                    <th>Property habitable</th>
-                                                    <th>Approve</th>
-                                                    <th>Decline</th>
+                                                    <th>
+                                                        <p>Property №</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Owner</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Floor</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Number of adults</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Number of children</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Number of pets</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Property habitable</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Approve</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Decline</p>
+                                                    </th>
                                                 </tr>
                                                 <tr th:each="property: ${@propertyRepository.findNotValidatedProperties(residentialEntity.getId())}">
-                                                    <td th:text="${property.getNumber()}"></td>
-                                                    <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
-                                                    <td th:text="${property.getFloor()}"></td>
-                                                    <td th:text="${property.getNumberOfAdults()}"></td>
-                                                    <td th:text="${property.getNumberOfChildren()}"></td>
-                                                    <td th:text="${property.getNumberOfPets()}"></td>
+                                                    <td><p th:text="${property.getNumber()}"></p></td>
+                                                    <td style="min-width: 150px"><p
+                                                            th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                                                    </td>
+                                                    <td><p th:text="${property.getFloor()}"></p></td>
+                                                    <td><p th:text="${property.getNumberOfAdults()}"></p></td>
+                                                    <td><p th:text="${property.getNumberOfChildren()}"></p></td>
+                                                    <td><p th:text="${property.getNumberOfPets()}"></p></td>
                                                     <td th:if="${property.isNotHabitable()}">
-                                                        <img title="Property is not habitable" src="/images/check_no.png"
+                                                        <img title="Property is not habitable"
+                                                             src="/images/check_no.png"
                                                              style="width: 110px;" alt="Property is not habitable">
                                                     </td>
                                                     <td th:unless="${property.isNotHabitable()}">
@@ -211,28 +233,42 @@
                                                               th:action="@{/administration/property/approve/{id} (id=${property.getId()})}"
                                                               th:method="POST"
                                                               th:object="${propertyManageBindingModel}">
+
+                                                            <div th:id="'customDialog_' + ${property.getId()}"
+                                                                 class="custom-dialog" style="display: none;">
+                                                                <p th:id="'customDialogText_' + ${property.getId()}"></p>
+                                                                <button class="custom-dialog-ok"
+                                                                        th:onclick="'closeCustomDialog(\'' + ${property.getId()} + '\')'">
+                                                                    OK
+                                                                </button>
+                                                            </div>
+
                                                             <label for="entityId-approve" class="hidden"></label>
                                                             <select class="form-control hidden" id="entityId-approve"
                                                                     th:field="*{entityId}">
                                                                 <option th:value="${residentialEntity.getId()}"></option>
                                                             </select>
-                                                            <button type="submit">
+                                                            <button th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property approved.\')'"
+                                                                    type="button">
                                                                 <img title="Approve property" src="/images/approve.jpg"
                                                                      style="width: 150px;" alt="Approve property">
                                                             </button>
                                                         </form>
                                                     </td>
                                                     <td>
+
                                                         <form class="form-container"
                                                               th:action="@{/administration/property/reject/{id} (id=${property.getId()})}"
                                                               th:method="POST"
                                                               th:object="${propertyManageBindingModel}">
+
                                                             <label for="entityId-reject" class="hidden"></label>
                                                             <select class="form-control hidden" id="entityId-reject"
                                                                     th:field="*{entityId}">
                                                                 <option th:value="${residentialEntity.getId()}"></option>
                                                             </select>
-                                                            <button type="submit">
+                                                            <button th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property rejected.\')'"
+                                                                    type="submit">
                                                                 <img title="Reject property" src="/images/reject.jpg"
                                                                      style="width: 150px;" alt="Reject property">
                                                             </button>
@@ -257,25 +293,59 @@
                                             </div>
                                             <table class="text-center">
                                                 <tr>
-                                                    <th>Property №</th>
-                                                    <th>Owner</th>
-                                                    <th>Username</th>
-                                                    <th>Floor</th>
-                                                    <th>Number of adults</th>
-                                                    <th>Number of children</th>
-                                                    <th>Number of pets</th>
-                                                    <th>Property habitable</th>
-                                                    <th>Edit</th>
-                                                    <th>Delete</th>
+                                                    <th>
+                                                        <p>Property №</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Owner</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Username</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Floor</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Number of adults</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Number of children</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Number of pets</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Property habitable</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Edit</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Delete</p>
+                                                    </th>
                                                 </tr>
                                                 <tr th:each="property: ${@propertyRepository.findValidatedProperties(residentialEntity.getId())}">
-                                                    <td th:text="${property.getNumber()}"></td>
-                                                    <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
-                                                    <td th:text="${property.getOwner().getUsername()}"></td>
-                                                    <td th:text="${property.getFloor()}"></td>
-                                                    <td th:text="${property.getNumberOfAdults()}"></td>
-                                                    <td th:text="${property.getNumberOfChildren()}"></td>
-                                                    <td th:text="${property.getNumberOfPets()}"></td>
+                                                    <td>
+                                                        <p th:text="${property.getNumber()}"></p>
+                                                    </td>
+                                                    <td style="min-width: 150px">
+                                                        <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                                                    </td>
+                                                    <td>
+                                                        <p th:text="${property.getOwner().getUsername()}"></p>
+                                                    </td>
+                                                    <td>
+                                                        <p th:text="${property.getFloor()}"></p>
+                                                    </td>
+                                                    <td>
+                                                        <p th:text="${property.getNumberOfAdults()}"></p>
+                                                    </td>
+                                                    <td>
+                                                        <p th:text="${property.getNumberOfChildren()}"></p>
+                                                    </td>
+                                                    <td>
+                                                        <p th:text="${property.getNumberOfPets()}"></p>
+                                                    </td>
                                                     <td th:if="${property.isNotHabitable()}">
                                                         <img title="Property is not habitable"
                                                              src="/images/check_no.png"
@@ -323,7 +393,8 @@
                                                                         th:text="${residentialEntity.getId()}">
                                                                 </option>
                                                             </select>
-                                                            <button type="submit">
+                                                            <button onclick="return confirmPropertyDelete()"
+                                                                    type="submit">
                                                                 <img title="Delete property"
                                                                      src="/images/delete.jpg"
                                                                      style="width: 111px;"
@@ -349,29 +420,54 @@
                                             </div>
                                             <table class="text-center">
                                                 <tr>
-                                                    <th class="text-black">Property №</th>
-                                                    <th class="text-black">Owner</th>
-                                                    <th class="text-black">Floor</th>
-                                                    <th class="text-black">Number of adults</th>
-                                                    <th class="text-black">Number of children</th>
-                                                    <th class="text-black">Number of pets</th>
-                                                    <th class="text-black">Property habitable</th>
-                                                    <th class="text-black">Edit</th>
-                                                    <th class="text-black">Delete</th>
+                                                    <th>
+                                                        <p>Property №</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Owner</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Floor</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Number of adults</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Number of children</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Number of pets</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Property habitable</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Edit</p>
+                                                    </th>
+                                                    <th>
+                                                        <p>Delete</p>
+                                                    </th>
                                                 </tr>
                                                 <tr class="text-center"
                                                     th:each="property: ${@propertyRepository.findRejectedProperties(residentialEntity.getId())}">
-                                                    <td class="text-black"
-                                                        th:text="${property.getNumber()}"></td>
-                                                    <td th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></td>
-                                                    <td class="text-black"
-                                                        th:text="${property.getFloor()}"></td>
-                                                    <td class="text-black"
-                                                        th:text="${property.getNumberOfAdults()}"></td>
-                                                    <td class="text-black"
-                                                        th:text="${property.getNumberOfChildren()}"></td>
-                                                    <td class="text-black"
-                                                        th:text="${property.getNumberOfPets()}"></td>
+                                                    <td>
+                                                        <p th:text="${property.getNumber()}"></p>
+                                                    </td>
+                                                    <td style="min-width: 150px">
+                                                        <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                                                    </td>
+                                                    <td>
+                                                        <p th:text="${property.getFloor()}"></p>
+                                                    </td>
+                                                    <td>
+                                                        <p th:text="${property.getNumberOfAdults()}"></p>
+                                                    </td>
+                                                    <td>
+                                                        <p th:text="${property.getNumberOfChildren()}"></p>
+                                                    </td>
+                                                    <td>
+                                                        <p th:text="${property.getNumberOfPets()}"></p>
+                                                    </td>
                                                     <td th:if="${property.isNotHabitable()}">
                                                         <img title="Property is not habitable"
                                                              src="/images/check_no.png"
@@ -401,7 +497,7 @@
                                                                      alt="Edit property"></button>
                                                         </form>
                                                     </td>
-                                                    <td class="text-black">
+                                                    <td>
                                                         <form class="form-container"
                                                               th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"
                                                               th:method="POST"
@@ -416,7 +512,8 @@
                                                                         th:text="${residentialEntity.getId()}">
                                                                 </option>
                                                             </select>
-                                                            <button type="submit">
+                                                            <button onclick="return confirmPropertyDelete()"
+                                                                    type="submit">
                                                                 <img title="Delete property"
                                                                      src="/images/delete.jpg"
                                                                      style="width: 110px;"
@@ -449,7 +546,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
-
+<script src="/js/confirm.js"></script>
 
 </body>
 </html>
