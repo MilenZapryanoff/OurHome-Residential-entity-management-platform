@@ -34,4 +34,6 @@ public interface PropertyService {
     boolean needOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel);
 
     List<Property> findAllProperties();
+
+    void changeAutoFeeGeneration(Property property);
 }
