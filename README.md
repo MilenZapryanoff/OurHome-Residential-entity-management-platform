@@ -11,7 +11,7 @@
 A platform that allows the registration of both home owners and residential entity managers. The platform provides an opportunity to receive messages (notifications) for various events, different user roles, validation of data and user registration verification by a moderator/manager, data on amounts due, monthly taxes, statements, news and etc.</li>
 </ul>ul>
 
-<h2> Some of the features </h2>
+<h2>Some of the features </h2>
 <ul>
   <li>User can register as Resident or Manager</li>
   <li>As a first step the manager have to register in the platform and register a Residential entity</li>
@@ -33,7 +33,7 @@ A platform that allows the registration of both home owners and residential enti
   <li>Sending email via contact form</li>
   <li>Reset forgotten password functionality</li>
   <li>On next stage admin will be able to update and delete all managers in the platform via user interface and a news feed will be created.</li>
-</ul>ul>
+</ul>
 <h2>Security</h2>
 <ul>
   <li>Due to the nature of the platform, security settings require additional than standard security checks. The variety of options for property registrations in different       Residential entities requires multiple additional checks to ensure that a user or moderator cannot manipulate someone else's data.</li>
