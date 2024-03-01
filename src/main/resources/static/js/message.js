@@ -1,10 +1,10 @@
 function openForm() {
     document.getElementById("messageText").value = "";
-    document.getElementById("myForm").style.display = "block";
+    document.getElementById("contactForm").style.display = "block";
 }
 
 function closeForm() {
-    document.getElementById("myForm").style.display = "none";
+    document.getElementById("contactForm").style.display = "none";
 }
 
 
