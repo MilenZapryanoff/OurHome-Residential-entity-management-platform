@@ -9,7 +9,7 @@
 <ul>
 <li>The idea behind this project is for residential entities management platform. 
 A platform that allows the registration of both home owners and residential entity managers. The platform provides an opportunity to receive messages (notifications) for various events, different user roles, validation of data and user registration verification by a moderator/manager, data on amounts due, monthly taxes, statements, news and etc.</li>
-</ul>ul>
+</ul>
 
 <h2>Some of the features </h2>
 <ul>
