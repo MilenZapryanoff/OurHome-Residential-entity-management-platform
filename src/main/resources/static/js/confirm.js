@@ -34,6 +34,14 @@ function confirmPropertyFeeDelete() {
     }
 }
 
+function confirmExpenseRemove() {
+    var result = confirm("Do you really want to delete this expense?");
+    if (result) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 function openCustomDialog(id, message) {
     var dialogTextId = 'customDialogText_' + id;
