@@ -111,7 +111,7 @@
 
 <div class="container">
     <!--start of Sub-menu-->
-    <div class="single-property section" id="post-action-nav">
+    <div class="single-property section" id="post-action-nav" style="padding-bottom: 70px">
         <div class="tabs-content">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -131,7 +131,7 @@
                 </li>
                 <li class="nav-item">
                     <div class="button">
-                        <a class="nav-link" th:href="@{/administration/property/{id}(id=${residentialEntity.getId()})}">
+                        <a class="nav-link" th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
                             <h5>Properties</h5>
                             <p class="text-secondary">data & management</p></a>
                     </div>
@@ -161,181 +161,185 @@
         </div>
     </div>
 
-    <!--Start of heading-->
-    <div class="section-administration-owners">
-        <div class="text-center">
-            <h4 class="category text-danger">LIST OF PROPERTY OWNERS</h4>
-        </div>
-    </div>
+    <div class="administration">
+        <div class="info-table">
+            <!--Start of heading-->
+            <div class="text-center">
+                <h4 class="category text-danger">LIST OF PROPERTY OWNERS</h4>
+            </div>
 
-    <!--Start of counter-->
-    <div class="tabs-content">
-        <p th:if="${residentialEntity.getResidents().size()} == 0"
-           class="text-center">No residents available</p>
-        <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="Properties" role="tabpanel"
-                 aria-labelledby="properties-tab-tab">
-                <div class="row">
-                    <div class="main-content">
-                        <span th:if="${residentialEntity.getResidents().size()} == 1"
-                            th:text="${residentialEntity.getResidents().size()} + ' record found'"
-                            class="category text-bg-success"></span>
-                        <span th:if="${residentialEntity.getResidents().size()} > 1"
-                              th:text="${residentialEntity.getResidents().size()} + ' records found'"
+            <!--Start of counter-->
+            <div class="tabs-content">
+                <p th:if="${residentialEntity.getResidents().size()} == 0"
+                   class="text-center">No residents available</p>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="Properties" role="tabpanel"
+                         aria-labelledby="properties-tab-tab">
+                        <div class="row">
+                            <div class="main-content">
+                        <span style="padding: 1px 5px; border-radius: 5px"
+                              th:if="${residentialEntity.getResidents().size()} == 1"
+                              th:text="${residentialEntity.getResidents().size()} + ' record found'"
                               class="category text-bg-success"></span>
-                        <hr>
+                                <span style="padding: 1px 5px; border-radius: 5px"
+                                      th:if="${residentialEntity.getResidents().size()} > 1"
+                                      th:text="${residentialEntity.getResidents().size()} + ' records found'"
+                                      class="category text-bg-success"></span>
+                                <hr>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!--Start of table-->
+            <table th:if="${residentialEntity.getResidents().size()} > 0">
+                <tr class="text-center">
+                    <th>
+                        <p>Property №</p>
+                    </th>
+                    <th>
+                        <p>First name</p>
+                    </th>
+                    <th>
+                        <p>Last name</p>
+                    </th>
+                    <th>
+                        <p>Username</p>
+                    </th>
+                    <th>
+                        <p>E-mail</p>
+                    </th>
+                    <th>
+                        <p>Phone number</p>
+                    </th>
+                    <th>
+                        <p>Role</p>
+                    </th>
+                    <th>
+                        <p>Message to owner</p>
+                    </th>
+                    <th style="padding-left: 10px">
+                        <p>Remove owner</p>
+                    </th>
+                </tr>
+                <tr class="text-center"
+                    th:each="resident : ${residentialEntity.getResidents()}">
+                    <td th:if="${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId()).size() > 0}">
+                        <p th:each="property : ${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId())}"
+                           th:text="'№'+ ${property.getNumber()}"></p>
+                    </td>
+                    <td th:if="${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId()).size() == 0}">
+                        <img title="No registered property"
+                             src="/images/attention.png" style="width: 111px;"
+                             alt="No registered property">
+                    </td>
+                    <td>
+                        <p th:text="${resident.getFirstName()}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${resident.getLastName()}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${resident.getUsername()}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${resident.getEmail()}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${resident.getPhoneNumber()}"></p>
+                    </td>
+                    <!-- START: Roles change button-->
+                    <td style="padding: 5px 10px">
+                        <form class="form-container"
+                              th:action="@{/administration/owners/edit_role/{id} (id=${resident.getId()})}"
+                              th:method="POST"
+                              th:object="${residentManageBindingModel}">
+                            <label for="userId" class="hidden">Role change</label>
+                            <select class="form-control hidden" id="userId"
+                                    th:field="*{userId}">
+                                <option th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}"
+                                        th:value="${resident.getId()}">
+                                </option>
+                                <option th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}"
+                                        value="">
+                                </option>
+                            </select>
+                            <label for="entityId" class="hidden"></label>
+                            <select class="form-control hidden" id="entityId"
+                                    th:field="*{entityId}">
+                                <option th:value="${residentialEntity.getId()}"></option>
+                            </select>
+                            <button class="form-control"
+                                    title="Switch to moderator access"
+                                    th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}"
+                                    type="submit"><small>Resident</small>
+                            </button>
+                            <button class="form-control text-bg-danger"
+                                    title="Remove moderator access"
+                                    th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}"
+                                    type="submit"><small class="text-white">Moderator</small>
+                            </button>
+                        </form>
+                    </td>
+                    <!-- START: Message button-->
+                    <td style="min-width: 250px">
+                        <form th:action="@{/administration/owners/message/{id}(id=${resident.getId()})}"
+                              th:method="POST" class="form-container"
+                              th:object="${residentManageBindingModel}">
+
+                            <label for="entityIdMessage" class="hidden"></label>
+                            <select class="form-control hidden"
+                                    id="entityIdMessage"
+                                    th:field="*{entityId}">
+                                <option th:value="${residentialEntity.getId()}"></option>
+                            </select>
+
+                            <label for="messageText" class="hidden"></label>
+                            <div style="border: none" class="form-control">
+                                <input style="max-width: 90%; border-radius: 30px"
+                                       type="text"
+                                       th:placeholder="'Send a message to ' + ${resident.getFirstName()}"
+                                       id="messageText"
+                                       required autocomplete="off"
+                                       th:field="*{message}"
+                                       th:errorclass="bg-danger"
+                                       title="Enter here your message">
+                                <button onclick="return confirmSendMessage()"
+                                        type="submit" style="padding: 0">
+                                    <img class="text-dark" title="Send message"
+                                         src="/images/send-message.png"
+                                         style="max-width:20px; padding: 0"
+                                         alt="Send message">
+                                </button>
+                            </div>
+                        </form>
+                    </td>
+                    <!-- START: Delete button-->
+                    <td style="padding: 0">
+                        <form th:action="@{/administration/owners/delete/{id} (id=${resident.getId()})}"
+                              th:method="POST"
+                              th:object="${residentManageBindingModel}">
+                            <label for="entityIdDeleteResident"
+                                   class="hidden"></label>
+                            <select class="form-control hidden"
+                                    id="entityIdDeleteResident"
+                                    th:field="*{entityId}">
+                                <option th:value="${residentialEntity.getId()}"></option>
+                            </select>
+                            <button onclick="return confirmOwnerRemove()"
+                                    type="submit" style="padding: 0">
+                                <img title="Remove owner from this Residential entity"
+                                     src="/images/delete.jpg"
+                                     style="max-width:20px; padding: 0"
+                                     alt="Remove owner">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
-
-    <!--Start of table-->
-    <table th:if="${residentialEntity.getResidents().size()} > 0">
-        <tr class="text-center">
-            <th>
-                <p>Property №</p>
-            </th>
-            <th>
-                <p>First name</p>
-            </th>
-            <th>
-                <p>Last name</p>
-            </th>
-            <th>
-                <p>Username</p>
-            </th>
-            <th>
-                <p>E-mail</p>
-            </th>
-            <th>
-                <p>Phone number</p>
-            </th>
-            <th>
-                <p>Role</p>
-            </th>
-            <th>
-                <p>Message to owner</p>
-            </th>
-            <th style="padding-left: 10px">
-                <p>Remove owner</p>
-            </th>
-        </tr>
-        <tr class="text-center"
-            th:each="resident : ${residentialEntity.getResidents()}">
-            <td th:if="${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId()).size() > 0}">
-                <p th:each="property : ${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId())}"
-                   th:text="'№'+ ${property.getNumber()}"></p>
-            </td>
-            <td th:if="${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId()).size() == 0}">
-                <img title="No registered property"
-                     src="/images/attention.png" style="width: 111px;"
-                     alt="No registered property">
-            </td>
-            <td>
-                <p th:text="${resident.getFirstName()}"></p>
-            </td>
-            <td>
-                <p th:text="${resident.getLastName()}"></p>
-            </td>
-            <td>
-                <p th:text="${resident.getUsername()}"></p>
-            </td>
-            <td>
-                <p th:text="${resident.getEmail()}"></p>
-            </td>
-            <td>
-                <p th:text="${resident.getPhoneNumber()}"></p>
-            </td>
-            <!-- START: Roles change button-->
-            <td style="padding: 5px 10px">
-                <form class="form-container"
-                      th:action="@{/administration/owners/edit_role/{id} (id=${resident.getId()})}"
-                      th:method="POST"
-                      th:object="${residentManageBindingModel}">
-                    <label for="userId" class="hidden">Role change</label>
-                    <select class="form-control hidden" id="userId"
-                            th:field="*{userId}">
-                        <option th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}"
-                                th:value="${resident.getId()}">
-                        </option>
-                        <option th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}"
-                                value="">
-                        </option>
-                    </select>
-                    <label for="entityId" class="hidden"></label>
-                    <select class="form-control hidden" id="entityId"
-                            th:field="*{entityId}">
-                        <option th:value="${residentialEntity.getId()}"></option>
-                    </select>
-                    <button class="form-control"
-                            title="Switch to moderator access"
-                            th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}"
-                            type="submit"><small>Resident</small>
-                    </button>
-                    <button class="form-control text-bg-danger"
-                            title="Remove moderator access"
-                            th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}"
-                            type="submit"><small class="text-white">Moderator</small>
-                    </button>
-                </form>
-            </td>
-            <!-- START: Message button-->
-            <td style="min-width: 250px">
-                <form th:action="@{/administration/owners/message/{id}(id=${resident.getId()})}"
-                      th:method="POST" class="form-container"
-                      th:object="${residentManageBindingModel}">
-
-                    <label for="entityIdMessage" class="hidden"></label>
-                    <select class="form-control hidden"
-                            id="entityIdMessage"
-                            th:field="*{entityId}">
-                        <option th:value="${residentialEntity.getId()}"></option>
-                    </select>
-
-                    <label for="messageText" class="hidden"></label>
-                    <div style="border: none" class="form-control">
-                        <input style="max-width: 90%; border-radius: 30px"
-                               type="text"
-                               th:placeholder="'Send a message to ' + ${resident.getFirstName()}"
-                               id="messageText"
-                               required autocomplete="off"
-                               th:field="*{message}"
-                               th:errorclass="bg-danger"
-                               title="Enter here your message">
-                        <button onclick="return confirmSendMessage()"
-                                type="submit" style="padding: 0">
-                            <img class="text-dark" title="Send message"
-                                 src="/images/send-message.png"
-                                 style="max-width:20px; padding: 0"
-                                 alt="Send message">
-                        </button>
-                    </div>
-                </form>
-            </td>
-            <!-- START: Delete button-->
-            <td style="padding: 0">
-                <form th:action="@{/administration/owners/delete/{id} (id=${resident.getId()})}"
-                      th:method="POST"
-                      th:object="${residentManageBindingModel}">
-                    <label for="entityIdDeleteResident"
-                           class="hidden"></label>
-                    <select class="form-control hidden"
-                            id="entityIdDeleteResident"
-                            th:field="*{entityId}">
-                        <option th:value="${residentialEntity.getId()}"></option>
-                    </select>
-                    <button onclick="return confirmOwnerRemove()"
-                            type="submit" style="padding: 0">
-                        <img title="Remove owner from this Residential entity"
-                             src="/images/delete.jpg"
-                             style="max-width:20px; padding: 0"
-                             alt="Remove owner">
-                    </button>
-                </form>
-            </td>
-        </tr>
-    </table>
 </div>
 
 <!-- Footer -->
