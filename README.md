@@ -79,8 +79,8 @@ A platform that allows the registration of both home owners and residential enti
 <h2>Updates</h2>
     <h4>v.1.24.0302</h4>
   <ul>
-  <li> New sections added for active/pending and rejected registrations</li>
-  <li> General code and visual improvements</li>
+  <li> New sections added for active/pending and rejected property registrations</li>
+  <li> General code and logic improvements</li>
   </ul>
 
   <h4>v.1.24.0301</h4>
