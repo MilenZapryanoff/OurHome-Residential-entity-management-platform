@@ -42,14 +42,46 @@ public class PropertyManageController {
      * Property details in Administration
      *
      * @param id property id
-     * @return view administration-property
+     * @return view administration- active properties
      */
-    @GetMapping("/administration/property/{id}")
+    @GetMapping("/administration/property/active/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityPropertyDetails(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
+    public ModelAndView residentialEntityActiveProperties(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
                                                          @PathVariable("id") Long id) {
 
-        return new ModelAndView("administration-property")
+        return new ModelAndView("administration-property-active")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
+    }
+
+    /**
+     * Property details in Administration
+     *
+     * @param id property id
+     * @return view administration- pending properties
+     */
+    @GetMapping("/administration/property/pending/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityPendingProperties(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
+                                                         @PathVariable("id") Long id) {
+
+        return new ModelAndView("administration-property-pending")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
+    }
+
+    /**
+     * Property details in Administration
+     *
+     * @param id property id
+     * @return view administration- rejected properties
+     */
+    @GetMapping("/administration/property/rejected/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityRejectedProperties(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
+                                                           @PathVariable("id") Long id) {
+
+        return new ModelAndView("administration-property-rejected")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
     }
@@ -73,7 +105,7 @@ public class PropertyManageController {
 
         propertyService.setMonthlyFee(monthlyFee, property);
 
-        return new ModelAndView("redirect:/administration/property/" + propertyManageBindingModel.getEntityId() + "#post-action-nav");
+        return new ModelAndView("redirect:/administration/property/pending/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
     }
 
     /**
@@ -89,7 +121,7 @@ public class PropertyManageController {
 
         propertyService.rejectProperty(id);
 
-        return new ModelAndView("redirect:/administration/property/" + propertyManageBindingModel.getEntityId() + "#post-action-nav");
+        return new ModelAndView("redirect:/administration/property/pending/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
     }
 
     /**
@@ -103,9 +135,14 @@ public class PropertyManageController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyDelete(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
+        boolean rejected = propertyService.findPropertyById(id).isRejected();
         propertyService.deleteProperty(id, true);
 
-        return new ModelAndView("redirect:/administration/property/" + propertyManageBindingModel.getEntityId() + "#post-action-nav");
+        if (rejected) {
+            return new ModelAndView("redirect:/administration/property/rejected/" + propertyManageBindingModel.getEntityId() + "#rejected-registrations");
+        } else {
+            return new ModelAndView("redirect:/administration/property/active/" + propertyManageBindingModel.getEntityId() + "#active-registrations");
+        }
     }
 
     /**
@@ -144,7 +181,7 @@ public class PropertyManageController {
         //sending message (notification) to owner/resident
         messageService.propertyModificationMessageToResident(propertyService.findPropertyById(id));
 
-        return new ModelAndView("redirect:/administration/property/" + residentialEntity.getId());
+        return new ModelAndView("redirect:/administration/property/active/" + residentialEntity.getId());
     }
 
 
