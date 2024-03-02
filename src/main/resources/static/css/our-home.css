@@ -154,7 +154,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #919191;
 }
 
 .due-amounts-table {
@@ -297,7 +296,7 @@ body {
 }
 
 input[type='number'] {
-    -moz-appearance:textfield;
+    -moz-appearance: textfield;
 }
 
 input::-webkit-outer-spin-button,
@@ -581,7 +580,7 @@ Header Style
     font-size: 14px;
     font-weight: 400;
     text-transform: none;
-    border-radius: 20px;
+    border-radius: 30px;
 }
 
 .header-area .main-nav .nav li:last-child a i {
@@ -1043,8 +1042,8 @@ Featured Style
 }
 
 .featured .info-table {
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
 }
 
@@ -1082,8 +1081,8 @@ custom
  */
 
 .featured .apartment-table {
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
 }
 
@@ -1153,7 +1152,7 @@ POP-UP window
     position: fixed;
     bottom: 30%;
     right: 30%;
-    border: 1px solid #2d2d2d;
+    border: 1px solid #cecece;
     z-index: 9;
 }
 
@@ -1249,8 +1248,8 @@ Video Style
 
 .video-content .video-frame {
     position: relative;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-    border-radius: 10px;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
+    border-radius: 30px;
 }
 
 .video-content .video-frame img {
@@ -1373,8 +1372,8 @@ Administration Style
 }
 
 .administration .info-table {
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
 }
 
@@ -1405,7 +1404,7 @@ Administration Style
 
 .administration .message {
     border-radius: 50px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
 }
 
@@ -1497,8 +1496,8 @@ Property Style
 }
 
 .property .info-table {
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
 }
 
@@ -1591,8 +1590,8 @@ Messages Style
 }
 
 .messages .info-table {
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     /*padding: 35px 30px;*/
 }
 
@@ -1737,7 +1736,7 @@ Contact Style
 
 .input-content .item {
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
     background-color: #fff;
 }
@@ -1770,8 +1769,8 @@ Contact Style
 
 .input-content #input-form {
     margin-left: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
     background-color: #fff;
 }
@@ -2072,8 +2071,8 @@ Single Page Style
 }
 
 .single-property .info-table {
-    border-radius: 40px;
-    box-shadow: 0 65px 120px rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 70px 30px;
     margin-left: 60px;
 }
@@ -2128,8 +2127,8 @@ Contact Page Style
 }
 
 .contact-page .item {
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
     background-color: #fff;
     display: inline-block;
@@ -2160,8 +2159,8 @@ Contact Page Style
 
 .contact-page #contact-form {
     margin-left: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
     background-color: #fff;
 }
@@ -2303,13 +2302,15 @@ th {
     background-color: rgba(245, 245, 245, 0.93);
     padding: 25px;
     border: 2px solid grey;
-    border-radius: 5px;
-    border-radius: 20px; box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5)
+    border-radius: 20px;
+    box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5)
 }
+
 .custom-dialog p {
     margin: 0;
     padding-bottom: 20px;
 }
+
 .custom-dialog button {
     width: 100px;
     padding: 5px 20px;
@@ -2320,9 +2321,28 @@ th {
     cursor: pointer;
     transition: .4s;
 }
+
 .custom-dialog button:hover {
     background-color: #DC3545;
     transition: .4s;
+}
+
+.modify-fee-button {
+    padding-top: 50px;
+}
+
+.input-data {
+    margin: 0 auto;
+    padding-top: 50px;
+}
+
+input {
+    border: 1px solid lightgray;
+}
+
+.counter span {
+    padding: 1px 5px;
+    border-radius: 5px;
 }
 
 /*
