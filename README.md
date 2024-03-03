@@ -77,10 +77,18 @@ A platform that allows the registration of both home owners and residential enti
 </ul>
 
 <h2>Updates</h2>
-    <h4>v.1.24.0302</h4>
+  <h4>v.1.24.0303</h4>
   <ul>
-  <li> New sections added for active/pending and rejected property registrations</li>
-  <li> General code and logic improvements</li>
+  <li> Show/hide password input toggle switch added in some password fields.</li>
+  <li> Added information for property owners how their monthly fee is calculated. If a fee is a component of automatically calculated property monthly fee, there is indicator   added for this fee.</li>
+  <li> Added new component of monthly fee - individual property fee. Now manager can set such a fee individually for every single property. If set, the amount is added to       the pediodical automatically calculated monthly. All together form the total monthly fee.</li>
+  <li> Some fields types have been changed.</li>
+  </ul>
+
+  <h4>v.1.24.0302</h4>
+  <ul>
+  <li> New sections added for active/pending and rejected property registrations.</li>
+  <li> General code and logic improvements.</li>
   </ul>
 
   <h4>v.1.24.0301</h4>
