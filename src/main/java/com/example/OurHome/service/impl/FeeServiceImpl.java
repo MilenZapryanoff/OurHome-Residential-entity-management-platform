@@ -68,9 +68,9 @@ public class FeeServiceImpl implements FeeService {
 
             return fixedFeeNonHabitable.add(additionalFeeNonHabitable);
         }
-        int numberOfAdults = Integer.parseInt(property.getNumberOfAdults());
-        int numberOfChildren = Integer.parseInt(property.getNumberOfChildren());
-        int numberOfPets = Integer.parseInt(property.getNumberOfPets());
+        int numberOfAdults = property.getNumberOfAdults();
+        int numberOfChildren = property.getNumberOfChildren();
+        int numberOfPets = property.getNumberOfPets();
 
         BigDecimal fixedFeeHabitable = fee.getFixedFeeHabitable();
         BigDecimal adultFee = fee.getAdultFee();
@@ -122,6 +122,7 @@ public class FeeServiceImpl implements FeeService {
             if (property.isValidated()) {
                 BigDecimal calculatedMonthlyFee = calculateMonthlyFee(residentialEntity, property);
                 property.setMonthlyFee(calculatedMonthlyFee);
+                property.setTotalMonthlyFee(calculatedMonthlyFee.add(property.getTotalMonthlyFee()));
                 propertyRepository.save(property);
             }
         }
