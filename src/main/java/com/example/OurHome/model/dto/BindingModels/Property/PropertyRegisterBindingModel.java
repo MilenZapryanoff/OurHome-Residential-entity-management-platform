@@ -1,6 +1,5 @@
 package com.example.OurHome.model.dto.BindingModels.Property;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -16,13 +15,13 @@ public class PropertyRegisterBindingModel {
     private String floor;
 
     @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
-    private String numberOfAdults;
+    private int numberOfAdults;
 
     @PositiveOrZero(message = "Number of children must be a positive digit or 0")
-    private String numberOfChildren;
+    private int numberOfChildren;
 
     @PositiveOrZero(message = "Number of pets must be a positive digit or 0")
-    private String numberOfPets;
+    private int numberOfPets;
 
     @PositiveOrZero(message = "Total flat space must be a positive digit")
     private String totalFlatSpace;
@@ -62,29 +61,28 @@ public class PropertyRegisterBindingModel {
         this.residentialEntity = residentialEntity;
     }
 
-    public String getNumberOfAdults() {
+    public int getNumberOfAdults() {
         return numberOfAdults;
     }
 
-    public void setNumberOfAdults(String numberOfAdults) {
+    public void setNumberOfAdults(int numberOfAdults) {
         this.numberOfAdults = numberOfAdults;
     }
 
-    public String getNumberOfChildren() {
+    public int getNumberOfChildren() {
         return numberOfChildren;
     }
 
-    public void setNumberOfChildren(String numberOfChildren) {
+    public void setNumberOfChildren(int numberOfChildren) {
         this.numberOfChildren = numberOfChildren;
     }
 
-    public String getNumberOfPets() {
+    public int getNumberOfPets() {
         return numberOfPets;
     }
 
-    public void setNumberOfPets(String numberOfPets) {
+    public void setNumberOfPets(int numberOfPets) {
         this.numberOfPets = numberOfPets;
-
     }
 
     public boolean isNotHabitable() {
