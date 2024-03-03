@@ -115,12 +115,13 @@
             </ul>
         </div>
         <!--Property fee section details data-->
-        <div class="administration monthly-fee-details" >
+        <div class="administration monthly-fee-details">
             <div class="info-table col-lg-10" style="margin: 0 auto">
                 <h4 id="overpayment-post-nav" class="category text-danger text-center"> PROPERTY FEE
                     DETAILS</h4>
                 <ul>
-                    <li style="padding: 5px 0; margin: 0" th:if="${property.isValidated()} and ${!property.isRejected()}"
+                    <li style="padding: 5px 0; margin: 0"
+                        th:if="${property.isValidated()} and ${!property.isRejected()}"
                         class="text-black"><b>Monthly fee:</b>
                         <form id="autofee"
                               th:action="@{/administration/fees/changeAutoFeeSlider/{id}(id=${property.getId()})}"
@@ -138,13 +139,12 @@
                         <div th:if="${property.isAutoFee()}">
                             <p>Automatic monthly fee generation is switched <strong
                                     class="text-success">ON</strong>.</p>
-                            <p>Fee will be automatically applied for this property every month.</p>
+                            <p>Monthly fee will be automatically applied on every 1<sup>st</sup> date of a new month.</p>
                         </div>
                         <div th:unless="${property.isAutoFee()}">
                             <p>Automatic monthly fee generation is switched <strong>OFF</strong>.</p>
                             <p>No monthly fee will be applied for this property until you switch it
-                                on
-                                or manually add a fee.</p>
+                                on or manually add a fee.</p>
                         </div>
                     </li>
                     <li th:if="${!property.isValidated()} or ${property.isRejected()}"
@@ -157,49 +157,31 @@
                             </a>
                         </div>
                         <p class="text-secondary">Monthly fee is not available for this property!
-                            Please check property status!</p>
+                            Please check property status!<br></p>
                     </li>
                     <li class="text-black" style="padding: 5px 0; margin: 0">
-                        <b th:text="'Monthly fee amount: ' + ${property.getMonthlyFee()} + ' лв.'"></b>
-                        <p> Monthly fee calculated according residential entity
-                            fee policy.<br>
-                            A new fee is applied on every 1<sup>st</sup> date of a new month.</p>
-                    </li>
-                    <li class="text-black" style="padding: 5px 0; margin: 0">
-                        <form id="input-form"
-                              th:method="POST"
-                              th:action="@{/administration/fees/setOverPayment/{id}(id=${property.getId()})}"
-                              th:object="${overpaymentBindingModel}">
-                            <fieldset>
-                                <label for="overPayment">
-                                    <b>Overpaid amount: </b>
-                                </label>
-                                <small th:if="${#fields.hasErrors('overPayment')}"
-                                       th:errors="*{overPayment}"
-                                       class="text-danger">overPayment error message</small>
-                                <input class="text-end" type="number" step="any" id="overPayment"
-                                       placeholder="0.00"
-                                       style="width: 70px"
-                                       th:field="*{overPayment}"
-                                       th:errorclass="bg-danger"
-                                       th:value="${property.getOverpayment()} + 'лв.'">
-                                <strong class="text-dark">лв.</strong>
-                                <button title="setOverPayment" type="submit">
-                                    <img class="submit-button"
-                                         title="Edit and update overpayment amount"
-                                         src="/images/update.jpg"
-                                         style="max-width: 66px; padding: 0"
-                                         alt="Edit and update overpayment amount">
+                        <b th:text="'Monthly fee amount: ' + ${property.getTotalMonthlyFee()} + ' лв.'"></b>
+                        <div class="accordion-item">
+                            <div class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed text-secondary"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#collapseTwo"
+                                        aria-expanded="false"
+                                        aria-controls="collapseTwo">
+                                    <small class="text-dark">View fee components: <strong class="text-danger">>>></strong></small>
                                 </button>
-                            </fieldset>
-                            <p>
-                                In case of overpayment set the overpaid amount in this field.<br>
-                                The amount will automatically cover future fees (excluding manually
-                                created fees)
-                                and will be decreased with the amount <br> of the covered fee until it
-                                gets used.
-                            </p>
-                        </form>
+                            </div>
+                            <div id="collapseTwo"
+                                 class="accordion-collapse collapse"
+                                 aria-labelledby="headingTwo"
+                                 data-bs-parent="#accordionExample">
+                                <div class="info">
+                                    <p>Monthly fee according to Residential entity fee policy: <strong th:text="${property.getMonthlyFee()} + 'лв.'"></strong></p>
+                                    <p>Additional individual property fee: <strong th:text="${property.getAdditionalPropertyFee()} + 'лв.'"></strong></p>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     <li class="text-black" style="padding: 5px 0; margin: 0">
                         <b>Number of unpaid fees:</b>
@@ -221,6 +203,74 @@
                         <p>
                             Total due amount is automatically calculated
                             by summing all individual unpaid monthly fees.</p>
+                    </li>
+                    <li class="text-black" style="padding: 5px 0; margin: 0">
+                        <form id="input-form-additional-fee"
+                              th:method="POST"
+                              th:action="@{/administration/fees/setAdditionalPropertyFee/{id}(id=${property.getId()})}"
+                              th:object="${overpaymentBindingModel}">
+                            <fieldset>
+                                <label for="overPayment">
+                                    <b>Additional property fee: </b>
+                                </label>
+                                <small th:if="${#fields.hasErrors('additionalPropertyFee')}"
+                                       th:errors="*{additionalPropertyFee}"
+                                       class="text-danger">AdditionalPropertyFee error message</small>
+                                <input class="text-end" type="number" step="any" id="additionalPropertyFee"
+                                       placeholder="0.00"
+                                       style="width: 70px"
+                                       th:field="*{additionalPropertyFee}"
+                                       th:errorclass="bg-danger"
+                                       th:value="${property.getAdditionalPropertyFee()} + 'лв.'">
+                                <strong class="text-dark">лв.</strong>
+                                <button title="setOverPayment" type="submit">
+                                    <img class="submit-button extend"
+                                         title="Set additional fee amount"
+                                         src="/images/check_yes.png"
+                                         alt="Set additional fee amount">
+                                </button>
+                            </fieldset>
+                            <p>
+                                Additional fee is a property specific fee associated with this property.<br>
+                                The amount set in this field will be automatically added to the total monthly fee
+                                calculated for this property.
+                            </p>
+                        </form>
+                    </li>
+                    <li class="text-black" style="padding: 5px 0; margin: 0">
+                        <form id="input-form"
+                              th:method="POST"
+                              th:action="@{/administration/fees/setOverPayment/{id}(id=${property.getId()})}"
+                              th:object="${overpaymentBindingModel}">
+                            <fieldset>
+                                <label for="overPayment">
+                                    <b>Overpaid amount: </b>
+                                </label>
+                                <small th:if="${#fields.hasErrors('overPayment')}"
+                                       th:errors="*{overPayment}"
+                                       class="text-danger">overPayment error message</small>
+                                <input class="text-end" type="number" step="any" id="overPayment"
+                                       placeholder="0.00"
+                                       style="width: 70px"
+                                       th:field="*{overPayment}"
+                                       th:errorclass="bg-danger"
+                                       th:value="${property.getOverpayment()} + 'лв.'">
+                                <strong class="text-dark">лв.</strong>
+                                <button title="setOverPayment" type="submit">
+                                    <img class="submit-button extend"
+                                         title="Update overpayment amount"
+                                         src="/images/check_yes.png"
+                                         alt="Update overpayment amount">
+                                </button>
+                            </fieldset>
+                            <p>
+                                In case of overpayment set the overpaid amount in this field.<br>
+                                The amount will automatically cover future fees (excluding manually
+                                created fees)
+                                and will be decreased with the amount <br> of the covered fee until it
+                                gets used.
+                            </p>
+                        </form>
                     </li>
                 </ul>
             </div>
@@ -334,7 +384,7 @@
                                 </form>
                             </td>
                             <td class="table-image">
-                                <img th:if="${propertyFee.isManual()}" title="Mark as paid"
+                                <img th:if="${propertyFee.isManual()}" title="Manual fee"
                                      src="/images/check_yes.png" style="width: 20px;" alt="Manual fee">
                                 <p th:unless="${propertyFee.isManual()}">-</p>
                             </td>
