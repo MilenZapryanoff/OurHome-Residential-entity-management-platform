@@ -1178,6 +1178,10 @@ POP-UP window
     outline: none;
 }
 
+input, #residentialAccessCode:focus, .form-container input[type=password]:focus {
+    outline: none;
+}
+
 /* Set a style for the submit/login button */
 .form-container .btn {
     background-color: #000000;
@@ -2343,6 +2347,31 @@ input {
 .counter span {
     padding: 1px 5px;
     border-radius: 5px;
+}
+
+.extend {
+    padding: 0;
+    max-width: 20px;
+    transition: .3s;
+}
+
+.extend:hover {
+    padding: 4px;
+    shape-image-threshold: revert;
+    transition: .3s;
+}
+
+
+td img {
+    padding: 0;
+    max-width: 20px;
+    transition: .25s;
+}
+
+td img:hover {
+    padding: 4px;
+    shape-image-threshold: revert;
+    transition: .25s;
 }
 
 /*
