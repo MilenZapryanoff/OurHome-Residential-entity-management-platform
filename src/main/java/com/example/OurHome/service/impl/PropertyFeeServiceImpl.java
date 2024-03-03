@@ -88,27 +88,29 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
 
         BigDecimal overpayment = property.getOverpayment();
         BigDecimal monthlyFee = property.getMonthlyFee();
+        BigDecimal additionalPropertyFee = property.getAdditionalPropertyFee();
+        BigDecimal totalMonthlyFee = monthlyFee.add(additionalPropertyFee);
 
         //if monthly fees in Residential entity are not set, no new fees will be created for the property
-        if (monthlyFee.compareTo(BigDecimal.ZERO) > 0) {
+        if (totalMonthlyFee.compareTo(BigDecimal.ZERO) > 0) {
 
             //Calculations of monthly fee in case of overpayment
             if (overpayment.compareTo(BigDecimal.ZERO) > 0) {
 
                 //Creating new monthly fee when overpaid amount > monthly fee
-                if (overpayment.compareTo(monthlyFee) > 0) {
-                    newPropertyFee.setFeeAmount(BigDecimal.valueOf(0));
+                if (overpayment.compareTo(totalMonthlyFee) > 0) {
+                    newPropertyFee.setFeeAmount(totalMonthlyFee);
                     newPropertyFee.setPaid(true);
                     newPropertyFee.setOverpaidAmountStart(overpayment);
 
-                    property.setOverpayment(overpayment.subtract(monthlyFee));
+                    property.setOverpayment(overpayment.subtract(totalMonthlyFee));
                     propertyRepository.save(property);
-                    newPropertyFee.setOverpaidAmountEnd(overpayment.subtract(monthlyFee));
+                    newPropertyFee.setOverpaidAmountEnd(overpayment.subtract(totalMonthlyFee));
                 }
 
                 //Creating new propertyFee when overpaid amount == monthly fee
-                if (overpayment.compareTo(monthlyFee) == 0) {
-                    newPropertyFee.setFeeAmount(BigDecimal.valueOf(0));
+                if (overpayment.compareTo(totalMonthlyFee) == 0) {
+                    newPropertyFee.setFeeAmount(totalMonthlyFee);
                     newPropertyFee.setPaid(true);
                     newPropertyFee.setOverpaidAmountStart(overpayment);
 
@@ -118,8 +120,8 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
                 }
 
                 //Creating new propertyFee when overpaid amount < monthly fee
-                if (overpayment.compareTo(monthlyFee) < 0) {
-                    newPropertyFee.setFeeAmount(monthlyFee.subtract(overpayment));
+                if (overpayment.compareTo(totalMonthlyFee) < 0) {
+                    newPropertyFee.setFeeAmount(totalMonthlyFee.subtract(overpayment));
                     newPropertyFee.setOverpaidAmountStart(overpayment);
 
                     property.setOverpayment(BigDecimal.valueOf(0));
@@ -127,7 +129,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
                     newPropertyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
                 }
             } else {
-                newPropertyFee.setFeeAmount(property.getMonthlyFee());
+                newPropertyFee.setFeeAmount(totalMonthlyFee);
                 newPropertyFee.setPaid(false);
                 newPropertyFee.setOverpaidAmountStart(BigDecimal.valueOf(0));
                 newPropertyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
@@ -140,7 +142,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             propertyFeeRepository.save(newPropertyFee);
 
             //send message to property owner
-            messageService.newFeeMessageToPropertyOwner(property, property.getMonthlyFee(), checkTotalDueAmount(property.getId()));
+            messageService.newFeeMessageToPropertyOwner(property, property.getTotalMonthlyFee(), checkTotalDueAmount(property.getId()));
         }
     }
 
@@ -197,6 +199,15 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     @Override
     public void updateOverpayment(Property property, BigDecimal overPayment) {
         property.setOverpayment(Objects.requireNonNullElseGet(overPayment, () -> BigDecimal.valueOf(0)));
+        propertyRepository.save(property);
+    }
+
+    /**
+     * Update additional property fee method
+     */
+    @Override
+    public void setAdditionalPropertyFee(Property property, BigDecimal additionalPropertyFee) {
+        property.setAdditionalPropertyFee(Objects.requireNonNullElseGet(additionalPropertyFee, () -> BigDecimal.valueOf(0)));
         propertyRepository.save(property);
     }
 
