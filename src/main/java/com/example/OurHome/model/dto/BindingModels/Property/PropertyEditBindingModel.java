@@ -11,11 +11,11 @@ public class PropertyEditBindingModel {
     @NotNull
     private String floor;
     @NotNull
-    private String numberOfAdults;
+    private int numberOfAdults;
     @NotNull
-    private String numberOfChildren;
+    private int numberOfChildren;
     @NotNull
-    private String numberOfPets;
+    private int numberOfPets;
 
     @Positive(message = "Total flat space must be positive digit")
     private String totalFlatSpace;
@@ -43,27 +43,27 @@ public class PropertyEditBindingModel {
         this.floor = floor;
     }
 
-    public String getNumberOfAdults() {
+    public int getNumberOfAdults() {
         return numberOfAdults;
     }
 
-    public void setNumberOfAdults(String numberOfAdults) {
+    public void setNumberOfAdults(int numberOfAdults) {
         this.numberOfAdults = numberOfAdults;
     }
 
-    public String getNumberOfChildren() {
+    public int getNumberOfChildren() {
         return numberOfChildren;
     }
 
-    public void setNumberOfChildren(String numberOfChildren) {
+    public void setNumberOfChildren(int numberOfChildren) {
         this.numberOfChildren = numberOfChildren;
     }
 
-    public String getNumberOfPets() {
+    public int getNumberOfPets() {
         return numberOfPets;
     }
 
-    public void setNumberOfPets(String numberOfPets) {
+    public void setNumberOfPets(int numberOfPets) {
         this.numberOfPets = numberOfPets;
     }
 
