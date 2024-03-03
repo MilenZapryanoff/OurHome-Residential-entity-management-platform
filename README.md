@@ -79,10 +79,11 @@ A platform that allows the registration of both home owners and residential enti
 <h2>Updates</h2>
   <h4>v.1.24.0303</h4>
   <ul>
-  <li> Show/hide password input toggle switch added in some password fields.</li>
-  <li> Added information for property owners how their monthly fee is calculated. If a fee is component of the monthly fee an indicator is added for this. This will help property owner to better understand his fee.</li>
-  <li> Added new component of monthly fee - individual property fee. Now manager can set such a fee individually for every single property. If set, the amount is added to       the pediodical monthly fee. All together form the total monthly fee.</li>
-  <li> Some field types have been changed.</li>
+  <li>Show/hide password input toggle switch added in some password fields.</li>
+  <li>Added information for property owners how their monthly fee is calculated. If a fee is component of the monthly fee an indicator is added for this. This will help property owner to better understand his fee.</li>
+  <li>Added new component of monthly fee - individual property fee. Now manager can set such a fee individually for every single property. If set, the amount is added to       the pediodical monthly fee. All together form the total monthly fee.</li>
+  <li>Some field types have been changed.</li>
+  <li>Improved integration tests.</li>
   </ul>
 
   <h4>v.1.24.0302</h4>
