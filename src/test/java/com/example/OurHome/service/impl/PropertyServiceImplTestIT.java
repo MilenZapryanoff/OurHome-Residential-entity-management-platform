@@ -156,7 +156,7 @@ class PropertyServiceImplTestIT {
         createTestProperty();
 
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
-        propertyEditBindingModel.setNumberOfAdults(String.valueOf(3));
+        propertyEditBindingModel.setNumberOfAdults(3);
 
         Long id = null;
         List<Property> all = propertyRepository.findAll();
@@ -174,7 +174,7 @@ class PropertyServiceImplTestIT {
         createTestProperty();
 
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
-        propertyEditBindingModel.setNumberOfChildren(String.valueOf(3));
+        propertyEditBindingModel.setNumberOfChildren(3);
 
         Long id = null;
         List<Property> all = propertyRepository.findAll();
@@ -192,7 +192,7 @@ class PropertyServiceImplTestIT {
         createTestProperty();
 
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
-        propertyEditBindingModel.setNumberOfPets(String.valueOf(3));
+        propertyEditBindingModel.setNumberOfPets(3);
 
         Long id = null;
         List<Property> all = propertyRepository.findAll();
@@ -230,9 +230,9 @@ class PropertyServiceImplTestIT {
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
         propertyEditBindingModel.setFloor(String.valueOf(1));
         propertyEditBindingModel.setNumber(String.valueOf(1));
-        propertyEditBindingModel.setNumberOfAdults(String.valueOf(2));
-        propertyEditBindingModel.setNumberOfChildren(String.valueOf(2));
-        propertyEditBindingModel.setNumberOfPets(String.valueOf(2));
+        propertyEditBindingModel.setNumberOfAdults(2);
+        propertyEditBindingModel.setNumberOfChildren(2);
+        propertyEditBindingModel.setNumberOfPets(2);
         propertyEditBindingModel.setNotHabitable(false);
 
         Long id = null;
@@ -255,9 +255,9 @@ class PropertyServiceImplTestIT {
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
         propertyEditBindingModel.setFloor(String.valueOf(10));
         propertyEditBindingModel.setNumber(String.valueOf(10));
-        propertyEditBindingModel.setNumberOfAdults(String.valueOf(20));
-        propertyEditBindingModel.setNumberOfChildren(String.valueOf(20));
-        propertyEditBindingModel.setNumberOfPets(String.valueOf(20));
+        propertyEditBindingModel.setNumberOfAdults(20);
+        propertyEditBindingModel.setNumberOfChildren(20);
+        propertyEditBindingModel.setNumberOfPets(20);
         propertyEditBindingModel.setNotHabitable(true);
 
         Long id = null;
@@ -289,9 +289,9 @@ class PropertyServiceImplTestIT {
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
         propertyEditBindingModel.setFloor(String.valueOf(10));
         propertyEditBindingModel.setNumber(String.valueOf(10));
-        propertyEditBindingModel.setNumberOfAdults(String.valueOf(20));
-        propertyEditBindingModel.setNumberOfChildren(String.valueOf(20));
-        propertyEditBindingModel.setNumberOfPets(String.valueOf(20));
+        propertyEditBindingModel.setNumberOfAdults(20);
+        propertyEditBindingModel.setNumberOfChildren(20);
+        propertyEditBindingModel.setNumberOfPets(20);
         propertyEditBindingModel.setNotHabitable(true);
 
         Long id = null;
@@ -415,9 +415,9 @@ class PropertyServiceImplTestIT {
         propertyRegisterBindingModel.setResidentialEntity(residentialEntity.getId());
         propertyRegisterBindingModel.setNumber(String.valueOf(10));
         propertyRegisterBindingModel.setFloor(String.valueOf(10));
-        propertyRegisterBindingModel.setNumberOfAdults(String.valueOf(10));
-        propertyRegisterBindingModel.setNumberOfChildren(String.valueOf(10));
-        propertyRegisterBindingModel.setNumberOfPets(String.valueOf(10));
+        propertyRegisterBindingModel.setNumberOfAdults(10);
+        propertyRegisterBindingModel.setNumberOfChildren(10);
+        propertyRegisterBindingModel.setNumberOfPets(10);
         propertyRegisterBindingModel.setNotHabitable(true);
         return propertyRegisterBindingModel;
     }
@@ -426,9 +426,9 @@ class PropertyServiceImplTestIT {
         Property property = new Property();
         property.setFloor(String.valueOf(1));
         property.setNumber(String.valueOf(1));
-        property.setNumberOfAdults(String.valueOf(2));
-        property.setNumberOfChildren(String.valueOf(2));
-        property.setNumberOfPets(String.valueOf(2));
+        property.setNumberOfAdults(2);
+        property.setNumberOfChildren(2);
+        property.setNumberOfPets(2);
         property.setValidated(false);
         propertyRepository.save(property);
         return property;
