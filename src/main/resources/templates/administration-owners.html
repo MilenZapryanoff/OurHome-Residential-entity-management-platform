@@ -167,11 +167,8 @@
             <div class="text-center">
                 <h4 class="category text-danger">LIST OF PROPERTY OWNERS</h4>
             </div>
-
             <!--Start of counter-->
             <div class="tabs-content">
-                <p th:if="${residentialEntity.getResidents().size()} == 0"
-                   class="text-center">No residents available</p>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="Properties" role="tabpanel"
                          aria-labelledby="properties-tab-tab">
@@ -193,6 +190,7 @@
             </div>
 
             <!--Start of table-->
+            <p th:if="${residentialEntity.getResidents().size()} == 0" class="text-center">No residents available</p>
             <table th:if="${residentialEntity.getResidents().size()} > 0">
                 <tr class="text-center">
                     <th>
@@ -309,7 +307,6 @@
                                         type="submit" style="padding: 0">
                                     <img class="text-dark" title="Send message"
                                          src="/images/send-message.png"
-                                         style="max-width:20px; padding: 0"
                                          alt="Send message">
                                 </button>
                             </div>
@@ -331,7 +328,6 @@
                                     type="submit" style="padding: 0">
                                 <img title="Remove owner from this Residential entity"
                                      src="/images/delete.jpg"
-                                     style="max-width:20px; padding: 0"
                                      alt="Remove owner">
                             </button>
                         </form>
