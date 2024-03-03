@@ -168,7 +168,7 @@
                                     </li>
                                     <li class="text-black">
                                         <p>Monthly fee: <b
-                                                th:text="${property.getMonthlyFee()} + ' лв.'"></b></p>
+                                                th:text="${property.getTotalMonthlyFee()} + ' лв.'"></b></p>
                                     </li>
                                     <li class="text-black">
                                         <p>Overpaid amount: <b
@@ -242,51 +242,108 @@
                                             <h5 class="text-danger">Residential entity fee
                                                 policy</h5>
                                             <p class="text-secondary">Residential entity fee
-                                                policy defines the way your property monthly fee
-                                                is calculated.
-                                                <br>In this section you will find the fees
-                                                applicable to your residential entity.</p>
+                                                policy defines the way your property monthly fee is calculated.
+                                                <br>In this section you will find the fees applicable to your residential entity.<br>
+                                                Amounts in <strong class="text-danger">red</strong> indicates if the component is included in your property monthly fee calculation.</strong>
+                                            </p>
                                         </div>
                                     </li>
                                     <li class="text-dark">
                                         <h5>Habitable property fee components</h5>
                                     </li>
+
+                                    <!--to change STRING TO INTEGER FOR ADULTS, CHILDREN AND PETS DB ENTITIES-->
+
                                     <li class="text-black">
-                                        <p>Fixed fee: <b
-                                                th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' лв.'"></b>
+                                        <p th:if="${!property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getFixedFeeHabitable() > 0}">
+                                            <img title="Per property" src="/images/home.png" style="width: 15px; margin-top: 5px; cursor: help" alt="Per property">
+                                            Fixed fee:  <b th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' лв.'" class="text-danger"></b>
+                                        </p>
+                                        <p th:unless="${!property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getFixedFeeHabitable() > 0}">
+                                            <img title="Per property" src="/images/home.png" style="width: 15px; margin-top: 5px; cursor: help" alt="Per property">
+                                            Fixed fee: <b th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' лв.'"></b>
                                         </p>
                                     </li>
                                     <li class="text-black">
-                                        <p>Adult fee: <b
+                                        <p th:if="${!property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getAdultFee() > 0} and ${property.getNumberOfAdults() > 0}">
+                                            <img title="Per adult" src="/images/person.png" style="width: 16px; margin-top: 5px; cursor: help" alt="Per adult">
+                                            Adult fee: <b th:text="${property.getResidentialEntity().getFee().getAdultFee()} + ' лв.'" class="text-danger"></b>
+                                        </p>
+                                        <p th:unless="${!property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getAdultFee() > 0} and ${property.getNumberOfAdults() > 0}">
+                                            <img title="Per adult" src="/images/person.png" style="width: 16px; margin-top: 5px; cursor: help" alt="Per adult">
+                                            Adult fee: <b
                                                 th:text="${property.getResidentialEntity().getFee().getAdultFee()} + ' лв.'"></b>
                                         </p>
+
                                     </li>
                                     <li class="text-black">
-                                        <p>Child fee: <b
+                                        <p th:if="${!property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getChildFee() > 0} and ${property.getNumberOfChildren() > 0}">
+                                            <img title="Per child" src="/images/person.png" style="width: 13px; margin-top: 5px; cursor: help" alt="Per child">
+                                            Child fee: <b
+                                                th:text="${property.getResidentialEntity().getFee().getChildFee()} + ' лв.'" class="text-danger"></b>
+                                        </p>
+                                        <p th:unless="${!property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getChildFee() > 0} and ${property.getNumberOfChildren() > 0}">
+                                            <img title="Per child" src="/images/person.png" style="width: 13px; margin-top: 5px; cursor: help" alt="Per child">
+                                            Child fee: <b
                                                 th:text="${property.getResidentialEntity().getFee().getChildFee()} + ' лв.'"></b>
                                         </p>
                                     </li>
                                     <li class="text-black">
-                                        <p>Pet fee: <b
-                                                th:text="${property.getResidentialEntity().getFee().getPetFee()} + ' лв.'"></b>
+                                        <p th:if="${!property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getPetFee() > 0} and ${property.getNumberOfPets() > 0}">
+                                            <img title="Per pet" src="/images/pet.png" style="width: 13px; margin-top: 5px; cursor: help" alt="Per pet">
+                                            Pet fee: <b th:text="${property.getResidentialEntity().getFee().getPetFee()} + ' лв.'" class="text-danger"></b>
+                                        </p>
+                                        <p th:unless="${!property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getPetFee() > 0} and ${property.getNumberOfPets() > 0}">
+                                            <img title="Per pet" src="/images/pet.png" style="width: 13px; margin-top: 5px; cursor: help" alt="Per pet">
+                                            Pet fee: <b th:text="${property.getResidentialEntity().getFee().getPetFee()} + ' лв.'"></b>
                                         </p>
                                     </li>
                                     <li class="text-black">
-                                        <p>Additional fee: <b
-                                                th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
+                                        <p th:if="${!property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getAdditionalFeeHabitable() > 0}">
+                                            <img title="Per property" src="/images/home.png" style="width: 15px; margin-top: 5px; cursor: help" alt="Per property">
+                                            Additional fee: <b th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' лв.'" class="text-danger"></b>
+                                        </p>
+                                        <p th:unless="${!property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getAdditionalFeeHabitable() > 0}">
+                                            <img title="Per property" src="/images/home.png" style="width: 15px; margin-top: 5px; cursor: help" alt="Per property">
+                                            Additional fee: <b th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
                                         </p>
                                     </li>
                                     <li class="text-dark">
                                         <h5>Non-habitable property fee components</h5>
                                     </li>
                                     <li class="text-black">
-                                        <p>Fixed fee: <b
-                                                th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
+                                        <p th:if="${property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getFixedFeeNonHabitable() > 0}">
+                                            <img title="Per property" src="/images/home.png" style="width: 15px; margin-top: 5px; cursor: help" alt="Per property">
+                                            Fixed fee: <b th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' лв.'" class="text-danger"></b>
+                                        </p>
+                                        <p th:unless="${property.isNotHabitable()}">
+                                            <img title="Per property" src="/images/home.png" style="width: 15px; margin-top: 5px; cursor: help" alt="Per property">
+                                            Fixed fee: <b th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
                                         </p>
                                     </li>
                                     <li class="text-black">
-                                        <p>Additional fee: <b
-                                                th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
+                                        <p th:if="${property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable() > 0}">
+                                            <img title="Per property" src="/images/home.png" style="width: 15px; margin-top: 5px; cursor: help" alt="Per property">
+                                            Additional fee: <b th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' лв.'" class="text-danger"></b>
+                                        </p>
+                                        <p th:unless="${property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable() > 0}">
+                                            <img title="Per property" src="/images/home.png" style="width: 15px; margin-top: 5px; cursor: help" alt="Per property">
+                                            Additional fee: <b th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
+                                        </p>
+                                    </li>
+                                    <li class="text-dark">
+                                        <h5>Individual property fee components</h5>
+                                    </li>
+                                    <li class="text-black">
+                                        <p th:if="${property.getAdditionalPropertyFee() > 0}">
+                                            <img title="Per property" src="/images/home.png" style="width: 15px; margin-top: 5px; cursor: help" alt="Per property">
+                                            Property specific fee: <b
+                                                th:text="${property.getAdditionalPropertyFee()} + ' лв.'" class="text-danger"></b>
+                                        </p>
+                                        <p th:unless="${property.getAdditionalPropertyFee() > 0}" >
+                                            <img title="Per property" src="/images/home.png" style="width: 15px; margin-top: 5px; cursor: help" alt="Per property">
+                                            Property specific fee: <b
+                                                th:text="${property.getAdditionalPropertyFee()} + ' лв.'"></b>
                                         </p>
                                     </li>
                                 </ul>
