@@ -412,9 +412,9 @@ class MessageServiceImplTestIT {
         Property property = new Property();
         property.setNumber(String.valueOf(1));
         property.setFloor(String.valueOf(1));
-        property.setNumberOfAdults(String.valueOf(1));
-        property.setNumberOfChildren(String.valueOf(1));
-        property.setNumberOfPets(String.valueOf(1));
+        property.setNumberOfAdults(1);
+        property.setNumberOfChildren(1);
+        property.setNumberOfPets(1);
         property.setOwner(owner);
         property.setResidentialEntity(residentialEntity);
         return property;
