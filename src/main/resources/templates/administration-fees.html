@@ -184,8 +184,6 @@
             <div class="text-center">
                 <h5 class="category text-danger">
                     DUE AMOUNTS BY PROPERTY</h5>
-                <p th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} == 0"
-                   class="text-center">No records found</p>
             </div>
 
             <div class="due-amounts-header" style="padding: 10px 0">
@@ -218,7 +216,9 @@
             </div>
             <hr>
 
-            <table
+            <p th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} == 0"
+               class="text-center">No records found</p>
+            <table style="width: 100%"
                    th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 0">
                 <tr class="text-center">
                     <th>
@@ -255,7 +255,7 @@
                         <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
                     </td>
                     <td>
-                        <p th:text="${property.getMonthlyFee()} + ' лв.'"></p>
+                        <p th:text="${property.getTotalMonthlyFee()} + ' лв.'"></p>
                     </td>
                     <td th:if="${property.getOverpayment()} > 0">
                         <p th:text="${property.getOverpayment()} + ' лв.'"></p>
