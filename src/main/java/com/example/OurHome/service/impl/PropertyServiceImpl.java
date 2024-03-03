@@ -69,6 +69,8 @@ public class PropertyServiceImpl implements PropertyService {
         newProperty.setOwner(loggedUser);
         newProperty.setAutoFee(true);
         newProperty.setValidated(false);
+        newProperty.setTotalMonthlyFee(BigDecimal.ZERO);
+        newProperty.setAdditionalPropertyFee(BigDecimal.ZERO);
 
         propertyRepository.save(newProperty);
 
@@ -211,9 +213,9 @@ public class PropertyServiceImpl implements PropertyService {
             return property.isRejected() ||
                     !property.getNumber().equals(propertyEditBindingModel.getNumber()) ||
                     !property.getFloor().equals(propertyEditBindingModel.getFloor()) ||
-                    !property.getNumberOfAdults().equals(propertyEditBindingModel.getNumberOfAdults()) ||
-                    !property.getNumberOfChildren().equals(propertyEditBindingModel.getNumberOfChildren()) ||
-                    !property.getNumberOfPets().equals(propertyEditBindingModel.getNumberOfPets()) ||
+                    property.getNumberOfAdults() != propertyEditBindingModel.getNumberOfAdults() ||
+                    property.getNumberOfChildren() != propertyEditBindingModel.getNumberOfChildren() ||
+                    property.getNumberOfPets() != propertyEditBindingModel.getNumberOfPets() ||
                     property.isNotHabitable() != propertyEditBindingModel.isNotHabitable();
         }
         return false;
@@ -248,6 +250,15 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public void setMonthlyFee(BigDecimal monthlyFee, Property property) {
         property.setMonthlyFee(monthlyFee);
+        if (monthlyFee == null) {
+            property.setTotalMonthlyFee(BigDecimal.ZERO.add(property.getTotalMonthlyFee()));
+        }
+        propertyRepository.save(property);
+    }
+
+    @Override
+    public void updateTotalMonthlyFee(Property property, BigDecimal additionalMonthlyFee) {
+        property.setTotalMonthlyFee(property.getMonthlyFee().add(additionalMonthlyFee));
         propertyRepository.save(property);
     }
 }
