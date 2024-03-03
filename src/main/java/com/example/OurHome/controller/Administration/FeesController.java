@@ -183,6 +183,26 @@ public class FeesController {
         return new ModelAndView("redirect:/administration/fees/details/" + id + "#overpayment-post-nav");
     }
 
+    @PostMapping("/administration/fees/setAdditionalPropertyFee/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView setAdditionalPropertyFee(@PathVariable("id") Long id,
+                                       @Valid OverpaymentBindingModel overpaymentBindingModel,
+                                       BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("administration-property-fees")
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("property", getProperty(id))
+                    .addObject("overpaymentBindingModel", overpaymentBindingModel);
+        }
+
+        Property property = propertyService.findPropertyById(id);
+        propertyFeeService.setAdditionalPropertyFee(property, overpaymentBindingModel.getAdditionalPropertyFee());
+        propertyService.updateTotalMonthlyFee(property, overpaymentBindingModel.getAdditionalPropertyFee());
+
+        return new ModelAndView("redirect:/administration/fees/details/" + id + "#overpayment-post-nav");
+    }
+
     /**
      * Administration -> Monthly Fees -> PropertyFees by property ID -> Edit fee
      *
