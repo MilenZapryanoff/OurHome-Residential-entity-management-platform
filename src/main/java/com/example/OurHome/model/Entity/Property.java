@@ -20,13 +20,13 @@ public class Property {
     private String floor;
 
     @Column
-    private String numberOfAdults;
+    private int numberOfAdults;
 
     @Column
-    private String numberOfChildren;
+    private int numberOfChildren;
 
     @Column
-    private String numberOfPets;
+    private int numberOfPets;
 
     @Column
     private String totalFlatSpace;
@@ -50,10 +50,16 @@ public class Property {
     private boolean autoFee;
 
     @Column
+    private BigDecimal overpayment;
+
+    @Column
     private BigDecimal monthlyFee;
 
     @Column
-    private BigDecimal overpayment;
+    private BigDecimal additionalPropertyFee;
+
+    @Column
+    private BigDecimal totalMonthlyFee;
 
     @ManyToOne
     private UserEntity owner;
@@ -93,27 +99,27 @@ public class Property {
         this.floor = floor;
     }
 
-    public String getNumberOfAdults() {
+    public int getNumberOfAdults() {
         return numberOfAdults;
     }
 
-    public void setNumberOfAdults(String numberOfAdults) {
+    public void setNumberOfAdults(int numberOfAdults) {
         this.numberOfAdults = numberOfAdults;
     }
 
-    public String getNumberOfChildren() {
+    public int getNumberOfChildren() {
         return numberOfChildren;
     }
 
-    public void setNumberOfChildren(String numberOfChildren) {
+    public void setNumberOfChildren(int numberOfChildren) {
         this.numberOfChildren = numberOfChildren;
     }
 
-    public String getNumberOfPets() {
+    public int getNumberOfPets() {
         return numberOfPets;
     }
 
-    public void setNumberOfPets(String numberOfPets) {
+    public void setNumberOfPets(int numberOfPets) {
         this.numberOfPets = numberOfPets;
     }
 
@@ -211,5 +217,21 @@ public class Property {
 
     public void setAutoFee(boolean autoFee) {
         this.autoFee = autoFee;
+    }
+
+    public BigDecimal getAdditionalPropertyFee() {
+        return additionalPropertyFee;
+    }
+
+    public void setAdditionalPropertyFee(BigDecimal additionalPropertyFee) {
+        this.additionalPropertyFee = additionalPropertyFee;
+    }
+
+    public BigDecimal getTotalMonthlyFee() {
+        return totalMonthlyFee;
+    }
+
+    public void setTotalMonthlyFee(BigDecimal totalMonthlyFee) {
+        this.totalMonthlyFee = totalMonthlyFee;
     }
 }
