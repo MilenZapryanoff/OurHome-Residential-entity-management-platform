@@ -95,7 +95,7 @@ class PropertyFeeServiceImplTestIT {
 
         Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(id);
 
-        assertEquals(0, propertyFee.get().getFeeAmount().compareTo(BigDecimal.ZERO));
+        assertEquals(0, propertyFee.get().getFeeAmount().compareTo(BigDecimal.TEN));
     }
 
     @Test
@@ -114,7 +114,7 @@ class PropertyFeeServiceImplTestIT {
 
         Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(id);
 
-        assertEquals(0, propertyFee.get().getFeeAmount().compareTo(BigDecimal.ZERO));
+        assertEquals(0, propertyFee.get().getFeeAmount().compareTo(BigDecimal.TEN));
     }
 
 
@@ -245,12 +245,12 @@ class PropertyFeeServiceImplTestIT {
         Property property = new Property();
         property.setFloor(String.valueOf(1));
         property.setNumber(String.valueOf(1));
-        property.setNumberOfAdults(String.valueOf(2));
-        property.setNumberOfChildren(String.valueOf(2));
-        property.setNumberOfPets(String.valueOf(2));
+        property.setNumberOfAdults(2);
+        property.setNumberOfChildren(2);
+        property.setNumberOfPets(2);
         property.setValidated(false);
         property.setMonthlyFee(BigDecimal.valueOf(10));
-
+        property.setAdditionalPropertyFee(BigDecimal.valueOf(0));
         return property;
     }
 
