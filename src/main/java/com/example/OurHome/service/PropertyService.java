@@ -36,4 +36,6 @@ public interface PropertyService {
     List<Property> findAllProperties();
 
     void changeAutoFeeGeneration(Property property);
+
+    void updateTotalMonthlyFee(Property property, BigDecimal additionalMonthlyFee);
 }
