@@ -76,6 +76,12 @@ A platform that allows the registration of both home owners and residential enti
   <li>MIT License</li>
 </ul>
 
+<h4>v.1.24.0306</h4>
+  <ul>
+  <li> Bugs and problems fixed</li>
+  <li> Some pages design changed and added new layouts.</li>
+  </ul>
+
 <h2>Updates</h2>
   <h4>v.1.24.0303</h4>
   <ul>
@@ -84,13 +90,6 @@ A platform that allows the registration of both home owners and residential enti
   <li>Added new component of monthly fee - individual property fee. Now manager can set such a fee individually for every single property. If set, the amount is added to       the pediodical monthly fee. All together form the total monthly fee.</li>
   <li>Some field types have been changed.</li>
   <li>Improved integration tests.</li>
-  </ul>
-
-
-<h4>v.1.24.0306</h4>
-  <ul>
-  <li> Bugs and problems fixed</li>
-  <li> Some pages design changed and added new layouts.</li>
   </ul>
 
   <h4>v.1.24.0302</h4>
