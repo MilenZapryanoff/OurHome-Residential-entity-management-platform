@@ -77,10 +77,19 @@ A platform that allows the registration of both home owners and residential enti
 </ul>
 
 <h2>Updates</h2>
-    <h4>v.1.24.0302</h4>
+  <h4>v.1.24.0303</h4>
   <ul>
-  <li> New sections added for active/pending and rejected property registrations</li>
-  <li> General code and logic improvements</li>
+  <li>Show/hide password input toggle switch added in some password fields.</li>
+  <li>Added information for property owners how their monthly fee is calculated. If a fee is component of the monthly fee an indicator is added for this. This will help property owner to better understand his fee.</li>
+  <li>Added new component of monthly fee - individual property fee. Now manager can set such a fee individually for every single property. If set, the amount is added to       the pediodical monthly fee. All together form the total monthly fee.</li>
+  <li>Some field types have been changed.</li>
+  <li>Improved integration tests.</li>
+  </ul>
+
+  <h4>v.1.24.0302</h4>
+  <ul>
+  <li> New sections added for active/pending and rejected property registrations.</li>
+  <li> General code and logic improvements.</li>
   </ul>
 
   <h4>v.1.24.0301</h4>
@@ -118,17 +127,19 @@ A platform that allows the registration of both home owners and residential enti
   </ul>
 
 <h2> More pictures: </h2>
-<img src="https://i.ibb.co/Khbdr7F/02.jpg">
-<img src="https://i.ibb.co/ss8BdZz/03.jpg">
-<img src="https://i.ibb.co/fqGwqRJ/04.jpg">
-<img src="https://i.ibb.co/Fxvxxcg/05.jpg">
-<img src="https://i.ibb.co/yQVHK9b/06.jpg">
-<img src="https://i.ibb.co/NpGSbV2/07.jpg">
-<img src="https://i.ibb.co/LvTMqVQ/08.jpg">
-<img src="https://i.ibb.co/KxpXccC/09.jpg">
-<img src="https://i.ibb.co/zPvwkGJ/10.jpg">
-<img src="https://i.ibb.co/q9X8H8j/11.jpg">
-<img src="https://i.ibb.co/tX7KP79/09.png">
+<img src="https://i.ibb.co/JyGLFYq/index.jpg">
+<img src="https://i.ibb.co/4K9fTK6/login.jpg">
+<img src="https://i.ibb.co/ZgJp81c/messages.jpg">
+<img src="https://i.ibb.co/vVtqbYn/profile.jpg">
+<img src="https://i.ibb.co/qDQgVQq/properties.jpg">
+<img src="https://i.ibb.co/MhQhWQ9/property-fees.jpg">
+<img src="https://i.ibb.co/phf02yw/administration-fees.jpg">
+<img src="https://i.ibb.co/JKfHM2L/administration-fees-expenses.jpg">
+<img src="https://i.ibb.co/54m3c3T/administration-fees-property.jpg">
+<img src="https://i.ibb.co/v4dxSMS/administration-fees-RE.jpg">
+<img src="https://i.ibb.co/c3gvDyx/administration-owners.jpg">
+<img src="https://i.ibb.co/pKg3fwz/administration-properties.jpg">
+<img src="https://i.ibb.co/PNPKCj5/administration-summary.jpg">
 Database architecture :
 <img src="https://i.ibb.co/rpC6mF3/Our-Home-database-architecture.jpg">
 
