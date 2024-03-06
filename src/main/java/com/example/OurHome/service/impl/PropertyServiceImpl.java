@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PropertyServiceImpl implements PropertyService {
@@ -183,7 +184,11 @@ public class PropertyServiceImpl implements PropertyService {
             modelMapper.map(propertyEditBindingModel, property);
 
             ResidentialEntity residentialEntity = property.getResidentialEntity();
-            property.setMonthlyFee(feeService.calculateMonthlyFee(residentialEntity, property));
+
+            if (property.getMonthlyFee() != null || moderatorChange) {
+                property.setMonthlyFee(feeService.calculateMonthlyFee(residentialEntity, property));
+                updateTotalMonthlyFee(property, property.getAdditionalPropertyFee());
+            }
 
             if (moderatorChange) {
                 property.setValidated(true);
@@ -249,16 +254,18 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public void setMonthlyFee(BigDecimal monthlyFee, Property property) {
+
+        BigDecimal additionalPropertyFee = property.getAdditionalPropertyFee();
+
         property.setMonthlyFee(monthlyFee);
-        if (monthlyFee == null) {
-            property.setTotalMonthlyFee(BigDecimal.ZERO.add(property.getTotalMonthlyFee()));
-        }
         propertyRepository.save(property);
+
+        updateTotalMonthlyFee(property, additionalPropertyFee);
     }
 
     @Override
-    public void updateTotalMonthlyFee(Property property, BigDecimal additionalMonthlyFee) {
-        property.setTotalMonthlyFee(property.getMonthlyFee().add(additionalMonthlyFee));
+    public void updateTotalMonthlyFee(Property property, BigDecimal additionalPropertyFee) {
+        property.setTotalMonthlyFee(Objects.requireNonNullElse(property.getMonthlyFee(), BigDecimal.ZERO).add(additionalPropertyFee));
         propertyRepository.save(property);
     }
 }
