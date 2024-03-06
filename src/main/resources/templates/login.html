@@ -96,52 +96,42 @@
 </div>
 
 <div class="login">
-    <div align="center" class="input-content">
-        <div class="col-lg-4">
+    <div class="input-content text-center">
+        <div class="col-lg-4 center-form">
             <form id="input-form"
                   th:method="POST"
                   th:action="@{/login}">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <fieldset>
-                            <label for="email"><b>Email</b></label>
-                            <input type="email" name="email"
-                                   th:value="${email}"
-                                   id="email" placeholder="Enter your email..." pattern="[^ @]*@[^ @]*" required>
-                        </fieldset>
-                    </div>
-                    <div class="col-lg-12">
-                        <fieldset>
-                            <label for="password"><b>Password</b></label>
-                            <input type="password" name="password"
-                                   th:value="${password}"
-                                   id="password" placeholder="Enter your password..." required>
-                            <i class="far fa-eye text-secondary" id="togglePassword" style="margin-left: -35px; cursor: pointer;"></i>
-                        </fieldset>
-                    </div>
-                    <div class="col-lg-12">
-                        <fieldset>
-                            <label for="rememberMe"><b>Remember me</b></label>
-                            <input name="rememberMe" id="rememberMe" type="checkbox">
-                        </fieldset>
-                    </div>
-                    <div class="col-lg-12">
-                        <fieldset>
-                            <button type="submit" id="login" class="orange-button">Login</button>
-                        </fieldset>
-                        <fieldset>
-                            <br>
-                            <a class="small" th:href="@{/forgot-password}">Forgot password</a> | <a class="small"
-                                                                                                    th:href="@{/register}">Register
-                            now</a>
-                        </fieldset>
-                    </div>
-                </div>
+                <fieldset>
+                    <label for="email"><b>Email</b></label>
+                    <input type="email" name="email"
+                           th:value="${email}"
+                           id="email" placeholder="Enter your email..." pattern="[^ @]*@[^ @]*" required>
+                </fieldset>
+                <fieldset>
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" name="password"
+                           th:value="${password}"
+                           id="password" placeholder="Enter your password..." required>
+                    <small class="fas fa-eye text-secondary fa-eye-slash" id="togglePassword"
+                       style="margin-left: -35px; cursor: pointer;"></small>
+                </fieldset>
+                <fieldset>
+                    <label for="rememberMe"><b>Remember me</b></label>
+                    <input name="rememberMe" id="rememberMe" type="checkbox">
+                </fieldset>
+                <fieldset>
+                    <button type="submit" id="login" class="orange-button">Login</button>
+                </fieldset>
+                <fieldset>
+                    <br>
+                    <a class="small" th:href="@{/forgot-password}">Forgot password</a> | <a class="small"
+                                                                                            th:href="@{/register}">Register
+                    now</a>
+                </fieldset>
             </form>
         </div>
     </div>
 </div>
-
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
