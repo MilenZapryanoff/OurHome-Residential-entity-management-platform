@@ -145,8 +145,9 @@
             </div>
             <!--        end of buttons-->
 
-            <div class="section property">
-                <div class="container">
+
+            <div class="container">
+                <div class="property">
                     <div class="tabs-content">
                         <ul class="nav nav-tabs">
                             <li>
@@ -158,7 +159,6 @@
             </div>
 
             <div class="col-lg-7">
-
                 <div class="accordion" id="accordionExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
@@ -312,7 +312,8 @@
                                    class="form-control text-bg-danger"/>
                         </button>
                         <div class="form-popup" id="contactForm" style="border: none">
-                            <form style="padding: 10px; border: 1px solid grey; border-radius: 20px; box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5)" th:action="@{/property/summary/messageToManager/{id} (id=${property.getId()})}"
+                            <form style="padding: 10px; border: 1px solid grey; border-radius: 20px; box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5)"
+                                  th:action="@{/property/summary/messageToManager/{id} (id=${property.getId()})}"
                                   th:method="POST"
                                   class="form-container"
                                   th:object="${sendMessageBindingModel}">
