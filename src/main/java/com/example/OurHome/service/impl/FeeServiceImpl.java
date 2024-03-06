@@ -122,7 +122,7 @@ public class FeeServiceImpl implements FeeService {
             if (property.isValidated()) {
                 BigDecimal calculatedMonthlyFee = calculateMonthlyFee(residentialEntity, property);
                 property.setMonthlyFee(calculatedMonthlyFee);
-                property.setTotalMonthlyFee(calculatedMonthlyFee.add(property.getTotalMonthlyFee()));
+                property.setTotalMonthlyFee(calculatedMonthlyFee.add(property.getAdditionalPropertyFee()));
                 propertyRepository.save(property);
             }
         }
