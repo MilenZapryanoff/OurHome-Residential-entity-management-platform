@@ -145,130 +145,129 @@
             </ul>
         </div>
         <!--end of buttons-->
-        <div class="section property" id="details">
-            <div class="container">
+
+        <div class="container">
+            <div class="property">
                 <div class="tabs-content">
-                    <div class="nav-wrapper ">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item" role="presentation">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
                                                 <span th:if="${property.isValidated()} or ${property.isRejected()}"
                                                       class="button">
                                                         <a class="nav-link active"
                                                            th:href="@{/property/details/edit/{id}(id=${property.getId()})}">
                                                     <div class="text-light">Settings</div></a>
                                                 </span>
-                                <span class="button">
+                            <span class="button">
                                                 <a class="nav-link"
                                                    th:href="@{/property}">
                                                 <div class="text-light">Back</div></a>
                                             </span>
-                            </li>
-                        </ul>
-                        <div class="col-lg-12">
-                            <div class="row text-center">
-                                <p class="text-danger" th:if="${property.isRejected()}">You can edit your property data
-                                    and resend the registration request to your Manager by
-                                    submitting data changes.</p>
-                            </div>
-                            <br>
-
-                            <h4 class="text-center">Your property details</h4>
-                            <div class="info-table">
-                                <div>
-                                    <ul>
-                                        <li>
-                                            <h5 class="text-danger">Property information</h5>
-                                        </li>
-                                        <li th:if="${property.isValidated()}" class="text-black">
-                                            Status: <b>Validated</b>
-                                        <li th:unless="${property.isValidated() or property.isRejected()}"
-                                            class="text-black">Status: <b>Pending validation</b>
-                                        <li th:if="${property.isRejected()}" class="text-black">
-                                            Status: <b>Rejected</b>
-                                        </li>
-                                        <li class="text-black">Property №: <b
-                                                th:text="${property.getNumber()}"></b></li>
-                                        <li class="text-black">Floor number: <b
-                                                th:text="${property.getFloor()}"></b>
-                                        </li>
-                                        <li class="text-black">Total flat space in square meters: <b
-                                                th:text="${property.getTotalFlatSpace()} + ' m2'"></b>
-                                        </li>
-                                        <li class="text-black">Number of rooms: <b
-                                                th:text="${property.getNumberOfRooms()}"></b>
-                                        </li>
-                                        <li class="text-black">Parking available: <b
-                                                th:if="${property.isParkingAvailable()}"
-                                                th:text="YES"></b> <b
-                                                th:unless="${property.isParkingAvailable()}"
-                                                th:text="NO"></b>
-                                        </li>
-                                        <li class="text-black">Address: <b
-                                                th:text="${property.getResidentialEntity().getStreetName()} + ' ' +
-                                                                    ${property.getResidentialEntity().getStreetNumber()}"></b>
-                                        </li>
-                                        <li class="text-black">Property owner: <b
-                                                th:text="${property.getOwner().getFirstName()} + ' '
-                                                                    + ${property.getOwner().getLastName()}"></b>
-                                        </li>
-                                        <li><h5 class="text-danger">Inhabitants information</h5>
-                                            <p class="text-secondary">Please note, that changes in this
-                                                section may affect your
-                                                monthly fees according to the accepted by your
-                                                residential entity fee policy.
-                                                Changes like this must be approved by your Manager.<br>
-                                                After submission of the form your property status will
-                                                be changed to <b>Pending validation</b>
-                                                and some of your data won't be visible. <br>
-                                                You will get full access as soon as your manager
-                                                validates the change.</p>
-                                        </li>
-                                        <li class="text-black">Number of adults: <b
-                                                th:text="${property.getNumberOfAdults()}"></b>
-                                        </li>
-                                        <li class="text-black">Number of children: <b
-                                                th:text="${property.getNumberOfChildren()}"></b>
-                                        </li>
-                                        <li class="text-black">Number of pets: <b
-                                                th:text="${property.getNumberOfPets()}"></b>
-                                        </li>
-                                        <li class="text-black">Property is habitable:
-                                            <b th:if="${property.isNotHabitable()}">NO</b>
-                                            <b th:unless="${property.isNotHabitable()}">YES</b>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                        </li>
+                    </ul>
+                    <div class="col-lg-12">
+                        <div class="row text-center">
+                            <p class="text-danger" th:if="${property.isRejected()}">You can edit your property data
+                                and resend the registration request to your Manager by
+                                submitting data changes.</p>
                         </div>
-                        <br><br><br>
-                        <h4 th:if="${property.isValidated()}" class="text-secondary text-center">Your
-                            Residential entity details</h4>
-                        <div th:if="${property.isValidated()}" class="info-table text-dark">
+                        <br>
+
+                        <h4 class="text-center">Your property details</h4>
+                        <div class="info-table">
                             <div>
                                 <ul>
-                                    <li class="text-secondary">Residential entity ID: <b
-                                            th:text="${property.getResidentialEntity().getId()}"></b>
+                                    <li>
+                                        <h5 class="text-danger">Property information</h5>
                                     </li>
-                                    <li class="text-secondary">Residential entity address: <b
-                                            th:text="${property.getResidentialEntity().getCity().getName()}
-                                                            + ', ' + ${property.getResidentialEntity().getStreetName()}
-                                                            + ', №' + ${property.getResidentialEntity().getStreetNumber()}"> </b>
+                                    <li th:if="${property.isValidated()}" class="text-black">
+                                        Status: <b>Validated</b>
+                                    <li th:unless="${property.isValidated() or property.isRejected()}"
+                                        class="text-black">Status: <b>Pending validation</b>
+                                    <li th:if="${property.isRejected()}" class="text-black">
+                                        Status: <b>Rejected</b>
                                     </li>
-                                    <li class="text-secondary">Number of apartments: <b
-                                            th:text="${property.getResidentialEntity().getNumberOfApartments()}"></b>
+                                    <li class="text-black">Property №: <b
+                                            th:text="${property.getNumber()}"></b></li>
+                                    <li class="text-black">Floor number: <b
+                                            th:text="${property.getFloor()}"></b>
                                     </li>
-                                    <li class="text-secondary">Manager: <b
-                                            th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +
-                                                                    ${property.getResidentialEntity().getManager().getLastName()}"></b>
+                                    <li class="text-black">Total flat space in square meters: <b
+                                            th:text="${property.getTotalFlatSpace()} + ' m2'"></b>
                                     </li>
-                                    <li class="text-secondary">Manager phone: <b
-                                            th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b>
+                                    <li class="text-black">Number of rooms: <b
+                                            th:text="${property.getNumberOfRooms()}"></b>
                                     </li>
-                                    <li class="text-secondary">Manager email: <b
-                                            th:text="${property.getResidentialEntity().getManager().getEmail()}"></b>
+                                    <li class="text-black">Parking available: <b
+                                            th:if="${property.isParkingAvailable()}"
+                                            th:text="YES"></b> <b
+                                            th:unless="${property.isParkingAvailable()}"
+                                            th:text="NO"></b>
+                                    </li>
+                                    <li class="text-black">Address: <b
+                                            th:text="${property.getResidentialEntity().getStreetName()} + ' ' +
+                                                                    ${property.getResidentialEntity().getStreetNumber()}"></b>
+                                    </li>
+                                    <li class="text-black">Property owner: <b
+                                            th:text="${property.getOwner().getFirstName()} + ' '
+                                                                    + ${property.getOwner().getLastName()}"></b>
+                                    </li>
+                                    <li><h5 class="text-danger">Inhabitants information</h5>
+                                        <p class="text-secondary">Please note, that changes in this
+                                            section may affect your
+                                            monthly fees according to the accepted by your
+                                            residential entity fee policy.
+                                            Changes like this must be approved by your Manager.<br>
+                                            After submission of the form your property status will
+                                            be changed to <b>Pending validation</b>
+                                            and some of your data won't be visible. <br>
+                                            You will get full access as soon as your manager
+                                            validates the change.</p>
+                                    </li>
+                                    <li class="text-black">Number of adults: <b
+                                            th:text="${property.getNumberOfAdults()}"></b>
+                                    </li>
+                                    <li class="text-black">Number of children: <b
+                                            th:text="${property.getNumberOfChildren()}"></b>
+                                    </li>
+                                    <li class="text-black">Number of pets: <b
+                                            th:text="${property.getNumberOfPets()}"></b>
+                                    </li>
+                                    <li class="text-black">Property is habitable:
+                                        <b th:if="${property.isNotHabitable()}">NO</b>
+                                        <b th:unless="${property.isNotHabitable()}">YES</b>
                                     </li>
                                 </ul>
                             </div>
+                        </div>
+                    </div>
+                    <br><br><br>
+                    <h4 th:if="${property.isValidated()}" class="text-secondary text-center">Your
+                        Residential entity details</h4>
+                    <div th:if="${property.isValidated()}" class="info-table text-dark">
+                        <div>
+                            <ul>
+                                <li class="text-secondary">Residential entity ID: <b
+                                        th:text="${property.getResidentialEntity().getId()}"></b>
+                                </li>
+                                <li class="text-secondary">Residential entity address: <b
+                                        th:text="${property.getResidentialEntity().getCity().getName()}
+                                                            + ', ' + ${property.getResidentialEntity().getStreetName()}
+                                                            + ', №' + ${property.getResidentialEntity().getStreetNumber()}"> </b>
+                                </li>
+                                <li class="text-secondary">Number of apartments: <b
+                                        th:text="${property.getResidentialEntity().getNumberOfApartments()}"></b>
+                                </li>
+                                <li class="text-secondary">Manager: <b
+                                        th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +
+                                                                    ${property.getResidentialEntity().getManager().getLastName()}"></b>
+                                </li>
+                                <li class="text-secondary">Manager phone: <b
+                                        th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b>
+                                </li>
+                                <li class="text-secondary">Manager email: <b
+                                        th:text="${property.getResidentialEntity().getManager().getEmail()}"></b>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
