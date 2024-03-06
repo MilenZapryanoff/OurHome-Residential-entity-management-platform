@@ -104,119 +104,114 @@
     </div>
 </div>
 
-<br><br>
-
 <!-- ***** Residential entity section ***** -->
 
-
-<div class="single-property section">
-    <div class="container">
-        <div class="messages">
-            <div align="center" class="input-content">
-                <div class="col-lg-6">
-                    <form id="input-form"
-                          th:method="POST"
-                          th:action="@{/profile/edit/{id}(id=${userViewModel.getId()})}"
-                          th:object="${profileEditBindingModel}">
-                        <div class="col-lg-12">
-                            <p>You can manage your user data and <br>change your
-                                password</p>
+<div class="container">
+    <div class="messages">
+        <div class="input-content text-center">
+            <div class="col-lg-6 center-form">
+                <form id="input-form"
+                      th:method="POST"
+                      th:action="@{/profile/edit/{id}(id=${userViewModel.getId()})}"
+                      th:object="${profileEditBindingModel}">
+                    <div class="col-lg-12">
+                        <p>You can manage your user data and <br>change your
+                            password</p>
+                        <br>
+                        <fieldset>
+                            <label for="firstName"><b>First Name</b></label>
                             <br>
-                            <fieldset>
-                                <label for="firstName"><b>First Name</b></label>
-                                <br>
-                                <small th:if="${#fields.hasErrors('firstName')}"
-                                       th:errors="*{firstName}"
-                                       class="text-danger">Street name error message</small>
-                                <input type="text" id="firstName"
-                                       placeholder="Enter first name..."
-                                       autocomplete="on"
-                                       th:field="*{firstName}"
-                                       th:errorclass="bg-danger"
-                                       th:value="${userViewModel.getFirstName()}">
-                            </fieldset>
-                            <fieldset>
-                                <label for="lastName"><b>Last
-                                    name</b></label>
-                                <br>
-                                <small th:if="${#fields.hasErrors('lastName')}"
-                                       th:errors="*{lastName}"
-                                       class="text-danger">Last name error message</small>
-                                <input type="text"
-                                       id="lastName"
-                                       placeholder="Enter last name..."
-                                       autocomplete="on"
-                                       required
-                                       th:field="*{lastName}"
-                                       th:errorclass="bg-danger"
-                                       th:value="${userViewModel.getLastName()}">
-                            </fieldset>
-                            <fieldset>
-                                <label for="username"><b>Username</b></label>
-                                <br>
-                                <small th:if="${#fields.hasErrors('username')}"
-                                       th:errors="*{username}"
-                                       class="text-danger">Username error
-                                    message</small>
-                                <input type="text"
-                                       id="username"
-                                       placeholder="Enter username..."
-                                       th:field="*{username}"
-                                       th:errorclass="bg-danger"
-                                       th:value="${userViewModel.getUsername()}">
-                            </fieldset>
-                            <fieldset>
-                                <label for="phoneNumber"><b>Phone number</b></label>
-                                <br>
-                                <small th:if="${#fields.hasErrors('phoneNumber')}"
-                                       th:errors="*{phoneNumber}"
-                                       class="text-danger">Phone number error
-                                    message</small>
-                                <input type="text"
-                                       id="phoneNumber"
-                                       placeholder="Enter number of rooms..."
-                                       th:field="*{phoneNumber}"
-                                       th:errorclass="bg-danger"
-                                       th:value="${userViewModel.getPhoneNumber()}">
-                            </fieldset>
-                            <fieldset>
-                                <label for="newPassword"><b>New password</b></label>
-                                <small>(optional)</small>
-                                <small th:if="${#fields.hasErrors('newPassword')}"
-                                       th:errors="*{newPassword}"
-                                       class="text-danger">New password error message</small>
-                                <input type="password"
-                                       id="newPassword"
-                                       placeholder="Enter new password..."
-                                       th:field="*{newPassword}"
-                                       th:errorclass="bg-danger">
-                            </fieldset>
-                            <fieldset>
-                                <label for="confirmPassword"><b>Confirm password</b></label>
-                                <small>(optional)</small>
-                                <small th:if="${#fields.hasErrors('confirmPassword')}"
-                                       th:errors="*{confirmPassword}"
-                                       class="text-danger">Confirm password error message</small>
-                                <input type="password"
-                                       id="confirmPassword"
-                                       placeholder="Confirm password..."
-                                       th:field="*{confirmPassword}"
-                                       th:errorclass="bg-danger">
-                            </fieldset>
-                            <fieldset>
-                                <button type="submit"
-                                        id="form-submit"
-                                        class="orange-button">Submit
-                                </button>
-                                <button class="orange-button" id="form-cancel">
-                                    <a th:href="@{/profile}">
-                                        <p class="text-light">Cancel</p>
-                                    </a>
-                                </button>
-                            </fieldset>
-                        </div>
-                    </form>
-                </div>
+                            <small th:if="${#fields.hasErrors('firstName')}"
+                                   th:errors="*{firstName}"
+                                   class="text-danger">Street name error message</small>
+                            <input type="text" id="firstName"
+                                   placeholder="Enter first name..."
+                                   autocomplete="on"
+                                   th:field="*{firstName}"
+                                   th:errorclass="bg-danger"
+                                   th:value="${userViewModel.getFirstName()}">
+                        </fieldset>
+                        <fieldset>
+                            <label for="lastName"><b>Last
+                                name</b></label>
+                            <br>
+                            <small th:if="${#fields.hasErrors('lastName')}"
+                                   th:errors="*{lastName}"
+                                   class="text-danger">Last name error message</small>
+                            <input type="text"
+                                   id="lastName"
+                                   placeholder="Enter last name..."
+                                   autocomplete="on"
+                                   required
+                                   th:field="*{lastName}"
+                                   th:errorclass="bg-danger"
+                                   th:value="${userViewModel.getLastName()}">
+                        </fieldset>
+                        <fieldset>
+                            <label for="username"><b>Username</b></label>
+                            <br>
+                            <small th:if="${#fields.hasErrors('username')}"
+                                   th:errors="*{username}"
+                                   class="text-danger">Username error
+                                message</small>
+                            <input type="text"
+                                   id="username"
+                                   placeholder="Enter username..."
+                                   th:field="*{username}"
+                                   th:errorclass="bg-danger"
+                                   th:value="${userViewModel.getUsername()}">
+                        </fieldset>
+                        <fieldset>
+                            <label for="phoneNumber"><b>Phone number</b></label>
+                            <br>
+                            <small th:if="${#fields.hasErrors('phoneNumber')}"
+                                   th:errors="*{phoneNumber}"
+                                   class="text-danger">Phone number error
+                                message</small>
+                            <input type="text"
+                                   id="phoneNumber"
+                                   placeholder="Enter number of rooms..."
+                                   th:field="*{phoneNumber}"
+                                   th:errorclass="bg-danger"
+                                   th:value="${userViewModel.getPhoneNumber()}">
+                        </fieldset>
+                        <fieldset>
+                            <label for="newPassword"><b>New password</b></label>
+                            <small>(optional)</small>
+                            <small th:if="${#fields.hasErrors('newPassword')}"
+                                   th:errors="*{newPassword}"
+                                   class="text-danger">New password error message</small>
+                            <input type="password"
+                                   id="newPassword"
+                                   placeholder="Enter new password..."
+                                   th:field="*{newPassword}"
+                                   th:errorclass="bg-danger">
+                        </fieldset>
+                        <fieldset>
+                            <label for="confirmPassword"><b>Confirm password</b></label>
+                            <small>(optional)</small>
+                            <small th:if="${#fields.hasErrors('confirmPassword')}"
+                                   th:errors="*{confirmPassword}"
+                                   class="text-danger">Confirm password error message</small>
+                            <input type="password"
+                                   id="confirmPassword"
+                                   placeholder="Confirm password..."
+                                   th:field="*{confirmPassword}"
+                                   th:errorclass="bg-danger">
+                        </fieldset>
+                        <fieldset>
+                            <button type="submit"
+                                    id="form-submit"
+                                    class="orange-button">Submit
+                            </button>
+                            <button class="orange-button" id="form-cancel">
+                                <a th:href="@{/profile}">
+                                    <p class="text-light">Cancel</p>
+                                </a>
+                            </button>
+                        </fieldset>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
