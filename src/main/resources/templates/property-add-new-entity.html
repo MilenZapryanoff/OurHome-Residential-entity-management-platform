@@ -105,50 +105,53 @@
         </div>
     </div>
 </div>
-<br>
 
-<div class="add-property">
-    <div align="center" class="input-content">
-        <div class="col-lg-4">
-            <form id="input-form"
-                  th:method="POST"
-                  th:action="@{/property/add/new}"
-                  th:object="${userAuthRegisterBindingModel}">
-                <div class="col-lg-12">
-                    <small th:if="${badResidentialEntity}" class="text-danger">Wrong residential entity ID or
-                        Access code!</small>
-                    <fieldset>
-                        <br>
-                        <label for="residentialId"><b>Residential Entity ID</b></label>
-                        <br>
-                        <small th:if="${#fields.hasErrors('residentialId')}"
-                               th:errors="*{residentialId}" class="text-danger">Residential entity ID error
-                            message</small>
-                        <input type="text" id="residentialId" placeholder="Enter Residential entity ID..." required
-                               th:field="*{residentialId}"
-                               th:errorclass="bg-danger">
-                    </fieldset>
-                    <fieldset>
-                        <label for="residentialAccessCode"><b>Residential entity Access code</b></label>
-                        <br>
-                        <small th:if="${#fields.hasErrors('residentialAccessCode')}"
-                               th:errors="*{residentialAccessCode}" class="text-danger">Access code error
-                            message</small>
-                        <input type="password" id="residentialAccessCode" placeholder="Enter Access code..." required
-                               th:field="*{residentialAccessCode}"
-                               th:errorclass="bg-danger">
-                    </fieldset>
-                    <fieldset>
-                        <button th:href="@{/property/add/new}" type="submit" id="form-submit" class="orange-button">Add
-                        </button>
-                        <button class="orange-button" id="form-cancel"><a
-                                th:href="@{/property/add}">
-                            <div class="text-light">Back</div>
-                        </a>
-                        </button>
-                    </fieldset>
-                </div>
-            </form>
+<div class="container">
+    <div class="messages">
+        <div class="input-content text-center">
+            <div class="col-lg-4 center-form">
+                <form id="input-form"
+                      th:method="POST"
+                      th:action="@{/property/add/new}"
+                      th:object="${userAuthRegisterBindingModel}">
+                    <div class="col-lg-12">
+                        <small th:if="${badResidentialEntity}" class="text-danger">Wrong residential entity ID or
+                            Access code!</small>
+                        <fieldset>
+                            <br>
+                            <label for="residentialId"><b>Residential Entity ID</b></label>
+                            <br>
+                            <small th:if="${#fields.hasErrors('residentialId')}"
+                                   th:errors="*{residentialId}" class="text-danger">Residential entity ID error
+                                message</small>
+                            <input type="text" id="residentialId" placeholder="Enter Residential entity ID..." required
+                                   th:field="*{residentialId}"
+                                   th:errorclass="bg-danger">
+                        </fieldset>
+                        <fieldset>
+                            <label for="residentialAccessCode"><b>Residential entity Access code</b></label>
+                            <br>
+                            <small th:if="${#fields.hasErrors('residentialAccessCode')}"
+                                   th:errors="*{residentialAccessCode}" class="text-danger">Access code error
+                                message</small>
+                            <input type="password" id="residentialAccessCode" placeholder="Enter Access code..."
+                                   required
+                                   th:field="*{residentialAccessCode}"
+                                   th:errorclass="bg-danger">
+                        </fieldset>
+                        <fieldset>
+                            <button th:href="@{/property/add/new}" type="submit" id="form-submit" class="orange-button">
+                                Add
+                            </button>
+                            <button class="orange-button" id="form-cancel"><a
+                                    th:href="@{/property/add}">
+                                <div class="text-light">Back</div>
+                            </a>
+                            </button>
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
