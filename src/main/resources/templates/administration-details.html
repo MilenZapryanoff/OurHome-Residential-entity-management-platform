@@ -104,7 +104,7 @@
 <!--Start of Residential entity details-->
 <div class="container">
     <!--Start of sub-menus-->
-    <div class="single-property section" style="padding-top: 48px">
+    <div class="single-property" style="padding-top: 48px">
         <div class="tabs-content">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -183,11 +183,13 @@
                     <li class="text-black">Manager: <b
                             th:text="${residentialEntity.getManager().getFirstName()} + ' ' + ${residentialEntity.getManager().getLastName()}"></b>
                     </li>
-                    <li class="text-black">Access code hint:
+                    <li class="text-black">
+                        Access code hint:
+                        <strong class="fas fa-eye text-danger fa-eye-slash" id="togglePassword" style="cursor: pointer;" title="Press icon to show password hint"></strong>
                         <input style="max-width: 90%; border: none"
                                 id="residentialAccessCode" type="password"
                         th:value="${residentialEntity.getAccessCodeHint()}">
-                        <i class="far fa-eye text-secondary" id="togglePassword" style="margin-left: 50px; cursor: pointer;"></i>
+
                     </li>
                     <li class="text-black">Registered apartments: <b
                             th:text="${residentialEntity.getProperties().size()}"></b>
