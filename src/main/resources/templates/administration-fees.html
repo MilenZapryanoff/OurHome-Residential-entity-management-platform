@@ -154,7 +154,7 @@
     <div class="section section-contact" id="autoFee-post-nav">
         <div class="section administration" id="fees">
             <div class="tabs-content row">
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs" style="gap: 10px; justify-content: center">
                     <li class="nav-item">
                         <div class="button">
                             <a class="nav-link active"
@@ -255,7 +255,8 @@
                         <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
                     </td>
                     <td>
-                        <p th:text="${property.getTotalMonthlyFee()} + ' лв.'"></p>
+                        <p th:if="${!property.isValidated()} or ${property.isRejected()}">Waiting confirmation</p>
+                        <p th:unless="${!property.isValidated()} or ${property.isRejected()}" th:text="${property.getTotalMonthlyFee()} + ' лв.'"></p>
                     </td>
                     <td th:if="${property.getOverpayment()} > 0">
                         <p th:text="${property.getOverpayment()} + ' лв.'"></p>
