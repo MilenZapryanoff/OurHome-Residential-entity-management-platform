@@ -239,6 +239,8 @@ public class UserServiceImpl implements UserService {
         Long verificationCode = new Random().nextLong(99999999, 1000000000);
 
         user.setValidationCode(passwordEncoder.encode(String.valueOf(verificationCode)));
+
+        //TODO: on some stage to change isValidated field to hasActiveRestorePassword because this stands behind the idea of this boolean
         user.setValidated(false);
         userRepository.save(user);
 
@@ -396,6 +398,7 @@ public class UserServiceImpl implements UserService {
         List<UserEntity> allUsersWithVerificationCode = userRepository.findAllUsersWithVerificationCode();
         for (UserEntity userEntity : allUsersWithVerificationCode) {
             userEntity.setValidationCode(null);
+            userEntity.setValidated(true);
             userRepository.save(userEntity);
         }
     }
