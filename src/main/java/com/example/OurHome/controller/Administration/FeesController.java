@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
+
 @Controller
 public class FeesController {
 
@@ -197,8 +199,14 @@ public class FeesController {
         }
 
         Property property = propertyService.findPropertyById(id);
-        propertyFeeService.setAdditionalPropertyFee(property, overpaymentBindingModel.getAdditionalPropertyFee());
-        propertyService.updateTotalMonthlyFee(property, overpaymentBindingModel.getAdditionalPropertyFee());
+
+        BigDecimal additionalPropertyFeeInput = overpaymentBindingModel.getAdditionalPropertyFee();
+        if (additionalPropertyFeeInput == null) {
+            additionalPropertyFeeInput = BigDecimal.ZERO;
+        }
+
+        propertyFeeService.setAdditionalPropertyFee(property, additionalPropertyFeeInput);
+        propertyService.updateTotalMonthlyFee(property, additionalPropertyFeeInput);
 
         return new ModelAndView("redirect:/administration/fees/details/" + id + "#overpayment-post-nav");
     }
