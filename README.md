@@ -127,17 +127,19 @@ A platform that allows the registration of both home owners and residential enti
   </ul>
 
 <h2> More pictures: </h2>
-<img src="https://i.ibb.co/Khbdr7F/02.jpg">
-<img src="https://i.ibb.co/ss8BdZz/03.jpg">
-<img src="https://i.ibb.co/fqGwqRJ/04.jpg">
-<img src="https://i.ibb.co/Fxvxxcg/05.jpg">
-<img src="https://i.ibb.co/yQVHK9b/06.jpg">
-<img src="https://i.ibb.co/NpGSbV2/07.jpg">
-<img src="https://i.ibb.co/LvTMqVQ/08.jpg">
-<img src="https://i.ibb.co/KxpXccC/09.jpg">
-<img src="https://i.ibb.co/zPvwkGJ/10.jpg">
-<img src="https://i.ibb.co/q9X8H8j/11.jpg">
-<img src="https://i.ibb.co/tX7KP79/09.png">
+<img src="https://i.ibb.co/JyGLFYq/index.jpg">
+<img src="https://i.ibb.co/4K9fTK6/login.jpg">
+<img src="https://i.ibb.co/ZgJp81c/messages.jpg">
+<img src="https://i.ibb.co/vVtqbYn/profile.jpg">
+<img src="https://i.ibb.co/qDQgVQq/properties.jpg">
+<img src="https://i.ibb.co/MhQhWQ9/property-fees.jpg">
+<img src="https://i.ibb.co/phf02yw/administration-fees.jpg">
+<img src="https://i.ibb.co/JKfHM2L/administration-fees-expenses.jpg">
+<img src="https://i.ibb.co/54m3c3T/administration-fees-property.jpg">
+<img src="https://i.ibb.co/v4dxSMS/administration-fees-RE.jpg">
+<img src="https://i.ibb.co/c3gvDyx/administration-owners.jpg">
+<img src="https://i.ibb.co/pKg3fwz/administration-properties.jpg">
+<img src="https://i.ibb.co/PNPKCj5/administration-summary.jpg">
 Database architecture :
 <img src="https://i.ibb.co/rpC6mF3/Our-Home-database-architecture.jpg">
 
