@@ -106,8 +106,9 @@
 </div>
 
 <!-- ***** Profile section ***** -->
-<div class="section property">
-    <div class="container">
+
+<div class="container">
+    <div class="property">
         <!--Back button-->
         <div class="tabs-content">
             <ul class="nav nav-tabs">
@@ -128,13 +129,13 @@
                 <ul>
                     <li class="text-black"><b>Amount:</b>
                         <span><small class="text-danger"
-                                  th:text="${expense.getAmount()} + ' лв.'"></small>
+                                     th:text="${expense.getAmount()} + ' лв.'"></small>
                     </span>
                     </li>
                     <li class="text-black"><b>Date:</b>
                         <span>
                         <small class="text-danger"
-                            th:text="${#temporals.format(expense.getExpenseDate(), 'dd MMM yyyy')}"></small>
+                               th:text="${#temporals.format(expense.getExpenseDate(), 'dd MMM yyyy')}"></small>
                     </span>
                     </li>
                     <li class="text-black"><b>Description:</b>
