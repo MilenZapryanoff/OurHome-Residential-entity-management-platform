@@ -191,7 +191,7 @@
 
             <!--Start of table-->
             <p th:if="${residentialEntity.getResidents().size()} == 0" class="text-center">No residents available</p>
-            <table th:if="${residentialEntity.getResidents().size()} > 0">
+            <table id="owners-table" th:if="${residentialEntity.getResidents().size()} > 0">
                 <tr class="text-center">
                     <th>
                         <p>Property №</p>
