@@ -229,7 +229,7 @@
                                                                                 <label for="petFee" class="text-secondary">Monthly fee for a pet living in the property.</label>
                                                                             </fieldset>
                                                                         </li>
-                                                                        <li class="text-black">5. Additional fee:
+                                                                        <li class="text-black">5. Other Residential entity fee:
                                                                             <fieldset>
                                                                                 <small th:if="${#fields.hasErrors('additionalFeeHabitable')}"
                                                                                        th:errors="*{additionalFeeHabitable}"
@@ -238,7 +238,7 @@
                                                                                        th:field="*{additionalFeeHabitable}"
                                                                                        th:errorclass="bg-danger"
                                                                                        th:value="${feeEditBindingModel.getAdditionalFeeHabitable()}">
-                                                                                <label for="additionalFeeHabitable" class="text-secondary">Additional property monthly fee.</label>
+                                                                                <label for="additionalFeeHabitable" class="text-secondary">Other Residential entity fee applied for every property.</label>
                                                                             </fieldset><br><br>
                                                                         </li>
                                                                     </ul>
@@ -267,16 +267,16 @@
                                                                                 <label for="fixedFeeNonHabitable" class="text-secondary">Fixed monthly fee per property</label>
                                                                             </fieldset>
                                                                         </li>
-                                                                        <li class="text-black">2. Additional fee:
+                                                                        <li class="text-black">2. Other Residential entity fee:
                                                                             <fieldset>
                                                                                 <small th:if="${#fields.hasErrors('additionalFeeNonHabitable')}"
                                                                                        th:errors="*{additionalFeeNonHabitable}"
-                                                                                       class="text-danger">Additional fee error message</small>
+                                                                                       class="text-danger">Other fee error message</small>
                                                                                 <input type="number" step="any" class="form-control-sm" id="additionalFeeNonHabitable" placeholder="Enter fee..." autocomplete="on" required
                                                                                        th:field="*{additionalFeeNonHabitable}"
                                                                                        th:errorclass="bg-danger"
                                                                                        th:value="${feeEditBindingModel.getAdditionalFeeNonHabitable()}">
-                                                                                <label for="additionalFeeNonHabitable" class="text-secondary">Additional property monthly fee.</label>
+                                                                                <label for="additionalFeeNonHabitable" class="text-secondary">Other Residential entity fee applied for every property.</label>
                                                                             </fieldset>
                                                                         </li>
                                                                         <li class="text-danger">Applying monthly fees changes:
