@@ -158,7 +158,7 @@
     <div class="section-contact" id="property-post-nav">
         <div class="section administration">
             <div class="tabs-content row">
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs" style="gap: 10px; justify-content: center">
                     <li class="nav-item">
                         <div class="button">
                             <a class="nav-link"
@@ -296,7 +296,7 @@
                                 <button th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property approved.\')'"
                                         type="submit">
                                     <img title="Approve property" src="/images/approve.jpg"
-                                         style="width: 50px;" alt="Approve property">
+                                         style="min-width: 50px;" alt="Approve property">
                                 </button>
                             </form>
                         </td>
@@ -315,7 +315,7 @@
                                 <button th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property rejected.\')'"
                                         type="submit">
                                     <img title="Reject property" src="/images/reject.jpg"
-                                         style="width: 50px;" alt="Reject property">
+                                         style="min-width: 50px;" alt="Reject property">
                                 </button>
                             </form>
                         </td>
