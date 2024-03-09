@@ -90,9 +90,12 @@
 <!--Single property BANNER-->
 <div class="page-heading header-text">
     <div class="container">
-        <h3>
-            Register now
-        </h3>
+        <h3> Register now </h3>
+        <div th:if="${registrationFailed}" class="err-msg">
+        <h5 class="text-white">Property registration failed!</h5>
+        <p class="text-white"th:text="'Property №' + ${propertyRegisterBindingModel.getNumber()} + ' is already registered in this Residential entity!'"></p>
+        <p class="text-white">Please contact your Residential entity manager to check property registration.</p>
+        </div>
     </div>
 </div>
 
