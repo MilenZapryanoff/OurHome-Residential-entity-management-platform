@@ -57,7 +57,12 @@ public class PropertyServiceImpl implements PropertyService {
      */
     @Override
     @Transactional
-    public void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser) {
+    public boolean newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser) {
+
+        if (propertyRepository.countPropertiesByNumber(propertyRegisterBindingModel.getNumber()) > 0) {
+            return false;
+        }
+
 
         Property newProperty = modelMapper.map(propertyRegisterBindingModel, Property.class);
         Long residentialEntityId = propertyRegisterBindingModel.getResidentialEntity();
@@ -77,6 +82,7 @@ public class PropertyServiceImpl implements PropertyService {
 
         //sending message to residential entity manager
         messageService.propertyRegistrationMessageToManager(residentialEntity);
+        return true;
     }
 
     /**
@@ -176,9 +182,16 @@ public class PropertyServiceImpl implements PropertyService {
      * @param moderatorChange          TRUE if change is made by moderator, FALSE if change is made by owner
      */
     @Override
-    public void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange) {
+    public boolean editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange) {
 
         Property property = propertyRepository.findById(id).orElse(null);
+
+        if (propertyRepository.countPropertiesByNumber(propertyEditBindingModel.getNumber()) > 0) {
+            assert property != null;
+            if (!propertyEditBindingModel.getNumber().equals(property.getNumber())) {
+                return false;
+            }
+        }
 
         if (property != null) {
             modelMapper.map(propertyEditBindingModel, property);
@@ -200,6 +213,7 @@ public class PropertyServiceImpl implements PropertyService {
             property.setRejected(false);
             propertyRepository.save(property);
         }
+        return true;
     }
 
     /**
