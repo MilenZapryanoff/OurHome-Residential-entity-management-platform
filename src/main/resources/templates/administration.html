@@ -91,11 +91,6 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <div class="row">
-                    <strong th:if="${notDeleted}" class="text-danger">Cannot delete entity with already registered
-                        residents!</strong>
-                    <strong th:if="${deleted}" class="text-success">Residential entity successfully deleted!</strong>
-                </div>
                 <h3 th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) == 0}">
                     0 residential entities available
                 </h3>
@@ -109,6 +104,16 @@
                         <span class="breadcrumb">
                     <a href="/administration/add">Create new Residential entity</a></span>
                 </div>
+
+                <div th:if="${notDeleted}" class="err-msg">
+                    <h5 class="text-white">Record not deleted!</h5>
+                    <p class="text-white">Cannot delete entity with already registered residents!</p>
+                </div>
+
+                <div th:if="${deleted}" class="success-msg">
+                    <h5 class="text-white">Record deleted!</h5>
+                    <p class="text-white">Residential entity successfully deleted!</p>
+                </div>
             </div>
         </div>
     </div>
@@ -118,7 +123,7 @@
 <div class="section single-property">
     <div th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) > 0}" class="container">
         <div th:each="residentialEntity: ${@residentialEntityRepository.findAllByManager_Id(userViewModel.getId())}"
-             class="row">
+             class="row" style="padding-bottom: 150px">
             <!--Start of sub-menu-->
             <div class="tabs-content">
                 <ul class="nav nav-tabs">
