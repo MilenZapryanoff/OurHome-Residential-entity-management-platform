@@ -76,6 +76,12 @@ A platform that allows the registration of both home owners and residential enti
   <li>MIT License</li>
 </ul>
 
+<h4>v.1.24.0306</h4>
+  <ul>
+  <li> Bugs and problems fixed</li>
+  <li> Some pages design changed and added new layouts.</li>
+  </ul>
+
 <h2>Updates</h2>
   <h4>v.1.24.0303</h4>
   <ul>
