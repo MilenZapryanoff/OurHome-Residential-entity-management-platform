@@ -70,9 +70,13 @@ public class PropertyController {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("property-add", "userViewModel", getUserViewModel());
         }
-        propertyService.newProperty(propertyRegisterBindingModel, getLoggedUser());
 
-        return new ModelAndView("redirect:/property");
+        if (propertyService.newProperty(propertyRegisterBindingModel, getLoggedUser())) {
+            return new ModelAndView("redirect:/property");
+        } else {
+            return new ModelAndView("property-add", "userViewModel", getUserViewModel())
+                    .addObject("registrationFailed", true);
+        }
     }
 
     /**
@@ -186,16 +190,22 @@ public class PropertyController {
                                                          @Valid PropertyEditBindingModel propertyEditBindingModel,
                                                          @PathVariable("id") Long id, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return new ModelAndView("property-details-edit")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("property", getProperty(id))
                     .addObject("propertyEditBindingModel", propertyEditBindingModel);
         }
 
-        propertyService.editProperty(id, propertyEditBindingModel, !propertyService.needOfVerification(id, propertyEditBindingModel));
-
-        return new ModelAndView("redirect:/property/details/" + id);
+        if (propertyService.editProperty(id, propertyEditBindingModel, !propertyService.needOfVerification(id, propertyEditBindingModel))) {
+            return new ModelAndView("redirect:/property/details/" + id);
+        } else {
+            return new ModelAndView("property-details-edit")
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("property", getProperty(id))
+                    .addObject("propertyEditBindingModel", propertyEditBindingModel)
+                    .addObject("editFailed", true);
+        }
     }
 
     /**
@@ -213,7 +223,7 @@ public class PropertyController {
 
     /**
      * PROPERTY -> MONTHLY FEES Section
-     * */
+     */
     @GetMapping("/property/monthlyfees/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView propertyFeesDetails(@PathVariable("id") Long id) {
@@ -250,8 +260,8 @@ public class PropertyController {
     @PostMapping("/property/expenses/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView residentialEntityFilterExpenses(@PathVariable("id") Long id,
-                                                  @Valid ExpenseFilterBindingModel expenseFilter,
-                                                  BindingResult bindingResult) {
+                                                        @Valid ExpenseFilterBindingModel expenseFilter,
+                                                        BindingResult bindingResult) {
 
         Property property = getProperty(id);
         ModelAndView modelAndView = new ModelAndView("property-expenses")
