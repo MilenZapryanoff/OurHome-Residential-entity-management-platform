@@ -93,9 +93,10 @@
 <!-- ***** BANNER *****-->
 <div class="page-heading header-text">
     <div class="container">
-        <div class="row">
-            <h3>Edit property data
-            </h3>
+        <h3>Edit property data</h3>
+        <div th:if="${editFailed}" class="err-msg">
+            <h5 class="text-white">Edit failed!</h5>
+            <p class="text-white" th:text="'Property №' + ${propertyEditBindingModel.getNumber()} + ' already exists in this Residential entity!'"></p>
         </div>
     </div>
 </div>
@@ -119,7 +120,9 @@
                             Some of your data won't be accessible until your manager approves the change.
                         </p>
                         <br>
-                        <h5 class="text-danger">Property information</h5>
+                        <hr>
+                        <h5>Property information</h5>
+                        <p class="text-success-emphasis">Fields in this section do not require manager validation!</p>
                         <br>
                         <fieldset>
                             <label for="number"><b>Property №</b></label>
@@ -140,7 +143,6 @@
                             error message</small>
                         <fieldset>
                             <label for="floor"><b>Floor number</b></label>
-                            <br>
                             <small th:if="${#fields.hasErrors('floor')}"
                                    th:errors="*{floor}"
                                    class="text-danger">Floor error message</small>
@@ -153,7 +155,6 @@
                         </fieldset>
                         <fieldset>
                             <label for="totalFlatSpace"><b>Total flat space </b>(square meters)</label>
-                            <br>
                             <small th:if="${#fields.hasErrors('totalFlatSpace')}"
                                    th:errors="*{totalFlatSpace}" class="text-danger">Floor error
                                 message</small>
@@ -163,7 +164,6 @@
                         </fieldset>
                         <fieldset>
                             <label for="numberOfRooms"><b>Number of rooms</b></label>
-                            <br>
                             <small th:if="${#fields.hasErrors('numberOfRooms')}"
                                    th:errors="*{numberOfRooms}" class="text-danger">Rooms error
                                 message</small>
@@ -179,11 +179,11 @@
                                    th:value="${property.parkingAvailable}">
                         </fieldset>
                         <br>
-                        <h5 class="text-danger">Inhabitants information</h5>
+                        <h5>Inhabitants information</h5>
+                        <p class="text-danger">Fields in next section require manager validation!</p>
                         <hr>
                         <fieldset>
                             <label for="numberOfAdults"><b>Number of adults</b></label>
-                            <br>
                             <small th:if="${#fields.hasErrors('numberOfAdults')}"
                                    th:errors="*{numberOfAdults}"
                                    class="text-danger">Adults number error
@@ -197,7 +197,6 @@
                         </fieldset>
                         <fieldset>
                             <label for="numberOfChildren"><b>Number of children</b></label>
-                            <br>
                             <small th:if="${#fields.hasErrors('numberOfChildren')}"
                                    th:errors="*{numberOfChildren}"
                                    class="text-danger">Children error
@@ -210,7 +209,6 @@
                         </fieldset>
                         <fieldset>
                             <label for="numberOfPets"><b>Number of pets</b></label>
-                            <br>
                             <small th:if="${#fields.hasErrors('numberOfPets')}"
                                    th:errors="*{numberOfPets}"
                                    class="text-danger">Number of pets message</small>
@@ -232,9 +230,8 @@
                             <button type="submit" id="form-submit"
                                     class="orange-button">Submit
                             </button>
-                            <button class="orange-button" id="form-cancel">
-                                <a
-                                        th:href="@{/property/details/{id}(id=${property.getId()})}">
+                            <button class="orange-button" id="form-cancel" type="button">
+                                <a th:href="@{/property/details/{id}(id=${property.getId()})}">
                                     <div class="text-light">Cancel</div>
                                 </a>
                             </button>
