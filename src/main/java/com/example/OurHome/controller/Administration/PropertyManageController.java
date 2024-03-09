@@ -47,7 +47,7 @@ public class PropertyManageController {
     @GetMapping("/administration/property/active/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityActiveProperties(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
-                                                         @PathVariable("id") Long id) {
+                                                          @PathVariable("id") Long id) {
 
         return new ModelAndView("administration-property-active")
                 .addObject("userViewModel", getUserViewModel())
@@ -63,7 +63,7 @@ public class PropertyManageController {
     @GetMapping("/administration/property/pending/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPendingProperties(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
-                                                         @PathVariable("id") Long id) {
+                                                           @PathVariable("id") Long id) {
 
         return new ModelAndView("administration-property-pending")
                 .addObject("userViewModel", getUserViewModel())
@@ -79,7 +79,7 @@ public class PropertyManageController {
     @GetMapping("/administration/property/rejected/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityRejectedProperties(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
-                                                           @PathVariable("id") Long id) {
+                                                            @PathVariable("id") Long id) {
 
         return new ModelAndView("administration-property-rejected")
                 .addObject("userViewModel", getUserViewModel())
@@ -177,13 +177,20 @@ public class PropertyManageController {
                                                       @PathVariable("id") Long id) {
 
         ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityByPropertyId(id);
-        propertyService.editProperty(id, propertyEditBindingModel, true);
-        //sending message (notification) to owner/resident
-        messageService.propertyModificationMessageToResident(propertyService.findPropertyById(id));
 
-        return new ModelAndView("redirect:/administration/property/active/" + residentialEntity.getId());
+        if (propertyService.editProperty(id, propertyEditBindingModel, true)) {
+            return new ModelAndView("redirect:/administration/property/active/" + residentialEntity.getId());
+        } else {
+            //sending message (notification) to owner/resident
+            messageService.propertyModificationMessageToResident(propertyService.findPropertyById(id));
+
+            return new ModelAndView("administration-property-edit")
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("property", getProperty(id))
+                    .addObject("propertyEditBindingModel", propertyEditBindingModel)
+                    .addObject("editFailed", true);
+        }
     }
-
 
     /**
      * Method returns currently logged user
