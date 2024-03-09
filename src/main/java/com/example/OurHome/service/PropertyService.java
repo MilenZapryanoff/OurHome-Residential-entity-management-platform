@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PropertyService {
 
-    void newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser);
+    boolean newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser);
 
     void deleteProperty(Long id, boolean deletedByManaged);
 
@@ -21,7 +21,7 @@ public interface PropertyService {
 
     void rejectProperty(Long id);
 
-    void editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange);
+    boolean editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange);
 
     void setOverpayment(PropertyFeeEditBindingModel propertyFeeEditBindingModel);
 
