@@ -23,6 +23,9 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("SELECT COUNT(p) FROM properties p where p.residentialEntity.id=:id")
     Long countAllPropertiesByResidentialEntity(@Param("id") Long id);
 
+    @Query("SELECT COUNT(p) FROM properties p where p.number=:number")
+    Long countPropertiesByNumber(@Param("number") String number);
+
     @Query("SELECT COUNT(p) FROM properties p where p.residentialEntity.id=:id and p.monthlyFee is not null")
     Long countAllPropertiesWithSetFeeByResidentialEntity(@Param("id") Long id);
 
