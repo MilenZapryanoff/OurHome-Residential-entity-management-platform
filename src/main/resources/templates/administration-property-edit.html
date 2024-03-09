@@ -95,8 +95,13 @@
     <div class="container">
         <div class="row">
             <h3>Edit Property</h3>
-            <p th:class="text-white" th:text="'Propery №: ' + ${property.getNumber()}"
+            <p th:unless="${editFailed}" th:class="text-white" th:text="'Propery №: ' + ${property.getNumber()}"
                class="category text-black"></p>
+            <div th:if="${editFailed}" class="err-msg">
+                <h5 class="text-white">Edit failed!</h5>
+                <p class="text-white"
+                   th:text="'Property №' + ${propertyEditBindingModel.getNumber()} + ' already exists in this Residential entity!'"></p>
+            </div>
         </div>
     </div>
 </div>
@@ -227,11 +232,15 @@
                             <button type="submit" id="form-submit"
                                     class="orange-button">Submit
                             </button>
-                            <button class="orange-button" id="form-cancel">
-                                <a th:if="${property.isRejected()}" th:href="@{/administration/property/rejected/{id}(id=${property.getResidentialEntity().getId()})}">
-                                    <div class="text-light">Cancel</div>
+                            <button th:if="${property.isRejected()}" class="orange-button" id="form-cancel-act"
+                                    type="button">
+                                <a th:href="@{/administration/property/rejected/{id}(id=${property.getResidentialEntity().getId()})}">
+                                    <div class="text-danger">Cancel</div>
                                 </a>
-                                <a th:unless="${property.isRejected()}" th:href="@{/administration/property/active/{id}(id=${property.getResidentialEntity().getId()})}">
+                            </button>
+                            <button th:unless="${property.isRejected()}" class="orange-button" id="form-cancel-rej"
+                                    type="button">
+                                <a th:href="@{/administration/property/active/{id}(id=${property.getResidentialEntity().getId()})}">
                                     <div class="text-light">Cancel</div>
                                 </a>
                             </button>
