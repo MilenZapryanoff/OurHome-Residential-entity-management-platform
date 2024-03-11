@@ -5,6 +5,7 @@ import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.OverpaymentBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
 import com.example.OurHome.model.events.PropertyApprovalEvent;
 import com.example.OurHome.repo.PropertyRepository;
@@ -92,7 +93,7 @@ public class PropertyServiceImpl implements PropertyService {
      * @param id property id
      */
     public void deleteProperty(Long id, boolean deletedByManager) {
-        Property property = propertyRepository.findById(id).orElse(null);
+        Property property = getProperty(id);
         if (property != null) {
             propertyRepository.delete(property);
 
@@ -101,8 +102,6 @@ public class PropertyServiceImpl implements PropertyService {
             } else {
                 messageService.propertyDeletedMessageToManager(property);
             }
-
-
         }
     }
 
@@ -128,10 +127,16 @@ public class PropertyServiceImpl implements PropertyService {
      */
     @Override
     public void approveProperty(Long id) {
-        Property property = propertyRepository.findById(id).orElse(null);
+
+        Property property = getProperty(id);
         if (property != null) {
+
+            //set monthly fee for a first time
+            property.setMonthlyFee(feeService.calculateMonthlyFee(property.getResidentialEntity(), property));
             property.setValidated(true);
-            propertyRepository.save(property);
+
+            //update totalMonthlyFee. Default value before update is 0.00
+            updateTotalMonthlyFee(property, property.getAdditionalPropertyFee());
 
             applicationEventPublisher.publishEvent(new PropertyApprovalEvent("PropertyService", property));
 
@@ -147,7 +152,7 @@ public class PropertyServiceImpl implements PropertyService {
      */
     @Override
     public void rejectProperty(Long id) {
-        Property property = propertyRepository.findById(id).orElse(null);
+        Property property = getProperty(id);
         if (property != null) {
             property.setRejected(true);
             propertyRepository.save(property);
@@ -155,6 +160,7 @@ public class PropertyServiceImpl implements PropertyService {
             messageService.propertyRejectedMessage(property);
         }
     }
+
 
     /**
      * Mapping of Property to PropertyEditBindingModel used for edit of property data.
@@ -184,13 +190,12 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public boolean editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange) {
 
-        Property property = propertyRepository.findById(id).orElse(null);
+        Property property = getProperty(id);
 
-        if (propertyRepository.countPropertiesByNumber(propertyEditBindingModel.getNumber()) > 0) {
-            assert property != null;
-            if (!propertyEditBindingModel.getNumber().equals(property.getNumber())) {
-                return false;
-            }
+        //fail data change request if trying to duplicate existing property number and NOT an own-property change.
+        if (propertyRepository.countPropertiesByNumber(propertyEditBindingModel.getNumber()) > 0 &&
+                !propertyEditBindingModel.getNumber().equals(property.getNumber())) {
+            return false;
         }
 
         if (property != null) {
@@ -199,7 +204,9 @@ public class PropertyServiceImpl implements PropertyService {
             ResidentialEntity residentialEntity = property.getResidentialEntity();
 
             if (property.getMonthlyFee() != null || moderatorChange) {
-                property.setMonthlyFee(feeService.calculateMonthlyFee(residentialEntity, property));
+                BigDecimal monthlyFee = feeService.calculateMonthlyFee(residentialEntity, property);
+                property.setMonthlyFee(monthlyFee);
+
                 updateTotalMonthlyFee(property, property.getAdditionalPropertyFee());
             }
 
@@ -210,6 +217,8 @@ public class PropertyServiceImpl implements PropertyService {
                 //sending message (notification) to manager
                 messageService.propertyModificationMessageToManager(property);
             }
+
+            //reset rejected status
             property.setRejected(false);
             propertyRepository.save(property);
         }
@@ -226,7 +235,7 @@ public class PropertyServiceImpl implements PropertyService {
      */
     @Override
     public boolean needOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel) {
-        Property property = propertyRepository.findById(id).orElse(null);
+        Property property = getProperty(id);
         if (property != null) {
 
             return property.isRejected() ||
@@ -247,18 +256,13 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public void changeAutoFeeGeneration(Property property) {
-        if (property.isAutoFee()) {
-            property.setAutoFee(false);
-            propertyRepository.save(property);
-        } else {
-            property.setAutoFee(true);
-            propertyRepository.save(property);
-        }
+        property.setAutoFee(!property.isAutoFee());
+        propertyRepository.save(property);
     }
 
     @Override
     public void setOverpayment(PropertyFeeEditBindingModel propertyFeeEditBindingModel) {
-        Property property = propertyRepository.findById(propertyFeeEditBindingModel.getPropertyId()).orElse(null);
+        Property property = getProperty(propertyFeeEditBindingModel.getPropertyId());
 
         if (property != null) {
             property.setOverpayment(propertyFeeEditBindingModel.getOverPayment());
@@ -267,19 +271,42 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public void setMonthlyFee(BigDecimal monthlyFee, Property property) {
+    public OverpaymentBindingModel mapOverPaymentBindingModel(Property property) {
+        return modelMapper.map(property, OverpaymentBindingModel.class);
+    }
 
-        BigDecimal additionalPropertyFee = property.getAdditionalPropertyFee();
-
-        property.setMonthlyFee(monthlyFee);
+    /**
+     * Update overpayment method
+     */
+    @Override
+    public void updateOverpayment(Property property, BigDecimal overPayment) {
+        property.setOverpayment(Objects.requireNonNullElseGet(overPayment, () -> BigDecimal.valueOf(0)));
         propertyRepository.save(property);
+    }
 
+    /**
+     * Update additional property fee method
+     */
+    @Override
+    public void setAdditionalPropertyFee(Property property, BigDecimal additionalPropertyFee) {
+
+        if (additionalPropertyFee == null) {
+            additionalPropertyFee = BigDecimal.ZERO;
+        }
+
+        property.setAdditionalPropertyFee(additionalPropertyFee);
         updateTotalMonthlyFee(property, additionalPropertyFee);
     }
 
-    @Override
-    public void updateTotalMonthlyFee(Property property, BigDecimal additionalPropertyFee) {
+    /**
+     * Private method for Total monthly fee update. Necessary in case of monthly fee modification!
+     */
+    private void updateTotalMonthlyFee(Property property, BigDecimal additionalPropertyFee) {
         property.setTotalMonthlyFee(Objects.requireNonNullElse(property.getMonthlyFee(), BigDecimal.ZERO).add(additionalPropertyFee));
         propertyRepository.save(property);
+    }
+
+    private Property getProperty(Long id) {
+        return propertyRepository.findById(id).orElse(null);
     }
 }
