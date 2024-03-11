@@ -22,7 +22,5 @@ public interface PropertyFeeService {
     void addFee(Property property, PropertyFeeAddBindingModel propertyFeeAddBindingModel);
     void changePaymentStatus(PropertyFee propertyFee);
     boolean addGlobalFee(ResidentialEntity residentialEntity, PropertyFeeAddGlobalFeeBindingModel propertyFeeAddGlobalFeeBindingModel);
-    OverpaymentBindingModel mapOverPaymentBindingModel(Property property);
-    void updateOverpayment(Property property, BigDecimal overPayment);
-    void setAdditionalPropertyFee(Property property, BigDecimal additionalPropertyFee);
+
 }
