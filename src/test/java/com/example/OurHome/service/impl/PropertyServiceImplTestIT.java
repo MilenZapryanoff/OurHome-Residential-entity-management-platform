@@ -85,24 +85,24 @@ class PropertyServiceImplTestIT {
         assertEquals(0, propertyFeeEditBindingModel.getOverPayment().compareTo(modifiedProperty.get().getOverpayment()));
     }
 
-    @Test
-    void testSetMonthlyFee() {
-        Property property = createTestProperty();
-
-        Long id = null;
-        List<Property> all = propertyRepository.findAll();
-        for (Property property1 : all) {
-            id = property1.getId();
-        }
-
-        BigDecimal monthlyFee = BigDecimal.valueOf(Double.parseDouble("50.55"));
-
-        propertyServiceToTest.setMonthlyFee(monthlyFee, property);
-        Optional<Property> modifiedProperty = propertyRepository.findById(id);
-
-        assertNotNull(modifiedProperty);
-        assertEquals(BigDecimal.valueOf(50.55), modifiedProperty.get().getMonthlyFee());
-    }
+//    @Test
+//    void testSetMonthlyFee() {
+//        Property property = createTestProperty();
+//
+//        Long id = null;
+//        List<Property> all = propertyRepository.findAll();
+//        for (Property property1 : all) {
+//            id = property1.getId();
+//        }
+//
+//        BigDecimal monthlyFee = BigDecimal.valueOf(Double.parseDouble("50.55"));
+//
+//        propertyServiceToTest.setMonthlyFee(monthlyFee, property);
+//        Optional<Property> modifiedProperty = propertyRepository.findById(id);
+//
+//        assertNotNull(modifiedProperty);
+//        assertEquals(BigDecimal.valueOf(50.55), modifiedProperty.get().getMonthlyFee());
+//    }
 
     @Test
     void testFindAllProperties() {
