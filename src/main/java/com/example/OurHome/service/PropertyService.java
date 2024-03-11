@@ -3,6 +3,7 @@ package com.example.OurHome.service;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.PropertyFee.OverpaymentBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
 
@@ -25,8 +26,6 @@ public interface PropertyService {
 
     void setOverpayment(PropertyFeeEditBindingModel propertyFeeEditBindingModel);
 
-    void setMonthlyFee(BigDecimal monthlyFee, Property property);
-
     Property findPropertyById(Long id);
 
     PropertyEditBindingModel mapPropertyToEditBindingModel(Property property);
@@ -37,5 +36,9 @@ public interface PropertyService {
 
     void changeAutoFeeGeneration(Property property);
 
-    void updateTotalMonthlyFee(Property property, BigDecimal additionalMonthlyFee);
+    OverpaymentBindingModel mapOverPaymentBindingModel(Property property);
+
+    void updateOverpayment(Property property, BigDecimal overPayment);
+
+    void setAdditionalPropertyFee(Property property, BigDecimal additionalPropertyFee);
 }
