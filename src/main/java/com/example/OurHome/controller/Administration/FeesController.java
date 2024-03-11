@@ -121,7 +121,7 @@ public class FeesController {
     public ModelAndView propertyFees(@PathVariable("id") Long id) {
 
         Property property = propertyService.findPropertyById(id);
-        OverpaymentBindingModel overpaymentBindingModel = propertyFeeService.mapOverPaymentBindingModel(property);
+        OverpaymentBindingModel overpaymentBindingModel = propertyService.mapOverPaymentBindingModel(property);
 
         return new ModelAndView("administration-property-fees")
                 .addObject("userViewModel", getUserViewModel())
@@ -180,7 +180,7 @@ public class FeesController {
         }
 
         Property property = propertyService.findPropertyById(id);
-        propertyFeeService.updateOverpayment(property, overpaymentBindingModel.getOverPayment());
+        propertyService.updateOverpayment(property, overpaymentBindingModel.getOverPayment());
 
         return new ModelAndView("redirect:/administration/fees/details/" + id + "#overpayment-post-nav");
     }
@@ -198,15 +198,7 @@ public class FeesController {
                     .addObject("overpaymentBindingModel", overpaymentBindingModel);
         }
 
-        Property property = propertyService.findPropertyById(id);
-
-        BigDecimal additionalPropertyFeeInput = overpaymentBindingModel.getAdditionalPropertyFee();
-        if (additionalPropertyFeeInput == null) {
-            additionalPropertyFeeInput = BigDecimal.ZERO;
-        }
-
-        propertyFeeService.setAdditionalPropertyFee(property, additionalPropertyFeeInput);
-        propertyService.updateTotalMonthlyFee(property, additionalPropertyFeeInput);
+        propertyService.setAdditionalPropertyFee(propertyService.findPropertyById(id), overpaymentBindingModel.getAdditionalPropertyFee());
 
         return new ModelAndView("redirect:/administration/fees/details/" + id + "#overpayment-post-nav");
     }
