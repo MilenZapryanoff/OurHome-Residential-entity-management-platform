@@ -100,11 +100,6 @@ public class PropertyManageController {
 
         propertyService.approveProperty(id);
 
-        Property property = propertyService.findPropertyById(id);
-        BigDecimal monthlyFee = feeService.calculateMonthlyFee(property.getResidentialEntity(), property);
-
-        propertyService.setMonthlyFee(monthlyFee, property);
-
         return new ModelAndView("redirect:/administration/property/pending/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
     }
 
