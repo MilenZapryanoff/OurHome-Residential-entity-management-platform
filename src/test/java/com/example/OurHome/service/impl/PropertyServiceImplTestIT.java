@@ -430,6 +430,7 @@ class PropertyServiceImplTestIT {
         property.setNumberOfChildren(2);
         property.setNumberOfPets(2);
         property.setValidated(false);
+        property.setAdditionalPropertyFee(BigDecimal.ZERO);
         propertyRepository.save(property);
         return property;
     }
