@@ -111,14 +111,14 @@
         <!--        start of buttons-->
         <div class="tabs-content">
             <ul class="nav nav-tabs">
-                <li class="nav-item" role="presentation">
+                <li class="nav-item">
                     <div class="buttons">
                         <a class="nav-link" th:href="@{/property/summary/{id}(id=${property.getId()})}">
                             <h5>Summary</h5>
                             <p class="text-secondary">and property status</p></a>
                     </div>
                 </li>
-                <li class="nav-item" role="presentation">
+                <li class="nav-item">
                     <div th:if="${property.isValidated()}" class="buttons">
                         <a class="nav-link" th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">
                             <h5>Monthly fees</h5>
@@ -126,7 +126,7 @@
                         </a>
                     </div>
                 </li>
-                <li class="nav-item" role="presentation">
+                <li class="nav-item">
                     <div class="buttons">
                         <a class="nav-link active" th:href="@{/property/details/{id}(id=${property.getId()})}">
                             <h5 class="text-danger">Property details</h5>
@@ -134,7 +134,7 @@
                         </a>
                     </div>
                 </li>
-                <li class="nav-item" role="presentation">
+                <li class="nav-item">
                     <div th:if="${property.isValidated()}" class="buttons">
                         <a class="nav-link" th:href="@{/property/expenses/{id}(id=${property.getId()})}">
                             <h5>Expenses</h5>
