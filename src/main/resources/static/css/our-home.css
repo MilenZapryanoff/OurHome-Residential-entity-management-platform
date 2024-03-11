@@ -1169,6 +1169,7 @@ Single Page Style
     padding: 70px 30px;
     margin-left: 60px;
 }
+
 .single-property .info-table ul li {
     display: block;
     margin-bottom: 12px;
@@ -1233,11 +1234,11 @@ Property fee section
     transition: 1s;
 }
 
-#individual-fee{
+#individual-fee {
     background-color: #eaeaea;
 }
 
-#individual-fee:hover{
+#individual-fee:hover {
     transition: 1s;
     background-color: white;
 }
@@ -1259,7 +1260,7 @@ Property fee section
 }
 
 .fee-component p {
-   font-size: 13px;
+    font-size: 13px;
 }
 
 
@@ -1618,7 +1619,17 @@ Properties Style
 --------------------------------------------- 
 */
 
+.properties {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    flex-shrink: 10;
+}
+
+
 .properties .item {
+    max-width: 350px;
     background-color: #fafafa;
     border-radius: 10px;
     padding: 30px;
@@ -2043,8 +2054,6 @@ input:checked + .slider:before {
 }
 
 
-
-
 th {
     padding: 0 10px;
 }
@@ -2148,19 +2157,71 @@ table {
 }
 
 .err-msg {
-    background-color: #DC3545;
+    background-color: rgba(220, 53, 69, 0.59);
     margin: 0 auto;
-    max-width: 700px;
-    border-radius: 20px;
+    max-width: 600px;
+    border-radius: 10px;
     overflow: hidden;
+    transition: 1.5s;
+}
+
+.err-msg:hover {
+    transition: 1.5s;
+    background-color: #DC3545;
+
 }
 
 .success-msg {
-    background-color: rgb(33,135,84);
+    background-color: rgba(33, 135, 84, 0.58);
     margin: 0 auto;
     max-width: 700px;
-    border-radius: 20px;
+    border-radius: 10px;
     overflow: hidden;
+    transition: 1s;
+}
+
+.success-msg:hover {
+    transition: 1s;
+    background-color: rgb(33, 135, 84);
+
+}
+
+/*
+---------------------------------------------
+Residential entity section image
+---------------------------------------------
+*/
+
+#residential-entity-image {
+    opacity: 80%;
+    border: 1px solid gray;
+    border-radius: 15px;
+    max-width: 200px;
+    box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5);
+    transition: 1.2s;
+}
+
+#residential-entity-image:hover {
+    opacity: 100%;
+    transition: 0.3s;
+}
+
+
+/*
+---------------------------------------------
+Property section image
+---------------------------------------------
+*/
+
+#property-section-image {
+    opacity: 70%;
+    max-width: 200px;
+    transition: 1.2s;
+}
+
+#property-section-image:hover {
+    opacity: 100%;
+    transition: 0.5s;
 }
 
 
@@ -2207,6 +2268,8 @@ body {
     .header-area .main-nav .nav li:last-child {
         background-color: black;
     }
+
+
 }
 
 
@@ -2306,11 +2369,25 @@ body {
         margin-left: 0;
         margin-top: 60px;
     }
+
+    .properties .item {
+        max-width: 450px;
+    }
 }
 
 @media (max-width: 1200px) {
 
     .contact-page .section-heading {
         margin-right: 100px;
+    }
+
+    .properties {
+        justify-content: center;
+    }
+
+    .properties .item {
+
+        flex-grow: 1;
+        flex-shrink: 1;
     }
 }
