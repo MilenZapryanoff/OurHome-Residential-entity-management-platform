@@ -235,7 +235,7 @@
                             <button th:if="${property.isRejected()}" class="orange-button" id="form-cancel-act"
                                     type="button">
                                 <a th:href="@{/administration/property/rejected/{id}(id=${property.getResidentialEntity().getId()})}">
-                                    <div class="text-danger">Cancel</div>
+                                    <div class="text-light">Cancel</div>
                                 </a>
                             </button>
                             <button th:unless="${property.isRejected()}" class="orange-button" id="form-cancel-rej"
