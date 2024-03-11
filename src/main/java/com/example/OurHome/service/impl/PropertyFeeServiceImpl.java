@@ -188,29 +188,6 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
         propertyFeeRepository.save(propertyFee);
     }
 
-    @Override
-    public OverpaymentBindingModel mapOverPaymentBindingModel(Property property) {
-        return modelMapper.map(property, OverpaymentBindingModel.class);
-    }
-
-    /**
-     * Update overpayment method
-     */
-    @Override
-    public void updateOverpayment(Property property, BigDecimal overPayment) {
-        property.setOverpayment(Objects.requireNonNullElseGet(overPayment, () -> BigDecimal.valueOf(0)));
-        propertyRepository.save(property);
-    }
-
-    /**
-     * Update additional property fee method
-     */
-    @Override
-    public void setAdditionalPropertyFee(Property property, BigDecimal additionalPropertyFee) {
-        property.setAdditionalPropertyFee(Objects.requireNonNullElseGet(additionalPropertyFee, () -> BigDecimal.valueOf(0)));
-        propertyRepository.save(property);
-    }
-
     /**
      * Mark as paid/unpaid
      */
