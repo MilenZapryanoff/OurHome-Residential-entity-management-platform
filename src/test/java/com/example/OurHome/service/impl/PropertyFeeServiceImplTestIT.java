@@ -47,7 +47,7 @@ class PropertyFeeServiceImplTestIT {
         Property property = createTestProperty();
         propertyRepository.save(property);
 
-        propertyFeeServiceToTest.createMonthlyFee(property);
+        propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
         Long id = null;
         List<PropertyFee> all = propertyFeeRepository.findAll();
@@ -66,7 +66,7 @@ class PropertyFeeServiceImplTestIT {
         property.setOverpayment(BigDecimal.valueOf(5));
         propertyRepository.save(property);
 
-        propertyFeeServiceToTest.createMonthlyFee(property);
+        propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
         Long id = null;
         List<PropertyFee> all = propertyFeeRepository.findAll();
@@ -85,7 +85,7 @@ class PropertyFeeServiceImplTestIT {
         property.setOverpayment(BigDecimal.valueOf(10));
         propertyRepository.save(property);
 
-        propertyFeeServiceToTest.createMonthlyFee(property);
+        propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
         Long id = null;
         List<PropertyFee> all = propertyFeeRepository.findAll();
@@ -104,7 +104,7 @@ class PropertyFeeServiceImplTestIT {
         property.setOverpayment(BigDecimal.valueOf(15));
         propertyRepository.save(property);
 
-        propertyFeeServiceToTest.createMonthlyFee(property);
+        propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
         Long id = null;
         List<PropertyFee> all = propertyFeeRepository.findAll();
@@ -134,7 +134,7 @@ class PropertyFeeServiceImplTestIT {
             id = fee.getId();
         }
 
-        propertyFeeServiceToTest.modifyFee(id, propertyFeeEditBindingModel);
+        propertyFeeServiceToTest.editMonthlyFee(id, propertyFeeEditBindingModel);
 
         Optional<PropertyFee> modifiedPropertyFee = propertyFeeRepository.findById(id);
 
@@ -149,7 +149,7 @@ class PropertyFeeServiceImplTestIT {
         propertyFeeRepository.save(propertyFee);
         propertyFeeRepository.save(propertyFee2);
 
-        propertyFeeServiceToTest.deleteFee(propertyFee);
+        propertyFeeServiceToTest.deleteMonthlyFee(propertyFee);
 
         List<PropertyFee> propertyFees = propertyFeeRepository.findAll();
 
@@ -168,7 +168,7 @@ class PropertyFeeServiceImplTestIT {
         propertyFeeAddBindingModel.setDescription("test");
         propertyFeeAddBindingModel.setPaid(true);
 
-        propertyFeeServiceToTest.addFee(property, propertyFeeAddBindingModel);
+        propertyFeeServiceToTest.createSingleFee(property, propertyFeeAddBindingModel);
 
         Long id = null;
         List<PropertyFee> all = propertyFeeRepository.findAll();
