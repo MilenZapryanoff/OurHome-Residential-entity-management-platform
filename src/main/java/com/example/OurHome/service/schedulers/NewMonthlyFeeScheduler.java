@@ -30,7 +30,7 @@ public class NewMonthlyFeeScheduler {
         if (!allProperties.isEmpty()) {
             for (Property property : allProperties) {
                 if (property.isValidated() && !property.isRejected() && property.isAutoFee()) {
-                    propertyFeeService.createMonthlyFee(property);
+                    propertyFeeService.createPeriodicalMonthlyFee(property);
                 }
             }
         }
