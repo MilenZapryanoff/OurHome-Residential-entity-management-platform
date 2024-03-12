@@ -3,7 +3,6 @@ package com.example.OurHome.service.impl;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyFee;
 import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.dto.BindingModels.PropertyFee.OverpaymentBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddGlobalFeeBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class PropertyFeeServiceImpl implements PropertyFeeService {
@@ -81,9 +79,9 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
      */
     @Override
     @Transactional
-    public void createMonthlyFee(Property property) {
+    public void createPeriodicalMonthlyFee(Property property) {
 
-        PropertyFee newPropertyFee = new PropertyFee();
+        PropertyFee newMonthlyFee = new PropertyFee();
         LocalDate now = LocalDate.now();
 
         BigDecimal overpayment = property.getOverpayment();
@@ -91,55 +89,22 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
         BigDecimal additionalPropertyFee = property.getAdditionalPropertyFee();
         BigDecimal totalMonthlyFee = monthlyFee.add(additionalPropertyFee);
 
-        //if monthly fees in Residential entity are not set, no new fees will be created for the property
+        //if totalMonthlyFee for this property is not 0.00, a new monthly fee will be created
         if (totalMonthlyFee.compareTo(BigDecimal.ZERO) > 0) {
 
-            //Calculations of monthly fee in case of overpayment
-            if (overpayment.compareTo(BigDecimal.ZERO) > 0) {
-
-                //Creating new monthly fee when overpaid amount > monthly fee
-                if (overpayment.compareTo(totalMonthlyFee) > 0) {
-                    newPropertyFee.setFeeAmount(totalMonthlyFee);
-                    newPropertyFee.setPaid(true);
-                    newPropertyFee.setOverpaidAmountStart(overpayment);
-
-                    property.setOverpayment(overpayment.subtract(totalMonthlyFee));
-                    propertyRepository.save(property);
-                    newPropertyFee.setOverpaidAmountEnd(overpayment.subtract(totalMonthlyFee));
-                }
-
-                //Creating new propertyFee when overpaid amount == monthly fee
-                if (overpayment.compareTo(totalMonthlyFee) == 0) {
-                    newPropertyFee.setFeeAmount(totalMonthlyFee);
-                    newPropertyFee.setPaid(true);
-                    newPropertyFee.setOverpaidAmountStart(overpayment);
-
-                    property.setOverpayment(BigDecimal.valueOf(0));
-                    propertyRepository.save(property);
-                    newPropertyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
-                }
-
-                //Creating new propertyFee when overpaid amount < monthly fee
-                if (overpayment.compareTo(totalMonthlyFee) < 0) {
-                    newPropertyFee.setFeeAmount(totalMonthlyFee.subtract(overpayment));
-                    newPropertyFee.setOverpaidAmountStart(overpayment);
-
-                    property.setOverpayment(BigDecimal.valueOf(0));
-                    propertyRepository.save(property);
-                    newPropertyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
-                }
+            if (overpayment.compareTo(BigDecimal.ZERO) == 0) {
+                //Setting of monthly fee if NO overpayment
+                setMonthlyFeeWithoutOverpayment(newMonthlyFee, totalMonthlyFee);
             } else {
-                newPropertyFee.setFeeAmount(totalMonthlyFee);
-                newPropertyFee.setPaid(false);
-                newPropertyFee.setOverpaidAmountStart(BigDecimal.valueOf(0));
-                newPropertyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
+                //Setting a monthly fee in case of overpayment
+                setMonthlyFeeWithOverpayment(property, overpayment, totalMonthlyFee, newMonthlyFee);
             }
 
-            newPropertyFee.setPeriodStart(now.withDayOfMonth(1));
-            newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
-            newPropertyFee.setProperty(property);
-            newPropertyFee.setDescription(now.getMonth() + " " + now.getYear());
-            propertyFeeRepository.save(newPropertyFee);
+            newMonthlyFee.setPeriodStart(now.withDayOfMonth(1));
+            newMonthlyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
+            newMonthlyFee.setProperty(property);
+            newMonthlyFee.setDescription(now.getMonth() + " " + now.getYear());
+            propertyFeeRepository.save(newMonthlyFee);
 
             //send message to property owner
             messageService.newFeeMessageToPropertyOwner(property, property.getTotalMonthlyFee(), checkTotalDueAmount(property.getId()));
@@ -153,10 +118,9 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
      * @param propertyFeeEditBindingModel data from frontend
      */
     @Override
-    public void modifyFee(Long propertyFeeId, PropertyFeeEditBindingModel propertyFeeEditBindingModel) {
+    public void editMonthlyFee(Long propertyFeeId, PropertyFeeEditBindingModel propertyFeeEditBindingModel) {
 
         PropertyFee propertyFee = propertyFeeRepository.findById(propertyFeeId).orElse(null);
-
         if (propertyFee != null) {
             propertyFee.setPeriodStart(propertyFeeEditBindingModel.getPeriodStart());
             propertyFee.setPeriodEnd(propertyFeeEditBindingModel.getPeriodEnd());
@@ -172,12 +136,12 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
      * @param propertyFee a property fee
      */
     @Override
-    public void deleteFee(PropertyFee propertyFee) {
+    public void deleteMonthlyFee(PropertyFee propertyFee) {
         propertyFeeRepository.delete(propertyFee);
     }
 
     @Override
-    public void addFee(Property property, PropertyFeeAddBindingModel propertyFeeAddBindingModel) {
+    public void createSingleFee(Property property, PropertyFeeAddBindingModel propertyFeeAddBindingModel) {
         PropertyFee propertyFee = modelMapper.map(propertyFeeAddBindingModel, PropertyFee.class);
         propertyFee.setManual(true);
         propertyFee.setProperty(property);
@@ -189,23 +153,14 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     }
 
     /**
-     * Mark as paid/unpaid
-     */
-    @Override
-    public void changePaymentStatus(PropertyFee propertyFee) {
-        propertyFee.setPaid(!propertyFee.isPaid());
-        propertyFeeRepository.save(propertyFee);
-    }
-
-    /**
      * Global fee add - Adds a fee to every single property in the common Residential entity.
      *
-     * @param residentialEntity Residential entity data
+     * @param residentialEntity                   Residential entity data
      * @param propertyFeeAddGlobalFeeBindingModel add global fee input data
      * @return boolean
      */
     @Override
-    public boolean addGlobalFee(ResidentialEntity residentialEntity, PropertyFeeAddGlobalFeeBindingModel propertyFeeAddGlobalFeeBindingModel) {
+    public boolean createMassFee(ResidentialEntity residentialEntity, PropertyFeeAddGlobalFeeBindingModel propertyFeeAddGlobalFeeBindingModel) {
 
         if (residentialEntity == null) {
             return false;
@@ -226,6 +181,15 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             propertyFeeRepository.save(propertyFee);
         }
         return true;
+    }
+
+    /**
+     * Mark as paid/unpaid
+     */
+    @Override
+    public void changePaymentStatus(PropertyFee propertyFee) {
+        propertyFee.setPaid(!propertyFee.isPaid());
+        propertyFeeRepository.save(propertyFee);
     }
 
     /**
@@ -253,6 +217,56 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             return modelMapper.map(propertyFee, PropertyFeeEditBindingModel.class);
         }
         return null;
+    }
+
+    /**
+     * Method for setting monthlyFee params in case of Overpayment.
+     *
+     * @param totalMonthlyFee Total Monthly fee
+     * @param newMonthlyFee   NewMonthlyFee
+     */
+    private static void setMonthlyFeeWithoutOverpayment(PropertyFee newMonthlyFee, BigDecimal totalMonthlyFee) {
+        newMonthlyFee.setFeeAmount(totalMonthlyFee);
+        newMonthlyFee.setPaid(false);
+        newMonthlyFee.setOverpaidAmountStart(BigDecimal.valueOf(0));
+        newMonthlyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
+    }
+
+    /**
+     * Method for setting monthlyFee params in case of Overpayment.
+     *
+     * @param property        property fee id
+     * @param overpayment     Overpaid amount
+     * @param totalMonthlyFee Total Monthly fee
+     * @param newMonthlyFee   NewMonthlyFee
+     */
+    private void setMonthlyFeeWithOverpayment(Property property, BigDecimal overpayment,
+                                              BigDecimal totalMonthlyFee, PropertyFee newMonthlyFee) {
+
+        //Setting new propertyFee when overpaid amount < total monthly fee
+        if (overpayment.compareTo(totalMonthlyFee) < 0) {
+            newMonthlyFee.setFeeAmount(totalMonthlyFee.subtract(overpayment));
+            newMonthlyFee.setPaid(false);
+
+            property.setOverpayment(BigDecimal.valueOf(0));
+            newMonthlyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
+        } else {
+            //Setting new propertyFee when overpaid amount == total monthly fee
+            if (overpayment.compareTo(totalMonthlyFee) == 0) {
+                property.setOverpayment(BigDecimal.valueOf(0));
+                newMonthlyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
+            }
+            //Setting new monthly fee when overpaid amount > total  monthly fee
+            else if (overpayment.compareTo(totalMonthlyFee) > 0) {
+                property.setOverpayment(overpayment.subtract(totalMonthlyFee));
+                newMonthlyFee.setOverpaidAmountEnd(overpayment.subtract(totalMonthlyFee));
+            }
+
+            newMonthlyFee.setFeeAmount(totalMonthlyFee);
+            newMonthlyFee.setPaid(true);
+        }
+        newMonthlyFee.setOverpaidAmountStart(overpayment);
+        propertyRepository.save(property);
     }
 }
 
