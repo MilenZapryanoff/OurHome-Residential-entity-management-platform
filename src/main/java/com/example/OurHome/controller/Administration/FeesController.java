@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.math.BigDecimal;
-
 @Controller
 public class FeesController {
 
@@ -241,7 +239,7 @@ public class FeesController {
                     .addObject("propertyFeeEditBindingModel", propertyFeeEditBindingModel);
         }
 
-        propertyFeeService.modifyFee(id, propertyFeeEditBindingModel);
+        propertyFeeService.editMonthlyFee(id, propertyFeeEditBindingModel);
         propertyService.setOverpayment(propertyFeeEditBindingModel);
 
         return new ModelAndView("redirect:/administration/fees/details/" + propertyFeeEditBindingModel.getPropertyId());
@@ -280,7 +278,7 @@ public class FeesController {
         }
 
         Property property = propertyService.findPropertyById(id);
-        propertyFeeService.addFee(property, propertyFeeAddBindingModel);
+        propertyFeeService.createSingleFee(property, propertyFeeAddBindingModel);
 
         return new ModelAndView("redirect:/administration/fees/details/" + id);
     }
@@ -299,7 +297,7 @@ public class FeesController {
         PropertyFee propertyFee = propertyFeeService.findPropertyFeeById(id);
         Long propertyId = propertyFee.getProperty().getId();
 
-        propertyFeeService.deleteFee(propertyFee);
+        propertyFeeService.deleteMonthlyFee(propertyFee);
 
         return new ModelAndView("redirect:/administration/fees/details/" + propertyId + "#delete-fee-post-nav");
     }
@@ -354,7 +352,7 @@ public class FeesController {
 
         ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityById(id).orElse(null);
 
-        if (propertyFeeService.addGlobalFee(residentialEntity, propertyFeeAddGlobalFeeBindingModel)) {
+        if (propertyFeeService.createMassFee(residentialEntity, propertyFeeAddGlobalFeeBindingModel)) {
             return new ModelAndView("administration-fees")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("residentialEntity", getResidentialEntity(id))
