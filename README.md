@@ -83,6 +83,12 @@ A platform that allows the registration of both home owners and residential enti
   </ul>
 
 <h2>Updates</h2>
+ <h4>v.1.24.0303</h4>
+  <ul>
+  <li>Added property categories.</li>
+  </ul>
+
+
   <h4>v.1.24.0303</h4>
   <ul>
   <li>Show/hide password input toggle switch added in some password fields.</li>
