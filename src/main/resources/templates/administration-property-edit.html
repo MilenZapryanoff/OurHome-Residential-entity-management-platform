@@ -131,6 +131,22 @@
                                    th:errorclass="bg-danger"
                                    th:value="${propertyEditBindingModel.getNumber()}">
                         </fieldset>
+                        <fieldset th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0}">
+                            <label for="propertyTypeId"><b>Property type</b></label>
+                            <select class="form-control" id="propertyTypeId"
+                                    th:field="*{propertyType}">
+                                <option th:if="${property.getPropertyType() != null}" class="text-secondary"
+                                        th:value="${property.getPropertyType().getId()}"
+                                        th:text="${property.getPropertyType().getDescription()} + ' (Selected)'"></option>
+                                <option th:if="${property.getPropertyType() == null}" th:value="''"
+                                        th:text="'---'"></option>
+                                <option th:each="propertyType : ${@propertyTypeRepository.findPropertyTypesByRE(property.getResidentialEntity().getId())}"
+                                        th:value="${propertyType.getId()}"
+                                        th:text="${propertyType.description}">
+                                </option>
+                                <option th:if="${property.getPropertyType() != null}" th:value="''" th:text="'---'"></option>
+                            </select>
+                        </fieldset>
                         <small th:if="${#fields.hasErrors('number')}"
                                th:errors="*{number}" class="text-danger">Number
                             error message</small>
@@ -198,16 +214,6 @@
                                    type="checkbox"
                                    th:field="*{notHabitable}"
                                    th:value="${property.notHabitable}">
-                        </fieldset>
-                        <fieldset>
-                            <label for="totalFlatSpace"
-                                   class="hidden"></label>
-                            <input hidden="hidden" type="text"
-                                   id="totalFlatSpace"
-                                   placeholder="Enter total flat space..."
-                                   th:field="*{totalFlatSpace}"
-                                   th:value="${property.totalFlatSpace}"
-                                   th:errorclass="bg-danger">
                         </fieldset>
                         <fieldset>
                             <label for="numberOfRooms"

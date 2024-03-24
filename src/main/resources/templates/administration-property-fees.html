@@ -165,7 +165,10 @@
                         <div class="info-box text-dark">
                             <b th:text="${property.getTotalMonthlyFee()} + ' лв.'"></b>
                         </div>
-                        <div class="accordion-item">
+                        <div th:unless="${property.getTotalMonthlyFee() != 0}" >
+                            <p>No monthly fee applies to this property</p>
+                        </div>
+                        <div th:if="${property.getTotalMonthlyFee() != 0}" class="accordion-item">
                             <div class="accordion-header" id="headingTwo">
                                 <button class="accordion-button collapsed"
                                         type="button"
@@ -294,6 +297,17 @@
                                             </p>
                                         </div>
                                     </div>
+                                    <div class="fee-component text-center res-entity"
+                                         th:if="${property.getAdditionalPropertyFee() < 0}" id="negative-individual-fee">
+                                        <div class="fee-category">
+                                            <i class="fa-solid fa-gears"></i>
+                                        </div>
+                                        <div class="fee-calc">
+                                            <p>Adjustment fee: <b class="text-danger"
+                                                    th:text="${property.getAdditionalPropertyFee()} + ' лв.'"></b>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -349,8 +363,8 @@
                             </fieldset>
                             <p>
                                 Individual fee is an additional property specific fee associated with this property.<br>
-                                The amount set in this field will be automatically added to the total monthly fee
-                                calculated for this property.
+                                The amount set in this field will be automatically calculated in the total monthly fee
+                                for this property. <br>You can reduce total monthly fee for this property by adding a negative amount (-).
                             </p>
                         </form>
                     </li>
@@ -536,8 +550,8 @@
                 </table>
             </div>
             <p class="text-center"
-               th:if="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} == 0">No
-                monthly fees found for this property</p>
+               th:if="${@propertyFeeRepository.countAllFeesByProperty(property.getId())} == 0">
+                <br>No monthly fees found for this property</p>
         </div>
     </div>
 </div>

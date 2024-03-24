@@ -140,14 +140,6 @@
                                    th:errorclass="bg-danger">
                         </fieldset>
                         <fieldset>
-                            <label for="totalFlatSpace"><b>Total flat space </b>(square meters)</label>
-                            <p th:if="${#fields.hasErrors('totalFlatSpace')}"
-                               th:errors="*{totalFlatSpace}" class="text-danger">Floor error message</p>
-                            <input type="text" id="totalFlatSpace" placeholder="Enter total flat space..." required
-                                   th:field="*{totalFlatSpace}"
-                                   th:errorclass="bg-danger">
-                        </fieldset>
-                        <fieldset>
                             <label for="numberOfRooms"><b>Number of rooms</b></label>
                             <p th:if="${#fields.hasErrors('numberOfRooms')}"
                                th:errors="*{numberOfRooms}" class="text-danger">Rooms error message</p>
@@ -194,8 +186,7 @@
                             </fieldset>
                         </div>
                         <fieldset>
-                            <button th:href="@{/property}" type="submit" id="form-submit" class="orange-button">Add
-                                property
+                            <button th:href="@{/property}" type="submit" id="form-submit" class="orange-button">Next
                             </button>
                         </fieldset>
                     </div>

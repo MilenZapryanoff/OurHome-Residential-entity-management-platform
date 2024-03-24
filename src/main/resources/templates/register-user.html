@@ -156,6 +156,8 @@
                             <input type="password" id="password" placeholder="Enter your password..." required
                                    th:field="*{password}"
                                    th:errorclass="bg-danger">
+                            <small class="fas fa-eye text-secondary fa-eye-slash" id="togglePassword"
+                                   style="margin-left: -35px; cursor: pointer;"></small>
                         </fieldset>
                         <fieldset>
                             <label for="confirmPassword"><b>Confirm password</b></label>
@@ -194,6 +196,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/password-hide.js"></script>
 
 </body>
 </html>

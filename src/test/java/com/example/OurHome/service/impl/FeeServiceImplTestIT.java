@@ -69,7 +69,7 @@ class FeeServiceImplTestIT {
     void testCalculateMonthlyFee() {
         Property property = createTestData();
 
-        BigDecimal monthlyFee = feeServiceToTest.calculateMonthlyFee(property.getResidentialEntity(), property);
+        BigDecimal monthlyFee = feeServiceToTest.calculateFundMm(property.getResidentialEntity(), property);
 
         assertEquals(BigDecimal.valueOf(50),monthlyFee);
     }

@@ -35,6 +35,14 @@ public class FeeEditBindingModel {
     @DecimalMin(value = "0.0", message = "Additional Fee must be greater than or equal to zero")
     private BigDecimal additionalFeeNonHabitable;
 
+    @NotNull(message = "Fund Repair cannot be null")
+    @DecimalMin(value = "0.0", message = "Fee must be greater than or equal to zero")
+    private BigDecimal fundRepairHabitable;
+
+    @NotNull(message = "Fund Repair cannot be null")
+    @DecimalMin(value = "0.0", message = "Fee must be greater than or equal to zero")
+    private BigDecimal fundRepairNonHabitable;
+
     public BigDecimal getFixedFeeHabitable() {
         return fixedFeeHabitable;
     }
@@ -89,5 +97,21 @@ public class FeeEditBindingModel {
 
     public void setAdditionalFeeNonHabitable(BigDecimal additionalFeeNonHabitable) {
         this.additionalFeeNonHabitable = additionalFeeNonHabitable;
+    }
+
+    public BigDecimal getFundRepairHabitable() {
+        return fundRepairHabitable;
+    }
+
+    public void setFundRepairHabitable(BigDecimal fundRepairHabitable) {
+        this.fundRepairHabitable = fundRepairHabitable;
+    }
+
+    public BigDecimal getFundRepairNonHabitable() {
+        return fundRepairNonHabitable;
+    }
+
+    public void setFundRepairNonHabitable(BigDecimal fundRepairNonHabitable) {
+        this.fundRepairNonHabitable = fundRepairNonHabitable;
     }
 }

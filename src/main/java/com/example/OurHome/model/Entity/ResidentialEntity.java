@@ -3,6 +3,7 @@ package com.example.OurHome.model.Entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,9 @@ public class ResidentialEntity {
     @OneToOne(cascade = CascadeType.ALL)
     private Fee fee;
 
+    @Column(nullable = false)
+    private BigDecimal incomesAmount;
+
     @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
     private List<Property> properties;
 
@@ -54,11 +58,15 @@ public class ResidentialEntity {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "residentialEntity", cascade = CascadeType.REMOVE)
     private List<Expense> expenses;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "residentialEntity", cascade = CascadeType.REMOVE)
+    private List<PropertyType> propertyTypes;
+
     public ResidentialEntity() {
         residents = new ArrayList<>();
         properties = new ArrayList<>();
         moderators = new ArrayList<>();
         expenses = new ArrayList<>();
+        propertyTypes = new ArrayList<>();
     }
 
     public String getAccessCode() {
@@ -171,5 +179,21 @@ public class ResidentialEntity {
 
     public void setExpenses(List<Expense> expense) {
         this.expenses = expense;
+    }
+
+    public BigDecimal getIncomesAmount() {
+        return incomesAmount;
+    }
+
+    public void setIncomesAmount(BigDecimal incomesAmount) {
+        this.incomesAmount = incomesAmount;
+    }
+
+    public List<PropertyType> getPropertyTypes() {
+        return propertyTypes;
+    }
+
+    public void setPropertyTypes(List<PropertyType> propertyTypes) {
+        this.propertyTypes = propertyTypes;
     }
 }

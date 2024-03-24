@@ -23,9 +23,6 @@ public class PropertyRegisterBindingModel {
     @PositiveOrZero(message = "Number of pets must be a positive digit or 0")
     private int numberOfPets;
 
-    @PositiveOrZero(message = "Total flat space must be a positive digit")
-    private String totalFlatSpace;
-
     @PositiveOrZero(message = "Number of rooms must be a positive digit")
     private String numberOfRooms;
 
@@ -35,6 +32,8 @@ public class PropertyRegisterBindingModel {
 
     @NotNull
     private Long residentialEntity;
+
+    private Long propertyType;
 
 
     public String getNumber() {
@@ -93,14 +92,6 @@ public class PropertyRegisterBindingModel {
         this.notHabitable = notHabitable;
     }
 
-    public String getTotalFlatSpace() {
-        return totalFlatSpace;
-    }
-
-    public void setTotalFlatSpace(String totalFlatSpace) {
-        this.totalFlatSpace = totalFlatSpace;
-    }
-
     public String getNumberOfRooms() {
         return numberOfRooms;
     }
@@ -115,5 +106,13 @@ public class PropertyRegisterBindingModel {
 
     public void setParkingAvailable(boolean parkingAvailable) {
         this.parkingAvailable = parkingAvailable;
+    }
+
+    public Long getPropertyType() {
+        return propertyType;
+    }
+
+    public void setPropertyType(Long propertyType) {
+        this.propertyType = propertyType;
     }
 }

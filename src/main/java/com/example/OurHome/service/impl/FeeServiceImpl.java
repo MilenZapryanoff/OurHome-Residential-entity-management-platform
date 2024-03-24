@@ -2,6 +2,7 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Fee;
 import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.PropertyType;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.Fee.FeeEditBindingModel;
 import com.example.OurHome.repo.FeeRepository;
@@ -32,7 +33,9 @@ public class FeeServiceImpl implements FeeService {
     }
 
     /**
-     * Default fee creating - 0.00 values set.
+     * New fee creation method.
+     * Default values set to - 0.00.
+     *
      * @param newResidentialEntity Residential Entity of the new fee
      * @return Fee
      */
@@ -47,27 +50,34 @@ public class FeeServiceImpl implements FeeService {
         fee.setAdditionalFeeHabitable(BigDecimal.valueOf(0.0));
         fee.setFixedFeeNonHabitable(BigDecimal.valueOf(0.0));
         fee.setAdditionalFeeNonHabitable(BigDecimal.valueOf(0.0));
+        fee.setFundRepairHabitable(BigDecimal.ZERO);
+        fee.setFundRepairNonHabitable(BigDecimal.ZERO);
         feeRepository.save(fee);
 
         return fee;
     }
 
     /**
-     * Individual property monthly fee calculation method
+     * Calculation of Fund Management and Maintenance amount.
+     *
      * @param residentialEntity Residential entity
-     * @param property Property
+     * @param property          Property
      * @return BigDecimal value
      */
     @Override
-    public BigDecimal calculateMonthlyFee(ResidentialEntity residentialEntity, Property property) {
+    public BigDecimal calculateFundMm(ResidentialEntity residentialEntity, Property property) {
 
         Fee fee = residentialEntity.getFee();
+
+        //in case of non-habitable property
         if (property.isNotHabitable()) {
             BigDecimal fixedFeeNonHabitable = fee.getFixedFeeNonHabitable();
             BigDecimal additionalFeeNonHabitable = fee.getAdditionalFeeNonHabitable();
 
             return fixedFeeNonHabitable.add(additionalFeeNonHabitable);
         }
+
+        //in case of habitable property
         int numberOfAdults = property.getNumberOfAdults();
         int numberOfChildren = property.getNumberOfChildren();
         int numberOfPets = property.getNumberOfPets();
@@ -86,8 +96,54 @@ public class FeeServiceImpl implements FeeService {
     }
 
     /**
+     * Calculation of Fund Repair amount.
+     * This method is used to calculate/recalculate the fund Repair amount after changes of
+     * entities that causes need of recalculation of property fees.
+     * Method returns the fund Repaid amount calculated according to the current settings.
+     *
+     * @param residentialEntity RE entity
+     * @param property          Property entity
+     * @return BigDecimal
+     */
+    @Override
+    public BigDecimal calculateFundRepair(ResidentialEntity residentialEntity, Property property) {
+
+        Fee fee = residentialEntity.getFee();
+        //In NO propertyType set for this property (default state)
+        if (property.getPropertyType() == null) {
+            return property.isNotHabitable() ? fee.getFundRepairNonHabitable() : fee.getFundRepairHabitable();
+            //In case of propertyType set for this property (different from default)
+        } else {
+            return property.isNotHabitable() ? property.getPropertyType().getFundRepairNotHabitable() : property.getPropertyType().getFundRepairHabitable();
+        }
+    }
+
+    /**
+     * Calculation of Fund Repair amount.
+     * This method is used in cases of property edit -> changing property type.
+     * Method returns the new fund Repaid amount according to property state and new property type set.
+     *
+     * @param property        Property entity
+     * @param newPropertyType This is the new propertyType that will be set for this property
+     * @return BigDecimal
+     */
+    @Override
+    public BigDecimal calculateNewFundRepair(Property property, PropertyType newPropertyType) {
+
+        Fee fee = property.getResidentialEntity().getFee();
+        //In case of setting new PropertyType to null (removing property type)
+        if (newPropertyType == null) {
+            return property.isNotHabitable() ? fee.getFundRepairNonHabitable() : fee.getFundRepairHabitable();
+            //In case of setting new PropertyType to an existing property type (adding/changing property type)
+        } else {
+            return property.isNotHabitable() ? newPropertyType.getFundRepairNotHabitable() : newPropertyType.getFundRepairHabitable();
+        }
+    }
+
+    /**
      * Residential entity Fee modification method.
-     * @param residentialEntity Residential entity
+     *
+     * @param residentialEntity   Residential entity
      * @param feeEditBindingModel FeeEditBindingModel carries data form user input
      */
     @Override
@@ -98,12 +154,13 @@ public class FeeServiceImpl implements FeeService {
             modelMapper.map(feeEditBindingModel, fee);
             feeRepository.save(fee);
 
-            updatePropertyFees(residentialEntity);
+            applyNewFeesToAllProperties(residentialEntity);
         }
     }
 
     /**
      * Mapping of Fee to FeeEditBindingModel
+     *
      * @param fee Fee
      * @return FeeEditBindingModel
      */
@@ -113,16 +170,25 @@ public class FeeServiceImpl implements FeeService {
     }
 
     /**
-     * Private method for applying new set Fee to all properties in this Residential entity
+     * Private method for applying new set Fees to all properties in RE.
+     * This method is used when changing Residential entity monthly fees settings.
+     *
      * @param residentialEntity Residential entity
      */
-    private void updatePropertyFees(ResidentialEntity residentialEntity) {
+    private void applyNewFeesToAllProperties(ResidentialEntity residentialEntity) {
+
         List<Property> properties = residentialEntity.getProperties();
+
         for (Property property : properties) {
             if (property.isValidated()) {
-                BigDecimal calculatedMonthlyFee = calculateMonthlyFee(residentialEntity, property);
-                property.setMonthlyFee(calculatedMonthlyFee);
-                property.setTotalMonthlyFee(calculatedMonthlyFee.add(property.getAdditionalPropertyFee()));
+
+                BigDecimal FundMm = calculateFundMm(residentialEntity, property);
+                BigDecimal FundRepair = calculateFundRepair(residentialEntity, property);
+
+                property.setMonthlyFeeFundMm(FundMm);
+                property.setMonthlyFeeFundRepair(FundRepair);
+                property.setTotalMonthlyFee(FundMm.add(FundRepair).add(property.getAdditionalPropertyFee()));
+
                 propertyRepository.save(property);
             }
         }

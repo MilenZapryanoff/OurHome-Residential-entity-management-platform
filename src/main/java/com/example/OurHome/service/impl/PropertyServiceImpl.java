@@ -1,6 +1,7 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.PropertyType;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
@@ -64,7 +65,6 @@ public class PropertyServiceImpl implements PropertyService {
             return false;
         }
 
-
         Property newProperty = modelMapper.map(propertyRegisterBindingModel, Property.class);
         Long residentialEntityId = propertyRegisterBindingModel.getResidentialEntity();
 
@@ -118,7 +118,6 @@ public class PropertyServiceImpl implements PropertyService {
         propertyRepository.deleteAll(allUserProperties);
     }
 
-
     /**
      * Property approval.
      * Performed by Residential entity MANAGER
@@ -132,10 +131,12 @@ public class PropertyServiceImpl implements PropertyService {
         if (property != null) {
 
             //set monthly fee for a first time
-            property.setMonthlyFee(feeService.calculateMonthlyFee(property.getResidentialEntity(), property));
+            property.setMonthlyFeeFundMm(feeService.calculateFundMm(property.getResidentialEntity(), property));
+            property.setMonthlyFeeFundRepair(feeService.calculateFundRepair(property.getResidentialEntity(), property));
+
             property.setValidated(true);
 
-            //update totalMonthlyFee. Default value before update is 0.00
+            //update totalMonthlyFee. Default value before approve is 0.00
             updateTotalMonthlyFee(property, property.getAdditionalPropertyFee());
 
             applicationEventPublisher.publishEvent(new PropertyApprovalEvent("PropertyService", property));
@@ -161,7 +162,6 @@ public class PropertyServiceImpl implements PropertyService {
         }
     }
 
-
     /**
      * Mapping of Property to PropertyEditBindingModel used for edit of property data.
      *
@@ -185,10 +185,12 @@ public class PropertyServiceImpl implements PropertyService {
      *
      * @param id                       property id
      * @param propertyEditBindingModel the binding model with the data returning from frontend
-     * @param moderatorChange          TRUE if change is made by moderator, FALSE if change is made by owner
+     * @param noValidationNeed         TRUE if change is made by moderator or no sensitive data changed, FALSE if change is made by owner and sensitive data changed
+     * @param propertyType             propertyType if set
      */
+
     @Override
-    public boolean editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange) {
+    public boolean editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean noValidationNeed, PropertyType propertyType) {
 
         Property property = getProperty(id);
 
@@ -203,14 +205,18 @@ public class PropertyServiceImpl implements PropertyService {
 
             ResidentialEntity residentialEntity = property.getResidentialEntity();
 
-            if (property.getMonthlyFee() != null || moderatorChange) {
-                BigDecimal monthlyFee = feeService.calculateMonthlyFee(residentialEntity, property);
-                property.setMonthlyFee(monthlyFee);
+            if (property.getMonthlyFeeFundMm() != null || noValidationNeed) {
 
-                updateTotalMonthlyFee(property, property.getAdditionalPropertyFee());
+                BigDecimal fundMm = feeService.calculateFundMm(residentialEntity, property);
+                BigDecimal fundRepair = feeService.calculateNewFundRepair(property, propertyType);
+
+                property.setMonthlyFeeFundMm(fundMm);
+                property.setMonthlyFeeFundRepair(fundRepair);
+                property.setTotalMonthlyFee(fundMm.add(fundRepair).add(property.getAdditionalPropertyFee()));
+
             }
 
-            if (moderatorChange) {
+            if (noValidationNeed) {
                 property.setValidated(true);
             } else {
                 property.setValidated(false);
@@ -220,6 +226,7 @@ public class PropertyServiceImpl implements PropertyService {
 
             //reset rejected status
             property.setRejected(false);
+            property.setPropertyType(propertyType);
             propertyRepository.save(property);
         }
         return true;
@@ -234,17 +241,31 @@ public class PropertyServiceImpl implements PropertyService {
      * @return TRUE if changes need verification from manager/moderator. FALSE if no need of verification
      */
     @Override
-    public boolean needOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel) {
+    public boolean checkNeedOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel) {
         Property property = getProperty(id);
         if (property != null) {
 
-            return property.isRejected() ||
-                    !property.getNumber().equals(propertyEditBindingModel.getNumber()) ||
+            //setting current and new propertyTypes ids to -1 to exclude null values.
+            Long currentPropertyTypeId = (long) -1;
+            Long newPropertyTypeId = (long) -1;
+
+            //checking if current propertyType is not null.
+            if (property.getPropertyType() != null) {
+                currentPropertyTypeId = property.getPropertyType().getId();
+            }
+
+            //checking if new propertyType is not null.
+            if (propertyEditBindingModel.getPropertyType() != null) {
+                newPropertyTypeId = propertyEditBindingModel.getPropertyType();
+            }
+
+            return property.isRejected() || !property.getNumber().equals(propertyEditBindingModel.getNumber()) ||
                     !property.getFloor().equals(propertyEditBindingModel.getFloor()) ||
                     property.getNumberOfAdults() != propertyEditBindingModel.getNumberOfAdults() ||
                     property.getNumberOfChildren() != propertyEditBindingModel.getNumberOfChildren() ||
                     property.getNumberOfPets() != propertyEditBindingModel.getNumberOfPets() ||
-                    property.isNotHabitable() != propertyEditBindingModel.isNotHabitable();
+                    property.isNotHabitable() != propertyEditBindingModel.isNotHabitable() ||
+                    !currentPropertyTypeId.equals(newPropertyTypeId);
         }
         return false;
     }
@@ -298,11 +319,33 @@ public class PropertyServiceImpl implements PropertyService {
         updateTotalMonthlyFee(property, additionalPropertyFee);
     }
 
+    @Override
+    public Property findPropertyByNumberAndResidentialEntity(String propertyNumber, Long residentialEntityId) {
+        return propertyRepository.findByPropertyNumberAndResidentialEntityId(propertyNumber, residentialEntityId);
+    }
+
+    @Override
+    public void setPropertyType(Property property, PropertyType propertyType) {
+        property.setPropertyType(propertyType);
+        propertyRepository.save(property);
+    }
+
+    @Override
+    public List<Property> findAllPropertiesByPropertyType(PropertyType propertyType) {
+        return propertyRepository.findAllPropertiesByPropertyType(propertyType);
+    }
+
+
+
+
     /**
      * Private method for Total monthly fee update. Necessary in case of monthly fee modification!
      */
     private void updateTotalMonthlyFee(Property property, BigDecimal additionalPropertyFee) {
-        property.setTotalMonthlyFee(Objects.requireNonNullElse(property.getMonthlyFee(), BigDecimal.ZERO).add(additionalPropertyFee));
+        property.setTotalMonthlyFee
+                (Objects.requireNonNullElse(property.getMonthlyFeeFundMm(), BigDecimal.ZERO)
+                        .add(property.getMonthlyFeeFundRepair())
+                        .add(additionalPropertyFee));
         propertyRepository.save(property);
     }
 

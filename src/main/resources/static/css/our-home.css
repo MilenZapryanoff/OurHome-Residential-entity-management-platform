@@ -1243,6 +1243,15 @@ Property fee section
     background-color: white;
 }
 
+#negative-individual-fee {
+    background-color: #eaeaea;
+}
+
+#negative-individual-fee:hover {
+    transition: 1s;
+    background-color: white;
+}
+
 .fee-component:hover {
     background-color: #eaeaea;
     transition: 1s;
@@ -2224,6 +2233,22 @@ Property section image
     transition: 0.5s;
 }
 
+
+.fee-table {
+    padding-top: 50px;
+
+}
+
+.inline {
+    font-size: 0.9em;
+    padding: 5px 0 2px 10px;
+}
+
+.frame {
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 5px;
+}
 
 /*
 ---------------------------------------------

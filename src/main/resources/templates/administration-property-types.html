@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
+                    </div>
+                    <!-- ***** Logo End ***** -->
+
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/messages}">Messages</a></li>
+                        <small th:with="userId=${userViewModel.getId()}">
+                            <samp th:if="${@messageRepository.countUnreadMessages(userId) > 0}"
+                                  th:with="userId=${userViewModel.getId()}"
+                                  class="timer count-title text-danger"
+                                  th:data-to="${@messageRepository.countUnreadMessages(userId)}"
+                                  data-speed="1000"></samp>
+                        </small>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
+                                                                     class="active">Administration</a>
+                        </li>
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
+                            property</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
+                        <li><a th:href="@{/contact}">Contact Us</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
+                        <li sec:authorize="isAuthenticated()">
+                            <form id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Properties data</h3>
+            <div class="col-lg-12">
+                <span th:text="'Residential entity ID: ' + ${residentialEntity.getId()}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Residential entity section ***** -->
+
+<div class="container">
+    <!--Start of sub-menu-->
+    <div class="tabs-content" style="padding-top: 48px">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <div class="button">
+                    <a class="nav-link" th:href="@{/administration}">
+                        <h5>Summary</h5>
+                        <p class="text-secondary">of residential entity</p></a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="button">
+                    <a class="nav-link"
+                       th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
+                        <h5>Owners</h5>
+                        <p class="text-secondary">data & management</p></a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="button">
+                    <a class="nav-link active"
+                       th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                        <h5 class="text-danger">Properties</h5>
+                        <p class="text-secondary">data & management</p></a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="button">
+                    <a class="nav-link" th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
+                        <h5>Monthly fees</h5>
+                        <p class="text-secondary">calculations & management</p></a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="button">
+                    <a class="nav-link" th:href="@{/administration/financial/{id}(id=${residentialEntity.getId()})}">
+                        <h5>Financial</h5>
+                        <p class="text-secondary">reports & management</p></a>
+                </div>
+            </li>
+            <li class="nav-item" role="presentation">
+                <div class="button">
+                    <a class="nav-link" th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
+                        <h5>Details</h5>
+                        <p class="text-secondary">data & settings</p></a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!--Sub-menu buttons-->
+    <div class="section-contact" id="property-post-nav">
+        <div class="section administration">
+            <div class="tabs-content row">
+                <ul class="nav nav-tabs" style="gap: 10px; justify-content: center">
+                    <li class="nav-item">
+                        <div class="button">
+                            <a class="nav-link active"
+                               href=#property-types>
+                                <div class="text-white">PROPERTY TYPES</div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="button">
+                            <a class="nav-link"
+                               th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
+                                <div class="text-light">Active registrations
+                                    <sup th:if="${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                         th:text="' '+ ${@propertyRepository.countVerifiedPropertiesByResidentialEntity(residentialEntity.getId())}">
+                                    </sup>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="button">
+                            <a class="nav-link"
+                               th:href="@{/administration/property/pending/{id}(id=${residentialEntity.getId()})}">
+                                <div class="text-light">Pending registrations
+                                    <sup th:if="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                         th:text="'  '+ ${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())}">
+                                    </sup>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="button">
+                            <a class="nav-link"
+                               th:href="@{/administration/property/rejected/{id}(id=${residentialEntity.getId()})}">
+                                <div class="text-light">Rejected registrations
+                                    <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                         th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
+                                    </sup>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!--Property types section-->
+    <div class="administration" style="margin: 50px 0">
+        <div class="info-table" id="property-types">
+
+            <!--Active registrations header-->
+            <div class="text-center">
+                <h4 class="category text-danger">PROPERTY TYPES</h4>
+                <p>Creating property types allows you to apply different monthly fees for
+                    different <br> property types and according to the accepted by the Residential entity fee
+                    policy.<br> If there are types set, property owners can choose between them while registering.<br>
+                    You can also manage it later in
+                    property settings.</p>
+            </div>
+
+
+            <div class="due-amounts-header" style="padding: 10px 0">
+                <!--Records counter-->
+                <div class="main-content">
+                     <span style="padding: 1px 5px; border-radius: 5px"
+                           th:if="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} == 0"
+                           th:text="'0 Record found'"
+                           class="category text-bg-success"></span>
+                    <span style="padding: 1px 5px; border-radius: 5px"
+                          th:if="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} == 1"
+                          th:text="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} + ' Record found'"
+                          class="category text-bg-success"></span>
+                    <span style="padding: 1px 5px; border-radius: 5px"
+                          th:if="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} > 1"
+                          th:text="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} + ' Records found'"
+                          class="category text-bg-success"></span>
+                    <br>
+                </div>
+                <!--Add global fee button-->
+                <div class="add-fee">
+                    <form th:action="@{/administration/property/types/add/{id} (id=${residentialEntity.getId()})}">
+                        <button type="submit">
+                            <img title="Create new property type"
+                                 src="/images/add_button.png"
+                                 style="max-width: 20px;"
+                                 alt="Create new property type">
+                            <p class="text-dark">
+                                Create new property type
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+
+
+            <!--Property types list-->
+            <table class="text-center">
+                <tr>
+                    <th>
+                        <p>Description</p>
+                    </th>
+                    <th>
+                        <p>Common parts %</p>
+                    </th>
+                    <th>
+                        <p>Total flat space</p>
+                    </th>
+                    <th>
+                        <p>Fund "Repair" (habitable)</p>
+                    </th>
+                    <th>
+                        <p>Fund "Repair" (non-habitable)</p>
+                    </th>
+                    <th>
+                        <p>Edit</p>
+                    </th>
+                    <th>
+                        <p>Delete</p>
+                    </th>
+                </tr>
+                <tr th:each="propertyType: ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}">
+                    <td>
+                        <p th:text="${propertyType.getDescription()}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${propertyType.getCommonPartsPercentage()}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${propertyType.getTotalFlatSpace()}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${propertyType.getFundRepairHabitable()}"></p>
+                    </td>
+                    <td>
+                        <p th:text="${propertyType.getFundRepairNotHabitable()}"></p>
+                    </td>
+                    <td>
+                        <form class="form-container"
+                              th:action="@{/administration/property/types/edit/{id} (id=${propertyType.getId()})}">
+                            <button type="submit">
+                                <img title="Edit property type"
+                                     src="/images/edit.png"
+                                     style="width: 20px;"
+                                     alt="Edit property"></button>
+                        </form>
+                    </td>
+                    <td>
+                        <form class="form-container"
+                              th:action="@{/administration/property/types/delete/{id} (id=${propertyType.getId()})}"
+                              th:method="POST">
+                            <button onclick="return confirmPropertyTypeDelete()"
+                                    type="submit">
+                                <img title="Delete property type"
+                                     src="/images/delete.jpg"
+                                     style="width: 20px;"
+                                     alt="Delete property"></button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+            <p th:if="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} == 0"
+               class="text-center"><br>No property types defined</p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/confirm.js"></script>
+
+</body>
+</html>

@@ -125,7 +125,7 @@
             <li class="nav-item">
                 <div class="button">
                     <a class="nav-link active"
-                       th:href="@{/administration/property/{id}(id=${residentialEntity.getId()})}">
+                       th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
                         <h5 class="text-danger">Properties</h5>
                         <p class="text-secondary">data & management</p></a>
                 </div>
@@ -159,6 +159,14 @@
         <div class="section administration">
             <div class="tabs-content row">
                 <ul class="nav nav-tabs" style="gap: 10px; justify-content: center">
+                    <li class="nav-item">
+                        <div class="button" >
+                            <a class="nav-link"
+                               th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                                <div class="text-white">PROPERTY TYPES</div>
+                            </a>
+                        </div>
+                    </li>
                     <li class="nav-item">
                         <div class="button">
                             <a class="nav-link"
@@ -234,6 +242,9 @@
                         <p>Owner</p>
                     </th>
                     <th>
+                        <p>Type</p>
+                    </th>
+                    <th>
                         <p>Floor</p>
                     </th>
                     <th>
@@ -263,6 +274,8 @@
                     <td style="min-width: 150px">
                         <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
                     </td>
+                    <td><p th:if="${property.getPropertyType()} != null" th:text="${property.getPropertyType().getDescription()}"></p>
+                        <p th:if="${property.getPropertyType()} == null"><i class="fa-solid fa-circle-info" title="Not set" style="color: rgba(222,193,1,0.86)"></i></p></td>
                     <td>
                         <p th:text="${property.getFloor()}"></p>
                     </td>

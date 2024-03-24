@@ -188,20 +188,26 @@
                                     </li>
                                     <li class="text-black">Property №: <b
                                             th:text="${property.getNumber()}"></b></li>
+                                    <li th:if="${property.getPropertyType() != null}" class="text-black">Property Type:
+                                        <b
+                                                th:text="${property.getPropertyType().getDescription()}"></b></li>
+                                    <li th:if="${property.getPropertyType() != null}" class="text-black">Total flat
+                                        space in square meters: <b
+                                                th:text="${property.getPropertyType().getTotalFlatSpace()} + ' m2'"></b>
+                                    </li>
                                     <li class="text-black">Floor number: <b
                                             th:text="${property.getFloor()}"></b>
-                                    </li>
-                                    <li class="text-black">Total flat space in square meters: <b
-                                            th:text="${property.getTotalFlatSpace()} + ' m2'"></b>
                                     </li>
                                     <li class="text-black">Number of rooms: <b
                                             th:text="${property.getNumberOfRooms()}"></b>
                                     </li>
-                                    <li class="text-black">Parking available: <b
-                                            th:if="${property.isParkingAvailable()}"
-                                            th:text="YES"></b> <b
-                                            th:unless="${property.isParkingAvailable()}"
-                                            th:text="NO"></b>
+                                    <li class="text-black">Parking available:
+                                        <b th:if="${property.isParkingAvailable()}">
+                                            <i class="fa-solid fa-circle-check text-success"></i>
+                                        </b>
+                                        <b th:unless="${property.isParkingAvailable()}">
+                                            <i class="fa-solid fa-circle-xmark text-danger"></i>
+                                        </b>
                                     </li>
                                     <li class="text-black">Address: <b
                                             th:text="${property.getResidentialEntity().getStreetName()} + ' ' +
@@ -233,8 +239,10 @@
                                             th:text="${property.getNumberOfPets()}"></b>
                                     </li>
                                     <li class="text-black">Property is habitable:
-                                        <b th:if="${property.isNotHabitable()}">NO</b>
-                                        <b th:unless="${property.isNotHabitable()}">YES</b>
+                                        <b th:if="${property.isNotHabitable()}"><i
+                                                class="fa-solid fa-circle-xmark text-danger"></i></b>
+                                        <b th:unless="${property.isNotHabitable()}"><i
+                                                class="fa-solid fa-circle-check text-success"></i></b>
                                     </li>
                                 </ul>
                             </div>

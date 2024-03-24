@@ -1,6 +1,8 @@
 package com.example.OurHome.model.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -16,6 +18,8 @@ public class Fee {
     private BigDecimal additionalFeeHabitable;
     private BigDecimal fixedFeeNonHabitable;
     private BigDecimal additionalFeeNonHabitable;
+    private BigDecimal fundRepairHabitable;
+    private BigDecimal fundRepairNonHabitable;
 
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "fee")
     private ResidentialEntity residentialEntity;
@@ -90,5 +94,21 @@ public class Fee {
 
     public void setResidentialEntity(ResidentialEntity residentialEntity) {
         this.residentialEntity = residentialEntity;
+    }
+
+    public BigDecimal getFundRepairHabitable() {
+        return fundRepairHabitable;
+    }
+
+    public void setFundRepairHabitable(BigDecimal fundRepairHabitable) {
+        this.fundRepairHabitable = fundRepairHabitable;
+    }
+
+    public BigDecimal getFundRepairNonHabitable() {
+        return fundRepairNonHabitable;
+    }
+
+    public void setFundRepairNonHabitable(BigDecimal fundRepairNonHabitable) {
+        this.fundRepairNonHabitable = fundRepairNonHabitable;
     }
 }

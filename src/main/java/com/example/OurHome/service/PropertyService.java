@@ -1,11 +1,12 @@
 package com.example.OurHome.service;
 
 import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.PropertyType;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.OverpaymentBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
-import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,7 +23,7 @@ public interface PropertyService {
 
     void rejectProperty(Long id);
 
-    boolean editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean moderatorChange);
+    boolean editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean noValidationNeed, PropertyType propertyType);
 
     void setOverpayment(PropertyFeeEditBindingModel propertyFeeEditBindingModel);
 
@@ -30,7 +31,7 @@ public interface PropertyService {
 
     PropertyEditBindingModel mapPropertyToEditBindingModel(Property property);
 
-    boolean needOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel);
+    boolean checkNeedOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel);
 
     List<Property> findAllProperties();
 
@@ -41,4 +42,11 @@ public interface PropertyService {
     void updateOverpayment(Property property, BigDecimal overPayment);
 
     void setAdditionalPropertyFee(Property property, BigDecimal additionalPropertyFee);
+
+    Property findPropertyByNumberAndResidentialEntity(String propertyNumber, Long residentialEntityId);
+
+    void setPropertyType(Property property, PropertyType propertyType);
+
+    List<Property> findAllPropertiesByPropertyType(PropertyType propertyType);
+
 }

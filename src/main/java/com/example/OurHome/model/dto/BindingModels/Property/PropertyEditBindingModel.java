@@ -16,16 +16,14 @@ public class PropertyEditBindingModel {
     private int numberOfChildren;
     @NotNull
     private int numberOfPets;
-
-    @Positive(message = "Total flat space must be positive digit")
-    private String totalFlatSpace;
-
     @Column
     private String numberOfRooms;
 
     private boolean parkingAvailable;
 
     private boolean notHabitable;
+
+    private Long propertyType;
 
     public String getNumber() {
         return number;
@@ -75,14 +73,6 @@ public class PropertyEditBindingModel {
         this.notHabitable = notHabitable;
     }
 
-    public String getTotalFlatSpace() {
-        return totalFlatSpace;
-    }
-
-    public void setTotalFlatSpace(String totalFlatSpace) {
-        this.totalFlatSpace = totalFlatSpace;
-    }
-
     public String getNumberOfRooms() {
         return numberOfRooms;
     }
@@ -98,4 +88,14 @@ public class PropertyEditBindingModel {
     public void setParkingAvailable(boolean parkingAvailable) {
         this.parkingAvailable = parkingAvailable;
     }
+
+    public Long getPropertyType() {
+        return propertyType;
+    }
+
+    public void setPropertyType(Long propertyType) {
+        this.propertyType = propertyType;
+    }
+
+
 }

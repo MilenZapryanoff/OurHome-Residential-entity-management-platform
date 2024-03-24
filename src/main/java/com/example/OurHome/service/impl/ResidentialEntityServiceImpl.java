@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -44,6 +45,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
         ResidentialEntity newResidentialEntity = modelMapper.map(residentialEntityRegisterBindingModel, ResidentialEntity.class);
 
         newResidentialEntity.setFee(feeService.createFee(newResidentialEntity));
+        newResidentialEntity.setIncomesAmount(BigDecimal.ZERO);
         newResidentialEntity.setManager(loggedUser);
         newResidentialEntity.setCity(cityRepository.findByName(residentialEntityRegisterBindingModel.getCity()));
 

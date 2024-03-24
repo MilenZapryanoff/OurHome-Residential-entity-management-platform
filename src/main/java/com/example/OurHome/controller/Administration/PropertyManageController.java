@@ -1,6 +1,7 @@
 package com.example.OurHome.controller.Administration;
 
 import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.PropertyType;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
@@ -17,25 +18,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.math.BigDecimal;
-
 @Controller
 public class PropertyManageController {
 
     private final UserService userService;
     private final ResidentialEntityService residentialEntityService;
     private final PropertyService propertyService;
-    private final PropertyFeeService propertyFeeService;
-    private final FeeService feeService;
     private final MessageService messageService;
+    private final PropertyTypeService propertyTypeService;
 
-    public PropertyManageController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, FeeService feeService, MessageService messageService) {
+    public PropertyManageController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, MessageService messageService, PropertyTypeService propertyTypeService) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
-        this.propertyFeeService = propertyFeeService;
-        this.feeService = feeService;
         this.messageService = messageService;
+        this.propertyTypeService = propertyTypeService;
     }
 
     /**
@@ -173,7 +170,12 @@ public class PropertyManageController {
 
         ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityByPropertyId(id);
 
-        if (propertyService.editProperty(id, propertyEditBindingModel, true)) {
+        PropertyType propertyType = null;
+        if (propertyEditBindingModel.getPropertyType() != null) {
+            propertyType = propertyTypeService.findById(propertyEditBindingModel.getPropertyType());
+        }
+
+        if (propertyService.editProperty(id, propertyEditBindingModel, true, propertyType)) {
             return new ModelAndView("redirect:/administration/property/active/" + residentialEntity.getId());
         } else {
             //sending message (notification) to owner/resident
@@ -186,6 +188,7 @@ public class PropertyManageController {
                     .addObject("editFailed", true);
         }
     }
+
 
     /**
      * Method returns currently logged user

@@ -25,6 +25,15 @@ function confirmPropertyDelete() {
     }
 }
 
+function confirmPropertyTypeDelete() {
+    var result = confirm("Are you sure you want to delete this property type?");
+    if (result) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function confirmPropertyFeeDelete() {
     var result = confirm("Do you really want to delete this record?");
     if (result) {

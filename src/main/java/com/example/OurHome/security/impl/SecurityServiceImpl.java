@@ -16,15 +16,17 @@ public class SecurityServiceImpl implements SecurityService {
     private final PropertyService propertyService;
     private final PropertyFeeService propertyFeeService;
     private final MessageService messageService;
-    private final ExpensesService expensesService;
+    private final FinancialService financialService;
+    private final PropertyTypeService propertyTypeService;
 
-    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, MessageService messageService, ExpensesService expensesService) {
+    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, MessageService messageService, FinancialService financialService, PropertyTypeService propertyTypeService) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
         this.propertyFeeService = propertyFeeService;
         this.messageService = messageService;
-        this.expensesService = expensesService;
+        this.financialService = financialService;
+        this.propertyTypeService = propertyTypeService;
     }
 
     @Override
@@ -99,14 +101,14 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public boolean checkExpenseModeratorAccess(Long expenseId, Authentication authentication) {
-        Expense expense = expensesService.findById(expenseId);
+        Expense expense = financialService.findById(expenseId);
         return expense.getResidentialEntity().getManager().getId().equals(getUserEntity(authentication).getId());
     }
 
     @Override
     public boolean checkExpenseUserAccess(Long expenseId, Authentication authentication) {
 
-        Expense expense = expensesService.findById(expenseId);
+        Expense expense = financialService.findById(expenseId);
 
         //grant access if logged user has apartment in member of expense's residential entity
         List<ResidentialEntity> residentialEntities = getUserEntity(authentication).getResidentialEntities();
@@ -143,5 +145,11 @@ public class SecurityServiceImpl implements SecurityService {
         Property property = propertyService.findPropertyById(propertyId);
         UserEntity loggedUser = getUserEntity(authentication);
         return property.getOwner().getId().equals(loggedUser.getId());
+    }
+
+    @Override
+    public boolean checkPropertyTypeModeratorAccess(Long propertyTypeId, Authentication authentication) {
+        ResidentialEntity residentialEntityByPropertyType = propertyTypeService.findResidentialEntityByPropertyType(propertyTypeId);
+        return residentialEntityByPropertyType != null && residentialEntityByPropertyType.getManager().getId().equals(getUserEntity(authentication).getId());
     }
 }

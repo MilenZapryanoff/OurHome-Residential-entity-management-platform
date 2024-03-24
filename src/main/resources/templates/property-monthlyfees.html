@@ -294,6 +294,17 @@
                                                             </p>
                                                         </div>
                                                     </div>
+                                                    <div class="fee-component text-center"
+                                                         th:if="${property.getAdditionalPropertyFee() < 0}" id="negative-individual-fee">
+                                                        <div class="fee-category">
+                                                            <i class="fa-solid fa-gears"></i>
+                                                        </div>
+                                                        <div class="fee-calc">
+                                                            <p>Adjustment fee: <b class="text-danger"
+                                                                    th:text="${property.getAdditionalPropertyFee()} + ' лв.'"></b>
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

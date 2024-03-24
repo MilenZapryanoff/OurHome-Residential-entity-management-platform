@@ -124,7 +124,7 @@
                 </li>
                 <li class="nav-item">
                     <div class="button">
-                        <a class="nav-link" th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
+                        <a class="nav-link" th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
                             <h5>Properties</h5>
                             <p class="text-secondary">data & management</p></a>
                     </div>
@@ -138,8 +138,8 @@
                 </li>
                 <li class="nav-item">
                     <div class="button">
-                        <a class="nav-link" th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Expenses</h5>
+                        <a class="nav-link" th:href="@{/administration/financial/{id}(id=${residentialEntity.getId()})}">
+                            <h5>Financial</h5>
                             <p class="text-secondary">reports & management</p></a>
                     </div>
                 </li>
@@ -207,8 +207,6 @@
                        th:href="@{/administration/details/edit/{id}(id=${residentialEntity.getId()})}">
                         <p class="text-white">Edit data</p></a>
                 </div>
-
-
             </div>
         </div>
     </div>

@@ -63,15 +63,16 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}" class="active">Administration</a></li>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}" class="active">Administration</a>
+                        </li>
                         <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
                             property</a></li>
                         <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
                         <li><a th:href="@{/contact}">Contact Us</a></li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
                         <li sec:authorize="isAuthenticated()">
-                            <form  id="logout" th:action="@{/logout}" method="POST">
-                            <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            <form id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
                             </form>
                         </li>
                         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
@@ -130,44 +131,47 @@
                     <li class="nav-item">
                         <div class="button">
                             <a class="nav-link active" th:href="@{/administration}">
-                            <h5 class="text-danger">Summary</h5>
-                            <p class="text-secondary">of residential entity</p></a>
+                                <h5 class="text-danger">Summary</h5>
+                                <p class="text-secondary">of residential entity</p></a>
                         </div>
                     </li>
                     <li class="nav-item">
                         <div class="button">
                             <a class="nav-link"
-                                th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Owners</h5>
-                            <p class="text-secondary">data & management</p></a>
+                               th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
+                                <h5>Owners</h5>
+                                <p class="text-secondary">data & management</p></a>
                         </div>
                     </li>
                     <li class="nav-item">
                         <div class="button">
-                            <a class="nav-link" th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Properties</h5>
-                            <p class="text-secondary">data & management</p></a>
+                            <a class="nav-link"
+                               th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                                <h5>Properties</h5>
+                                <p class="text-secondary">data & management</p></a>
                         </div>
                     </li>
                     <li class="nav-item">
                         <div class="button">
                             <a class="nav-link" th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Monthly fees</h5>
-                            <p class="text-secondary">calculations & management</p></a>
+                                <h5>Monthly fees</h5>
+                                <p class="text-secondary">calculations & management</p></a>
                         </div>
                     </li>
                     <li class="nav-item">
                         <div class="button">
-                            <a class="nav-link" th:href="@{/administration/expenses/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Expenses</h5>
-                            <p class="text-secondary">reports & management</p></a>
+                            <a class="nav-link"
+                               th:href="@{/administration/financial/{id}(id=${residentialEntity.getId()})}">
+                                <h5>Financial</h5>
+                                <p class="text-secondary">reports & management</p></a>
                         </div>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <div class="button" >
-                            <a class="nav-link" th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Details</h5>
-                            <p class="text-secondary">data & settings</p></a>
+                    <li class="nav-item">
+                        <div class="button">
+                            <a class="nav-link"
+                               th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
+                                <h5>Details</h5>
+                                <p class="text-secondary">data & settings</p></a>
                         </div>
                     </li>
                 </ul>
@@ -181,7 +185,8 @@
                     <div class="main-content">
                     <span th:text="'Residential entity: ' + ${residentialEntity.getId()}"
                           class="category text-black"></span>
-                        <h4 style="border-bottom: none" th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>
+                        <h4 style="border-bottom: none"
+                            th:text="${residentialEntity.getStreetName()} + ' №' + ${residentialEntity.getStreetNumber()}"></h4>
                     </div>
                 </div>
                 <div class="accordion" id="accordionExample">
@@ -270,9 +275,10 @@
             <div class="col-lg-5" style="padding-top: 40px">
                 <div class="info-table text-center">
                     <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}"><img
-                            src="/images/building-avatar.jpg" alt="View details" title="View Details" id="residential-entity-image"></a>
-                        <br>
-                        <div class="mt-3 rounded badge-warning">
+                            src="/images/building-avatar.jpg" alt="View details" title="View Details"
+                            id="residential-entity-image"></a>
+                    <br>
+                    <div class="mt-3 rounded badge-warning">
                         <div class="text-center">City:
                             <a class="text-black"
                                th:text="${residentialEntity.getCity().getName()}"></a></div>

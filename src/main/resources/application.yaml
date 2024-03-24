@@ -45,6 +45,8 @@ OurHome:
   remember:
     me:
       key: ${REMEMBER_ME_KEY:key_pass}
+
+#logging
 #logging:
 #  level:
 #    org:
@@ -56,7 +58,7 @@ OurHome:
 #      springframework:
 #        security: TRACE
 #    blog: WARN
-
+#logging end
 server:
   port: 8080
 

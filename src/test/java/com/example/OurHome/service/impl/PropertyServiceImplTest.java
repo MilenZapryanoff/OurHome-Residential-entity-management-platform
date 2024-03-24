@@ -1,10 +1,7 @@
 package com.example.OurHome.service.impl;
 
-import com.example.OurHome.model.Entity.Expense;
 import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.repo.ExpensesRepository;
 import com.example.OurHome.repo.PropertyRepository;
-import com.example.OurHome.repo.ResidentialEntityRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +11,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

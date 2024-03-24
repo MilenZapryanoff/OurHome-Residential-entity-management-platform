@@ -249,7 +249,7 @@ class PropertyFeeServiceImplTestIT {
         property.setNumberOfChildren(2);
         property.setNumberOfPets(2);
         property.setValidated(false);
-        property.setMonthlyFee(BigDecimal.valueOf(10));
+        property.setMonthlyFeeFundMm(BigDecimal.valueOf(10));
         property.setAdditionalPropertyFee(BigDecimal.valueOf(0));
         return property;
     }

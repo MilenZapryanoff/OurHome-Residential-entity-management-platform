@@ -29,9 +29,6 @@ public class Property {
     private int numberOfPets;
 
     @Column
-    private String totalFlatSpace;
-
-    @Column
     private String numberOfRooms;
 
     @Column
@@ -53,7 +50,10 @@ public class Property {
     private BigDecimal overpayment;
 
     @Column
-    private BigDecimal monthlyFee;
+    private BigDecimal monthlyFeeFundMm;
+
+    @Column
+    private BigDecimal monthlyFeeFundRepair;
 
     @Column
     private BigDecimal additionalPropertyFee;
@@ -66,6 +66,9 @@ public class Property {
 
     @ManyToOne
     private ResidentialEntity residentialEntity;
+
+    @ManyToOne
+    private PropertyType propertyType;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "property",cascade = CascadeType.REMOVE)
     private List<PropertyFee> propertyFees;
@@ -163,14 +166,6 @@ public class Property {
         this.residentialEntity = residentialEntity;
     }
 
-    public String getTotalFlatSpace() {
-        return totalFlatSpace;
-    }
-
-    public void setTotalFlatSpace(String totalFlatSpace) {
-        this.totalFlatSpace = totalFlatSpace;
-    }
-
     public String getNumberOfRooms() {
         return numberOfRooms;
     }
@@ -187,12 +182,12 @@ public class Property {
         this.parkingAvailable = parkingAvailable;
     }
 
-    public BigDecimal getMonthlyFee() {
-        return monthlyFee;
+    public BigDecimal getMonthlyFeeFundMm() {
+        return monthlyFeeFundMm;
     }
 
-    public void setMonthlyFee(BigDecimal monthlyFee) {
-        this.monthlyFee = monthlyFee;
+    public void setMonthlyFeeFundMm(BigDecimal monthlyFee) {
+        this.monthlyFeeFundMm = monthlyFee;
     }
 
     public BigDecimal getOverpayment() {
@@ -233,5 +228,21 @@ public class Property {
 
     public void setTotalMonthlyFee(BigDecimal totalMonthlyFee) {
         this.totalMonthlyFee = totalMonthlyFee;
+    }
+
+    public PropertyType getPropertyType() {
+        return propertyType;
+    }
+
+    public void setPropertyType(PropertyType propertyType) {
+        this.propertyType = propertyType;
+    }
+
+    public BigDecimal getMonthlyFeeFundRepair() {
+        return monthlyFeeFundRepair;
+    }
+
+    public void setMonthlyFeeFundRepair(BigDecimal monthlyFeeFundRepair) {
+        this.monthlyFeeFundRepair = monthlyFeeFundRepair;
     }
 }

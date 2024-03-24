@@ -81,13 +81,16 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     @Transactional
     public void createPeriodicalMonthlyFee(Property property) {
 
+        //TODO: feeAmount in PropertyFee to be separated to 'totalAmount', 'fundRepair' and 'fundMm'
+
         PropertyFee newMonthlyFee = new PropertyFee();
         LocalDate now = LocalDate.now();
 
         BigDecimal overpayment = property.getOverpayment();
-        BigDecimal monthlyFee = property.getMonthlyFee();
+        BigDecimal fundMm = property.getMonthlyFeeFundMm();
+        BigDecimal fundRepair = property.getMonthlyFeeFundRepair();
         BigDecimal additionalPropertyFee = property.getAdditionalPropertyFee();
-        BigDecimal totalMonthlyFee = monthlyFee.add(additionalPropertyFee);
+        BigDecimal totalMonthlyFee = fundMm.add(fundRepair).add(additionalPropertyFee);
 
         //if totalMonthlyFee for this property is not 0.00, a new monthly fee will be created
         if (totalMonthlyFee.compareTo(BigDecimal.ZERO) > 0) {

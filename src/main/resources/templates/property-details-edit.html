@@ -112,9 +112,8 @@
                       th:object="${propertyEditBindingModel}">
                     <div class="col-lg-12">
                         <p>Please note, that some property <br>changes like <b>Inhabitants information,
-                            property number and floor number</b> may affect your
-                            monthly fee calculations. Changes like this must be approved my your
-                            Manager.<br>
+                            property number, floor number or property type</b> (<i>if option available</i>) may affect your
+                            monthly fee calculations. <br>New data must be approved by Residential entity Manager.<br>
                             If You submit changes in some of the fields forming your monthly fee your
                             property status will be changed to <b>Pending validation</b>
                             Some of your data won't be accessible until your manager approves the change.
@@ -122,7 +121,6 @@
                         <br>
                         <hr>
                         <h5>Property information</h5>
-                        <p class="text-success-emphasis">Fields in this section do not require manager validation!</p>
                         <br>
                         <fieldset>
                             <label for="number"><b>Property №</b></label>
@@ -153,17 +151,23 @@
                                    th:errorclass="bg-danger"
                                    th:value="${propertyEditBindingModel.getFloor()}">
                         </fieldset>
-                        <fieldset>
-                            <label for="totalFlatSpace"><b>Total flat space </b>(square meters)</label>
-                            <small th:if="${#fields.hasErrors('totalFlatSpace')}"
-                                   th:errors="*{totalFlatSpace}" class="text-danger">Floor error
-                                message</small>
-                            <input type="text" id="totalFlatSpace" placeholder="Enter total flat space..."
-                                   th:field="*{totalFlatSpace}"
-                                   th:errorclass="bg-danger">
+                        <fieldset th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0}">
+                            <label for="propertyTypeId"><b>Property type</b></label>
+                            <select class="form-control" id="propertyTypeId"
+                                    th:field="*{propertyType}">
+                                <option th:if="${property.getPropertyType() != null}" class="text-secondary"
+                                        th:value="${property.getPropertyType().getId()}"
+                                        th:text="${property.getPropertyType().getDescription()} + ' (Selected)'"></option>
+                                <option th:if="${property.getPropertyType() == null}" th:value="''" th:text="'---'"></option>
+                                <option th:each="propertyType : ${@propertyTypeRepository.findPropertyTypesByRE(property.getResidentialEntity().getId())}"
+                                        th:value="${propertyType.getId()}"
+                                        th:text="${propertyType.description} + ' (' + ${propertyType.getTotalFlatSpace()} + ' m2)'">
+                                </option>
+                            </select>
                         </fieldset>
+                        <br>
                         <fieldset>
-                            <label for="numberOfRooms"><b>Number of rooms</b></label>
+                            <label for="numberOfRooms"><b>Number of rooms</b> (optional)</label>
                             <small th:if="${#fields.hasErrors('numberOfRooms')}"
                                    th:errors="*{numberOfRooms}" class="text-danger">Rooms error
                                 message</small>
@@ -172,7 +176,7 @@
                                    th:errorclass="bg-danger">
                         </fieldset>
                         <fieldset>
-                            <label for="parkingAvailable"><b>Parking available</b></label>
+                            <label for="parkingAvailable"><b>Parking available</b> (optional)</label>
                             <input name="parkingAvailable" id="parkingAvailable"
                                    type="checkbox"
                                    th:field="*{parkingAvailable}"
@@ -180,8 +184,8 @@
                         </fieldset>
                         <br>
                         <h5>Inhabitants information</h5>
-                        <p class="text-danger">Fields in next section require manager validation!</p>
                         <hr>
+
                         <fieldset>
                             <label for="numberOfAdults"><b>Number of adults</b></label>
                             <small th:if="${#fields.hasErrors('numberOfAdults')}"
