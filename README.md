@@ -82,7 +82,7 @@ A platform that allows the registration of both home owners and residential enti
  <h4>v.1.24.0324</h4>
   <ul>
   <li>Section 'Administration -> Expenses' now changed to Section 'Administration -> Financial'. In this section are now included 'Expenses' - holding information about Residential entity expenses and 'Incomes' secton - a plece where will be hold information about collected amounts from fees.</li> 
-  <li>Monthly fees are now separated to 'Fund Repair component' and 'Fund Management and maintenance component'. This will allows new functionalities and reports about the collected amounts and additional informatiton about their origin and purpose.</li>
+  <li>Monthly fees are now separated to 'Fund Repair component' and 'Fund Management and maintenance component'. This allows new functionalities and reports about the collected amounts and additional informatiton about their origin and purpose.</li>
   <li>Marking a fee as paid will automatically recalculate Residential entity Incomes according to the preset fee components for this Residential entity. Changing a fee status from paid to unpaid will make an automatic reverse and will decrease the sum in Incomes.</li>
   <li>Added option for different property categories in every Residential entity. This is an optional categorization according to residential entity specifics and needs. This allows a different amount of 'Fund repair component' to be applied according to the type of the defined properties. Automatically recalculation of Fund Repair amount for properties in the Residential entity will be done in case of changing property type or setting a new property type to a property.</li>
   
