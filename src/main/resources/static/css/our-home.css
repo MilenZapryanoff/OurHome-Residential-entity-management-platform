@@ -1125,16 +1125,12 @@ Single Page Style
     margin-top: 60px;
     margin-left: 0;
     margin-right: 0;
-    --bs-accordion-border-radius: 10px;
+    --bs-accordion-border-radius: 20px;
     --bs-accordion-inner-border-radius: 10px;
-    --bs-accordion-bg: #fafafa;
+    --bs-accordion-bg: #efefef;
     --bs-accordion-border-color: none;
     border: none !important;
 }
-
-/*.single-property .accordion-header {*/
-/*    border-bottom: 1px solid #eaeaea;*/
-/*}*/
 
 .single-property .accordion-button {
     box-shadow: none;
@@ -1146,7 +1142,7 @@ Single Page Style
 
 .single-property .accordion-button:not(.collapsed) {
     color: #DC3545;
-    background-color: #fafafa;
+    background-color: #e5e5e5;
     outline: none;
     transition: 1s;
 }
@@ -1157,10 +1153,6 @@ Single Page Style
 
 .single-property #headingThree {
     border-bottom: none;
-}
-
-.single-property .accordion-item:last-of-type .accordion-collapse {
-    border-top: 1px solid #eaeaea;
 }
 
 .single-property .info-table {
@@ -1234,11 +1226,11 @@ Property fee section
     transition: 1s;
 }
 
-#individual-fee {
+#fundRepair-fee {
     background-color: #eaeaea;
 }
 
-#individual-fee:hover {
+#fundRepair-fee:hover {
     transition: 1s;
     background-color: white;
 }

@@ -60,7 +60,9 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             PropertyFee newPropertyFee = new PropertyFee();
             LocalDate now = LocalDate.now();
 
-            newPropertyFee.setFeeAmount(BigDecimal.valueOf(0.0));
+            newPropertyFee.setFeeAmount(BigDecimal.ZERO);
+            newPropertyFee.setFundRepairAmount(BigDecimal.ZERO);
+            newPropertyFee.setFundMmAmount(BigDecimal.ZERO);
             newPropertyFee.setPaid(true);
             newPropertyFee.setPeriodStart(now.withDayOfMonth(1));
             newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
@@ -107,6 +109,8 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             newMonthlyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
             newMonthlyFee.setProperty(property);
             newMonthlyFee.setDescription(now.getMonth() + " " + now.getYear());
+            newMonthlyFee.setFundMmAmount(fundMm);
+            newMonthlyFee.setFundRepairAmount(fundRepair);
             propertyFeeRepository.save(newMonthlyFee);
 
             //send message to property owner

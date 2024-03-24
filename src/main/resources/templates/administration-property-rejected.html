@@ -241,7 +241,7 @@
                     <th>
                         <p>Owner</p>
                     </th>
-                    <th>
+                    <th th:if="${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId()).size() > 0}">
                         <p>Type</p>
                     </th>
                     <th>
@@ -274,7 +274,8 @@
                     <td style="min-width: 150px">
                         <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
                     </td>
-                    <td><p th:if="${property.getPropertyType()} != null" th:text="${property.getPropertyType().getDescription()}"></p>
+                    <td th:if="${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId()).size() > 0}">
+                        <p th:if="${property.getPropertyType()} != null" th:text="${property.getPropertyType().getDescription()}"></p>
                         <p th:if="${property.getPropertyType()} == null"><i class="fa-solid fa-circle-info" title="Not set" style="color: rgba(222,193,1,0.86)"></i></p></td>
                     <td>
                         <p th:text="${property.getFloor()}"></p>

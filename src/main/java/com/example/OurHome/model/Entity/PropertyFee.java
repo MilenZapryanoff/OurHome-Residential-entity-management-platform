@@ -15,6 +15,12 @@ public class PropertyFee {
     @Column(nullable = false)
     private BigDecimal feeAmount;
 
+    @Column(nullable = false)
+    private BigDecimal fundRepairAmount;
+
+    @Column(nullable = false)
+    private BigDecimal fundMmAmount;
+
     @Column()
     private BigDecimal overpaidAmountStart;
 
@@ -117,5 +123,21 @@ public class PropertyFee {
 
     public void setOverpaidAmountEnd(BigDecimal overpaidAmountEnd) {
         this.overpaidAmountEnd = overpaidAmountEnd;
+    }
+
+    public BigDecimal getFundRepairAmount() {
+        return fundRepairAmount;
+    }
+
+    public void setFundRepairAmount(BigDecimal fundRepairAmount) {
+        this.fundRepairAmount = fundRepairAmount;
+    }
+
+    public BigDecimal getFundMmAmount() {
+        return fundMmAmount;
+    }
+
+    public void setFundMmAmount(BigDecimal fundMmAmount) {
+        this.fundMmAmount = fundMmAmount;
     }
 }

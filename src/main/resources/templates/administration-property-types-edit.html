@@ -139,7 +139,7 @@
                             <input type="text" id="commonPartsPercentage"
                                    placeholder="Enter common parts %..."
                                    autocomplete="on"
-                                    th:field="*{commonPartsPercentage}"
+                                   th:field="*{commonPartsPercentage}"
                                    th:errorclass="bg-danger"
                                    th:value="${propertyTypeEditBindingModel.getCommonPartsPercentage()}">
                         </fieldset>
@@ -160,6 +160,7 @@
                             <small th:if="${#fields.hasErrors('fundRepairHabitable')}"
                                    th:errors="*{fundRepairHabitable}"
                                    class="text-danger">Fund repair error message</small>
+                            <label for="fundRepairAmount"></label>
                             <input type="text" id="fundRepairAmount"
                                    placeholder="Enter amount..."
                                    autocomplete="on"
@@ -172,6 +173,7 @@
                             <small th:if="${#fields.hasErrors('fundRepairNotHabitable')}"
                                    th:errors="*{fundRepairNotHabitable}"
                                    class="text-danger">Fund repair error message</small>
+                            <label for="fundRepairNotHabitable"></label>
                             <input type="text" id="fundRepairNotHabitable"
                                    placeholder="Enter amount..."
                                    autocomplete="on"

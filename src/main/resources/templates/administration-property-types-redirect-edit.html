@@ -153,11 +153,11 @@
                                    th:value="${propertyTypeEditBindingModel.getTotalFlatSpace()}">
                         </fieldset>
                         <fieldset>
-                            <label for="fundRepairHabitable"><b>Fund repair amount (habitable)</b></label>
+                            <label for="fundRepairHabitable"><b>Fund Repair amount</b> (habitable)</label>
                             <small th:if="${#fields.hasErrors('fundRepairHabitable')}"
                                    th:errors="*{fundRepairHabitable}"
                                    class="text-danger">Fund repair error message</small>
-                            <input class="text-bg-danger" type="text" id="fundRepairHabitable"
+                            <input class="text-dark" type="text" id="fundRepairHabitable"
                                    placeholder="Enter amount..."
                                    autocomplete="on"
                                    th:field="*{fundRepairHabitable}"
@@ -165,11 +165,11 @@
                                    th:value="${propertyTypeEditBindingModel.getFundRepairHabitable()}">
                         </fieldset>
                         <fieldset>
-                            <label for="fundRepairNotHabitable"><b>Fund repair amount (non-habitable)</b></label>
+                            <label for="fundRepairNotHabitable"><b>Fund Repair amount</b> (non-habitable)</label>
                             <small th:if="${#fields.hasErrors('fundRepairNotHabitable')}"
                                    th:errors="*{fundRepairNotHabitable}"
                                    class="text-danger">Fund repair error message</small>
-                            <input class="text-bg-danger" type="text" id="fundRepairNotHabitable"
+                            <input class="text-dark" type="text" id="fundRepairNotHabitable"
                                    placeholder="Enter amount..."
                                    autocomplete="on"
                                    th:field="*{fundRepairNotHabitable}"

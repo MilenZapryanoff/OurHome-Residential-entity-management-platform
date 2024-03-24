@@ -273,23 +273,23 @@
                     <h5 class="text-danger text-center">FUND "REPAIR" <i class="fa-solid fa-screwdriver-wrench"></i>
                     </h5>
                     <ul class="fee-table">
-                        <li class="text-black"><b>6.</b> Fixed property fee
-                            <p class="text-secondary">Monthly fee applied to every single property.</p>
+                        <li class="text-black"><b>6.</b> Fixed 'Fund Repair' fee
+                            <p class="text-secondary">Monthly fee applied to every property with no custom property type set.</p>
                             <div class="frame">
                                 <div class="text-black inline"><b>A.</b> habitable property:
                                     <div class="info-box">
                                         <i th:text="${residentialEntity.getFee().getFundRepairHabitable()} + ' лв.'"></i>
                                     </div>
                                     <div class="property-counter">
-                                        <p class="text-danger" style="font-size: 0.8em"
+                                        <p class="text-secondary" style="font-size: 0.8em"
                                            th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 0}">
                                             No properties in this category.
                                         </p>
-                                        <p class="text-success" style="font-size: 0.8em"
+                                        <p class="text-info" style="font-size: 0.8em"
                                            th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 1}">
                                             1 property in this category.
                                         </p>
-                                        <p class="text-success" style="font-size: 0.8em"
+                                        <p class="text-info" style="font-size: 0.8em"
                                            th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) > 1}"
                                            th:text="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId())} + ' properties in this category.'">
                                         </p>
@@ -300,15 +300,15 @@
                                         <i th:text="${residentialEntity.getFee().getFundRepairNonHabitable()} + ' лв.'"></i>
                                     </div>
                                     <div class="property-counter">
-                                        <p class="text-danger" style="font-size: 0.8em"
+                                        <p class="text-secondary" style="font-size: 0.8em"
                                            th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 0}">
                                             No properties in this category.
                                         </p>
-                                        <p class="text-success" style="font-size: 0.8em"
+                                        <p class="text-info" style="font-size: 0.8em"
                                            th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 1}">
                                             1 property in this category.
                                         </p>
-                                        <p class="text-success" style="font-size: 0.8em"
+                                        <p class="text-info" style="font-size: 0.8em"
                                            th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) > 1}"
                                            th:text="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId())} + ' properties in this category.'">
                                         </p>
@@ -320,8 +320,8 @@
                         </li>
 
                         <li th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}"
-                            class="text-black"><b>7.</b> Fee by property type
-                            <p class="text-secondary">Monthly fee according to property type.</p>
+                            class="text-black"><b>7.</b> 'Fund Repair' fee by property type
+                            <p class="text-secondary">'Fund Repair' fee applied according to the property type set.</p>
                             <div class="frame">
 
                                 <div th:each="propertyType: ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}"
@@ -335,15 +335,15 @@
                                             <i th:text="${propertyType.getFundRepairHabitable()} + ' лв.'"></i>
                                         </div>
                                         <div class="property-counter">
-                                            <p class="text-danger" style="font-size: 0.8em"
+                                            <p class="text-secondary" style="font-size: 0.8em"
                                                th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) == 0}">
                                                 No properties in this category.
                                             </p>
-                                            <p class="text-success" style="font-size: 0.8em"
+                                            <p class="text-info" style="font-size: 0.8em"
                                                th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) == 1}">
                                                 1 property in this category.
                                             </p>
-                                            <p class="text-success" style="font-size: 0.8em"
+                                            <p class="text-info" style="font-size: 0.8em"
                                                th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) > 1}"
                                                th:text="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType)} + ' properties in this category.'">
                                             </p>
@@ -356,15 +356,15 @@
                                             <i th:text="${propertyType.getFundRepairNotHabitable()} + ' лв.'"></i>
                                         </div>
                                         <div class="property-counter">
-                                            <p class="text-danger" style="font-size: 0.8em"
+                                            <p class="text-secondary" style="font-size: 0.8em"
                                                th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) == 0}">
                                                 No properties in this category.
                                             </p>
-                                            <p class="text-success" style="font-size: 0.8em"
+                                            <p class="text-info" style="font-size: 0.8em"
                                                th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) == 1}">
                                                 1 property in this category.
                                             </p>
-                                            <p class="text-success" style="font-size: 0.8em"
+                                            <p class="text-info" style="font-size: 0.8em"
                                                th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) > 1}"
                                                th:text="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType)} + ' properties in this category.'">
                                             </p>

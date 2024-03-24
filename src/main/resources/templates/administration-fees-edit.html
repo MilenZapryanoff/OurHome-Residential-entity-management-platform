@@ -184,7 +184,7 @@
                                                                class="text-danger">Fixed fee
                                                             error message</small>
                                                         <input type="number" step="any"
-                                                               class="form-control-sm text-danger"
+                                                               class="form-control-sm"
                                                                id="fixedFeeHabitable"
                                                                placeholder="Enter fee..."
                                                                autocomplete="on" required
@@ -203,7 +203,7 @@
                                                                class="text-danger">Fixed fee
                                                             error message</small>
                                                         <input type="number" step="any"
-                                                               class="form-control-sm text-danger"
+                                                               class="form-control-sm"
                                                                id="fixedFeeNonHabitable"
                                                                placeholder="Enter fee..."
                                                                autocomplete="on" required
@@ -226,7 +226,7 @@
                                                            class="text-danger">Adult fee
                                                         error message</small>
                                                     <input type="number" step="any"
-                                                           class="form-control-sm text-danger"
+                                                           class="form-control-sm"
                                                            id="adultFee"
                                                            placeholder="Enter fee..."
                                                            autocomplete="on" required
@@ -250,7 +250,7 @@
                                                            class="text-danger">Child fee
                                                         error message</small>
                                                     <input type="number" step="any"
-                                                           class="form-control-sm text-danger"
+                                                           class="form-control-sm"
                                                            id="childFee"
                                                            placeholder="Enter fee..."
                                                            autocomplete="on" required
@@ -274,7 +274,7 @@
                                                            class="text-danger">Pet fee error
                                                         message</small>
                                                     <input type="number" step="any"
-                                                           class="form-control-sm text-danger"
+                                                           class="form-control-sm"
                                                            id="petFee"
                                                            placeholder="Enter fee..."
                                                            autocomplete="on" required
@@ -301,7 +301,7 @@
                                                                class="text-danger">Additional
                                                             fee error message</small>
                                                         <input type="number" step="any"
-                                                               class="form-control-sm text-danger"
+                                                               class="form-control-sm"
                                                                id="additionalFeeHabitable"
                                                                placeholder="Enter fee..."
                                                                autocomplete="on" required
@@ -320,7 +320,7 @@
                                                                class="text-danger">Other fee
                                                             error message</small>
                                                         <input type="number" step="any"
-                                                               class="form-control-sm text-danger"
+                                                               class="form-control-sm"
                                                                id="additionalFeeNonHabitable"
                                                                placeholder="Enter fee..."
                                                                autocomplete="on" required
@@ -366,9 +366,8 @@
                                     <h5 class="text-danger text-center">FUND "REPAIR" <i
                                             class="fa-solid fa-screwdriver-wrench"></i></h5>
                                     <ul class="fee-table">
-                                        <li class="text-black"><b>6.</b> Fixed property fee
-                                            <p class="text-secondary">Monthly fee applied to
-                                                every single property.</p>
+                                        <li class="text-black"><b>6.</b> Fixed 'Fund Repaid' fee
+                                            <p class="text-secondary">Monthly fee applied to every property with no custom property type set.</p>
                                             <div class="frame">
                                                 <div class="text-black inline"><b>A.</b>
                                                     habitable property:
@@ -378,7 +377,7 @@
                                                                class="text-danger">Other fee
                                                             error message</small>
                                                         <input type="number" step="any"
-                                                               class="form-control-sm  text-danger"
+                                                               class="form-control-sm"
                                                                id="fundRepairHabitable"
                                                                placeholder="Enter fee..."
                                                                autocomplete="on" required
@@ -397,7 +396,7 @@
                                                                class="text-danger">Other fee
                                                             error message</small>
                                                         <input type="number" step="any"
-                                                               class="form-control-sm text-danger"
+                                                               class="form-control-sm"
                                                                id="fundRepairNonHabitable"
                                                                placeholder="Enter fee..."
                                                                autocomplete="on" required
@@ -415,10 +414,8 @@
                                                 applies per property</small></p>
                                         </li>
                                         <li th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}"
-                                            class="text-black"><b>7.</b> Fee by property
-                                            type
-                                            <p class="text-secondary">Monthly fee according
-                                                to property type.</p>
+                                            class="text-black"><b>7.</b> 'Fund Repair' fee by property type
+                                            <p class="text-secondary">'Fund Repair' fee applied according to the property type set.</p>
                                             <div class="frame">
                                                 <div th:each="propertyType: ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}"
                                                      class="text-black inline">
@@ -433,13 +430,13 @@
 
                                                     <div class="section" style="padding: 3px 15px">
                                                         <span><b>A.</b> habitable property</span>
-                                                        <div class="info-box text-danger">
+                                                        <div class="info-box">
                                                             <i th:text="${propertyType.getFundRepairHabitable()} + ' лв.'"></i>
                                                         </div>
                                                     </div>
                                                     <div class="section" style="padding: 3px 15px">
                                                         <span><b>B.</b> non-habitable property</span>
-                                                        <div class="info-box text-danger">
+                                                        <div class="info-box">
                                                             <i th:text="${propertyType.getFundRepairNotHabitable()} + ' лв.'"></i>
                                                         </div>
                                                     </div>
