@@ -158,6 +158,6 @@ A platform that allows the registration of both home owners and residential enti
 <img src="https://i.ibb.co/pKg3fwz/administration-properties.jpg">
 <img src="https://i.ibb.co/PNPKCj5/administration-summary.jpg">
 Database architecture :
-<img src="https://i.ibb.co/rpC6mF3/Our-Home-database-architecture.jpg">
+<img src="https://i.ibb.co/BNx1PwG/ourhome-db-architecture.jpg">
 
 
