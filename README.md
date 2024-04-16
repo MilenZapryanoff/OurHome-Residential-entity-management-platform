@@ -79,6 +79,14 @@ A platform that allows the registration of both home owners and residential enti
 
 
 <h2>Updates</h2>
+<h4>v.1.24.0415</h4>
+  <ul>
+  <li> Added fee component separation when manually create a monthly fee (both individual and global fee). Now the total monthly fee amount is disabled for input, as it is a result of the fund 'Management and maintenance' and fund 'Repair' component.</li>
+  <li> When deleting an existing fee that is already paid and calculated to the Residential entity income an automatic reversal functionality is added. In case of deletion, the amount of the fee including it's componentss accounts are reversed from the Residential entity total incomes.</li>
+  <li> Improved logical operations and checks in case of manual fee manipulations.</li>
+  <li> Extended monthly fee details visualisations for both Manager and Property Owner </li>
+  </ul>
+  
  <h4>v.1.24.0324</h4>
   <ul>
   <li>Section 'Administration -> Expenses' now changed to Section 'Administration -> Financial'. In this section are now included 'Expenses' - holding information about Residential entity expenses and 'Incomes' secton - a plece where will be hold information about collected amounts from fees.</li> 
