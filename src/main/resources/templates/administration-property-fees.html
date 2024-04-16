@@ -177,13 +177,14 @@
                                         data-bs-target="#collapseTwo"
                                         aria-expanded="false"
                                         aria-controls="collapseTwo">
-                                    <small class="text-dark"><i class="fa-solid fa-magnifying-glass"></i> View fee components <small class="arrows text-danger">
-                                        >>></small></small>
+                                    <small onclick="feeComponentArrowChange()" class="text-dark"><i class="fa-solid fa-magnifying-glass"></i>View fee
+                                        components <small id="fee-component" class="arrows text-danger">>>></small></small>
                                 </button>
                             </div>
                             <div id="collapseTwo" class="accordion-collapse collapse">
                                 <div class="property-fees text-center">
-                                    <p style="border-bottom: 1px solid lightgray"><b>Fund Management and Maintenance</b></p>
+                                    <p style="border-bottom: 1px solid lightgray"><b>Fund Management and Maintenance</b>
+                                    </p>
                                     <div class="fee-container">
                                         <div class="fee-component text-center res-entity"
                                              th:if="${!property.isNotHabitable()} and ${property.getResidentialEntity().getFee().getFixedFeeHabitable() > 0}">
@@ -495,6 +496,7 @@
                         <th class="text-secondary">Fee amt.</th>
                         <th class="text-secondary">Overpaid amt.</th>
                         <th class="text-secondary">Overpaid amt. left</th>
+                        <th class="text-secondary">DUE amt.</th>
                         <th class="text-secondary">Start period</th>
                         <th class="text-secondary">End period</th>
                         <th class="text-secondary">Description</th>
@@ -508,10 +510,9 @@
                             <p th:text="${propertyFee.getId()}">
                         </td>
                         <td>
-                            <p th:if="${propertyFee.getFeeAmount()} > 0 and ${propertyFee.isPaid()}"
+                            <p th:if="${propertyFee.getFeeAmount()} > 0"
                                th:text="${propertyFee.getFeeAmount()} + ' лв.'">
-                            <p th:if="${propertyFee.getFeeAmount()} > 0 and ${!propertyFee.isPaid()}"
-                               class="text-danger" th:text="${propertyFee.getFeeAmount()} + ' лв.'">
+
                             <p th:if="${propertyFee.getFeeAmount()} == 0">-</p>
                         </td>
                         <td>
@@ -523,6 +524,17 @@
                             <p th:if="${propertyFee.getOverpaidAmountEnd()} > 0"
                                th:text="${propertyFee.getOverpaidAmountEnd()} + ' лв.'">
                             <p th:unless="${propertyFee.getOverpaidAmountEnd()} > 0">-</p>
+                        </td>
+                        <td>
+                            <p class="text-danger due-amount-field"
+                               th:if="${!propertyFee.isPaid() and propertyFee.getDueAmount() > 0 }"
+                               th:text="${propertyFee.getDueAmount()} + ' лв.'">
+                            <p class="due-amount-field"
+                               th:if="${!propertyFee.isPaid() and propertyFee.getOverpaidAmountStart() >= propertyFee.getFeeAmount()}"
+                               th:text="'0.00 лв.'">
+                            <p th:if="${propertyFee.isPaid()}"
+                               th:text="'0.00 лв.'">
+
                         </td>
                         <td>
                             <p th:text="${#temporals.format(propertyFee.getPeriodStart(), 'dd-MM-yyyy')}">
@@ -571,7 +583,10 @@
                                  src="/images/check_yes.png" style="width: 20px;" alt="Manual fee">
                             <p th:unless="${propertyFee.isManual()}">-</p>
                         </td>
-                        <td class="table-image">
+                        <td th:if="${propertyFee.getOverpaidAmountStart() > 0}" class="table-image">
+                            <p>-</p>
+                        </td>
+                        <td th:unless="${propertyFee.getOverpaidAmountStart() > 0}" class="table-image">
                             <form class="form-container"
                                   th:action="@{/administration/fees/details/edit/{id} (id=${propertyFee.getId()})}">
                                 <button type="submit">
@@ -623,6 +638,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/confirm.js"></script>
+<script src="/js/arrow-change.js"></script>
 
 </body>
 </html>

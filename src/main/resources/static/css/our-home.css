@@ -146,6 +146,15 @@ body {
     border-radius: 5px;
 }
 
+
+
+.due-amount-field {
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    background-color: rgba(245, 245, 245, 0.58);
+}
+
+
 .due-amounts-header {
     display: flex;
     justify-content: space-between;
@@ -2241,6 +2250,7 @@ Property section image
     border-radius: 15px;
     padding: 5px;
 }
+
 
 /*
 ---------------------------------------------

@@ -178,8 +178,8 @@
                                                         data-bs-target="#collapseFeeTwo"
                                                         aria-expanded="false"
                                                         aria-controls="collapseFeeTwo" >
-                                                    <p class="text-dark"><i class="fa-solid fa-magnifying-glass"></i> View fee components <small class="arrows text-danger">
-                                                        >>></small></p>
+                                                    <p onclick="feeComponentArrowChange()" class="text-dark"><i class="fa-solid fa-magnifying-glass"></i> View fee components
+                                                        <small id="fee-component"  class="arrows text-danger">>>></small></p>
                                                 </button>
                                             </div>
                                             <div id="collapseFeeTwo" class="accordion-collapse collapse">
@@ -366,19 +366,17 @@
                                     </div>
                                 </li>
                                 <li class="text-black">
-                                    <b>Overpaid amount:</b>
+                                    <b>Prepaid amount:</b>
                                     <div class="info-box">
                                         <b th:text="${property.getOverpayment()} + ' лв.'"></b>
                                     </div>
                                 </li>
                                 <li class="text-black">
                                     <b>Property habitable: </b>
-                                    <div class="info-box">
-                                        <b th:if="${property.isNotHabitable()}"
-                                           th:text="NO"></b>
-                                        <b th:unless="${property.isNotHabitable()}"
-                                           th:text="YES"></b>
-                                    </div>
+                                    <b th:if="${property.isNotHabitable()}"><i
+                                            class="fa-solid fa-circle-xmark text-danger"></i></b>
+                                    <b th:unless="${property.isNotHabitable()}"><i
+                                            class="fa-solid fa-circle-check text-success"></i></b>
                                 </li>
                                 <li class="text-black"
                                     th:if="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} != null">
@@ -397,34 +395,33 @@
                                                     data-bs-target="#collapseTwo"
                                                     aria-expanded="false"
                                                     aria-controls="collapseTwo">
-                                                <div class="text-dark"><b><i class="fa-solid fa-magnifying-glass"></i> View unpaid fees</b><small class="arrows text-danger">
-                                                    >>></small></div>
+                                                <div onclick="unpaidFeesArrowChange()" class="text-dark"><b><i class="fa-solid fa-magnifying-glass"></i> View unpaid fees</b>
+                                            <small id="unpaid-fees" class="arrows text-danger">>>></small></div>
                                             </button>
                                         </div>
                                         <div id="collapseTwo" class="collapse">
                                             <div class="info-table" style="margin: 20px 0 0;background-color: #f5f5f5">
                                                 <table class="text-center">
                                                     <tr>
-                                                        <th class="text-dark">Fee amount</th>
-                                                        <th class="text-dark">&emsp;&ensp;</th>
+                                                        <th class="text-dark">Fee amt.</th>
+                                                        <th class="text-dark">Prepaid amt.</th>
+                                                        <th class="text-dark">Due amt.</th>
                                                         <th class="text-dark">Period start</th>
-                                                        <th class="text-dark">&emsp;&ensp;</th>
                                                         <th class="text-dark">Period end</th>
-                                                        <th class="text-dark">&emsp;&ensp;</th>
                                                         <th class="text-dark">Description</th>
                                                     </tr>
-                                                    <tr
-                                                            th:each="propertyFee: ${@propertyFeeRepository.findAllUnpaidFees(property.getId())}">
-                                                        <td class="text-danger"
+                                                    <tr th:each="propertyFee: ${@propertyFeeRepository.findAllUnpaidFees(property.getId())}">
+                                                        <td class="text-dark"
                                                             th:text="${propertyFee.getFeeAmount()}"></td>
-                                                        <th>&emsp;&ensp;</th>
+                                                        <td class="text-dark"
+                                                            th:text="${propertyFee.getOverpaidAmountStart()}"></td>
                                                         <td class="text-danger"
+                                                            th:text="${propertyFee.getDueAmount()}"></td>
+                                                        <td class="text-dark"
                                                             th:text="${#temporals.format(propertyFee.getPeriodStart(), 'dd-MMM-yyyy')}"></td>
-                                                        <th>&emsp;&ensp;</th>
-                                                        <td class="text-danger"
+                                                        <td class="text-dark"
                                                             th:text="${#temporals.format(propertyFee.getPeriodEnd(), 'dd-MMM-yyyy')}"></td>
-                                                        <th>&emsp;&ensp;</th>
-                                                        <td class="text-danger"
+                                                        <td class="text-dark"
                                                             th:text="${propertyFee.getDescription()}"></td>
                                                     </tr>
                                                 </table>
@@ -541,6 +538,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/arrow-change.js"></script>
 
 
 </body>

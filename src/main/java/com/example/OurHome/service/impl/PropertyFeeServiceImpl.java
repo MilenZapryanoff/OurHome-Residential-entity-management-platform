@@ -11,6 +11,7 @@ import com.example.OurHome.repo.PropertyFeeRepository;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.PropertyFeeService;
+import com.example.OurHome.service.ResidentialEntityService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.event.EventListener;
@@ -27,12 +28,14 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     private final PropertyRepository propertyRepository;
     private final ModelMapper modelMapper;
     private final MessageService messageService;
+    private final ResidentialEntityService residentialEntityService;
 
-    public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper, MessageService messageService) {
+    public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper, MessageService messageService, ResidentialEntityService residentialEntityService) {
         this.propertyFeeRepository = propertyFeeRepository;
         this.propertyRepository = propertyRepository;
         this.modelMapper = modelMapper;
         this.messageService = messageService;
+        this.residentialEntityService = residentialEntityService;
     }
 
     /**
@@ -83,16 +86,21 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     @Transactional
     public void createPeriodicalMonthlyFee(Property property) {
 
-        //TODO: feeAmount in PropertyFee to be separated to 'totalAmount', 'fundRepair' and 'fundMm'
-
         PropertyFee newMonthlyFee = new PropertyFee();
         LocalDate now = LocalDate.now();
 
         BigDecimal overpayment = property.getOverpayment();
-        BigDecimal fundMm = property.getMonthlyFeeFundMm();
-        BigDecimal fundRepair = property.getMonthlyFeeFundRepair();
         BigDecimal additionalPropertyFee = property.getAdditionalPropertyFee();
-        BigDecimal totalMonthlyFee = fundMm.add(fundRepair).add(additionalPropertyFee);
+
+        //TODO: additional property fee (individual fee) is fixed as fundMM component!
+        // I can add a flag for to be able to select to which component the individual fee belongs.
+        BigDecimal fundMm = property.getMonthlyFeeFundMm().add(additionalPropertyFee);
+
+        BigDecimal fundRepair = property.getMonthlyFeeFundRepair();
+        BigDecimal totalMonthlyFee = fundMm.add(fundRepair);
+
+        newMonthlyFee.setFundMmAmount(fundMm);
+        newMonthlyFee.setFundRepairAmount(fundRepair);
 
         //if totalMonthlyFee for this property is not 0.00, a new monthly fee will be created
         if (totalMonthlyFee.compareTo(BigDecimal.ZERO) > 0) {
@@ -109,8 +117,6 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             newMonthlyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
             newMonthlyFee.setProperty(property);
             newMonthlyFee.setDescription(now.getMonth() + " " + now.getYear());
-            newMonthlyFee.setFundMmAmount(fundMm);
-            newMonthlyFee.setFundRepairAmount(fundRepair);
             propertyFeeRepository.save(newMonthlyFee);
 
             //send message to property owner
@@ -128,11 +134,33 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     public void editMonthlyFee(Long propertyFeeId, PropertyFeeEditBindingModel propertyFeeEditBindingModel) {
 
         PropertyFee propertyFee = propertyFeeRepository.findById(propertyFeeId).orElse(null);
+
         if (propertyFee != null) {
+            BigDecimal fundMmAmount = propertyFeeEditBindingModel.getFundMmAmount();
+            BigDecimal fundRepairAmount = propertyFeeEditBindingModel.getFundRepairAmount();
+            BigDecimal totalFeeAmount = fundMmAmount.add(fundRepairAmount);
+
+            propertyFee.setFundMmAmount(fundMmAmount);
+            propertyFee.setFundRepairAmount(fundRepairAmount);
+            propertyFee.setFeeAmount(totalFeeAmount);
+            propertyFee.setDueAmount(totalFeeAmount);
+
             propertyFee.setPeriodStart(propertyFeeEditBindingModel.getPeriodStart());
             propertyFee.setPeriodEnd(propertyFeeEditBindingModel.getPeriodEnd());
-            propertyFee.setFeeAmount(propertyFeeEditBindingModel.getFeeAmount());
-            propertyFee.setPaid(propertyFeeEditBindingModel.isPaid());
+
+            //checking if payment status is changed
+            if (propertyFee.isPaid()) {
+                if (!propertyFeeEditBindingModel.isPaid()) {
+                    residentialEntityService.reversePaymentAmountFromIncomes(propertyFee, propertyFee.getProperty());
+                    propertyFee.setPaid(false);
+                }
+            } else {
+                if (propertyFeeEditBindingModel.isPaid()) {
+                    residentialEntityService.addPaymentAmountToIncomes(propertyFee, propertyFee.getProperty());
+                    propertyFee.setPaid(true);
+                }
+            }
+
             propertyFee.setDescription(propertyFeeEditBindingModel.getDescription());
 
             propertyFeeRepository.save(propertyFee);
@@ -144,19 +172,19 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
      */
     @Override
     public void deleteMonthlyFee(PropertyFee propertyFee) {
+        if (propertyFee.isPaid()) {
+            residentialEntityService.reversePaymentAmountFromIncomes(propertyFee, propertyFee.getProperty());
+        }
+
         propertyFeeRepository.delete(propertyFee);
     }
 
     @Override
     public void createSingleFee(Property property, PropertyFeeAddBindingModel propertyFeeAddBindingModel) {
-        PropertyFee propertyFee = modelMapper.map(propertyFeeAddBindingModel, PropertyFee.class);
-        propertyFee.setManual(true);
-        propertyFee.setProperty(property);
-        propertyFee.setId(null);
-        propertyFee.setOverpaidAmountStart(property.getOverpayment());
-        propertyFee.setOverpaidAmountEnd(property.getOverpayment());
 
-        propertyFeeRepository.save(propertyFee);
+        PropertyFee propertyFee = modelMapper.map(propertyFeeAddBindingModel, PropertyFee.class);
+
+        setNewPropertyFee(property, propertyFee);
     }
 
     /**
@@ -180,12 +208,8 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
 
         for (Property property : properties) {
             PropertyFee propertyFee = modelMapper.map(propertyFeeAddGlobalFeeBindingModel, PropertyFee.class);
-            propertyFee.setManual(true);
-            propertyFee.setProperty(property);
-            propertyFee.setId(null);
-            propertyFee.setOverpaidAmountStart(property.getOverpayment());
-            propertyFee.setOverpaidAmountEnd(property.getOverpayment());
-            propertyFeeRepository.save(propertyFee);
+
+            setNewPropertyFee(property, propertyFee);
         }
         return true;
     }
@@ -195,7 +219,16 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
      */
     @Override
     public void changePaymentStatus(PropertyFee propertyFee) {
-        propertyFee.setPaid(!propertyFee.isPaid());
+
+        Property property = propertyRepository.findById(propertyFee.getProperty().getId()).orElse(null);
+
+        if (!propertyFee.isPaid()) {
+            propertyFee.setPaid(true);
+            residentialEntityService.addPaymentAmountToIncomes(propertyFee, property);
+        } else {
+            propertyFee.setPaid(false);
+            residentialEntityService.reversePaymentAmountFromIncomes(propertyFee, property);
+        }
         propertyFeeRepository.save(propertyFee);
     }
 
@@ -234,9 +267,38 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
      */
     private static void setMonthlyFeeWithoutOverpayment(PropertyFee newMonthlyFee, BigDecimal totalMonthlyFee) {
         newMonthlyFee.setFeeAmount(totalMonthlyFee);
+        newMonthlyFee.setDueAmount(totalMonthlyFee);
         newMonthlyFee.setPaid(false);
         newMonthlyFee.setOverpaidAmountStart(BigDecimal.valueOf(0));
         newMonthlyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
+    }
+
+    /**
+     * Private Method for setting propertyFee params when adding new global or individual fee.
+     *
+     * @param property        property fee id
+     * @param propertyFee     new PropertyFee
+     */
+    private void setNewPropertyFee(Property property, PropertyFee propertyFee) {
+        BigDecimal fundMmAmount = propertyFee.getFundMmAmount();
+        BigDecimal fundRepairAmount = propertyFee.getFundRepairAmount();
+        BigDecimal totalFeeAmount = fundMmAmount.add(fundRepairAmount);
+
+        propertyFee.setFeeAmount(totalFeeAmount);
+        propertyFee.setDueAmount(totalFeeAmount);
+
+        propertyFee.setManual(true);
+        propertyFee.setProperty(property);
+        propertyFee.setId(null);
+        propertyFee.setOverpaidAmountStart(property.getOverpayment());
+        propertyFee.setOverpaidAmountEnd(property.getOverpayment());
+
+        propertyFeeRepository.save(propertyFee);
+
+        //Add amount to RE incomes in case of property fee is set as paid
+        if (propertyFee.isPaid()) {
+            residentialEntityService.addPaymentAmountToIncomes(propertyFee, propertyFee.getProperty());
+        }
     }
 
     /**
@@ -251,8 +313,12 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
                                               BigDecimal totalMonthlyFee, PropertyFee newMonthlyFee) {
 
         //Setting new propertyFee when overpaid amount < total monthly fee
+
+        //TODO: If fee is partially paid the overpaid amount is not added to RE incomes component until the whole propertyFee is paid.
+        //TODO: I can add a new field in RE enitity for non-completed (pending partial overpayments) payments where the overpaid amount is kept until propertyFee is paid.
         if (overpayment.compareTo(totalMonthlyFee) < 0) {
-            newMonthlyFee.setFeeAmount(totalMonthlyFee.subtract(overpayment));
+
+            newMonthlyFee.setDueAmount(totalMonthlyFee.subtract(overpayment));
             newMonthlyFee.setPaid(false);
 
             property.setOverpayment(BigDecimal.valueOf(0));
@@ -269,10 +335,14 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
                 newMonthlyFee.setOverpaidAmountEnd(overpayment.subtract(totalMonthlyFee));
             }
 
-            newMonthlyFee.setFeeAmount(totalMonthlyFee);
+            newMonthlyFee.setDueAmount(BigDecimal.valueOf(0));
             newMonthlyFee.setPaid(true);
+            residentialEntityService.addPaymentAmountToIncomes(newMonthlyFee, property);
         }
+
+        newMonthlyFee.setFeeAmount(totalMonthlyFee);
         newMonthlyFee.setOverpaidAmountStart(overpayment);
+
         propertyRepository.save(property);
     }
 }

@@ -4,7 +4,9 @@ import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyFee;
 import com.example.OurHome.repo.PropertyFeeRepository;
 import com.example.OurHome.repo.PropertyRepository;
+import com.example.OurHome.service.FinancialService;
 import com.example.OurHome.service.MessageService;
+import com.example.OurHome.service.ResidentialEntityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,10 +32,13 @@ class PropertyFeeServiceImplTest {
     @Mock
     private MessageService mockMessageService;
 
+    @Mock
+    private ResidentialEntityService mockResidentialEntityService;
+
     @BeforeEach
     void setUp() {
         serviceToTest = new PropertyFeeServiceImpl(mockPropertyFeeRepository,mockPropertyRepository,
-                mockModelMapper, mockMessageService);
+                mockModelMapper, mockMessageService, mockResidentialEntityService);
     }
 
     @Test

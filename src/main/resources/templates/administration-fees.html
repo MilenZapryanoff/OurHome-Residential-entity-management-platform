@@ -92,9 +92,8 @@
 <!-- ***** BANNER *****-->
 <div class="page-heading header-text">
     <h3>Monthly fees</h3>
-    <div class="col-lg-12">
-        <span th:text="'Residential entity ID: ' + ${residentialEntity.getId()}"></span>
-        <h4 th:if="${globalFeeAdded}" class="text-success">Fee successfully added</h4>
+     <div th:if="${globalFeeAdded}" class="success-msg">
+        <h5 class="text-white">Fee successfully created!</h5>
     </div>
 </div>
 <br><br>

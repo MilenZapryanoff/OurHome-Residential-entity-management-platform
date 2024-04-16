@@ -28,6 +28,9 @@ public class PropertyFee {
     private BigDecimal overpaidAmountEnd;
 
     @Column(nullable = false)
+    private BigDecimal dueAmount;
+
+    @Column(nullable = false)
     private LocalDate periodStart;
 
     @Column(nullable = false)
@@ -139,5 +142,13 @@ public class PropertyFee {
 
     public void setFundMmAmount(BigDecimal fundMmAmount) {
         this.fundMmAmount = fundMmAmount;
+    }
+
+    public BigDecimal getDueAmount() {
+        return dueAmount;
+    }
+
+    public void setDueAmount(BigDecimal dueAmount) {
+        this.dueAmount = dueAmount;
     }
 }

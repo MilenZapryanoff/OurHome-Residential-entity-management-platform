@@ -1,5 +1,7 @@
 package com.example.OurHome.service;
 
+import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.PropertyFee;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityEditBindingModel;
@@ -28,4 +30,7 @@ public interface ResidentialEntityService {
 
     ResidentialEntity findResidentialEntityByPropertyId(Long id);
 
+    void addPaymentAmountToIncomes(PropertyFee propertyFee, Property property);
+
+    void reversePaymentAmountFromIncomes(PropertyFee propertyFee, Property property);
 }

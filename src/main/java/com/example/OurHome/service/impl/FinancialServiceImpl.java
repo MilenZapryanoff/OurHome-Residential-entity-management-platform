@@ -1,6 +1,7 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Expense;
+import com.example.OurHome.model.Entity.PropertyFee;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseEditBindingModel;
@@ -69,7 +70,7 @@ public class FinancialServiceImpl implements FinancialService {
     public IncomesBindingModel mapIncomesBindingModel(Long id) {
         IncomesBindingModel incomesBindingModel = new IncomesBindingModel();
 
-        residentialEntityService.findResidentialEntityById(id).ifPresent(residentialEntity -> incomesBindingModel.setIncomesAmount(residentialEntity.getIncomesAmount()));
+        residentialEntityService.findResidentialEntityById(id).ifPresent(residentialEntity -> incomesBindingModel.setIncomesAmount(residentialEntity.getIncomesTotalAmount()));
 
         return incomesBindingModel;
     }

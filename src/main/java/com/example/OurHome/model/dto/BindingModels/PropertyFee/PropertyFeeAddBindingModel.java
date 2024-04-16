@@ -1,8 +1,7 @@
 package com.example.OurHome.model.dto.BindingModels.PropertyFee;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
@@ -12,8 +11,16 @@ public class PropertyFeeAddBindingModel {
 
     private Long id;
 
-    @NotNull(message = "Fee amount cannot be null")
-    @DecimalMin(value = "0.0", message = "Fixed Fee must be greater than or equal to zero")
+    @PositiveOrZero(message = "Amount must be positive or 0")
+    @Column(nullable = false)
+    private BigDecimal fundRepairAmount;
+
+    @PositiveOrZero(message = "Amount must be positive or 0")
+    @Column(nullable = false)
+    private BigDecimal fundMmAmount;
+
+    @Positive(message = "Total fee amount must be bigger than 0")
+    @Column
     private BigDecimal feeAmount;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -86,5 +93,21 @@ public class PropertyFeeAddBindingModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public BigDecimal getFundRepairAmount() {
+        return fundRepairAmount;
+    }
+
+    public void setFundRepairAmount(BigDecimal fundRepairAmount) {
+        this.fundRepairAmount = fundRepairAmount;
+    }
+
+    public BigDecimal getFundMmAmount() {
+        return fundMmAmount;
+    }
+
+    public void setFundMmAmount(BigDecimal fundMmAmount) {
+        this.fundMmAmount = fundMmAmount;
     }
 }

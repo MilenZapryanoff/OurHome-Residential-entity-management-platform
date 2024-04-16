@@ -1,5 +1,7 @@
 package com.example.OurHome.service.impl;
 
+import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.PropertyFee;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityEditBindingModel;
@@ -45,7 +47,9 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
         ResidentialEntity newResidentialEntity = modelMapper.map(residentialEntityRegisterBindingModel, ResidentialEntity.class);
 
         newResidentialEntity.setFee(feeService.createFee(newResidentialEntity));
-        newResidentialEntity.setIncomesAmount(BigDecimal.ZERO);
+        newResidentialEntity.setIncomesFundMm(BigDecimal.ZERO);
+        newResidentialEntity.setIncomesFundRepair(BigDecimal.ZERO);
+        newResidentialEntity.setIncomesTotalAmount(BigDecimal.ZERO);
         newResidentialEntity.setManager(loggedUser);
         newResidentialEntity.setCity(cityRepository.findByName(residentialEntityRegisterBindingModel.getCity()));
 
@@ -131,6 +135,44 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     @Override
     public ResidentialEntity findResidentialEntityByPropertyId(Long id) {
        return residentialEntityRepository.findResidentialEntityByPropertyId(id);
+    }
+
+    @Override
+    public void addPaymentAmountToIncomes(PropertyFee propertyFee, Property property) {
+        ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityByPropertyId(property.getId());
+
+        BigDecimal currentFundMm = residentialEntity.getIncomesFundMm();
+        BigDecimal currentFundRepair = residentialEntity.getIncomesFundRepair();
+        BigDecimal currentTotalAmount = residentialEntity.getIncomesTotalAmount();
+
+        residentialEntity.setIncomesFundMm(currentFundMm.
+                add(propertyFee.getFundMmAmount()));
+        residentialEntity.setIncomesFundRepair(currentFundRepair
+                .add(propertyFee.getFundRepairAmount()));
+        residentialEntity.setIncomesTotalAmount(currentTotalAmount
+                .add(propertyFee.getFundMmAmount())
+                .add(propertyFee.getFundRepairAmount()));
+
+        residentialEntityRepository.save(residentialEntity);
+    }
+
+    @Override
+    public void reversePaymentAmountFromIncomes(PropertyFee propertyFee, Property property) {
+        ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityByPropertyId(property.getId());
+
+        BigDecimal currentFundMm = residentialEntity.getIncomesFundMm();
+        BigDecimal currentFundRepair = residentialEntity.getIncomesFundRepair();
+        BigDecimal currentTotalAmount = residentialEntity.getIncomesTotalAmount();
+
+        residentialEntity.setIncomesFundMm(currentFundMm
+                .subtract(propertyFee.getFundMmAmount()));
+        residentialEntity.setIncomesFundRepair(currentFundRepair
+                .subtract(propertyFee.getFundRepairAmount()));
+        residentialEntity.setIncomesTotalAmount(currentTotalAmount
+                .subtract(propertyFee.getFundMmAmount())
+                .subtract(propertyFee.getFundRepairAmount()));
+
+        residentialEntityRepository.save(residentialEntity);
     }
 
     /**

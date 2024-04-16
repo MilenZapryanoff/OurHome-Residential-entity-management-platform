@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface PropertyFeeRepository extends JpaRepository<PropertyFee, Long> {
 
-    @Query("SELECT SUM(f.feeAmount) FROM property_fees f WHERE f.isPaid = false AND f.property.id=:id")
+    @Query("SELECT SUM(f.dueAmount) FROM property_fees f WHERE f.isPaid = false AND f.property.id=:id")
     BigDecimal sumOfUnpaidFees(@Param("id") Long id);
 
     @Query("SELECT COUNT(f.id) FROM property_fees f WHERE f.property.id=:id")

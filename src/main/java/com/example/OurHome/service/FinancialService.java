@@ -1,6 +1,7 @@
 package com.example.OurHome.service;
 
 import com.example.OurHome.model.Entity.Expense;
+import com.example.OurHome.model.Entity.PropertyFee;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseEditBindingModel;
@@ -34,6 +35,5 @@ public interface FinancialService {
     ExpenseFilterBindingModel createCustomExpenseFilter(LocalDate startPeriod, LocalDate endPeriod, ResidentialEntity residentialEntity);
 
     String saveDocument(MultipartFile file, Long id) throws IOException;
-
 
 }

@@ -44,7 +44,13 @@ public class ResidentialEntity {
     private Fee fee;
 
     @Column(nullable = false)
-    private BigDecimal incomesAmount;
+    private BigDecimal incomesFundMm;
+
+    @Column(nullable = false)
+    private BigDecimal incomesFundRepair;
+
+    @Column(nullable = false)
+    private BigDecimal incomesTotalAmount;
 
     @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
     private List<Property> properties;
@@ -181,12 +187,12 @@ public class ResidentialEntity {
         this.expenses = expense;
     }
 
-    public BigDecimal getIncomesAmount() {
-        return incomesAmount;
+    public BigDecimal getIncomesTotalAmount() {
+        return incomesTotalAmount;
     }
 
-    public void setIncomesAmount(BigDecimal incomesAmount) {
-        this.incomesAmount = incomesAmount;
+    public void setIncomesTotalAmount(BigDecimal incomesAmount) {
+        this.incomesTotalAmount = incomesAmount;
     }
 
     public List<PropertyType> getPropertyTypes() {
@@ -195,5 +201,21 @@ public class ResidentialEntity {
 
     public void setPropertyTypes(List<PropertyType> propertyTypes) {
         this.propertyTypes = propertyTypes;
+    }
+
+    public BigDecimal getIncomesFundMm() {
+        return incomesFundMm;
+    }
+
+    public void setIncomesFundMm(BigDecimal incomesFundMm) {
+        this.incomesFundMm = incomesFundMm;
+    }
+
+    public BigDecimal getIncomesFundRepair() {
+        return incomesFundRepair;
+    }
+
+    public void setIncomesFundRepair(BigDecimal incomesFundRepair) {
+        this.incomesFundRepair = incomesFundRepair;
     }
 }

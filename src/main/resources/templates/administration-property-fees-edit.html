@@ -22,7 +22,7 @@
 
 </head>
 
-<body>
+<body onload="calcTotalSum()">
 
 <!-- ***** Preloader Start ***** -->
 <div id="js-preloader" class="js-preloader">
@@ -97,6 +97,10 @@
             <div class="col-lg-12">
                 <span th:text="'Fee: ' + ${propertyFeeEditBindingModel.getDescription()}"></span>
             </div>
+            <div th:if="${feeChangeFailed}" class="err-msg">
+                <h5 class="text-white">Fee change failed!</h5>
+                <p class="text-white">Fee amount cannot be 0!<br>At lease one of the fee components must be number greater than 0!</p>
+            </div>
         </div>
     </div>
 </div>
@@ -113,19 +117,43 @@
                       th:object="${propertyFeeEditBindingModel}">
                     <div class="col-lg-12">
                         <fieldset>
-                            <label for="feeAmount"><b>Monthly fee amount</b></label><br>
-                            <small class="text-secondary">The amount of monthly fee calculated
-                                according your Residential entity fee policy</small>
-                            <small th:if="${#fields.hasErrors('feeAmount')}"
-                                   th:errors="*{feeAmount}"
-                                   class="text-danger">Monthly fee error message</small>
+                            <label for="fundMmAmount"><b>Fund Maintenance <br> and management amount</b></label>
+                            <p th:if="${#fields.hasErrors('fundMmAmount')}"
+                               th:errors="*{fundMmAmount}"
+                               class="text-danger">Monthly fee error message</p>
                             <input type="number" step="any"
-                                   id="feeAmount"
-                                   placeholder="Enter fee amount..."
+                                   id="fundMmAmount"
+                                   placeholder="Enter amount..."
                                    autocomplete="on"
-                                   required th:field="*{feeAmount}"
+                                   th:field="*{fundMmAmount}"
                                    th:errorclass="bg-danger"
-                                   th:value="${propertyFeeEditBindingModel.getFeeAmount()}">
+                                   th:value="${propertyFeeEditBindingModel.getFundMmAmount()}">
+                        </fieldset>
+                        <fieldset>
+                            <label for="fundRepairAmount"><b>Fund Repair amount</b></label>
+                            <p th:if="${#fields.hasErrors('fundRepairAmount')}"
+                               th:errors="*{fundRepairAmount}"
+                               class="text-danger">Monthly fee error message</p>
+                            <input type="number" step="any"
+                                   id="fundRepairAmount"
+                                   placeholder="Enter amount..."
+                                   autocomplete="on"
+                                   th:field="*{fundRepairAmount}"
+                                   th:errorclass="bg-danger"
+                                   th:value="${propertyFeeEditBindingModel.getFundRepairAmount()}">
+                        </fieldset>
+                        <fieldset>
+                            <label for="feeAmount"><b>Total monthly fee amount</b></label>
+                            <p>The amount in this field is automatically calculated!
+                                The sum must be a greater than 0, so at least one of the amount components above must be a positive number!</p>
+                            <p th:if="${#fields.hasErrors('feeAmount')}"
+                               th:errors="*{feeAmount}"
+                               class="text-danger">Monthly fee error message</p>
+                            <input type="number" step="any"
+                                   disabled="disabled"
+                                   id="feeAmount"
+                                   th:field="*{feeAmount}"
+                                   th:errorclass="bg-danger">
                         </fieldset>
                         <fieldset>
                             <label for="periodStart"><b>Fee start period</b></label>
@@ -224,6 +252,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/totalSumCalc.js"></script>
 
 
 </body>
