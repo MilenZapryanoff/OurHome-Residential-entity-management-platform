@@ -79,6 +79,15 @@ A platform that allows the registration of both home owners and residential enti
 
 
 <h2>Updates</h2>
+
+
+<h4>v.1.24.0421</h4>
+  <ul>
+  <li> Bug fixes</li>
+  <li> Added some animations</li>
+  </ul>
+
+
 <h4>v.1.24.0415</h4>
   <ul>
   <li> Added fee component separation when manually create a monthly fee (both individual and global fee). Now the total monthly fee amount is disabled for input, as it is a result of the fund 'Management and maintenance' and fund 'Repair' component.</li>
