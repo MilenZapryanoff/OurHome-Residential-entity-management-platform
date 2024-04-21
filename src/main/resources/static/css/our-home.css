@@ -2251,6 +2251,239 @@ Property section image
     padding: 5px;
 }
 
+/*
+---------------------------------------------
+Delete button styles and animation
+---------------------------------------------
+*/
+
+.delete-button {
+    --background: rgb(73, 70, 70);
+    --background-hover: rgb(220, 53, 69);
+    --text: #ffffff;
+    --icon: #ffffff;
+    display: flex;
+    outline: none;
+    cursor: pointer;
+    min-width: max-content;
+    border: 1px solid #575757;
+    padding: 1px 18px 1px 8px;
+    border-radius: 30px;
+    line-height: 24px;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 13px;
+    overflow: hidden;
+    color: var(--text);
+    background: var(--b, var(--background));
+    transition: transform 0.3s, background 0.4s;
+    transform: scale(var(--scale, 1)) translateZ(0);
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+.delete-button:active {
+    --scale: .95;
+}
+.delete-button:hover {
+    --b: var(--background-hover);
+}
+.delete-button .icon,
+.delete-button .text {
+    display: inline-block;
+    vertical-align: top;
+    transform: translateZ(0);
+}
+.delete-button .icon {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    z-index: 1;
+    margin-right: 8px;
+    color: var(--text);
+}
+.delete-button .icon svg {
+    width: 96px;
+    height: 96px;
+    display: block;
+    position: absolute;
+    left: -36px;
+    top: -36px;
+    will-change: transform;
+    fill: var(--icon);
+    transform: scale(0.25) translateZ(0);
+    -webkit-animation: var(--name, var(--name-top, none)) 2400ms ease forwards;
+    animation: var(--name, var(--name-top, none)) 2400ms ease forwards;
+}
+.delete-button .icon svg.bottom {
+    --name: var(--name-bottom, none);
+}
+.delete-button .text {
+    -webkit-animation: var(--name-text, none) 2400ms ease forwards;
+    animation: var(--name-text, none) 2400ms ease forwards;
+}
+.delete-button .text span {
+    display: inline-block;
+    vertical-align: top;
+    opacity: var(--span-o, 1);
+    transform: translate(var(--span-x, 0), var(--span-y, 0)) rotate(var(--span-r, 0deg)) translateZ(0);
+    transition: transform 0.3s ease var(--span-d, 0s), opacity 0.2s linear var(--span-o-d, 0.3s);
+}
+.delete-button .text span:nth-child(1) {
+    --span-delay: 0.4s;
+    --span-o-d: 0.325s;
+}
+.delete-button .text span:nth-child(2) {
+    --span-delay: 0.45s;
+    --span-o-d: 0.35s;
+}
+.delete-button .text span:nth-child(3) {
+    --span-delay: 0.5s;
+    --span-o-d: 0.375s;
+}
+.delete-button .text span:nth-child(4) {
+    --span-delay: 0.55s;
+    --span-o-d: 0.4s;
+}
+.delete-button .text span:nth-child(5) {
+    --span-delay: 0.6s;
+    --span-o-d: 0.425s;
+}
+.delete-button .text span:nth-child(6) {
+    --span-delay: 0.65s;
+    --span-o-d: 0.45s;
+}
+.delete-button .text span:nth-child(7) {
+    --span-delay: 0.7s;
+    --span-o-d: 0.475s;
+}
+.delete-button .text span:nth-child(8) {
+    --span-delay: 0.75s;
+    --span-o-d: 0.5s;
+}
+.delete-button .text span:nth-child(9) {
+    --span-delay: 0.8s;
+    --span-o-d: 0.525s;
+}
+.delete-button .text span:nth-child(10) {
+    --span-delay: 0.85s;
+    --span-o-d: 0.55s;
+}
+.delete-button .text span:nth-child(11) {
+    --span-delay: 0.9s;
+    --span-o-d: 0.575s;
+}
+.delete-button.delete {
+    --b: var(--background-hover);
+    --name-top: trash-top;
+    --name-bottom: trash-bottom;
+    --name-text: text;
+    --span-x: -8px;
+    --span-y: 8px;
+    --span-r: -40deg;
+    --span-o: 0;
+}
+.delete-button.delete .text span {
+    --span-o-d: 1s;
+    --span-d: var(--span-delay);
+}
+
+@-webkit-keyframes trash-bottom {
+    25%, 32% {
+        transform: translate(32px, 19px) scale(1) translateZ(0);
+    }
+    70%, 80% {
+        transform: translate(32px, 0) scale(0.25) translateZ(0);
+    }
+    90% {
+        transform: translateX(-2px) scale(0.25) translateZ(0);
+    }
+    100% {
+        transform: scale(0.25) translateZ(0);
+    }
+}
+
+@keyframes trash-bottom {
+    25%, 32% {
+        transform: translate(32px, 19px) scale(1) translateZ(0);
+    }
+    70%, 80% {
+        transform: translate(32px, 0) scale(0.25) translateZ(0);
+    }
+    90% {
+        transform: translateX(-2px) scale(0.25) translateZ(0);
+    }
+    100% {
+        transform: scale(0.25) translateZ(0);
+    }
+}
+@-webkit-keyframes trash-top {
+    25%, 32% {
+        transform: translate(38px, 4px) scale(1) rotate(-20deg) translateZ(0);
+    }
+    70%, 80% {
+        transform: translate(32px, 0) scale(0.25) translateZ(0);
+    }
+    90% {
+        transform: translateX(-2px) scale(0.25) translateZ(0);
+    }
+    100% {
+        transform: scale(0.25) translateZ(0);
+    }
+}
+@keyframes trash-top {
+    25%, 32% {
+        transform: translate(38px, 4px) scale(1) rotate(-20deg) translateZ(0);
+    }
+    70%, 80% {
+        transform: translate(32px, 0) scale(0.25) translateZ(0);
+    }
+    90% {
+        transform: translateX(-2px) scale(0.25) translateZ(0);
+    }
+    100% {
+        transform: scale(0.25) translateZ(0);
+    }
+}
+@-webkit-keyframes text {
+    25% {
+        transform: translate(-4px, -6px) rotate(-20deg) translateZ(0);
+    }
+    70% {
+        opacity: 1;
+        transform: translate(-12px, 48px) rotate(-80deg) scale(0.2) translateZ(0);
+    }
+    71% {
+        opacity: 0;
+    }
+    72%, 90% {
+        opacity: 0;
+        transform: translateZ(0);
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes text {
+    25% {
+        transform: translate(-4px, -6px) rotate(-20deg) translateZ(0);
+    }
+    70% {
+        opacity: 1;
+        transform: translate(-12px, 48px) rotate(-80deg) scale(0.2) translateZ(0);
+    }
+    71% {
+        opacity: 0;
+    }
+    72%, 90% {
+        opacity: 0;
+        transform: translateZ(0);
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 
 /*
 ---------------------------------------------

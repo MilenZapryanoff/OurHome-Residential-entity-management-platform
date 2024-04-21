@@ -66,6 +66,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             newPropertyFee.setFeeAmount(BigDecimal.ZERO);
             newPropertyFee.setFundRepairAmount(BigDecimal.ZERO);
             newPropertyFee.setFundMmAmount(BigDecimal.ZERO);
+            newPropertyFee.setDueAmount(BigDecimal.ZERO);
             newPropertyFee.setPaid(true);
             newPropertyFee.setPeriodStart(now.withDayOfMonth(1));
             newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));

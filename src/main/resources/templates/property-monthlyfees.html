@@ -413,7 +413,9 @@
                                                     <tr th:each="propertyFee: ${@propertyFeeRepository.findAllUnpaidFees(property.getId())}">
                                                         <td class="text-dark"
                                                             th:text="${propertyFee.getFeeAmount()}"></td>
-                                                        <td class="text-dark"
+                                                        <td th:if="${propertyFee.getOverpaidAmountStart()} == 0" class="text-dark"
+                                                            th:text="'-'"></td>
+                                                        <td th:unless="${propertyFee.getOverpaidAmountStart()} == 0" class="text-dark"
                                                             th:text="${propertyFee.getOverpaidAmountStart()}"></td>
                                                         <td class="text-danger"
                                                             th:text="${propertyFee.getDueAmount()}"></td>
