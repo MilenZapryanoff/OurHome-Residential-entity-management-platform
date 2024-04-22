@@ -151,6 +151,7 @@ body {
 .due-amount-field {
     border: 1px solid lightgray;
     border-radius: 10px;
+    min-width: max-content;
     background-color: rgba(245, 245, 245, 0.58);
 }
 
@@ -1301,15 +1302,16 @@ Arrows
 */
 
 
-.arrows {
-    font-size: 15px;
-    transition: 1s;
+.magnifier-expand {
+    color: #9f9f9f;
+    font-size: 18px;
+    transition: 1.7s;
 }
 
-.arrows:hover {
-    padding-left: 20px;
-    transition: 1s;
-    font-weight: 900;
+.magnifier-expand:hover {
+    color: #000000;
+
+    transition: 0.5s;
 }
 
 /* 
@@ -2000,7 +2002,7 @@ Contact Page Style
 }
 
 .table-image {
-    width: min-content;
+    width: max-content;
 }
 
 /*
@@ -2141,15 +2143,12 @@ input {
 
 
 td img {
-    padding: 0;
+    padding: 1px;
     max-width: 20px;
-    transition: .25s;
 }
 
 td img:hover {
-    padding: 4px;
-    shape-image-threshold: revert;
-    transition: .25s;
+    padding: 0;
 }
 
 table {
@@ -2258,7 +2257,7 @@ Delete button styles and animation
 */
 
 .delete-button {
-    --background: rgb(73, 70, 70);
+    --background: rgb(33, 37, 41);
     --background-hover: rgb(220, 53, 69);
     --text: #ffffff;
     --icon: #ffffff;

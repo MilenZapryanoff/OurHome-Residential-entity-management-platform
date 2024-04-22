@@ -3,15 +3,21 @@ function feeComponentArrowChange() {
     changeArrowsDirection(arrowsElement);
 }
 
-function unpaidFeesArrowChange() {
-    let arrowsElement = document.getElementById('unpaid-fees');
+function feesHistoryArrowChange() {
+    let arrowsElement = document.getElementById('fees-history');
     changeArrowsDirection(arrowsElement);
 }
 
 function changeArrowsDirection(arrowsElement) {
-    if (arrowsElement.textContent === '>>>') {
-        arrowsElement.textContent = '<<<'
+    let className = arrowsElement.className;
+
+    if (className.includes('fa-magnifying-glass-plus')) {
+        arrowsElement.classList.remove('fa-magnifying-glass-plus');
+        arrowsElement.classList.add('fa-magnifying-glass-minus')
+        arrowsElement.classList.add('text-dark')
     } else {
-        arrowsElement.textContent = '>>>'
+        arrowsElement.classList.remove('fa-magnifying-glass-minus');
+        arrowsElement.classList.remove('text-dark')
+        arrowsElement.classList.add('fa-magnifying-glass-plus')
     }
 }

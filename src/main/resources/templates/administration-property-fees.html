@@ -177,8 +177,10 @@
                                         data-bs-target="#collapseTwo"
                                         aria-expanded="false"
                                         aria-controls="collapseTwo">
-                                    <small class="text-dark"><i class="fa-solid fa-magnifying-glass"></i>View fee
-                                        components <small id="fee-component" class="arrows text-danger">>>></small></small>
+                                    <small class="text-dark">View fee components
+                                        <small class="magnifier-expand">
+                                            <i id="fee-component" class="fa-solid fa-magnifying-glass-plus"></i></small>
+                                    </small>
                                 </button>
                             </div>
                             <div id="collapseTwo" class="accordion-collapse collapse">
@@ -583,10 +585,11 @@
                                  src="/images/check_yes.png" style="width: 20px;" alt="Manual fee">
                             <p th:unless="${propertyFee.isManual()}">-</p>
                         </td>
+
                         <td th:if="${propertyFee.getOverpaidAmountStart() > 0}" class="table-image">
                             <p>-</p>
                         </td>
-                        <td th:unless="${propertyFee.getOverpaidAmountStart() > 0}" class="table-image">
+                        <td th:if="${propertyFee.getOverpaidAmountStart() <= 0} and ${!propertyFee.isPaid()}" class="table-image">
                             <form class="form-container"
                                   th:action="@{/administration/fees/details/edit/{id} (id=${propertyFee.getId()})}">
                                 <button type="submit">
@@ -597,6 +600,18 @@
                                 </button>
                             </form>
                         </td>
+                        <td th:if="${propertyFee.getOverpaidAmountStart() <= 0} and ${propertyFee.isPaid()}" class="table-image">
+                            <img title="Paid fee cannot be edited!"
+                                 src="/images/forbidden_edit.jpg"
+                                 alt="Paid fee cannot be edited!">
+                        </td>
+
+
+
+
+
+
+
                         <td class="table-image">
                             <form class="form-container"
                                   th:action="@{/administration/fees/details/delete/{id} (id=${propertyFee.getId()})}"
