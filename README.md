@@ -81,10 +81,11 @@ A platform that allows the registration of both home owners and residential enti
 <h2>Updates</h2>
 
 
-<h4>v.1.24.0421</h4>
+<h4>v.1.24.0422</h4>
   <ul>
   <li> Bug fixes</li>
-  <li> Added some animations</li>
+  <li> Added some button and accordion menu animations</li>
+  <li> It is now restricted to edit already paid fee. You should first unmark it as paid. This action will also reverse Residential entity income transaction. The change will prevent reversing an amount different from the original transaction for the same monthly fee.</li>
   </ul>
 
 
