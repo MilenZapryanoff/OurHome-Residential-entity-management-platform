@@ -106,7 +106,7 @@
             <div class="col-lg-6 center-form">
                 <form id="input-form"
                       th:method="POST"
-                      th:action="@{/administration/financial/add/{id} (id=${id})}"
+                      th:action="@{/administration/financial/expenses/add/{id} (id=${id})}"
                       th:object="${expenseAddBindingModel}">
                     <div class="col-lg-12">
                         <fieldset>
@@ -157,7 +157,7 @@
                             </button>
                             <button type="button">
                                 <a class="orange-button"
-                                   th:href="@{/administration/financial/{id}(id=${id})}">
+                                   th:href="@{/administration/financial/expenses/{id}(id=${id})}">
                                     <p class="text-light">Cancel</p>
                                 </a>
                             </button>

@@ -42,7 +42,24 @@ public class MessageServiceImpl implements MessageService {
     }
 
     /**
-     * Send message (notification) to MANAGER of RE when new property registration
+     * Send message (notification) to MANAGER of RE when new property (MANUAL-CONFIRM) registration happens.
+     * happens.
+     */
+    @Override
+    public void propertyPendingRegistrationMessageToManager(ResidentialEntity residentialEntity) {
+        messageRepository.save(
+                new Message(
+                        LocalDate.now(),
+                        Time.valueOf(LocalTime.now()),
+                        "New property registration in Residential entity ID: "
+                                + residentialEntity.getId() + ". You can access the request via Administration panel",
+                        residentialEntity.getManager(),
+                        false,
+                        false));
+    }
+
+    /**
+     * Send message (notification) to MANAGER of RE when new property (AUTO-CONFIRM) registration happens.
      * happens.
      */
     @Override
@@ -52,7 +69,7 @@ public class MessageServiceImpl implements MessageService {
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
                         "New property registration in Residential entity ID: "
-                                + residentialEntity.getId() + ". You can access the request via Administration panel",
+                                + residentialEntity.getId() + ". Request is auto-confirmed as there is no data change in the registration request.\nNo action needed from your side! ",
                         residentialEntity.getManager(),
                         false,
                         false));
@@ -229,9 +246,7 @@ public class MessageServiceImpl implements MessageService {
     public void deleteAllMessages(Long id) {
         List<Message> notArchivedMessages = messageRepository.findArchivedMessagesByUserId(id);
         if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
-            for (Message message : notArchivedMessages) {
-                messageRepository.deleteById(message.getId());
-            }
+            messageRepository.deleteAll(notArchivedMessages);
         }
     }
 
@@ -243,11 +258,10 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void readAllMessages(Long id) {
         List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesByUserId(id);
+
         if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
-            for (Message message : notArchivedMessages) {
-                message.setRead(true);
-                messageRepository.save(message);
-            }
+            notArchivedMessages.forEach(message -> message.setRead(true));
+            messageRepository.saveAll(notArchivedMessages);
         }
     }
 
@@ -259,12 +273,13 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void archiveAllMessages(Long id) {
         List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesByUserId(id);
+
         if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
-            for (Message message : notArchivedMessages) {
+            notArchivedMessages.forEach(message -> {
                 message.setArchived(true);
                 message.setRead(true);
-                messageRepository.save(message);
-            }
+            });
+            messageRepository.saveAll(notArchivedMessages);
         }
     }
 
@@ -290,9 +305,10 @@ public class MessageServiceImpl implements MessageService {
 
     /**
      * New message to property owner for new monthly fee.
-     * @param property Property
+     *
+     * @param property   Property
      * @param monthlyFee Monthly fee amount
-     * @param dueAmount Total due amount
+     * @param dueAmount  Total due amount
      */
     @Override
     public void newFeeMessageToPropertyOwner(Property property, BigDecimal monthlyFee, BigDecimal dueAmount) {
@@ -302,7 +318,7 @@ public class MessageServiceImpl implements MessageService {
 
         String messageText;
 
-        if(dueAmount != null){
+        if (dueAmount != null) {
             messageText = "You have new monthly fee for " + month + " " + year + " for the amount of " +
                     monthlyFee + "лв. for property № " + property.getNumber() + "." +
                     "\n" +

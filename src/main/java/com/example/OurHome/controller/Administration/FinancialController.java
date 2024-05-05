@@ -44,13 +44,13 @@ public class FinancialController {
      *
      * @param id Residential entity Id
      */
-    @GetMapping("/administration/financial/{id}")
+    @GetMapping("/administration/financial/expenses/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityFinancials(@PathVariable("id") Long id) {
 
         ExpenseFilterBindingModel expenseFilter = financialService.createDefaultExpenseFilter(getResidentialEntity(id));
 
-        return new ModelAndView("administration-financial")
+        return new ModelAndView("administration-financial-expenses")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("expenseFilterBindingModel", expenseFilter);
@@ -61,14 +61,14 @@ public class FinancialController {
      *
      * @param id Residential entity Id
      */
-    @PostMapping("/administration/financial/{id}")
+    @PostMapping("/administration/financial/expenses/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityFinancials(@PathVariable("id") Long id,
                                                     @Valid ExpenseFilterBindingModel expenseFilter,
                                                     BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-financial")
+            return new ModelAndView("administration-financial-expenses")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("residentialEntity", getResidentialEntity(id))
                     .addObject("expenseFilterBindingModel", expenseFilter);
@@ -77,7 +77,7 @@ public class FinancialController {
         expenseFilter = financialService.createCustomExpenseFilter(expenseFilter.getPeriodStart(),
                 expenseFilter.getPeriodEnd(), getResidentialEntity(id));
 
-        return new ModelAndView("administration-financial")
+        return new ModelAndView("administration-financial-expenses")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("expenseFilterBindingModel", expenseFilter);
@@ -88,7 +88,7 @@ public class FinancialController {
      *
      * @param id Residential entity Id
      */
-    @GetMapping("/administration/financial/add/{id}")
+    @GetMapping("/administration/financial/expenses/add/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView addExpense(@PathVariable("id") Long id) {
 
@@ -105,7 +105,7 @@ public class FinancialController {
      * @param id Residential entity id
      *           POST
      */
-    @PostMapping("/administration/financial/add/{id}")
+    @PostMapping("/administration/financial/expenses/add/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView addExpense(@PathVariable("id") Long id,
                                    @Valid ExpenseAddBindingModel expenseAddBindingModel,
@@ -119,7 +119,7 @@ public class FinancialController {
 
         financialService.createExpense(getResidentialEntity(id), expenseAddBindingModel);
 
-        return new ModelAndView("redirect:/administration/financial/" + id);
+        return new ModelAndView("redirect:/administration/financial/expenses/" + id);
     }
 
     /**
@@ -127,7 +127,7 @@ public class FinancialController {
      *
      * @param id Residential entity Id
      */
-    @GetMapping("/administration/financial/edit/{id}")
+    @GetMapping("/administration/financial/expenses/edit/{id}")
     @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
     public ModelAndView editExpense(@PathVariable("id") Long id) {
 
@@ -146,7 +146,7 @@ public class FinancialController {
      * @param id Residential entity id
      *           POST
      */
-    @PostMapping("/administration/financial/edit/{id}")
+    @PostMapping("/administration/financial/expenses/edit/{id}")
     @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
     public ModelAndView editExpense(@PathVariable("id") Long id,
                                     @Valid ExpenseEditBindingModel expenseEditBindingModel,
@@ -161,7 +161,7 @@ public class FinancialController {
         Expense expense = financialService.findById(id);
         financialService.editExpense(expenseEditBindingModel, expense);
 
-        return new ModelAndView("redirect:/administration/financial/" + expense.getResidentialEntity().getId());
+        return new ModelAndView("redirect:/administration/financial/expenses/" + expense.getResidentialEntity().getId());
     }
 
     /**
@@ -170,7 +170,7 @@ public class FinancialController {
      * @param id Residential entity id
      *           POST
      */
-    @PostMapping("/administration/financial/delete/{id}")
+    @PostMapping("/administration/financial/expenses/delete/{id}")
     @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
     public ModelAndView deleteExpense(@PathVariable("id") Long id) {
 
@@ -178,7 +178,7 @@ public class FinancialController {
         Long entityId = expense.getResidentialEntity().getId();
         financialService.deleteExpense(expense);
 
-        return new ModelAndView("redirect:/administration/financial/" + entityId);
+        return new ModelAndView("redirect:/administration/financial/expenses/" + entityId);
     }
 
     /**
@@ -186,7 +186,7 @@ public class FinancialController {
      *
      * @param id Residential Expense id
      */
-    @GetMapping("/administration/financial/details/{id}")
+    @GetMapping("/administration/financial/expenses/details/{id}")
     @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
     public ModelAndView expenseDetails(@PathVariable("id") Long id) {
 
@@ -257,8 +257,23 @@ public class FinancialController {
             modelAndView.addObject("deleteError", "No document associated with this expense!");
         }
 
-        return new ModelAndView("redirect:/administration/financial/details/ " + expense.getId());
+        return new ModelAndView("redirect:/administration/financial/expenses/details/ " + expense.getId());
     }
+
+    /**
+     * Administration -> Financial -> Toggle expense visibility
+     *
+     * @param id Residential Expense id
+     */
+    @PostMapping("/administration/financial/expenses/changeExpensesVisibility/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView changeExpensesVisibility(@PathVariable("id") Long id) {
+
+        residentialEntityService.changeExpensesVisibility(id);
+
+        return new ModelAndView("redirect:/administration/financial/expenses/" + id + "#fees");
+    }
+
 
     /**
      * View residential entity expense doc by property owner (member of this Residential entity)
@@ -267,7 +282,7 @@ public class FinancialController {
      * @param id expense id
      * @return expense-document
      */
-    @GetMapping("/financial/details/{id}")
+    @GetMapping("/expenses/details/{id}")
     @PreAuthorize("@securityService.checkExpenseUserAccess(#id, authentication)")
     public ModelAndView residentialEntityExpenseDetails(@PathVariable("id") Long id) {
 
@@ -292,6 +307,20 @@ public class FinancialController {
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("incomesBindingModel", incomesBindingModel);
+    }
+
+    /**
+     * Administration -> Financial -> Toggle incomes visibility
+     *
+     * @param id Residential Expense id
+     */
+    @PostMapping("/administration/financial/changeIncomesVisibility/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView changeIncomesVisibility(@PathVariable("id") Long id) {
+
+        residentialEntityService.changeIncomesVisibility(id);
+
+        return new ModelAndView("redirect:/administration/financial/incomes/" + id + "#fees");
     }
 
     /**

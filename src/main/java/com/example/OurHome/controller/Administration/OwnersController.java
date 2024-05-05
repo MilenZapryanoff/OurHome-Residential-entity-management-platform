@@ -2,6 +2,7 @@ package com.example.OurHome.controller.Administration;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyManageBindingModel;
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentManageBindingModel;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.PropertyService;
@@ -45,6 +46,70 @@ public class OwnersController {
     }
 
     /**
+     * Owners details in Administration
+     *
+     * @param id property id
+     * @return view administration- pending owner registrations
+     */
+    @GetMapping("/administration/owners/pending/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityPendingOwnerRegistrations(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
+                                                                   @PathVariable("id") Long id) {
+
+        return new ModelAndView("administration-owners-pending")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
+    }
+
+    /**
+     * Property details in Administration
+     *
+     * @param id property id
+     * @return view administration- rejected properties
+     */
+    @GetMapping("/administration/owners/rejected/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityRejectedOwnerRegistrations(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
+                                                                    @PathVariable("id") Long id) {
+
+        return new ModelAndView("administration-owners-rejected")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
+    }
+
+    /**
+     * Owner registration approve
+     *
+     * @param propertyManageBindingModel carries information about the entityId
+     * @param id                         property id
+     * @return "redirect:/administration/owners/{entityId}"
+     */
+    @PostMapping("/administration/owners/approve/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityPropertyApprove(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
+
+        propertyService.approveProperty(id, true);
+
+        return new ModelAndView("redirect:/administration/owners/pending/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
+    }
+
+    /**
+     * Owner registration reject
+     *
+     * @param propertyManageBindingModel carries information about the entityId
+     * @param id                         property id
+     * @return "redirect:/administration/property/{entityId}"
+     */
+    @PostMapping("/administration/owners/reject/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityPropertyReject(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
+
+        propertyService.rejectProperty(id);
+
+        return new ModelAndView("redirect:/administration/owners/pending/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
+    }
+
+    /**
      * Handles role change requests in RE
      *
      * @param residentManageBindingModel carries information about the RE id
@@ -79,16 +144,36 @@ public class OwnersController {
     @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
     public ModelAndView deleteResident(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
 
+        ResidentialEntity residentialEntity = getResidentialEntity(residentManageBindingModel.getEntityId());
+
         //remove user form RE
-        userService.removeResidentFromResidentialEntity(id, getResidentialEntity(residentManageBindingModel.getEntityId()));
-        //delete user's properties in this RE
-        propertyService.deletePropertiesWhenResidentRemoved(id, residentManageBindingModel.getEntityId());
+        userService.removeResidentFromResidentialEntity(id, residentialEntity);
+        //unlink properties from user
+        propertyService.unlinkAllPropertiesFromOwner(id, residentialEntity);
 
         return new ModelAndView("administration-owners")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()))
                 .addObject("residentRemoved", true);
     }
+
+    /**
+     * Unlink property owner
+     *
+     * @param propertyManageBindingModel carries information about the entityId
+     * @param id                         property id
+     * @return "redirect:/administration/property/{entityId}"
+     */
+    @PostMapping("/administration/owners/property/unlink/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView unlinkPropertyOwner(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
+
+        boolean rejected = propertyService.findPropertyById(id).isRejected();
+        propertyService.unlinkOwner(id, true);
+
+        return new ModelAndView("redirect:/administration/owners/rejected/" + propertyManageBindingModel.getEntityId() + "#rejected-registration");
+    }
+
 
     /**
      * Method returns currently logged user

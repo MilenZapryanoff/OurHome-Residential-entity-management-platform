@@ -108,7 +108,7 @@
 
             <div th:if="${residentRemoved}" class="success-msg">
                 <h5 class="text-white">Resident successfully removed from this Residential entity!</h5>
-                <p class="text-white">Please note, that resident's properties are also removed!</p>
+                <p class="text-white">User's properties ownership has been updated!</p>
             </div>
         </div>
     </div>
@@ -117,7 +117,7 @@
 
 <div class="container">
     <!--start of Sub-menu-->
-    <div class="single-property section" id="post-action-nav" style="padding-bottom: 70px">
+    <div class="single-property section" id="post-action-nav">
         <div class="tabs-content">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -130,7 +130,7 @@
                 <li class="nav-item">
                     <div class="button">
                         <a class="nav-link active"
-                           th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
+                           href="#">
                             <h5 class="text-danger">Owners</h5>
                             <p class="text-secondary">data & management</p></a>
                     </div>
@@ -138,7 +138,7 @@
                 <li class="nav-item">
                     <div class="button">
                         <a class="nav-link"
-                           th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                           th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
                             <h5>Properties</h5>
                             <p class="text-secondary">data & management</p></a>
                     </div>
@@ -153,7 +153,7 @@
                 <li class="nav-item">
                     <div class="button">
                         <a class="nav-link"
-                           th:href="@{/administration/financial/{id}(id=${residentialEntity.getId()})}">
+                           th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
                             <h5>Financial</h5>
                             <p class="text-secondary">reports & management</p></a>
                     </div>
@@ -169,6 +169,52 @@
         </div>
     </div>
 
+    <!--Sub-menu buttons-->
+    <div class="section-contact" id="property-post-nav">
+        <div class="section administration">
+            <div class="tabs-content row">
+                <ul class="nav nav-tabs" style="gap: 10px; justify-content: center">
+                    <li class="nav-item">
+                        <div class="button" id="active-registrations">
+                            <a class="nav-link active"
+                               href=#active-registrations>
+                                <div class="text-light"><i class="fa-solid fa-user-check"></i> Owners
+                                    <sup th:if="${residentialEntity.getResidents().size()} > 0"
+                                         th:text="'  '+ ${residentialEntity.getResidents().size()}">
+                                    </sup>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="button">
+                            <a class="nav-link"
+                               th:href="@{/administration/owners/pending/{id}(id=${residentialEntity.getId()})}">
+                                <div class="text-light"><i class="fa-solid fa-hourglass-half"></i> Pending requests
+                                    <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
+                                         th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
+                                    </sup>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="button">
+                            <a class="nav-link"
+                               th:href="@{/administration/owners/rejected/{id}(id=${residentialEntity.getId()})}">
+                                <div class="text-light"><i class="fa-solid fa-ban"></i> Rejected requests
+                                    <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                         th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
+                                    </sup>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="administration">
         <div class="info-table">
             <!--Start of heading-->
@@ -178,7 +224,7 @@
             <!--Start of counter-->
             <div class="tabs-content">
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="Properties" role="tabpanel"
+                    <div class="tab-pane fade show active" id="owners" role="tabpanel"
                          aria-labelledby="properties-tab-tab">
                         <div class="row">
                             <div class="main-content">
@@ -198,9 +244,9 @@
             </div>
 
             <!--Start of table-->
-            <p th:if="${residentialEntity.getResidents().size()} == 0" class="text-center">No residents available</p>
-            <table id="owners-table" th:if="${residentialEntity.getResidents().size()} > 0">
-                <tr class="text-center">
+            <p th:if="${residentialEntity.getResidents().size()} == 0" class="text-center">No registered residents</p>
+            <table class="text-center" style="display: flex" th:if="${residentialEntity.getResidents().size()} > 0">
+                <tr>
                     <th>
                         <p>Property №</p>
                     </th>
@@ -231,11 +277,11 @@
                 </tr>
                 <tr class="text-center"
                     th:each="resident : ${residentialEntity.getResidents()}">
-                    <td th:if="${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId()).size() > 0}">
-                        <p th:each="property : ${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId())}"
+                    <td th:if="${@propertyRepository.findAllUserObtainedProperties(resident.getId(), residentialEntity.getId()).size() > 0}">
+                        <p th:each="property : ${@propertyRepository.findAllUserObtainedProperties(resident.getId(), residentialEntity.getId())}"
                            th:text="'№'+ ${property.getNumber()}"></p>
                     </td>
-                    <td th:if="${@propertyRepository.findAllUserProperties(resident.getId(), residentialEntity.getId()).size() == 0}">
+                    <td th:if="${@propertyRepository.findAllUserObtainedProperties(resident.getId(), residentialEntity.getId()).size() == 0}">
                         <img title="No registered property"
                              src="/images/attention.png" style="width: 111px;"
                              alt="No registered property">

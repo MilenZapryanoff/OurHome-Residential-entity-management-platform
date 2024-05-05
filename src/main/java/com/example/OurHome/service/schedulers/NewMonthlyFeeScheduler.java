@@ -27,12 +27,14 @@ public class NewMonthlyFeeScheduler {
     public void newMonthlyFee() {
 
         List<Property> allProperties = propertyService.findAllProperties();
+
         if (!allProperties.isEmpty()) {
-            for (Property property : allProperties) {
-                if (property.isValidated() && !property.isRejected() && property.isAutoFee()) {
+
+            allProperties.forEach(property -> {
+                if (property.isValidated() && property.isAutoFee()) {
                     propertyFeeService.createPeriodicalMonthlyFee(property);
                 }
-            }
+            });
         }
     }
 }

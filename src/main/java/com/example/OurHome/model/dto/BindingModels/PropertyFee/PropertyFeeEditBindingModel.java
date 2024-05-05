@@ -36,7 +36,7 @@ public class PropertyFeeEditBindingModel {
 
     private boolean isPaid;
 
-    @Size(max = 40, message = "Description must not be longer than 45 symbols")
+    @Size(max = 45, message = "Description must not be longer than 45 symbols")
     private String description;
 
     private Long propertyId;

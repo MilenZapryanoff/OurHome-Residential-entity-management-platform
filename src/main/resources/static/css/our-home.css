@@ -2047,7 +2047,7 @@ SLIDER SWITCH
 }
 
 input:checked + .slider {
-    background-color: #198754;
+    background-color: #DC3545;
 }
 
 input:checked + .slider:before {
@@ -2064,7 +2064,6 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
-
 
 th {
     padding: 0 10px;
@@ -2152,13 +2151,9 @@ td img:hover {
 }
 
 table {
-    width: 100%;
     table-layout: fixed;
-}
-
-#owners-table {
     overflow: auto;
-    display: flex;
+    max-width: 96% ;
 }
 
 .center-form {
@@ -2193,6 +2188,10 @@ table {
     transition: 1s;
     background-color: rgb(33, 135, 84);
 
+}
+
+.gray-field {
+    background-color: rgba(234, 234, 234, 0.67);
 }
 
 /*
@@ -2483,6 +2482,22 @@ Delete button styles and animation
     }
 }
 
+.table-button {
+    transition: 1s;
+}
+
+.table-button:hover {
+    color: #DC3545;
+    transition: 0.3s;
+}
+
+.help {
+    cursor: help;
+}
+
+.warning {
+    color: rgb(245, 191, 14);
+}
 
 /*
 ---------------------------------------------
@@ -2631,6 +2646,10 @@ body {
 
     .properties .item {
         max-width: 450px;
+    }
+
+    #properties-list, #property-types-table {
+        display: flex;
     }
 }
 

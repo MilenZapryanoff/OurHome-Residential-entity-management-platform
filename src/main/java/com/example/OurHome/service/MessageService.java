@@ -14,6 +14,8 @@ public interface MessageService {
 
     void newModeratorMessage(UserEntity userEntity, ResidentialEntity residentialEntity);
 
+    void propertyPendingRegistrationMessageToManager(ResidentialEntity residentialEntity);
+
     void propertyRegistrationMessageToManager(ResidentialEntity residentialEntity);
 
     void propertyModificationMessageToManager(Property property);

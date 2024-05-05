@@ -39,7 +39,8 @@ public class PropertyTypeServiceImpl implements PropertyTypeService {
     /**
      * Property type add method.
      * Performed by Residential entity MANAGER.
-     * @param id                           property type id
+     *
+     * @param id                          property type id
      * @param propertyTypeAddBindingModel data input from user (manager)
      */
     @Override
@@ -98,13 +99,12 @@ public class PropertyTypeServiceImpl implements PropertyTypeService {
     public void deletePropertyType(Long id) {
 
         PropertyType propertyType = propertyTypeRepository.findById(id).orElse(null);
+
         List<Property> properties = propertyService.findAllPropertiesByPropertyType(propertyType);
 
         if (!properties.isEmpty()) {
-            for (Property property : properties) {
-                property.setPropertyType(null);
-                propertyRepository.save(property);
-            }
+            properties.forEach(property -> property.setPropertyType(null));
+            propertyRepository.saveAll(properties);
         }
 
         assert propertyType != null;
@@ -134,21 +134,21 @@ public class PropertyTypeServiceImpl implements PropertyTypeService {
      * of all properties in the RE
      * Method used when changes to property type is edited or deleted.
      *
-     * @param residentialEntity     RE entity
+     * @param residentialEntity RE entity
      */
     private void recalculatePropertyFeeComponents(ResidentialEntity residentialEntity) {
 
         List<Property> allPropertiesByResidentialEntity = propertyRepository.findAllPropertiesByResidentialEntity(residentialEntity.getId());
-        for (Property property : allPropertiesByResidentialEntity) {
 
+        allPropertiesByResidentialEntity.forEach(property -> {
             BigDecimal fundRepairComponent = feeService.calculateFundRepair(property.getResidentialEntity(), property);
             BigDecimal fundMmComponent = feeService.calculateFundMm(property.getResidentialEntity(), property);
 
             property.setMonthlyFeeFundRepair(fundRepairComponent);
             property.setMonthlyFeeFundMm(fundMmComponent);
             property.setTotalMonthlyFee(fundMmComponent.add(fundRepairComponent).add(property.getAdditionalPropertyFee()));
+        });
 
-            propertyRepository.save(property);
-        }
+        propertyRepository.saveAll(allPropertiesByResidentialEntity);
     }
 }

@@ -124,7 +124,7 @@
         <div th:each="property: ${userViewModel.getProperties()}">
 
             <!--Active registration-->
-            <div th:if="${property.isValidated()}" class="item">
+            <div th:if="${property.isObtained()}" class="item">
                 <a th:href="@{/property/summary/{id}(id=${property.getId()})}"><img
                         src="/images/property-plan.jpg" alt="View details" title="View details"></a>
                 <span class="category text-bg-success text-light">Validated!</span>
@@ -156,7 +156,7 @@
             </div>
 
             <!--Property rejected-->
-            <div th:if="${!property.isValidated()} and ${property.isRejected()}" class="item">
+            <div th:if="${!property.isObtained()} and ${property.isRejected()}" class="item">
                 <a th:href="@{/property/summary/{id}(id=${property.getId()})}"><img
                         src="/images/property-plan-X.jpg" alt=""></a>
                 <span class="category text-danger">Rejected<!doctype html>
@@ -190,7 +190,7 @@
             </div>
 
             <!--Pending registration-->
-            <div th:if="${!property.isValidated()} and ${!property.isRejected()}" class="item">
+            <div th:if="${!property.isObtained()} and ${!property.isRejected()}" class="item">
                 <a th:href="@{/property/summary/{id}(id=${property.getId()})}"><img
                         src="/images/property-plan-BW.jpg" alt="View details" title="View details"></a>
                 <span class="category text-bg-secondary">Waiting for validation<!doctype html></span>

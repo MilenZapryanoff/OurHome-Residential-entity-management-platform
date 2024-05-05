@@ -244,7 +244,7 @@ class PropertyFeeServiceImplTestIT {
     private Property createTestProperty() {
         Property property = new Property();
         property.setFloor(String.valueOf(1));
-        property.setNumber(String.valueOf(1));
+        property.setNumber(1);
         property.setNumberOfAdults(2);
         property.setNumberOfChildren(2);
         property.setNumberOfPets(2);

@@ -15,12 +15,11 @@ public interface ResidentialEntityService {
 
     void removeResidentialEntity(Long id);
 
-    boolean checkIfResidentialEntityDeletable(Long id);
+    boolean checkIfUserIsResidentialEntityModerator(Long residentialEntityId, Long residentId);
 
     boolean accessCodesMatchCheck(String accessCode, String confirmAccessCode);
 
     Optional<ResidentialEntity> findResidentialEntityById(Long id);
-
 
     void editResidentialEntity(Long entityId, ResidentialEntityEditBindingModel residentialEntityEditBindingModel);
 
@@ -33,4 +32,10 @@ public interface ResidentialEntityService {
     void addPaymentAmountToIncomes(PropertyFee propertyFee, Property property);
 
     void reversePaymentAmountFromIncomes(PropertyFee propertyFee, Property property);
+
+    void changeExpensesVisibility(Long id);
+
+    void changeIncomesVisibility(Long id);
+
+    boolean checkIfResidentialEntityDeletable(Long id);
 }

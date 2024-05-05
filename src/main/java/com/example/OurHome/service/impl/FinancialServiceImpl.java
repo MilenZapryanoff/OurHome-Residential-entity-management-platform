@@ -1,7 +1,6 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Expense;
-import com.example.OurHome.model.Entity.PropertyFee;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseEditBindingModel;
@@ -82,7 +81,15 @@ public class FinancialServiceImpl implements FinancialService {
      */
     @Override
     public void editExpense(ExpenseEditBindingModel expenseEditBindingModel, Expense expense) {
+
+        String picturePath = expense.getPicturePath();
         modelMapper.map(expenseEditBindingModel, expense);
+
+        //set picturePath again if already set before change
+        if (picturePath != null) {
+            expense.setPicturePath(picturePath);
+        }
+
         financialRepository.save(expense);
     }
 

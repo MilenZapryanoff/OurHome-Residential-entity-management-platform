@@ -67,11 +67,11 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             newPropertyFee.setFundRepairAmount(BigDecimal.ZERO);
             newPropertyFee.setFundMmAmount(BigDecimal.ZERO);
             newPropertyFee.setDueAmount(BigDecimal.ZERO);
-            newPropertyFee.setPaid(true);
             newPropertyFee.setPeriodStart(now.withDayOfMonth(1));
             newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
             newPropertyFee.setProperty(propertyApprovalEvent.getProperty());
             newPropertyFee.setDescription("Modify this record if old duties available");
+            newPropertyFee.setNonFinancial(true);
             newPropertyFee.setOverpaidAmountStart(BigDecimal.ZERO);
             newPropertyFee.setOverpaidAmountEnd(BigDecimal.ZERO);
             propertyFeeRepository.save(newPropertyFee);
@@ -160,6 +160,11 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
                     residentialEntityService.addPaymentAmountToIncomes(propertyFee, propertyFee.getProperty());
                     propertyFee.setPaid(true);
                 }
+            }
+
+            //if editing a non-financial fee and amount is changed the propertyFee is switched to financial fee.
+            if (totalFeeAmount.compareTo(BigDecimal.ZERO) > 0) {
+                propertyFee.setNonFinancial(false);
             }
 
             propertyFee.setDescription(propertyFeeEditBindingModel.getDescription());
@@ -277,8 +282,8 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     /**
      * Private Method for setting propertyFee params when adding new global or individual fee.
      *
-     * @param property        property fee id
-     * @param propertyFee     new PropertyFee
+     * @param property    property fee id
+     * @param propertyFee new PropertyFee
      */
     private void setNewPropertyFee(Property property, PropertyFee propertyFee) {
         BigDecimal fundMmAmount = propertyFee.getFundMmAmount();

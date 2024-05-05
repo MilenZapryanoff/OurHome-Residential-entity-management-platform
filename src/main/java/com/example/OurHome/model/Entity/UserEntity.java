@@ -56,12 +56,14 @@ public class UserEntity {
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Property> properties;
 
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<PropertyRequest> propertyRequests;
+
     @OneToMany(mappedBy = "receiver", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Message> receivedMessages;
 
     @OneToMany(mappedBy = "sender", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Message> sentMessages;
-
 
     public UserEntity() {
         properties = new ArrayList<>();
@@ -69,6 +71,7 @@ public class UserEntity {
         sentMessages = new ArrayList<>();
         residentialEntities = new ArrayList<>();
         moderatedResidentialEntities = new ArrayList<>();
+        propertyRequests = new ArrayList<>();
     }
 
     public Long getId() {
@@ -198,5 +201,13 @@ public class UserEntity {
 
     public void setAvatarPath(String avatarPath) {
         this.avatarPath = avatarPath;
+    }
+
+    public List<PropertyRequest> getPropertyRequests() {
+        return propertyRequests;
+    }
+
+    public void setPropertyRequests(List<PropertyRequest> propertyRequests) {
+        this.propertyRequests = propertyRequests;
     }
 }

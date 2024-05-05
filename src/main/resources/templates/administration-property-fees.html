@@ -117,13 +117,12 @@
         <!--Property fee section details data-->
         <div class="administration monthly-fee-details">
             <div class="info-table col-lg-10" style="margin: 0 auto">
-                <h4 id="overpayment-post-nav" class="category text-danger text-center"> PROPERTY FEE
-                    DETAILS</h4>
+                <h4 id="overpayment-post-nav" class="category text-danger text-center"> PROPERTY FEE DETAILS</h4>
                 <ul>
                     <li style="padding: 5px 0; margin: 0"
-                        th:if="${property.isValidated()} and ${!property.isRejected()}"
+                        th:if="${property.isValidated()}"
                         class="text-black"><b>Monthly fee:</b>
-                        <form id="autofee"
+                        <form id="autoFee"
                               th:action="@{/administration/fees/changeAutoFeeSlider/{id}(id=${property.getId()})}"
                               method="POST">
                             <fieldset>
@@ -148,17 +147,17 @@
                                 on or manually add a fee.</p>
                         </div>
                     </li>
-                    <li th:if="${!property.isValidated()} or ${property.isRejected()}"
+                    <li th:if="${!property.isValidated()}"
                         class="text-secondary" style="padding: 10px 0; margin: 0">Monthly fee:
                         <div class="switch-inactive">
-                            <a th:href="@{/administration/property/{id} (id=${property.getResidentialEntity().getId()})}">
+                            <a>
                                 <div class="switch">
                                     <p class="slider round"></p>
                                 </div>
                             </a>
                         </div>
-                        <p class="text-secondary">Monthly fee is not available for this property!
-                            Please check property status!<br></p>
+                        <p class="text-secondary">Automatic monthly fee is not available at this moment!
+                            <br>Please check property status!<br></p>
                     </li>
                     <li style="padding: 5px 0; margin: 0">
                         <b class="text-dark">Monthly fee amount:</b>
@@ -171,7 +170,7 @@
 
                         <div th:if="${property.getTotalMonthlyFee() > 0}" class="accordion-item">
                             <div class="accordion-header" id="headingTwo">
-                                <button onclick="feeComponentArrowChange()" class="accordion-button collapsed"
+                                <button onclick="feeComponentMagnifierChange()" class="accordion-button collapsed"
                                         type="button"
                                         data-bs-toggle="collapse"
                                         data-bs-target="#collapseTwo"
@@ -492,20 +491,20 @@
                         </form>
                     </div>
                 </div>
-                <table class="text-center">
+                <table class="table text-center" style="max-width: 100%;">
                     <tr>
-                        <th class="text-secondary">Fee ID</th>
-                        <th class="text-secondary">Fee amt.</th>
-                        <th class="text-secondary">Overpaid amt.</th>
-                        <th class="text-secondary">Overpaid amt. left</th>
-                        <th class="text-secondary">DUE amt.</th>
-                        <th class="text-secondary">Start period</th>
-                        <th class="text-secondary">End period</th>
-                        <th class="text-secondary">Description</th>
-                        <th class="table-image text-secondary">Paid</th>
-                        <th class="table-image text-secondary">Manually created</th>
-                        <th class="table-image text-secondary">Edit</th>
-                        <th class="table-image text-secondary">Delete</th>
+                        <th><p>Fee ID</p></th>
+                        <th><p style="min-width: 80px;">Fee amt.</p></th>
+                        <th><p>Overpaid amt.</p></th>
+                        <th><p>Overpaid amt. left</p></th>
+                        <th><p style="min-width: 80px;">DUE amt.</p></th>
+                        <th><p>Start period</p></th>
+                        <th><p>End period</p></th>
+                        <th><p>Description</p></th>
+                        <th><p>Paid</p></th>
+                        <th><p>Manually created</p></th>
+                        <th><p>Edit</p></th>
+                        <th><p>Delete</p></th>
                     </tr>
                     <tr th:each="propertyFee: ${@propertyFeeRepository.findAllFees(property.getId())}">
                         <td>
@@ -529,12 +528,12 @@
                         </td>
                         <td>
                             <p class="text-danger due-amount-field"
-                               th:if="${!propertyFee.isPaid() and propertyFee.getDueAmount() > 0 }"
+                               th:if="${!propertyFee.isPaid() and propertyFee.getDueAmount() > 0}"
                                th:text="${propertyFee.getDueAmount()} + ' лв.'">
                             <p class="due-amount-field"
-                               th:if="${!propertyFee.isPaid() and propertyFee.getOverpaidAmountStart() >= propertyFee.getFeeAmount()}"
+                               th:if="${!propertyFee.isPaid() and propertyFee.getOverpaidAmountStart() >= propertyFee.getFeeAmount() and !propertyFee.nonFinancial }"
                                th:text="'0.00 лв.'">
-                            <p th:if="${propertyFee.isPaid()}"
+                            <p th:if="${propertyFee.isPaid() or propertyFee.nonFinancial}"
                                th:text="'0.00 лв.'">
 
                         </td>
@@ -602,15 +601,9 @@
                         </td>
                         <td th:if="${propertyFee.getOverpaidAmountStart() <= 0} and ${propertyFee.isPaid()}" class="table-image">
                             <img title="Paid fee cannot be edited!"
-                                 src="/images/forbidden_edit.jpg"
+                                 src="/images/edit_inactive.png"
                                  alt="Paid fee cannot be edited!">
                         </td>
-
-
-
-
-
-
 
                         <td class="table-image">
                             <form class="form-container"
@@ -656,7 +649,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/confirm.js"></script>
-<script src="/js/arrow-change.js"></script>
+<script src="/js/magnifier-change.js"></script>
 <script src="/js/delete-button.js"></script>
 
 </body>

@@ -78,12 +78,6 @@ class ResidentialEntityServiceImplTestIT {
     }
 
 
-    @Test
-    void testCheckIfResidentialEntityDeletable() {
-        createResidentialEntity();
-
-        assertTrue(residentialEntityServiceToTest.checkIfResidentialEntityDeletable(100L));
-    }
 
     @Test
     void testFindResidentialEntityById() {

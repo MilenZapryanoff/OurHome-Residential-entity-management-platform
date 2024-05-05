@@ -120,7 +120,7 @@ class PropertyServiceImplTestIT {
         createTestProperty();
 
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
-        propertyEditBindingModel.setNumber(String.valueOf(2));
+        propertyEditBindingModel.setNumber(2);
 
         Long id = null;
         List<Property> all = propertyRepository.findAll();
@@ -229,7 +229,7 @@ class PropertyServiceImplTestIT {
 
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
         propertyEditBindingModel.setFloor(String.valueOf(1));
-        propertyEditBindingModel.setNumber(String.valueOf(1));
+        propertyEditBindingModel.setNumber(1);
         propertyEditBindingModel.setNumberOfAdults(2);
         propertyEditBindingModel.setNumberOfChildren(2);
         propertyEditBindingModel.setNumberOfPets(2);
@@ -254,7 +254,7 @@ class PropertyServiceImplTestIT {
 
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
         propertyEditBindingModel.setFloor(String.valueOf(10));
-        propertyEditBindingModel.setNumber(String.valueOf(10));
+        propertyEditBindingModel.setNumber(10);
         propertyEditBindingModel.setNumberOfAdults(20);
         propertyEditBindingModel.setNumberOfChildren(20);
         propertyEditBindingModel.setNumberOfPets(20);
@@ -290,7 +290,7 @@ class PropertyServiceImplTestIT {
 
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
         propertyEditBindingModel.setFloor(String.valueOf(10));
-        propertyEditBindingModel.setNumber(String.valueOf(10));
+        propertyEditBindingModel.setNumber(10);
         propertyEditBindingModel.setNumberOfAdults(20);
         propertyEditBindingModel.setNumberOfChildren(20);
         propertyEditBindingModel.setNumberOfPets(20);
@@ -331,7 +331,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        propertyServiceToTest.approveProperty(id);
+        propertyServiceToTest.approveProperty(id, true);
 
         Optional<Property> property = propertyRepository.findById(id);
 
@@ -360,7 +360,7 @@ class PropertyServiceImplTestIT {
 
 
     @Test
-    void testDeletePropertyByManager() {
+    void testUnlinkOwnerByManager() {
         Property testProperty = createTestProperty();
         testProperty.setRejected(false);
         testProperty.setResidentialEntity(createResidentialEntity());
@@ -372,7 +372,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        propertyServiceToTest.deleteProperty(id, true);
+        propertyServiceToTest.unlinkOwner(id, true);
 
         Optional<Property> property = propertyRepository.findById(id);
 
@@ -380,7 +380,7 @@ class PropertyServiceImplTestIT {
     }
 
     @Test
-    void testDeletePropertyByOwner() {
+    void testUnlinkOwnerByOwner() {
         Property testProperty = createTestProperty();
         testProperty.setRejected(false);
         testProperty.setResidentialEntity(createResidentialEntity());
@@ -392,7 +392,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        propertyServiceToTest.deleteProperty(id, false);
+        propertyServiceToTest.unlinkOwner(id, false);
 
         Optional<Property> property = propertyRepository.findById(id);
 
@@ -400,13 +400,13 @@ class PropertyServiceImplTestIT {
     }
 
     @Test
-    void testNewProperty() {
+    void testRequestToObtainProperty() {
         ResidentialEntity residentialEntity = createResidentialEntity();
 
         PropertyRegisterBindingModel propertyRegisterBindingModel =
                 getPropertyRegisterBindingModel(residentialEntity);
 
-        propertyServiceToTest.newProperty(propertyRegisterBindingModel, createTestOwner());
+        propertyServiceToTest.requestToObtainProperty(propertyRegisterBindingModel, createTestOwner());
 
         List<Property> allProperties = propertyRepository.findAll();
         Property property = allProperties.get(0);
@@ -418,7 +418,7 @@ class PropertyServiceImplTestIT {
     private static PropertyRegisterBindingModel getPropertyRegisterBindingModel(ResidentialEntity residentialEntity) {
         PropertyRegisterBindingModel propertyRegisterBindingModel = new PropertyRegisterBindingModel();
         propertyRegisterBindingModel.setResidentialEntity(residentialEntity.getId());
-        propertyRegisterBindingModel.setNumber(String.valueOf(10));
+        propertyRegisterBindingModel.setNumber(10);
         propertyRegisterBindingModel.setFloor(String.valueOf(10));
         propertyRegisterBindingModel.setNumberOfAdults(10);
         propertyRegisterBindingModel.setNumberOfChildren(10);
@@ -430,7 +430,7 @@ class PropertyServiceImplTestIT {
     private Property createTestProperty() {
         Property property = new Property();
         property.setFloor(String.valueOf(1));
-        property.setNumber(String.valueOf(1));
+        property.setNumber(1);
         property.setNumberOfAdults(2);
         property.setNumberOfChildren(2);
         property.setNumberOfPets(2);

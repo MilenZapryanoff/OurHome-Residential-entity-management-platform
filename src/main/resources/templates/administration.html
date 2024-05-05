@@ -108,7 +108,7 @@
 
                 <div th:if="${notDeleted}" class="err-msg">
                     <h5 class="text-white">Record not deleted!</h5>
-                    <p class="text-white">Cannot delete entity with already registered residents!</p>
+                    <p class="text-white">Cannot delete entity with already registered owners!</p>
                 </div>
 
                 <div th:if="${deleted}" class="success-msg">
@@ -130,7 +130,7 @@
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
                         <div class="button">
-                            <a class="nav-link active" th:href="@{/administration}">
+                            <a class="nav-link active" href=#>
                                 <h5 class="text-danger">Summary</h5>
                                 <p class="text-secondary">of residential entity</p></a>
                         </div>
@@ -146,7 +146,7 @@
                     <li class="nav-item">
                         <div class="button">
                             <a class="nav-link"
-                               th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                               th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
                                 <h5>Properties</h5>
                                 <p class="text-secondary">data & management</p></a>
                         </div>
@@ -161,7 +161,7 @@
                     <li class="nav-item">
                         <div class="button">
                             <a class="nav-link"
-                               th:href="@{/administration/financial/{id}(id=${residentialEntity.getId()})}">
+                               th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
                                 <h5>Financial</h5>
                                 <p class="text-secondary">reports & management</p></a>
                         </div>
@@ -194,68 +194,112 @@
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Property registrations:
+                                <span><i class="fa-solid fa-circle-info"></i> Properties setup: </span>
                             </button>
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
                              data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                Every new property registration in your Residential entity requires your approval.<br>
-                                Before validation the user won't be able to access any data of your residential
-                                entity. The data will become visible after successful profile validation.
-                                <hr>
-                                You have
-                                <strong th:if="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId()) > 0}"
-                                        class="timer count-title text-danger"
-                                        th:data-to="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId())}"
-                                        data-speed="1000"></strong>
-                                <strong class="text-success"
-                                        th:if="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId()) == 0}"
-                                >0</strong>
-                                pending validation requests in your Residential entity.
-                                <br>
-                                <a th:if="${@propertyRepository.countNotVerifiedPropertiesByResidentialEntity(residentialEntity.getId()) > 0}"
-                                   th:href="@{/administration/property/pending/{id}(id=${residentialEntity.getId()})}">Validate
-                                    now!</a>
+                            <div class="accordion-body text-dark">
+                                <div th:if="${@propertyRepository.countNotParametrizedPropertiesByResidentialEntity(residentialEntity.getId()) > 0}">
+                                    <p>As a <b>first step</b> in your new Residential entity you should set properties
+                                        data.
+                                        This will allow you to use all platform functionalities.</p>
+                                    <p>You can use link bellow to redirect to properties section where you can find all
+                                        properties of your Residential entity.</p>
+                                    <p>Use "Edit" button to finish setup for every property.</p>
+                                    <hr>
+                                    <p>You have
+                                        <strong class="timer count-title text-danger"
+                                                th:data-to="${@propertyRepository.countNotParametrizedPropertiesByResidentialEntity(residentialEntity.getId())}"
+                                                data-speed="1000"></strong>
+                                        properties that need your attention!
+
+                                    <p>
+                                        <a th:if="${@propertyRepository.countNotParametrizedPropertiesByResidentialEntity(residentialEntity.getId()) > 0}"
+                                           th:href="@{/administration/property/active/{id}#active-registrations(id=${residentialEntity.getId()})}">Set
+                                            up now!</a></p>
+                                </div>
+                                <div th:unless="${@propertyRepository.countNotParametrizedPropertiesByResidentialEntity(residentialEntity.getId()) > 0}">
+                                    <p><i class="fa-solid fa-check text-success"></i> All properties in this Residential
+                                        Entity are configured!</p>
+                                    <p>You have <b th:class="text-success">0</b> properties that need your attention!
+                                    </p>
+                                    <hr>
+
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Owners
+                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseOne">
+                                <span><i class="fa-solid fa-circle-info"></i> Owners registrations: </span>
                             </button>
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                              data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                You can manage the list of <a
-                                    th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">owners</a>
-                                in your residential entity by
-                                giving them
-                                different roles or removing them from the list. Make sure, that every registered
-                                resident belongs
-                                to your residential entity.
+                                <p>To be able to access property data every property owner should obtain his property by
+                                    registering in the platform.
+                                </p>
+                                <p>Owner registration has to be <b>validated</b> by you as a Manager in case of data
+                                    difference between preset property data, and
+                                    input data in owner registration form.</p>
+                                <p>If input data matches preset property data owner registration is auto-validated!</p>
+
+                                <hr>
+                                <p>You have
+                                    <strong th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId()) > 0}"
+                                            class="timer count-title text-danger"
+                                            th:data-to="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}"
+                                            data-speed="1000"></strong>
+                                    <strong class="text-success"
+                                            th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId()) == 0}"
+                                    >0</strong>
+                                    pending validation requests in your Residential entity.
+                                    <br>
+                                    <a th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId()) > 0}"
+                                       th:href="@{/administration/owners/pending/{id}(id=${residentialEntity.getId()})}">Validate
+                                        now!</a>
+                                </p>
                             </div>
                         </div>
                     </div>
-
-
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingThree">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseThree" aria-expanded="false"
-                                    aria-controls="collapseThree">
-                                <a>Delete Residential entity</a>
+                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
+                                <span><i class="fa-solid fa-user-group"></i> Owners</span>
                             </button>
                         </h2>
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
                              data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                Every residential entity could be deleted by its <strong>Manager</strong>.<br>
-                                To be able to delete an entity you have to be sure that there are no residents in this
-                                residential entity.
+                                <p>You can manage the list of <a
+                                        th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">owners</a>
+                                    in your residential entity by giving them different roles or removing them from the
+                                    list.</p>
+                                <p>Make sure, that every registered resident belongs to your residential entity.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseFour" aria-expanded="false"
+                                    aria-controls="collapseThree">
+                                <span><i class="fa-solid fa-trash"></i> Delete Residential entity</span>
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                             data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <p>Every residential entity could be deleted by its <strong>Manager</strong>.<br>
+                                    To be able to delete this Residential entity there should be <b>NO</b> registered
+                                    residents in this
+                                    residential entity. This will prevent any unwanted data loose!</p>
+                                <hr>
                                 <div class="col-lg-2">
                                     <form th:action="@{/administration/remove/{id}(id=${residentialEntity.getId()})}"
                                           method="POST">

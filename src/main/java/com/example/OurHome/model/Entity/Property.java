@@ -14,9 +14,9 @@ public class Property {
     private Long id;
 
     @Column(nullable = false)
-    private String number;
+    private int number;
 
-    @Column(nullable = false)
+    @Column
     private String floor;
 
     @Column
@@ -39,6 +39,9 @@ public class Property {
 
     @Column
     private boolean isValidated;
+
+    @Column
+    private boolean isObtained;
 
     @Column
     private boolean isRejected;
@@ -67,6 +70,9 @@ public class Property {
     @ManyToOne
     private ResidentialEntity residentialEntity;
 
+    @OneToOne
+    private PropertyRequest propertyRequest;
+
     @ManyToOne
     private PropertyType propertyType;
 
@@ -86,11 +92,11 @@ public class Property {
         this.id = id;
     }
 
-    public String getNumber() {
+    public int getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 
@@ -244,5 +250,21 @@ public class Property {
 
     public void setMonthlyFeeFundRepair(BigDecimal monthlyFeeFundRepair) {
         this.monthlyFeeFundRepair = monthlyFeeFundRepair;
+    }
+
+    public boolean isObtained() {
+        return isObtained;
+    }
+
+    public void setObtained(boolean obtained) {
+        isObtained = obtained;
+    }
+
+    public PropertyRequest getPropertyRequest() {
+        return propertyRequest;
+    }
+
+    public void setPropertyRequest(PropertyRequest propertyRequest) {
+        this.propertyRequest = propertyRequest;
     }
 }

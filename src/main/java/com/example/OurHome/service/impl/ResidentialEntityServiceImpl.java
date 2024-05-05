@@ -9,6 +9,7 @@ import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.Residential
 import com.example.OurHome.repo.CityRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
 import com.example.OurHome.service.FeeService;
+import com.example.OurHome.service.PropertyService;
 import com.example.OurHome.service.ResidentialEntityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,13 +28,15 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     private final FeeService feeService;
     private final ResidentialEntityRepository residentialEntityRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PropertyService propertyService;
 
-    public ResidentialEntityServiceImpl(ModelMapper modelMapper, CityRepository cityRepository, FeeService feeService, ResidentialEntityRepository residentialEntityRepository, PasswordEncoder passwordEncoder) {
+    public ResidentialEntityServiceImpl(ModelMapper modelMapper, CityRepository cityRepository, FeeService feeService, ResidentialEntityRepository residentialEntityRepository, PasswordEncoder passwordEncoder, PropertyService propertyService) {
         this.modelMapper = modelMapper;
         this.cityRepository = cityRepository;
         this.feeService = feeService;
         this.residentialEntityRepository = residentialEntityRepository;
         this.passwordEncoder = passwordEncoder;
+        this.propertyService = propertyService;
     }
 
     /**
@@ -51,6 +54,8 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
         newResidentialEntity.setIncomesFundRepair(BigDecimal.ZERO);
         newResidentialEntity.setIncomesTotalAmount(BigDecimal.ZERO);
         newResidentialEntity.setManager(loggedUser);
+        newResidentialEntity.setIncomesVisible(true);
+        newResidentialEntity.setExpensesVisible(true);
         newResidentialEntity.setCity(cityRepository.findByName(residentialEntityRegisterBindingModel.getCity()));
 
         //generating a random 8-digit code user as residentialEntity ID
@@ -64,19 +69,26 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
 
         residentialEntityRepository.save(newResidentialEntity);
 
+        propertyService.createAllProperties(newResidentialEntity);
+
         return residentialEntityRepository.countById(generatedRandomId) != 0;
     }
 
     @Override
     public void removeResidentialEntity(Long id) {
+        ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityById(id);
+
+        List<Property> residentialEntityProperties = residentialEntity.getProperties();
+        propertyService.deleteAllProperties(residentialEntityProperties);
+
         residentialEntityRepository.deleteById(id);
     }
 
-    @Override
-    public boolean checkIfResidentialEntityDeletable(Long id) {
-        ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityById(id);
-        return residentialEntity.getResidents().isEmpty();
+    public boolean checkIfUserIsResidentialEntityModerator(Long residentialEntityId, Long residentId) {
+        Long result = residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntityId, residentId);
+        return result >= 1;
     }
+
 
     @Override
     public boolean accessCodesMatchCheck(String accessCode, String confirmAccessCode) {
@@ -134,7 +146,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
 
     @Override
     public ResidentialEntity findResidentialEntityByPropertyId(Long id) {
-       return residentialEntityRepository.findResidentialEntityByPropertyId(id);
+        return residentialEntityRepository.findResidentialEntityByPropertyId(id);
     }
 
     @Override
@@ -173,6 +185,38 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
                 .subtract(propertyFee.getFundRepairAmount()));
 
         residentialEntityRepository.save(residentialEntity);
+    }
+
+
+    /**
+     * Method for setting expense visibility of Residential Entity. Turning ON or OFF
+     *
+     * @param id Residential Expense id
+     */
+    @Override
+    public void changeExpensesVisibility(Long id) {
+        ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityById(id);
+
+        if (residentialEntity != null) {
+            residentialEntity.setExpensesVisible(!residentialEntity.isExpensesVisible());
+            residentialEntityRepository.save(residentialEntity);
+        }
+    }
+
+    @Override
+    public void changeIncomesVisibility(Long id) {
+        ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityById(id);
+
+        if (residentialEntity != null) {
+            residentialEntity.setIncomesVisible(!residentialEntity.isIncomesVisible());
+            residentialEntityRepository.save(residentialEntity);
+        }
+    }
+
+    @Override
+    public boolean checkIfResidentialEntityDeletable(Long residentialEntityId) {
+        ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityById(residentialEntityId);
+        return residentialEntity.getResidents().isEmpty();
     }
 
     /**

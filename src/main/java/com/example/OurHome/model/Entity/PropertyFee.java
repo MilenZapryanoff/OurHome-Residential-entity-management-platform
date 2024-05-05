@@ -40,6 +40,9 @@ public class PropertyFee {
     private boolean isPaid;
 
     @Column
+    private boolean nonFinancial;
+
+    @Column
     private boolean isManual;
 
     @Column(length = 45)
@@ -150,5 +153,13 @@ public class PropertyFee {
 
     public void setDueAmount(BigDecimal dueAmount) {
         this.dueAmount = dueAmount;
+    }
+
+    public boolean isNonFinancial() {
+        return nonFinancial;
+    }
+
+    public void setNonFinancial(boolean nonFinancial) {
+        this.nonFinancial = nonFinancial;
     }
 }

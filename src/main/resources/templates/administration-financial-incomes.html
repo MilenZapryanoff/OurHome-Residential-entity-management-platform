@@ -128,7 +128,7 @@
                 <li class="nav-item">
                     <div class="button">
                         <a class="nav-link"
-                           th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                           th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
                             <h5>Properties</h5>
                             <p class="text-secondary">data & management</p></a>
                     </div>
@@ -143,7 +143,7 @@
                 <li class="nav-item">
                     <div class="button">
                         <a class="nav-link active"
-                           th:href="@{/administration/financial/{id}(id=${residentialEntity.getId()})}">
+                           href=#>
                             <h5 class="text-danger">Financial</h5>
                             <p class="text-secondary">reports & management</p></a>
                     </div>
@@ -166,8 +166,8 @@
                         <li class="nav-item">
                             <div class="button">
                                 <a class="nav-link"
-                                   th:href="@{/administration/financial/{id}(id=${residentialEntity.getId()})}">
-                                    <div class="text-light">Residential entity Expenses</div>
+                                   th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
+                                    <div class="text-light">Expenses <i class="fa-solid fa-circle-minus"></i></div>
                                 </a>
                             </div>
                         </li>
@@ -175,7 +175,7 @@
                             <div class="button">
                                 <a class="nav-link active"
                                    href=#>
-                                    <div class="text-light">Residential entity Incomes</div>
+                                    <div class="text-light">Incomes <i class="fa-solid fa-circle-plus"></i></div>
                                 </a>
                             </div>
                         </li>
@@ -191,42 +191,55 @@
                       th:method="POST"
                       th:action="@{/administration/financial/incomes/edit/{id}(id=${residentialEntity.getId()})}"
                       th:object="${incomesBindingModel}">
-                <table style="width: 100%">
-                    <tr class="text-center">
-                        <th>
-                            <H5>Residential entity Incomes </H5>
-                        </th>
-                    </tr>
-                    <tr class="text-center">
-                        <td>
-                            <p class="text-secondary">Residential entity incomes amount is the total amount collected by any type of fees.</p>
-                            <fieldset>
-<!--                                <small th:if="${#fields.hasErrors('incomesBindingModel')}"-->
-<!--                                       th:errors="*{incomesAmount}"-->
-<!--                                       class="text-danger">Incomes amount error message</small>-->
-                                <label for="childFee" class="text-secondary"></label>
-                                <input type="number" step="any" class="form-control-sm"
-                                       id="childFee" placeholder="Enter fee..." autocomplete="on" required
-                                       th:field="*{incomesAmount}"
-                                       th:errorclass="bg-danger"
-                                       th:value="${incomesBindingModel.getIncomesAmount()}">
+                    <table style="width: 100%">
+                        <tr class="text-center">
+                            <th>
+                                <H5>Residential entity Incomes </H5>
+                            </th>
+                        </tr>
+                        <tr class="text-center">
+                            <td>
+                                <p class="text-secondary">Residential entity incomes amount is the total amount
+                                    collected by any type of fees.</p>
+                                <fieldset>
+                                    <label for="incomes" class="text-secondary"></label>
+                                    <input type="number" step="any" class="form-control-sm"
+                                           id="incomes" placeholder="Enter fee..." autocomplete="on" required
+                                           th:field="*{incomesAmount}"
+                                           th:errorclass="bg-danger"
+                                           th:value="${incomesBindingModel.getIncomesAmount()}">
 
-                                <div class="col-lg-2" style="margin: 0 auto">
-                                    <fieldset><br>
-                                        <button type="submit" id="form-submit" class="form-control text-bg-danger">
-                                            <small>Edit amount</small>
-                                        </button>
-                                    </fieldset>
 
-                                </div>
-                            </fieldset>
+                                    <div class="col-lg-2" style="margin: 0 auto">
+                                        <fieldset><br>
+                                            <button type="submit" id="form-submit" class="form-control text-bg-danger">
+                                                <small>Edit amount</small>
+                                            </button>
+                                        </fieldset>
 
-                        </td>
-
-                        </td>
-                    </tr>
-                </table>.
+                                    </div>
+                                </fieldset>
+                            </td>
+                        </tr>
+                    </table>
                 </form>
+                <hr>
+                <div class="text-center">
+                    <p>Incomes data visible for residents: </p>
+                    <form id="dataVisible"
+                          th:action="@{/administration/financial/changeIncomesVisibility/{id}(id=${residentialEntity.getId()})}"
+                          method="POST">
+                        <fieldset>
+                            <label class="switch">
+                                <input name="incomesVisibilitySwitch" id="incomesVisibilitySwitch"
+                                       type="checkbox"
+                                       th:checked="${residentialEntity.isIncomesVisible()}"
+                                       onchange="submit()">
+                                <span class="slider round"></span>
+                            </label>
+                        </fieldset>
+                    </form>
+                </div>
             </div>
         </div>
 

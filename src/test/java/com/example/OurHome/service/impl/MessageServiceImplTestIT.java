@@ -341,13 +341,13 @@ class MessageServiceImplTestIT {
     }
 
     @Test
-    void testPropertyRegistrationMessageToManager() {
+    void testPropertyPendingRegistrationMessageToManager() {
         Property property = createTestData();
 
         List<UserEntity> allUsers = userRepository.findAll();
         Long managerId = allUsers.get(0).getId();
 
-        messageServiceToTest.propertyRegistrationMessageToManager(property.getResidentialEntity());
+        messageServiceToTest.propertyPendingRegistrationMessageToManager(property.getResidentialEntity());
 
         List<Message> allMessages = messageRepository.findAll();
 
@@ -410,7 +410,7 @@ class MessageServiceImplTestIT {
         UserEntity owner = createTestOwner();
 
         Property property = new Property();
-        property.setNumber(String.valueOf(1));
+        property.setNumber(1);
         property.setFloor(String.valueOf(1));
         property.setNumberOfAdults(1);
         property.setNumberOfChildren(1);

@@ -110,7 +110,7 @@ class FeeServiceImplTestIT {
         residentialEntity.setFee(createTestFee());
 
         Property property = new Property();
-        property.setNumber(String.valueOf(1));
+        property.setNumber(1);
         property.setFloor(String.valueOf(1));
         property.setNumberOfAdults(1);
         property.setNumberOfChildren(1);

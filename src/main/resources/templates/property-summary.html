@@ -137,9 +137,9 @@
                     </li>
                     <li class="nav-item" role="presentation">
                         <div th:if="${property.isValidated()}" class="buttons">
-                            <a class="nav-link" th:href="@{/property/expenses/{id}(id=${property.getId()})}">
-                                <h5>Expenses</h5>
-                                <p class="text-secondary">of your residential entity</p>
+                            <a class="nav-link" th:href="@{/property/re/data/{id}(id=${property.getId()})}">
+                                <h5>Residential Entity</h5>
+                                <p class="text-secondary">data and reports</p>
                             </a>
                         </div>
                     </li>
@@ -268,6 +268,7 @@
                                                 </svg>
                                             </div>
                                             <div class="text">Delete</div>
+                                        </button>
                                     </form>
                                 </div>
                                 <div th:if="(${property.isValidated()} and ${!property.isRejected()}) or (${!property.isValidated()} and ${property.getPropertyFees().size() > 0})"

@@ -7,6 +7,17 @@ function confirmSendMessage() {
     }
 }
 
+function confirmUnlinkOwner() {
+    const result = confirm("Are you sure you want to remove property owner?\n" +
+        "This action is not reversible!\n" +
+        "Property owner will have to make a new registration request to obtain access of his property data");
+    if (result) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function openCustomDialog(id, message) {
     const dialogTextId = 'customDialogText_' + id;
     const dialogId = 'customDialog_' + id;

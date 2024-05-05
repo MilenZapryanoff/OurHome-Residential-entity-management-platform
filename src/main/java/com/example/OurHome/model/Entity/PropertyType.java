@@ -3,6 +3,7 @@ package com.example.OurHome.model.Entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "property_types")
@@ -25,7 +26,14 @@ public class PropertyType {
     @ManyToOne
     private ResidentialEntity residentialEntity;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "propertyType")
-    private List<Property> property;
+    private List<Property> properties;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "propertyType", cascade = CascadeType.REMOVE)
+    private List<PropertyRequest> propertyRequests;
+
+    public PropertyType() {
+        properties = new ArrayList<>();
+        propertyRequests = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -83,11 +91,19 @@ public class PropertyType {
         this.residentialEntity = residentialEntity;
     }
 
-    public List<Property> getProperty() {
-        return property;
+    public List<Property> getProperties() {
+        return properties;
     }
 
-    public void setProperty(List<Property> property) {
-        this.property = property;
+    public void setProperties(List<Property> property) {
+        this.properties = property;
+    }
+
+    public List<PropertyRequest> getPropertyRequests() {
+        return propertyRequests;
+    }
+
+    public void setPropertyRequests(List<PropertyRequest> propertyRequests) {
+        this.propertyRequests = propertyRequests;
     }
 }

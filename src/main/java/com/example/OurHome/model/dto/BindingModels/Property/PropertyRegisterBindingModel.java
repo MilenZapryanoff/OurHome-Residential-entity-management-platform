@@ -8,7 +8,7 @@ public class PropertyRegisterBindingModel {
 
     @NotNull
     @Positive(message = "Property № must be a positive digit")
-    private String number;
+    private int number;
 
     @NotNull
     @Positive(message = "Floor № must be a positive digit")
@@ -35,12 +35,11 @@ public class PropertyRegisterBindingModel {
 
     private Long propertyType;
 
-
-    public String getNumber() {
+    public int getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 

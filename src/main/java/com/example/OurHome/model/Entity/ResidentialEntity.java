@@ -52,6 +52,12 @@ public class ResidentialEntity {
     @Column(nullable = false)
     private BigDecimal incomesTotalAmount;
 
+    @Column
+    private boolean incomesVisible;
+
+    @Column
+    private boolean expensesVisible;
+
     @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
     private List<Property> properties;
 
@@ -218,4 +224,21 @@ public class ResidentialEntity {
     public void setIncomesFundRepair(BigDecimal incomesFundRepair) {
         this.incomesFundRepair = incomesFundRepair;
     }
+
+    public boolean isIncomesVisible() {
+        return incomesVisible;
+    }
+
+    public void setIncomesVisible(boolean incomesVisible) {
+        this.incomesVisible = incomesVisible;
+    }
+
+    public boolean isExpensesVisible() {
+        return expensesVisible;
+    }
+
+    public void setExpensesVisible(boolean expensesVisible) {
+        this.expensesVisible = expensesVisible;
+    }
+
 }

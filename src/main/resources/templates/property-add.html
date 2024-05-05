@@ -93,8 +93,8 @@
         <h3> Register now </h3>
         <div th:if="${registrationFailed}" class="err-msg">
         <h5 class="text-white">Property registration failed!</h5>
-        <p class="text-white"th:text="'Property №' + ${propertyRegisterBindingModel.getNumber()} + ' is already registered in this Residential entity!'"></p>
-        <p class="text-white">Please contact your Residential entity manager to check property registration.</p>
+        <p class="text-white"th:text="'A problem occured with the registration of Property №' + ${propertyRegisterBindingModel.getNumber()}"></p>
+        <p class="text-white">Please contact your Residential entity manager for further information.</p>
         </div>
     </div>
 </div>

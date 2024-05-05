@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Positive;
 public class PropertyEditBindingModel {
 
     @NotNull
-    private String number;
+    private int number;
     @NotNull
     private String floor;
     @NotNull
@@ -25,11 +25,11 @@ public class PropertyEditBindingModel {
 
     private Long propertyType;
 
-    public String getNumber() {
+    public int getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 

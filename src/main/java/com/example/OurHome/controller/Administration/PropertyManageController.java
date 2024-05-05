@@ -52,90 +52,21 @@ public class PropertyManageController {
     }
 
     /**
-     * Property details in Administration
-     *
-     * @param id property id
-     * @return view administration- pending properties
-     */
-    @GetMapping("/administration/property/pending/{id}")
-    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityPendingProperties(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
-                                                           @PathVariable("id") Long id) {
-
-        return new ModelAndView("administration-property-pending")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("residentialEntity", getResidentialEntity(id));
-    }
-
-    /**
-     * Property details in Administration
-     *
-     * @param id property id
-     * @return view administration- rejected properties
-     */
-    @GetMapping("/administration/property/rejected/{id}")
-    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityRejectedProperties(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
-                                                            @PathVariable("id") Long id) {
-
-        return new ModelAndView("administration-property-rejected")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("residentialEntity", getResidentialEntity(id));
-    }
-
-
-    /**
-     * Property approve
+     * Unlink property owner
      *
      * @param propertyManageBindingModel carries information about the entityId
      * @param id                         property id
      * @return "redirect:/administration/property/{entityId}"
      */
-    @PostMapping("/administration/property/approve/{id}")
+    @PostMapping("/administration/property/unlink/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityPropertyApprove(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
+    public ModelAndView residentialEntityPropertyUnlink(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
-        propertyService.approveProperty(id);
+        propertyService.unlinkOwner(id, true);
 
-        return new ModelAndView("redirect:/administration/property/pending/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
+        return new ModelAndView("redirect:/administration/property/active/" + propertyManageBindingModel.getEntityId() + "#active-registrations");
     }
 
-    /**
-     * Property reject
-     *
-     * @param propertyManageBindingModel carries information about the entityId
-     * @param id                         property id
-     * @return "redirect:/administration/property/{entityId}"
-     */
-    @PostMapping("/administration/property/reject/{id}")
-    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityPropertyReject(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
-
-        propertyService.rejectProperty(id);
-
-        return new ModelAndView("redirect:/administration/property/pending/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
-    }
-
-    /**
-     * Property delete
-     *
-     * @param propertyManageBindingModel carries information about the entityId
-     * @param id                         property id
-     * @return "redirect:/administration/property/{entityId}"
-     */
-    @PostMapping("/administration/property/delete/{id}")
-    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityPropertyDelete(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
-
-        boolean rejected = propertyService.findPropertyById(id).isRejected();
-        propertyService.deleteProperty(id, true);
-
-        if (rejected) {
-            return new ModelAndView("redirect:/administration/property/rejected/" + propertyManageBindingModel.getEntityId() + "#rejected-registrations");
-        } else {
-            return new ModelAndView("redirect:/administration/property/active/" + propertyManageBindingModel.getEntityId() + "#active-registrations");
-        }
-    }
 
     /**
      * Property edit in Residential entity
@@ -188,6 +119,28 @@ public class PropertyManageController {
                     .addObject("editFailed", true);
         }
     }
+
+    /**
+     * Property delete
+     *
+     * @param propertyManageBindingModel carries information about the entityId
+     * @param id                         property id
+     * @return "redirect:/administration/property/{entityId}"
+     */
+    @PostMapping("/administration/property/delete/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityPropertyDelete(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
+
+        boolean rejected = propertyService.findPropertyById(id).isRejected();
+        propertyService.deleteProperty(id, true);
+
+        if (rejected) {
+            return new ModelAndView("redirect:/administration/property/rejected/" + propertyManageBindingModel.getEntityId() + "#rejected-registrations");
+        } else {
+            return new ModelAndView("redirect:/administration/property/active/" + propertyManageBindingModel.getEntityId() + "#active-registrations");
+        }
+    }
+
 
 
     /**

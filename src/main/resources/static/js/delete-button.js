@@ -3,7 +3,7 @@ document.querySelectorAll('.delete-button').forEach(button => {
     text.innerHTML = '<span>' + text.textContent.trim().split('').join('</span><span>') + '</span>';
 
     button.addEventListener('click', e => {
-        if (confirmPropertyFeeDelete()) {
+        if (deleteConfirmed()) {
             if (!button.classList.contains('delete')) {
                 button.classList.add('delete');
                 setTimeout(() => button.classList.remove('delete'), 2400);
@@ -14,6 +14,6 @@ document.querySelectorAll('.delete-button').forEach(button => {
     });
 });
 
-function confirmPropertyFeeDelete() {
+function deleteConfirmed() {
     return confirm("Do you really want to delete this record?");
 }

@@ -2,6 +2,7 @@ package com.example.OurHome.service;
 
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyType;
+import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
@@ -13,13 +14,11 @@ import java.util.List;
 
 public interface PropertyService {
 
-    boolean newProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser);
+    boolean requestToObtainProperty(PropertyRegisterBindingModel propertyRegisterBindingModel, UserEntity loggedUser);
 
-    void deleteProperty(Long id, boolean deletedByManaged);
+    void unlinkOwner(Long id, boolean deletedByManaged);
 
-    void deletePropertiesWhenResidentRemoved(Long residentId, Long residentialEntityId);
-
-    void approveProperty(Long id);
+    void approveProperty(Long id, boolean noValidationNeed);
 
     void rejectProperty(Long id);
 
@@ -33,6 +32,8 @@ public interface PropertyService {
 
     boolean checkNeedOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel);
 
+    boolean checkNeedOfVerification(Long id, PropertyRegisterBindingModel propertyRegisterBindingModel );
+
     List<Property> findAllProperties();
 
     void changeAutoFeeGeneration(Property property);
@@ -43,10 +44,19 @@ public interface PropertyService {
 
     void setAdditionalPropertyFee(Property property, BigDecimal additionalPropertyFee);
 
-    Property findPropertyByNumberAndResidentialEntity(String propertyNumber, Long residentialEntityId);
+    Property findPropertyByNumberAndResidentialEntity(int propertyNumber, Long residentialEntityId);
 
     void setPropertyType(Property property, PropertyType propertyType);
 
     List<Property> findAllPropertiesByPropertyType(PropertyType propertyType);
 
+    void createAllProperties(ResidentialEntity newResidentialEntity);
+
+    void deleteAllProperties(List<Property> residentialEntityProperties);
+
+    boolean checkPropertiesForOwnersSet(Long residentialEntityId);
+
+    void unlinkAllPropertiesFromOwner(Long residentId, ResidentialEntity residentialEntity);
+
+    void deleteProperty(Long id, boolean deletedByManager);
 }

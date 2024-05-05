@@ -136,9 +136,9 @@
                 </li>
                 <li class="nav-item">
                     <div th:if="${property.isValidated()}" class="buttons">
-                        <a class="nav-link" th:href="@{/property/expenses/{id}(id=${property.getId()})}">
-                            <h5>Expenses</h5>
-                            <p class="text-secondary">of your residential entity</p>
+                        <a class="nav-link" th:href="@{/property/re/data/{id}(id=${property.getId()})}">
+                            <h5>Residential Entity</h5>
+                            <p class="text-secondary">data and reports</p>
                         </a>
                     </div>
                 </li>
@@ -246,36 +246,6 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
-                    </div>
-                    <br><br><br>
-                    <h4 th:if="${property.isValidated()}" class="text-secondary text-center">Your
-                        Residential entity details</h4>
-                    <div th:if="${property.isValidated()}" class="info-table text-dark">
-                        <div>
-                            <ul>
-                                <li class="text-secondary">Residential entity ID: <b
-                                        th:text="${property.getResidentialEntity().getId()}"></b>
-                                </li>
-                                <li class="text-secondary">Residential entity address: <b
-                                        th:text="${property.getResidentialEntity().getCity().getName()}
-                                                            + ', ' + ${property.getResidentialEntity().getStreetName()}
-                                                            + ', №' + ${property.getResidentialEntity().getStreetNumber()}"> </b>
-                                </li>
-                                <li class="text-secondary">Number of apartments: <b
-                                        th:text="${property.getResidentialEntity().getNumberOfApartments()}"></b>
-                                </li>
-                                <li class="text-secondary">Manager: <b
-                                        th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +
-                                                                    ${property.getResidentialEntity().getManager().getLastName()}"></b>
-                                </li>
-                                <li class="text-secondary">Manager phone: <b
-                                        th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b>
-                                </li>
-                                <li class="text-secondary">Manager email: <b
-                                        th:text="${property.getResidentialEntity().getManager().getEmail()}"></b>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>

@@ -120,7 +120,7 @@
             </li>
             <li class="nav-item">
                 <div class="button">
-                    <a class="nav-link" th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                    <a class="nav-link" th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
                         <h5>Properties</h5>
                         <p class="text-secondary">data & management</p></a>
                 </div>
@@ -128,14 +128,14 @@
             <li class="nav-item">
                 <div class="button">
                     <a class="nav-link active"
-                       th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
+                       href=#>
                         <h5 class="text-danger">Monthly fees</h5>
                         <p class="text-secondary">calculations & management</p></a>
                 </div>
             </li>
             <li class="nav-item">
                 <div class="button">
-                    <a class="nav-link" th:href="@{/administration/financial/{id}(id=${residentialEntity.getId()})}">
+                    <a class="nav-link" th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
                         <h5>Financial</h5>
                         <p class="text-secondary">reports & management</p></a>
                 </div>
@@ -158,7 +158,7 @@
                         <div class="button">
                             <a class="nav-link active"
                                href=#due-amounts-table>
-                                <div class="text-light">Fees by property</div>
+                                <div class="text-light"><i class="fa-solid fa-hand-holding-dollar"></i> Fees by property</div>
                             </a>
                         </div>
                     </li>
@@ -166,7 +166,7 @@
                         <div class="button">
                             <a class="nav-link"
                                th:href="@{/administration/fees/settings/{id}(id=${residentialEntity.getId()})}">
-                                <div class="text-light">Residential entity fees</div>
+                                <div class="text-light"><i class="fa-solid fa-gears"></i> Residential entity fees</div>
                             </a>
                         </div>
                     </li>
@@ -217,9 +217,10 @@
 
             <p th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} == 0"
                class="text-center">No records found</p>
-            <table style="width: 100%"
+
+            <table class="table text-center"
                    th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 0">
-                <tr class="text-center">
+                <tr>
                     <th>
                         <p>Property №</p>
                     </th>
@@ -245,17 +246,18 @@
                         <p>View details</p>
                     </th>
                 </tr>
-                <tr class="text-center"
+                <tr
                     th:each="property: ${@propertyRepository.findAllPropertiesWithSetFee(residentialEntity.getId())}">
                     <td>
                         <p th:text="${property.getNumber()}"></p>
                     </td>
-                    <td style="min-width: 140px">
-                        <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                    <td >
+                        <p th:if="${property.isObtained()}" th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                        <p th:unless="${property.isObtained()}"><i title="Not assigned" class="fa-solid fa-user-large-slash text-secondary"></i></p>
                     </td>
                     <td>
-                        <p th:if="${!property.isValidated()} or ${property.isRejected()}">Waiting confirmation</p>
-                        <p th:unless="${!property.isValidated()} or ${property.isRejected()}" th:text="${property.getTotalMonthlyFee()} + ' лв.'"></p>
+                        <p th:if="${!property.isValidated()}">Waiting parametrization</p>
+                        <p th:unless="${!property.isValidated()}" th:text="${property.getTotalMonthlyFee()} + ' лв.'"></p>
                     </td>
                     <td th:if="${property.getOverpayment()} > 0">
                         <p th:text="${property.getOverpayment()} + ' лв.'"></p>
@@ -296,7 +298,7 @@
                             </button>
                         </form>
                         <!--Attention button-->
-                            <img th:if="${!property.isValidated()} or ${property.isRejected()}"
+                            <img th:if="${!property.isValidated()}"
                                  title="No automatic monthly fee generation"
                                  src="/images/attention.png"
                                  style="width: 20px;"
@@ -304,59 +306,14 @@
                     </td>
                     <td>
                         <small th:if="${property.isValidated()}">-</small>
-                        <small th:if="${!property.isValidated()} and ${!property.isRejected()}"
+                        <small th:if="${!property.isValidated()}"
                                th:class="text-danger"><a
                                 class="text-danger"
-                                th:href="@{/administration/property/pending/{id}#pending-registrations (id=${id})}">
-                            Property status
-                            : Not
-                            validated<br>
-                            <small class="text-secondary">Please
-                                validate or
-                                edit
-                                property
-                                data to
-                                activate
-                                automatic
-                                monthly fee
-                                generation!<br><b>
-                                    Please
-                                    check
-                                    for
-                                    skipped
-                                    monthly
-                                    fees!</b>
+                                th:href="@{/administration/property/active/{id}#active-registrations (id=${id})}">
+                            Property status : Not ready<br>
+                            <small class="text-secondary">Please set property data to activate automatic
+                                monthly fee generation!
                             </small></a>
-                        </small>
-                        <small th:if="${property.isRejected()}"
-                               th:class="text-danger">
-                            <a class="text-danger"
-                               th:href="@{/administration/property/rejected/{id}#rejected-registrations (id=${id})}">
-                                Property
-                                status :
-                                Rejected<br>
-                                <small class="text-secondary">Please
-                                    edit
-                                    property
-                                    or ask
-                                    owner to
-                                    correct
-                                    his
-                                    property
-                                    data to
-                                    be
-                                    activated
-                                    automatic
-                                    monthly
-                                    fee
-                                    generation!<br><b>
-                                        Please
-                                        check
-                                        for
-                                        skipped
-                                        monthly
-                                        fees!</b>
-                                </small></a>
                         </small>
                     </td>
                     <td th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">
@@ -377,7 +334,6 @@
             </table>
         </div>
     </div>
-
 </div>
 
 

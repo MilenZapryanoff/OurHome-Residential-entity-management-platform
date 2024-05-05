@@ -2,6 +2,8 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.repo.PropertyRepository;
+import com.example.OurHome.repo.ResidentialEntityRepository;
+import com.example.OurHome.service.PropertyRequestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +27,7 @@ class PropertyServiceImplTest {
     @Mock
     private ModelMapper mockModelMapper;
     @Mock
-    private ResidentialEntityServiceImpl mockResidentialEntityService;
+    private ResidentialEntityRepository residentialEntityRepository;
     @Mock
     private FeeServiceImpl mockFeeService;
     @Mock
@@ -34,17 +36,19 @@ class PropertyServiceImplTest {
     private PasswordEncoder mockPasswordEncoder;
     @Mock
     private ApplicationEventPublisher mockAapplicationEventPublisher;
+    @Mock
+    private PropertyRequestService mockPropertyRequestService;
 
     @BeforeEach
     void setUp() {
-        serviceToTest = new PropertyServiceImpl(mockModelMapper, mockResidentialEntityService,
-                mockPropertyRepository, mockMessageService, mockFeeService, mockAapplicationEventPublisher);
+        serviceToTest = new PropertyServiceImpl(mockModelMapper,
+                mockPropertyRepository, mockMessageService, mockFeeService, mockAapplicationEventPublisher, residentialEntityRepository, mockPropertyRequestService);
     }
 
     @Test
     void findPropertyById() {
         Property property = new Property();
-        property.setNumber(String.valueOf(99));
+        property.setNumber(99);
         when(mockPropertyRepository.findById(1L)).thenReturn(Optional.of(property));
 
         Property propertyById = serviceToTest.findPropertyById(1L);

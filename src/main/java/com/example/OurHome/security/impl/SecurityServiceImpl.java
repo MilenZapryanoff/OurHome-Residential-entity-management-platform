@@ -110,15 +110,21 @@ public class SecurityServiceImpl implements SecurityService {
 
         Expense expense = financialService.findById(expenseId);
 
+        UserEntity loggedUser = getUserEntity(authentication);
+
         //grant access if logged user has apartment in member of expense's residential entity
-        List<ResidentialEntity> residentialEntities = getUserEntity(authentication).getResidentialEntities();
+        List<ResidentialEntity> residentialEntities = loggedUser.getResidentialEntities();
         for (ResidentialEntity residentialEntity : residentialEntities) {
-            if (residentialEntity.getId().equals(expense.getResidentialEntity().getId())) {
+
+            //check if : Expense is in this RE
+            if (residentialEntity.getId().equals(expense.getResidentialEntity().getId())
+                    // AND (RE expenses are set to visible OR logged User is Moderator)
+                    && (residentialEntity.isExpensesVisible() || residentialEntityService.checkIfUserIsResidentialEntityModerator(residentialEntity.getId(), loggedUser.getId()))) {
                 return true;
             }
         }
         //grant access if logged user is residential entity manager
-        return getUserEntity(authentication).getId().equals(expense.getResidentialEntity().getManager().getId());
+        return loggedUser.getId().equals(expense.getResidentialEntity().getManager().getId());
     }
 
     @Override

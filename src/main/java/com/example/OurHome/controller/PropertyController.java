@@ -1,9 +1,6 @@
 package com.example.OurHome.controller;
 
-import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.model.Entity.PropertyType;
-import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.Entity.*;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseFilterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Message.SendMessageBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
@@ -32,15 +29,17 @@ public class PropertyController {
     private final FinancialService financialService;
     private final ResidentialEntityService residentialEntityService;
     private final PropertyTypeService propertyTypeService;
+    private final PropertyRequestService propertyRequestService;
 
 
-    public PropertyController(UserService userService, PropertyService propertyService, MessageService messageService, FinancialService financialService, ResidentialEntityService residentialEntityService, PropertyTypeService propertyTypeService) {
+    public PropertyController(UserService userService, PropertyService propertyService, MessageService messageService, FinancialService financialService, ResidentialEntityService residentialEntityService, PropertyTypeService propertyTypeService, PropertyRequestService propertyRequestService) {
         this.userService = userService;
         this.propertyService = propertyService;
         this.messageService = messageService;
         this.financialService = financialService;
         this.residentialEntityService = residentialEntityService;
         this.propertyTypeService = propertyTypeService;
+        this.propertyRequestService = propertyRequestService;
     }
 
     /**
@@ -75,7 +74,7 @@ public class PropertyController {
             return new ModelAndView("property-add", "userViewModel", getUserViewModel());
         }
 
-        if (propertyService.newProperty(propertyRegisterBindingModel, getLoggedUser())) {
+        if (propertyService.requestToObtainProperty(propertyRegisterBindingModel, getLoggedUser())) {
             if (!residentialEntity.getPropertyTypes().isEmpty()) {
                 return new ModelAndView("property-add-select-type",
                         "userViewModel", getUserViewModel())
@@ -86,7 +85,8 @@ public class PropertyController {
             }
 
         } else {
-            return new ModelAndView("property-add", "userViewModel", getUserViewModel()).addObject("registrationFailed", true);
+            return new ModelAndView("property-add", "userViewModel", getUserViewModel())
+                    .addObject("registrationFailed", true);
         }
     }
 
@@ -94,16 +94,17 @@ public class PropertyController {
     public ModelAndView addPropertySelectType(@ModelAttribute("propertyRegisterBindingModel") PropertyRegisterBindingModel propertyRegisterBindingModel) {
 
         Long residentialEntityId = propertyRegisterBindingModel.getResidentialEntity();
-        String propertyNumber = propertyRegisterBindingModel.getNumber();
+        int propertyNumber = propertyRegisterBindingModel.getNumber();
 
-        Property property = propertyService.findPropertyByNumberAndResidentialEntity(propertyNumber, residentialEntityId);
-
+        PropertyRequest propertyRequest = propertyRequestService.findActivePropertyRequestByNumberAndResidentialEntityId(propertyNumber, residentialEntityId);
         Long propertyTypeId = propertyRegisterBindingModel.getPropertyType();
-        if (propertyTypeId != null) {
+
+        if (propertyTypeId != null && propertyRequest != null) {
             PropertyType propertyType = propertyTypeService.findById(propertyTypeId);
-            propertyService.setPropertyType(property, propertyType);
+
+            propertyRequest.setPropertyType(propertyType);
+            propertyRequestService.update(propertyRequest);
         }
-        
         return new ModelAndView("redirect:/property");
     }
 
@@ -214,14 +215,14 @@ public class PropertyController {
     }
 
     /**
-     * PROPERTY -> Delete property
+     * PROPERTY -> Delete property owner
      * POST
      */
     @PostMapping("/property/delete/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView propertyDelete(@PathVariable("id") Long id) {
 
-        propertyService.deleteProperty(id, false);
+        propertyService.unlinkOwner(id, false);
 
         return new ModelAndView("redirect:/property");
     }
@@ -238,9 +239,29 @@ public class PropertyController {
 
 
     /**
-     * PROPERTY -> EXPENSES RE Section
+     * PROPERTY -> RE -> Data Section
      */
-    @GetMapping("/property/expenses/{id}")
+    @GetMapping("/property/re/data/{id}")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
+    public ModelAndView residentialEntityData(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id) {
+
+
+        Property property = getProperty(id);
+        ResidentialEntity residentialEntity = getResidentialEntity(property.getResidentialEntity().getId());
+
+        ExpenseFilterBindingModel expenseFilter = financialService.createDefaultExpenseFilter(residentialEntity);
+
+
+        return new ModelAndView("property-re-data", "userViewModel", getUserViewModel())
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("property", property)
+                .addObject("expenseFilterBindingModel", expenseFilter);
+    }
+
+    /**
+     * PROPERTY -> RE -> EXPENSES Section
+     */
+    @GetMapping("/property/re/expenses/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView residentialEntityExpenses(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id) {
 
@@ -251,25 +272,32 @@ public class PropertyController {
         ExpenseFilterBindingModel expenseFilter = financialService.createDefaultExpenseFilter(residentialEntity);
 
 
-        return new ModelAndView("property-expenses", "userViewModel", getUserViewModel()).addObject("userViewModel", getUserViewModel()).addObject("property", property).addObject("expenseFilterBindingModel", expenseFilter);
+        return new ModelAndView("property-re-expenses", "userViewModel", getUserViewModel())
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("property", property)
+                .addObject("expenseFilterBindingModel", expenseFilter);
     }
 
-    @PostMapping("/property/expenses/{id}")
+    @PostMapping("/property/re/expenses/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView residentialEntityFilterExpenses(@PathVariable("id") Long id, @Valid ExpenseFilterBindingModel expenseFilter, BindingResult bindingResult) {
 
         Property property = getProperty(id);
-        ModelAndView modelAndView = new ModelAndView("property-expenses").addObject("userViewModel", getUserViewModel()).addObject("property", property);
+        ModelAndView modelAndView = new ModelAndView("property-re-expenses")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("property", property);
 
         if (bindingResult.hasErrors()) {
-            return modelAndView.addObject("expenseFilterBindingModel", expenseFilter);
+            return modelAndView
+                    .addObject("expenseFilterBindingModel", expenseFilter);
         }
 
         ResidentialEntity residentialEntity = getResidentialEntity(property.getResidentialEntity().getId());
 
         expenseFilter = financialService.createCustomExpenseFilter(expenseFilter.getPeriodStart(), expenseFilter.getPeriodEnd(), residentialEntity);
 
-        return modelAndView.addObject("expenseFilterBindingModel", expenseFilter);
+        return modelAndView
+                .addObject("expenseFilterBindingModel", expenseFilter);
     }
 
     /**
