@@ -95,7 +95,7 @@ A platform that allows the registration of both home owners and residential enti
 for all properties in the beginning of the RE no matter if property has assigned owner or not. The platform is now focused on servicing to manager, instead of owners first.</li>
    <li>Every owner now instead of registering his property has to make a request for registration. If manager approves obtaining of the current property by this user(owner)
 the property ownership is updated. This will give access to new owner to property stored data.</li>
-   <li>Manager can now remove owner of property without deleting the whole property. Only the ownership date is updated.</li>
+   <li>Manager can now remove owner of property without deleting the whole property. Only the ownership is updated.</li>
    <li>Owner can now add or remove a property (instead of owner as in previous versions of the platform). 
 The control of creating and deleting properties is now transffered from user to manager. </li>
    <li>Some server side performance improvements were made</li>
