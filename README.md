@@ -79,6 +79,14 @@ A platform that allows the registration of both home owners and residential enti
 
 
 <h2>Updates</h2>
+
+<h4>v.2.24.0514</h4>
+  <ul>
+   <li>Logic improvement of some basic functionalities.</li>
+   <li>When property is rejected, the owner can now resend registration request.</li>
+  </ul>
+
+
 <h4>v.2.24.0505</h4>
   <ul>
    <li>Added toggle switch for turning ON/OFF visibility of RE expenses and incomes</li>
