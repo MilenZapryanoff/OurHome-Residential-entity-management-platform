@@ -20,9 +20,6 @@ public class ResidentialEntityEditBindingModel {
 
     private String entrance;
 
-    @NotNull
-    private Long numberOfApartments;
-
 
     public CityName getCity() {
         return city;
@@ -70,14 +67,6 @@ public class ResidentialEntityEditBindingModel {
 
     public void setEntrance(String entrance) {
         this.entrance = entrance;
-    }
-
-    public Long getNumberOfApartments() {
-        return numberOfApartments;
-    }
-
-    public void setNumberOfApartments(Long numberOfApartments) {
-        this.numberOfApartments = numberOfApartments;
     }
 
 }

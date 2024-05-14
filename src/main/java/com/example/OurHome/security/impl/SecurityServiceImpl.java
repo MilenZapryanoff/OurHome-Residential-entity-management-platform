@@ -154,6 +154,14 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
+    public boolean checkPropertyOwnerAccessToFinancialData(Long propertyId, Authentication authentication) {
+        Property property = propertyService.findPropertyById(propertyId);
+        UserEntity loggedUser = getUserEntity(authentication);
+        return property.getOwner().getId().equals(loggedUser.getId()) && property.isObtained();
+    }
+
+
+    @Override
     public boolean checkPropertyTypeModeratorAccess(Long propertyTypeId, Authentication authentication) {
         ResidentialEntity residentialEntityByPropertyType = propertyTypeService.findResidentialEntityByPropertyType(propertyTypeId);
         return residentialEntityByPropertyType != null && residentialEntityByPropertyType.getManager().getId().equals(getUserEntity(authentication).getId());

@@ -29,17 +29,17 @@ public class PropertyController {
     private final FinancialService financialService;
     private final ResidentialEntityService residentialEntityService;
     private final PropertyTypeService propertyTypeService;
-    private final PropertyRequestService propertyRequestService;
+    private final PropertyRegisterRequestService propertyRegisterRequestService;
 
 
-    public PropertyController(UserService userService, PropertyService propertyService, MessageService messageService, FinancialService financialService, ResidentialEntityService residentialEntityService, PropertyTypeService propertyTypeService, PropertyRequestService propertyRequestService) {
+    public PropertyController(UserService userService, PropertyService propertyService, MessageService messageService, FinancialService financialService, ResidentialEntityService residentialEntityService, PropertyTypeService propertyTypeService, PropertyRegisterRequestService propertyRegisterRequestService) {
         this.userService = userService;
         this.propertyService = propertyService;
         this.messageService = messageService;
         this.financialService = financialService;
         this.residentialEntityService = residentialEntityService;
         this.propertyTypeService = propertyTypeService;
-        this.propertyRequestService = propertyRequestService;
+        this.propertyRegisterRequestService = propertyRegisterRequestService;
     }
 
     /**
@@ -96,14 +96,14 @@ public class PropertyController {
         Long residentialEntityId = propertyRegisterBindingModel.getResidentialEntity();
         int propertyNumber = propertyRegisterBindingModel.getNumber();
 
-        PropertyRequest propertyRequest = propertyRequestService.findActivePropertyRequestByNumberAndResidentialEntityId(propertyNumber, residentialEntityId);
+        PropertyRegisterRequest propertyRegisterRequest = propertyRegisterRequestService.findActivePropertyRequestByNumberAndResidentialEntityId(propertyNumber, residentialEntityId);
         Long propertyTypeId = propertyRegisterBindingModel.getPropertyType();
 
-        if (propertyTypeId != null && propertyRequest != null) {
+        if (propertyTypeId != null && propertyRegisterRequest != null) {
             PropertyType propertyType = propertyTypeService.findById(propertyTypeId);
 
-            propertyRequest.setPropertyType(propertyType);
-            propertyRequestService.update(propertyRequest);
+            propertyRegisterRequest.setPropertyType(propertyType);
+            propertyRegisterRequestService.update(propertyRegisterRequest);
         }
         return new ModelAndView("redirect:/property");
     }
@@ -207,10 +207,16 @@ public class PropertyController {
             propertyType = propertyTypeService.findById(propertyEditBindingModel.getPropertyType());
         }
 
-        if (propertyService.editProperty(id, propertyEditBindingModel, !propertyService.checkNeedOfVerification(id, propertyEditBindingModel), propertyType)) {
+        boolean validationRequired = propertyService.checkNeedOfVerification(id, propertyEditBindingModel);
+
+        if (propertyService.propertyChangeRequest(id, propertyEditBindingModel, propertyType, getLoggedUser(), validationRequired)) {
             return new ModelAndView("redirect:/property/details/" + id);
         } else {
-            return new ModelAndView("property-details-edit").addObject("userViewModel", getUserViewModel()).addObject("property", getProperty(id)).addObject("propertyEditBindingModel", propertyEditBindingModel).addObject("editFailed", true);
+            return new ModelAndView("property-details-edit")
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("property", getProperty(id))
+                    .addObject("propertyEditBindingModel", propertyEditBindingModel)
+                    .addObject("editFailed", true);
         }
     }
 
@@ -231,7 +237,7 @@ public class PropertyController {
      * PROPERTY -> MONTHLY FEES Section
      */
     @GetMapping("/property/monthlyfees/{id}")
-    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
     public ModelAndView propertyFeesDetails(@PathVariable("id") Long id) {
 
         return new ModelAndView("property-monthlyfees", "userViewModel", getUserViewModel()).addObject("property", getProperty(id));
@@ -242,7 +248,7 @@ public class PropertyController {
      * PROPERTY -> RE -> Data Section
      */
     @GetMapping("/property/re/data/{id}")
-    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
     public ModelAndView residentialEntityData(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id) {
 
 
@@ -262,7 +268,7 @@ public class PropertyController {
      * PROPERTY -> RE -> EXPENSES Section
      */
     @GetMapping("/property/re/expenses/{id}")
-    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
     public ModelAndView residentialEntityExpenses(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id) {
 
 
@@ -279,7 +285,7 @@ public class PropertyController {
     }
 
     @PostMapping("/property/re/expenses/{id}")
-    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
     public ModelAndView residentialEntityFilterExpenses(@PathVariable("id") Long id, @Valid ExpenseFilterBindingModel expenseFilter, BindingResult bindingResult) {
 
         Property property = getProperty(id);

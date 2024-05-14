@@ -168,22 +168,6 @@
                                    th:value="${residentialEntityEditBindingModel.entrance}">
                         </fieldset>
                         <fieldset>
-                            <label for="numberOfApartments"><b>Number of
-                                properties</b></label>
-                            <br>
-                            <small th:if="${#fields.hasErrors('numberOfApartments')}"
-                                   th:errors="*{numberOfApartments}"
-                                   class="text-danger">Number of properties
-                                error
-                                message</small>
-                            <input type="text" id="numberOfApartments"
-                                   placeholder="Enter number of properties ..."
-                                   required
-                                   th:field="*{numberOfApartments}"
-                                   th:errorclass="bg-danger"
-                                   th:value="${residentialEntityEditBindingModel.numberOfApartments}">
-                        </fieldset>
-                        <fieldset>
                             <label for="accessCode"><b>Access code</b>
                                 (optional)</label>
                             <br>

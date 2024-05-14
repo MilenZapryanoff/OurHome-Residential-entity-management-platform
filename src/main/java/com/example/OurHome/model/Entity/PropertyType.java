@@ -28,11 +28,11 @@ public class PropertyType {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "propertyType")
     private List<Property> properties;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "propertyType", cascade = CascadeType.REMOVE)
-    private List<PropertyRequest> propertyRequests;
+    private List<PropertyRegisterRequest> propertyRegisterRequests;
 
     public PropertyType() {
         properties = new ArrayList<>();
-        propertyRequests = new ArrayList<>();
+        propertyRegisterRequests = new ArrayList<>();
     }
 
     public Long getId() {
@@ -99,11 +99,11 @@ public class PropertyType {
         this.properties = property;
     }
 
-    public List<PropertyRequest> getPropertyRequests() {
-        return propertyRequests;
+    public List<PropertyRegisterRequest> getPropertyRequests() {
+        return propertyRegisterRequests;
     }
 
-    public void setPropertyRequests(List<PropertyRequest> propertyRequests) {
-        this.propertyRequests = propertyRequests;
+    public void setPropertyRequests(List<PropertyRegisterRequest> propertyRegisterRequests) {
+        this.propertyRegisterRequests = propertyRegisterRequests;
     }
 }

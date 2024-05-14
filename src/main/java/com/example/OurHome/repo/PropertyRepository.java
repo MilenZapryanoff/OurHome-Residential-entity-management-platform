@@ -15,7 +15,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("SELECT COUNT(p) FROM properties p where p.isValidated = false AND p.isRejected = false AND p.residentialEntity.id=:id")
     Long countNotVerifiedPropertiesByResidentialEntity(@Param("id") Long id);
 
-    @Query("SELECT COUNT(p) FROM properties p where p.isObtained = false AND p.isRejected = false AND p.residentialEntity.id=:id AND p.propertyRequest is not null AND p.propertyRequest.obtainRequest = true")
+    @Query("SELECT COUNT(p) FROM properties p where p.isObtained = false AND p.isRejected = false AND p.residentialEntity.id=:id AND p.propertyRegisterRequest is not null")
     Long countPendingPropertyObtainsByResidentialEntity(@Param("id") Long id);
 
     @Query("SELECT COUNT(p) FROM properties p where p.isRejected = true AND p.residentialEntity.id=:id AND p.isObtained = false")
@@ -30,7 +30,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("SELECT COUNT(p) FROM properties p where p.residentialEntity.id=:id and p.monthlyFeeFundMm is not null")
     Long countAllPropertiesWithSetFeeByResidentialEntity(@Param("id") Long id);
 
-    @Query("SELECT p FROM properties p where p.isObtained = false AND p.isRejected = false AND p.residentialEntity.id=:residentialEntityId AND p.propertyRequest is not null AND p.propertyRequest.obtainRequest = true ORDER BY p.number")
+    @Query("SELECT p FROM properties p where p.isObtained = false AND p.isRejected = false AND p.residentialEntity.id=:residentialEntityId AND p.propertyRegisterRequest is not null ORDER BY p.number")
     List<Property> findPendingPropertyObtainsByResidentialEntity(Long residentialEntityId);
 
     @Query("SELECT p FROM properties p where p.residentialEntity.id=:residentialEntityId and p.monthlyFeeFundMm is not null ORDER BY p.number")
@@ -70,5 +70,5 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     List<Property> findAllPropertiesByResidentialEntity(Long id);
 
     @Query("SELECT count(p) FROM properties p WHERE p.residentialEntity.id =:residentialEntityId AND p.isObtained = true")
-    Long checkPropertiesForOwnersSet(Long residentialEntityId);
+    Long numberOfPropertiesWithOwnerSet(Long residentialEntityId);
 }

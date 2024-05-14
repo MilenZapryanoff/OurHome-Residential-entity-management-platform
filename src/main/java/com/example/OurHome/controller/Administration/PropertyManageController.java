@@ -106,7 +106,7 @@ public class PropertyManageController {
             propertyType = propertyTypeService.findById(propertyEditBindingModel.getPropertyType());
         }
 
-        if (propertyService.editProperty(id, propertyEditBindingModel, true, propertyType)) {
+        if (propertyService.editProperty(id, propertyEditBindingModel, propertyType)) {
             return new ModelAndView("redirect:/administration/property/active/" + residentialEntity.getId());
         } else {
             //sending message (notification) to owner/resident

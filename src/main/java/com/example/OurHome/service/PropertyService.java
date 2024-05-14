@@ -22,7 +22,9 @@ public interface PropertyService {
 
     void rejectProperty(Long id);
 
-    boolean editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, boolean noValidationNeed, PropertyType propertyType);
+    boolean editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType);
+
+    boolean propertyChangeRequest(Long id, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType, UserEntity loggedUser, boolean needValidation);
 
     void setOverpayment(PropertyFeeEditBindingModel propertyFeeEditBindingModel);
 
@@ -50,7 +52,7 @@ public interface PropertyService {
 
     List<Property> findAllPropertiesByPropertyType(PropertyType propertyType);
 
-    void createAllProperties(ResidentialEntity newResidentialEntity);
+    void createAllProperties(ResidentialEntity newResidentialEntity, Long numberOfApartments);
 
     void deleteAllProperties(List<Property> residentialEntityProperties);
 

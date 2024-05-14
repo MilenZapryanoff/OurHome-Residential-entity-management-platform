@@ -268,7 +268,7 @@ class PropertyServiceImplTestIT {
         //TODO : to fix tests because of the new object propertyType
         PropertyType propertyType = new PropertyType();
 
-        propertyServiceToTest.editProperty(id, propertyEditBindingModel, true, propertyType);
+        propertyServiceToTest.editProperty(id, propertyEditBindingModel, propertyType);
 
         Optional<Property> property = propertyRepository.findById(id);
 
@@ -305,7 +305,7 @@ class PropertyServiceImplTestIT {
         //TODO : to fix tests because of the new object propertyType
         PropertyType propertyType = new PropertyType();
 
-        propertyServiceToTest.editProperty(id, propertyEditBindingModel, false, propertyType);
+        propertyServiceToTest.editProperty(id, propertyEditBindingModel, propertyType);
 
         Optional<Property> property = propertyRepository.findById(id);
 
@@ -446,7 +446,6 @@ class PropertyServiceImplTestIT {
         residentialEntity.setId(100L);
         residentialEntity.setAccessCode("test");
         residentialEntity.setCity(cityRepository.findByName(CityName.valueOf("София")));
-        residentialEntity.setNumberOfApartments(15L);
         residentialEntity.setStreetName("test");
         residentialEntity.setStreetNumber(String.valueOf(1));
         residentialEntity.setFee(createTestFee());

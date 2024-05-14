@@ -33,9 +33,6 @@ public class ResidentialEntity {
     @Column
     private String entrance;
 
-    @Column(nullable = false)
-    private Long numberOfApartments;
-
     @ManyToOne(optional = false)
     @JoinColumn(referencedColumnName = "id")
     private UserEntity manager;
@@ -135,14 +132,6 @@ public class ResidentialEntity {
 
     public void setEntrance(String vhod) {
         this.entrance = vhod;
-    }
-
-    public Long getNumberOfApartments() {
-        return numberOfApartments;
-    }
-
-    public void setNumberOfApartments(Long numberOfApartments) {
-        this.numberOfApartments = numberOfApartments;
     }
 
     public List<Property> getProperties() {

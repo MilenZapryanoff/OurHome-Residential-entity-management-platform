@@ -47,6 +47,8 @@ public interface SecurityService {
 
     boolean checkPropertyOwnerAccess(Long propertyId, Authentication authentication);
 
+    boolean checkPropertyOwnerAccessToFinancialData(Long propertyId, Authentication authentication);
+
     /**
      * PropertyType access check
      */

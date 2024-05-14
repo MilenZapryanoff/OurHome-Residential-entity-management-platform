@@ -285,11 +285,11 @@
                                            th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 0}">
                                             No properties in this category.
                                         </p>
-                                        <p class="text-info" style="font-size: 0.8em"
+                                        <p class="text-danger" style="font-size: 0.8em"
                                            th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 1}">
                                             1 property in this category.
                                         </p>
-                                        <p class="text-info" style="font-size: 0.8em"
+                                        <p class="text-danger" style="font-size: 0.8em"
                                            th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) > 1}"
                                            th:text="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId())} + ' properties in this category.'">
                                         </p>
@@ -304,11 +304,11 @@
                                            th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 0}">
                                             No properties in this category.
                                         </p>
-                                        <p class="text-info" style="font-size: 0.8em"
+                                        <p class="text-danger" style="font-size: 0.8em"
                                            th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 1}">
                                             1 property in this category.
                                         </p>
-                                        <p class="text-info" style="font-size: 0.8em"
+                                        <p class="text-danger" style="font-size: 0.8em"
                                            th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) > 1}"
                                            th:text="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId())} + ' properties in this category.'">
                                         </p>

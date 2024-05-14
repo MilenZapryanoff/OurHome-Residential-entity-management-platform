@@ -1,0 +1,16 @@
+package com.example.OurHome.repo;
+
+import com.example.OurHome.model.Entity.PropertyChangeRequest;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface PropertyChangeRequestRepository extends JpaRepository<PropertyChangeRequest, Long> {
+
+    @Query("SELECT pcr FROM property_change_requests pcr where pcr.number=:number AND pcr.residentialEntityId=:residentialEntityId and pcr.active = true")
+    PropertyChangeRequest findActivePropertyRequestByNumberAndResidentialEntityId(int number, Long residentialEntityId);
+
+    @Query("SELECT COUNT(pcr) FROM property_change_requests pcr where pcr.number=:number AND pcr.residentialEntityId=:residentialEntityId and pcr.active = true")
+    int countActivePropertyRequestByNumberAndResidentialEntityId(int number, Long residentialEntityId);
+}

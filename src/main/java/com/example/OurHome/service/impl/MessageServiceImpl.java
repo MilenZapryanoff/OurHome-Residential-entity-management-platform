@@ -190,8 +190,8 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Property № " + property.getNumber() + " has been REMOVED from Residential entity ID: "
-                                + property.getResidentialEntity().getId() + " by his owner.",
+                        "Registration request for property № " + property.getNumber() + " in Residential entity ID: "
+                                + property.getResidentialEntity().getId() + " has been Canceled by user.",
                         property.getResidentialEntity().getManager(),
                         false,
                         false));

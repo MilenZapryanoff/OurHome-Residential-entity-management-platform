@@ -57,7 +57,7 @@ public class UserEntity {
     private List<Property> properties;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private List<PropertyRequest> propertyRequests;
+    private List<PropertyRegisterRequest> propertyRegisterRequests;
 
     @OneToMany(mappedBy = "receiver", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Message> receivedMessages;
@@ -71,7 +71,7 @@ public class UserEntity {
         sentMessages = new ArrayList<>();
         residentialEntities = new ArrayList<>();
         moderatedResidentialEntities = new ArrayList<>();
-        propertyRequests = new ArrayList<>();
+        propertyRegisterRequests = new ArrayList<>();
     }
 
     public Long getId() {
@@ -203,11 +203,11 @@ public class UserEntity {
         this.avatarPath = avatarPath;
     }
 
-    public List<PropertyRequest> getPropertyRequests() {
-        return propertyRequests;
+    public List<PropertyRegisterRequest> getPropertyRequests() {
+        return propertyRegisterRequests;
     }
 
-    public void setPropertyRequests(List<PropertyRequest> propertyRequests) {
-        this.propertyRequests = propertyRequests;
+    public void setPropertyRequests(List<PropertyRegisterRequest> propertyRegisterRequests) {
+        this.propertyRegisterRequests = propertyRegisterRequests;
     }
 }

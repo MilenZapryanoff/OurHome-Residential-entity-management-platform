@@ -71,7 +71,10 @@ public class Property {
     private ResidentialEntity residentialEntity;
 
     @OneToOne
-    private PropertyRequest propertyRequest;
+    private PropertyRegisterRequest propertyRegisterRequest;
+
+    @OneToOne
+    private PropertyChangeRequest propertyChangeRequest;
 
     @ManyToOne
     private PropertyType propertyType;
@@ -260,11 +263,19 @@ public class Property {
         isObtained = obtained;
     }
 
-    public PropertyRequest getPropertyRequest() {
-        return propertyRequest;
+    public PropertyRegisterRequest getPropertyRegisterRequest() {
+        return propertyRegisterRequest;
     }
 
-    public void setPropertyRequest(PropertyRequest propertyRequest) {
-        this.propertyRequest = propertyRequest;
+    public void setPropertyRegisterRequest(PropertyRegisterRequest propertyRegisterRequest) {
+        this.propertyRegisterRequest = propertyRegisterRequest;
+    }
+
+    public PropertyChangeRequest getPropertyChangeRequest() {
+        return propertyChangeRequest;
+    }
+
+    public void setPropertyChangeRequest(PropertyChangeRequest propertyChangeRequest) {
+        this.propertyChangeRequest = propertyChangeRequest;
     }
 }

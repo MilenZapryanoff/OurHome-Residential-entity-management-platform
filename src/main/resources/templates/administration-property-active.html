@@ -196,7 +196,7 @@
 
             <!--Active registrations header-->
             <div class="text-center">
-                <h4 class="category text-danger">ACTIVE REGISTRATIONS</h4>
+                <h4 class="category text-danger">LIST OF PROPERTIES</h4>
             </div>
 
             <!--Records counter-->
@@ -257,10 +257,14 @@
                     <td>
                         <p th:text="${property.getNumber()}"></p>
                     </td>
-                    <td th:if="${property.isValidated()}"><i class="fa-regular fa-circle-check text-success help"
-                                                             title="Status OK"></i></td>
-                    <td th:unless="${property.isValidated()}"><i class="fa-solid fa-triangle-exclamation warning help"
-                                                                 title="Parametrization needed"></i></td>
+                    <td>
+                        <i th:if="${property.isValidated() and property.getPropertyChangeRequest() == null}" class="fa-regular fa-circle-check text-success help"
+                           title="Status OK"></i>
+                        <i th:unless="${property.isValidated()}" class="fa-solid fa-triangle-exclamation warning help"
+                           title="Parametrization required"></i>
+                        <i th:if="${property.getPropertyChangeRequest() != null}" class="fa-solid fa-triangle-exclamation text-danger help"
+                            title="Property data change request from owner"></i>
+                    </td>
                     <td class="gray-field">
                         <p th:if="${property.isObtained()}"
                            th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
@@ -283,12 +287,13 @@
                                 <i title="Rejected owner registration for this property"
                                    class="fa-solid fa-user-gear text-danger"></i></a>
                         </p>
-                        <p title="Property owner registration is completed!" class="text-success help" th:if="${property.getOwner()} != null and ${property.isObtained()}">OK</p>
+                        <p title="Property owner registration is completed!" class="help"
+                           th:if="${property.getOwner()} != null and ${property.isObtained()}">OK</p>
                         <p th:if="${property.getOwner()} == null and ${!property.isObtained()}">-</p>
                     </td>
                     <td class="gray-field">
                         <form style="background-color: initial"
-                                th:if="${property.getOwner()} != null" class="form-container"
+                              th:if="${property.getOwner()} != null" class="form-container"
                               th:action="@{/administration/property/unlink/{id} (id=${property.getId()})}"
                               th:method="POST"
                               th:object="${propertyManageBindingModel}">
@@ -319,21 +324,26 @@
                         <p th:text="${property.getFloor()}"></p>
                     </td>
                     <td>
-                        <p th:text="${property.getNumberOfAdults()}"></p>
+                        <p th:if="${!property.isNotHabitable()}" th:text="${property.getNumberOfAdults()}"></p>
+                        <p th:unless="${!property.isNotHabitable()}">-</p>
                     </td>
                     <td>
-                        <p th:text="${property.getNumberOfChildren()}"></p>
+                        <p th:if="${!property.isNotHabitable()}" th:text="${property.getNumberOfChildren()}"></p>
+                        <p th:unless="${!property.isNotHabitable()}">-</p>
                     </td>
                     <td>
-                        <p th:text="${property.getNumberOfPets()}"></p>
+                        <p th:if="${!property.isNotHabitable()}" th:text="${property.getNumberOfPets()}"></p>
+                        <p th:unless="${!property.isNotHabitable()}">-</p>
                     </td>
-                    <td th:if="${property.isNotHabitable()}">
-                        <i class="fa-solid fa-house-chimney help text-danger-emphasis"
+                    <td th:if="${property.isValidated()}">
+                        <i th:if="${property.isNotHabitable()}"
+                           class="fa-solid fa-house-chimney help text-danger"
                            title="Property is not habitable"></i>
+                        <i th:unless="${property.isNotHabitable()}"
+                           class="fa-solid fa-house-chimney-user text-success-emphasis help"
+                           title="Property is habitable"></i>
                     </td>
-                    <td th:unless="${property.isNotHabitable()}">
-                        <i class="fa-solid fa-house-chimney-user help" title="Property is habitable"></i>
-                    </td>
+                    <td th:unless="${property.isValidated()}">-</td>
                     <td>
                         <form class="form-container"
                               th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
@@ -348,11 +358,17 @@
                                         th:text="${residentialEntity.getId()}">
                                 </option>
                             </select>
-                            <button type="submit">
+                            <button th:if="${property.isValidated()}" type="submit">
                                 <img title="Edit property"
                                      src="/images/edit.png"
                                      style="width: 20px;"
-                                     alt="Edit property"></button>
+                                     alt="Edit property">
+                            </button>
+
+                            <button th:unless="${property.isValidated()}" type="submit">
+                                <i class="fa-solid fa-gear text-danger"
+                                   title="Parametrization required"></i>
+                            </button>
                         </form>
                     </td>
                     <td>

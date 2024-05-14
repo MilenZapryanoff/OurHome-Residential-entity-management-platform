@@ -47,6 +47,8 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     @Override
     public boolean newResidentialEntity(ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel, UserEntity loggedUser) {
 
+        Long numberOfApartments = residentialEntityRegisterBindingModel.getNumberOfApartments();
+
         ResidentialEntity newResidentialEntity = modelMapper.map(residentialEntityRegisterBindingModel, ResidentialEntity.class);
 
         newResidentialEntity.setFee(feeService.createFee(newResidentialEntity));
@@ -69,7 +71,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
 
         residentialEntityRepository.save(newResidentialEntity);
 
-        propertyService.createAllProperties(newResidentialEntity);
+        propertyService.createAllProperties(newResidentialEntity, numberOfApartments);
 
         return residentialEntityRepository.countById(generatedRandomId) != 0;
     }
@@ -111,7 +113,6 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
             residentialEntity.setStreetName(bindingModel.getStreetName());
             residentialEntity.setStreetNumber(bindingModel.getStreetNumber());
             residentialEntity.setEntrance(bindingModel.getEntrance());
-            residentialEntity.setNumberOfApartments(bindingModel.getNumberOfApartments());
 
             if (accessCode.length() >= 3) {
                 residentialEntity.setAccessCode(passwordEncoder.encode(accessCode));

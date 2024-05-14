@@ -122,7 +122,7 @@
                     </div>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <div th:if="${property.isValidated()}" class="buttons">
+                    <div th:if="${property.isObtained()}" class="buttons">
                         <a class="nav-link" th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">
                             <h5>Monthly fees</h5>
                             <p class="text-secondary">and due amounts</p>
@@ -138,7 +138,7 @@
                     </div>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <div th:if="${property.isValidated()}" class="buttons">
+                    <div th:if="${property.isObtained()}" class="buttons">
                         <a class="nav-link active" th:href="@{/property/re/data/{id}(id=${property.getId()})}">
                             <h5 class="text-danger">Residential Entity</h5>
                             <p class="text-secondary">data and reports</p>

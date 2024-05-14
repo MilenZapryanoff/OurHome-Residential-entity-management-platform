@@ -265,9 +265,6 @@
                         <p>Property habitable</p>
                     </th>
                     <th>
-                        <p>Edit</p>
-                    </th>
-                    <th>
                         <p>Delete</p>
                     </th>
                 </tr>
@@ -304,25 +301,6 @@
                             src="/images/check_yes.png"
                             style="width: 20px;"
                             alt="Property is habitable"></td>
-                    <td>
-                        <form class="form-container"
-                              th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
-                              th:object="${propertyManageBindingModel}">
-                            <select class="form-control hidden"
-                                    id="activeEntityIdEdit"
-                                    th:field="*{entityId}">
-                                <option
-                                        th:value="${residentialEntity.getId()}"
-                                        th:text="${residentialEntity.getId()}">
-                                </option>
-                            </select>
-                            <button type="submit">
-                                <img title="Edit property"
-                                     src="/images/edit.png"
-                                     style="width: 20px;"
-                                     alt="Edit property"></button>
-                        </form>
-                    </td>
                     <td>
                         <form class="form-container"
                               th:action="@{/administration/owners/property/unlink/{id} (id=${property.getId()})}"

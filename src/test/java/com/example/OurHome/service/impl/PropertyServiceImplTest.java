@@ -3,7 +3,8 @@ package com.example.OurHome.service.impl;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
-import com.example.OurHome.service.PropertyRequestService;
+import com.example.OurHome.service.PropertyChangeRequestService;
+import com.example.OurHome.service.PropertyRegisterRequestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,12 +38,13 @@ class PropertyServiceImplTest {
     @Mock
     private ApplicationEventPublisher mockAapplicationEventPublisher;
     @Mock
-    private PropertyRequestService mockPropertyRequestService;
+    private PropertyRegisterRequestService mockPropertyRegisterRequestService;
+    private PropertyChangeRequestService mockPropertyChangeRequestService;
 
     @BeforeEach
     void setUp() {
         serviceToTest = new PropertyServiceImpl(mockModelMapper,
-                mockPropertyRepository, mockMessageService, mockFeeService, mockAapplicationEventPublisher, residentialEntityRepository, mockPropertyRequestService);
+                mockPropertyRepository, mockMessageService, mockFeeService, mockAapplicationEventPublisher, residentialEntityRepository, mockPropertyRegisterRequestService, mockPropertyChangeRequestService);
     }
 
     @Test

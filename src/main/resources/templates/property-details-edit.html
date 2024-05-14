@@ -96,7 +96,7 @@
         <h3>Edit property data</h3>
         <div th:if="${editFailed}" class="err-msg">
             <h5 class="text-white">Edit failed!</h5>
-            <p class="text-white" th:text="'Property №' + ${propertyEditBindingModel.getNumber()} + ' already exists in this Residential entity!'"></p>
+            <p class="text-white" th:text="'Something went wrong with data change of property №' + ${propertyEditBindingModel.getNumber()}"></p>
         </div>
     </div>
 </div>

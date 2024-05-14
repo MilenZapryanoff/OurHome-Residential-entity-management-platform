@@ -122,7 +122,7 @@
                     </div>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <div th:if="${property.isValidated()}" class="buttons">
+                    <div th:if="${property.isObtained()}" class="buttons">
                         <a class="nav-link" th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">
                             <h5>Monthly fees</h5>
                             <p class="text-secondary">and due amounts</p>
@@ -138,7 +138,7 @@
                     </div>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <div th:if="${property.isValidated()}" class="buttons">
+                    <div th:if="${property.isObtained()}" class="buttons">
                         <a class="nav-link active" th:href="@{/property/re/data/{id}(id=${property.getId()})}">
                             <h5 class="text-danger">Residential Entity</h5>
                             <p class="text-secondary">data and reports</p>
@@ -200,7 +200,7 @@
                                                             + ', №' + ${property.getResidentialEntity().getStreetNumber()}"> </b>
                             </li>
                             <li class="text-dark">Number of apartments: <b
-                                    th:text="${property.getResidentialEntity().getNumberOfApartments()}"></b>
+                                    th:text="${@propertyRepository.countAllPropertiesByResidentialEntity(property.getResidentialEntity().getId())}"></b>
                             </li>
                             <li class="text-dark">Manager: <b
                                     th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +

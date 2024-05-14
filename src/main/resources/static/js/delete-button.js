@@ -15,5 +15,5 @@ document.querySelectorAll('.delete-button').forEach(button => {
 });
 
 function deleteConfirmed() {
-    return confirm("Do you really want to delete this record?");
+    return confirm("Do you really want to perform this action?");
 }
