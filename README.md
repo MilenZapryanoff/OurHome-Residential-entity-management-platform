@@ -84,6 +84,8 @@ A platform that allows the registration of both home owners and residential enti
   <ul>
    <li>Logic improvement of some basic functionalities.</li>
    <li>When property is rejected, the owner can now resend registration request.</li>
+   <li>Property owner requests related with a specific property are now separated to 'registration requests' and 'change request'.</li>
+   <li>New DB tables and relations were added. This allows all property data requests to be managed more accurate.</li>
   </ul>
 
 
