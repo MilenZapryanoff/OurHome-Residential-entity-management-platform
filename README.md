@@ -80,6 +80,12 @@ A platform that allows the registration of both home owners and residential enti
 
 <h2>Updates</h2>
 
+<h4>v.2.24.0516</h4>
+  <ul>
+    <li>UX improvements and fixes</li>
+    <li>Server side logic improvement and bug fixes</li>
+  </ul>
+
 <h4>v.2.24.0514</h4>
   <ul>
    <li>Logic improvement of some basic functionalities.</li>
