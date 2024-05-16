@@ -29,17 +29,14 @@ public class PropertyController {
     private final FinancialService financialService;
     private final ResidentialEntityService residentialEntityService;
     private final PropertyTypeService propertyTypeService;
-    private final PropertyRegisterRequestService propertyRegisterRequestService;
 
-
-    public PropertyController(UserService userService, PropertyService propertyService, MessageService messageService, FinancialService financialService, ResidentialEntityService residentialEntityService, PropertyTypeService propertyTypeService, PropertyRegisterRequestService propertyRegisterRequestService) {
+    public PropertyController(UserService userService, PropertyService propertyService, MessageService messageService, FinancialService financialService, ResidentialEntityService residentialEntityService, PropertyTypeService propertyTypeService) {
         this.userService = userService;
         this.propertyService = propertyService;
         this.messageService = messageService;
         this.financialService = financialService;
         this.residentialEntityService = residentialEntityService;
         this.propertyTypeService = propertyTypeService;
-        this.propertyRegisterRequestService = propertyRegisterRequestService;
     }
 
     /**
@@ -67,45 +64,16 @@ public class PropertyController {
     @PostMapping("/property/add")
     public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel") @Valid PropertyRegisterBindingModel propertyRegisterBindingModel, BindingResult bindingResult) {
 
-        Long residentialEntityId = propertyRegisterBindingModel.getResidentialEntity();
-        ResidentialEntity residentialEntity = getResidentialEntity(residentialEntityId);
-
         if (bindingResult.hasErrors()) {
             return new ModelAndView("property-add", "userViewModel", getUserViewModel());
         }
 
         if (propertyService.requestToObtainProperty(propertyRegisterBindingModel, getLoggedUser())) {
-            if (!residentialEntity.getPropertyTypes().isEmpty()) {
-                return new ModelAndView("property-add-select-type",
-                        "userViewModel", getUserViewModel())
-                        .addObject("residentialEntityId", residentialEntityId)
-                        .addObject("propertyNumber", propertyRegisterBindingModel.getNumber());
-            } else {
-                return new ModelAndView("redirect:/property");
-            }
-
+            return new ModelAndView("redirect:/property");
         } else {
             return new ModelAndView("property-add", "userViewModel", getUserViewModel())
                     .addObject("registrationFailed", true);
         }
-    }
-
-    @PostMapping("/property/add/property-type")
-    public ModelAndView addPropertySelectType(@ModelAttribute("propertyRegisterBindingModel") PropertyRegisterBindingModel propertyRegisterBindingModel) {
-
-        Long residentialEntityId = propertyRegisterBindingModel.getResidentialEntity();
-        int propertyNumber = propertyRegisterBindingModel.getNumber();
-
-        PropertyRegisterRequest propertyRegisterRequest = propertyRegisterRequestService.findActivePropertyRequestByNumberAndResidentialEntityId(propertyNumber, residentialEntityId);
-        Long propertyTypeId = propertyRegisterBindingModel.getPropertyType();
-
-        if (propertyTypeId != null && propertyRegisterRequest != null) {
-            PropertyType propertyType = propertyTypeService.findById(propertyTypeId);
-
-            propertyRegisterRequest.setPropertyType(propertyType);
-            propertyRegisterRequestService.update(propertyRegisterRequest);
-        }
-        return new ModelAndView("redirect:/property");
     }
 
     /**
@@ -184,9 +152,22 @@ public class PropertyController {
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView propertyEdit(@PathVariable("id") Long id) {
 
-        PropertyEditBindingModel propertyEditBindingModel = propertyService.mapPropertyToEditBindingModel(getProperty(id));
+        Property property = getProperty(id);
+        PropertyEditBindingModel propertyEditBindingModel;
 
-        return new ModelAndView("property-details-edit").addObject("userViewModel", getUserViewModel()).addObject("property", getProperty(id)).addObject("propertyEditBindingModel", propertyEditBindingModel);
+        if (property.isRejected() && property.getPropertyRegisterRequest() != null) {
+            //getting input fields from the active registration request that has been rejected. This way we hide the real property data
+            propertyEditBindingModel = propertyService.mapRegistationRequestToEditBindingModel(property);
+
+        } else {
+            //getting input fields data directly from the property
+            propertyEditBindingModel = propertyService.mapPropertyToEditBindingModel(property);
+        }
+
+        return new ModelAndView("property-details-edit")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("property", getProperty(id))
+                .addObject("propertyEditBindingModel", propertyEditBindingModel);
     }
 
 

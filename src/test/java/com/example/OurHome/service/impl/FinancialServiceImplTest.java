@@ -41,7 +41,7 @@ class FinancialServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        serviceToTest = new FinancialServiceImpl(mockFinancialRepository, mockModelMapper, mockPasswordEncoder, mockResidentialEntityService);
+        serviceToTest = new FinancialServiceImpl(mockFinancialRepository, mockModelMapper, mockResidentialEntityService);
     }
 
     @Test

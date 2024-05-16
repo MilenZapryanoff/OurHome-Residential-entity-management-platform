@@ -339,11 +339,11 @@
                                                th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) == 0}">
                                                 No properties in this category.
                                             </p>
-                                            <p class="text-info" style="font-size: 0.8em"
+                                            <p class="text-danger" style="font-size: 0.8em"
                                                th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) == 1}">
                                                 1 property in this category.
                                             </p>
-                                            <p class="text-info" style="font-size: 0.8em"
+                                            <p class="text-danger" style="font-size: 0.8em"
                                                th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) > 1}"
                                                th:text="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType)} + ' properties in this category.'">
                                             </p>
@@ -360,11 +360,11 @@
                                                th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) == 0}">
                                                 No properties in this category.
                                             </p>
-                                            <p class="text-info" style="font-size: 0.8em"
+                                            <p class="text-danger" style="font-size: 0.8em"
                                                th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) == 1}">
                                                 1 property in this category.
                                             </p>
-                                            <p class="text-info" style="font-size: 0.8em"
+                                            <p class="text-danger" style="font-size: 0.8em"
                                                th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) > 1}"
                                                th:text="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType)} + ' properties in this category.'">
                                             </p>

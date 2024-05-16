@@ -1,21 +1,20 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.PropertyRegisterRequest;
-import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.repo.PropertyRegisterRequestRepository;
 import com.example.OurHome.service.PropertyRegisterRequestService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PropertyRegisterRequestServiceImpl implements PropertyRegisterRequestService {
 
     private final PropertyRegisterRequestRepository propertyRegisterRequestRepository;
-    private final PropertyRepository propertyRepository;
 
-    public PropertyRegisterRequestServiceImpl(PropertyRegisterRequestRepository propertyRegisterRequestRepository, PropertyRepository propertyRepository) {
+    public PropertyRegisterRequestServiceImpl(PropertyRegisterRequestRepository propertyRegisterRequestRepository) {
         this.propertyRegisterRequestRepository = propertyRegisterRequestRepository;
-        this.propertyRepository = propertyRepository;
     }
 
     @Override
@@ -26,7 +25,7 @@ public class PropertyRegisterRequestServiceImpl implements PropertyRegisterReque
         Long residentialEntityId = propertyRegisterRequest.getResidentialEntityId();
 
         //check again if there is no other active request for this property. Cannot exist more than ONE active request.
-        if (checkForNoActivePropertyRegisterRequest( propertyNumber, residentialEntityId)) {
+        if (checkForNoActivePropertyRegisterRequest(propertyNumber, residentialEntityId)) {
             propertyRegisterRequestRepository.save(propertyRegisterRequest);
 
             return propertyRegisterRequestRepository.findActivePropertyRequestByNumberAndResidentialEntityId(propertyNumber, residentialEntityId);
@@ -56,5 +55,17 @@ public class PropertyRegisterRequestServiceImpl implements PropertyRegisterReque
     @Override
     public boolean checkForNoActivePropertyRegisterRequest(int propertyNumber, Long residentialEntityId) {
         return propertyRegisterRequestRepository.countActivePropertyRequestByNumberAndResidentialEntityId(propertyNumber, residentialEntityId) == 0;
+    }
+
+    @Override
+    public void save(PropertyRegisterRequest propertyRegisterRequest) {
+        propertyRegisterRequestRepository.save(propertyRegisterRequest);
+    }
+
+    @Override
+    public void detachPropertyType(Long propertyTypeId) {
+        List<PropertyRegisterRequest> allRequestsByPropertyType = propertyRegisterRequestRepository.findAllRequestsByPropertyType(propertyTypeId);
+        allRequestsByPropertyType.forEach(propertyRegisterRequest -> propertyRegisterRequest.setPropertyType(null));
+        propertyRegisterRequestRepository.saveAll(allRequestsByPropertyType);
     }
 }

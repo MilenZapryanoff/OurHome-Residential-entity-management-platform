@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PropertyChangeRequestRepository extends JpaRepository<PropertyChangeRequest, Long> {
 
@@ -13,4 +15,7 @@ public interface PropertyChangeRequestRepository extends JpaRepository<PropertyC
 
     @Query("SELECT COUNT(pcr) FROM property_change_requests pcr where pcr.number=:number AND pcr.residentialEntityId=:residentialEntityId and pcr.active = true")
     int countActivePropertyRequestByNumberAndResidentialEntityId(int number, Long residentialEntityId);
+
+    @Query("SELECT pcr FROM property_change_requests pcr where pcr.propertyType.id=:propertyTypeId")
+    List<PropertyChangeRequest> findAllRequestsByPropertyType(Long propertyTypeId);
 }

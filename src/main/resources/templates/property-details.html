@@ -150,8 +150,8 @@
             <div class="property">
                 <div class="tabs-content">
                     <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                                                <span th:if="${property.isValidated()} or ${property.isRejected()}"
+                        <li id="dcr" class="nav-item">
+                                                <span th:if="${property.isValidated() and property.isObtained()} or ${property.isRejected()}"
                                                       class="button">
                                                         <a class="nav-link active"
                                                            th:href="@{/property/details/edit/{id}(id=${property.getId()})}">
@@ -164,26 +164,99 @@
                                             </span>
                         </li>
                     </ul>
-                    <div class="col-lg-12">
-                        <h4 class="text-center">Your property details</h4>
-                        <div class="row text-center">
-                            <p class="text-danger" th:if="${property.isRejected() or !property.isObtained()}">You can still edit your property data
-                                and resend the registration request to your Manager by
-                                submitting data changes.</p>
+                    <div class="row">
+                        <!--Registration status-->
+                        <div class="col-lg-6" style="padding-bottom: 60px">
+                            <div class="info-table">
+                                <ul>
+                                    <li><h5 class="text-danger text-center">Registration status:</h5>
+                                    </li>
+                                    <li th:if="${property.isObtained()}" class="text-dark text-center">
+                                        <b>Validated!</b>
+                                    <li th:if="${!property.isObtained() and !property.isRejected()}"
+                                        class="text-black text-center"><b>Pending validation</b>
+                                    <p class="text-secondary text-center">Your registration request is pending.
+                                        Waiting for Residential entity manager to approve it!</p>
+                                    <li th:if="${property.isRejected()}" class="text-center">
+                                        <b class="text-danger">REJECTED!</b>
+                                    <p class="text-secondary text-center">Your registration request is Rejected.
+                                        You can contact your Residential entity manager for more information or edit your registration
+                                        request data and resend it!</p>
+                                    </li>
+                                    <li th:if="${!property.isObtained() and property.getPropertyRegisterRequest() != null }"
+                                        class="text-black text-center">Floor: <b
+                                            th:text="${property.getPropertyRegisterRequest().getFloor()}"></b>
+                                    </li>
+                                    <li th:if="${!property.isObtained() and property.getPropertyRegisterRequest() != null }"
+                                        class="text-black text-center">Number of adults: <b
+                                            th:text="${property.getPropertyRegisterRequest().getNumberOfAdults()}"></b>
+                                    </li>
+                                    <li th:if="${!property.isObtained() and property.getPropertyRegisterRequest() != null }"
+                                        class="text-black text-center">Number of children: <b
+                                            th:text="${property.getPropertyRegisterRequest().getNumberOfChildren()}"></b>
+                                    </li>
+                                    <li th:if="${!property.isObtained() and property.getPropertyRegisterRequest() != null }"
+                                        class="text-black text-center">Number of pets: <b
+                                            th:text="${property.getPropertyRegisterRequest().getNumberOfPets()}"></b>
+                                    </li>
+                                    <li th:if="${!property.isObtained() and property.getPropertyRegisterRequest() != null }"
+                                        class="text-black text-center">Property is habitable:
+                                        <b th:if="${property.getPropertyRegisterRequest().isNotHabitable()}"><i
+                                                class="fa-solid fa-circle-xmark text-danger"></i></b>
+                                        <b th:unless="${property.getPropertyRegisterRequest().isNotHabitable()}"><i
+                                                class="fa-solid fa-circle-check text-success"></i></b>
+                                    </li>
+                                </ul>
+
+                            </div>
                         </div>
-                        <br>
+                        <!--Change requests-->
+                        <div class="col-lg-6" style="padding-bottom: 60px">
+                            <div class="info-table">
+                                <ul>
+                                    <li><h5 class="text-danger text-center">Data change request</h5>
+                                    </li>
+                                    <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
+                                        class="text-black">Number of adults: <b
+                                            th:text="${property.getPropertyChangeRequest().getNumberOfAdults()}"></b>
+                                    </li>
+                                    <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
+                                        class="text-black">Number of children: <b
+                                            th:text="${property.getPropertyChangeRequest().getNumberOfChildren()}"></b>
+                                    </li>
+                                    <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
+                                        class="text-black">Number of pets: <b
+                                            th:text="${property.getPropertyChangeRequest().getNumberOfPets()}"></b>
+                                    </li>
+                                    <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
+                                        class="text-black">Property Type:
+                                        <b th:text="${property.getPropertyChangeRequest().getPropertyType().getDescription()} + ', ' + ${property.getPropertyChangeRequest().getPropertyType().getTotalFlatSpace() + ' m2'}"></b>
+                                    </li>
+                                    <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
+                                        class="text-black">Property is habitable:
+                                        <b th:if="${property.getPropertyChangeRequest().isNotHabitable()}"><i
+                                                class="fa-solid fa-circle-xmark text-danger"></i></b>
+                                        <b th:unless="${property.getPropertyChangeRequest().isNotHabitable()}"><i
+                                                class="fa-solid fa-circle-check text-success"></i></b>
+                                    </li>
+
+                                    <li th:unless="${property.isObtained() and property.getPropertyChangeRequest() != null}"
+                                        class="text-dark text-center">
+                                        No pending change requests
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--Property data-->
+                    <div th:if="${property.isObtained()}" class="col-lg-12">
                         <div class="info-table">
                             <div>
                                 <ul>
                                     <li>
-                                        <h5 class="text-danger">Property information</h5>
-                                    </li>
-                                    <li th:if="${property.isObtained()}" class="text-black">
-                                        Status: <b>Validated</b>
-                                    <li th:if="${!property.isObtained() and !property.isRejected()}"
-                                        class="text-black">Status: <b>Pending validation</b>
-                                    <li th:if="${property.isRejected()}" class="text-black">
-                                        Status: <b class="text-danger">Rejected</b>
+                                        <h5 class="text-danger text-center">Property details</h5>
+                                        <p class="text-center">In this section you can find details about the current settings for this property!</p>
                                     </li>
                                     <li class="text-black">Property №: <b
                                             th:text="${property.getNumber()}"></b></li>
@@ -216,37 +289,35 @@
                                             th:text="${property.getOwner().getFirstName()} + ' '
                                                                     + ${property.getOwner().getLastName()}"></b>
                                     </li>
-                                    <li><h5 class="text-danger">Inhabitants information</h5>
-                                        <p class="text-secondary">Please note, that changes in this
-                                            section may affect your
-                                            monthly fees according to the accepted by your
-                                            residential entity fee policy.
-                                            Changes like this must be approved by your Manager.<br>
-                                            After submission of the form your property status will
-                                            be changed to <b>Pending validation</b>
-                                            and some of your data won't be visible. <br>
-                                            You will get full access as soon as your manager
-                                            validates the change.</p>
-                                    </li>
-                                    <li class="text-black">Number of adults: <b
-                                            th:text="${property.getNumberOfAdults()}"></b>
-                                    </li>
-                                    <li class="text-black">Number of children: <b
-                                            th:text="${property.getNumberOfChildren()}"></b>
-                                    </li>
-                                    <li class="text-black">Number of pets: <b
-                                            th:text="${property.getNumberOfPets()}"></b>
-                                    </li>
-                                    <li class="text-black">Property is habitable:
-                                        <b th:if="${property.isNotHabitable()}"><i
-                                                class="fa-solid fa-circle-xmark text-danger"></i></b>
-                                        <b th:unless="${property.isNotHabitable()}"><i
-                                                class="fa-solid fa-circle-check text-success"></i></b>
-                                    </li>
+                                    <div th:if="${property.isObtained()}">
+                                        <li><h5 class="text-danger">Inhabitants information</h5>
+                                            <p class="text-secondary">Please note, that changes in this
+                                                section may affect your monthly fees according to the accepted by your
+                                                residential entity fee policy.<br>
+                                                Such changes have to be approved by your Manager!<br>
+                                                The status of the change request will be visible in <a href="#dcr">Data change request</a> section.</p>
+                                        </li>
+                                        <li class="text-black">Number of adults: <b
+                                                th:text="${property.getNumberOfAdults()}"></b>
+                                        </li>
+                                        <li class="text-black">Number of children: <b
+                                                th:text="${property.getNumberOfChildren()}"></b>
+                                        </li>
+                                        <li class="text-black">Number of pets: <b
+                                                th:text="${property.getNumberOfPets()}"></b>
+                                        </li>
+                                        <li class="text-black">Property is habitable:
+                                            <b th:if="${property.isNotHabitable()}"><i
+                                                    class="fa-solid fa-circle-xmark text-danger"></i></b>
+                                            <b th:unless="${property.isNotHabitable()}"><i
+                                                    class="fa-solid fa-circle-check text-success"></i></b>
+                                        </li>
+                                    </div>
                                 </ul>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

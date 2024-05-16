@@ -1,11 +1,12 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.PropertyChangeRequest;
-import com.example.OurHome.model.Entity.PropertyRegisterRequest;
 import com.example.OurHome.repo.PropertyChangeRequestRepository;
 import com.example.OurHome.service.PropertyChangeRequestService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PropertyChangeRequestServiceImpl implements PropertyChangeRequestService {
@@ -50,5 +51,12 @@ public class PropertyChangeRequestServiceImpl implements PropertyChangeRequestSe
     public void invalidateRequest(PropertyChangeRequest propertyChangeRequest) {
         propertyChangeRequest.setActive(false);
         propertyChangeRequestRepository.save(propertyChangeRequest);
+    }
+
+    @Override
+    public void detachPropertyType(Long propertyTypeId) {
+        List<PropertyChangeRequest> allRequestsByPropertyType = propertyChangeRequestRepository.findAllRequestsByPropertyType(propertyTypeId);
+        allRequestsByPropertyType.forEach(propertyChangeRequest -> propertyChangeRequest.setPropertyType(null));
+        propertyChangeRequestRepository.saveAll(allRequestsByPropertyType);
     }
 }

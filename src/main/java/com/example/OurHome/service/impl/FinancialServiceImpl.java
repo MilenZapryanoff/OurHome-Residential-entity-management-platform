@@ -10,7 +10,6 @@ import com.example.OurHome.repo.FinancialRepository;
 import com.example.OurHome.service.FinancialService;
 import com.example.OurHome.service.ResidentialEntityService;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,7 +31,7 @@ public class FinancialServiceImpl implements FinancialService {
     private final ModelMapper modelMapper;
 
 
-    public FinancialServiceImpl(FinancialRepository financialRepository, ModelMapper modelMapper, PasswordEncoder mockPasswordEncoder, ResidentialEntityService residentialEntityService) {
+    public FinancialServiceImpl(FinancialRepository financialRepository, ModelMapper modelMapper, ResidentialEntityService residentialEntityService) {
         this.financialRepository = financialRepository;
         this.modelMapper = modelMapper;
         this.residentialEntityService = residentialEntityService;

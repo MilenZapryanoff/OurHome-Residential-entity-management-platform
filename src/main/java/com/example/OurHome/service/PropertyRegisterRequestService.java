@@ -1,6 +1,7 @@
 package com.example.OurHome.service;
 
 import com.example.OurHome.model.Entity.PropertyRegisterRequest;
+import com.example.OurHome.model.Entity.ResidentialEntity;
 
 public interface PropertyRegisterRequestService {
 
@@ -13,4 +14,8 @@ public interface PropertyRegisterRequestService {
     PropertyRegisterRequest findActivePropertyRequestByNumberAndResidentialEntityId(int propertyNumber, Long residentialEntityId);
 
     boolean checkForNoActivePropertyRegisterRequest(int propertyNumber, Long residentialEntityId);
+
+    void save(PropertyRegisterRequest propertyRegisterRequest);
+
+    void detachPropertyType(Long propertyTypeId);
 }

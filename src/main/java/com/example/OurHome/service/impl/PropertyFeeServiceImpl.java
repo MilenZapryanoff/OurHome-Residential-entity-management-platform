@@ -321,7 +321,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
         //Setting new propertyFee when overpaid amount < total monthly fee
 
         //TODO: If fee is partially paid the overpaid amount is not added to RE incomes component until the whole propertyFee is paid.
-        //TODO: I can add a new field in RE enitity for non-completed (pending partial overpayments) payments where the overpaid amount is kept until propertyFee is paid.
+        //TODO: I can add a new field in RE entity for non-completed (pending partial overpayments) payments where the overpaid amount is kept until propertyFee is paid.
         if (overpayment.compareTo(totalMonthlyFee) < 0) {
 
             newMonthlyFee.setDueAmount(totalMonthlyFee.subtract(overpayment));

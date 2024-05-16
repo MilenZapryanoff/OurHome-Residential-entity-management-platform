@@ -61,4 +61,6 @@ public interface PropertyService {
     void unlinkAllPropertiesFromOwner(Long residentId, ResidentialEntity residentialEntity);
 
     void deleteProperty(Long id, boolean deletedByManager);
+
+    PropertyEditBindingModel mapRegistationRequestToEditBindingModel(Property property);
 }

@@ -5,9 +5,7 @@ import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.PropertyType.PropertyTypeAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyType.PropertyTypeEditBindingModel;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
-import com.example.OurHome.service.PropertyTypeService;
-import com.example.OurHome.service.ResidentialEntityService;
-import com.example.OurHome.service.UserService;
+import com.example.OurHome.service.*;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,11 +23,15 @@ public class PropertyTypeController {
     private final UserService userService;
     private final PropertyTypeService propertyTypeService;
     private final ResidentialEntityService residentialEntityService;
+    private final PropertyRegisterRequestService propertyRegisterRequestService;
+    private final PropertyChangeRequestService propertyChangeRequestService;
 
-    public PropertyTypeController(UserService userService, PropertyTypeService propertyTypeService, ResidentialEntityService residentialEntityService) {
+    public PropertyTypeController(UserService userService, PropertyTypeService propertyTypeService, ResidentialEntityService residentialEntityService, PropertyRegisterRequestService propertyRegisterRequestService, PropertyChangeRequestService propertyChangeRequestService) {
         this.userService = userService;
         this.propertyTypeService = propertyTypeService;
         this.residentialEntityService = residentialEntityService;
+        this.propertyRegisterRequestService = propertyRegisterRequestService;
+        this.propertyChangeRequestService = propertyChangeRequestService;
     }
 
 
@@ -211,6 +213,11 @@ public class PropertyTypeController {
     public ModelAndView propertyTypeDelete(@PathVariable("id") Long id) {
 
         ResidentialEntity residentialEntity = propertyTypeService.findResidentialEntityByPropertyType(id);
+
+        //detach register/change requests from propertyTypes.
+        propertyRegisterRequestService.detachPropertyType(id);
+        propertyChangeRequestService.detachPropertyType(id);
+
         propertyTypeService.deletePropertyType(id);
 
         return new ModelAndView("redirect:/administration/property/types/" + residentialEntity.getId() + "#property-types");

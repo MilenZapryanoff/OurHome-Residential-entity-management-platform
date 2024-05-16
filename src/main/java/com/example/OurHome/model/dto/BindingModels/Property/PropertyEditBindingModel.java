@@ -3,6 +3,7 @@ package com.example.OurHome.model.dto.BindingModels.Property;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public class PropertyEditBindingModel {
 
@@ -10,12 +11,14 @@ public class PropertyEditBindingModel {
     private int number;
     @NotNull
     private String floor;
-    @NotNull
+
+    @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
     private int numberOfAdults;
-    @NotNull
+    @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
     private int numberOfChildren;
-    @NotNull
+    @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
     private int numberOfPets;
+
     @Column
     private String numberOfRooms;
 

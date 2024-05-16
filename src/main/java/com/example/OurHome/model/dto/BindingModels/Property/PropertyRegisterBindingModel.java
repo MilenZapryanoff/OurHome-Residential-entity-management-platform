@@ -16,10 +16,8 @@ public class PropertyRegisterBindingModel {
 
     @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
     private int numberOfAdults;
-
     @PositiveOrZero(message = "Number of children must be a positive digit or 0")
     private int numberOfChildren;
-
     @PositiveOrZero(message = "Number of pets must be a positive digit or 0")
     private int numberOfPets;
 
@@ -32,8 +30,6 @@ public class PropertyRegisterBindingModel {
 
     @NotNull
     private Long residentialEntity;
-
-    private Long propertyType;
 
     public int getNumber() {
         return number;
@@ -107,11 +103,4 @@ public class PropertyRegisterBindingModel {
         this.parkingAvailable = parkingAvailable;
     }
 
-    public Long getPropertyType() {
-        return propertyType;
-    }
-
-    public void setPropertyType(Long propertyType) {
-        this.propertyType = propertyType;
-    }
 }

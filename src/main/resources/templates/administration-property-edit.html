@@ -172,7 +172,7 @@
                                    th:errors="*{numberOfAdults}"
                                    class="text-danger">Adults number error
                                 message</small>
-                            <input type="text" id="numberOfAdults"
+                            <input type="number" id="numberOfAdults"
                                    placeholder="Enter number of adults..."
                                    autocomplete="on" required
                                    th:field="*{numberOfAdults}"
@@ -187,8 +187,9 @@
                                    th:errors="*{numberOfChildren}"
                                    class="text-danger">Children error
                                 message</small>
-                            <input type="text" id="numberOfChildren"
+                            <input type="number" id="numberOfChildren"
                                    placeholder="Enter number of children..."
+                                   autocomplete="on" required
                                    th:field="*{numberOfChildren}"
                                    th:errorclass="bg-danger"
                                    th:value="${propertyEditBindingModel.getNumberOfChildren()}">
@@ -200,16 +201,15 @@
                                    th:errors="*{numberOfPets}"
                                    class="text-danger">Number of pets
                                 message</small>
-                            <input type="text" id="numberOfPets"
+                            <input type="number" id="numberOfPets"
                                    placeholder="Enter number of pets ..."
-                                   required
+                                   autocomplete="on" required
                                    th:field="*{numberOfPets}"
                                    th:errorclass="bg-danger"
                                    th:value="${propertyEditBindingModel.getNumberOfPets()}">
                         </fieldset>
                         <fieldset>
-                            <label for="isNotHabitable"><b>Property is not
-                                habitable</b></label>
+                            <label for="isNotHabitable"><b>Property is not habitable</b></label>
                             <input name="isNotHabitable" id="isNotHabitable"
                                    type="checkbox"
                                    th:field="*{notHabitable}"
@@ -265,6 +265,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/input-data-control.js"></script>
 
 
 </body>

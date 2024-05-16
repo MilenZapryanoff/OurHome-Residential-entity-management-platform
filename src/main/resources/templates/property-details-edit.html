@@ -111,12 +111,12 @@
                       th:action="@{/property/details/edit/{id}(id=${property.getId()})}"
                       th:object="${propertyEditBindingModel}">
                     <div class="col-lg-12">
-                        <p>Please note, that some property <br>changes like <b>Inhabitants information,
+                        <p th:if="${property.isRejected()}">Your can now edit registration request data and resend it for approval.<br>
+                            By submitting the form your request will be sent to Residential entity manager for approval.
+                        </p>
+                        <p th:unless="${property.isRejected()}">Please note, that some property <br>changes like <b>Inhabitants information,
                             property number, floor number or property type</b> (<i>if option available</i>) may affect your
                             monthly fee calculations. <br>New data must be approved by Residential entity Manager.<br>
-                            If You submit changes in some of the fields forming your monthly fee your
-                            property status will be changed to <b>Pending validation</b>
-                            Some of your data won't be accessible until your manager approves the change.
                         </p>
                         <br>
                         <hr>
@@ -127,11 +127,10 @@
                             <br>
                             <small th:if="${#fields.hasErrors('number')}"
                                    th:errors="*{number}"
-                                   class="text-danger">Street name error
-                                message</small>
+                                   class="text-danger">Property № error message</small>
                             <input type="text" id="number"
-                                   placeholder="Enter street name..."
-                                   autocomplete="on"
+                                   placeholder="Enter Property №..."
+                                   disabled="disabled"
                                    required th:field="*{number}"
                                    th:errorclass="bg-danger"
                                    th:value="${propertyEditBindingModel.getNumber()}">
@@ -151,7 +150,7 @@
                                    th:errorclass="bg-danger"
                                    th:value="${propertyEditBindingModel.getFloor()}">
                         </fieldset>
-                        <fieldset th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0}">
+                        <fieldset th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0 and !property.isRejected()}">
                             <label for="propertyTypeId"><b>Property type</b></label>
                             <select class="form-control" id="propertyTypeId"
                                     th:field="*{propertyType}">
@@ -259,6 +258,8 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/input-data-control.js"></script>
+
 
 
 </body>
