@@ -1,6 +1,7 @@
 package com.example.OurHome.repo;
 
 import com.example.OurHome.model.Entity.PropertyChangeRequest;
+import com.example.OurHome.model.Entity.PropertyRegisterRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,7 @@ public interface PropertyChangeRequestRepository extends JpaRepository<PropertyC
 
     @Query("SELECT pcr FROM property_change_requests pcr where pcr.propertyType.id=:propertyTypeId")
     List<PropertyChangeRequest> findAllRequestsByPropertyType(Long propertyTypeId);
+
+    @Query("SELECT pcr FROM property_change_requests pcr where pcr.residentialEntityId=:residentialEntityId")
+    List<PropertyChangeRequest> findAllByResidentialEntity(Long residentialEntityId);
 }

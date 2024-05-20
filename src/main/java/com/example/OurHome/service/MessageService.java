@@ -22,7 +22,9 @@ public interface MessageService {
 
     void propertyModificationMessageToResident(Property property);
 
-    void propertyApprovedMessage(Property property);
+    void propertyRegistrationApprovedMessage(Property property);
+
+    void propertyRegistrationApprovedWithNoChangesMessage(Property property);
 
     void propertyRejectedMessage(Property property);
 

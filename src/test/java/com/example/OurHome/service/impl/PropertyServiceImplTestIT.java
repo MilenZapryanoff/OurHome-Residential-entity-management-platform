@@ -128,7 +128,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        boolean needOfVerification = propertyServiceToTest.checkNeedOfVerification(id, propertyEditBindingModel);
+        boolean needOfVerification = propertyServiceToTest.validationIsRequired(id, propertyEditBindingModel);
 
         assertTrue(needOfVerification);
     }
@@ -146,7 +146,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        boolean needOfVerification = propertyServiceToTest.checkNeedOfVerification(id, propertyEditBindingModel);
+        boolean needOfVerification = propertyServiceToTest.validationIsRequired(id, propertyEditBindingModel);
 
         assertTrue(needOfVerification);
     }
@@ -164,7 +164,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        boolean needOfVerification = propertyServiceToTest.checkNeedOfVerification(id, propertyEditBindingModel);
+        boolean needOfVerification = propertyServiceToTest.validationIsRequired(id, propertyEditBindingModel);
 
         assertTrue(needOfVerification);
     }
@@ -182,7 +182,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        boolean needOfVerification = propertyServiceToTest.checkNeedOfVerification(id, propertyEditBindingModel);
+        boolean needOfVerification = propertyServiceToTest.validationIsRequired(id, propertyEditBindingModel);
 
         assertTrue(needOfVerification);
     }
@@ -200,7 +200,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        boolean needOfVerification = propertyServiceToTest.checkNeedOfVerification(id, propertyEditBindingModel);
+        boolean needOfVerification = propertyServiceToTest.validationIsRequired(id, propertyEditBindingModel);
 
         assertTrue(needOfVerification);
     }
@@ -218,7 +218,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        boolean needOfVerification = propertyServiceToTest.checkNeedOfVerification(id, propertyEditBindingModel);
+        boolean needOfVerification = propertyServiceToTest.validationIsRequired(id, propertyEditBindingModel);
 
         assertTrue(needOfVerification);
     }
@@ -241,7 +241,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        boolean needOfVerification = propertyServiceToTest.checkNeedOfVerification(id, propertyEditBindingModel);
+        boolean needOfVerification = propertyServiceToTest.validationIsRequired(id, propertyEditBindingModel);
 
         assertFalse(needOfVerification);
     }
@@ -320,7 +320,7 @@ class PropertyServiceImplTestIT {
     }
 
     @Test
-    void testApproveProperty() {
+    void testApprovePropertyWithDataChange() {
         Property testProperty = createTestProperty();
         testProperty.setResidentialEntity(createResidentialEntity());
         propertyRepository.save(testProperty);
@@ -331,7 +331,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        propertyServiceToTest.approveProperty(id, true);
+        propertyServiceToTest.approvePropertyWithDataChange(id, true);
 
         Optional<Property> property = propertyRepository.findById(id);
 

@@ -213,7 +213,6 @@ class FinancialServiceImplTestIT {
         residentialEntity.setId(100L);
         residentialEntity.setAccessCode("test");
         residentialEntity.setCity(cityRepository.findByName(CityName.valueOf("София")));
-        residentialEntity.setNumberOfApartments(5L);
         residentialEntity.setStreetName("Test");
         residentialEntity.setStreetNumber(String.valueOf(1));
         residentialEntity.setCity(cityRepository.findByName(CityName.valueOf("София")));

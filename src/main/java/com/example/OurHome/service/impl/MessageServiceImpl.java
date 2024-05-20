@@ -132,7 +132,7 @@ public class MessageServiceImpl implements MessageService {
      * @param property carries information about the property. Allows message extend.
      */
     @Override
-    public void propertyApprovedMessage(Property property) {
+    public void propertyRegistrationApprovedMessage(Property property) {
         messageRepository.save(
                 new Message(
                         LocalDate.now(),
@@ -338,6 +338,22 @@ public class MessageServiceImpl implements MessageService {
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
                         messageText,
+                        property.getOwner(),
+                        false,
+                        false));
+    }
+
+    @Override
+    public void propertyRegistrationApprovedWithNoChangesMessage(Property property) {
+        messageRepository.save(
+                new Message(
+                        LocalDate.now(),
+                        Time.valueOf(LocalTime.now()),
+                        "Your registration request for property № " + property.getNumber() + " id Residential entity ID: "
+                                + property.getResidentialEntity().getId() + " has been APPROVED. Please note, that there " +
+                                "was a difference between your input data and the preset data for this property. " +
+                                " Your input data was ignored and no changes were made for this property." +
+                                "You can now access your property data and reports.",
                         property.getOwner(),
                         false,
                         false));

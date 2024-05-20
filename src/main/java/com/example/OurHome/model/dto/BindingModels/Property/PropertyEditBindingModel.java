@@ -8,6 +8,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 public class PropertyEditBindingModel {
 
     @NotNull
+    @Positive(message = "Property number must be a positive digit")
     private int number;
     @NotNull
     private String floor;
@@ -27,6 +28,9 @@ public class PropertyEditBindingModel {
     private boolean notHabitable;
 
     private Long propertyType;
+
+    public PropertyEditBindingModel() {
+    }
 
     public int getNumber() {
         return number;

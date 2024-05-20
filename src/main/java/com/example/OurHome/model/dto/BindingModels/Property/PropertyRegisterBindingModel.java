@@ -31,6 +31,9 @@ public class PropertyRegisterBindingModel {
     @NotNull
     private Long residentialEntity;
 
+    public PropertyRegisterBindingModel() {
+    }
+
     public int getNumber() {
         return number;
     }

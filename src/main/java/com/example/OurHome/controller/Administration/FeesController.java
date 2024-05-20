@@ -46,7 +46,7 @@ public class FeesController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityFees(@PathVariable("id") Long id) {
 
-        return new ModelAndView("administration-fees")
+        return new ModelAndView("administration/administration-fees")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
     }
@@ -55,7 +55,7 @@ public class FeesController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityFeeSettings(@PathVariable("id") Long id) {
 
-        return new ModelAndView("administration-fees-settings")
+        return new ModelAndView("administration/administration-fees-settings")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
     }
@@ -77,7 +77,7 @@ public class FeesController {
 
         FeeEditBindingModel feeEditBindingModel = feeService.mapFeeToBindingModel(residentialEntity.getFee());
 
-        return new ModelAndView("administration-fees-edit")
+        return new ModelAndView("administration/administration-fees-edit")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("feeEditBindingModel", feeEditBindingModel);
@@ -96,7 +96,7 @@ public class FeesController {
                                                   BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-fees-edit")
+            return new ModelAndView("administration/administration-fees-edit")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("residentialEntity", getResidentialEntity(id))
                     .addObject("feeEditBindingModel", feeEditBindingModel);
@@ -123,7 +123,7 @@ public class FeesController {
         Property property = propertyService.findPropertyById(id);
         OverpaymentBindingModel overpaymentBindingModel = propertyService.mapOverPaymentBindingModel(property);
 
-        return new ModelAndView("administration-property-fees")
+        return new ModelAndView("administration/administration-property-fees")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("property", getProperty(id))
                 .addObject("overpaymentBindingModel", overpaymentBindingModel);
@@ -159,6 +159,37 @@ public class FeesController {
         return new ModelAndView("redirect:/administration/fees/" + property.getResidentialEntity().getId() + "#autoFee-post-nav");
     }
 
+
+    /**
+     * Switch all properties monthly (auto) fee generation ON (Top Table buttons in Monthly fees section table)
+     *
+     * @param id residentialEntity ID
+     */
+    @PostMapping("/administration/fees/turnAllPropertiesFeesOn/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView turnAllPropertyFeesOn(@PathVariable("id") Long id) {
+
+        ResidentialEntity residentialEntity = getResidentialEntity(id);
+        propertyService.turnAllPropertiesFeesOn(residentialEntity);
+
+        return new ModelAndView("redirect:/administration/fees/" + id + "#autoFee-post-nav");
+    }
+
+    /**
+     * Switch all properties monthly (auto) fee generation OFF (Top Table buttons in Monthly fees section table)
+     *
+     * @param id residentialEntity ID
+     */
+    @PostMapping("/administration/fees/turnAllPropertiesFeesOff/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView turnAllPropertyFeesOff(@PathVariable("id") Long id) {
+
+        ResidentialEntity residentialEntity = getResidentialEntity(id);
+        propertyService.turnAllPropertiesFeesOff(residentialEntity);
+
+        return new ModelAndView("redirect:/administration/fees/" + id + "#autoFee-post-nav");
+    }
+
     /**
      * Updating overpayment amount
      *
@@ -173,7 +204,7 @@ public class FeesController {
                                        BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-property-fees")
+            return new ModelAndView("administration/administration-property-fees")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("property", getProperty(id))
                     .addObject("overpaymentBindingModel", overpaymentBindingModel);
@@ -192,7 +223,7 @@ public class FeesController {
                                                  BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-property-fees")
+            return new ModelAndView("administration/administration-property-fees")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("property", getProperty(id))
                     .addObject("overpaymentBindingModel", overpaymentBindingModel);
@@ -217,7 +248,7 @@ public class FeesController {
         propertyFeeEditBindingModel.setOverPayment(getProperty(propertyId).getOverpayment());
 
 
-        return new ModelAndView("administration-property-fees-edit")
+        return new ModelAndView("administration/administration-property-fees-edit")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("propertyFeeEditBindingModel", propertyFeeEditBindingModel);
     }
@@ -239,7 +270,7 @@ public class FeesController {
         //Edition may be allowed only for not paid fees, because if already paid i have to recalculate the RE income somehow.
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-property-fees-edit")
+            return new ModelAndView("administration/administration-property-fees-edit")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("propertyFeeEditBindingModel", propertyFeeEditBindingModel);
         }
@@ -252,7 +283,7 @@ public class FeesController {
         }
 
         if (propertyFeeEditBindingModel.getFundMmAmount().equals(BigDecimal.ZERO) && propertyFeeEditBindingModel.getFundRepairAmount().equals(BigDecimal.ZERO)) {
-            return new ModelAndView("administration-property-fees-edit")
+            return new ModelAndView("administration/administration-property-fees-edit")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("propertyFeeEditBindingModel", propertyFeeEditBindingModel)
                     .addObject("feeChangeFailed", true);
@@ -273,7 +304,7 @@ public class FeesController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView addPropertyFee(@PathVariable("id") Long id) {
 
-        return new ModelAndView("administration-property-fees-add")
+        return new ModelAndView("administration/administration-property-fees-add")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("propertyFeeAddBindingModel", new PropertyFeeAddBindingModel());
     }
@@ -291,7 +322,7 @@ public class FeesController {
                                        BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-property-fees-add")
+            return new ModelAndView("administration/administration-property-fees-add")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("propertyFeeAddBindingModel", propertyFeeAddBindingModel);
         }
@@ -304,7 +335,7 @@ public class FeesController {
         }
 
         if (propertyFeeAddBindingModel.getFundMmAmount().equals(BigDecimal.ZERO) && propertyFeeAddBindingModel.getFundRepairAmount().equals(BigDecimal.ZERO)) {
-            return new ModelAndView("administration-property-fees-add")
+            return new ModelAndView("administration/administration-property-fees-add")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("propertyFeeAddBindingModel", propertyFeeAddBindingModel)
                     .addObject("feeCreationFailed", true);
@@ -360,7 +391,7 @@ public class FeesController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView addGlobalFee(@PathVariable("id") Long id) {
 
-        return new ModelAndView("administration-fees-addglobalfee")
+        return new ModelAndView("administration/administration-fees-addglobalfee")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("propertyFeeAddGlobalFeeBindingModel", new PropertyFeeAddGlobalFeeBindingModel());
     }
@@ -378,7 +409,7 @@ public class FeesController {
                                      BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-fees-addglobalfee")
+            return new ModelAndView("administration/administration-fees-addglobalfee")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("propertyFeeAddGlobalFeeBindingModel", propertyFeeAddGlobalFeeBindingModel);
         }
@@ -393,14 +424,14 @@ public class FeesController {
         }
 
         if (propertyFeeAddGlobalFeeBindingModel.getFundMmAmount().equals(BigDecimal.ZERO) && propertyFeeAddGlobalFeeBindingModel.getFundRepairAmount().equals(BigDecimal.ZERO)) {
-            return new ModelAndView("administration-fees-addglobalfee")
+            return new ModelAndView("administration/administration-fees-addglobalfee")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("propertyFeeAddGlobalFeeBindingModel", propertyFeeAddGlobalFeeBindingModel)
                     .addObject("globalFeeFailed", true);
         }
 
         if (propertyFeeService.createMassFee(residentialEntity, propertyFeeAddGlobalFeeBindingModel)) {
-            return new ModelAndView("administration-fees")
+            return new ModelAndView("administration/administration-fees")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("residentialEntity", getResidentialEntity(id))
                     .addObject("globalFeeAdded", true);

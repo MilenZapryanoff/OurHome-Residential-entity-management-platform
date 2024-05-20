@@ -4,6 +4,7 @@ import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyType;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyCreateBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.OverpaymentBindingModel;
@@ -18,13 +19,15 @@ public interface PropertyService {
 
     void unlinkOwner(Long id, boolean deletedByManaged);
 
-    void approveProperty(Long id, boolean noValidationNeed);
+    void approvePropertyWithDataChange(Long id, boolean noValidationNeed);
+
+    void approvePropertyWithoutDataChange(Long id);
 
     void rejectProperty(Long id);
 
     boolean editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType);
 
-    boolean propertyChangeRequest(Long id, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType, UserEntity loggedUser, boolean needValidation);
+    boolean processChangeRequest(Long id, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType, UserEntity loggedUser);
 
     void setOverpayment(PropertyFeeEditBindingModel propertyFeeEditBindingModel);
 
@@ -32,9 +35,9 @@ public interface PropertyService {
 
     PropertyEditBindingModel mapPropertyToEditBindingModel(Property property);
 
-    boolean checkNeedOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel);
+    boolean validationIsRequired(Long id, PropertyEditBindingModel propertyEditBindingModel);
 
-    boolean checkNeedOfVerification(Long id, PropertyRegisterBindingModel propertyRegisterBindingModel );
+    boolean validationIsRequired(Long id, PropertyRegisterBindingModel propertyRegisterBindingModel );
 
     List<Property> findAllProperties();
 
@@ -62,5 +65,15 @@ public interface PropertyService {
 
     void deleteProperty(Long id, boolean deletedByManager);
 
-    PropertyEditBindingModel mapRegistationRequestToEditBindingModel(Property property);
+    PropertyEditBindingModel mapRegistrationRequestToEditBindingModel(Property property);
+
+    void createSingleProperty(PropertyCreateBindingModel propertyCreateBindingModel, ResidentialEntity residentialEntity, PropertyType propertyType);
+
+    void updateNonFinancialPropertyFields(Property property, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType);
+
+    PropertyEditBindingModel mapChangeRequestToEditBindingModel(Property property);
+
+    void turnAllPropertiesFeesOn(ResidentialEntity residentialEntity);
+
+    void turnAllPropertiesFeesOff(ResidentialEntity residentialEntity);
 }

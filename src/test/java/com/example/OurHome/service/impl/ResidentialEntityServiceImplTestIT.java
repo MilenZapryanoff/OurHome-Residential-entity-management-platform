@@ -67,10 +67,10 @@ class ResidentialEntityServiceImplTestIT {
     }
 
     @Test
-    void testRemoveResidentialEntity() {
+    void testDeleteResidentialEntity() {
         createResidentialEntity();
 
-        residentialEntityServiceToTest.removeResidentialEntity(100L);
+        residentialEntityServiceToTest.deleteResidentialEntity(100L);
 
         List<ResidentialEntity> all = residentialEntityRepository.findAll();
 
@@ -97,7 +97,6 @@ class ResidentialEntityServiceImplTestIT {
         ResidentialEntityEditBindingModel residentialEntityEditBindingModel = new ResidentialEntityEditBindingModel();
         residentialEntityEditBindingModel.setAccessCode("modified");
         residentialEntityEditBindingModel.setCity(CityName.valueOf("Пловдив"));
-        residentialEntityEditBindingModel.setNumberOfApartments(20L);
         residentialEntityEditBindingModel.setStreetName("testPass");
         residentialEntityEditBindingModel.setStreetNumber(String.valueOf(2));
 
@@ -105,7 +104,6 @@ class ResidentialEntityServiceImplTestIT {
 
         Optional<ResidentialEntity> editedResidentialEntity = residentialEntityRepository.findById(100L);
 
-        assertEquals(residentialEntityEditBindingModel.getNumberOfApartments(), editedResidentialEntity.get().getNumberOfApartments());
         assertEquals(residentialEntityEditBindingModel.getStreetName(), editedResidentialEntity.get().getStreetName());
         assertEquals(residentialEntityEditBindingModel.getStreetNumber(), editedResidentialEntity.get().getStreetNumber());
     }
@@ -134,7 +132,6 @@ class ResidentialEntityServiceImplTestIT {
         assertEquals(residentialEntity.getStreetName(), residentialEntityEditBindingModel.getStreetName());
         assertEquals(residentialEntity.getStreetNumber(), residentialEntityEditBindingModel.getStreetNumber());
         assertEquals(residentialEntity.getEntrance(), residentialEntityEditBindingModel.getEntrance());
-        assertEquals(residentialEntity.getNumberOfApartments(), residentialEntityEditBindingModel.getNumberOfApartments());
     }
 
     private ResidentialEntity createResidentialEntity() {
@@ -145,7 +142,6 @@ class ResidentialEntityServiceImplTestIT {
         residentialEntity.setId(100L);
         residentialEntity.setAccessCode("test");
         residentialEntity.setCity(cityRepository.findByName(CityName.valueOf("София")));
-        residentialEntity.setNumberOfApartments(15L);
         residentialEntity.setStreetName("test");
         residentialEntity.setStreetNumber(String.valueOf(1));
         residentialEntityRepository.save(residentialEntity);

@@ -266,13 +266,13 @@ class MessageServiceImplTestIT {
     }
 
     @Test
-    void testPropertyApprovedMessage() {
+    void testPropertyRegistrationApprovedMessage() {
         Property property = createTestData();
 
         List<UserEntity> allUsers = userRepository.findAll();
         Long userId = allUsers.get(1).getId();
 
-        messageServiceToTest.propertyApprovedMessage(property);
+        messageServiceToTest.propertyRegistrationApprovedMessage(property);
 
         List<Message> allMessages = messageRepository.findAll();
 

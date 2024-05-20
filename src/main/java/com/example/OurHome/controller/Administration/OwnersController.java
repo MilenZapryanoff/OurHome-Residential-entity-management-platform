@@ -1,5 +1,6 @@
 package com.example.OurHome.controller.Administration;
 
+import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyManageBindingModel;
@@ -40,7 +41,7 @@ public class OwnersController {
     public ModelAndView residentialEntityOwnersDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
                                                        @PathVariable("id") Long id) {
 
-        return new ModelAndView("administration-owners")
+        return new ModelAndView("administration/administration-owners")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
     }
@@ -56,9 +57,25 @@ public class OwnersController {
     public ModelAndView residentialEntityPendingOwnerRegistrations(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
                                                                    @PathVariable("id") Long id) {
 
-        return new ModelAndView("administration-owners-pending")
+        return new ModelAndView("administration/administration-owners-pending")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
+    }
+
+    /**
+     * Owners details in Administration
+     *
+     * @param id property id
+     * @return view administration- pending owner registrations
+     */
+    @GetMapping("/administration/owners/pending/request/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView propertyOwnerRegistrationRequest(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
+            @PathVariable("id") Long id) {
+
+        return new ModelAndView("administration/administration-owners-pending-request")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("property", getProperty(id));
     }
 
     /**
@@ -72,23 +89,39 @@ public class OwnersController {
     public ModelAndView residentialEntityRejectedOwnerRegistrations(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
                                                                     @PathVariable("id") Long id) {
 
-        return new ModelAndView("administration-owners-rejected")
+        return new ModelAndView("administration/administration-owners-rejected")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
     }
 
     /**
-     * Owner registration approve
+     * Owner registration approve with applying changes from request
      *
      * @param propertyManageBindingModel carries information about the entityId
      * @param id                         property id
      * @return "redirect:/administration/owners/{entityId}"
      */
-    @PostMapping("/administration/owners/approve/{id}")
+    @PostMapping("/administration/owners/approve-with-changes/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityPropertyApprove(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
+    public ModelAndView residentialEntityPropertyApproveWithDataChange(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
-        propertyService.approveProperty(id, true);
+        propertyService.approvePropertyWithDataChange(id, true);
+
+        return new ModelAndView("redirect:/administration/owners/pending/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
+    }
+
+    /**
+     * Owner registration approve without applying changes from request (ignoring request changes)
+     *
+     * @param propertyManageBindingModel carries information about the entityId
+     * @param id                         property id
+     * @return "redirect:/administration/owners/{entityId}"
+     */
+    @PostMapping("/administration/owners/approve-without-changes/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityPropertyApproveWithoutDataChange(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
+
+        propertyService.approvePropertyWithoutDataChange(id);
 
         return new ModelAndView("redirect:/administration/owners/pending/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
     }
@@ -151,7 +184,7 @@ public class OwnersController {
         //unlink properties from user
         propertyService.unlinkAllPropertiesFromOwner(id, residentialEntity);
 
-        return new ModelAndView("administration-owners")
+        return new ModelAndView("administration/administration-owners")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()))
                 .addObject("residentRemoved", true);
@@ -193,5 +226,15 @@ public class OwnersController {
      */
     private ResidentialEntity getResidentialEntity(Long id) {
         return residentialEntityService.findResidentialEntityById(id).orElse(null);
+    }
+
+    /**
+     * Method returns a Property
+     *
+     * @param id property id
+     * @return Property
+     */
+    private Property getProperty(Long id) {
+        return propertyService.findPropertyById(id);
     }
 }

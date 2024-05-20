@@ -33,7 +33,7 @@ public class ResidentialEntityController {
     @GetMapping("/administration")
     public ModelAndView administration() {
 
-        return new ModelAndView("administration", "userViewModel", getUserViewModel());
+        return new ModelAndView("administration/administration", "userViewModel", getUserViewModel());
     }
 
     /**
@@ -43,7 +43,7 @@ public class ResidentialEntityController {
     public ModelAndView addNewResidence(@ModelAttribute("residentialEntityRegisterBindingModel")
                                         ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel) {
 
-        return new ModelAndView("administration-add-residence", "userViewModel", getUserViewModel());
+        return new ModelAndView("administration/administration-add-residence", "userViewModel", getUserViewModel());
     }
 
     /**
@@ -58,9 +58,9 @@ public class ResidentialEntityController {
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-add-residence", "userViewModel", getUserViewModel());
+            return new ModelAndView("administration/administration-add-residence", "userViewModel", getUserViewModel());
         } else if (!residentialEntityService.accessCodesMatchCheck(residentialEntityRegisterBindingModel.getAccessCode(), residentialEntityRegisterBindingModel.getConfirmAccessCode())) {
-            return new ModelAndView("administration-add-residence", "userViewModel", getUserViewModel())
+            return new ModelAndView("administration/administration-add-residence", "userViewModel", getUserViewModel())
                     .addObject("noAccessCodeMatch", true);
         }
         residentialEntityService.newResidentialEntity(residentialEntityRegisterBindingModel, loggedUser);
@@ -76,10 +76,10 @@ public class ResidentialEntityController {
     @PostMapping("/administration/remove/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityRemove(@PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView("administration", "userViewModel", getUserViewModel());
+        ModelAndView modelAndView = new ModelAndView("administration/administration", "userViewModel", getUserViewModel());
 
         if (residentialEntityService.checkIfResidentialEntityDeletable(id)) {
-            residentialEntityService.removeResidentialEntity(id);
+            residentialEntityService.deleteResidentialEntity(id);
             return modelAndView.addObject("deleted", true);
         }
         return modelAndView.addObject("notDeleted", true);

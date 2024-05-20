@@ -45,7 +45,7 @@ public class PropertyTypeController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyTypes(@PathVariable("id") Long id) {
 
-        return new ModelAndView("administration-property-types")
+        return new ModelAndView("administration/administration-property-types")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
     }
@@ -62,7 +62,7 @@ public class PropertyTypeController {
 
         PropertyTypeAddBindingModel propertyTypeAddBindingModel = new PropertyTypeAddBindingModel();
 
-        return new ModelAndView("administration-property-types-add")
+        return new ModelAndView("administration/administration-property-types-add")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("propertyTypeAddBindingModel", propertyTypeAddBindingModel);
@@ -82,7 +82,7 @@ public class PropertyTypeController {
                                         @PathVariable("id") Long id) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-property-types-add")
+            return new ModelAndView("administration/administration-property-types-add")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("residentialEntity", getResidentialEntity(id))
                     .addObject("propertyTypeAddBindingModel", propertyTypeAddBindingModel);
@@ -90,7 +90,7 @@ public class PropertyTypeController {
         if (propertyTypeService.addPropertyType(id, propertyTypeAddBindingModel)) {
             return new ModelAndView("redirect:/administration/property/types/" + id);
         } else {
-            return new ModelAndView("administration-property-types-add")
+            return new ModelAndView("administration/administration-property-types-add")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("propertyTypeAddBindingModel", propertyTypeAddBindingModel)
                     .addObject("residentialEntity", getResidentialEntity(id))
@@ -111,7 +111,7 @@ public class PropertyTypeController {
         PropertyTypeEditBindingModel propertyTypeEditBindingModel = propertyTypeService.mapPropertyTypeToEditBindingModel(id);
         ResidentialEntity residentialEntity = propertyTypeService.findResidentialEntityByPropertyType(id);
 
-        return new ModelAndView("administration-property-types-edit")
+        return new ModelAndView("administration/administration-property-types-edit")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", residentialEntity)
                 .addObject("propertyTypeEditBindingModel", propertyTypeEditBindingModel);
@@ -133,7 +133,7 @@ public class PropertyTypeController {
         ResidentialEntity residentialEntity = propertyTypeService.findResidentialEntityByPropertyType(id);
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-property-types-edit")
+            return new ModelAndView("administration/administration-property-types-edit")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("residentialEntity", residentialEntity)
                     .addObject("propertyTypeEditBindingModel", propertyTypeEditBindingModel);
@@ -142,7 +142,7 @@ public class PropertyTypeController {
         if (propertyTypeService.editPropertyType(id, propertyTypeEditBindingModel)) {
             return new ModelAndView("redirect:/administration/property/types/" + residentialEntity.getId() + "#property-types");
         } else {
-            return new ModelAndView("administration-property-types-edit")
+            return new ModelAndView("administration/administration-property-types-edit")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("propertyTypeEditBindingModel", propertyTypeEditBindingModel)
                     .addObject("residentialEntity", residentialEntity)
@@ -163,7 +163,7 @@ public class PropertyTypeController {
         PropertyTypeEditBindingModel propertyTypeEditBindingModel = propertyTypeService.mapPropertyTypeToEditBindingModel(id);
         ResidentialEntity residentialEntity = propertyTypeService.findResidentialEntityByPropertyType(id);
 
-        return new ModelAndView("administration-property-types-redirect-edit")
+        return new ModelAndView("administration/administration-property-types-redirect-edit")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", residentialEntity)
                 .addObject("propertyTypeEditBindingModel", propertyTypeEditBindingModel);
@@ -185,7 +185,7 @@ public class PropertyTypeController {
         ResidentialEntity residentialEntity = propertyTypeService.findResidentialEntityByPropertyType(id);
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-property-types-redirect-edit")
+            return new ModelAndView("administration/administration-property-types-redirect-edit")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("residentialEntity", residentialEntity)
                     .addObject("propertyTypeEditBindingModel", propertyTypeEditBindingModel);
@@ -194,7 +194,7 @@ public class PropertyTypeController {
         if (propertyTypeService.editPropertyType(id, propertyTypeEditBindingModel)) {
             return new ModelAndView("redirect:/administration/fees/edit/" + residentialEntity.getId() + "#post-nav");
         } else {
-            return new ModelAndView("administration-property-types-edit")
+            return new ModelAndView("administration/administration-property-types-edit")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("propertyTypeEditBindingModel", propertyTypeEditBindingModel)
                     .addObject("residentialEntity", residentialEntity)

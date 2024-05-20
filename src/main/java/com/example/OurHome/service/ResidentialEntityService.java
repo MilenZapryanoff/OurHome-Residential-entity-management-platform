@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ResidentialEntityService {
     boolean newResidentialEntity(ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel, UserEntity loggedUser);
 
-    void removeResidentialEntity(Long id);
+    void deleteResidentialEntity(Long id);
 
     boolean checkIfUserIsResidentialEntityModerator(Long residentialEntityId, Long residentId);
 

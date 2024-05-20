@@ -50,7 +50,7 @@ public class FinancialController {
 
         ExpenseFilterBindingModel expenseFilter = financialService.createDefaultExpenseFilter(getResidentialEntity(id));
 
-        return new ModelAndView("administration-financial-expenses")
+        return new ModelAndView("administration/administration-financial-expenses")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("expenseFilterBindingModel", expenseFilter);
@@ -68,7 +68,7 @@ public class FinancialController {
                                                     BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-financial-expenses")
+            return new ModelAndView("administration/administration-financial-expenses")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("residentialEntity", getResidentialEntity(id))
                     .addObject("expenseFilterBindingModel", expenseFilter);
@@ -77,7 +77,7 @@ public class FinancialController {
         expenseFilter = financialService.createCustomExpenseFilter(expenseFilter.getPeriodStart(),
                 expenseFilter.getPeriodEnd(), getResidentialEntity(id));
 
-        return new ModelAndView("administration-financial-expenses")
+        return new ModelAndView("administration/administration-financial-expenses")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("expenseFilterBindingModel", expenseFilter);
@@ -93,7 +93,7 @@ public class FinancialController {
     public ModelAndView addExpense(@PathVariable("id") Long id) {
 
 
-        return new ModelAndView("administration-financial-add")
+        return new ModelAndView("administration/administration-financial-add")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("expenseAddBindingModel", new ExpenseAddBindingModel());
@@ -112,7 +112,7 @@ public class FinancialController {
                                    BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-financial-add")
+            return new ModelAndView("administration/administration-financial-add")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("expenseAddBindingModel", expenseAddBindingModel);
         }
@@ -134,7 +134,7 @@ public class FinancialController {
         Expense expense = financialService.findById(id);
         ExpenseEditBindingModel expenseEditBindingModel = financialService.mapExpenseToBindingModel(expense);
 
-        return new ModelAndView("administration-financial-edit")
+        return new ModelAndView("administration/administration-financial-edit")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("expenseEditBindingModel", expenseEditBindingModel)
                 .addObject("entityId", expense.getResidentialEntity().getId());
@@ -153,7 +153,7 @@ public class FinancialController {
                                     BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration-financial-edit")
+            return new ModelAndView("administration/administration-financial-edit")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("expenseEditBindingModel", expenseEditBindingModel);
         }
@@ -192,7 +192,7 @@ public class FinancialController {
 
         Expense expense = financialService.findById(id);
 
-        return new ModelAndView("administration-financial-details")
+        return new ModelAndView("administration/administration-financial-details")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("expense", expense);
     }
@@ -209,7 +209,7 @@ public class FinancialController {
 
         Expense expense = financialService.findById(id);
 
-        ModelAndView modelAndView = new ModelAndView("administration-financial-details")
+        ModelAndView modelAndView = new ModelAndView("administration/administration-financial-details")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("expense", expense);
 
@@ -233,7 +233,7 @@ public class FinancialController {
 
         Expense expense = financialService.findById(id);
 
-        ModelAndView modelAndView = new ModelAndView("administration-financial-details")
+        ModelAndView modelAndView = new ModelAndView("administration/administration-financial-details")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("expense", expense);
 
@@ -303,7 +303,7 @@ public class FinancialController {
 
         IncomesBindingModel incomesBindingModel = financialService.mapIncomesBindingModel(id);
 
-        return new ModelAndView("administration-financial-incomes")
+        return new ModelAndView("administration/administration-financial-incomes")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("incomesBindingModel", incomesBindingModel);

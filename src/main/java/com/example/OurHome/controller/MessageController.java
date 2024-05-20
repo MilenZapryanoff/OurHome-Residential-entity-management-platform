@@ -131,7 +131,7 @@ public class MessageController {
                                     ResidentManageBindingModel residentManageBindingModel,
                                     @PathVariable("id") Long id) {
 
-        ModelAndView modelAndView = new ModelAndView("administration-owners")
+        ModelAndView modelAndView = new ModelAndView("administration/administration-owners")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()));
 

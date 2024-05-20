@@ -19,4 +19,7 @@ public interface PropertyRegisterRequestRepository extends JpaRepository<Propert
 
     @Query("SELECT prr FROM property_register_requests prr where prr.propertyType.id=:propertyTypeId")
     List<PropertyRegisterRequest> findAllRequestsByPropertyType(Long propertyTypeId);
+
+    @Query("SELECT prr FROM property_register_requests prr where prr.residentialEntityId=:residentialEntityId")
+    List<PropertyRegisterRequest> findAllByResidentialEntity(Long residentialEntityId);
 }

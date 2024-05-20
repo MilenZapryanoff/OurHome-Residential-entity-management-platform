@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
+                    </div>
+                    <!-- ***** Logo End ***** -->
+
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/messages}">Messages</a></li>
+                        <small th:with="userId=${userViewModel.getId()}">
+                            <samp th:if="${@messageRepository.countUnreadMessages(userId) > 0}"
+                                  th:with="userId=${userViewModel.getId()}"
+                                  class="timer count-title text-danger"
+                                  th:data-to="${@messageRepository.countUnreadMessages(userId)}"
+                                  data-speed="1000"></samp>
+                        </small>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
+                                                                     class="active">Administration</a>
+                        </li>
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
+                            property</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
+                        <li><a th:href="@{/contact}">Contact Us</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
+                        <li sec:authorize="isAuthenticated()">
+                            <form id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Residential Entity Data</h3>
+                <span th:text="'RESIDENTIAL ENTITY: ' + ${property.getResidentialEntity().getCity().getName()}
+                + ', ' + ${property.getResidentialEntity().getStreetName()}
+                + ' № ' +${property.getResidentialEntity().getStreetNumber()}
+                + ', entrance: ' +${property.getResidentialEntity().getEntrance()}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br>
+
+<!-- ***** Residential entity section ***** -->
+
+
+<div class="single-property">
+    <div class="container">
+        <!--        start of buttons-->
+        <div class="tabs-content">
+            <ul class="nav nav-tabs">
+                <li class="nav-item" role="presentation">
+                    <div class="buttons">
+                        <a class="nav-link" th:href="@{/property/summary/{id}(id=${property.getId()})}">
+                            <h5>Summary</h5>
+                            <p class="text-secondary">and property status</p></a>
+                    </div>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <div th:if="${property.isObtained()}" class="buttons">
+                        <a class="nav-link" th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">
+                            <h5>Monthly fees</h5>
+                            <p class="text-secondary">and due amounts</p>
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <div class="buttons">
+                        <a class="nav-link" th:href="@{/property/details/{id}(id=${property.getId()})}">
+                            <h5>Property details</h5>
+                            <p class="text-secondary">and settings</p>
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <div th:if="${property.isObtained()}" class="buttons">
+                        <a class="nav-link active" th:href="@{/property/re/data/{id}(id=${property.getId()})}">
+                            <h5 class="text-danger">Residential Entity</h5>
+                            <p class="text-secondary">data and reports</p>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--end of buttons-->
+
+
+        <div class="section property">
+            <div class="tabs-content">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item" id="data" >
+                        <div class="button">
+                            <a class="nav-link active"
+                               href=#data>
+                                <div>Data</i></div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="button">
+                            <a class="nav-link"
+                               th:href="@{/property/re/expenses/{id}(id=${property.getId()})}">
+                                <div>Expenses  <i class="fa-solid fa-circle-minus"></i></div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="button">
+                            <a class="nav-link"
+                               th:href="@{/property/re/incomes/{id}(id=${property.getId()})}">
+                                <div>Incomes  <i class="fa-solid fa-circle-plus"></i></div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="button ">
+                            <a class="nav-link"
+                               th:href="@{/property}">
+                                <div>Back</div>
+                            </a>
+                        </a>
+                    </li>
+                </ul>
+
+                <div th:if="${property.isValidated()}" class="info-table text-dark">
+                    <div>
+                        <ul>
+                            <li><h5 class="text-center text-danger">Your Residential entity details</h5></li>
+                            <li class="text-dark">Residential entity ID: <b
+                                    th:text="${property.getResidentialEntity().getId()}"></b>
+                            </li>
+                            <li class="text-dark">Residential entity address: <b
+                                    th:text="${property.getResidentialEntity().getCity().getName()}
+                                                            + ', ' + ${property.getResidentialEntity().getStreetName()}
+                                                            + ', №' + ${property.getResidentialEntity().getStreetNumber()}"> </b>
+                            </li>
+                            <li class="text-dark">Number of apartments: <b
+                                    th:text="${@propertyRepository.countAllPropertiesByResidentialEntity(property.getResidentialEntity().getId())}"></b>
+                            </li>
+                            <li class="text-dark">Manager: <b
+                                    th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +
+                                                                    ${property.getResidentialEntity().getManager().getLastName()}"></b>
+                            </li>
+                            <li class="text-dark">Manager phone: <b
+                                    th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b>
+                            </li>
+                            <li class="text-dark">Manager email: <b
+                                    th:text="${property.getResidentialEntity().getManager().getEmail()}"></b>
+                            </li>
+                            <li>
+                                <div class="text-center">
+                                    <br>
+                                    <h5 class="text-danger">Residential entity fee policy</h5>
+                                    <p class="text-secondary">Residential entity fee
+                                        policy defines the way your property monthly fee is calculated.
+                                        <br>In this section you will find the fees applicable to your residential
+                                        entity.<br>
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="text-dark">
+                                <h5>Habitable property fee components</h5>
+                            </li>
+                            <li class="text-black">
+                                <p>Fixed fee: <b
+                                        th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' лв.'"></b>
+                                </p>
+                                <p class="text-secondary">
+                                    <i class="fa-solid fa-house-chimney"></i><small> applies per property</small>
+                                </p>
+                            </li>
+                            <li class="text-black">
+                                <p>Adult fee: <b
+                                        th:text="${property.getResidentialEntity().getFee().getAdultFee()} + ' лв.'"></b>
+                                </p>
+                                <p class="text-secondary">
+                                    <i class="fa-solid fa-person"></i><small> applies per adult</small>
+                                </p>
+                            </li>
+                            <li class="text-black">
+                                <p>Child fee: <b
+                                        th:text="${property.getResidentialEntity().getFee().getChildFee()} + ' лв.'"></b>
+                                </p>
+                                <p class="text-secondary">
+                                    <i class="fa-solid fa-child"></i><small> applies per child</small>
+                                </p>
+                            </li>
+                            <li class="text-black">
+                                <p>Pet fee: <b
+                                        th:text="${property.getResidentialEntity().getFee().getPetFee()} + ' лв.'"></b>
+                                </p>
+                                <p class="text-secondary">
+                                    <i class="fa-solid fa-dog"></i><small> applies per pet</small>
+                                </p>
+                            </li>
+                            <li class="text-black">
+                                <p>Other Residential entity fee: <b
+                                        th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
+                                </p>
+                                <p class="text-secondary">
+                                    <i class="fa-solid fa-gem"></i><small> applies per property</small>
+                                </p>
+                            </li>
+                            <li class="text-dark">
+                                <h5>Non-habitable property fee components</h5>
+                            </li>
+                            <li class="text-black">
+                                <p>Fixed fee: <b
+                                        th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
+                                </p>
+                                <p class="text-secondary">
+                                    <i class="fa-solid fa-house"></i><small> applies per property</small>
+                                </p>
+                            </li>
+                            <li class="text-black">
+                                <p>Other Residential entity fee: <b
+                                        th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
+                                </p>
+                                <p class="text-secondary">
+                                    <i class="fa-solid fa-gem"></i><small> applies per property</small>
+                                </p>
+                            </li>
+                            <li class="text-dark">
+                                <h5>Individual property fee components</h5>
+                            </li>
+                            <li class="text-black">
+                                <p>Individual property specific fee: <b
+                                        th:text="${property.getAdditionalPropertyFee()} + ' лв.'"></b></p>
+                                <p class="text-secondary">
+                                    <i class="fa-solid fa-gears"></i><small> applies for this property only</small>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+
+</body>
+</html>

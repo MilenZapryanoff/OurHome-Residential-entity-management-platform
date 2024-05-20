@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
+                    </div>
+                    <!-- ***** Logo End ***** -->
+
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/messages}">Messages</a></li>
+                        <small th:with="userId=${userViewModel.getId()}">
+                            <samp th:if="${@messageRepository.countUnreadMessages(userId) > 0}"
+                                  th:with="userId=${userViewModel.getId()}"
+                                  class="timer count-title text-danger"
+                                  th:data-to="${@messageRepository.countUnreadMessages(userId)}"
+                                  data-speed="1000"></samp>
+                        </small>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
+                                                                     class="active">Administration</a>
+                        </li>
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
+                            property</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
+                        <li><a th:href="@{/contact}">Contact Us</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
+                        <li sec:authorize="isAuthenticated()">
+                            <form id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Property registration request</h3>
+        </div>
+    </div>
+</div>
+
+
+<!-- Property create input form -->
+<div class="container">
+    <div class="property" style="padding-top: 80px;: ">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="profile"
+                 aria-labelledby="profile-tab">
+                <div class="row">
+                    <div class="col-lg-6" style="padding-bottom: 20px">
+                        <div class="info-table">
+                            <ul>
+                                <li>
+                                    <h5 class="text-danger text-center">Property data</h5>
+                                    <p class="text-center">Property data set for this property.</p>
+                                    <p class="text-center">Please note, that most of the data in this section may be
+                                        part of the components involved in the calculation of the monthly fee for this
+                                        property.
+                                        <b>It is important to keep this data correct.</b>
+                                    </p>
+                                </li>
+                                <li class="text-black text-center"><i class="fa-solid fa-list-ol"></i> Property №:
+                                    <b th:text="${property.getNumber()}"></b>
+                                </li>
+                                <li class="text-black text-center"><i class="fa-solid fa-stairs"></i> Property floor number:
+                                    <b th:text="${property.getFloor()}"></b>
+                                </li>
+                                <li class="text-black text-center"><i class="fa-solid fa-person"></i> Number of adults:
+                                    <b th:text="${property.getNumberOfAdults()}"></b>
+                                </li>
+                                <li class="text-black text-center"><i class="fa-solid fa-child"></i> Number of children:
+                                    <b th:text="${property.getNumberOfChildren()}"></b>
+                                </li>
+                                <li class="text-black text-center"><i class="fa-solid fa-dog"></i> Number of pets:
+                                    <b th:text="${property.getNumberOfPets()}"></b>
+                                </li>
+                                <li class="text-black text-center"><i class="fa-solid fa-house-chimney-user"></i> Property is habitable:
+                                    <b th:if="${property.isNotHabitable()}"><i
+                                            class="fa-solid fa-circle-xmark text-danger"></i></b>
+                                    <b th:unless="${property.isNotHabitable()}"><i
+                                            class="fa-solid fa-circle-check text-success"></i></b>
+                                </li>
+                                <li th:if="${@propertyTypeRepository.countPropertyTypesByRE(property.getResidentialEntity()) > 0}"
+                                    class="text-black text-center"><i class="fa-solid fa-building"></i> Property type:
+                                    <b th:text="${property.getPropertyType().getDescription()}"></b>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-6" style="padding-bottom: 20px">
+                        <div class="info-table">
+                            <ul>
+                                <li>
+                                    <h5 class="text-danger text-center">Registration request</h5>
+                                    <p class="text-center">Request data is the data, that property owner has entered for
+                                        this property.</p>
+                                </li>
+                                <li class="text-center text-dark">Requester:
+                                    <b th:text="${property.getOwner().getFirstName() + ' ' + property.getOwner().getLastName()}"></b>
+                                </li>
+                                <li class="text-black text-center">
+                                    <b th:if="${property.getNumber() != property.getPropertyRegisterRequest().getNumber()}">
+                                    <i class="fa-solid fa-triangle-exclamation text-danger help"
+                                       title="Difference between property data and registration request data"></i></b>
+                                    <i class="fa-solid fa-list-ol"></i> Property №:
+                                    <b th:text="${property.getPropertyRegisterRequest().getNumber()}"></b>
+                                </li>
+                                <li class="text-black text-center"><b th:if="${property.getFloor() != property.getPropertyRegisterRequest().getFloor()}">
+                                    <i class="fa-solid fa-triangle-exclamation text-danger help"
+                                       title="Difference between property data and registration request data"></i></b>
+                                    <i class="fa-solid fa-stairs"></i> Property floor number:
+                                    <b th:text="${property.getPropertyRegisterRequest().getFloor()}"></b>
+                                </li>
+                                <li class="text-black text-center"><b th:if="${property.getNumberOfAdults() != property.getPropertyRegisterRequest().getNumberOfAdults()}">
+                                    <i class="fa-solid fa-triangle-exclamation text-danger help"
+                                       title="Difference between property data and registration request data"></i></b>
+                                    <i class="fa-solid fa-person"></i> Number of adults:
+                                    <b th:text="${property.getPropertyRegisterRequest().getNumberOfAdults()}"></b>
+                                </li>
+                                <li class="text-black text-center"><b th:if="${property.getNumberOfChildren() != property.getPropertyRegisterRequest().getNumberOfChildren()}">
+                                    <i class="fa-solid fa-triangle-exclamation text-danger help"
+                                       title="Difference between property data and registration request data"></i></b>
+                                    <i class="fa-solid fa-child"></i> Number of children:
+                                    <b th:text="${property.getPropertyRegisterRequest().getNumberOfChildren()}"></b>
+                                </li>
+                                <li class="text-black text-center"><b th:if="${property.getNumberOfPets() != property.getPropertyRegisterRequest().getNumberOfPets()}">
+                                    <i class="fa-solid fa-triangle-exclamation text-danger help"
+                                       title="Difference between property data and registration request data"></i></b>
+                                    <i class="fa-solid fa-dog"></i> Number of pets:
+                                    <b th:text="${property.getPropertyRegisterRequest().getNumberOfPets()}"></b>
+
+                                </li>
+                                <li class="text-black text-center"><b th:if="${property.isNotHabitable() != property.getPropertyRegisterRequest().isNotHabitable()}">
+                                    <i class="fa-solid fa-triangle-exclamation text-danger help"
+                                       title="Difference between property data and registration request data"></i></b>
+                                    <i class="fa-solid fa-house-chimney-user"></i> Property is habitable:
+                                    <b th:if="${property.getPropertyRegisterRequest().isNotHabitable()}"><i
+                                            class="fa-solid fa-circle-xmark text-danger"></i></b>
+                                    <b th:unless="${property.getPropertyRegisterRequest().isNotHabitable()}"><i
+                                            class="fa-solid fa-circle-check text-success"></i></b>
+
+                                </li>
+                                <li>
+                                    <p>Symbol <i class="fa-solid fa-triangle-exclamation"></i> shows
+                                        differences between
+                                        the data set for this property and registration request
+                                        input data.</p>
+                                    <p><b>You can choose between :</b>
+                                        <br> <i class="fa-solid fa-circle text-success"></i> Approving registration
+                                        request <b>with</b> data change.
+                                        New property owner will be set and data change will be applied according to
+                                        registration request data.
+                                        <br> <i class="fa-solid fa-circle text-success"></i> Approving registration
+                                        request <b>without</b> data change. New property
+                                        owner will be set, but data changes will be <b>ignored</b>!
+                                        <br> <i class="fa-solid fa-circle text-danger"></i> Rejecting registration
+                                        request <b>without</b> data change. New property
+                                        owner won't be set, and data changes will be <b>ignored</b>! Owner can change
+                                        new registration request!
+                                    </p>
+                                    <div class="buttons-container">
+                                        <form class="form-container"
+                                              th:action="@{/administration/owners/approve-with-changes/{id} (id=${property.getId()})}"
+                                              th:method="POST"
+                                              th:object="${propertyManageBindingModel}">
+
+                                            <div th:id="'customDialog_' + ${property.getId()}"
+                                                 class="custom-dialog" style="display: none;">
+                                                <p th:id="'customDialogText_' + ${property.getId()}"></p>
+                                                <button class="custom-dialog-ok"
+                                                        th:onclick="'closeCustomDialog(\'' + ${property.getId()} + '\')'">
+                                                    OK
+                                                </button>
+                                            </div>
+
+                                            <label for="entityId-approve-with-change" class="hidden"></label>
+                                            <select class="form-control hidden" id="entityId-approve-with-change"
+                                                    th:field="*{entityId}">
+                                                <option th:value="${property.getResidentialEntity().getId()}"></option>
+                                            </select>
+                                            <button id="approve-with-change"
+                                                    th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property approved.\')'"
+                                                    type="submit">Approve with changes
+                                            </button>
+
+                                        </form>
+                                        <form class="form-container"
+                                              th:action="@{/administration/owners/approve-without-changes/{id} (id=${property.getId()})}"
+                                              th:method="POST"
+                                              th:object="${propertyManageBindingModel}">
+
+                                            <label for="entityId-approve-without-change" class="hidden"></label>
+                                            <select class="form-control hidden" id="entityId-approve-without-change"
+                                                    th:field="*{entityId}">
+                                                <option th:value="${property.getResidentialEntity().getId()}"></option>
+                                            </select>
+                                            <button id="approve-without-change"
+                                                    th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property approved.\')'"
+                                                    type="submit">Approve without changes
+                                            </button>
+                                        </form>
+                                    </div>
+                                </li>
+                                <li style="display: flex; justify-content: center">
+                                    <form class="form-container"
+                                          th:action="@{/administration/owners/reject/{id} (id=${property.getId()})}"
+                                          th:method="POST"
+                                          th:object="${propertyManageBindingModel}">
+
+                                        <label for="entityId-reject" class="hidden"></label>
+                                        <select class="form-control hidden" id="entityId-reject"
+                                                th:field="*{entityId}">
+                                            <option th:value="${property.getResidentialEntity().getId()}"></option>
+                                        </select>
+                                        <button id="reject" class="text-center"
+                                                th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property rejected.\')'"
+                                                type="submit">Reject registration
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/confirm.js"></script>
+
+</body>
+</html>

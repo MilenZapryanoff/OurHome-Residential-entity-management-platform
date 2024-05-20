@@ -6,7 +6,7 @@ import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddGlobalFeeBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
-import com.example.OurHome.model.events.PropertyApprovalEvent;
+import com.example.OurHome.model.events.PropertyCreationEvent;
 import com.example.OurHome.repo.PropertyFeeRepository;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.service.MessageService;
@@ -52,14 +52,14 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     /**
      * Creation of first fee. It is by default set to paid and fee amount set to 0.0
      *
-     * @param propertyApprovalEvent property approval event
+     * @param propertyCreationEvent property approval event
      */
     @Override
-    @EventListener(PropertyApprovalEvent.class)
+    @EventListener(PropertyCreationEvent.class)
     @Transactional
-    public void createFirstFee(PropertyApprovalEvent propertyApprovalEvent) {
+    public void createFirstFee(PropertyCreationEvent propertyCreationEvent) {
 
-        if (propertyApprovalEvent.getProperty().getPropertyFees().isEmpty()) {
+        if (propertyCreationEvent.getProperty().getPropertyFees().isEmpty()) {
             PropertyFee newPropertyFee = new PropertyFee();
             LocalDate now = LocalDate.now();
 
@@ -69,7 +69,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             newPropertyFee.setDueAmount(BigDecimal.ZERO);
             newPropertyFee.setPeriodStart(now.withDayOfMonth(1));
             newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
-            newPropertyFee.setProperty(propertyApprovalEvent.getProperty());
+            newPropertyFee.setProperty(propertyCreationEvent.getProperty());
             newPropertyFee.setDescription("Modify this record if old duties available");
             newPropertyFee.setNonFinancial(true);
             newPropertyFee.setOverpaidAmountStart(BigDecimal.ZERO);

@@ -81,7 +81,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.example.OurHome.model.Entity.PropertyFee;
 &nbsp;import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
 &nbsp;import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
-&nbsp;import com.example.OurHome.model.events.PropertyApprovalEvent;
+&nbsp;import com.example.OurHome.model.events.PropertyCreationEvent;
 &nbsp;import com.example.OurHome.repo.PropertyFeeRepository;
 &nbsp;import com.example.OurHome.repo.PropertyRepository;
 &nbsp;import com.example.OurHome.service.MessageService;
@@ -122,14 +122,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    /**
 &nbsp;     * Creation of first fee. It is by default set to paid and fee amount set to 0.0
-&nbsp;     * @param propertyApprovalEvent property approval event
+&nbsp;     * @param propertyCreationEvent property approval event
 &nbsp;     */
 &nbsp;    @Override
 &nbsp;    @EventListener(PropertyApprovalEvent.class)
 &nbsp;    @Transactional
-&nbsp;    public void createFirstFee(PropertyApprovalEvent propertyApprovalEvent) {
+&nbsp;    public void createFirstFee(PropertyApprovalEvent propertyCreationEvent) {
 &nbsp;
-<b class="nc">&nbsp;        if (propertyApprovalEvent.getProperty().getPropertyFees().isEmpty()){</b>
+<b class="nc">&nbsp;        if (propertyCreationEvent.getProperty().getPropertyFees().isEmpty()){</b>
 <b class="nc">&nbsp;            PropertyFee newPropertyFee = new PropertyFee();</b>
 <b class="nc">&nbsp;            LocalDate now = LocalDate.now();</b>
 &nbsp;
@@ -137,7 +137,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;            newPropertyFee.setPaid(true);</b>
 <b class="nc">&nbsp;            newPropertyFee.setPeriodStart(now.withDayOfMonth(1));</b>
 <b class="nc">&nbsp;            newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));</b>
-<b class="nc">&nbsp;            newPropertyFee.setProperty(propertyApprovalEvent.getProperty());</b>
+<b class="nc">&nbsp;            newPropertyFee.setProperty(propertyCreationEvent.getProperty());</b>
 <b class="nc">&nbsp;            newPropertyFee.setDescription(&quot;Edit this record if old duties available&quot;);</b>
 <b class="nc">&nbsp;            propertyFeeRepository.save(newPropertyFee);</b>
 &nbsp;        }

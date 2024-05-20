@@ -38,7 +38,7 @@ public class DetailsController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityDetails(@PathVariable("id") Long id) {
 
-        return new ModelAndView("administration-details")
+        return new ModelAndView("administration/administration-details")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
     }
@@ -55,7 +55,7 @@ public class DetailsController {
 
         ResidentialEntityEditBindingModel residentialEntityEditBindingModel = residentialEntityService.mapEntityToEditBindingModel(getResidentialEntity(id));
 
-        return new ModelAndView("administration-details-edit")
+        return new ModelAndView("administration/administration-details-edit")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("residentialEntityEditBindingModel", residentialEntityEditBindingModel);
@@ -74,7 +74,7 @@ public class DetailsController {
     public ModelAndView residentialEntityEditDetailsPost(@ModelAttribute("residentialEntityEditBindingModel")
                                                          @Valid ResidentialEntityEditBindingModel residentialEntityEditBindingModel, @PathVariable("entityId") Long entityId, BindingResult bindingResult) {
 
-        ModelAndView modelAndView = new ModelAndView("administration-details-edit")
+        ModelAndView modelAndView = new ModelAndView("administration/administration-details-edit")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(entityId))
                 .addObject("residentialEntityEditBindingModel", residentialEntityEditBindingModel);

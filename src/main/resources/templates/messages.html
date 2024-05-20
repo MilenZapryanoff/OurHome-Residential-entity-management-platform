@@ -105,9 +105,14 @@
                     th:text="'1 new message'"></h3>
                 <h3 th:if="${@messageRepository.countUnreadMessages(userViewModel.getId()) > 1}"
                     th:text="${@messageRepository.countUnreadMessages(userViewModel.getId())} + ' new messages'"></h3>
-                <h4 th:if="${messageError}" class="text-danger">Message not sent. Text length must be up to 2000
-                    symbols</h4>
-                <h4 th:if="${messageSent}" class="text-success">MESSAGE SENT</h4>
+                <div th:if="${messageError}" class="err-msg">
+                    <h5 class="text-white">Message not sent!</h5>
+                    <p class="text-white">Text length must be up to 2000 symbols!</p>
+                </div>
+
+                <div th:if="${messageSent}" class="success-msg">
+                    <h5 class="text-white">MESSAGE SENT!</h5>
+                </div>
             </div>
         </div>
     </div>
@@ -210,7 +215,7 @@
                                                                                     <hr>
                                                                                 </div>
                                                                                 <div th:text="${message.getText()}"></div>
-
+                                                                                <br>
                                                                                 <div th:unless="${message.getSender() == null}">
                                                                                     <form th:action="@{/messages/send/{id} (id=${message.getId()})}"
                                                                                           th:method="POST"
@@ -232,20 +237,18 @@
                                                                                                     th:value="${message.getReceiver().getId()}">
                                                                                             </option>
                                                                                         </select>
-                                                                                        <label for="messageText"
-                                                                                               class="hidden"></label>
-                                                                                        <input class="info-table small"
-                                                                                               type="text"
-                                                                                               th:placeholder="'Reply to ' + ${message.getSender().getFirstName()}"
-                                                                                               id="messageText"
-                                                                                               required
-                                                                                               autocomplete="off"
-                                                                                               th:field="*{message}"
-                                                                                               th:errorclass="bg-danger">
-                                                                                        <div class="col-lg-3">
+                                                                                        <label for="messageText" class="hidden"></label>
+                                                                                        <textarea id="messageText"
+                                                                                                  required type="text"
+                                                                                                  autocomplete="off"
+                                                                                                  th:field="*{message}"
+                                                                                                  th:placeholder="'Reply to ' + ${message.getSender().getFirstName()}"
+                                                                                                  th:errorclass="bg-danger">
+                                                                                        </textarea>
+                                                                                        <div class="col-lg-3" style="padding-top: 10px">
                                                                                             <button type="submit"
                                                                                                     class="form-control text-bg-success">
-                                                                                                <small>SEND</small>
+                                                                                                <small>Reply</small>
                                                                                             </button>
                                                                                         </div>
                                                                                     </form>
@@ -285,8 +288,7 @@
                                                                                           th:method="POST"
                                                                                           class="form-container"
                                                                                           th:object="${sendMessageBindingModel}">
-                                                                                        <label for="senderIdNotArchived"
-                                                                                               class="hidden"></label>
+                                                                                        <label for="senderIdNotArchived" class="hidden"></label>
                                                                                         <select class="form-control hidden"
                                                                                                 id="senderIdNotArchived"
                                                                                                 th:field="*{receiverId}">
@@ -294,8 +296,7 @@
                                                                                                     th:value="${message.getSender().getId()}">
                                                                                             </option>
                                                                                         </select>
-                                                                                        <label for="receiverIdNotArchived"
-                                                                                               class="hidden"></label>
+                                                                                        <label for="receiverIdNotArchived" class="hidden"></label>
                                                                                         <select class="form-control hidden"
                                                                                                 id="receiverIdNotArchived"
                                                                                                 th:field="*{senderId}">
@@ -303,20 +304,18 @@
                                                                                                     th:value="${message.getReceiver().getId()}">
                                                                                             </option>
                                                                                         </select>
-                                                                                        <label for="messageTextNotRead"
-                                                                                               class="hidden"></label>
-                                                                                        <input class="info-table small"
-                                                                                               type="text"
-                                                                                               th:placeholder="'Reply to ' + ${message.getSender().getFirstName()}"
-                                                                                               id="messageTextNotRead"
-                                                                                               required
-                                                                                               autocomplete="off"
-                                                                                               th:field="*{message}"
-                                                                                               th:errorclass="bg-danger">
-                                                                                        <div class="col-lg-3">
+                                                                                        <label for="messageTextNotRead" class="hidden"></label>
+                                                                                        <textarea id="messageTextNotRead"
+                                                                                                  required type="text"
+                                                                                                  autocomplete="off"
+                                                                                                  th:field="*{message}"
+                                                                                                  th:placeholder="'Reply to ' + ${message.getSender().getFirstName()}"
+                                                                                                  th:errorclass="bg-danger">
+                                                                                        </textarea>
+                                                                                        <div class="col-lg-3" style="padding-top: 10px">
                                                                                             <button type="submit"
                                                                                                     class="form-control text-bg-success">
-                                                                                                <small>SEND</small>
+                                                                                                <small>Reply</small>
                                                                                             </button>
                                                                                         </div>
                                                                                     </form>

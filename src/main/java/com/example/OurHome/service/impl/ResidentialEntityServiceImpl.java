@@ -9,6 +9,7 @@ import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.Residential
 import com.example.OurHome.repo.CityRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
 import com.example.OurHome.service.FeeService;
+import com.example.OurHome.service.PropertyChangeRequestService;
 import com.example.OurHome.service.PropertyService;
 import com.example.OurHome.service.ResidentialEntityService;
 import org.modelmapper.ModelMapper;
@@ -29,14 +30,18 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     private final ResidentialEntityRepository residentialEntityRepository;
     private final PasswordEncoder passwordEncoder;
     private final PropertyService propertyService;
+    private final PropertyRegisterRequestServiceImpl propertyRegisterRequestService;
+    private final PropertyChangeRequestService propertyChangeRequestService;
 
-    public ResidentialEntityServiceImpl(ModelMapper modelMapper, CityRepository cityRepository, FeeService feeService, ResidentialEntityRepository residentialEntityRepository, PasswordEncoder passwordEncoder, PropertyService propertyService) {
+    public ResidentialEntityServiceImpl(ModelMapper modelMapper, CityRepository cityRepository, FeeService feeService, ResidentialEntityRepository residentialEntityRepository, PasswordEncoder passwordEncoder, PropertyService propertyService, PropertyRegisterRequestServiceImpl propertyRegisterRequestService, PropertyChangeRequestService propertyChangeRequestService) {
         this.modelMapper = modelMapper;
         this.cityRepository = cityRepository;
         this.feeService = feeService;
         this.residentialEntityRepository = residentialEntityRepository;
         this.passwordEncoder = passwordEncoder;
         this.propertyService = propertyService;
+        this.propertyRegisterRequestService = propertyRegisterRequestService;
+        this.propertyChangeRequestService = propertyChangeRequestService;
     }
 
     /**
@@ -77,11 +82,17 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     }
 
     @Override
-    public void removeResidentialEntity(Long id) {
+    public void deleteResidentialEntity(Long id) {
         ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityById(id);
 
         List<Property> residentialEntityProperties = residentialEntity.getProperties();
         propertyService.deleteAllProperties(residentialEntityProperties);
+
+        if (!residentialEntity.getPropertyTypes().isEmpty()) {
+            //detach register/change requests from propertyTypes.
+            propertyRegisterRequestService.deleteAllRegistrationRequests(id);
+            propertyChangeRequestService.deleteAllRegistrationRequests(id);
+        }
 
         residentialEntityRepository.deleteById(id);
     }

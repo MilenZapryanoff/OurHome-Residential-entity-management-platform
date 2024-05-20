@@ -1,21 +1,15 @@
+function confirmCancelChange() {
+    return confirm("Are you sure you want to Cancel this change request?");
+}
+
 function confirmSendMessage() {
-    const result = confirm("Are you sure you want to send this message?");
-    if (result) {
-        return true;
-    } else {
-        return false;
-    }
+    return confirm("Are you sure you want to send this message?");
 }
 
 function confirmUnlinkOwner() {
-    const result = confirm("Are you sure you want to remove property owner?\n" +
+    return confirm("Are you sure you want to remove property owner?\n" +
         "This action is not reversible!\n" +
         "Property owner will have to make a new registration request to obtain access of his property data");
-    if (result) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 function openCustomDialog(id, message) {
@@ -33,7 +27,9 @@ function openCustomDialog(id, message) {
     // Show the custom dialog
     const dialogElement = document.getElementById(dialogId);
     if (dialogElement) {
-        dialogElement.style.display = 'block';
+        dialogElement.style.display = 'flex';
+        dialogElement.style.flexDirection = 'column'
+        dialogElement.style.alignItems='center';
     } else {
         console.error('Dialog element not found:', dialogId);
     }

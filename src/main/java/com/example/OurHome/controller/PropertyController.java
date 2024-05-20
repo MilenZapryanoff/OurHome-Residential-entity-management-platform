@@ -8,6 +8,7 @@ import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBind
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentManageBindingModel;
 import com.example.OurHome.model.dto.BindingModels.User.UserAuthBindingModel;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
+import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.service.*;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,14 +30,18 @@ public class PropertyController {
     private final FinancialService financialService;
     private final ResidentialEntityService residentialEntityService;
     private final PropertyTypeService propertyTypeService;
+    private final PropertyChangeRequestService propertyChangeRequestService;
+    private final PropertyRepository propertyRepository;
 
-    public PropertyController(UserService userService, PropertyService propertyService, MessageService messageService, FinancialService financialService, ResidentialEntityService residentialEntityService, PropertyTypeService propertyTypeService) {
+    public PropertyController(UserService userService, PropertyService propertyService, MessageService messageService, FinancialService financialService, ResidentialEntityService residentialEntityService, PropertyTypeService propertyTypeService, PropertyChangeRequestService propertyChangeRequestService, PropertyRepository propertyRepository) {
         this.userService = userService;
         this.propertyService = propertyService;
         this.messageService = messageService;
         this.financialService = financialService;
         this.residentialEntityService = residentialEntityService;
         this.propertyTypeService = propertyTypeService;
+        this.propertyChangeRequestService = propertyChangeRequestService;
+        this.propertyRepository = propertyRepository;
     }
 
     /**
@@ -45,7 +50,7 @@ public class PropertyController {
     @GetMapping("/property")
     public ModelAndView property() {
 
-        return new ModelAndView("property", "userViewModel", getUserViewModel());
+        return new ModelAndView("property/property", "userViewModel", getUserViewModel());
     }
 
     /**
@@ -54,7 +59,7 @@ public class PropertyController {
     @GetMapping("/property/add")
     public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel") PropertyRegisterBindingModel propertyRegisterBindingModel) {
 
-        return new ModelAndView("property-add", "userViewModel", getUserViewModel());
+        return new ModelAndView("property/property-add", "userViewModel", getUserViewModel());
     }
 
     /**
@@ -62,16 +67,18 @@ public class PropertyController {
      * POST
      */
     @PostMapping("/property/add")
-    public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel") @Valid PropertyRegisterBindingModel propertyRegisterBindingModel, BindingResult bindingResult) {
+    public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel")
+                                    @Valid PropertyRegisterBindingModel propertyRegisterBindingModel,
+                                    BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("property-add", "userViewModel", getUserViewModel());
+            return new ModelAndView("property/property-add", "userViewModel", getUserViewModel());
         }
 
         if (propertyService.requestToObtainProperty(propertyRegisterBindingModel, getLoggedUser())) {
             return new ModelAndView("redirect:/property");
         } else {
-            return new ModelAndView("property-add", "userViewModel", getUserViewModel())
+            return new ModelAndView("property/property-add", "userViewModel", getUserViewModel())
                     .addObject("registrationFailed", true);
         }
     }
@@ -82,7 +89,7 @@ public class PropertyController {
     @GetMapping("/property/add/new")
     public ModelAndView addPropertyInNewEntity(@ModelAttribute("userAuthRegisterBindingModel") UserAuthBindingModel userAuthBindingModel) {
 
-        return new ModelAndView("property-add-new-entity", "userViewModel", getUserViewModel());
+        return new ModelAndView("property/property-add-new-entity", "userViewModel", getUserViewModel());
     }
 
     /**
@@ -96,9 +103,9 @@ public class PropertyController {
         String validationCode = userAuthBindingModel.getResidentialAccessCode();
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("property-add-new-entity", "userViewModel", getUserViewModel());
+            return new ModelAndView("property/property-add-new-entity", "userViewModel", getUserViewModel());
         } else if (!userService.residentialValidation(residentialEntityId, validationCode)) {
-            return new ModelAndView("property-add-new-entity", "userViewModel", getUserViewModel()).addObject("badResidentialEntity", true);
+            return new ModelAndView("property/property-add-new-entity", "userViewModel", getUserViewModel()).addObject("badResidentialEntity", true);
 
         }
         userService.joinUserToNewResidentialEntity(userAuthBindingModel, getLoggedUser());
@@ -113,7 +120,7 @@ public class PropertyController {
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView residentialEntityDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id) {
 
-        return new ModelAndView("property-summary", "userViewModel", getUserViewModel()).addObject("property", getProperty(id));
+        return new ModelAndView("property/property-summary", "userViewModel", getUserViewModel()).addObject("property", getProperty(id));
     }
 
     /**
@@ -124,7 +131,10 @@ public class PropertyController {
     @PreAuthorize("@securityService.checkMessageSenderAndReceiver(#propertyId, #sendMessageBindingModel.getSenderId() ,#sendMessageBindingModel.getReceiverId())")
     public ModelAndView sendMessageToPropertyManager(@ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long propertyId) {
 
-        ModelAndView modelAndView = new ModelAndView("property-summary").addObject("userViewModel", getUserViewModel()).addObject("property", getProperty(propertyId)).addObject("sendMessageBindingModel", sendMessageBindingModel);
+        ModelAndView modelAndView = new ModelAndView("property/property-summary")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("property", getProperty(propertyId))
+                .addObject("sendMessageBindingModel", sendMessageBindingModel);
 
         if (sendMessageBindingModel.getMessage().length() > 2000) {
             return modelAndView.addObject("messageError", true);
@@ -142,7 +152,7 @@ public class PropertyController {
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
     public ModelAndView propertyDetails(@ModelAttribute("propertyManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
 
-        return new ModelAndView("property-details", "userViewModel", getUserViewModel()).addObject("property", getProperty(id));
+        return new ModelAndView("property/property-details", "userViewModel", getUserViewModel()).addObject("property", getProperty(id));
     }
 
     /**
@@ -153,18 +163,20 @@ public class PropertyController {
     public ModelAndView propertyEdit(@PathVariable("id") Long id) {
 
         Property property = getProperty(id);
-        PropertyEditBindingModel propertyEditBindingModel;
+        PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
 
         if (property.isRejected() && property.getPropertyRegisterRequest() != null) {
-            //getting input fields from the active registration request that has been rejected. This way we hide the real property data
-            propertyEditBindingModel = propertyService.mapRegistationRequestToEditBindingModel(property);
-
+            //getting input fields from the active registration request. This way we hide the real property data
+            propertyEditBindingModel = propertyService.mapRegistrationRequestToEditBindingModel(property);
+        } else if (property.getPropertyChangeRequest() != null) {
+            //getting input fields from the active change request. This way we hide the real property data
+            propertyEditBindingModel = propertyService.mapChangeRequestToEditBindingModel(property);
         } else {
             //getting input fields data directly from the property
             propertyEditBindingModel = propertyService.mapPropertyToEditBindingModel(property);
         }
 
-        return new ModelAndView("property-details-edit")
+        return new ModelAndView("property/property-details-edit")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("property", getProperty(id))
                 .addObject("propertyEditBindingModel", propertyEditBindingModel);
@@ -177,10 +189,15 @@ public class PropertyController {
      */
     @PostMapping("/property/details/edit/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
-    public ModelAndView propertyEdit(@ModelAttribute("propertyEditBindingModel") @Valid PropertyEditBindingModel propertyEditBindingModel, @PathVariable("id") Long id, BindingResult bindingResult) {
+    public ModelAndView propertyEdit(
+            @PathVariable("id") Long id,
+            @Valid PropertyEditBindingModel propertyEditBindingModel, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("property-details-edit").addObject("userViewModel", getUserViewModel()).addObject("property", getProperty(id)).addObject("propertyEditBindingModel", propertyEditBindingModel);
+            return new ModelAndView("property/property-details-edit")
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("property", getProperty(id))
+                    .addObject("propertyEditBindingModel", propertyEditBindingModel);
         }
 
         PropertyType propertyType = null;
@@ -188,18 +205,50 @@ public class PropertyController {
             propertyType = propertyTypeService.findById(propertyEditBindingModel.getPropertyType());
         }
 
-        boolean validationRequired = propertyService.checkNeedOfVerification(id, propertyEditBindingModel);
+        Property property = getProperty(id);
 
-        if (propertyService.propertyChangeRequest(id, propertyEditBindingModel, propertyType, getLoggedUser(), validationRequired)) {
+        //setting property number to original value. This will not allow change request to contain different property number.
+        //Front-end (edit page) input field is also readonly!
+        propertyEditBindingModel.setNumber(property.getNumber());
+
+        propertyService.updateNonFinancialPropertyFields(property, propertyEditBindingModel, propertyType);
+
+        boolean validationRequired = propertyService.validationIsRequired(id, propertyEditBindingModel);
+
+        //if there are no changes of fee component data and property ownership is FINISHED!
+        if (!validationRequired && property.isObtained()) {
+            return new ModelAndView("redirect:/property/details/" + id);
+        }
+
+        if (propertyService.processChangeRequest(id, propertyEditBindingModel, propertyType, getLoggedUser())) {
             return new ModelAndView("redirect:/property/details/" + id);
         } else {
-            return new ModelAndView("property-details-edit")
+            return new ModelAndView("property/property-details-edit")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("property", getProperty(id))
                     .addObject("propertyEditBindingModel", propertyEditBindingModel)
                     .addObject("editFailed", true);
         }
     }
+
+
+    /**
+     * PROPERTY -> DETAILS -> Cancel request
+     * POST
+     */
+    @PostMapping("/property/details/cancel-change-request/{id}")
+    @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
+    public ModelAndView propertyCancelChangeRequest(@PathVariable("id") Long id) {
+
+        Property property = getProperty(id);
+        propertyChangeRequestService.invalidateRequest(property.getPropertyChangeRequest());
+
+        property.setPropertyChangeRequest(null);
+        propertyRepository.save(property);
+
+        return new ModelAndView("redirect:/property/details/" + id);
+    }
+
 
     /**
      * PROPERTY -> Delete property owner
@@ -221,7 +270,7 @@ public class PropertyController {
     @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
     public ModelAndView propertyFeesDetails(@PathVariable("id") Long id) {
 
-        return new ModelAndView("property-monthlyfees", "userViewModel", getUserViewModel()).addObject("property", getProperty(id));
+        return new ModelAndView("property/property-monthlyfees", "userViewModel", getUserViewModel()).addObject("property", getProperty(id));
     }
 
 
@@ -230,7 +279,10 @@ public class PropertyController {
      */
     @GetMapping("/property/re/data/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
-    public ModelAndView residentialEntityData(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id) {
+    public ModelAndView residentialEntityData
+    (@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel
+             residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel
+             sendMessageBindingModel, @PathVariable("id") Long id) {
 
 
         Property property = getProperty(id);
@@ -239,7 +291,7 @@ public class PropertyController {
         ExpenseFilterBindingModel expenseFilter = financialService.createDefaultExpenseFilter(residentialEntity);
 
 
-        return new ModelAndView("property-re-data", "userViewModel", getUserViewModel())
+        return new ModelAndView("property/property-re-data", "userViewModel", getUserViewModel())
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("property", property)
                 .addObject("expenseFilterBindingModel", expenseFilter);
@@ -250,7 +302,10 @@ public class PropertyController {
      */
     @GetMapping("/property/re/expenses/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
-    public ModelAndView residentialEntityExpenses(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id) {
+    public ModelAndView residentialEntityExpenses
+    (@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel
+             residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel
+             sendMessageBindingModel, @PathVariable("id") Long id) {
 
 
         Property property = getProperty(id);
@@ -259,7 +314,7 @@ public class PropertyController {
         ExpenseFilterBindingModel expenseFilter = financialService.createDefaultExpenseFilter(residentialEntity);
 
 
-        return new ModelAndView("property-re-expenses", "userViewModel", getUserViewModel())
+        return new ModelAndView("property/property-re-expenses", "userViewModel", getUserViewModel())
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("property", property)
                 .addObject("expenseFilterBindingModel", expenseFilter);
@@ -267,10 +322,11 @@ public class PropertyController {
 
     @PostMapping("/property/re/expenses/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
-    public ModelAndView residentialEntityFilterExpenses(@PathVariable("id") Long id, @Valid ExpenseFilterBindingModel expenseFilter, BindingResult bindingResult) {
+    public ModelAndView residentialEntityFilterExpenses(@PathVariable("id") Long
+                                                                id, @Valid ExpenseFilterBindingModel expenseFilter, BindingResult bindingResult) {
 
         Property property = getProperty(id);
-        ModelAndView modelAndView = new ModelAndView("property-re-expenses")
+        ModelAndView modelAndView = new ModelAndView("property/property-re-expenses")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("property", property);
 

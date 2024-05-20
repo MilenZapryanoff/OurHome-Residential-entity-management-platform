@@ -68,4 +68,10 @@ public class PropertyRegisterRequestServiceImpl implements PropertyRegisterReque
         allRequestsByPropertyType.forEach(propertyRegisterRequest -> propertyRegisterRequest.setPropertyType(null));
         propertyRegisterRequestRepository.saveAll(allRequestsByPropertyType);
     }
+
+    @Override
+    public void deleteAllRegistrationRequests(Long residentialEntityId) {
+        List<PropertyRegisterRequest> allRequests = propertyRegisterRequestRepository.findAllByResidentialEntity(residentialEntityId);
+        propertyRegisterRequestRepository.deleteAll(allRequests);
+    }
 }

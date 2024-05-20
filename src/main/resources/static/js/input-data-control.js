@@ -69,9 +69,9 @@ function manageInputFields() {
         numberOfChildren.value = '0';
         numberOfPets.value = '0';
 
-        numberOfAdults.disabled = true;
-        numberOfPets.disabled = true;
-        numberOfChildren.disabled = true
+        numberOfAdults.readOnly = true;
+        numberOfPets.readOnly = true;
+        numberOfChildren.readOnly = true
 
         numberOfAdults.title = "Adults number can be set only for habitable properties!"
         numberOfChildren.title = "Children number can be set only for habitable properties!"
@@ -83,9 +83,9 @@ function manageInputFields() {
         numberOfChildren.value = children;
         numberOfPets.value = pets;
 
-        numberOfAdults.disabled = false;
-        numberOfPets.disabled = false;
-        numberOfChildren.disabled = false;
+        numberOfAdults.readOnly = false;
+        numberOfPets.readOnly = false;
+        numberOfChildren.readOnly = false;
 
         numberOfAdults.title = ""
         numberOfChildren.title = ""

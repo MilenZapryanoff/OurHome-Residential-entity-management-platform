@@ -66,9 +66,16 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("SELECT count(p) FROM properties p where p.propertyType is null AND p.notHabitable = true AND p.residentialEntity.id=:residentialEntityId")
     Long countNonHabitablePropertiesWithoutPropertyTypeByREId(Long residentialEntityId);
 
-    @Query("SELECT p FROM properties p where p.residentialEntity.id=:id")
+    @Query("SELECT p FROM properties p where p.residentialEntity.id=:id ORDER BY p.number, p.id")
     List<Property> findAllPropertiesByResidentialEntity(Long id);
 
     @Query("SELECT count(p) FROM properties p WHERE p.residentialEntity.id =:residentialEntityId AND p.isObtained = true")
     Long numberOfPropertiesWithOwnerSet(Long residentialEntityId);
+
+    @Query("SELECT count(p) FROM properties p WHERE p.residentialEntity.id =:residentialEntityId AND p.autoFee = true")
+    Long countAllPropertiesWithAutoFeeOn(Long residentialEntityId);
+
+    @Query("SELECT count(p) FROM properties p WHERE p.residentialEntity.id =:residentialEntityId AND p.autoFee = false")
+    Long countAllPropertiesWithAutoFeeOff(Long residentialEntityId);
+
 }

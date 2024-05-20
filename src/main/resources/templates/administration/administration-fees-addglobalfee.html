@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+
+<body onload="calcTotalSum()">
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;"
+                                              alt="OurHome"></img></a>
+                    </div>
+                    <!-- ***** Logo End ***** -->
+
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/messages}">Messages</a></li>
+                        <small th:with="userId=${userViewModel.getId()}">
+                            <samp th:if="${@messageRepository.countUnreadMessages(userId) > 0}"
+                                  th:with="userId=${userViewModel.getId()}"
+                                  class="timer count-title text-danger"
+                                  th:data-to="${@messageRepository.countUnreadMessages(userId)}"
+                                  data-speed="1000"></samp>
+                        </small>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
+                                                                     class="active">Administration</a>
+                        </li>
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
+                            property</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
+                        <li><a th:href="@{/contact}">Contact Us</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
+                        <li sec:authorize="isAuthenticated()">
+                            <form id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                            </form>
+                        </li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Add global fee</h3>
+            <div th:if="${globalFeeFailed}" class="err-msg">
+                <h5 class="text-white">Fee creation failed!</h5>
+                <p class="text-white">Fee amount cannot be 0!<br>At lease one of the fee components must be number greater than 0!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Add global fee section *****-->
+<div class="container">
+    <div class="messages">
+        <div class="input-content text-center">
+            <div class="col-lg-6 center-form">
+                <form id="input-form"
+                      th:method="POST"
+                      th:action="@{/administration/fees/addglobalfee/{id} (id=${id})}"
+                      th:object="${propertyFeeAddGlobalFeeBindingModel}">
+                    <div class="col-lg-12">
+                        <fieldset>
+                            <p>Global fee section allows you to add <br>one-time fee for all
+                                apartments in your residential entity.</p>
+                            <br>
+                            <label for="fundMmAmount"><b>Fund Maintenance <br> and management amount</b></label>
+                            <p th:if="${#fields.hasErrors('fundMmAmount')}"
+                               th:errors="*{fundMmAmount}"
+                               class="text-danger">Monthly fee error message</p>
+                            <input type="number" step="any"
+                                   id="fundMmAmount"
+                                   placeholder="Enter amount..."
+                                   autocomplete="on"
+                                   th:field="*{fundMmAmount}"
+                                   th:errorclass="bg-danger"
+                                   th:value="${propertyFeeAddGlobalFeeBindingModel.getFundMmAmount()}">
+                        </fieldset>
+                        <fieldset>
+                            <label for="fundRepairAmount"><b>Fund Repair amount</b></label>
+                            <p th:if="${#fields.hasErrors('fundRepairAmount')}"
+                               th:errors="*{fundRepairAmount}"
+                               class="text-danger">Monthly fee error message</p>
+                            <input type="number" step="any"
+                                   id="fundRepairAmount"
+                                   placeholder="Enter amount..."
+                                   autocomplete="on"
+                                   th:field="*{fundRepairAmount}"
+                                   th:errorclass="bg-danger"
+                                   th:value="${propertyFeeAddGlobalFeeBindingModel.getFundRepairAmount()}">
+                        </fieldset>
+                        <fieldset>
+                            <label for="feeAmount"><b>Total monthly fee amount</b></label>
+                            <p>The amount in this field is automatically calculated!
+                            The sum must be a greater than 0, so at least one of the amount components above must be a positive number!</p>
+                            <p th:if="${#fields.hasErrors('feeAmount')}"
+                               th:errors="*{feeAmount}"
+                               class="text-danger">Monthly fee error message</p>
+                            <input type="number" step="any"
+                                   disabled="disabled"
+                                   id="feeAmount"
+                                   th:field="*{feeAmount}"
+                                   th:errorclass="bg-danger">
+                        </fieldset>
+                        <fieldset>
+                            <label for="periodStart"><b>Fee start period</b></label>
+                            <p th:if="${#fields.hasErrors('periodStart')}"
+                               th:errors="*{periodStart}"
+                               class="text-danger">Fee start period error...</p>
+                            <input type="date"
+                                   id="periodStart"
+                                   th:field="*{periodStart}"
+                                   th:errorclass="bg-danger"
+                                   th:value="${propertyFeeAddGlobalFeeBindingModel.getPeriodStart()}">
+                        </fieldset>
+                        <fieldset>
+                            <label for="periodEnd"><b>Fee end period</b></label>
+                            <p th:if="${#fields.hasErrors('periodEnd')}"
+                               th:errors="*{periodEnd}"
+                               class="text-danger">Fee end period error...</p>
+                            <input type="date"
+                                   id="periodEnd"
+                                   th:field="*{periodEnd}"
+                                   th:errorclass="bg-danger"
+                                   th:value="${propertyFeeAddGlobalFeeBindingModel.getPeriodEnd()}">
+                        </fieldset>
+                        <fieldset>
+                            <label for="description"><b>Description</b></label>
+                            <p th:if="${#fields.hasErrors('description')}"
+                               th:errors="*{description}"
+                               class="text-danger">Description error message</p>
+                            <input type="text"
+                                   id="description"
+                                   placeholder="Enter description..."
+                                   th:field="*{description}"
+                                   th:errorclass="bg-danger"
+                                   th:value="${propertyFeeAddGlobalFeeBindingModel.getDescription()}">
+                        </fieldset>
+                        <fieldset>
+                            <p class="text-danger">Caution: <br> Creating a global fee will add an individual fee for
+                                every apartment in yor Residential entity!</p>
+                            <br>
+                            <button type="submit" id="form-submit"
+                                    class="orange-button">Add
+                            </button>
+                            <button class="orange-button" id="form-cancel" type="button">
+                                <a th:href="@{/administration/fees/{id}(id=${id})}">
+                                    <div class="text-light">Cancel</div>
+                                </a>
+                            </button>
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/input-data-control.js"></script>
+
+
+</body>
+</html>

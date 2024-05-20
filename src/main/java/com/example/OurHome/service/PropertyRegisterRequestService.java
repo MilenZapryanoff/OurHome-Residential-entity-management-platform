@@ -1,7 +1,6 @@
 package com.example.OurHome.service;
 
 import com.example.OurHome.model.Entity.PropertyRegisterRequest;
-import com.example.OurHome.model.Entity.ResidentialEntity;
 
 public interface PropertyRegisterRequestService {
 
@@ -18,4 +17,6 @@ public interface PropertyRegisterRequestService {
     void save(PropertyRegisterRequest propertyRegisterRequest);
 
     void detachPropertyType(Long propertyTypeId);
+
+    void deleteAllRegistrationRequests(Long residentialEntityId);
 }

@@ -1,11 +1,12 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.*;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyCreateBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.OverpaymentBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
-import com.example.OurHome.model.events.PropertyApprovalEvent;
+import com.example.OurHome.model.events.PropertyCreationEvent;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
 import com.example.OurHome.service.*;
@@ -69,7 +70,7 @@ public class PropertyServiceImpl implements PropertyService {
                 && propertyRegisterRequestService
                 .checkForNoActivePropertyRegisterRequest(propertyNumber, residentialEntityId)) {
 
-            boolean verificationRequired = checkNeedOfVerification(property.getId(), propertyRegisterBindingModel);
+            boolean verificationRequired = validationIsRequired(property.getId(), propertyRegisterBindingModel);
 
             //Set propertyRq data
             PropertyRegisterRequest propertyRegisterRequest = modelMapper.map(propertyRegisterBindingModel, PropertyRegisterRequest.class);
@@ -176,13 +177,13 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     /**
-     * Property approval.
+     * Property approval with data change.
      * Performed by Residential entity MANAGER
      *
      * @param id property id
      */
     @Override
-    public void approveProperty(Long id, boolean validationRequired) {
+    public void approvePropertyWithDataChange(Long id, boolean validationRequired) {
 
         Property property = getProperty(id);
 
@@ -208,6 +209,35 @@ public class PropertyServiceImpl implements PropertyService {
                 updatePropertyFee(property.getResidentialEntity(), property, property.getPropertyType());
             }
             propertyRepository.save(property);
+        }
+    }
+
+    /**
+     * Property approval without data change (ignore data change input from owner).
+     * Performed by Residential entity MANAGER
+     *
+     * @param id property id
+     */
+    @Override
+    public void approvePropertyWithoutDataChange(Long id) {
+
+        Property property = getProperty(id);
+
+        if (property != null) {
+            PropertyRegisterRequest propertyRegisterRequest = property.getPropertyRegisterRequest();
+
+            //invalidate property request
+            propertyRegisterRequestService.invalidateRequest(propertyRegisterRequest);
+            property.setPropertyRegisterRequest(null);
+
+            property.setNumberOfRooms(propertyRegisterRequest.getNumberOfRooms());
+            property.setParkingAvailable(propertyRegisterRequest.isParkingAvailable());
+            property.setObtained(true);
+            property.setRejected(false);
+
+            propertyRepository.save(property);
+
+            messageService.propertyRegistrationApprovedWithNoChangesMessage(property);
         }
     }
 
@@ -261,8 +291,54 @@ public class PropertyServiceImpl implements PropertyService {
      * @param property property entity
      */
     @Override
-    public PropertyEditBindingModel mapRegistationRequestToEditBindingModel(Property property) {
+    public PropertyEditBindingModel mapRegistrationRequestToEditBindingModel(Property property) {
         return modelMapper.map(property.getPropertyRegisterRequest(), PropertyEditBindingModel.class);
+    }
+
+    @Override
+    public PropertyEditBindingModel mapChangeRequestToEditBindingModel(Property property) {
+
+        PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
+
+        PropertyChangeRequest propertyChangeRequest = property.getPropertyChangeRequest();
+        if (propertyChangeRequest != null) {
+            propertyEditBindingModel = modelMapper.map(propertyChangeRequest, PropertyEditBindingModel.class);
+            propertyEditBindingModel.setPropertyType(propertyChangeRequest.getId());
+        }
+
+        return propertyEditBindingModel;
+    }
+
+    /**
+     * Method for setting all properties monthly (auto) fee in current residential entity ON
+     * Performed only by Residential Entity manager!
+     *
+     * @param residentialEntity        current residential enitty
+     */
+    @Override
+    public void turnAllPropertiesFeesOn(ResidentialEntity residentialEntity) {
+        List<Property> allProperties = residentialEntity.getProperties();
+
+        if (!allProperties.isEmpty()) {
+            allProperties.forEach(property -> property.setAutoFee(true));
+            propertyRepository.saveAll(allProperties);
+        }
+    }
+
+    /**
+     * Method for setting all properties monthly (auto) fee in current residential entity OFF
+     * Performed only by Residential Entity manager!
+     *
+     * @param residentialEntity        current residential enitty
+     */
+    @Override
+    public void turnAllPropertiesFeesOff(ResidentialEntity residentialEntity) {
+        List<Property> allProperties = residentialEntity.getProperties();
+
+        if (!allProperties.isEmpty()) {
+            allProperties.forEach(property -> property.setAutoFee(false));
+            propertyRepository.saveAll(allProperties);
+        }
     }
 
     /**
@@ -308,6 +384,25 @@ public class PropertyServiceImpl implements PropertyService {
         return true;
     }
 
+    /**
+     * Property data change in case of changes of non-fee component data change (fast-lane change).
+     * Performed only by Owner!
+     *
+     * @param property                 current property
+     * @param propertyEditBindingModel the binding model with the data returning from frontend
+     */
+    @Override
+    public void updateNonFinancialPropertyFields(Property property, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType) {
+
+        if (property.getPropertyChangeRequest() != null) {
+            mapPropertyEditBindingModelToChangeRequest(property, propertyEditBindingModel, propertyType);
+        }
+
+        property.setParkingAvailable(propertyEditBindingModel.isParkingAvailable());
+        property.setNumberOfRooms(propertyEditBindingModel.getNumberOfRooms());
+        propertyRepository.save(property);
+    }
+
 
     /**
      * Property change request method.
@@ -317,44 +412,25 @@ public class PropertyServiceImpl implements PropertyService {
      * @param propertyEditBindingModel the binding model with the data returning from frontend
      * @param propertyType             propertyType if set
      * @param loggedUser               logged user data
-     * @param validationRequired       boolean showing if data modification requires manager validation
      */
     @Override
-    public boolean propertyChangeRequest(Long id, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType, UserEntity loggedUser, boolean validationRequired) {
+    public boolean processChangeRequest(Long id, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType, UserEntity loggedUser) {
 
         Property property = getProperty(id);
+        Long propertyOwnerId = property.getOwner().getId();
+        Long LoggedUserId = loggedUser.getId();
 
-
-        //setting property number to original value. This will not allow change request to contain different property number.
-        //Front-end (edit page) input field is also disabled!
-        propertyEditBindingModel.setNumber(property.getNumber());
-
-        //if there are no changes of fee component data
-        if (!validationRequired) {
-            property.setParkingAvailable(propertyEditBindingModel.isParkingAvailable());
-            property.setNumberOfRooms(propertyEditBindingModel.getNumberOfRooms());
-            propertyRepository.save(property);
+        //if property ownership is already set
+        if (property.isObtained() && propertyOwnerId.equals(LoggedUserId)) {
+            //if there is no change request linked to this property
+            processChangeIfPropertyOwnerSet(propertyEditBindingModel, propertyType, property);
             return true;
-        } else {
-
-            Long propertyOwnerId = property.getOwner().getId();
-            Long LoggedUserId = loggedUser.getId();
-
-            //if property ownership is already set
-            if (property.isObtained() && propertyOwnerId.equals(LoggedUserId)) {
-
-                //if there is no change request linked to this property
-                processChangeIfOwnerSet(propertyEditBindingModel, propertyType, property);
-                return true;
-            }
-            if (property.isRejected()) {
-
-                //Editing and resending registration request if property rejected
-                processChangeIfRejected(propertyEditBindingModel, property);
-                return true;
-            }
         }
-
+        if (property.isRejected()) {
+            //Editing and resending registration request if property rejected
+            processChangeIfPropertyRejected(propertyEditBindingModel, property);
+            return true;
+        }
         return false;
     }
 
@@ -368,34 +444,16 @@ public class PropertyServiceImpl implements PropertyService {
      * @return TRUE if changes need verification from manager/moderator. FALSE if no need of verification
      */
     @Override
-    public boolean checkNeedOfVerification(Long id, PropertyEditBindingModel propertyEditBindingModel) {
-
+    public boolean validationIsRequired(Long id, PropertyEditBindingModel propertyEditBindingModel) {
         Property property = getProperty(id);
-
         if (property != null) {
-
-            //setting current and new propertyTypes ids to -1 to exclude null values.
-            Long currentPropertyTypeId = (long) -1;
-            Long newPropertyTypeId = (long) -1;
-
-            //checking if current propertyType is not null.
-            if (property.getPropertyType() != null) {
-                currentPropertyTypeId = property.getPropertyType().getId();
-            }
-
-            //checking if new propertyType is not null.
-            if (propertyEditBindingModel.getPropertyType() != null) {
-                newPropertyTypeId = propertyEditBindingModel.getPropertyType();
-            }
-
-            return property.isRejected()
-                    || property.getNumber() != propertyEditBindingModel.getNumber()
+            return property.getNumber() != propertyEditBindingModel.getNumber()
                     || !property.getFloor().equals(propertyEditBindingModel.getFloor())
                     || property.getNumberOfAdults() != propertyEditBindingModel.getNumberOfAdults()
                     || property.getNumberOfChildren() != propertyEditBindingModel.getNumberOfChildren()
                     || property.getNumberOfPets() != propertyEditBindingModel.getNumberOfPets()
                     || property.isNotHabitable() != propertyEditBindingModel.isNotHabitable()
-                    || !currentPropertyTypeId.equals(newPropertyTypeId);
+                    || isPropertyTypeCheck(propertyEditBindingModel, property);
         }
         return false;
     }
@@ -409,11 +467,10 @@ public class PropertyServiceImpl implements PropertyService {
      * @return TRUE if changes need verification from manager/moderator. FALSE if no need of verification
      */
     @Override
-    public boolean checkNeedOfVerification(Long id, PropertyRegisterBindingModel propertyRegisterBindingModel) {
+    public boolean validationIsRequired(Long id, PropertyRegisterBindingModel propertyRegisterBindingModel) {
 
         Property property = getProperty(id);
         if (property != null) {
-
             return property.getNumber() != propertyRegisterBindingModel.getNumber()
                     || !property.getFloor().equals(propertyRegisterBindingModel.getFloor())
                     || property.getNumberOfAdults() != propertyRegisterBindingModel.getNumberOfAdults()
@@ -459,7 +516,6 @@ public class PropertyServiceImpl implements PropertyService {
      */
     @Override
     public void setAdditionalPropertyFee(Property property, BigDecimal additionalPropertyFee) {
-
         if (additionalPropertyFee == null) {
             additionalPropertyFee = BigDecimal.ZERO;
         }
@@ -471,10 +527,40 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public void setPropertyType(Property property, PropertyType propertyType) {
 
-        //TODO: to use this method for setting propertyType when approved by Manager
+        //TODO: to use this method for setting propertyType when change request approved by Manager
         property.setPropertyType(propertyType);
         propertyRepository.save(property);
     }
+
+
+    /**
+     * Create single RE properties
+     *
+     * @param propertyCreateBindingModel property params from manager input
+     */
+    @Override
+    public void createSingleProperty(PropertyCreateBindingModel propertyCreateBindingModel, ResidentialEntity residentialEntity, PropertyType propertyType) {
+
+
+        Property newProperty = modelMapper.map(propertyCreateBindingModel, Property.class);
+        newProperty.setAutoFee(true);
+        newProperty.setValidated(true);
+        newProperty.setResidentialEntity(residentialEntity);
+        newProperty.setObtained(false);
+        newProperty.setMonthlyFeeFundMm(feeService.calculateFundMm(newProperty.getResidentialEntity(), newProperty));
+        newProperty.setMonthlyFeeFundRepair(feeService.calculateFundRepair(newProperty.getResidentialEntity(), newProperty));
+        newProperty.setAdditionalPropertyFee(BigDecimal.ZERO);
+        if (propertyType != null) {
+            newProperty.setPropertyType(propertyType);
+        }
+        //update totalMonthlyFee
+        updateTotalMonthlyFee(newProperty, newProperty.getAdditionalPropertyFee());
+
+        applicationEventPublisher.publishEvent(new PropertyCreationEvent("PropertyService", newProperty));
+
+        propertyRepository.save(newProperty);
+    }
+
 
     /**
      * Create all RE properties
@@ -506,10 +592,9 @@ public class PropertyServiceImpl implements PropertyService {
             //update totalMonthlyFee
             updateTotalMonthlyFee(newProperty, newProperty.getAdditionalPropertyFee());
 
-            applicationEventPublisher.publishEvent(new PropertyApprovalEvent("PropertyService", newProperty));
+            applicationEventPublisher.publishEvent(new PropertyCreationEvent("PropertyService", newProperty));
 
             properties.add(newProperty);
-
         }
         propertyRepository.saveAll(properties);
     }
@@ -537,31 +622,78 @@ public class PropertyServiceImpl implements PropertyService {
         return propertyEditBindingModel;
     }
 
+    /**
+     * Mapping of PropertyEditBindingModel to PropertyChangeRequest used for edit of property data.
+     *
+     * @param property                 Property entity
+     * @param propertyEditBindingModel input data
+     * @param propertyType             selected propertyType in input form
+     */
+    private void mapPropertyEditBindingModelToChangeRequest(Property property, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType) {
+        PropertyChangeRequest propertyChangeRequest = property.getPropertyChangeRequest();
+        modelMapper.map(propertyEditBindingModel, propertyChangeRequest);
+        propertyChangeRequest.setPropertyType(propertyType);
+        propertyChangeRequestService.save(propertyChangeRequest);
+    }
+
     @Override
     public boolean checkPropertiesForOwnersSet(Long residentialEntityId) {
         return propertyRepository.numberOfPropertiesWithOwnerSet(residentialEntityId) == 0;
     }
 
     /**
+     * Private class method to check if there is need to check propertyType for differences.
+     * If some of the fields in the if statement of the method are changed property is set to verified=false
+     *
+     * @param property                 The property that is going to be changed.
+     * @param propertyEditBindingModel the binding model with the data returning from frontend
+     * @return TRUE if propertyType need verification from manager/moderator. FALSE if no need of verification
+     */
+    private static boolean isPropertyTypeCheck(PropertyEditBindingModel propertyEditBindingModel, Property property) {
+
+        //setting current and new propertyTypes ids to -1 to exclude null values.
+        Long currentPropertyTypeId = (long) -1;
+        Long newPropertyTypeId = (long) -1;
+
+        //checking if current propertyType is not null.
+        if (property.getPropertyType() != null) {
+            currentPropertyTypeId = property.getPropertyType().getId();
+        }
+
+        //checking if new propertyType is not null.
+        if (propertyEditBindingModel.getPropertyType() != null) {
+            newPropertyTypeId = propertyEditBindingModel.getPropertyType();
+        }
+
+        boolean propertyTypeCheck = false;
+        if (property.isObtained()) {
+            propertyTypeCheck = !currentPropertyTypeId.equals(newPropertyTypeId);
+        }
+        return propertyTypeCheck;
+    }
+
+    /**
      * Private method for processing change request if property is already obtained by an owner.!
      */
-    private void processChangeIfOwnerSet(PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType, Property property) {
-        if (property.getPropertyChangeRequest() == null) {
-            PropertyChangeRequest propertyChangeRequest = modelMapper.map(propertyEditBindingModel, PropertyChangeRequest.class);
+    private void processChangeIfPropertyOwnerSet(PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType, Property property) {
 
-            propertyChangeRequest.setResidentialEntityId(property.getResidentialEntity().getId());
-            propertyChangeRequest.setActive(true);
-            propertyChangeRequest.setProperty(property);
-            propertyChangeRequest.setPropertyType(propertyType);
+        //if property has no active change request assigned
+        if (property.getPropertyChangeRequest() == null) {
+
+            PropertyChangeRequest newPropertyChangeRequest = modelMapper.map(propertyEditBindingModel, PropertyChangeRequest.class);
+            newPropertyChangeRequest.setResidentialEntityId(property.getResidentialEntity().getId());
+            newPropertyChangeRequest.setActive(true);
+            newPropertyChangeRequest.setProperty(property);
+            newPropertyChangeRequest.setPropertyType(propertyType);
 
             //Save PropertyRq in DB and return DB entity
-            PropertyChangeRequest newPropertyChangeRequest = propertyChangeRequestService.saveRequestToDBAndReturnEntity(propertyChangeRequest);
+            PropertyChangeRequest propertyChangeRequest = propertyChangeRequestService.saveRequestToDBAndReturnEntity(newPropertyChangeRequest);
 
-            property.setPropertyChangeRequest(newPropertyChangeRequest);
+            property.setPropertyChangeRequest(propertyChangeRequest);
             propertyRepository.save(property);
 
         } else {
-            //if there is an existing property change request linked to this property.
+            //if property has an active change request assigned
             PropertyChangeRequest existingPropertyChangeRequest = property.getPropertyChangeRequest();
 
             //update existing change request data
@@ -579,20 +711,56 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Private method for processing change request if property is rejected.!
      */
-    private void processChangeIfRejected(PropertyEditBindingModel propertyEditBindingModel, Property property) {
-        PropertyRegisterRequest propertyRegisterRequest = property.getPropertyRegisterRequest();
+    private void processChangeIfPropertyRejected(PropertyEditBindingModel propertyEditBindingModel, Property property) {
 
-        modelMapper.map(propertyEditBindingModel, propertyRegisterRequest);
+        if (property.getPropertyRegisterRequest() != null) {
 
-        propertyRegisterRequestService.save(propertyRegisterRequest);
+            //Step 1. Updating property register request
+            PropertyRegisterRequest propertyRegisterRequest = updatePropertyRegisterRequest(propertyEditBindingModel, property);
 
-        property.setRejected(false);
-        propertyRepository.save(property);
+            //if validation is required (input fee components data equals to property data)
+            if (validationIsRequired(property.getId(), propertyEditBindingModel)) {
+                messageService.propertyModificationMessageToManager(property);
+                //if validation is not required (input fee components data equals to property data)
+            } else {
+                property.setParkingAvailable(propertyRegisterRequest.isParkingAvailable());
+                property.setNumberOfRooms(propertyRegisterRequest.getNumberOfRooms());
+                property.setObtained(true);
+                propertyRegisterRequestService.invalidateRequest(property.getPropertyRegisterRequest());
+                property.setPropertyRegisterRequest(null);
 
-        //sending message (notification) to manager
-        messageService.propertyModificationMessageToManager(property);
+                //sending message (notification) to manager
+                messageService.propertyRegistrationMessageToManager(property.getResidentialEntity());
+            }
+            property.setRejected(false);
+            propertyRepository.save(property);
+        }
     }
 
+
+    /**
+     * Private method for updating property register request.
+     * Used when editing a property with active registration request
+     */
+    private PropertyRegisterRequest updatePropertyRegisterRequest(PropertyEditBindingModel propertyEditBindingModel, Property property) {
+        PropertyRegisterRequest propertyRegisterRequest = property.getPropertyRegisterRequest();
+
+        propertyRegisterRequest.setFloor(propertyEditBindingModel.getFloor());
+        propertyRegisterRequest.setNumberOfAdults(propertyEditBindingModel.getNumberOfAdults());
+        propertyRegisterRequest.setNumberOfChildren(propertyEditBindingModel.getNumberOfChildren());
+        propertyRegisterRequest.setNumberOfPets(propertyEditBindingModel.getNumberOfPets());
+        propertyRegisterRequest.setNotHabitable(propertyEditBindingModel.isNotHabitable());
+        propertyRegisterRequest.setNumberOfRooms(propertyEditBindingModel.getNumberOfRooms());
+        propertyRegisterRequest.setParkingAvailable(propertyEditBindingModel.isParkingAvailable());
+        propertyRegisterRequest.setNumberOfRooms(propertyEditBindingModel.getNumberOfRooms());
+        propertyRegisterRequestService.save(propertyRegisterRequest);
+
+        return propertyRegisterRequest;
+    }
+
+    /**
+     * Private method for updating property fee.
+     */
     private void updatePropertyFee(ResidentialEntity residentialEntity, Property property, PropertyType propertyType) {
         BigDecimal fundMm = feeService.calculateFundMm(residentialEntity, property);
         BigDecimal fundRepair = feeService.calculateNewFundRepair(property, propertyType);
