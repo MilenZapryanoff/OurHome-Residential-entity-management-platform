@@ -80,6 +80,17 @@ A platform that allows the registration of both home owners and residential enti
 
 <h2>Updates</h2>
 
+<h4>v.2.24.0520</h4>
+  <ul>
+    <li>Now residential entity manager can approve owner registration request without applying property data changes in case of registration form contains
+    different data from preset property data</li>
+    <li>Added option for residential entity manager to create a single property.</li>
+    <li>Added option for switching ON/OFF monthly auto fees for all properties in the residential entity at once. Not one by one as it was in previous version.</li>
+    <li>Pending % Rejected registrations section are redesigned. Added additional information and control options.</li>
+    <li>Input fields improvements with added javascript events and dom manipulations</li>
+    <li>Bug fixes</li>
+  </ul>
+
 <h4>v.2.24.0516</h4>
   <ul>
     <li>UX improvements and fixes</li>
