@@ -295,7 +295,11 @@
                                                                             style="color: rgba(222,193,1,0.86)"></i>
                         </p></td>
                     <td>
-                        <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                        <div class="user-avatar-small" >
+                            <img th:if="${property.getOwner().getAvatarPath() != null}" th:src="@{${property.getOwner().getAvatarPath()}}" alt="Avatar">
+                            <img th:unless="${property.getOwner().getAvatarPath() != null}" src="/avatars/default.jpg" alt="Default Avatar">
+                            <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                        </div>
                     </td>
                     <td>
                         <p th:text="${property.getOwner().getEmail()}"></p>

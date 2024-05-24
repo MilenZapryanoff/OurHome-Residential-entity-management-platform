@@ -49,15 +49,33 @@ public class ProfileController {
     public ModelAndView uploadAvatar(@RequestParam("avatar") MultipartFile file) {
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        ModelAndView modelAndView = new ModelAndView("profile", "userViewModel", getUserViewModel());
-
         try {
             String relativePath = userService.saveAvatar(file, loggedUser.getId());
             userService.updateUserAvatar(loggedUser, relativePath);
         } catch (IllegalArgumentException | IOException e) {
-            modelAndView.addObject("errorMessage", e.getMessage());
+            return new ModelAndView("profile", "userViewModel", getUserViewModel())
+                    .addObject("errorMessage", e.getMessage());
         }
-        return modelAndView;
+        return new ModelAndView("redirect:/profile");
+    }
+
+
+    /**
+     * Remove avatar method
+     *
+     * @return modelAndView
+     */
+    @PostMapping("/removeAvatar")
+    public ModelAndView removeAvatar() {
+
+        try {
+            userService.removeAvatar(getUserViewModel().getId());
+        } catch (IllegalArgumentException | IOException e) {
+            return new ModelAndView("profile", "userViewModel", getUserViewModel())
+                    .addObject("errorMessage", e.getMessage());
+        }
+
+        return new ModelAndView("redirect:/profile");
     }
 
     @GetMapping("/profile/edit/{id}")

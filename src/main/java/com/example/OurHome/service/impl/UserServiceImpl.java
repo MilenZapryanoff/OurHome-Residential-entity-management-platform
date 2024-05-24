@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -400,6 +401,36 @@ public class UserServiceImpl implements UserService {
             userEntity.setValidationCode(null);
             userEntity.setValidated(true);
             userRepository.save(userEntity);
+        }
+    }
+
+    @Override
+    public void removeAvatar(Long loggedUserId) throws IOException {
+
+        UserEntity loggedUser = userRepository.findById(loggedUserId).orElseThrow(() -> new IllegalArgumentException("User not found!"));
+
+        // Get the current avatar path
+        String avatarPath = loggedUser.getAvatarPath();
+
+        // Check if the user has a custom avatar
+        if (avatarPath != null && avatarPath.matches("/avatars/avatar-" + loggedUser.getId() + "-.*\\.(jpg|jpeg|png|gif)$")) {
+            String uploadDirectory = "src/main/resources/static";
+            Path filePath = Paths.get(uploadDirectory, avatarPath);
+
+            // Delete the file from the file system
+            try {
+                Files.deleteIfExists(filePath);
+
+                // Set the avatarPath to the default value based on the user's role
+                String defaultAvatarPath = loggedUser.getRole().getName().equals("MANAGER") ? "/avatars/default-manager.jpg" : "/avatars/default.jpg";
+                loggedUser.setAvatarPath(defaultAvatarPath);
+
+                userRepository.save(loggedUser);
+            } catch (IOException e) {
+                throw new IOException("Failed to delete the file!", e);
+            }
+        } else {
+            throw new IllegalArgumentException("User does not have a custom avatar set!");
         }
     }
 

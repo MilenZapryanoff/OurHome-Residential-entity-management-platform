@@ -4,20 +4,41 @@
       xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 </head>
 
 <body>
 <th:block sec:authorize="isAuthenticated()">
     <div th:fragment="header" class="sub-header">
-        <div align="right" class="container">
-            <div class="row">
-                <th:block>
-                    <small>
-                        Welcome,
-                        <strong th:text="${userViewModel.getFirstName()} + ' ' + ${userViewModel.getLastName()}"
-                                class="text-danger"
-                        ></strong></small>
-                </th:block>
+        <div class="container">
+            <div class="header-container">
+                <div class="avatar">
+                    <button type="button">
+                        <a th:href="@{/profile}">
+                            <img th:if="${userViewModel.avatarPath != null}"
+                                 th:src="@{${userViewModel.avatarPath}}" alt="Avatar">
+                            <img th:unless="${userViewModel.avatarPath != null}"
+                                 src="/avatars/default.jpg" alt="Default Avatar">
+                        </a>
+                    </button>
+                </div>
+                <div class="logged-user">
+                    <p><b th:text="${userViewModel.getFirstName()} + ' ' + ${userViewModel.getLastName()}"></b></p>
+                </div>
             </div>
         </div>
     </div>

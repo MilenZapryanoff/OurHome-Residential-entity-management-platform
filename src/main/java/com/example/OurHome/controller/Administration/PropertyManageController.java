@@ -145,12 +145,10 @@ public class PropertyManageController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyEdit(@PathVariable("id") Long id) {
 
-        PropertyEditBindingModel propertyEditBindingModel = propertyService.mapPropertyToEditBindingModel(getProperty(id));
-
         return new ModelAndView("administration/administration-property-edit")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("property", getProperty(id))
-                .addObject("propertyEditBindingModel", propertyEditBindingModel);
+                .addObject("propertyEditBindingModel", propertyService.mapPropertyToEditBindingModel(getProperty(id)));
     }
 
     /**
@@ -162,15 +160,14 @@ public class PropertyManageController {
      */
     @PostMapping("/administration/property/edit/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityPropertyEdit(@ModelAttribute("propertyEditBindingModel")
-                                                      @PathVariable("id") Long id,
-                                                      @Valid PropertyEditBindingModel propertyEditBindingModel, BindingResult bindingResult) {
+    public ModelAndView residentialEntityPropertyEdit(@PathVariable("id") Long id,
+                                                      @Valid PropertyEditBindingModel propertyEditBindingModel,
+                                                      BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return new ModelAndView("administration/administration-property-edit")
                     .addObject("userViewModel", getUserViewModel())
-                    .addObject("property", getProperty(id))
-                    .addObject("propertyEditBindingModel", propertyEditBindingModel);
+                    .addObject("property", getProperty(id));
         }
 
         ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityByPropertyId(id);
@@ -189,7 +186,6 @@ public class PropertyManageController {
             return new ModelAndView("administration/administration-property-edit")
                     .addObject("userViewModel", getUserViewModel())
                     .addObject("property", getProperty(id))
-                    .addObject("propertyEditBindingModel", propertyEditBindingModel)
                     .addObject("editFailed", true);
         }
     }

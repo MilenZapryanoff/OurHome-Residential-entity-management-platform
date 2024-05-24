@@ -89,7 +89,6 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-
                 <h3 th:if="${userViewModel.getProperties().size() == 0}">
                     0 Properties available
                 </h3>
@@ -100,23 +99,20 @@
                     th:text="${userViewModel.getProperties().size()} +
                     ' properties available'"></h3>
                 <span class="breadcrumb">
-                <a th:href="@{/property/add}">Add new Property</a></span>
+                    <form th:method="GET"
+                          th:action="@{/property/add}">
+                         <button type="submit">
+                             <p>Add new Property</p>
+                         </button>
+                    </form>
+                </span>
             </div>
         </div>
     </div>
 </div>
-<div th:if="${userViewModel.getProperties().size() == 0}" class="section properties">
-    <div class="container">
-        <br>
-        <ul class="properties-filter-non-verified">
-        </ul>
-        <div class="row properties-box">
-            <div class="col-lg-12">
-                <p class="text-center">No registered properties</p>
-            </div>
-        </div>
-    </div>
-</div>
+
+<p th:if="${userViewModel.getProperties().size() == 0}" class="text-center" style="margin: 14em auto">No registered
+    properties</p>
 
 
 <div th:if="${userViewModel.getProperties().size() > 0}" class="container">
@@ -177,7 +173,7 @@
                                                         th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span>
                     </li>
                     <br>
-                    <li>Monthly fee: </li>
+                    <li>Monthly fee:</li>
                     <br>
                     <li>Total due amount: <span></span></li>
                 </ul>
@@ -220,7 +216,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

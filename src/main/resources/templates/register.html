@@ -82,34 +82,83 @@
         <div class="row">
             <div class="section-heading text-center">
                 <h6>| Register </h6>
-                <p class="text-white">Select your role</p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="container">
-    <div class="messages">
-        <div class="input-content">
-            <div class="row">
-                <div class="col-lg-6">
-                    <a th:href="@{/register/auth}">
-                        <div class="item">
+
+<div class="input-content">
+    <div class="wrapper">
+        <div class="title-text">
+            <div class="title login">SELECT YOUR ROLE</div>
+            <div class="title signup">SELECT YOUR ROLE</div>
+        </div>
+        <div class="form-container">
+            <div class="slide-controls">
+                <input type="radio" name="slide" id="login" checked>
+                <input type="radio" name="slide" id="signup">
+                <label for="login" class="slide login">Resident</label>
+                <label for="signup" class="slide signup">Manager</label>
+                <div class="slider-tab"></div>
+            </div>
+            <div class="form-inner">
+                <form class="login">
+                    <div class="row">
+                        <div class="col-lg-3 text-center" style="align-content: center">
                             <img src="/images/resident.jpg" alt="" style="max-width: 52px;">
-                            <h5 class="text-info-emphasis">RESIDENT</h5>
-                            <h6><span>Register as a resident</span></h6>
                         </div>
-                    </a>
-                </div>
-                <div class="col-lg-6">
-                    <a th:href="@{/register/manager}">
-                        <div class="item">
+                        <div class="col-lg-9">
+                            <div class="text-container">
+                                <p> Register as a resident in existing Residential entity.
+                                    In order to register as a resident  you should first
+                                    provide a valid 8-digit
+                                    Residential ID and Access code. If you do not
+                                    have this information, you should contact
+                                    your Residential Entity manager first.</p>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="text-center">
+                        <fieldset>
+                            <a th:href="@{/register/auth}">
+                                <button type="button" class="orange-button ">Register as Resident
+                                </button>
+                            </a>
+                        </fieldset>
+                        <small>You already have registration? | <a href="/login">Login now</a></small>
+                    </div>
+                </form>
+                <form class="signup">
+                    <div class="row">
+                        <div class="col-lg-3 text-center" style="align-content: center">
                             <img src="/images/manager.jpg" alt="" style="max-width: 52px;">
-                            <h5 class="text-info-emphasis">MANAGER</h5>
-                            <h6><span>Register as a residential manager</span></h6>
                         </div>
-                    </a>
-                </div>
+                        <div class="col-lg-9">
+                            <div class="text-container">
+                                <p>Registering as Manager will allow you to create
+                                    and manage your Residential Entity in OurHome
+                                    platform. As a first step you must register as
+                                    a manager. As soon as you complete registration
+                                    you will get access to the platform</p>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div class="text-center">
+                        <fieldset>
+                            <a th:href="@{/register/manager}">
+                                <button type="button"
+                                        class="orange-button">Register as Manager
+                                </button>
+                            </a>
+                        </fieldset>
+                        <small>You already have registration? | <a href="/login">Login now</a></small>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>
@@ -127,6 +176,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/register.js"></script>
 
 </body>
 </html>

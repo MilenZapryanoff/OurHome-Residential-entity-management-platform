@@ -251,6 +251,9 @@
                         <p>Property №</p>
                     </th>
                     <th>
+                        <p>Avatar</p>
+                    </th>
+                    <th>
                         <p>First name</p>
                     </th>
                     <th>
@@ -283,8 +286,14 @@
                     </td>
                     <td th:if="${@propertyRepository.findAllUserObtainedProperties(resident.getId(), residentialEntity.getId()).size() == 0}">
                         <img title="No registered property"
-                             src="/images/attention.png" style="width: 111px;"
-                             alt="No registered property">
+                             src="/images/attention.png" style="max-width: 22px;"
+                             alt="No property registered">
+                    </td>
+                    <td>
+                        <div class="user-avatar-small" >
+                            <img th:if="${resident.getAvatarPath() != null}" th:src="@{${resident.getAvatarPath()}}" alt="Avatar">
+                            <img th:unless="${resident.getAvatarPath() != null}" src="/avatars/default.jpg" alt="Default Avatar">
+                        </div>
                     </td>
                     <td>
                         <p th:text="${resident.getFirstName()}"></p>
@@ -350,10 +359,10 @@
                             <div class="input-container">
                                 <label>
                                     <textarea class="messageText"
-                                          required style="width: 100%; padding-right: 40px; "
+                                          required
                                           th:errorclass="bg-danger"
                                           th:field="*{message}"
-                                          th:placeholder="'Send a message to ' + ${resident.getFirstName()}"
+                                          th:placeholder="'Send message to ' + ${resident.getFirstName()}"
                                           type="text">
                                     </textarea>
                                 </label>
@@ -366,7 +375,7 @@
                         </form>
                     </td>
                     <!-- START: Delete button-->
-                    <td style="padding: 0">
+                    <td>
                         <form th:action="@{/administration/owners/delete/{id} (id=${resident.getId()})}"
                               th:method="POST"
                               th:object="${residentManageBindingModel}">

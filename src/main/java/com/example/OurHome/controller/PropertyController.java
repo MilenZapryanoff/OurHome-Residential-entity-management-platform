@@ -59,7 +59,17 @@ public class PropertyController {
     @GetMapping("/property/add")
     public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel") PropertyRegisterBindingModel propertyRegisterBindingModel) {
 
-        return new ModelAndView("property/property-add", "userViewModel", getUserViewModel());
+        UserViewModel loggedUser = getUserViewModel();
+        UserAuthBindingModel userAuthBindingModel = new UserAuthBindingModel();
+
+        if (loggedUser.getResidentialEntities().isEmpty()) {
+            return new ModelAndView("property/property-add-new-entity")
+                    .addObject("userViewModel", loggedUser)
+                    .addObject("userAuthRegisterBindingModel", userAuthBindingModel)
+                    .addObject("notJoinedToResidentialEntity", true);
+        }
+
+        return new ModelAndView("property/property-add", "userViewModel", loggedUser);
     }
 
     /**

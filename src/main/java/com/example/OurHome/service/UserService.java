@@ -54,4 +54,6 @@ public interface UserService {
     void editProfile(Long id, ProfileEditBindingModel profileEditBindingModel, Boolean passwordChange);
 
     void cleanUpPasswordRestoreVerificationCodes();
+
+    void removeAvatar(Long loggedUserId) throws IOException;
 }

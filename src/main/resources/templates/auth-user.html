@@ -86,30 +86,25 @@
         <div class="col-lg-4 offset-lg-4">
             <div class="section-heading text-center">
                 <h6>| PRE-AUTHENTICATION </h6>
-                <p class="text-light">In order to register in your residential entity you have to provide a valid
-                    8-digit Residential
-                    ID and Access code.
-                    If you do not have this information, you should contact your residential entity manager
-                </p>
             </div>
         </div>
     </div>
 </div>
 <div class="register">
     <div class="input-content text-center">
-        <div class="col-lg-4 center-form">
+        <div class="col-lg-3 center-form">
             <form id="input-form"
                   th:method="POST"
                   th:action="@{/register/auth}"
                   th:object="${userAuthBindingModel}">
                 <div class="row">
                     <div class="col-lg-12">
-                        <small th:if="${badResidentialEntity}" class="text-danger">Wrong residential entity ID or Access
-                            code!<br></small>
+                        <p>Please provide Residential Entity ID and Access code to be able to complete your registration as resident.</p>
+                        <p th:if="${badResidentialEntity}" class="text-danger">Wrong residential entity ID or Access code!<br></p>
                         <fieldset>
                             <label for="residentialId"><b>Residential entity ID</b></label>
-                            <small th:if="${#fields.hasErrors('residentialId')}"
-                                   th:errors="*{residentialId}" class="text-danger">Residential Id error message</small>
+                            <p th:if="${#fields.hasErrors('residentialId')}"
+                                   th:errors="*{residentialId}" class="text-danger">Residential Id error message</p>
                             <input type="text" id="residentialId" placeholder="Enter residential ID..."
                                    autocomplete="on"
                                    required
@@ -118,9 +113,9 @@
                         </fieldset>
                         <fieldset>
                             <label for="residentialAccessCode"><b>Residential entity Access code</b></label>
-                            <small th:if="${#fields.hasErrors('residentialAccessCode')}"
+                            <p th:if="${#fields.hasErrors('residentialAccessCode')}"
                                    th:errors="*{residentialAccessCode}" class="text-danger">Validation code error
-                                message</small>
+                                message</p>
                             <input type="password" id="residentialAccessCode" placeholder="Enter Validation code..."
                                    autocomplete="on" required
                                    th:field="*{residentialAccessCode}"

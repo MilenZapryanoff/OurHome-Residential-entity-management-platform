@@ -24,7 +24,7 @@ public class RegisterController {
     }
 
     @GetMapping("/register")
-    public ModelAndView preRegistration() {
+    public ModelAndView preRegistration(@ModelAttribute("managerRegisterBindingModel") ManagerRegisterBindingModel managerRegisterBindingModel) {
         return new ModelAndView("register");
     }
 

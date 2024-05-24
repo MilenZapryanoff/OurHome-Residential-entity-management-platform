@@ -94,15 +94,24 @@
     <div class="container">
         <div class="row">
             <h3>Property registration request</h3>
+            <p class="text-light" th:text="'Property № ' + ${property.getNumber()}"></p>
         </div>
     </div>
 </div>
 
 
-<!-- Property create input form -->
+<!-- Property registration request form -->
 <div class="container">
-    <div class="property" style="padding-top: 80px;: ">
+    <div class="property">
         <div class="tab-content" id="myTabContent">
+            <div class="tabs-content">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link text-light"
+                           th:href="@{/administration/owners/pending/{id}(id=${property.getResidentialEntity().getId()})}">Back</a>
+                    </li>
+                </ul>
+            </div>
             <div class="tab-pane fade show active" id="profile"
                  aria-labelledby="profile-tab">
                 <div class="row">
@@ -110,18 +119,20 @@
                         <div class="info-table">
                             <ul>
                                 <li>
-                                    <h5 class="text-danger text-center">Property data</h5>
-                                    <p class="text-center">Property data set for this property.</p>
-                                    <p class="text-center">Please note, that most of the data in this section may be
-                                        part of the components involved in the calculation of the monthly fee for this
-                                        property.
-                                        <b>It is important to keep this data correct.</b>
-                                    </p>
+                                    <section class="text-center">
+                                        <h5 class="text-danger">Property data</h5>
+                                        <p>Property data set for this property.</p>
+                                        <p>Please note, that most of the data in this section may be
+                                            part of the components involved in the calculation of the monthly fee for
+                                            this property.</p>
+                                        <p><b>It is important to keep this data correct.</b></p>
+                                    </section>
                                 </li>
                                 <li class="text-black text-center"><i class="fa-solid fa-list-ol"></i> Property №:
                                     <b th:text="${property.getNumber()}"></b>
                                 </li>
-                                <li class="text-black text-center"><i class="fa-solid fa-stairs"></i> Property floor number:
+                                <li class="text-black text-center"><i class="fa-solid fa-stairs"></i> Property floor
+                                    number:
                                     <b th:text="${property.getFloor()}"></b>
                                 </li>
                                 <li class="text-black text-center"><i class="fa-solid fa-person"></i> Number of adults:
@@ -133,13 +144,14 @@
                                 <li class="text-black text-center"><i class="fa-solid fa-dog"></i> Number of pets:
                                     <b th:text="${property.getNumberOfPets()}"></b>
                                 </li>
-                                <li class="text-black text-center"><i class="fa-solid fa-house-chimney-user"></i> Property is habitable:
+                                <li class="text-black text-center"><i class="fa-solid fa-house-chimney-user"></i>
+                                    Property is habitable:
                                     <b th:if="${property.isNotHabitable()}"><i
                                             class="fa-solid fa-circle-xmark text-danger"></i></b>
                                     <b th:unless="${property.isNotHabitable()}"><i
                                             class="fa-solid fa-circle-check text-success"></i></b>
                                 </li>
-                                <li th:if="${@propertyTypeRepository.countPropertyTypesByRE(property.getResidentialEntity()) > 0}"
+                                <li th:if="${property.getPropertyType() != null}"
                                     class="text-black text-center"><i class="fa-solid fa-building"></i> Property type:
                                     <b th:text="${property.getPropertyType().getDescription()}"></b>
                                 </li>
@@ -150,46 +162,58 @@
                         <div class="info-table">
                             <ul>
                                 <li>
-                                    <h5 class="text-danger text-center">Registration request</h5>
-                                    <p class="text-center">Request data is the data, that property owner has entered for
+                                    <section class="text-center">
+                                    <h5 class="text-danger">Registration request</h5>
+                                    <p>Request data is the data, that property owner has entered for
                                         this property.</p>
+                                    </section>
                                 </li>
-                                <li class="text-center text-dark">Requester:
-                                    <b th:text="${property.getOwner().getFirstName() + ' ' + property.getOwner().getLastName()}"></b>
+                                <li class="text-center text-dark">
+                                    <p><h6>Requester:</h6></p>
+                                    <div class="user-avatar-medium">
+                                        <img th:if="${property.getOwner().getAvatarPath() != null}"
+                                             th:src="@{${property.getOwner().getAvatarPath()}}" alt="Avatar">
+                                        <b th:text="${property.getOwner().getFirstName() + ' ' + property.getOwner().getLastName()}"></b>
+                                    </div>
                                 </li>
                                 <li class="text-black text-center">
                                     <b th:if="${property.getNumber() != property.getPropertyRegisterRequest().getNumber()}">
-                                    <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                       title="Difference between property data and registration request data"></i></b>
+                                        <i class="fa-solid fa-triangle-exclamation text-danger help"
+                                           title="Difference between property data and registration request data"></i></b>
                                     <i class="fa-solid fa-list-ol"></i> Property №:
                                     <b th:text="${property.getPropertyRegisterRequest().getNumber()}"></b>
                                 </li>
-                                <li class="text-black text-center"><b th:if="${property.getFloor() != property.getPropertyRegisterRequest().getFloor()}">
+                                <li class="text-black text-center"><b
+                                        th:if="${property.getFloor() != property.getPropertyRegisterRequest().getFloor()}">
                                     <i class="fa-solid fa-triangle-exclamation text-danger help"
                                        title="Difference between property data and registration request data"></i></b>
                                     <i class="fa-solid fa-stairs"></i> Property floor number:
                                     <b th:text="${property.getPropertyRegisterRequest().getFloor()}"></b>
                                 </li>
-                                <li class="text-black text-center"><b th:if="${property.getNumberOfAdults() != property.getPropertyRegisterRequest().getNumberOfAdults()}">
+                                <li class="text-black text-center"><b
+                                        th:if="${property.getNumberOfAdults() != property.getPropertyRegisterRequest().getNumberOfAdults()}">
                                     <i class="fa-solid fa-triangle-exclamation text-danger help"
                                        title="Difference between property data and registration request data"></i></b>
                                     <i class="fa-solid fa-person"></i> Number of adults:
                                     <b th:text="${property.getPropertyRegisterRequest().getNumberOfAdults()}"></b>
                                 </li>
-                                <li class="text-black text-center"><b th:if="${property.getNumberOfChildren() != property.getPropertyRegisterRequest().getNumberOfChildren()}">
+                                <li class="text-black text-center"><b
+                                        th:if="${property.getNumberOfChildren() != property.getPropertyRegisterRequest().getNumberOfChildren()}">
                                     <i class="fa-solid fa-triangle-exclamation text-danger help"
                                        title="Difference between property data and registration request data"></i></b>
                                     <i class="fa-solid fa-child"></i> Number of children:
                                     <b th:text="${property.getPropertyRegisterRequest().getNumberOfChildren()}"></b>
                                 </li>
-                                <li class="text-black text-center"><b th:if="${property.getNumberOfPets() != property.getPropertyRegisterRequest().getNumberOfPets()}">
+                                <li class="text-black text-center"><b
+                                        th:if="${property.getNumberOfPets() != property.getPropertyRegisterRequest().getNumberOfPets()}">
                                     <i class="fa-solid fa-triangle-exclamation text-danger help"
                                        title="Difference between property data and registration request data"></i></b>
                                     <i class="fa-solid fa-dog"></i> Number of pets:
                                     <b th:text="${property.getPropertyRegisterRequest().getNumberOfPets()}"></b>
 
                                 </li>
-                                <li class="text-black text-center"><b th:if="${property.isNotHabitable() != property.getPropertyRegisterRequest().isNotHabitable()}">
+                                <li class="text-black text-center"><b
+                                        th:if="${property.isNotHabitable() != property.getPropertyRegisterRequest().isNotHabitable()}">
                                     <i class="fa-solid fa-triangle-exclamation text-danger help"
                                        title="Difference between property data and registration request data"></i></b>
                                     <i class="fa-solid fa-house-chimney-user"></i> Property is habitable:
@@ -200,29 +224,28 @@
 
                                 </li>
                                 <li>
-                                    <p>Symbol <i class="fa-solid fa-triangle-exclamation"></i> shows
-                                        differences between
-                                        the data set for this property and registration request
-                                        input data.</p>
-                                    <p><b>You can choose between :</b>
-                                        <br> <i class="fa-solid fa-circle text-success"></i> Approving registration
-                                        request <b>with</b> data change.
-                                        New property owner will be set and data change will be applied according to
-                                        registration request data.
-                                        <br> <i class="fa-solid fa-circle text-success"></i> Approving registration
-                                        request <b>without</b> data change. New property
-                                        owner will be set, but data changes will be <b>ignored</b>!
-                                        <br> <i class="fa-solid fa-circle text-danger"></i> Rejecting registration
-                                        request <b>without</b> data change. New property
-                                        owner won't be set, and data changes will be <b>ignored</b>! Owner can change
-                                        new registration request!
-                                    </p>
+                                    <div class="text-center">
+                                        <p>Symbol <i class="fa-solid fa-triangle-exclamation"></i> shows
+                                            differences between the data set for this property and registration request input data</p>
+                                        <br>
+                                        <p><b class="text-danger">You have the following options :</b></p>
+                                        <p><b><i class="fa-solid fa-circle text-success"></i> Approve registration request with data change</b></p>
+                                        <p>New property owner will be set and data change will be applied according to registration request data.</p>
+                                        <br>
+                                        <p><b><i class="fa-solid fa-circle text-success"></i> Approve registration request without data change.</b></p>
+                                        <p>New property owner will be set, but data changes will be <b>ignored!</b></p>
+                                        <br>
+                                        <p><b><i class="fa-solid fa-circle text-danger"></i> Reject registration request</b></p>
+                                        <p>No changes will be applied for this property!</p>
+                                        <br>
+                                    </div>
+
+
                                     <div class="buttons-container">
                                         <form class="form-container"
                                               th:action="@{/administration/owners/approve-with-changes/{id} (id=${property.getId()})}"
                                               th:method="POST"
                                               th:object="${propertyManageBindingModel}">
-
                                             <div th:id="'customDialog_' + ${property.getId()}"
                                                  class="custom-dialog" style="display: none;">
                                                 <p th:id="'customDialogText_' + ${property.getId()}"></p>
@@ -241,7 +264,6 @@
                                                     th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property approved.\')'"
                                                     type="submit">Approve with changes
                                             </button>
-
                                         </form>
                                         <form class="form-container"
                                               th:action="@{/administration/owners/approve-without-changes/{id} (id=${property.getId()})}"

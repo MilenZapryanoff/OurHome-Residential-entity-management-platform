@@ -90,113 +90,116 @@
 <!--Single property BANNER-->
 <div class="page-heading header-text">
     <div class="container">
-        <h3> Register now </h3>
+        <h3>Register now</h3>
+        <h4 class="text-white"><i class="fa-regular fa-building"></i></h4>
         <div th:if="${registrationFailed}" class="err-msg">
-        <h5 class="text-white">Property registration failed!</h5>
-        <p class="text-white"th:text="'A problem occured with the registration of Property №' + ${propertyRegisterBindingModel.getNumber()}"></p>
-        <p class="text-white">Please contact your Residential entity manager for further information.</p>
+            <h5 class="text-white">Property registration failed!</h5>
+            <p class="text-white"
+               th:text="'A problem occured with the registration of Property №' + ${propertyRegisterBindingModel.getNumber()}"></p>
+            <p class="text-white">Please contact your Residential entity manager for further information.</p>
         </div>
     </div>
 </div>
 
 <div class="container">
-    <div class="messages">
-        <div class="input-content text-center">
-            <div class="col-lg-5 center-form">
-                <form id="input-form"
-                      th:method="POST"
-                      th:action="@{/property/add}"
-                      th:object="${propertyRegisterBindingModel}">
-                    <div class="col-lg-12">
-                        <h5 class="text-danger">Property information</h5>
-                        <br>
-                        <fieldset>
-                            <label for="residentialEntity"><b>Residential entity</b></label>
-                            <select class="form-control" id="residentialEntity"
-                                    th:field="*{residentialEntity}">
-                                <option th:each="residentialEntity : ${userViewModel.getResidentialEntities()}"
-                                        th:value="${residentialEntity.getId()}"
-                                        th:text="'ID: '+ ${residentialEntity.getId()} + ' - ' + ${residentialEntity.getCity().getName()} + |, | + ${residentialEntity.getStreetName()} + ' №' +
+    <div class="input-content text-center">
+        <div class="col-lg-5 center-form">
+            <form id="input-form"
+                  th:method="POST"
+                  th:action="@{/property/add}"
+                  th:object="${propertyRegisterBindingModel}">
+                <div class="col-lg-12">
+                    <h5 class="text-danger">Property information</h5>
+                    <br>
+                    <fieldset>
+                        <label for="residentialEntity"><b>Residential entity</b></label>
+                        <select class="form-control" id="residentialEntity"
+                                th:field="*{residentialEntity}">
+                            <option th:each="residentialEntity : ${userViewModel.getResidentialEntities()}"
+                                    th:value="${residentialEntity.getId()}"
+                                    th:text="'ID: '+ ${residentialEntity.getId()} + ' - ' + ${residentialEntity.getCity().getName()} + |, | + ${residentialEntity.getStreetName()} + ' №' +
                                 ${residentialEntity.getStreetNumber()} + ' ' + ${residentialEntity.getEntrance()}">
-                                </option>
-                            </select>
-                            <a class="small" th:href="@{/property/add/new}">Add new residential entity</a>
-                        </fieldset>
+                            </option>
+                        </select>
+                        <a class="small" th:href="@{/property/add/new}">Add new residential entity</a>
+                    </fieldset>
+                    <fieldset>
+                        <br>
+                        <label for="number"><b>Property №</b></label>
+                        <p th:if="${#fields.hasErrors('number')}"
+                           th:errors="*{number}" class="text-danger">Property № error message</p>
+                        <input type="number" id="number" placeholder="Enter your property №..." required
+                               th:field="*{number}"
+                               th:errorclass="bg-danger">
+                    </fieldset>
+                    <fieldset>
+                        <label for="floor"><b>Floor number</b></label>
+                        <p th:if="${#fields.hasErrors('floor')}"
+                           th:errors="*{floor}" class="text-danger">Floor error message</p>
+                        <input type="number" id="floor" placeholder="Enter floor..." required
+                               th:field="*{floor}"
+                               th:errorclass="bg-danger">
+                    </fieldset>
+                    <fieldset>
+                        <label for="numberOfRooms"><b>Number of rooms</b></label>
+                        <p th:if="${#fields.hasErrors('numberOfRooms')}"
+                           th:errors="*{numberOfRooms}" class="text-danger">Rooms error message</p>
+                        <input type="number" id="numberOfRooms" placeholder="Enter number of rooms..." required
+                               th:field="*{numberOfRooms}"
+                               th:errorclass="bg-danger">
+                    </fieldset>
+                    <fieldset>
+                        <label for="parkingAvailable"><b>Parking available</b></label>
+                        <input name="parkingAvailable" id="parkingAvailable"
+                               type="checkbox">
+                    </fieldset>
+                    <h5 class="text-danger">Inhabitants information</h5>
+                    <hr>
+                    <fieldset>
+                        <label for="numberOfAdults"><b>Number of adults </b><small>(over 7yo)</small></label>
+                        <p th:if="${#fields.hasErrors('numberOfAdults')}"
+                           th:errors="*{numberOfAdults}" class="text-danger">Adults error message</p>
+                        <input type="number" id="numberOfAdults" placeholder="Enter number of adults..."
+                               autocomplete="on" required
+                               th:field="*{numberOfAdults}"
+                               th:errorclass="bg-danger">
+                    </fieldset>
+                    <fieldset>
+                        <label for="numberOfChildren"><b>Number of children </b><small>(under 7yo)</small></label>
+                        <p th:if="${#fields.hasErrors('numberOfAdults')}"
+                           th:errors="*{numberOfChildren}" class="text-danger">Children error message</p>
+                        <input type="number" id="numberOfChildren" placeholder="Enter number of children... (0 or more)"
+                               autocomplete="on" required
+                               th:field="*{numberOfChildren}"
+                               th:errorclass="bg-danger">
+                    </fieldset>
+                    <fieldset>
+                        <label for="numberOfPets"><b>Number of pets</b></label>
+                        <p th:if="${#fields.hasErrors('numberOfPets')}"
+                           th:errors="*{numberOfPets}" class="text-danger">Adults error message</p>
+                        <input type="number" id="numberOfPets" placeholder="Enter number of pets...(0 or more)"
+                               autocomplete="on" required
+                               th:field="*{numberOfPets}"
+                               th:errorclass="bg-danger">
+                    </fieldset>
+                    <div class="col-lg-12">
                         <fieldset>
-                            <br>
-                            <label for="number"><b>Property №</b></label>
-                            <p th:if="${#fields.hasErrors('number')}"
-                               th:errors="*{number}" class="text-danger">Property № error message</p>
-                            <input type="number" id="number" placeholder="Enter your property №..." required
-                                   th:field="*{number}"
-                                   th:errorclass="bg-danger">
-                        </fieldset>
-                        <fieldset>
-                            <label for="floor"><b>Floor number</b></label>
-                            <p th:if="${#fields.hasErrors('floor')}"
-                               th:errors="*{floor}" class="text-danger">Floor error message</p>
-                            <input type="number" id="floor" placeholder="Enter floor..." required
-                                   th:field="*{floor}"
-                                   th:errorclass="bg-danger">
-                        </fieldset>
-                        <fieldset>
-                            <label for="numberOfRooms"><b>Number of rooms</b></label>
-                            <p th:if="${#fields.hasErrors('numberOfRooms')}"
-                               th:errors="*{numberOfRooms}" class="text-danger">Rooms error message</p>
-                            <input type="number" id="numberOfRooms" placeholder="Enter number of rooms..." required
-                                   th:field="*{numberOfRooms}"
-                                   th:errorclass="bg-danger">
-                        </fieldset>
-                        <fieldset>
-                            <label for="parkingAvailable"><b>Parking available</b></label>
-                            <input name="parkingAvailable" id="parkingAvailable"
+                            <label for="isNotHabitable"><b>Property not habitable</b></label>
+                            <input name="notHabitable" id="isNotHabitable"
                                    type="checkbox">
                         </fieldset>
-                        <h5 class="text-danger">Inhabitants information</h5>
-                        <hr>
-                        <fieldset>
-                            <label for="numberOfAdults"><b>Number of adults </b><small>(over 7yo)</small></label>
-                            <p th:if="${#fields.hasErrors('numberOfAdults')}"
-                               th:errors="*{numberOfAdults}" class="text-danger">Adults error message</p>
-                            <input type="number" id="numberOfAdults" placeholder="Enter number of adults..." autocomplete="on" required
-                                   th:field="*{numberOfAdults}"
-                                   th:errorclass="bg-danger">
-                        </fieldset>
-                        <fieldset>
-                            <label for="numberOfChildren"><b>Number of children </b><small>(under 7yo)</small></label>
-                            <p th:if="${#fields.hasErrors('numberOfAdults')}"
-                               th:errors="*{numberOfChildren}" class="text-danger">Children error message</p>
-                            <input type="number" id="numberOfChildren" placeholder="Enter number of children... (0 or more)" autocomplete="on" required
-                                   th:field="*{numberOfChildren}"
-                                   th:errorclass="bg-danger">
-                        </fieldset>
-                        <fieldset>
-                            <label for="numberOfPets"><b>Number of pets</b></label>
-                            <p th:if="${#fields.hasErrors('numberOfPets')}"
-                               th:errors="*{numberOfPets}" class="text-danger">Adults error message</p>
-                            <input type="number" id="numberOfPets" placeholder="Enter number of pets...(0 or more)" autocomplete="on" required
-                                   th:field="*{numberOfPets}"
-                                   th:errorclass="bg-danger">
-                        </fieldset>
-                        <div class="col-lg-12">
-                            <fieldset>
-                                <label for="isNotHabitable"><b>Property not habitable</b></label>
-                                <input name="notHabitable" id="isNotHabitable"
-                                       type="checkbox">
-                            </fieldset>
-                        </div>
-                        <fieldset>
-                            <button th:href="@{/property}" id="form-submit" class="orange-button">Add
-                            </button>
-                            <button class="orange-button" id="form-cancel" type="button">
-                                <a href=/property>
-                                    <div class="text-light">Cancel</div>
-                                </a>
-                            </button>
-                        </fieldset>
                     </div>
-                </form>
-            </div>
+                    <fieldset>
+                        <button th:href="@{/property}" id="form-submit" class="orange-button">Add
+                        </button>
+                        <button class="orange-button" id="form-cancel" type="button">
+                            <a href=/property>
+                                <div class="text-light">Cancel</div>
+                            </a>
+                        </button>
+                    </fieldset>
+                </div>
+            </form>
         </div>
     </div>
 </div>

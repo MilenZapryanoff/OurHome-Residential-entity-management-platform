@@ -18,6 +18,7 @@ font & reset css
 --------------------------------------------- 
 */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900");
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 
 /*
 ---------------------------------------------
@@ -145,7 +146,6 @@ body {
     padding: 0 5px;
     border-radius: 5px;
 }
-
 
 
 .due-amount-field {
@@ -389,11 +389,38 @@ Pre-loader Style
 
 /*
 ---------------------------------------------
-Header Style
+Profile Style
 --------------------------------------------- 
+*/
+.profile ul li .avatar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile ul li img {
+    border-radius: 50%;
+    width: 250px;
+    height: 250px;
+}
+
+
+.avatar-control {
+    border: 1px solid red;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+/*
+---------------------------------------------
+Header Style
+---------------------------------------------
 */
 
 .sub-header {
+
     background-color: #fff;
     padding: 10px 0;
     border-bottom: 1px solid #eee;
@@ -447,6 +474,23 @@ Header Style
     color: #DC3545;
     margin-right: 8px;
 }
+
+.sub-header .header-container {
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.sub-header .avatar img {
+    width: 25px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.sub-header .logged-user {
+    margin-left: 10px;
+}
+
 
 .background-header {
     background-color: #fff;
@@ -951,7 +995,7 @@ button {
 
 
 /*
-POP-UP window
+Password reset OP-UP window
  */
 
 {
@@ -1035,26 +1079,6 @@ input, #residentialAccessCode:focus, .form-container input[type=password]:focus 
     display: none;
 }
 
-
-.custom-input {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.custom-button {
-    padding: 35px;
-    text-align: center;
-    margin-left: -70px;
-
-}
-
-.custom-button2 {
-    padding: 35px;
-    text-align: center;
-    margin-left: -40px;
-    margin-block: 20px;
-}
-
 /* 
 ---------------------------------------------
 Fun Facts Style
@@ -1105,6 +1129,7 @@ Fun Facts Style
     right: 0;
     top: 0;
 }
+
 
 /*
 ---------------------------------------------
@@ -1183,11 +1208,6 @@ Single Page Style
     border-bottom: none;
     padding-bottom: 0;
     margin-bottom: 0;
-}
-
-.single-property .info-table ul li img {
-    float: left;
-    margin-right: 25px;
 }
 
 .single-property .info-table ul li h4 {
@@ -1297,10 +1317,9 @@ Property fee section
 
 /*
 ---------------------------------------------
-Arrows
+Magnifier expand
 ---------------------------------------------
 */
-
 
 .magnifier-expand {
     color: #9f9f9f;
@@ -1449,9 +1468,9 @@ Property Style
     padding: 0 0;
 }
 
-.property .tab-content img {
-    padding: 0 45px;
-}
+/*.property .tab-content img {*/
+/*    padding: 0 45px;*/
+/*}*/
 
 .property .tabs-content .nav-link {
     font-size: 16px;
@@ -1538,13 +1557,9 @@ Messages Style
 */
 
 .messages {
+    margin-top: 70px;
     background-color: #ffffff;
     padding: 100px 0;
-}
-
-.messages .tab-content img {
-    /*padding: 0 45px;*/
-    max-width: 18px;
 }
 
 .messages .tabs-content .nav-link {
@@ -1578,50 +1593,8 @@ Messages Style
     margin-left: 20px;
 }
 
-.messages .info-table {
-    border-radius: 30px;
-    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
-    /*padding: 35px 30px;*/
-}
-
-.messages .info-table ul li {
-    display: block;
-    margin-bottom: 24px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
-    font-size: 15px;
-    color: #aaa;
-    font-weight: 400;
-}
-
-.messages .info-table ul li:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 0;
-}
-
-.messages .info-table ul li span {
-    font-size: 20px;
-    color: #1e1e1e;
-    font-weight: 700;
-    float: right;
-    display: inline-block;
-}
-
-.messages .tabs-content {
-    padding: 0;
-    background-color: transparent;
-}
-
-.messages .tabs-content h4 {
-    font-size: 17px;
-    font-weight: 600;
-    margin-bottom: 30px;
-}
-
-.messages .icon-button {
-    margin-top: 30px;
+.message-content {
+    padding: 15px;
 }
 
 
@@ -1639,17 +1612,17 @@ Properties Style
     flex-shrink: 10;
 }
 
-
 .properties .item {
     max-width: 350px;
     background-color: #fafafa;
-    border-radius: 10px;
+    border-radius: 20px;
     padding: 30px;
-    margin-bottom: 30px;
+    margin: 20px;
+    border: 1px solid #eee;
 }
 
 .properties .item img {
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 .properties .item span.category {
@@ -1672,6 +1645,12 @@ Properties Style
     color: #1e1e1e;
 }
 
+.properties .item ul {
+    border-bottom: 1px solid #eaeaea;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+}
+
 .properties .item ul li {
     display: inline-block;
     font-size: 15px;
@@ -1684,24 +1663,9 @@ Properties Style
     color: #1e1e1e;
 }
 
-.properties .item ul {
-    border-bottom: 1px solid #eaeaea;
-    margin-bottom: 30px;
-    padding-bottom: 30px;
-}
-
-.properties .item h6 {
-    font-size: 20px;
-    color: #f35525;
-    display: inline-block;
-    float: right;
-    margin-top: 30px;
-}
-
 .properties .item .main-button {
     text-align: center;
 }
-
 
 /* 
 ---------------------------------------------
@@ -1723,7 +1687,7 @@ Contact Style
 }
 
 .input-content {
-    margin-top: -130px;
+    margin-top: -35px;
     position: relative;
     z-index: 1;
 }
@@ -1794,16 +1758,16 @@ Contact Style
 
 textarea {
     width: 100%;
+    min-width: 240px;
     height: 52px;
-    max-height: 180px;
+    max-height: 200px;
     border-bottom-left-radius: 20px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     border: none;
     background-color: #eaeaea;
-
     font-size: 14px;
-    padding: 14px 13px;
+    padding: 14px 40px 14px 13px;
 }
 
 .input-content #input-form button {
@@ -1822,11 +1786,157 @@ textarea {
     background-color: #DC3545;
 }
 
+/*
+---------------------------------------------
+Registration form
+---------------------------------------------
+*/
 
-/* 
+::selection {
+    background: #DC3545;
+    color: #fff;
+}
+
+.wrapper {
+    margin: 0 auto;
+    overflow: hidden;
+    max-width: 550px;
+    background: #fff;
+    padding: 35px;
+    border-radius: 30px;
+    box-shadow: 1px 15px 20px rgba(0, 0, 0, 0.1);
+}
+
+.wrapper .title-text {
+    display: flex;
+    width: 200%;
+}
+
+.wrapper .title {
+    width: 50%;
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .slide-controls {
+    position: relative;
+    display: flex;
+    height: 50px;
+    width: 100%;
+    overflow: hidden;
+    margin: 30px 0 10px 0;
+    justify-content: space-between;
+    border: 1px solid lightgrey;
+    border-radius: 30px;
+    background-color: #efefef;
+
+}
+
+.wrapper button {
+    margin: 0 0 20px 0;
+    background-color: #1e1e1e;
+    height: 44px;
+    border-radius: 30px;
+    padding: 0 20px;
+    color: #fff;
+    border: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all .5s;
+}
+
+.wrapper button:hover {
+    background-color: #DC3545;
+}
+
+.wrapper .text-container {
+    max-width: 330px;
+    margin: 25px auto;
+    align-items: flex-start;
+}
+
+.wrapper .btn {
+    border-radius: 30px;
+}
+
+.slide-controls .slide {
+    height: 100%;
+    width: 100%;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 48px;
+    cursor: pointer;
+    z-index: 1;
+    transition: all 0.6s ease;
+}
+
+.slide-controls label.signup {
+    color: #000;
+}
+
+.slide-controls .slider-tab {
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    left: 0;
+    z-index: 0;
+    border-radius: 30px;
+    background: #DC3545;
+    border: 1px solid #7a7a7a;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+#signup:checked ~ .slider-tab {
+    left: 50%;
+}
+
+#signup:checked ~ label.signup {
+    color: #fff;
+    cursor: default;
+    user-select: none;
+}
+
+#signup:checked ~ label.login {
+    color: #000;
+}
+
+#login:checked ~ label.signup {
+    color: #000;
+}
+
+#login:checked ~ label.login {
+    cursor: default;
+    user-select: none;
+}
+
+.wrapper .form-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.form-container .form-inner {
+    display: flex;
+    width: 200%;
+}
+
+.form-container .form-inner form {
+    width: 50%;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+
+/*
 ---------------------------------------------
 Footer Style
---------------------------------------------- 
+---------------------------------------------
 */
 
 footer.footer-no-gap {
@@ -1895,6 +2005,7 @@ Page Header Style
     text-transform: uppercase;
     color: #fff;
 }
+
 
 /* 
 ---------------------------------------------
@@ -2110,6 +2221,12 @@ POP-UP ALERT
     transition: .4s;
 }
 
+/*
+---------------------------------------------
+MISC styles
+---------------------------------------------
+*/
+
 .modify-fee-button {
     padding-top: 50px;
 }
@@ -2142,10 +2259,8 @@ input {
     transition: .3s;
 }
 
-
 td img {
     padding: 1px;
-    max-width: 20px;
 }
 
 td img:hover {
@@ -2155,7 +2270,7 @@ td img:hover {
 table {
     table-layout: fixed;
     overflow: auto;
-    max-width: 96% ;
+    max-width: 96%;
 }
 
 .center-form {
@@ -2282,18 +2397,22 @@ Delete button styles and animation
     -webkit-tap-highlight-color: transparent;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
+
 .delete-button:active {
     --scale: .95;
 }
+
 .delete-button:hover {
     --b: var(--background-hover);
 }
+
 .delete-button .icon,
 .delete-button .text {
     display: inline-block;
     vertical-align: top;
     transform: translateZ(0);
 }
+
 .delete-button .icon {
     width: 24px;
     height: 24px;
@@ -2302,6 +2421,7 @@ Delete button styles and animation
     margin-right: 8px;
     color: var(--text);
 }
+
 .delete-button .icon svg {
     width: 96px;
     height: 96px;
@@ -2315,13 +2435,16 @@ Delete button styles and animation
     -webkit-animation: var(--name, var(--name-top, none)) 2400ms ease forwards;
     animation: var(--name, var(--name-top, none)) 2400ms ease forwards;
 }
+
 .delete-button .icon svg.bottom {
     --name: var(--name-bottom, none);
 }
+
 .delete-button .text {
     -webkit-animation: var(--name-text, none) 2400ms ease forwards;
     animation: var(--name-text, none) 2400ms ease forwards;
 }
+
 .delete-button .text span {
     display: inline-block;
     vertical-align: top;
@@ -2329,50 +2452,62 @@ Delete button styles and animation
     transform: translate(var(--span-x, 0), var(--span-y, 0)) rotate(var(--span-r, 0deg)) translateZ(0);
     transition: transform 0.3s ease var(--span-d, 0s), opacity 0.2s linear var(--span-o-d, 0.3s);
 }
+
 .delete-button .text span:nth-child(1) {
     --span-delay: 0.4s;
     --span-o-d: 0.325s;
 }
+
 .delete-button .text span:nth-child(2) {
     --span-delay: 0.45s;
     --span-o-d: 0.35s;
 }
+
 .delete-button .text span:nth-child(3) {
     --span-delay: 0.5s;
     --span-o-d: 0.375s;
 }
+
 .delete-button .text span:nth-child(4) {
     --span-delay: 0.55s;
     --span-o-d: 0.4s;
 }
+
 .delete-button .text span:nth-child(5) {
     --span-delay: 0.6s;
     --span-o-d: 0.425s;
 }
+
 .delete-button .text span:nth-child(6) {
     --span-delay: 0.65s;
     --span-o-d: 0.45s;
 }
+
 .delete-button .text span:nth-child(7) {
     --span-delay: 0.7s;
     --span-o-d: 0.475s;
 }
+
 .delete-button .text span:nth-child(8) {
     --span-delay: 0.75s;
     --span-o-d: 0.5s;
 }
+
 .delete-button .text span:nth-child(9) {
     --span-delay: 0.8s;
     --span-o-d: 0.525s;
 }
+
 .delete-button .text span:nth-child(10) {
     --span-delay: 0.85s;
     --span-o-d: 0.55s;
 }
+
 .delete-button .text span:nth-child(11) {
     --span-delay: 0.9s;
     --span-o-d: 0.575s;
 }
+
 .delete-button.delete {
     --b: var(--background-hover);
     --name-top: trash-top;
@@ -2383,6 +2518,7 @@ Delete button styles and animation
     --span-r: -40deg;
     --span-o: 0;
 }
+
 .delete-button.delete .text span {
     --span-o-d: 1s;
     --span-d: var(--span-delay);
@@ -2417,6 +2553,7 @@ Delete button styles and animation
         transform: scale(0.25) translateZ(0);
     }
 }
+
 @-webkit-keyframes trash-top {
     25%, 32% {
         transform: translate(38px, 4px) scale(1) rotate(-20deg) translateZ(0);
@@ -2431,6 +2568,7 @@ Delete button styles and animation
         transform: scale(0.25) translateZ(0);
     }
 }
+
 @keyframes trash-top {
     25%, 32% {
         transform: translate(38px, 4px) scale(1) rotate(-20deg) translateZ(0);
@@ -2445,6 +2583,7 @@ Delete button styles and animation
         transform: scale(0.25) translateZ(0);
     }
 }
+
 @-webkit-keyframes text {
     25% {
         transform: translate(-4px, -6px) rotate(-20deg) translateZ(0);
@@ -2464,6 +2603,7 @@ Delete button styles and animation
         opacity: 1;
     }
 }
+
 @keyframes text {
     25% {
         transform: translate(-4px, -6px) rotate(-20deg) translateZ(0);
@@ -2610,6 +2750,50 @@ Owner send message button
 }
 
 
+/*
+---------------------------------------------
+User avatar (small icon)
+---------------------------------------------
+*/
+
+.user-avatar-small {
+    display: inline-block;
+
+}
+
+.user-avatar-small img {
+    width: 40px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.user-avatar-small p {
+    display: inline-block;
+
+}
+
+
+/*
+---------------------------------------------
+User avatar (small medium)
+---------------------------------------------
+*/
+
+.user-avatar-medium {
+    display: inline-block;
+    padding: 8px 0;
+}
+
+.user-avatar-medium img {
+    width: 80px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.user-avatar-medium p {
+    display: inline-block;
+
+}
 
 /*
 ---------------------------------------------
@@ -2759,14 +2943,6 @@ body {
     .properties .item {
         max-width: 450px;
     }
-
-    #properties-list,
-    #property-types-table,
-    #rejected-requests,
-    #pending-requests,
-    #owners-table {
-        display: flex;
-    }
 }
 
 @media (max-width: 1200px) {
@@ -2783,5 +2959,13 @@ body {
 
         flex-grow: 1;
         flex-shrink: 1;
+    }
+
+    #properties-list,
+    #property-types-table,
+    #rejected-requests,
+    #pending-requests,
+    #owners-table {
+        display: flex;
     }
 }

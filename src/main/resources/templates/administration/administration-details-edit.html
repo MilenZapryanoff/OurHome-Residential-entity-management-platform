@@ -127,11 +127,10 @@
                         <fieldset>
                             <label for="streetName"><b>Street
                                 Name</b></label>
-                            <br>
-                            <small th:if="${#fields.hasErrors('streetName')}"
+                            <p th:if="${#fields.hasErrors('streetName')}"
                                    th:errors="*{streetName}"
                                    class="text-danger">Street name error
-                                message</small>
+                                message</p>
                             <input type="text" id="streetName"
                                    placeholder="Enter street name..."
                                    autocomplete="on"
@@ -142,11 +141,10 @@
                         <fieldset>
                             <label for="streetNumber"><b>Street
                                 №</b></label>
-                            <br>
-                            <small th:if="${#fields.hasErrors('streetNumber')}"
+                            <p th:if="${#fields.hasErrors('streetNumber')}"
                                    th:errors="*{streetNumber}"
                                    class="text-danger">Street number error
-                                message</small>
+                                message</p>
                             <input type="text" id="streetNumber"
                                    placeholder="Enter street №..."
                                    autocomplete="on" required
@@ -156,11 +154,10 @@
                         </fieldset>
                         <fieldset>
                             <label for="entrance"><b>Entrance №</b></label>
-                            <br>
-                            <small th:if="${#fields.hasErrors('entrance')}"
+                            <p th:if="${#fields.hasErrors('entrance')}"
                                    th:errors="*{entrance}"
                                    class="text-danger">Entrance error
-                                message</small>
+                                message</p>
                             <input type="text" id="entrance"
                                    placeholder="Enter Entrance №..."
                                    th:field="*{entrance}"
@@ -170,11 +167,10 @@
                         <fieldset>
                             <label for="accessCode"><b>Access code</b>
                                 (optional)</label>
-                            <br>
-                            <small th:if="${#fields.hasErrors('accessCode')}"
+                            <p th:if="${#fields.hasErrors('accessCode')}"
                                    th:errors="*{accessCode}"
                                    class="text-danger">Access code
-                                error</small>
+                                error</p>
                             <small th:if="${bad_accessCode}"
                                    class="text-danger">Access code must be
                                 between 3 and 20 symbols!</small>
@@ -187,11 +183,10 @@
                         <fieldset>
                             <label for="confirmAccessCode"><b>Confirm access
                                 code</b> (optional)</label>
-                            <br>
-                            <small th:if="${#fields.hasErrors('confirmAccessCode')}"
+                            <p th:if="${#fields.hasErrors('confirmAccessCode')}"
                                    th:errors="*{confirmAccessCode}"
                                    class="text-danger">Confirm access code
-                                error</small>
+                                error</p>
                             <small th:if="${noAccessCodeMatch}"
                                    class="text-danger">Confirm access code
                                 do not match!</small>
@@ -216,10 +211,6 @@
             </div>
         </div>
     </div>
-</div>
-</div>
-</div>
-
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">

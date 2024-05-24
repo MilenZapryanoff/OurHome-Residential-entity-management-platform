@@ -99,57 +99,72 @@
                     </div>
                 </div>
                 <h3>
-                    Register now
+                    JOIN NEW RESIDENTIAL ENTITY
                 </h3>
+                <h4 class="text-white"><i class="fa-regular fa-building"></i></h4>
             </div>
         </div>
     </div>
 </div>
 
 <div class="container">
-    <div class="messages">
-        <div class="input-content text-center">
-            <div class="col-lg-4 center-form">
-                <form id="input-form"
-                      th:method="POST"
-                      th:action="@{/property/add/new}"
-                      th:object="${userAuthRegisterBindingModel}">
-                    <div class="col-lg-12">
-                        <small th:if="${badResidentialEntity}" class="text-danger">Wrong residential entity ID or
-                            Access code!</small>
-                        <fieldset>
-                            <br>
-                            <label for="residentialId"><b>Residential Entity ID</b></label>
-                            <br>
-                            <small th:if="${#fields.hasErrors('residentialId')}"
-                                   th:errors="*{residentialId}" class="text-danger">Residential entity ID error
-                                message</small>
-                            <input type="text" id="residentialId" placeholder="Enter Residential entity ID..." required
-                                   th:field="*{residentialId}"
-                                   th:errorclass="bg-danger">
-                        </fieldset>
-                        <fieldset>
-                            <label for="residentialAccessCode"><b>Residential entity Access code</b></label>
-                            <br>
-                            <small th:if="${#fields.hasErrors('residentialAccessCode')}"
-                                   th:errors="*{residentialAccessCode}" class="text-danger">Access code error
-                                message</small>
-                            <input type="password" id="residentialAccessCode" placeholder="Enter Access code..."
-                                   required
-                                   th:field="*{residentialAccessCode}"
-                                   th:errorclass="bg-danger">
-                        </fieldset>
-                        <fieldset>
-                            <button th:href="@{/property/add/new}" type="submit" id="form-submit" class="orange-button">
-                                Add
-                            </button>
-                            <button class="orange-button" id="form-cancel" type="button">
-                                <a th:href="@{/property/add}"> <div class="text-light">Back</div></a>
-                            </button>
-                        </fieldset>
+    <div class="input-content text-center">
+        <div class="col-lg-4 center-form">
+            <form id="input-form"
+                  th:method="POST"
+                  th:action="@{/property/add/new}"
+                  th:object="${userAuthRegisterBindingModel}">
+                <div class="col-lg-12">
+                    <div th:if="${notJoinedToResidentialEntity}">
+                        <p class="text-danger">You are not a member of any Residential Entity!!</p>
+                        <p class="text-danger">To be able to proceed with your property registration you must join to
+                            existing Residential Entity!</p>
                     </div>
-                </form>
-            </div>
+                    <div th:unless="${notJoinedToResidentialEntity}">
+                        <p><b>Join to new Residential entity.</b></p>
+                        <p>The number of Residential Entities you are part of is not limited.</p>
+                    </div>
+                    <hr>
+
+                    <p th:if="${badResidentialEntity}" class="text-danger">Wrong residential entity ID or
+                        Access code!</p>
+                    <fieldset>
+                        <label for="residentialId"><b>Residential Entity ID</b></label>
+                        <p th:if="${#fields.hasErrors('residentialId')}"
+                           th:errors="*{residentialId}" class="text-danger">Residential entity ID error
+                            message</p>
+                        <input type="text" id="residentialId" placeholder="Enter Residential entity ID..." required
+                               th:field="*{residentialId}"
+                               th:errorclass="bg-danger">
+                    </fieldset>
+                    <fieldset>
+                        <label for="residentialAccessCode"><b>Residential entity Access code</b></label>
+                        <p th:if="${#fields.hasErrors('residentialAccessCode')}"
+                           th:errors="*{residentialAccessCode}" class="text-danger">Access code error
+                            message</p>
+                        <input type="password" id="residentialAccessCode" placeholder="Enter Access code..."
+                               required
+                               th:field="*{residentialAccessCode}"
+                               th:errorclass="bg-danger">
+                    </fieldset>
+                    <fieldset>
+                        <button th:href="@{/property/add/new}" type="submit" id="form-submit" class="orange-button">
+                            Add
+                        </button>
+                        <button th:if="${notJoinedToResidentialEntity}" class="orange-button" type="button">
+                            <a th:href="@{/property}">
+                                <div class="text-light">Cancel</div>
+                            </a>
+                        </button>
+                        <button th:unless="${notJoinedToResidentialEntity}" class="orange-button" type="button">
+                            <a th:href="@{/property/add}">
+                                <div class="text-light">Back</div>
+                            </a>
+                        </button>
+                    </fieldset>
+                </div>
+            </form>
+            <br>
         </div>
     </div>
 </div>

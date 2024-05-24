@@ -21,7 +21,6 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 
 </head>
-
 <body>
 
 <!-- ***** Preloader Start ***** -->
@@ -35,7 +34,6 @@
         </div>
     </div>
 </div>
-<!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
 <div th:replace="~{fragments/header}" class="sub-header">
@@ -64,8 +62,7 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}"
-                                                                     class="active">Administration</a>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}" class="active">Administration</a>
                         </li>
                         <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
                             property</a></li>
@@ -286,7 +283,11 @@
                                                                                 style="color: rgba(222,193,1,0.86)"></i>
                             </p></td>
                         <td>
-                            <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                            <div class="user-avatar-small" >
+                                <img th:if="${property.getOwner().getAvatarPath() != null}" th:src="@{${property.getOwner().getAvatarPath()}}" alt="Avatar">
+                                <img th:unless="${property.getOwner().getAvatarPath() != null}" src="/avatars/default.jpg" alt="Default Avatar">
+                                <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                            </div>
                         </td>
                         <td>
                             <p th:text="${property.getOwner().getEmail()}"></p>

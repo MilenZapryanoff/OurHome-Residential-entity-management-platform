@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 
 @Controller
 public class FinancialController {
@@ -92,11 +93,13 @@ public class FinancialController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView addExpense(@PathVariable("id") Long id) {
 
+        ExpenseAddBindingModel expenseAddBindingModel = new ExpenseAddBindingModel();
+        expenseAddBindingModel.setExpenseDate(LocalDate.now());
 
         return new ModelAndView("administration/administration-financial-add")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id))
-                .addObject("expenseAddBindingModel", new ExpenseAddBindingModel());
+                .addObject("expenseAddBindingModel", expenseAddBindingModel);
     }
 
     /**

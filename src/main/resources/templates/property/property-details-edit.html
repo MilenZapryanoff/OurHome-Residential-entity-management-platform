@@ -94,149 +94,152 @@
 <div class="page-heading header-text">
     <div class="container">
         <h3>Edit property data</h3>
+        <h4 class="text-white"><i class="fa-regular fa-pen-to-square"></i></h4>
         <div th:if="${editFailed}" class="err-msg">
             <h5 class="text-white">Edit failed!</h5>
-            <p class="text-white" th:text="'Something went wrong with data change of property №' + ${propertyEditBindingModel.getNumber()}"></p>
+            <p class="text-white"
+               th:text="'Something went wrong with data change of property №' + ${propertyEditBindingModel.getNumber()}"></p>
         </div>
     </div>
 </div>
 <!-- ***** Residential entity section ***** -->
 
 <div class="container">
-    <div class="messages">
-        <div class="input-content text-center">
-            <div class="col-lg-6 center-form">
-                <form id="input-form"
-                      th:method="POST"
-                      th:action="@{/property/details/edit/{id}(id=${property.getId()})}"
-                      th:object="${propertyEditBindingModel}">
-                    <div class="col-lg-12">
-                        <p th:if="${property.isRejected()}">Your can now edit registration request data and resend it for approval.<br>
-                            By submitting the form your request will be sent to Residential entity manager for approval.
-                        </p>
-                        <p th:unless="${property.isRejected()}">Please note, that some property <br>changes like <b>Inhabitants information,
-                            property number, floor number or property type</b> (<i>if option available</i>) may affect your
-                            monthly fee calculations. <br>New data must be approved by Residential entity Manager.<br>
-                        </p>
-                        <br>
-                        <hr>
-                        <h5>Property information</h5>
-                        <br>
-                        <fieldset>
-                            <label for="number"><b>Property №</b></label>
-                            <br>
-                            <small th:if="${#fields.hasErrors('number')}"
-                                   th:errors="*{number}"
-                                   class="text-danger">Property № error message</small>
-                            <input type="number" id="number"
-                                   placeholder="Enter Property №..."
-                                   readonly="readonly"
-                                   th:field="*{number}"
-                                   th:errorclass="bg-danger"
-                                   th:value="${propertyEditBindingModel.getNumber()}">
-                        </fieldset>
-                        <fieldset>
-                            <label for="floor"><b>Floor number</b></label>
-                            <small th:if="${#fields.hasErrors('floor')}"
-                                   th:errors="*{floor}"
-                                   class="text-danger">Floor error message</small>
-                            <input type="number" id="floor"
-                                   placeholder="Enter floor..."
-                                   autocomplete="on"
-                                   required th:field="*{floor}"
-                                   th:errorclass="bg-danger"
-                                   th:value="${propertyEditBindingModel.getFloor()}">
-                        </fieldset>
-                        <fieldset th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0 and !property.isRejected()}">
-                            <label for="propertyTypeId"><b>Property type</b></label>
-                            <select class="form-control" id="propertyTypeId"
-                                    th:field="*{propertyType}">
-                                <option th:if="${property.getPropertyType() != null}" class="text-secondary"
-                                        th:value="${property.getPropertyType().getId()}"
-                                        th:text="${property.getPropertyType().getDescription()} + ' (Selected)'"></option>
-                                <option th:if="${property.getPropertyType() == null}" th:value="''" th:text="'---'"></option>
-                                <option th:each="propertyType : ${@propertyTypeRepository.findPropertyTypesByRE(property.getResidentialEntity().getId())}"
-                                        th:value="${propertyType.getId()}"
-                                        th:text="${propertyType.description} + ' (' + ${propertyType.getTotalFlatSpace()} + ' m2)'">
-                                </option>
-                            </select>
-                        </fieldset>
-                        <br>
-                        <fieldset>
-                            <label for="numberOfRooms"><b>Number of rooms</b> (optional)</label>
-                            <small th:if="${#fields.hasErrors('numberOfRooms')}"
-                                   th:errors="*{numberOfRooms}" class="text-danger">Rooms error
-                                message</small>
-                            <input type="number" id="numberOfRooms" placeholder="Enter number of rooms..."
-                                   th:field="*{numberOfRooms}"
-                                   th:errorclass="bg-danger">
-                        </fieldset>
-                        <fieldset>
-                            <label for="parkingAvailable"><b>Parking available</b> (optional)</label>
-                            <input name="parkingAvailable" id="parkingAvailable"
-                                   type="checkbox"
-                                   th:field="*{parkingAvailable}"
-                                   th:value="${property.parkingAvailable}">
-                        </fieldset>
-                        <br>
-                        <h5>Inhabitants information</h5>
-                        <hr>
+    <div class="input-content text-center">
+        <div class="col-lg-6 center-form">
+            <form id="input-form"
+                  th:method="POST"
+                  th:action="@{/property/details/edit/{id}(id=${property.getId()})}"
+                  th:object="${propertyEditBindingModel}">
+                <div class="col-lg-12">
+                    <p th:if="${property.isRejected()}">Your can now edit registration request data and resend it for
+                        approval.<br>
+                        By submitting the form your request will be sent to Residential entity manager for approval.
+                    </p>
+                    <p th:unless="${property.isRejected()}">Please note, that some property <br>changes like <b>Inhabitants
+                        information,
+                        property number, floor number or property type</b> (<i>if option available</i>) may affect your
+                        monthly fee calculations. <br>New data must be approved by Residential entity Manager.<br>
+                    </p>
+                    <br>
+                    <hr>
+                    <h5>Property information</h5>
+                    <br>
+                    <fieldset>
+                        <label for="number"><b>Property №</b></label>
+                        <p th:if="${#fields.hasErrors('number')}"
+                               th:errors="*{number}"
+                               class="text-danger">Property № error message</p>
+                        <input type="number" id="number"
+                               placeholder="Enter Property №..."
+                               readonly="readonly"
+                               th:field="*{number}"
+                               th:errorclass="bg-danger"
+                               th:value="${propertyEditBindingModel.getNumber()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="floor"><b>Floor number</b></label>
+                        <p th:if="${#fields.hasErrors('floor')}"
+                               th:errors="*{floor}"
+                               class="text-danger">Floor error message</p>
+                        <input type="number" id="floor"
+                               placeholder="Enter floor..."
+                               autocomplete="on"
+                               required th:field="*{floor}"
+                               th:errorclass="bg-danger"
+                               th:value="${propertyEditBindingModel.getFloor()}">
+                    </fieldset>
+                    <fieldset
+                            th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0 and !property.isRejected()}">
+                        <label for="propertyTypeId"><b>Property type</b></label>
+                        <select class="form-control" id="propertyTypeId"
+                                th:field="*{propertyType}">
+                            <option th:if="${property.getPropertyType() != null}" class="text-secondary"
+                                    th:value="${property.getPropertyType().getId()}"
+                                    th:text="${property.getPropertyType().getDescription()} + ' (Selected)'"></option>
+                            <option th:if="${property.getPropertyType() == null}" th:value="''"
+                                    th:text="'---'"></option>
+                            <option th:each="propertyType : ${@propertyTypeRepository.findPropertyTypesByRE(property.getResidentialEntity().getId())}"
+                                    th:value="${propertyType.getId()}"
+                                    th:text="${propertyType.description} + ' (' + ${propertyType.getTotalFlatSpace()} + ' m2)'">
+                            </option>
+                        </select>
+                    </fieldset>
+                    <br>
+                    <fieldset>
+                        <label for="numberOfRooms"><b>Number of rooms</b> (optional)</label>
+                        <p th:if="${#fields.hasErrors('numberOfRooms')}"
+                               th:errors="*{numberOfRooms}" class="text-danger">Rooms error
+                            message</p>
+                        <input type="number" id="numberOfRooms" placeholder="Enter number of rooms..."
+                               th:field="*{numberOfRooms}"
+                               th:errorclass="bg-danger">
+                    </fieldset>
+                    <fieldset>
+                        <label for="parkingAvailable"><b>Parking available</b> (optional)</label>
+                        <input name="parkingAvailable" id="parkingAvailable"
+                               type="checkbox"
+                               th:field="*{parkingAvailable}"
+                               th:value="${property.parkingAvailable}">
+                    </fieldset>
+                    <br>
+                    <h5>Inhabitants information</h5>
+                    <hr>
 
-                        <fieldset>
-                            <label for="numberOfAdults"><b>Number of adults</b></label>
-                            <small th:if="${#fields.hasErrors('numberOfAdults')}"
-                                   th:errors="*{numberOfAdults}"
-                                   class="text-danger">Adults number error message</small>
-                            <input type="number" id="numberOfAdults"
-                                   placeholder="Enter number of adults..."
-                                   autocomplete="on" required
-                                   th:field="*{numberOfAdults}"
-                                   th:errorclass="bg-danger"
-                                   th:value="${propertyEditBindingModel.getNumberOfAdults()}">
-                        </fieldset>
-                        <fieldset>
-                            <label for="numberOfChildren"><b>Number of children</b></label>
-                            <small th:if="${#fields.hasErrors('numberOfChildren')}"
-                                   th:errors="*{numberOfChildren}"
-                                   class="text-danger">Children error message</small>
-                            <input type="number" id="numberOfChildren"
-                                   placeholder="Enter number of children..."
-                                   th:field="*{numberOfChildren}"
-                                   th:errorclass="bg-danger"
-                                   th:value="${propertyEditBindingModel.getNumberOfChildren()}">
-                        </fieldset>
-                        <fieldset>
-                            <label for="numberOfPets"><b>Number of pets</b></label>
-                            <small th:if="${#fields.hasErrors('numberOfPets')}"
-                                   th:errors="*{numberOfPets}"
-                                   class="text-danger">Number of pets message</small>
-                            <input type="number" id="numberOfPets"
-                                   placeholder="Enter number of pets ..."
-                                   required
-                                   th:field="*{numberOfPets}"
-                                   th:errorclass="bg-danger"
-                                   th:value="${propertyEditBindingModel.getNumberOfPets()}">
-                        </fieldset>
-                        <fieldset>
-                            <label for="isNotHabitable"><b>Property is not habitable</b></label>
-                            <input name="isNotHabitable" id="isNotHabitable"
-                                   type="checkbox"
-                                   th:field="*{notHabitable}"
-                                   th:value="${property.notHabitable}">
-                        </fieldset>
-                        <fieldset>
-                            <button type="submit" id="form-submit"
-                                    class="orange-button">Submit
-                            </button>
-                            <button class="orange-button" id="form-cancel" type="button">
-                                <a th:href="@{/property/details/{id}(id=${property.getId()})}">
-                                    <div class="text-light">Cancel</div>
-                                </a>
-                            </button>
-                        </fieldset>
-                    </div>
-                </form>
-            </div>
+                    <fieldset>
+                        <label for="numberOfAdults"><b>Number of adults</b></label>
+                        <p th:if="${#fields.hasErrors('numberOfAdults')}"
+                               th:errors="*{numberOfAdults}"
+                               class="text-danger">Adults number error message</p>
+                        <input type="number" id="numberOfAdults"
+                               placeholder="Enter number of adults..."
+                               autocomplete="on" required
+                               th:field="*{numberOfAdults}"
+                               th:errorclass="bg-danger"
+                               th:value="${propertyEditBindingModel.getNumberOfAdults()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="numberOfChildren"><b>Number of children</b></label>
+                        <p th:if="${#fields.hasErrors('numberOfChildren')}"
+                               th:errors="*{numberOfChildren}"
+                               class="text-danger">Children error message</p>
+                        <input type="number" id="numberOfChildren"
+                               placeholder="Enter number of children..."
+                               th:field="*{numberOfChildren}"
+                               th:errorclass="bg-danger"
+                               th:value="${propertyEditBindingModel.getNumberOfChildren()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="numberOfPets"><b>Number of pets</b></label>
+                        <p th:if="${#fields.hasErrors('numberOfPets')}"
+                               th:errors="*{numberOfPets}"
+                               class="text-danger">Number of pets message</p>
+                        <input type="number" id="numberOfPets"
+                               placeholder="Enter number of pets ..."
+                               required
+                               th:field="*{numberOfPets}"
+                               th:errorclass="bg-danger"
+                               th:value="${propertyEditBindingModel.getNumberOfPets()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="isNotHabitable"><b>Property is not habitable</b></label>
+                        <input name="isNotHabitable" id="isNotHabitable"
+                               type="checkbox"
+                               th:field="*{notHabitable}"
+                               th:value="${property.notHabitable}">
+                    </fieldset>
+                    <fieldset>
+                        <button type="submit" id="form-submit"
+                                class="orange-button">Submit
+                        </button>
+                        <button class="orange-button" id="form-cancel" type="button">
+                            <a th:href="@{/property/details/{id}(id=${property.getId()})}">
+                                <div class="text-light">Cancel</div>
+                            </a>
+                        </button>
+                    </fieldset>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -254,7 +257,6 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/input-data-control.js"></script>
-
 
 
 </body>
