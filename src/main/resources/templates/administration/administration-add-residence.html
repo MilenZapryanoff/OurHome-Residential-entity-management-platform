@@ -118,6 +118,7 @@
                             </option>
                         </select>
                     </fieldset>
+                    <br>
                     <p th:if="${#fields.hasErrors('city')}"
                            th:errors="*{city}" class="text-danger">City error message</p>
                     <fieldset>
@@ -152,7 +153,7 @@
                         <p th:if="${#fields.hasErrors('numberOfApartments')}"
                                th:errors="*{numberOfApartments}" class="text-danger">Number of properties error
                             message</p>
-                        <input type="text" id="numberOfApartments" placeholder="Enter number of properties ..."
+                        <input type="number" id="numberOfApartments" placeholder="Enter number of properties ..."
                                required
                                th:field="*{numberOfApartments}"
                                th:errorclass="bg-danger">

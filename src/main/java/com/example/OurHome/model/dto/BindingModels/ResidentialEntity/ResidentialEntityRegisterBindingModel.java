@@ -1,7 +1,9 @@
 package com.example.OurHome.model.dto.BindingModels.ResidentialEntity;
 
 import com.example.OurHome.model.enums.CityName;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public class ResidentialEntityRegisterBindingModel {
@@ -25,6 +27,8 @@ public class ResidentialEntityRegisterBindingModel {
     private String entrance;
 
     @NotNull
+    @Positive(message = "Number of apartments must be between 0 and 500")
+    @Max(value = 500L, message = "Number of apartments must be up to 500")
     private Long numberOfApartments;
 
 

@@ -1,8 +1,6 @@
 package com.example.OurHome.service;
 
-import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyChangeRequest;
-import com.example.OurHome.model.Entity.ResidentialEntity;
 
 public interface PropertyChangeRequestService {
 

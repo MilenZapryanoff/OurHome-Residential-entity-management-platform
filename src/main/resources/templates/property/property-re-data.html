@@ -153,7 +153,7 @@
         <div class="section property">
             <div class="tabs-content">
                 <ul class="nav nav-tabs">
-                    <li class="nav-item" id="data" >
+                    <li class="nav-item" id="data">
                         <div class="button">
                             <a class="nav-link active"
                                href=#data>
@@ -165,7 +165,7 @@
                         <div class="button">
                             <a class="nav-link"
                                th:href="@{/property/re/expenses/{id}(id=${property.getId()})}">
-                                <div>Expenses  <i class="fa-solid fa-circle-minus"></i></div>
+                                <div>Expenses <i class="fa-solid fa-circle-minus"></i></div>
                             </a>
                         </div>
                     </li>
@@ -173,7 +173,7 @@
                         <div class="button">
                             <a class="nav-link"
                                th:href="@{/property/re/incomes/{id}(id=${property.getId()})}">
-                                <div>Incomes  <i class="fa-solid fa-circle-plus"></i></div>
+                                <div>Incomes <i class="fa-solid fa-circle-plus"></i></div>
                             </a>
                         </div>
                     </li>
@@ -191,27 +191,42 @@
                     <div>
                         <ul>
                             <li><h5 class="text-center text-danger">Your Residential entity details</h5></li>
-                            <li class="text-dark">Residential entity ID: <b
-                                    th:text="${property.getResidentialEntity().getId()}"></b>
-                            </li>
-                            <li class="text-dark">Residential entity address: <b
-                                    th:text="${property.getResidentialEntity().getCity().getName()}
+                            <li style="display: flex">
+                                <ul class="col-lg-9">
+
+                                    <li class="text-dark">Residential entity ID: <b
+                                            th:text="${property.getResidentialEntity().getId()}"></b>
+                                    </li>
+                                    <li class="text-dark">Residential entity address: <b
+                                            th:text="${property.getResidentialEntity().getCity().getName()}
                                                             + ', ' + ${property.getResidentialEntity().getStreetName()}
                                                             + ', №' + ${property.getResidentialEntity().getStreetNumber()}"> </b>
-                            </li>
-                            <li class="text-dark">Number of apartments: <b
-                                    th:text="${@propertyRepository.countAllPropertiesByResidentialEntity(property.getResidentialEntity().getId())}"></b>
-                            </li>
-                            <li class="text-dark">Manager: <b
-                                    th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +
+                                    </li>
+                                    <li class="text-dark">Number of apartments: <b
+                                            th:text="${@propertyRepository.countAllPropertiesByResidentialEntity(property.getResidentialEntity().getId())}"></b>
+                                    </li>
+                                    <li class="text-dark">Manager: <b
+                                            th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +
                                                                     ${property.getResidentialEntity().getManager().getLastName()}"></b>
+                                    </li>
+                                    <li class="text-dark">Manager phone: <b
+                                            th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b>
+                                    </li>
+                                    <li class="text-dark">Manager email: <b
+                                            th:text="${property.getResidentialEntity().getManager().getEmail()}"></b>
+                                    </li>
+                                </ul>
+                                <ul style="margin: 0 auto">
+                                    <li th:if="${property.getResidentialEntity().getPicturePath() != null}">
+                                        <img th:src="@{${property.getResidentialEntity().picturePath}}" alt="No image available" class="residential-entity-image">
+                                    </li>
+                                    <li th:if="${property.getResidentialEntity().getPicturePath() == null}">
+                                        <img src="/images/No_Image_Available.jpg"  alt="No image available" class="residential-entity-image">
+                                    </li>
+                                </ul>
                             </li>
-                            <li class="text-dark">Manager phone: <b
-                                    th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b>
-                            </li>
-                            <li class="text-dark">Manager email: <b
-                                    th:text="${property.getResidentialEntity().getManager().getEmail()}"></b>
-                            </li>
+
+
                             <li>
                                 <div class="text-center">
                                     <br>
@@ -293,6 +308,37 @@
                                         th:text="${property.getAdditionalPropertyFee()} + ' лв.'"></b></p>
                                 <p class="text-secondary">
                                     <i class="fa-solid fa-gears"></i><small> applies for this property only</small>
+                                </p>
+                            </li>
+                            <li>
+                                <div class="text-center">
+                                    <br>
+                                    <h5 class="text-danger">Residential entity Bank details <i
+                                            class="fa-solid fa-landmark"></i></h5>
+                                    <p class="text-secondary">Here you can find the Bank account details of your
+                                        Residential Entity</p>
+                                </div>
+                            </li>
+                            <li class="text-black">
+                                <p>IBAN: <b class="text-danger"
+                                            th:if="${property.getResidentialEntity().getBankIban() != null}"
+                                            th:text="${property.getResidentialEntity().getBankIban()}"></b></p>
+                            </li>
+                            <li class="text-black">
+                                <p>Bank account holder: <b class="text-danger"
+                                                           th:if="${property.getResidentialEntity().getBankAccountHolder()  != null}"
+                                                           th:text="${property.getResidentialEntity().getBankAccountHolder()}"></b>
+                                </p>
+                            </li>
+                            <li class="text-black">
+                                <p>Bank name: <b class="text-danger"
+                                                 th:if="${property.getResidentialEntity().getBankName() != null}"
+                                                 th:text="${property.getResidentialEntity().getBankName()}"></b></p>
+                            </li>
+                            <li class="text-black">
+                                <p>Additional data: <b class="text-danger"
+                                                       th:if="${property.getResidentialEntity().getBankAdditionalData() != null}"
+                                                       th:text="${property.getResidentialEntity().getBankAdditionalData()}"></b>
                                 </p>
                             </li>
                         </ul>

@@ -262,7 +262,7 @@
                                             </select>
                                             <button id="approve-with-change"
                                                     th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property approved.\')'"
-                                                    type="submit">Approve with changes
+                                                    type="submit" title="This action will set property owner and modify existing data!">Approve with changes
                                             </button>
                                         </form>
                                         <form class="form-container"
@@ -275,9 +275,12 @@
                                                     th:field="*{entityId}">
                                                 <option th:value="${property.getResidentialEntity().getId()}"></option>
                                             </select>
-                                            <button id="approve-without-change"
+                                            <button th:if="${property.isValidated()}" id="approve-without-change"
                                                     th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property approved.\')'"
-                                                    type="submit">Approve without changes
+                                                    type="submit" title="This action will set property owner without modifying other data!">Approve without changes
+                                            </button>
+                                            <button th:unless="${property.isValidated()}" id="approve-without-change-inactive"
+                                                    type="reset" title="Complete property parametrization before using this option!">Approve without changes
                                             </button>
                                         </form>
                                     </div>

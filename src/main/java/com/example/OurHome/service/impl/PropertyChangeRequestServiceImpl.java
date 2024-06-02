@@ -1,8 +1,6 @@
 package com.example.OurHome.service.impl;
 
-import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyChangeRequest;
-import com.example.OurHome.model.Entity.PropertyRegisterRequest;
 import com.example.OurHome.repo.PropertyChangeRequestRepository;
 import com.example.OurHome.service.PropertyChangeRequestService;
 import jakarta.transaction.Transactional;
@@ -18,7 +16,6 @@ public class PropertyChangeRequestServiceImpl implements PropertyChangeRequestSe
     public PropertyChangeRequestServiceImpl(PropertyChangeRequestRepository propertyChangeRequestRepository) {
         this.propertyChangeRequestRepository = propertyChangeRequestRepository;
     }
-
 
     @Override
     @Transactional
@@ -58,8 +55,7 @@ public class PropertyChangeRequestServiceImpl implements PropertyChangeRequestSe
     @Override
     public void detachPropertyType(Long propertyTypeId) {
         List<PropertyChangeRequest> allRequestsByPropertyType = propertyChangeRequestRepository.findAllRequestsByPropertyType(propertyTypeId);
-        allRequestsByPropertyType
-                .forEach(propertyChangeRequest -> propertyChangeRequest.setPropertyType(null));
+        allRequestsByPropertyType.forEach(propertyChangeRequest -> propertyChangeRequest.setPropertyType(null));
         propertyChangeRequestRepository.saveAll(allRequestsByPropertyType);
 
     }

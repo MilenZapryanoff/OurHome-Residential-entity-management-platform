@@ -343,7 +343,7 @@
                                    class="form-control text-bg-danger"/>
                         </button>
                         <div class="form-popup" id="contactForm" style="border: none">
-                            <form style="padding: 10px; border: 1px solid grey; border-radius: 20px; box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5)"
+                            <form id="message-popup"
                                   th:action="@{/property/summary/messageToManager/{id} (id=${property.getId()})}"
                                   th:method="POST"
                                   class="form-container"
@@ -366,14 +366,14 @@
                                         th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b></label>
                                 <label for="messageText" class="small">Email: <b
                                         th:text="${property.getResidentialEntity().getManager().getEmail()}"></b></label>
-                                <label for="messageText" class="small text-danger">Send a message to your
+                                <label for="messageText" class="small text-danger">Send message to your
                                     manager: </label>
-                                <input style="border-radius: 10px; box-shadow: none" class="info-table" type="text"
+                                <textarea type="text"
                                        placeholder="Your message"
                                        id="messageText" required
                                        autocomplete="off"
                                        th:field="*{message}"
-                                       th:errorclass="bg-danger">
+                                       th:errorclass="bg-danger"></textarea>
                                 <button style="border-radius: 30px" type="submit"
                                         class="btn">Send
                                 </button>

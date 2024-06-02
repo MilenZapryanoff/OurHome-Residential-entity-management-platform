@@ -999,8 +999,7 @@ Password reset OP-UP window
  */
 
 {
-    box-sizing: border-box
-;
+    box-sizing: border-box;
 }
 
 /* Button used to open the contact form - fixed at the bottom of the page */
@@ -1021,17 +1020,27 @@ Password reset OP-UP window
 .form-popup {
     display: none;
     position: fixed;
-    bottom: 30%;
-    right: 30%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     border: 1px solid #cecece;
     z-index: 9;
 }
 
-/* Add styles to the form container */
-.form-container {
+#message-popup {
+    padding: 15px;
+    border: 1px solid grey;
+    border-radius: 20px;
+    box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5);
     max-width: 500px;
-    /*padding: 10px;*/
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.91);
+}
+
+#message-popup textarea {
+    border-radius: 4px;
+    box-shadow: none;
+    margin: 20px 0;
+    height: 100px;
 }
 
 /* Full-width input fields */
@@ -1499,8 +1508,8 @@ Property Style
 
 .property .tabs-content ul.nav-tabs li {
     padding-right: 0;
-    border-right: none;
     margin-left: 20px;
+    margin-bottom: 20px;
 }
 
 .property .info-table {
@@ -2317,16 +2326,16 @@ Residential entity section image
 ---------------------------------------------
 */
 
-#residential-entity-image {
-    opacity: 80%;
+.residential-entity-image {
+    opacity: 85%;
     border: 1px solid gray;
     border-radius: 15px;
     max-width: 200px;
-    box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5);
+    box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.5);
     transition: 1.2s;
 }
 
-#residential-entity-image:hover {
+.residential-entity-image:hover {
     opacity: 100%;
     transition: 0.3s;
 }
@@ -2377,6 +2386,7 @@ Delete button styles and animation
     --background-hover: rgb(220, 53, 69);
     --text: #ffffff;
     --icon: #ffffff;
+    margin: 0 auto;
     display: flex;
     outline: none;
     cursor: pointer;
@@ -2684,6 +2694,16 @@ Property request buttons
     transition: 0.5s;
 }
 
+#approve-without-change-inactive {
+    color: white;
+
+    background-color: #bcbcbc;
+    padding: 8px 10px;
+    border-bottom-right-radius: 30px;
+    border-top-right-radius: 30px;
+    transition: 1.5s;
+}
+
 #reject {
     color: white;
     max-width: 100%;
@@ -2792,7 +2812,6 @@ User avatar (small medium)
 
 .user-avatar-medium p {
     display: inline-block;
-
 }
 
 /*
@@ -2965,7 +2984,8 @@ body {
     #property-types-table,
     #rejected-requests,
     #pending-requests,
-    #owners-table {
+    #owners-table,
+    #bank-details {
         display: flex;
     }
 }

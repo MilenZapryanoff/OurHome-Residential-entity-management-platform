@@ -1,6 +1,7 @@
 package com.example.OurHome.controller.Administration;
 
 import com.example.OurHome.model.Entity.*;
+import com.example.OurHome.model.dto.BindingModels.Fee.BankDetailsBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Fee.FeeEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.OverpaymentBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
@@ -58,6 +59,69 @@ public class FeesController {
         return new ModelAndView("administration/administration-fees-settings")
                 .addObject("userViewModel", getUserViewModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
+    }
+
+    @GetMapping("/administration/fees/bank-details/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityBankDetails(@PathVariable("id") Long id) {
+
+        return new ModelAndView("administration/administration-fees-bank-details")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
+    }
+
+
+    /**
+     * Administration -> Monthly Fees -> Bank Details Edit page get mapping
+     *
+     * @param id Residential entity ID
+     */
+    @GetMapping("/administration/fees/bank-details/edit/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityBankDetailsEdit(@PathVariable("id") Long id) {
+
+        BankDetailsBindingModel bankDetailsBindingModel = residentialEntityService.mapEntityToBankDetailsBindingModel(getResidentialEntity(id));
+
+        return new ModelAndView("administration/administration-fees-bank-details-edit")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id))
+                .addObject("bankDetailsBindingModel", bankDetailsBindingModel);
+    }
+
+    /**
+     * Administration -> Monthly Fees -> Bank Details Edit page POST mapping
+     *
+     * @param id Residential entity ID
+     */
+    @PostMapping("/administration/fees/bank-details/edit/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityBankDetailsEdit(@PathVariable("id") Long id,
+                                                         @Valid BankDetailsBindingModel bankDetailsBindingModel,
+                                                         BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("administration/administration-fees-bank-details-edit")
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("residentialEntity", getResidentialEntity(id));
+        }
+
+        residentialEntityService.updateResidentialEntityBankDetails(getResidentialEntity(id), bankDetailsBindingModel);
+
+        return new ModelAndView("redirect:/administration/fees/bank-details/" + id);
+    }
+
+    /**
+     * Administration -> Monthly Fees -> Bank Details Delete POST mapping
+     *
+     * @param id Residential entity ID
+     */
+    @PostMapping("/administration/fees/bank-details/delete/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityBankDetailsDelete(@PathVariable("id") Long id) {
+
+        residentialEntityService.deleteResidentialEntityBankDetails(getResidentialEntity(id));
+
+        return new ModelAndView("redirect:/administration/fees/bank-details/" + id);
     }
 
 

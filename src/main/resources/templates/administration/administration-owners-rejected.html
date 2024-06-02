@@ -178,7 +178,7 @@
                                th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
                                 <div class="text-light"><i class="fa-solid fa-user-check"></i> Owners
                                     <sup th:if="${residentialEntity.getResidents().size()} > 0"
-                                         th:text="'  '+ ${residentialEntity.getResidents().size()}">
+                                         th:text="'  '+ ${residentialEntity.getResidents().size()}"></sup>
                                 </div>
                             </a>
                         </div>

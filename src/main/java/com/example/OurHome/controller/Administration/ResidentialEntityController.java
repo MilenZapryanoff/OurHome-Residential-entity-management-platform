@@ -1,5 +1,6 @@
 package com.example.OurHome.controller.Administration;
 
+import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityRegisterBindingModel;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
@@ -10,11 +11,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
 
 @Controller
 public class ResidentialEntityController {
@@ -76,6 +77,7 @@ public class ResidentialEntityController {
     @PostMapping("/administration/remove/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityRemove(@PathVariable("id") Long id) {
+
         ModelAndView modelAndView = new ModelAndView("administration/administration", "userViewModel", getUserViewModel());
 
         if (residentialEntityService.checkIfResidentialEntityDeletable(id)) {
@@ -93,5 +95,54 @@ public class ResidentialEntityController {
     private UserViewModel getUserViewModel() {
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         return userService.getUserViewData(loggedUser);
+    }
+
+
+    /**
+     * Upload Residential entity picture method
+     *
+     * @param file uploaded file
+     * @return modelAndView
+     */
+    @PostMapping("/administration/uploadResidentialEntityPicture/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView uploadResidentialEntityPicture(@PathVariable("id") Long id,
+                                                       @RequestParam("picture") MultipartFile file) {
+
+        ResidentialEntity residentialEntity = getResidentialEntity(id);
+
+        try {
+            String relativePath = residentialEntityService.savePicture(file, residentialEntity);
+            residentialEntityService.updatePicturePath(residentialEntity, relativePath);
+        } catch (IllegalArgumentException | IOException e) {
+            return new ModelAndView("administration/administration", "userViewModel", getUserViewModel())
+                    .addObject("errorMessage", e.getMessage());
+        }
+        return new ModelAndView("redirect:/administration");
+    }
+
+
+    /**
+     * Remove residential entity picture method
+     *
+     * @return modelAndView
+     */
+    @PostMapping("/administration/removeResidentialEntityPicture/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView removeResidentialEntityPicture(@PathVariable("id") Long id) {
+
+        ResidentialEntity residentialEntity = getResidentialEntity(id);
+
+        try {
+            residentialEntityService.removeResidentialEntityPicture(residentialEntity);
+        } catch (IllegalArgumentException | IOException e) {
+            return new ModelAndView("administration/administration", "userViewModel", getUserViewModel())
+                    .addObject("errorMessage", e.getMessage());
+        }
+        return new ModelAndView("redirect:/administration");
+    }
+
+    private ResidentialEntity getResidentialEntity(Long id) {
+        return residentialEntityService.findResidentialEntityById(id).orElse(null);
     }
 }

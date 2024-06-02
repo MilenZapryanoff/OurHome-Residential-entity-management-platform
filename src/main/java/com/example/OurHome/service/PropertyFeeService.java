@@ -6,7 +6,7 @@ import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddGlobalFeeBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
-import com.example.OurHome.model.events.PropertyCreationEvent;
+import com.example.OurHome.service.events.PropertyCreationEvent;
 
 import java.math.BigDecimal;
 

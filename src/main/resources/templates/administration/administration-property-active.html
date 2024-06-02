@@ -292,10 +292,10 @@
                                    title="Parametrization required"></i>
                             </button>
                         </form>
-                        <i th:if="${property.getPropertyChangeRequest() != null}"
+                        <i th:if="${property.getPropertyChangeRequest() != null} and ${property.isValidated()}"
                            class="fa-solid fa-triangle-exclamation warning help"
                            title="Property data change request from owner"></i>
-                        <i th:if="${property.getPropertyRegisterRequest() != null}"
+                        <i th:if="${property.getPropertyRegisterRequest() != null} and ${property.isValidated()}"
                            class="fa-solid fa-triangle-exclamation warning help"
                            title="Pending owner registration request for this property"></i>
                     </td>

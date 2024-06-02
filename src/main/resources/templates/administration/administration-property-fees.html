@@ -602,9 +602,9 @@
                         <td th:if="${propertyFee.getOverpaidAmountStart() <= 0} and ${propertyFee.isPaid()}" class="table-image">
                             <img title="Paid fee cannot be edited!"
                                  src="/images/edit_inactive.png"
+                                 style="width: 20px;"
                                  alt="Paid fee cannot be edited!">
                         </td>
-
                         <td class="table-image">
                             <form class="form-container"
                                   th:action="@{/administration/fees/details/delete/{id} (id=${propertyFee.getId()})}"

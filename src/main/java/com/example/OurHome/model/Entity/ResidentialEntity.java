@@ -55,6 +55,21 @@ public class ResidentialEntity {
     @Column
     private boolean expensesVisible;
 
+    @Column
+    private String bankIban;
+    @Column
+    private String bankAccountHolder;
+    @Column
+    private String bankName;
+    @Column
+    private String bankAdditionalData;
+
+    @Column
+    private boolean bankDetailsSet;
+
+    @Column
+    private String picturePath;
+
     @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
     private List<Property> properties;
 
@@ -230,4 +245,51 @@ public class ResidentialEntity {
         this.expensesVisible = expensesVisible;
     }
 
+    public String getBankIban() {
+        return bankIban;
+    }
+
+    public void setBankIban(String bankIban) {
+        this.bankIban = bankIban;
+    }
+
+    public String getBankAccountHolder() {
+        return bankAccountHolder;
+    }
+
+    public void setBankAccountHolder(String bankAccountNumber) {
+        this.bankAccountHolder = bankAccountNumber;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getBankAdditionalData() {
+        return bankAdditionalData;
+    }
+
+    public void setBankAdditionalData(String bankAdditionalData) {
+        this.bankAdditionalData = bankAdditionalData;
+    }
+
+    public boolean isBankDetailsSet() {
+        return bankDetailsSet;
+    }
+
+    public void setBankDetailsSet(boolean bankDetailsSet) {
+        this.bankDetailsSet = bankDetailsSet;
+    }
+
+    public String getPicturePath() {
+        return picturePath;
+    }
+
+    public void setPicturePath(String picturePath) {
+        this.picturePath = picturePath;
+    }
 }

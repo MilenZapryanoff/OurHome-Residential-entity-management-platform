@@ -6,7 +6,7 @@ import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingM
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.OverpaymentBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
-import com.example.OurHome.model.events.PropertyCreationEvent;
+import com.example.OurHome.service.events.PropertyCreationEvent;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
 import com.example.OurHome.service.*;
@@ -201,6 +201,8 @@ public class PropertyServiceImpl implements PropertyService {
             property.setParkingAvailable(propertyRegisterRequest.isParkingAvailable());
 
             if (!property.isValidated()) {
+                //publish event to create first fee after approving property change that is still not validated.
+                publishEvent(property);
                 property.setValidated(true);
             }
 
@@ -223,7 +225,7 @@ public class PropertyServiceImpl implements PropertyService {
 
         Property property = getProperty(id);
 
-        if (property != null) {
+        if (property != null && property.isValidated()) {
             PropertyRegisterRequest propertyRegisterRequest = property.getPropertyRegisterRequest();
 
             //invalidate property request
@@ -234,6 +236,12 @@ public class PropertyServiceImpl implements PropertyService {
             property.setParkingAvailable(propertyRegisterRequest.isParkingAvailable());
             property.setObtained(true);
             property.setRejected(false);
+
+            if (!property.isValidated()) {
+                //publish event to create first fee after approving property change that is still not validated.
+                publishEvent(property);
+                property.setValidated(true);
+            }
 
             propertyRepository.save(property);
 
@@ -313,7 +321,7 @@ public class PropertyServiceImpl implements PropertyService {
      * Method for setting all properties monthly (auto) fee in current residential entity ON
      * Performed only by Residential Entity manager!
      *
-     * @param residentialEntity        current residential enitty
+     * @param residentialEntity current residential entity
      */
     @Override
     public void turnAllPropertiesFeesOn(ResidentialEntity residentialEntity) {
@@ -329,7 +337,7 @@ public class PropertyServiceImpl implements PropertyService {
      * Method for setting all properties monthly (auto) fee in current residential entity OFF
      * Performed only by Residential Entity manager!
      *
-     * @param residentialEntity        current residential enitty
+     * @param residentialEntity current residential entity
      */
     @Override
     public void turnAllPropertiesFeesOff(ResidentialEntity residentialEntity) {
@@ -371,10 +379,16 @@ public class PropertyServiceImpl implements PropertyService {
         // Update (recalculate) property fee
         updatePropertyFee(residentialEntity, property, propertyType);
 
-        property.setValidated(true);
+        //publish event to create first fee after editing (setting) property for the first time.
+        if (!property.isValidated()) {
+            publishEvent(property);
+            property.setValidated(true);
+        }
+
         property.setPropertyType(propertyType);
 
         propertyRepository.save(property);
+
 
         //sending message to owner if owner registration is completed
         if (property.isObtained()) {
@@ -541,10 +555,8 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public void createSingleProperty(PropertyCreateBindingModel propertyCreateBindingModel, ResidentialEntity residentialEntity, PropertyType propertyType) {
 
-
         Property newProperty = modelMapper.map(propertyCreateBindingModel, Property.class);
         newProperty.setAutoFee(true);
-        newProperty.setValidated(true);
         newProperty.setResidentialEntity(residentialEntity);
         newProperty.setObtained(false);
         newProperty.setMonthlyFeeFundMm(feeService.calculateFundMm(newProperty.getResidentialEntity(), newProperty));
@@ -556,7 +568,9 @@ public class PropertyServiceImpl implements PropertyService {
         //update totalMonthlyFee
         updateTotalMonthlyFee(newProperty, newProperty.getAdditionalPropertyFee());
 
-        applicationEventPublisher.publishEvent(new PropertyCreationEvent("PropertyService", newProperty));
+        //publish event to create first fee.
+        publishEvent(newProperty);
+        newProperty.setValidated(true);
 
         propertyRepository.save(newProperty);
     }
@@ -591,8 +605,6 @@ public class PropertyServiceImpl implements PropertyService {
 
             //update totalMonthlyFee
             updateTotalMonthlyFee(newProperty, newProperty.getAdditionalPropertyFee());
-
-            applicationEventPublisher.publishEvent(new PropertyCreationEvent("PropertyService", newProperty));
 
             properties.add(newProperty);
         }
@@ -775,7 +787,6 @@ public class PropertyServiceImpl implements PropertyService {
      */
     private void updateTotalMonthlyFee(Property property, BigDecimal additionalPropertyFee) {
         property.setTotalMonthlyFee(Objects.requireNonNullElse(property.getMonthlyFeeFundMm(), BigDecimal.ZERO).add(property.getMonthlyFeeFundRepair()).add(additionalPropertyFee));
-        propertyRepository.save(property);
     }
 
     /**
@@ -816,6 +827,14 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public List<Property> findAllProperties() {
         return propertyRepository.findAll();
+    }
+
+    /**
+     * Private method for event publishing. This will trigger createFirstFee in PropertyFeeServiceImlp class
+     * @param property current property
+     */
+    private void publishEvent(Property property) {
+        applicationEventPublisher.publishEvent(new PropertyCreationEvent("PropertyService", property));
     }
 
     private Property getProperty(Long id) {
