@@ -80,6 +80,19 @@ A platform that allows the registration of both home owners and residential enti
 
 <h2>Updates</h2>
 
+<h4>v.2.24.0620</h4>
+  <ul>
+    <li>Added bank details in Residential Entity</li>
+    <li>Added Residential Entity custom picture upload/delete</li>
+    <li>Change requests implemented. They can be now managed - approve or reject</li>
+    <li>Added Date/time creation information for every registration and change request.</li>
+    <li>Added Date/time creation information for every user.</li>
+    <li>Front end improvements and redesign</li>
+    <li>Responsive improvements</li>
+    <li><Added additional financial information in Administration -> Financial -> Incomes section. Now manager is able to see total overpaid (prepaid) sums for his RE and blocked prepaid sums for fees with partial coverage of overpayments./li>
+    <li>Now if a fee with an overpayment (prepaid amount) coverage is deleted, the prepaid sum is automatically reversed to property balance. This ensures, that in case of deletion there will be no loss of prepaid amount. The sum will be used in next monthly fees   </li>
+  </ul>
+
 <h4>v.2.24.0520</h4>
   <ul>
     <li>Added option for removing avatar in Profile section. Users avatars are now visible in different pages.</li>
