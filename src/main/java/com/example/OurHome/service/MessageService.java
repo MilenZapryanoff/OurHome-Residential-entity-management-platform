@@ -47,4 +47,8 @@ public interface MessageService {
     void sendMessage(UserEntity receiver, UserEntity sender, String message);
 
     void newFeeMessageToPropertyOwner(Property property, BigDecimal monthlyFee, BigDecimal dueAmount);
+
+    void propertyChangeRequestApproved(Property property);
+
+    void propertyChangeRequestRejected(Property property);
 }

@@ -92,104 +92,46 @@
 <!-- ***** BANNER *****-->
 <div class="page-heading header-text">
     <h3>Monthly fees</h3>
-    <h4 class="text-white"><i class="fa-solid fa-hand-holding-dollar"></i></i></h4>
+    <div class="col-lg-12">
+        <span th:text="'Residential entity ID: ' + ${residentialEntity.getId()}"></span>
+    </div>
     <div th:if="${globalFeeAdded}" class="success-msg">
-        <h5 class="text-white">Fee successfully created!</h5>
+        <h5 class="text-light">Fee successfully created!</h5>
     </div>
 </div>
-<br><br>
 
 <!-- ***** Monthly fees-Fees by property section ***** -->
 <div class="container">
     <!--Start of Sub-menus-->
-    <div class="tabs-content">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <div class="button">
-                    <a class="nav-link" th:href="@{/administration}">
-                        <h5>Summary</h5>
-                        <p class="text-secondary">of residential entity</p></a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <div class="button">
-                    <a class="nav-link"
-                       th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Owners</h5>
-                        <p class="text-secondary">data & management</p></a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <div class="button">
-                    <a class="nav-link"
-                       th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Properties</h5>
-                        <p class="text-secondary">data & management</p></a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <div class="button">
-                    <a class="nav-link active"
-                       href=#>
-                        <h5 class="text-danger">Monthly fees</h5>
-                        <p class="text-secondary">calculations & management</p></a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <div class="button">
-                    <a class="nav-link"
-                       th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Financial</h5>
-                        <p class="text-secondary">reports & management</p></a>
-                </div>
-            </li>
-            <li class="nav-item" role="presentation">
-                <div class="button">
-                    <a class="nav-link" th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
-                        <h5>Details</h5>
-                        <p class="text-secondary">data & settings</p></a>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <!--Sub-menu buttons-->
-    <div class="section section-contact" id="autoFee-post-nav">
-        <div class="section administration" id="fees">
-            <div class="tabs-content row">
-                <ul class="nav nav-tabs" style="gap: 10px; justify-content: center">
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link active"
-                               href=#due-amounts-table>
-                                <div class="text-light"><i class="fa-solid fa-hand-holding-dollar"></i> Fees by property
-                                </div>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link"
-                               th:href="@{/administration/fees/settings/{id}(id=${residentialEntity.getId()})}">
-                                <div class="text-light"><i class="fa-solid fa-gears"></i> Residential entity fees</div>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link"
-                               th:href="@{/administration/fees/bank-details/{id}(id=${residentialEntity.getId()})}">
-                                <div class="text-light"><i class="fa-solid fa-landmark"></i> Bank details</div>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <div class="administration-nav-bar">
+        <a th:href="@{/administration}">Summary</a>
+        <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Owners</a>
+        <a  th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">Properties</a>
+        <a href=#>Monthly fees</a>
+        <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Financial</a>
+        <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Details</a>
+        <div class="animation start-fees"></div>
     </div>
 
-    <!--Start of table-->
     <div class="administration">
-        <div class="info-table" id="due-amounts-table">
+        <!--Sub-menu buttons-->
+        <div class="table-nav-section">
+            <a class="button nav-link active"
+               href=#due-amounts-table>
+                <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Fees by property</span>
+                </div>
+            </a>
+            <a class="button nav-link"
+               th:href="@{/administration/fees/settings/{id}(id=${residentialEntity.getId()})}">
+                <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Residential entity fees</span></div>
+            </a>
+            <a class="button nav-link"
+               th:href="@{/administration/fees/bank-details/{id}(id=${residentialEntity.getId()})}">
+                <div class="text-center"><i class="fa-solid fa-landmark"></i> <span>Bank details</span></div>
+            </a>
+        </div>
+        <!--Start of table-->
+        <div class="info-table bottom-rounded" id="due-amounts-table">
 
             <!--Section heading-->
             <div class="text-center">
@@ -228,7 +170,7 @@
             <p th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} == 0"
                class="text-center">No records found</p>
 
-            <table class="table text-center"
+            <table class="table text-center" id="monthly-fees-table"
                    th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 0">
                 <tr>
                     <th>
@@ -246,26 +188,26 @@
                     <th>
                         <p>Auto fees</p>
                         <div style="display: flex; justify-content: center">
-                        <form th:if="${@propertyRepository.countAllPropertiesWithAutoFeeOn(residentialEntity.getId()) < residentialEntity.getProperties().size()}"
-                              class="form-container"
-                              th:action="@{/administration/fees/turnAllPropertiesFeesOn/{id}(id=${residentialEntity.getId()})}"
-                              th:method="POST">
-                            <button type="submit">
-                                <img title="Turn all monthly fees ON"
-                                     src="/images/on.jpg"
-                                     style="width: 20px;"
-                                     alt="Turn all properties monthly fee ON">
-                            </button>
-                        </form>
-                        <form th:if="${@propertyRepository.countAllPropertiesWithAutoFeeOff(residentialEntity.getId()) < residentialEntity.getProperties().size()}"
-                                class="form-container"
-                              th:action="@{/administration/fees/turnAllPropertiesFeesOff/{id}(id=${residentialEntity.getId()})}"
-                              th:method="POST">
-                            <button type="submit">
-                                <img title="Turn all monthly fees OFF" src="/images/off.jpg" style="width: 20px;"
-                                     alt="Turn monthly fee ON">
-                            </button>
-                        </form>
+                            <form th:if="${@propertyRepository.countAllPropertiesWithAutoFeeOn(residentialEntity.getId()) < residentialEntity.getProperties().size()}"
+                                  class="form-container"
+                                  th:action="@{/administration/fees/turnAllPropertiesFeesOn/{id}(id=${residentialEntity.getId()})}"
+                                  th:method="POST">
+                                <button type="submit">
+                                    <img title="Turn all monthly fees ON"
+                                         src="/images/on.jpg"
+                                         style="width: 20px;"
+                                         alt="Turn all properties monthly fee ON">
+                                </button>
+                            </form>
+                            <form th:if="${@propertyRepository.countAllPropertiesWithAutoFeeOff(residentialEntity.getId()) < residentialEntity.getProperties().size()}"
+                                  class="form-container"
+                                  th:action="@{/administration/fees/turnAllPropertiesFeesOff/{id}(id=${residentialEntity.getId()})}"
+                                  th:method="POST">
+                                <button type="submit">
+                                    <img title="Turn all monthly fees OFF" src="/images/off.jpg" style="width: 20px;"
+                                         alt="Turn monthly fee ON">
+                                </button>
+                            </form>
                         </div>
                     </th>
                     <th>

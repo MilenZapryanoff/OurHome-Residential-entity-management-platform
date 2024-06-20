@@ -5,6 +5,7 @@ import com.example.OurHome.model.Entity.Message;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.Role;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class UserViewModel {
     private Long pendingPropertyApproval;
     private String email;
     private String phoneNumber;
+    private LocalDateTime registrationDateTime;
     private List<ResidentialEntity> residentialEntities;
     private List<Property> properties;
     private List<Message> messages;
@@ -133,5 +135,13 @@ public class UserViewModel {
 
     public void setAvatarPath(String avatarPath) {
         this.avatarPath = avatarPath;
+    }
+
+    public LocalDateTime getRegistrationDateTime() {
+        return registrationDateTime;
+    }
+
+    public void setRegistrationDateTime(LocalDateTime registrationDateTime) {
+        this.registrationDateTime = registrationDateTime;
     }
 }

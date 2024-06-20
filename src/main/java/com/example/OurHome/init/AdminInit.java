@@ -9,6 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class AdminInit implements CommandLineRunner {
 
@@ -46,6 +48,7 @@ public class AdminInit implements CommandLineRunner {
             admin.setFirstName("System");
             admin.setLastName("Administrator");
             admin.setUsername("admin");
+            admin.setRegistrationDateTime(LocalDateTime.now());
             //TODO: to run this code on your local machine you should first create a password for your admin user. You can do this by adding environment variable 'admin_pass' in your IDE.
             admin.setPassword(passwordEncoder.encode("${OurHome.remember.me.key}"));
             admin.setValidated(true);

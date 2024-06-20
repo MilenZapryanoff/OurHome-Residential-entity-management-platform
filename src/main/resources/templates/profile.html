@@ -184,6 +184,10 @@
                                     class="text-black"><b>Managed Residential entities:</b>
                                     <p th:text="${@residentialEntityRepository.countByManager_Id(userViewModel.getId())}"></p>
                                 </li>
+                                <li class="text-black"><b>Account created on:</b>
+                                    <p th:text="${#temporals.format(userViewModel.getRegistrationDateTime(), 'dd.MM.yyyy, HH:mm')}"></p>
+                                </li>
+                                </li>
                             </ul>
                         </div>
                     </div>

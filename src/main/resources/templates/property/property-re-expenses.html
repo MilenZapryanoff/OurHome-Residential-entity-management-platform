@@ -104,97 +104,49 @@
     </div>
 </div>
 
-<br><br>
 
 <!-- ***** Residential entity section ***** -->
+<div class="container">
+    <!--        start of buttons-->
+    <div class="property-nav-bar">
+        <a th:href="@{/property}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
+        <a th:href="@{/property/summary/{id}(id=${property.getId()})}">Summary</a>
+        <a th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">Monthly fees</a>
+        <a th:href="@{/property/details/{id}(id=${property.getId()})}">Property details</a>
+        <a href=#>Residential Entity</a>
+        <div class="transition property-re"></div>
+    </div>
+    <!--end of buttons-->
+    <div class="table-nav-section">
+        <a class="button nav-link"
+           th:href="@{/property/re/data/{id}(id=${property.getId()})}">
+            <div class="text-center"><span>Data</span></div>
+        </a>
+        <a class="button nav-link active"
+           href=#>
+            <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Expenses</span></div>
+        </a>
+        <a class="button nav-link"
+           th:href="@{/property/re/incomes/{id}(id=${property.getId()})}">
+            <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Incomes</span></div>
+        </a>
+    </div>
 
-
-<div class="single-property">
-    <div class="container">
-        <!--        start of buttons-->
-        <div class="tabs-content">
-            <ul class="nav nav-tabs">
-                <li class="nav-item" role="presentation">
-                    <div class="buttons">
-                        <a class="nav-link" th:href="@{/property/summary/{id}(id=${property.getId()})}">
-                            <h5>Summary</h5>
-                            <p class="text-secondary">and property status</p></a>
-                    </div>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <div th:if="${property.isObtained()}" class="buttons">
-                        <a class="nav-link" th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">
-                            <h5>Monthly fees</h5>
-                            <p class="text-secondary">and due amounts</p>
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <div class="buttons">
-                        <a class="nav-link" th:href="@{/property/details/{id}(id=${property.getId()})}">
-                            <h5>Property details</h5>
-                            <p class="text-secondary">and settings</p>
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <div th:if="${property.isObtained()}" class="buttons">
-                        <a class="nav-link active" th:href="@{/property/re/data/{id}(id=${property.getId()})}">
-                            <h5 class="text-danger">Residential Entity</h5>
-                            <p class="text-secondary">data and reports</p>
-                        </a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <!--end of buttons-->
-
-
-        <div class="section property">
+    <div class="property">
+        <div class="info-table rounded-bottom">
             <div class="tabs-content">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <div class="button" id="expenses">
-                            <a class="nav-link"
-                               th:href="@{/property/re/data/{id}(id=${property.getId()})}">
-                                <div>Data</div>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link active"
-                               href=#expenses>
-                                <div>Expenses  <i class="fa-solid fa-circle-minus"></i></div>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link"
-                               th:href="@{/property/re/incomes/{id}(id=${property.getId()})}">
-                                <div>Incomes  <i class="fa-solid fa-circle-plus"></i></div>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="button ">
-                            <a class="nav-link"
-                               th:href="@{/property}">
-                                <div>Back</div>
-                            </a>
-                        </a>
-                    </li>
-                </ul>
-
                 <div class="col-lg-12 text-center">
-                    <h5>Residential entity expenses report</h5>
-                    <br>
-                    <div th:if="${property.getResidentialEntity().isExpensesVisible()} or ${@residentialEntityRepository.isUserModeratorOfResidentialEntity(property.getResidentialEntity().getId(), userViewModel.getId()) >= 1}">
-                      <span class="text-secondary">In this section you will find data about your residential entity expenses.
-                                                <br>You can see your current month expenses, or select a specific period of time.</span>
-                        <!--Expenses report-->
-                        <div class="expenses-report text-center">
+                    <div th:if="${property.getResidentialEntity().isExpensesVisible()} or ${@residentialEntityRepository.isUserModeratorOfResidentialEntity(property.getResidentialEntity().getId(), userViewModel.getId()) >= 1}"
+                         class="expenses-container">
+                        <div class="expenses-header">
+                            <h5>Residential entity expenses report</h5>
+                            <br>
+                            <p class="text-secondary">In this section you will find data about your residential entity
+                                expenses.
+                                <br>You can see your current month expenses, or select a specific period of time.</p>
+                        </div>
+                        <!--Expenses filter-->
+                        <div class="expenses-report text-center col-lg-10">
                             <div class="input-content">
                                 <form id="input-form"
                                       th:method="POST"
@@ -248,57 +200,54 @@
                                         <div class="tab-pane fade show active"
                                              id="Properties" role="tabpanel"
                                              aria-labelledby="properties-tab-tab">
-                                            <br><br>
-
-                                            <!--Expenses list section-->
-                                            <div class="section administration"
-                                                 id="verified">
-                                                <div class="row">
-                                                    <div class="main-content"><span
-                                                            th:if="${expenseFilterBindingModel.getExpenseList().size()} == 0"
-                                                            class="category text-bg-danger">0 Records found</span>
-                                                        <span th:if="${expenseFilterBindingModel.getExpenseList().size()} == 1"
-                                                              th:text="${expenseFilterBindingModel.getExpenseList().size()} + ' Record found'"
-                                                              class="category text-bg-success"></span>
-                                                        <span th:if="${expenseFilterBindingModel.getExpenseList().size()} > 1"
-                                                              th:text="${expenseFilterBindingModel.getExpenseList().size()} + ' Records found'"
-                                                              class="category text-bg-success"></span>
-                                                        <hr>
-                                                    </div>
-                                                    <table class="text-center">
-                                                        <tr>
-                                                            <th>Amount</th>
-                                                            <th>Date</th>
-                                                            <th>Description</th>
-                                                            <th>Document</th>
-                                                        </tr>
-                                                        <tr th:each="expense : ${expenseFilterBindingModel.getExpenseList()}">
-                                                            <td th:text="${expense.getAmount()} + ' лв.'"></td>
-                                                            <td th:text="${#temporals.format(expense.getExpenseDate(), 'dd-MMM-yyyy')}"></td>
-                                                            <td th:text="${expense.getDescription()}"></td>
-                                                            <td>
-                                                                <a th:if="${expense.getPicturePath()} != null"
-                                                                   th:href="@{/expenses/details/{id} (id=${expense.getId()})}"
-                                                                   target="_blank">
-                                                                    <img title="View document"
-                                                                         src="/images/invoice.png"
-                                                                         style="width: 110px; padding: 0;"
-                                                                         alt="View document">
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
+                        <!--Expenses list section-->
+                        <div class="expenses-report row counter">
+                            <div class="main-content"><span
+                                    th:if="${expenseFilterBindingModel.getExpenseList().size()} == 0"
+                                    class="category text-bg-danger">0 Records found</span>
+                                <span th:if="${expenseFilterBindingModel.getExpenseList().size()} == 1"
+                                      th:text="${expenseFilterBindingModel.getExpenseList().size()} + ' Record found'"
+                                      class="category text-bg-success"></span>
+                                <span th:if="${expenseFilterBindingModel.getExpenseList().size()} > 1"
+                                      th:text="${expenseFilterBindingModel.getExpenseList().size()} + ' Records found'"
+                                      class="category text-bg-success"></span>
+                                <hr>
+                            </div>
+                            <table id="expenses-table" class="text-center">
+                                <tr>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Document</th>
+                                </tr>
+                                <tr th:each="expense : ${expenseFilterBindingModel.getExpenseList()}">
+                                    <td th:text="${expense.getAmount()} + ' лв.'"></td>
+                                    <td th:text="${#temporals.format(expense.getExpenseDate(), 'dd.MM.yyyy')}"></td>
+                                    <td th:text="${expense.getDescription()}"></td>
+                                    <td>
+                                        <a th:if="${expense.getPicturePath()} != null"
+                                           th:href="@{/expenses/details/{id} (id=${expense.getId()})}"
+                                           target="_blank">
+                                            <img title="View document"
+                                                 src="/images/invoice.png"
+                                                 style="width: 22px; padding: 0;"
+                                                 alt="View document">
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-
                     <div th:if="${!property.getResidentialEntity().isExpensesVisible()} and ${@residentialEntityRepository.isUserModeratorOfResidentialEntity(property.getResidentialEntity().getId(), userViewModel.getId()) == 0}">
-                        <span class="text-danger">Residential entity manager has not authorized you to access this data!</span>
+                        <h5>Residential entity expenses report</h5>
+                        <br>
+                        <p class="text-danger">Residential entity manager has not authorized you to access this
+                            data!</p>
                     </div>
                 </div>
             </div>

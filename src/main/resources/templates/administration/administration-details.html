@@ -104,60 +104,20 @@
 <!--Start of Residential entity details-->
 <div class="container">
     <!--Start of sub-menus-->
-    <div class="single-property" style="padding-top: 48px">
-        <div class="tabs-content">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <div class="button">
-                        <a class="nav-link" th:href="@{/administration}">
-                            <h5>Summary</h5>
-                            <p class="text-secondary">of residential entity</p></a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class="button">
-                        <a class="nav-link"
-                           th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Owners</h5>
-                            <p class="text-secondary">data & management</p></a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class="button">
-                        <a class="nav-link" th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Properties</h5>
-                            <p class="text-secondary">data & management</p></a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class="button">
-                        <a class="nav-link" th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Monthly fees</h5>
-                            <p class="text-secondary">calculations & management</p></a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class="button">
-                        <a class="nav-link" th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Financial</h5>
-                            <p class="text-secondary">reports & management</p></a>
-                    </div>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <div class="button">
-                        <a class="nav-link active"
-                           href=#>
-                            <h5 class="text-danger">Details</h5>
-                            <p class="text-secondary">data & settings</p></a>
-                    </div>
-                </li>
-            </ul>
-        </div>
+    <div class="administration-nav-bar">
+        <a th:href="@{/administration}">Summary</a>
+        <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Owners</a>
+        <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">Properties</a>
+        <a th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">Monthly fees</a>
+        <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Financial</a>
+        <a href=#>Details</a>
+        <div class="animation start-details"></div>
     </div>
+
     <!--RE details section-->
     <div class="administration">
         <div class="col-lg-6" style="margin: 0 auto; padding-top: 60px">
-            <div class="info-table" style="border-radius: 30px">
+            <div class="info-table rounded">
                 <!--Residential entity details section heading-->
                 <div class="text-center" style="padding-bottom: 30px">
                     <h4 class="category text-danger">RESIDENTIAL ENTITY DETAILS</h4>
@@ -205,7 +165,7 @@
                 <div style="padding-top: 20px" class="modify-re-button">
                     <a class="form-control text-center text-bg-danger"
                        th:href="@{/administration/details/edit/{id}(id=${residentialEntity.getId()})}">
-                        <p class="text-white">Edit data</p></a>
+                        <p class="text-light">Edit data</p></a>
                 </div>
             </div>
         </div>

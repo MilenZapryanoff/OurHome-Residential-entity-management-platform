@@ -101,69 +101,22 @@
     </div>
 </div>
 
-<br><br>
-
 <!-- ***** Residential entity section ***** -->
-
-
 <div class="single-property section">
     <div class="container">
-        <!--        start of buttons-->
-        <div class="tabs-content">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <div class="buttons">
-                        <a class="nav-link" th:href="@{/property/summary/{id}(id=${property.getId()})}">
-                            <h5>Summary</h5>
-                            <p class="text-secondary">and property status</p></a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div th:if="${property.isObtained()}" class="buttons">
-                        <a class="nav-link" th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">
-                            <h5>Monthly fees</h5>
-                            <p class="text-secondary">and due amounts</p>
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class="buttons">
-                        <a class="nav-link active" th:href="@{/property/details/{id}(id=${property.getId()})}">
-                            <h5 class="text-danger">Property details</h5>
-                            <p class="text-secondary">and settings</p>
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div th:if="${property.isObtained()}" class="buttons">
-                        <a class="nav-link" th:href="@{/property/re/data/{id}(id=${property.getId()})}">
-                            <h5>Residential Entity</h5>
-                            <p class="text-secondary">data and reports</p>
-                        </a>
-                    </div>
-                </li>
-            </ul>
+        <!--Start of sub-menus-->
+        <div class="property-nav-bar">
+            <a th:href="@{/property}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
+            <a th:href="@{/property/summary/{id}(id=${property.getId()})}">Summary</a>
+            <a th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">Monthly fees</a>
+            <a href=#>Property details</a>
+            <a th:href="@{/property/re/data/{id}(id=${property.getId()})}">Residential Entity</a>
+            <div class="transition property-details"></div>
         </div>
-        <!--end of buttons-->
 
         <div class="container">
             <div class="property">
                 <div class="tabs-content">
-                    <ul class="nav nav-tabs">
-                        <li id="dcr" class="nav-item">
-                                                <span th:if="${property.isValidated() and property.isObtained()} or ${property.isRejected()}"
-                                                      class="button">
-                                                        <a class="nav-link active"
-                                                           th:href="@{/property/details/edit/{id}(id=${property.getId()})}">
-                                                    <div class="text-light">Edit data</div></a>
-                                                </span>
-                            <span class="button">
-                                                <a class="nav-link"
-                                                   th:href="@{/property}">
-                                                <div class="text-light">Back</div></a>
-                                            </span>
-                        </li>
-                    </ul>
                     <div class="row">
                         <!--Registration status-->
                         <div class="col-lg-6" style="padding-bottom: 60px">
@@ -207,6 +160,10 @@
                                         <b th:unless="${property.getPropertyRegisterRequest().isNotHabitable()}"><i
                                                 class="fa-solid fa-circle-check text-success"></i></b>
                                     </li>
+                                    <li class="text-black text-center"
+                                        th:if="${property.getPropertyRegisterRequest() != null}"
+                                        th:text="'Created on: '+ ${#temporals.format(property.getPropertyRegisterRequest().getCreationDateTime(), 'dd.MM.yyyy, HH:mm')}">
+                                    </li>
                                 </ul>
 
                             </div>
@@ -217,31 +174,46 @@
                                 <ul>
                                     <li><h5 class="text-danger text-center">Data change request</h5>
                                     </li>
+                                    <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
+                                        class="text-black text-center">Status:
+                                        <b th:if="${property.getPropertyChangeRequest().isRejected()}"
+                                           class="text-danger text-center">REJECTED</b>
+                                        <b th:unless="${property.getPropertyChangeRequest().isRejected()}"
+                                           class="text-secondary text-center">Pending approval</b>
+                                    </li>
+                                    <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
+                                        class="text-black text-center"
+                                        th:text="'Created on: '+ ${#temporals.format(property.getPropertyChangeRequest().getCreationDateTime(), 'dd.MM.yyyy, HH:mm')}">
+                                    </li>
+                                    <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
+                                        class="text-black text-center"
+                                        th:text="'Last modified on: '+ ${#temporals.format(property.getPropertyChangeRequest().getLastModificationDateTime(), 'dd.MM.yyyy, HH:mm')}">
+                                    </li>
                                     <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null and property.getPropertyChangeRequest().getPropertyType() != null}"
-                                        class="text-black">Property Type:
+                                        class="text-black text-center">Property Type:
                                         <b th:text="${property.getPropertyChangeRequest().getPropertyType().getDescription()} + ', ' + ${property.getPropertyChangeRequest().getPropertyType().getTotalFlatSpace() + ' m2'}"></b>
                                     </li>
                                     <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
-                                        class="text-black">Property floor: <b
+                                        class="text-black text-center">Property floor: <b
                                             th:text="${property.getPropertyChangeRequest().getFloor()}"></b>
                                     </li>
                                     <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
-                                        class="text-black">Property is habitable:
+                                        class="text-black text-center">Property is habitable:
                                         <b th:if="${property.getPropertyChangeRequest().isNotHabitable()}"><i
                                                 class="fa-solid fa-circle-xmark text-danger"></i></b>
                                         <b th:unless="${property.getPropertyChangeRequest().isNotHabitable()}"><i
                                                 class="fa-solid fa-circle-check text-success"></i></b>
                                     </li>
                                     <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
-                                        class="text-black">Number of adults: <b
+                                        class="text-black text-center">Number of adults: <b
                                             th:text="${property.getPropertyChangeRequest().getNumberOfAdults()}"></b>
                                     </li>
                                     <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
-                                        class="text-black">Number of children: <b
+                                        class="text-black text-center">Number of children: <b
                                             th:text="${property.getPropertyChangeRequest().getNumberOfChildren()}"></b>
                                     </li>
                                     <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}"
-                                        class="text-black">Number of pets: <b
+                                        class="text-black text-center">Number of pets: <b
                                             th:text="${property.getPropertyChangeRequest().getNumberOfPets()}"></b>
                                     </li>
                                     <li th:unless="${property.isObtained() and property.getPropertyChangeRequest() != null}"
@@ -328,7 +300,13 @@
                                         <b th:unless="${property.isNotHabitable()}"><i
                                                 class="fa-solid fa-circle-check text-success"></i></b>
                                     </li>
-
+                                    <li class="text-center">
+                                        <a th:if="${property.isValidated() and property.isObtained()} or ${property.isRejected()}"
+                                           class="nav-link"
+                                           th:href="@{/property/details/edit/{id}(id=${property.getId()})}">
+                                            <div class=" text-light">Edit data</div>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

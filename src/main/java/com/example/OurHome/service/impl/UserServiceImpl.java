@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -104,6 +105,7 @@ public class UserServiceImpl implements UserService {
         newUserEntity.getResidentialEntities().add(residentialEntity);
         newUserEntity.setRole(roleRepository.findRoleByName("RESIDENT"));
         newUserEntity.setValidated(true);
+        newUserEntity.setRegistrationDateTime(LocalDateTime.now());
         newUserEntity.setAvatarPath("/avatars/default.jpg");
 
         userRepository.save(newUserEntity);
@@ -125,6 +127,7 @@ public class UserServiceImpl implements UserService {
         newManager.setValidated(true);
         newManager.setRole(roleRepository.findRoleByName("MANAGER"));
         newManager.setAvatarPath("/avatars/default-manager.jpg");
+        newManager.setRegistrationDateTime(LocalDateTime.now());
 
         userRepository.save(newManager);
     }

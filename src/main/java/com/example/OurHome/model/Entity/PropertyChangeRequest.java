@@ -2,6 +2,8 @@ package com.example.OurHome.model.Entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity(name = "property_change_requests")
 public class PropertyChangeRequest {
 
@@ -27,11 +29,18 @@ public class PropertyChangeRequest {
     private boolean parkingAvailable;
     @Column
     private boolean active;
+    @Column
+    private boolean isRejected;
 
     @ManyToOne
     private PropertyType propertyType;
     @Column
     private String numberOfRooms;
+
+    @Column(nullable = false)
+    private LocalDateTime creationDateTime;
+    @Column(nullable = false)
+    private LocalDateTime lastModificationDateTime;
 
     @OneToOne(mappedBy = "propertyChangeRequest", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     private Property property;
@@ -141,5 +150,29 @@ public class PropertyChangeRequest {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public boolean isRejected() {
+        return isRejected;
+    }
+
+    public void setRejected(boolean rejected) {
+        isRejected = rejected;
+    }
+
+    public LocalDateTime getCreationDateTime() {
+        return creationDateTime;
+    }
+
+    public void setCreationDateTime(LocalDateTime creationDate) {
+        this.creationDateTime = creationDate;
+    }
+
+    public LocalDateTime getLastModificationDateTime() {
+        return lastModificationDateTime;
+    }
+
+    public void setLastModificationDateTime(LocalDateTime lastModificationDate) {
+        this.lastModificationDateTime = lastModificationDate;
     }
 }

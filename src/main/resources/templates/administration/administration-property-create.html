@@ -95,10 +95,10 @@
     <div class="container">
         <div class="row">
             <h3>Create new property</h3>
-            <h4 class="text-white"><i class="fa-regular fa-pen-to-square"></i></h4>
+            <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
             <div th:if="${duplicatedProperty}" class="err-msg">
-                <h5 class="text-white">Property creation failed!</h5>
-                <p class="text-white"
+                <h5 class="text-light">Property creation failed!</h5>
+                <p class="text-light"
                    th:text="'Property №' + ${propertyCreateBindingModel.getNumber()} + ' already exists in this Residential entity!'"></p>
             </div>
         </div>
@@ -118,8 +118,8 @@
                     <fieldset>
                         <label for="number"><b>Property №</b></label>
                         <p th:if="${#fields.hasErrors('number')}"
-                               th:errors="*{number}"
-                               class="text-danger">Property № error message</p>
+                           th:errors="*{number}"
+                           class="text-danger">Property № error message</p>
                         <input type="number" id="number"
                                placeholder="Enter property №..."
                                autocomplete="on"
@@ -130,8 +130,8 @@
                     <fieldset>
                         <label for="floor"><b>Floor</b></label>
                         <p th:if="${#fields.hasErrors('floor')}"
-                               th:errors="*{floor}"
-                               class="text-danger">Floor error message</p>
+                           th:errors="*{floor}"
+                           class="text-danger">Floor error message</p>
                         <input type="text" id="floor"
                                placeholder="Enter floor..."
                                autocomplete="on"
@@ -154,8 +154,8 @@
                     <fieldset>
                         <label for="numberOfAdults"><b>Number of adults</b></label>
                         <p th:if="${#fields.hasErrors('numberOfAdults')}"
-                               th:errors="*{numberOfAdults}"
-                               class="text-danger">Adults number error message</p>
+                           th:errors="*{numberOfAdults}"
+                           class="text-danger">Adults number error message</p>
                         <input type="number" id="numberOfAdults"
                                placeholder="Enter number of adults..."
                                autocomplete="on" required
@@ -166,8 +166,8 @@
                     <fieldset>
                         <label for="numberOfChildren"><b>Number of children</b></label>
                         <p th:if="${#fields.hasErrors('numberOfChildren')}"
-                               th:errors="*{numberOfChildren}"
-                               class="text-danger">Children error message</p>
+                           th:errors="*{numberOfChildren}"
+                           class="text-danger">Children error message</p>
                         <input type="number" id="numberOfChildren"
                                placeholder="Enter number of children..."
                                autocomplete="on" required
@@ -178,8 +178,8 @@
                     <fieldset>
                         <label for="numberOfPets"><b>Number of pets</b></label>
                         <p th:if="${#fields.hasErrors('numberOfPets')}"
-                               th:errors="*{numberOfPets}"
-                               class="text-danger">Number of pets error</p>
+                           th:errors="*{numberOfPets}"
+                           class="text-danger">Number of pets error</p>
                         <input type="number" id="numberOfPets"
                                placeholder="Enter number of pets ..."
                                autocomplete="on" required
@@ -197,12 +197,10 @@
                         <button type="submit" id="form-submit"
                                 class="orange-button">Submit
                         </button>
-                        <button class="orange-button" id="form-cancel-rej"
-                                type="button">
-                            <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
-                                <div class="text-light">Cancel</div>
-                            </a>
-                        </button>
+                        <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
+                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel
+                            </button>
+                        </a>
                     </fieldset>
                 </div>
             </form>

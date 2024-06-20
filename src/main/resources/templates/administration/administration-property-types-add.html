@@ -95,7 +95,7 @@
     <div class="container">
         <div class="row">
             <h3>Create new Property type</h3>
-            <h4 class="text-white"><i class="fa-regular fa-pen-to-square"></i></h4>
+            <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
         </div>
     </div>
 </div>
@@ -113,8 +113,8 @@
                     <fieldset>
                         <label for="description"><b>Description</b></label>
                         <p th:if="${#fields.hasErrors('description')}"
-                               th:errors="*{description}"
-                               class="text-danger">Description error message</p>
+                           th:errors="*{description}"
+                           class="text-danger">Description error message</p>
                         <input type="text" id="description"
                                placeholder="Enter property type description..."
                                autocomplete="on"
@@ -125,8 +125,8 @@
                     <fieldset>
                         <label for="commonPartsPercentage"><b>Common Parts percentage (%)</b></label>
                         <p th:if="${#fields.hasErrors('commonPartsPercentage')}"
-                               th:errors="*{commonPartsPercentage}"
-                               class="text-danger">common parts error message</p>
+                           th:errors="*{commonPartsPercentage}"
+                           class="text-danger">common parts error message</p>
                         <input type="text" id="commonPartsPercentage"
                                placeholder="Enter common parts %..."
                                autocomplete="on"
@@ -137,8 +137,8 @@
                     <fieldset>
                         <label for="totalFlatSpace"><b>Total flat space (square meters)</b></label>
                         <p th:if="${#fields.hasErrors('totalFlatSpace')}"
-                               th:errors="*{totalFlatSpace}"
-                               class="text-danger">Total flat space error message</p>
+                           th:errors="*{totalFlatSpace}"
+                           class="text-danger">Total flat space error message</p>
                         <input type="text" id="totalFlatSpace"
                                placeholder="Enter total flat space..."
                                autocomplete="on" required
@@ -150,12 +150,10 @@
                         <button type="submit" id="form-submit"
                                 class="orange-button">Submit
                         </button>
-                        <button class="orange-button" id="form-cancel-act"
-                                type="button">
-                            <a th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
-                                <div class="text-light">Cancel</div>
-                            </a>
-                        </button>
+                        <a th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel
+                            </button>
+                        </a>
                     </fieldset>
                 </div>
             </form>

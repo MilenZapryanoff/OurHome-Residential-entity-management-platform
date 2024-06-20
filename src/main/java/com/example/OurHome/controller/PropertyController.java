@@ -1,6 +1,9 @@
 package com.example.OurHome.controller;
 
-import com.example.OurHome.model.Entity.*;
+import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.PropertyType;
+import com.example.OurHome.model.Entity.ResidentialEntity;
+import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseFilterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Message.SendMessageBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
@@ -216,20 +219,25 @@ public class PropertyController {
         }
 
         Property property = getProperty(id);
-
         //setting property number to original value. This will not allow change request to contain different property number.
         //Front-end (edit page) input field is also readonly!
         propertyEditBindingModel.setNumber(property.getNumber());
 
-        propertyService.updateNonFinancialPropertyFields(property, propertyEditBindingModel, propertyType);
-
         boolean validationRequired = propertyService.validationIsRequired(id, propertyEditBindingModel);
 
-        //if there are no changes of fee component data and property ownership is FINISHED!
+        //updating of non-fee component data. This happens anyway.
+        propertyService.updateNonFeeComponentData(property, propertyEditBindingModel, propertyType);
+
+        //if there are no fee components data change and property ownership is FINISHED!
         if (!validationRequired && property.isObtained()) {
+            //cancel changeRequest (by forwarding to cancel method in controller) if such exists as there is no change of fee component data. In this case changeRequest is redundant!
+            if (property.getPropertyChangeRequest() != null) {
+                return new ModelAndView("forward:/property/details/cancel-change-request/" + id);
+            }
             return new ModelAndView("redirect:/property/details/" + id);
         }
 
+        //processing of change request if validation is REQUIRED!
         if (propertyService.processChangeRequest(id, propertyEditBindingModel, propertyType, getLoggedUser())) {
             return new ModelAndView("redirect:/property/details/" + id);
         } else {

@@ -103,83 +103,41 @@
                     ' residential entities available'"></h3>
                 <div class="column-gap-2">
                         <span class="breadcrumb">
-                    <a href="/administration/add">Create new Residential entity</a></span>
+                    <a class="text-danger" href="/administration/add">Create new Residential entity</a></span>
                 </div>
 
                 <div th:if="${notDeleted}" class="err-msg">
-                    <h5 class="text-white">Record not deleted!</h5>
-                    <p class="text-white">Cannot delete entity with already registered owners!</p>
+                    <h5 class="text-light">Record not deleted!</h5>
+                    <p class="text-light">Cannot delete entity with already registered owners!</p>
                 </div>
 
                 <div th:if="${deleted}" class="success-msg">
-                    <h5 class="text-white">Record deleted!</h5>
-                    <p class="text-white">Residential entity successfully deleted!</p>
+                    <h5 class="text-light">Record deleted!</h5>
+                    <p class="text-light">Residential entity successfully deleted!</p>
                 </div>
-
                 <div th:if="${errorMessage}" class="err-msg">
-                    <h5 class="text-white" th:text="${errorMessage.toString()}"></h5>
+                    <h5 class="text-light" th:text="${errorMessage.toString()}"></h5>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-<br><br>
+
 <!-- ***** Residential entity section ***** -->
 <div class="section single-property">
     <div th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) > 0}" class="container">
         <div th:each="residentialEntity: ${@residentialEntityRepository.findAllByManager_Id(userViewModel.getId())}"
              class="row" style="padding-bottom: 150px">
             <!--Start of sub-menu-->
-            <div class="tabs-content">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link active" href=#>
-                                <h5 class="text-danger">Summary</h5>
-                                <p class="text-secondary">of residential entity</p></a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link"
-                               th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
-                                <h5>Owners</h5>
-                                <p class="text-secondary">data & management</p></a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link"
-                               th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
-                                <h5>Properties</h5>
-                                <p class="text-secondary">data & management</p></a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link" th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
-                                <h5>Monthly fees</h5>
-                                <p class="text-secondary">calculations & management</p></a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link"
-                               th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
-                                <h5>Financial</h5>
-                                <p class="text-secondary">reports & management</p></a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link"
-                               th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
-                                <h5>Details</h5>
-                                <p class="text-secondary">data & settings</p></a>
-                        </div>
-                    </li>
-                </ul>
+
+            <div class="administration-nav-bar">
+                <a href=#>Summary</a>
+                <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Owners</a>
+                <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">Properties</a>
+                <a th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">Monthly fees</a>
+                <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Financial</a>
+                <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Details</a>
+                <div class="animation start-summary"></div>
             </div>
 
             <!--Start of left-section-->
@@ -397,6 +355,7 @@
                 </div>
             </div>
         </div>
+        <hr>
     </div>
     <div th:unless="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) > 0}" class="container">
        <div class="messages">

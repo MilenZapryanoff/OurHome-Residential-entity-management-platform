@@ -349,7 +349,7 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Your registration request for property № " + property.getNumber() + " id Residential entity ID: "
+                        "Your registration request for property № " + property.getNumber() + " in Residential entity ID: "
                                 + property.getResidentialEntity().getId() + " has been APPROVED. Please note, that there " +
                                 "was a difference between your input data and the preset data for this property. " +
                                 " Your input data was ignored and no changes were made for this property." +
@@ -358,6 +358,34 @@ public class MessageServiceImpl implements MessageService {
                         false,
                         false));
     }
+
+    @Override
+    public void propertyChangeRequestApproved(Property property) {
+        messageRepository.save(
+                new Message(
+                        LocalDate.now(),
+                        Time.valueOf(LocalTime.now()),
+                        "Your change request for property № " + property.getNumber() + " in Residential entity ID: "
+                                + property.getResidentialEntity().getId() + " has been APPROVED. Changes applied to your property!",
+                        property.getOwner(),
+                        false,
+                        false));
+    }
+
+    @Override
+    public void propertyChangeRequestRejected(Property property) {
+        messageRepository.save(
+                new Message(
+                        LocalDate.now(),
+                        Time.valueOf(LocalTime.now()),
+                        "Your change request for property № " + property.getNumber() + " in Residential entity ID: "
+                                + property.getResidentialEntity().getId() + " has been REJECTED. Your changes will not take affect. You can still send new change request if needed!",
+                        property.getOwner(),
+                        false,
+                        false));
+    }
+
+
 
     @Override
     public Message findMessageById(Long id) {

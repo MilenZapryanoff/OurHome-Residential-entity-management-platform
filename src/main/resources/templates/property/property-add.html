@@ -91,12 +91,12 @@
 <div class="page-heading header-text">
     <div class="container">
         <h3>Register now</h3>
-        <h4 class="text-white"><i class="fa-regular fa-building"></i></h4>
+        <h4 class="text-light"><i class="fa-regular fa-building"></i></h4>
         <div th:if="${registrationFailed}" class="err-msg">
-            <h5 class="text-white">Property registration failed!</h5>
-            <p class="text-white"
+            <h5 class="text-light">Property registration failed!</h5>
+            <p class="text-light"
                th:text="'A problem occured with the registration of Property №' + ${propertyRegisterBindingModel.getNumber()}"></p>
-            <p class="text-white">Please contact your Residential entity manager for further information.</p>
+            <p class="text-light">Please contact your Residential entity manager for further information.</p>
         </div>
     </div>
 </div>
@@ -149,9 +149,16 @@
                                th:errorclass="bg-danger">
                     </fieldset>
                     <fieldset>
-                        <label for="parkingAvailable"><b>Parking available</b></label>
-                        <input name="parkingAvailable" id="parkingAvailable"
-                               type="checkbox">
+                        <input class="inp-cbx" name="parkingAvailable" id="parkingAvailable" type="checkbox"
+                               th:field="*{parkingAvailable}"
+                               hidden="hidden">
+                        <label class="cbx" for="parkingAvailable">
+                        <span>
+                    <svg width="12px" height="10px" viewbox="0 0 12 10"><polyline
+                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                        </span>
+                            <span><b>Parking available</b> (optional)</span>
+                        </label>
                     </fieldset>
                     <h5 class="text-danger">Inhabitants information</h5>
                     <hr>
@@ -184,9 +191,16 @@
                     </fieldset>
                     <div class="col-lg-12">
                         <fieldset>
-                            <label for="isNotHabitable"><b>Property not habitable</b></label>
-                            <input name="notHabitable" id="isNotHabitable"
-                                   type="checkbox">
+                            <input class="inp-cbx" name="isNotHabitable" id="isNotHabitable" type="checkbox"
+                                   th:field="*{notHabitable}"
+                                   hidden="hidden">
+                            <label class="cbx" for="isNotHabitable">
+                        <span>
+                    <svg width="12px" height="10px" viewbox="0 0 12 10"><polyline
+                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                        </span>
+                                <span><b>Property not habitable</b></span>
+                            </label>
                         </fieldset>
                     </div>
                     <fieldset>

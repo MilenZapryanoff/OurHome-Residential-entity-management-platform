@@ -150,7 +150,7 @@ body {
 
 .due-amount-field {
     border: 1px solid lightgray;
-    border-radius: 10px;
+    border-radius: 5px;
     min-width: max-content;
     background-color: rgba(245, 245, 245, 0.58);
 }
@@ -204,7 +204,7 @@ body {
     height: 50px;
     line-height: 50px;
     padding: 0 30px 0 0;
-    border-radius: 25px;
+    border-radius: 5px;
     transition: all .3s;
 }
 
@@ -237,7 +237,7 @@ body {
     height: 40px;
     line-height: 40px;
     padding: 0 30px;
-    border-radius: 25px;
+    border-radius: 5px;
     transition: all .3s;
 }
 
@@ -256,7 +256,7 @@ body {
     height: 40px;
     line-height: 40px;
     padding: 0 30px;
-    border-radius: 25px;
+    border-radius: 5px;
     transition: all .3s;
 }
 
@@ -275,6 +275,10 @@ body {
 
 input[type='number'] {
     -moz-appearance: textfield;
+}
+
+input {
+    max-width: 100%;
 }
 
 input::-webkit-outer-spin-button,
@@ -602,7 +606,7 @@ Header Style
     font-size: 14px;
     font-weight: 400;
     text-transform: none;
-    border-radius: 30px;
+    border-radius: 5px;
 }
 
 .header-area .main-nav .nav li:last-child a i {
@@ -755,15 +759,9 @@ Header Style
         padding-left: 5px;
         padding-right: 5px;
     }
-
 }
 
 @media (max-width: 767px) {
-    .background-header .main-nav {
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-        border-radius: 0 0 25px 25px;
-        width: 100%;
-    }
 
     .background-header .main-nav .nav,
     .header-area .main-nav .nav {
@@ -824,7 +822,6 @@ Header Style
     }
 
     .header-area .nav li:last-child a {
-        background-color: transparent !important;
         font-weight: 300 !important;
         text-transform: capitalize !important;
     }
@@ -881,7 +878,6 @@ Header Style
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
-
 }
 
 /* 
@@ -999,7 +995,8 @@ Password reset OP-UP window
  */
 
 {
-    box-sizing: border-box;
+    box-sizing: border-box
+;
 }
 
 /* Button used to open the contact form - fixed at the bottom of the page */
@@ -1030,14 +1027,14 @@ Password reset OP-UP window
 #message-popup {
     padding: 15px;
     border: 1px solid grey;
-    border-radius: 20px;
+    border-radius: 5px;
     box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5);
     max-width: 500px;
     background-color: rgba(255, 255, 255, 0.91);
 }
 
 #message-popup textarea {
-    border-radius: 4px;
+    border-radius: 5px;
     box-shadow: none;
     margin: 20px 0;
     height: 100px;
@@ -1181,7 +1178,6 @@ Single Page Style
     font-size: 17px;
     font-weight: 500;
     color: #1e1e1e;
-
 }
 
 .single-property .accordion-button:not(.collapsed) {
@@ -1200,10 +1196,9 @@ Single Page Style
 }
 
 .single-property .info-table {
-    border-radius: 30px;
+    border-radius: 5px;
     box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 70px 30px;
-    margin-left: 60px;
 }
 
 .single-property .info-table ul li {
@@ -1261,15 +1256,15 @@ Property fee section
     font-size: 60px;
     border: 1px solid #a6a6a6;
     box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
-    border-radius: 25px;
+    border-radius: 5px;
     transition: 1s;
 }
 
-#fundRepair-fee {
+.fundRepair-fee {
     background-color: #eaeaea;
 }
 
-#fundRepair-fee:hover {
+.fundRepair-fee:hover {
     transition: 1s;
     background-color: white;
 }
@@ -1350,7 +1345,7 @@ Administration Style
 
 .administration {
     background-color: #ffffff;
-    padding: 0 0;
+    padding: 50px 0;
 }
 
 .administration .tab-content img {
@@ -1389,7 +1384,6 @@ Administration Style
 }
 
 .administration .info-table {
-    border-radius: 30px;
     box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
 }
@@ -1466,6 +1460,223 @@ Administration Style
     margin-top: 30px;
 }
 
+.administration-header {
+    padding-top: 30px;
+}
+
+/*
+---------------------------------------------
+Administration sub menus
+---------------------------------------------
+*/
+
+.administration-nav-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 20px auto 40px auto;
+    position: relative;
+    max-width: 900px;
+    padding: 0;
+    /*background-color: #a1a1a1;*/
+    background-color: #212121;
+    border-radius: 5px;
+    font-size: 0;
+    box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5);
+    border: 1px solid rgba(112, 112, 112, 0.5);
+}
+
+.administration-nav-bar a {
+    line-height: 50px;
+    font-size: 15px;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    text-decoration: none;
+    text-align: center;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.administration-nav-bar a:hover {
+    color: white;
+    transition: all .7s ease 0s;
+}
+
+
+.administration-nav-bar .animation {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    z-index: 0;
+    transition: all .5s ease 0s;
+}
+
+
+.administration-nav-bar a:nth-child(1) {
+    width: 16.66%;
+}
+
+.administration-nav-bar a:nth-child(2) {
+    width: 16.66%;
+}
+
+.administration-nav-bar a:nth-child(3) {
+    width: 16.66%;
+}
+
+.administration-nav-bar a:nth-child(4) {
+    width: 16.66%;
+}
+
+.administration-nav-bar a:nth-child(5) {
+    width: 16.66%;
+}
+
+.administration-nav-bar a:nth-child(6) {
+    width: 16.66%;
+}
+
+.administration-nav-bar .start-summary, a:nth-child(1):hover ~ .animation {
+    width: 16.66%;
+    left: 0;
+    background-color: #DC3545;
+}
+
+.administration-nav-bar .start-owners, a:nth-child(2):hover ~ .animation {
+    width: 16.66%;
+    left: 16.66%;
+    background-color: #DC3545;
+}
+
+.administration-nav-bar .start-properties, a:nth-child(3):hover ~ .animation {
+    width: 16.66%;
+    left: 33.32%;
+    background-color: #DC3545;
+}
+
+.administration-nav-bar .start-fees, a:nth-child(4):hover ~ .animation {
+    width: 16.66%;
+    left: 49.98%;
+    background-color: #DC3545;
+}
+
+.administration-nav-bar .start-financial, a:nth-child(5):hover ~ .animation {
+    width: 16.66%;
+    left: 66.64%;
+    background-color: #DC3545;
+}
+
+.administration-nav-bar .start-details, a:nth-child(6):hover ~ .animation {
+    width: 16.66%;
+    left: 83.30%;
+    background-color: #DC3545;
+}
+
+
+/*
+---------------------------------------------
+Property sub menus
+---------------------------------------------
+*/
+
+.property-nav-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 20px auto 70px auto;
+    position: relative;
+    max-width: 900px;
+    padding: 0;
+    /*background-color: #a1a1a1;*/
+    background-color: #212121;
+    border-radius: 5px;
+    font-size: 0;
+    box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5);
+    border: 1px solid rgba(112, 112, 112, 0.5);
+}
+
+.property-nav-bar a {
+    line-height: 50px;
+    font-size: 15px;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    text-decoration: none;
+    text-align: center;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.property-nav-bar a:hover {
+    color: white;
+    transition: all .7s ease 0s;
+}
+
+
+.property-nav-bar .transition {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    z-index: 0;
+    transition: all .5s ease 0s;
+}
+
+
+.property-nav-bar a:nth-child(1) {
+    width: 6%;
+}
+
+.property-nav-bar a:nth-child(2) {
+    width: 23.50%;
+}
+
+.property-nav-bar a:nth-child(3) {
+    width: 23.50%;
+}
+
+.property-nav-bar a:nth-child(4) {
+    width: 23.50%;
+}
+
+.property-nav-bar a:nth-child(5) {
+    width: 23.50%;
+}
+
+
+.property-nav-bar .property-back, a:nth-child(1):hover ~ .transition {
+    width: 6%;
+    left: 0;
+    background-color: #808080;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.property-nav-bar .property-summary, a:nth-child(2):hover ~ .transition {
+    width: 23.50%;
+    left: 6%;
+    background-color: #DC3545;
+}
+
+.property-nav-bar .property-fees, a:nth-child(3):hover ~ .transition {
+    width: 23.50%;
+    left: 29.50%;
+    background-color: #DC3545;
+}
+
+.property-nav-bar .property-details, a:nth-child(4):hover ~ .transition {
+    width: 23.50%;
+    left: 53%;
+    background-color: #DC3545;
+}
+
+.property-nav-bar .property-re, a:nth-child(5):hover ~ .transition {
+    width: 23.50%;
+    left: 76.50%;
+    background-color: #DC3545;
+}
+
+
 /*
 ---------------------------------------------
 Property Style
@@ -1513,7 +1724,6 @@ Property Style
 }
 
 .property .info-table {
-    border-radius: 30px;
     box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
 }
@@ -1606,6 +1816,12 @@ Messages Style
     padding: 15px;
 }
 
+.message-container {
+    border-radius: 5px;
+    border: 1px solid #e1e1e1;
+    margin: 10px 0;
+    background-color: rgba(246, 246, 246, 0.65)
+}
 
 /*
 ---------------------------------------------
@@ -1624,14 +1840,14 @@ Properties Style
 .properties .item {
     max-width: 350px;
     background-color: #fafafa;
-    border-radius: 20px;
+    border-radius: 5px;
     padding: 30px;
     margin: 20px;
     border: 1px solid #eee;
 }
 
 .properties .item img {
-    border-radius: 20px;
+    border-radius: 5px;
 }
 
 .properties .item span.category {
@@ -1676,7 +1892,22 @@ Properties Style
     text-align: center;
 }
 
-/* 
+/*
+---------------------------------------------
+Incomes section
+---------------------------------------------
+*/
+
+
+.incomes-container {
+    padding: 15px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+}
+
+/*
 ---------------------------------------------
 Contact Style
 --------------------------------------------- 
@@ -1702,12 +1933,12 @@ Contact Style
 }
 
 .input-content #map {
-    border-radius: 10px;
+    border-radius: 5px;
     margin-bottom: 60px;
 }
 
 .input-content .item {
-    border-radius: 30px;
+    border-radius: 5px;
     box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
     background-color: #fff;
@@ -1742,7 +1973,7 @@ Contact Style
 .input-content #input-form {
     margin-left: 10px;
     margin-right: 10px;
-    border-radius: 30px;
+    border-radius: 5px;
     box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
     background-color: #fff;
@@ -1757,7 +1988,7 @@ Contact Style
 .input-content #input-form input {
     width: 100%;
     height: 30px;
-    border-radius: 22px;
+    border-radius: 5px;
     background-color: #f6f6f6;
     border: none;
     margin-bottom: 30px;
@@ -1770,9 +2001,9 @@ textarea {
     min-width: 240px;
     height: 52px;
     max-height: 200px;
-    border-bottom-left-radius: 20px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     border: none;
     background-color: #eaeaea;
     font-size: 14px;
@@ -1782,7 +2013,7 @@ textarea {
 .input-content #input-form button {
     background-color: #1e1e1e;
     height: 44px;
-    border-radius: 22px;
+    border-radius: 5px;
     padding: 0 20px;
     color: #fff;
     border: none;
@@ -1794,6 +2025,7 @@ textarea {
 .input-content #input-form button:hover {
     background-color: #DC3545;
 }
+
 
 /*
 ---------------------------------------------
@@ -1812,7 +2044,7 @@ Registration form
     max-width: 550px;
     background: #fff;
     padding: 35px;
-    border-radius: 30px;
+    border-radius: 5px;
     box-shadow: 1px 15px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -1838,7 +2070,7 @@ Registration form
     margin: 30px 0 10px 0;
     justify-content: space-between;
     border: 1px solid lightgrey;
-    border-radius: 30px;
+    border-radius: 5px;
     background-color: #efefef;
 
 }
@@ -1847,7 +2079,7 @@ Registration form
     margin: 0 0 20px 0;
     background-color: #1e1e1e;
     height: 44px;
-    border-radius: 30px;
+    border-radius: 5px;
     padding: 0 20px;
     color: #fff;
     border: none;
@@ -1867,7 +2099,7 @@ Registration form
 }
 
 .wrapper .btn {
-    border-radius: 30px;
+    border-radius: 5px;
 }
 
 .slide-controls .slide {
@@ -1893,7 +2125,7 @@ Registration form
     width: 50%;
     left: 0;
     z-index: 0;
-    border-radius: 30px;
+    border-radius: 5px;
     background: #DC3545;
     border: 1px solid #7a7a7a;
     transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -1978,10 +2210,10 @@ footer p a:hover {
 }
 
 
-/* 
+/*
 ---------------------------------------------
 Page Header Style
---------------------------------------------- 
+---------------------------------------------
 */
 
 .page-heading {
@@ -2016,10 +2248,10 @@ Page Header Style
 }
 
 
-/* 
+/*
 ---------------------------------------------
 Contact Page Style
---------------------------------------------- 
+---------------------------------------------
 */
 
 .contact-page #map {
@@ -2036,7 +2268,7 @@ Contact Page Style
 }
 
 .contact-page .item {
-    border-radius: 30px;
+    border-radius: 5px;
     box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
     background-color: #fff;
@@ -2068,7 +2300,7 @@ Contact Page Style
 
 .contact-page #contact-form {
     margin-left: 30px;
-    border-radius: 30px;
+    border-radius: 5px;
     box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
     background-color: #fff;
@@ -2083,7 +2315,7 @@ Contact Page Style
 .contact-page #contact-form input {
     width: 100%;
     height: 44px;
-    border-radius: 22px;
+    border-radius: 5px;
     background-color: #f6f6f6;
     border: none;
     margin-bottom: 30px;
@@ -2095,7 +2327,7 @@ Contact Page Style
     width: 100%;
     height: 150px;
     max-height: 180px;
-    border-radius: 22px;
+    border-radius: 5px;
     background-color: #f6f6f6;
     border: none;
     margin-bottom: 40px;
@@ -2106,7 +2338,7 @@ Contact Page Style
 .contact-page #contact-form button {
     background-color: #1e1e1e;
     height: 44px;
-    border-radius: 22px;
+    border-radius: 5px;
     padding: 0 20px;
     color: #fff;
     border: none;
@@ -2120,7 +2352,8 @@ Contact Page Style
 }
 
 .expenses-report {
-    padding-top: 150px;
+    margin: 0 auto;
+    padding-top: 70px;
 }
 
 .table-image {
@@ -2205,7 +2438,7 @@ POP-UP ALERT
     background-color: rgba(245, 245, 245, 0.93);
     padding: 25px;
     border: 2px solid grey;
-    border-radius: 20px;
+    border-radius: 5px;
     box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5)
 }
 
@@ -2290,7 +2523,7 @@ table {
     background-color: rgba(220, 53, 69, 0.59);
     margin: 0 auto;
     max-width: 600px;
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
     transition: 1.5s;
 }
@@ -2305,7 +2538,7 @@ table {
     background-color: rgba(33, 135, 84, 0.58);
     margin: 0 auto;
     max-width: 700px;
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
     transition: 1s;
 }
@@ -2329,7 +2562,7 @@ Residential entity section image
 .residential-entity-image {
     opacity: 85%;
     border: 1px solid gray;
-    border-radius: 15px;
+    border-radius: 5px;
     max-width: 200px;
     box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.5);
     transition: 1.2s;
@@ -2371,7 +2604,7 @@ Property section image
 
 .frame {
     border: 1px solid lightgray;
-    border-radius: 15px;
+    border-radius: 5px;
     padding: 5px;
 }
 
@@ -2393,7 +2626,7 @@ Delete button styles and animation
     min-width: max-content;
     border: 1px solid #575757;
     padding: 1px 18px 1px 8px;
-    border-radius: 30px;
+    border-radius: 5px;
     line-height: 24px;
     font-family: inherit;
     font-weight: 500;
@@ -2654,82 +2887,164 @@ Delete button styles and animation
 
 /*
 ---------------------------------------------
-Property request buttons
+Registration/change request section
+---------------------------------------------
+*/
+
+.request-wrapper {
+    padding: 0 10px;
+}
+
+.requester-container {
+    margin: 10px auto;
+    border-radius: 5px;
+    max-width: 75%;
+    border: 1px solid #bdbdbd;
+    overflow: hidden;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
+}
+
+.requester-container p {
+    font-size: 0.9em;
+}
+
+.requester-container p:first-child {
+    padding-top: 10px;
+}
+
+.requester-container p:last-child {
+    padding-bottom: 10px;
+}
+
+.requester-container h6 {
+    color: white;
+    background-color: #8d8d8d;
+    padding: 10px 0 10px 0;
+    border-bottom: 1px solid #bdbdbd;
+}
+
+.request-container {
+    margin: 10px auto;
+    border-radius: 5px;
+    max-width: 75%;
+    border: 1px solid #bdbdbd;
+    overflow: hidden;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
+}
+
+.request-container p {
+    padding: 4px 0;
+    font-size: 0.95em;
+}
+
+.request-container i {
+    font-size: 1.2em;
+}
+
+.request-container h6 {
+    color: white;
+    background-color: #DC3545;
+    padding: 10px 0 10px 0;
+    border-bottom: 1px solid #bdbdbd;
+}
+
+
+/*
+---------------------------------------------
+Registration/change request buttons
 ---------------------------------------------
 */
 
 .buttons-container {
     display: flex;
-    justify-content: center;
+    gap: 1px;
+    flex-direction: row;
+    justify-content: space-between;
     padding-top: 10px;
 }
 
+.buttons-container form {
+    min-width: 33.3%;
+    width: 50%;
+    background-color: #1f1f1f;
+}
+
+.buttons-container form button p {
+    color: #ffffff;
+    padding: 0;
+    margin: 0;
+    font-size: 0.95em;
+}
+
 #approve-with-change {
-    color: white;
-    background-color: #000000;
-    padding: 8px 10px;
-    border-bottom-left-radius: 30px;
-    border-top-left-radius: 30px;
-    border-right: 1px solid white;
+    width: 100%;
+    height: 100%;
+    padding: 0 5px;
     transition: 1.5s;
 }
 
 #approve-with-change:hover {
-    background-color: #147700;
+    background-color: #278a15;
     transition: 0.5s;
 }
 
 #approve-without-change {
-    color: white;
-
-    background-color: #000000;
-    padding: 8px 10px;
-    border-bottom-right-radius: 30px;
-    border-top-right-radius: 30px;
+    width: 100%;
+    height: 100%;
+    padding: 0 5px;
     transition: 1.5s;
 }
 
 #approve-without-change:hover {
-    background-color: #147700;
+    background-color: #278a15;
     transition: 0.5s;
 }
 
 #approve-without-change-inactive {
-    color: white;
-
+    width: 100%;
+    height: 100%;
+    padding: 0 5px;
+    transition: 1.5s;
     background-color: #bcbcbc;
+}
+
+#approve-change-request {
+    color: white;
+    width: 100%;
+    background-color: #000000;
     padding: 8px 10px;
-    border-bottom-right-radius: 30px;
-    border-top-right-radius: 30px;
     transition: 1.5s;
 }
 
+#approve-change-request:hover {
+    background-color: #147700;
+    transition: 0.5s;
+}
+
 #reject {
+    width: 100%;
+    height: 100%;
     color: white;
-    max-width: 100%;
-    background-color: #DC3545;
     padding: 8px 10px;
-    border-radius: 30px;
     transition: 1.5s;
 }
 
 #reject:hover {
-
-    background-color: rgba(220, 53, 69, 0.8);
-    transition: 1s;
+    background-color: #DC3545;
+    transition: 0.5s;
 }
 
+/*Button for cancellation of change request (performed by owner in Property details section)*/
 #cancel-change-request {
     color: white;
     max-width: 100%;
     background-color: #DC3545;
     padding: 8px 10px;
-    border-radius: 30px;
+    border-radius: 5px;
     transition: 1.5s;
 }
 
 #cancel-change-request:hover {
-
     background-color: #ce3342;
     transition: 1s;
 }
@@ -2814,10 +3129,176 @@ User avatar (small medium)
     display: inline-block;
 }
 
+
+/*
+---------------------------------------------
+Animated check box
+---------------------------------------------
+*/
+
+.cbx {
+    margin: auto;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    padding-bottom: 20px;
+}
+
+.cbx span {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translate3d(0, 0, 0);
+}
+
+.cbx span:first-child {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    transform: scale(1);
+    vertical-align: middle;
+    border: 1px solid #9098A9;
+    transition: all 0.2s ease;
+}
+
+.cbx span:first-child svg {
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    fill: none;
+    stroke: #FFFFFF;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16px;
+    stroke-dashoffset: 16px;
+    transition: all 0.3s ease;
+    transition-delay: 0.1s;
+    transform: translate3d(0, 0, 0);
+}
+
+.cbx span:first-child:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: #DC3545;
+    display: block;
+    transform: scale(0);
+    opacity: 1;
+    border-radius: 50%;
+}
+
+.cbx span:last-child {
+    padding-left: 8px;
+}
+
+.cbx:hover span:first-child {
+    border-color: #3b3b3b;
+}
+
+.inp-cbx:checked + .cbx span:first-child {
+    background: #DC3545;
+    border-color: #DC3545;
+    animation: wave 0.4s ease;
+}
+
+.inp-cbx:checked + .cbx span:first-child svg {
+    stroke-dashoffset: 0;
+}
+
+.inp-cbx:checked + .cbx span:first-child:before {
+    transform: scale(3.5);
+    opacity: 0;
+    transition: all 0.6s ease;
+}
+
+.inp-cbx:checked + [type="hidden"] + .cbx span:first-child {
+    background: #DC3545;
+    border-color: #DC3545;
+    animation: wave 0.4s ease;
+}
+
+.inp-cbx:checked + [type="hidden"] + .cbx span:first-child svg {
+    stroke-dashoffset: 0;
+}
+
+.inp-cbx:checked + [type="hidden"] + .cbx span:first-child:before {
+    transform: scale(3.5);
+    opacity: 0;
+    transition: all 0.6s ease;
+}
+
+
+@keyframes wave {
+    50% {
+        transform: scale(0.9);
+    }
+}
+
+
+/*
+---------------------------------------------
+Table nav bars
+---------------------------------------------
+*/
+
+.table-nav-section {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    overflow: hidden;
+}
+
+.table-nav-section .button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    background-color: #a1a1a1;
+    transition: 1.2s;
+}
+
+.table-nav-section .button:hover {
+    background-color: #d33141;
+    transition: 0.5s;
+}
+
+.table-nav-section a {
+    margin: 0 auto;
+    padding: 10px;
+    color: white;
+}
+
+.table-nav-section a:hover {
+    color: white;
+}
+
+.table-nav-section div {
+    margin: 0 auto;
+}
+
+.table-nav-section .active {
+    background-color: #d33141;
+    color: white;
+}
+
+.rounded {
+    border-radius: 5px;
+}
+
+.bottom-rounded {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+
 /*
 ---------------------------------------------
 Responsive Style
---------------------------------------------- 
+---------------------------------------------
 */
 
 body {
@@ -2859,8 +3340,184 @@ body {
     }
 
 
-}
+    .administration-nav-bar {
+        min-width: 80%;
+        flex-direction: column;
+        max-width: 50%;
+        background-color: white;
+    }
 
+    .administration-nav-bar a {
+        line-height: 27px;
+        color: black;
+    }
+
+    .administration-nav-bar .animation {
+        height: 16.66%;
+        width: 100%;
+    }
+
+    .administration-nav-bar a:nth-child(1) {
+        height: 16.66%;
+        width: 100%;
+    }
+
+    .administration-nav-bar a:nth-child(2) {
+        height: 16.66%;
+        width: 100%;
+    }
+
+    .administration-nav-bar a:nth-child(3) {
+        height: 16.66%;
+        width: 100%;
+    }
+
+    .administration-nav-bar a:nth-child(4) {
+        height: 16.66%;
+        width: 100%;
+    }
+
+    .administration-nav-bar a:nth-child(5) {
+        height: 16.66%;
+        width: 100%;
+    }
+
+    .administration-nav-bar a:nth-child(6) {
+        height: 16.66%;
+        width: 100%;
+    }
+
+    .administration-nav-bar .start-summary, a:nth-child(1):hover ~ .animation {
+        background-color: #c1c1c1;
+        height: 16.66%;
+        width: 100%;
+        left: 0;
+        top: 0;
+    }
+
+    .administration-nav-bar .start-owners, a:nth-child(2):hover ~ .animation {
+        background-color: #c1c1c1;
+        height: 16.66%;
+        width: 100%;
+        left: 0;
+        top: 16.66%;
+    }
+
+    .administration-nav-bar .start-properties, a:nth-child(3):hover ~ .animation {
+        background-color: #c1c1c1;
+        height: 16.66%;
+        width: 100%;
+        left: 0;
+        top: 33.32%;
+    }
+
+    .administration-nav-bar .start-fees, a:nth-child(4):hover ~ .animation {
+        background-color: #c1c1c1;
+        height: 16.66%;
+        width: 100%;
+        left: 0;
+        top: 49.98%;
+    }
+
+    .administration-nav-bar .start-financial, a:nth-child(5):hover ~ .animation {
+        background-color: #c1c1c1;
+        height: 16.66%;
+        width: 100%;
+        left: 0;
+        top: 66.64%;
+    }
+
+    .administration-nav-bar .start-details, a:nth-child(6):hover ~ .animation {
+        background-color: #c1c1c1;
+        height: 16.66%;
+        width: 100%;
+        left: 0;
+        top: 83.30%;
+    }
+
+    .property-nav-bar {
+        min-width: 80%;
+        flex-direction: column;
+        max-width: 50%;
+        background-color: white;
+    }
+
+    .property-nav-bar a {
+        line-height: 27px;
+        color: black;
+    }
+
+    .property-nav-bar .transition {
+        height: 20%;
+        width: 100%;
+    }
+
+    .property-nav-bar a:nth-child(1) {
+        height: 20%;
+        width: 100%;
+    }
+
+    .property-nav-bar a:nth-child(2) {
+        height: 20%;
+        width: 100%;
+    }
+
+    .property-nav-bar a:nth-child(3) {
+        height: 20%;
+        width: 100%;
+    }
+
+    .property-nav-bar a:nth-child(4) {
+        height: 20%;
+        width: 100%;
+    }
+
+    .property-nav-bar a:nth-child(5) {
+        height: 20%;
+        width: 100%;
+    }
+
+
+    .property-nav-bar .property-back, a:nth-child(1):hover ~ .transition {
+        background-color: #c1c1c1;
+        height: 20%;
+        width: 100%;
+        left: 0;
+        top: 0;
+    }
+
+    .property-nav-bar .property-summary, a:nth-child(2):hover ~ .transition {
+        background-color: #c1c1c1;
+        height: 20%;
+        width: 100%;
+        left: 0;
+        top: 20%;
+    }
+
+    .property-nav-bar .property-fees, a:nth-child(3):hover ~ .transition {
+        background-color: #c1c1c1;
+        height: 20%;
+        width: 100%;
+        left: 0;
+        top: 40%;
+    }
+
+    .property-nav-bar .property-details, a:nth-child(4):hover ~ .transition {
+        background-color: #c1c1c1;
+        height: 20%;
+        width: 100%;
+        left: 0;
+        top: 60%;
+    }
+
+    .property-nav-bar .property-re, a:nth-child(5):hover ~ .transition {
+        background-color: #c1c1c1;
+        height: 20%;
+        width: 100%;
+        left: 0;
+        top: 80%;
+    }
+}
 
 @media (max-width: 766px) {
 
@@ -2870,6 +3527,18 @@ body {
 
     .header-area .main-nav small {
         display: none;
+    }
+
+    p, b, label, strong, a, span, li, input, button, small, h1, h3 h2, h4, h6, .text-light {
+        font-size: 0.8em;
+    }
+
+    h5 {
+        font-size: 1.2em;
+    }
+
+    .page-heading h3 {
+        font-size: 1.4em;
     }
 }
 
@@ -2985,7 +3654,10 @@ body {
     #rejected-requests,
     #pending-requests,
     #owners-table,
-    #bank-details {
+    #bank-details,
+    #blocked-overpayments,
+    #expenses-table,
+    #monthly-fees-table {
         display: flex;
     }
 }

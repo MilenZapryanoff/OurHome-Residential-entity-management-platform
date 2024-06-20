@@ -56,6 +56,71 @@ public class PropertyManageController {
     }
 
     /**
+     * Property change requests in Administration
+     *
+     * @param id property id
+     * @return view administration-change-requests
+     */
+    @GetMapping("/administration/property/change-requests/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityChangeRequests(@PathVariable("id") Long id) {
+
+        return new ModelAndView("administration/administration-property-change-requests")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
+    }
+
+
+    /**
+     * Change request details in Administration
+     *
+     * @param id property id
+     * @return view administration- pending property change request
+     */
+    @GetMapping("/administration/property/pending/request/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView propertyChangeRequest(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
+                                              @PathVariable("id") Long id) {
+
+        return new ModelAndView("administration/administration-property-pending-request")
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("property", getProperty(id));
+    }
+
+    /**
+     * Approve property pending change request
+     *
+     * @param id property id
+     */
+    @PostMapping("/administration/property/pending/request/approve/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView propertyChangeRequestApprove(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
+                                              @PathVariable("id") Long id) {
+
+        propertyService.approvePropertyChangeRequest(id);
+
+        return new ModelAndView("redirect:/administration/property/change-requests/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
+    }
+
+    /**
+     * Reject property pending change request
+     *
+     * @param id property id
+     */
+    @PostMapping("/administration/property/pending/request/reject/{id}")
+    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
+    public ModelAndView propertyChangeRequestReject(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
+                                              @PathVariable("id") Long id) {
+
+        propertyService.rejectPropertyChangeRequest(id);
+
+        return new ModelAndView("redirect:/administration/property/change-requests/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
+    }
+
+
+
+
+    /**
      * Unlink property owner
      *
      * @param propertyManageBindingModel carries information about the entityId

@@ -96,68 +96,27 @@
                 <h3>Summary</h3>
                 <span th:text="'Property №: ' + ${property.getNumber()}"></span>
                 <div th:if="${messageError}" class="err-msg">
-                    <h5 class="text-white">Message not sent</h5>
-                    <p class="text-white">Text length must be up to 2000 symbols!</p>
+                    <h5 class="text-light">Message not sent</h5>
+                    <p class="text-light">Text length must be up to 2000 symbols!</p>
                 </div>
-                <div th:if="${messageSent}" class="success-msg"><h5 class="text-white">MESSAGE SENT!</h5></div>
+                <div th:if="${messageSent}" class="success-msg"><h5 class="text-light">MESSAGE SENT!</h5></div>
             </div>
         </div>
     </div>
 </div>
-<br><br>
+
 <!-- ***** Residential entity section ***** -->
 <div class="section single-property">
     <div class="container">
         <div class="row">
-            <!--start of buttons-->
-            <div class="tabs-content">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item" role="presentation">
-                        <div class="buttons">
-                            <a class="nav-link active" th:href="@{/property/summary/{id}(id=${property.getId()})}">
-                                <h5 class="text-danger">Summary</h5>
-                                <p class="text-secondary">and property status</p></a>
-                        </div>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <div th:if="${property.isObtained()}" class="buttons">
-                            <a class="nav-link" th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">
-                                <h5>Monthly fees</h5>
-                                <p class="text-secondary">and due amounts</p>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <div class="buttons">
-                            <a class="nav-link" th:href="@{/property/details/{id}(id=${property.getId()})}">
-                                <h5>Property details</h5>
-                                <p class="text-secondary">and settings</p>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <div th:if="${property.isObtained()}" class="buttons">
-                            <a class="nav-link" th:href="@{/property/re/data/{id}(id=${property.getId()})}">
-                                <h5>Residential Entity</h5>
-                                <p class="text-secondary">data and reports</p>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <!--        end of buttons-->
-
-
-            <div class="container">
-                <div class="property">
-                    <div class="tabs-content">
-                        <ul class="nav nav-tabs">
-                            <li>
-                                <a th:href="@{/property}" class="nav-link">Back</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <!--Start of sub-menus-->
+            <div class="property-nav-bar">
+                <a th:href="@{/property}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
+                <a href=#>Summary</a>
+                <a th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">Monthly fees</a>
+                <a th:href="@{/property/details/{id}(id=${property.getId()})}">Property details</a>
+                <a th:href="@{/property/re/data/{id}(id=${property.getId()})}">Residential Entity</a>
+                <div class="transition property-summary"></div>
             </div>
 
             <div class="col-lg-7">
@@ -374,10 +333,10 @@
                                        autocomplete="off"
                                        th:field="*{message}"
                                        th:errorclass="bg-danger"></textarea>
-                                <button style="border-radius: 30px" type="submit"
+                                <button type="submit"
                                         class="btn">Send
                                 </button>
-                                <button style="border-radius: 30px" type="button"
+                                <button type="button"
                                         class="btn text-bg-danger"
                                         onclick="closeForm()">
                                     Close

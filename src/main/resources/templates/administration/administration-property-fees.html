@@ -116,7 +116,7 @@
         </div>
         <!--Property fee section details data-->
         <div class="administration monthly-fee-details">
-            <div class="info-table col-lg-10" style="margin: 0 auto">
+            <div class="info-table col-lg-12" style="margin: 0 auto">
                 <h4 id="overpayment-post-nav" class="category text-danger text-center"> PROPERTY FEE DETAILS</h4>
                 <ul>
                     <li style="padding: 5px 0; margin: 0"
@@ -538,10 +538,10 @@
 
                         </td>
                         <td>
-                            <p th:text="${#temporals.format(propertyFee.getPeriodStart(), 'dd-MM-yyyy')}">
+                            <p th:text="${#temporals.format(propertyFee.getPeriodStart(), 'dd.MM.yyyy')}">
                         </td>
                         <td>
-                            <p th:text="${#temporals.format(propertyFee.getPeriodEnd(), 'dd-MM-yyyy')}">
+                            <p th:text="${#temporals.format(propertyFee.getPeriodEnd(), 'dd.MM.yyyy')}">
                         </td>
                         <td style="min-width: 140px">
                             <p th:text="${propertyFee.getDescription()}">

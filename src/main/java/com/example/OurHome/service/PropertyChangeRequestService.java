@@ -15,4 +15,6 @@ public interface PropertyChangeRequestService {
     void detachPropertyType(Long propertyTypeId);
 
     void deleteAllRegistrationRequests(Long residentialEntityId);
+
+    void markChangeRequestAsRejected(PropertyChangeRequest propertyChangeRequest);
 }

@@ -94,10 +94,10 @@
     <div class="container">
         <div class="row">
             <h3>Edit fee</h3>
-            <h4 class="text-white"><i class="fa-regular fa-pen-to-square"></i></h4>
+            <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
             <div th:if="${feeChangeFailed}" class="err-msg">
-                <h5 class="text-white">Fee change failed!</h5>
-                <p class="text-white">Fee amount cannot be 0!<br>At lease one of the fee components must be number
+                <h5 class="text-light">Fee change failed!</h5>
+                <p class="text-light">Fee amount cannot be 0!<br>At lease one of the fee components must be number
                     greater than 0!</p>
             </div>
         </div>
@@ -221,11 +221,9 @@
                         <button type="submit" id="form-submit"
                                 class="orange-button">Submit
                         </button>
-                        <button class="orange-button" id="form-cancel" type="button">
-                            <a th:href="@{/administration/fees/details/{id}(id=${propertyFeeEditBindingModel.getPropertyId()})}">
-                                <div class="text-light">Cancel</div>
-                            </a>
-                        </button>
+                        <a th:href="@{/administration/fees/details/{id}(id=${propertyFeeEditBindingModel.getPropertyId()})}">
+                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel</button>
+                        </a>
                     </fieldset>
                 </div>
             </form>

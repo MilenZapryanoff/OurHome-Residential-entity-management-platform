@@ -95,12 +95,12 @@
     <div class="container">
         <div class="row">
             <h3>Edit Property type</h3>
-            <h4 class="text-white"><i class="fa-regular fa-pen-to-square"></i></h4>
-            <p th:unless="${editFailed}" th:class="text-white"
+            <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
+            <p th:unless="${editFailed}" th:class="text-light"
                th:text="'Propery Type : ' + ${propertyTypeEditBindingModel.getDescription()}"
                class="category text-black"></p>
             <div th:if="${editFailed}" class="err-msg">
-                <h5 class="text-white">Edit failed!</h5>
+                <h5 class="text-light">Edit failed!</h5>
             </div>
         </div>
     </div>
@@ -143,8 +143,8 @@
                     <fieldset>
                         <label for="totalFlatSpace"><b>Total flat space (square meters)</b></label>
                         <p th:if="${#fields.hasErrors('totalFlatSpace')}"
-                               th:errors="*{totalFlatSpace}"
-                               class="text-danger">Total flat space error message</p>
+                           th:errors="*{totalFlatSpace}"
+                           class="text-danger">Total flat space error message</p>
                         <input type="text" id="totalFlatSpace"
                                placeholder="Enter total flat space..."
                                autocomplete="on" required
@@ -155,8 +155,8 @@
                     <fieldset>
                         <label for="totalFlatSpace"><b>Fund "Repair" (habitable)</b></label>
                         <p th:if="${#fields.hasErrors('fundRepairHabitable')}"
-                               th:errors="*{fundRepairHabitable}"
-                               class="text-danger">Fund repair error message</p>
+                           th:errors="*{fundRepairHabitable}"
+                           class="text-danger">Fund repair error message</p>
                         <label for="fundRepairAmount"></label>
                         <input type="text" id="fundRepairAmount"
                                placeholder="Enter amount..."
@@ -168,8 +168,8 @@
                     <fieldset>
                         <label for="totalFlatSpace"><b>Fund "Repair" (non-habitable)</b></label>
                         <p th:if="${#fields.hasErrors('fundRepairNotHabitable')}"
-                               th:errors="*{fundRepairNotHabitable}"
-                               class="text-danger">Fund repair error message</p>
+                           th:errors="*{fundRepairNotHabitable}"
+                           class="text-danger">Fund repair error message</p>
                         <label for="fundRepairNotHabitable"></label>
                         <input type="text" id="fundRepairNotHabitable"
                                placeholder="Enter amount..."
@@ -182,12 +182,9 @@
                         <button type="submit" id="form-submit"
                                 class="orange-button">Submit
                         </button>
-                        <button class="orange-button" id="form-cancel-act"
-                                type="button">
-                            <a th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
-                                <div class="text-light">Cancel</div>
-                            </a>
-                        </button>
+                        <a th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel</button>
+                        </a>
                     </fieldset>
                 </div>
             </form>

@@ -105,7 +105,7 @@ public class OwnersController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyApproveWithDataChange(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
-        propertyService.approvePropertyWithDataChange(id, true);
+        propertyService.approvePropertyRegistrationWithDataChange(id, true);
 
         return new ModelAndView("redirect:/administration/owners/pending/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
     }
@@ -121,7 +121,7 @@ public class OwnersController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyApproveWithoutDataChange(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel, @PathVariable("id") Long id) {
 
-        propertyService.approvePropertyWithoutDataChange(id);
+        propertyService.approvePropertyRegistrationWithoutDataChange(id);
 
         return new ModelAndView("redirect:/administration/owners/pending/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
     }

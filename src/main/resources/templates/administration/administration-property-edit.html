@@ -96,11 +96,11 @@
         <div class="row">
             <h3 th:if="${property.isValidated()}">Edit property data</h3>
             <h3 th:unless="${property.isValidated()}">Set property data</h3>
-            <p th:unless="${editFailed}" th:class="text-white" th:text="'Propery №: ' + ${property.getNumber()}"
+            <p th:unless="${editFailed}" th:class="text-light" th:text="'Propery №: ' + ${property.getNumber()}"
                class="category text-black"></p>
             <div th:if="${editFailed}" class="err-msg">
-                <h5 class="text-white">Edit failed!</h5>
-                <p class="text-white"
+                <h5 class="text-light">Edit failed!</h5>
+                <p class="text-light"
                    th:text="'Property №' + ${propertyEditBindingModel.getNumber()} + ' already exists in this Residential entity!'"></p>
             </div>
         </div>
@@ -119,8 +119,8 @@
                     <fieldset>
                         <label for="number"><b>Property №</b></label>
                         <p th:if="${#fields.hasErrors('number')}"
-                               th:errors="*{number}"
-                               class="text-danger">Street name error message</p>
+                           th:errors="*{number}"
+                           class="text-danger">Street name error message</p>
                         <input type="number" id="number"
                                placeholder="Enter street name..." required
                                th:field="*{number}"
@@ -148,8 +148,8 @@
                     <fieldset>
                         <label for="floor"><b>Floor</b></label>
                         <p th:if="${#fields.hasErrors('floor')}"
-                               th:errors="*{floor}"
-                               class="text-danger">Floor error message</p>
+                           th:errors="*{floor}"
+                           class="text-danger">Floor error message</p>
                         <input type="text" id="floor"
                                placeholder="Enter floor..."
                                autocomplete="on"
@@ -160,8 +160,8 @@
                     <fieldset>
                         <label for="numberOfAdults"><b>Number of adults</b></label>
                         <p th:if="${#fields.hasErrors('numberOfAdults')}"
-                               th:errors="*{numberOfAdults}"
-                               class="text-danger">Adults number error message</p>
+                           th:errors="*{numberOfAdults}"
+                           class="text-danger">Adults number error message</p>
                         <input type="number" id="numberOfAdults"
                                placeholder="Enter number of adults..."
                                autocomplete="on" required
@@ -172,8 +172,8 @@
                     <fieldset>
                         <label for="numberOfChildren"><b>Number of children</b></label>
                         <p th:if="${#fields.hasErrors('numberOfChildren')}"
-                               th:errors="*{numberOfChildren}"
-                               class="text-danger">Children error message</p>
+                           th:errors="*{numberOfChildren}"
+                           class="text-danger">Children error message</p>
                         <input type="number" id="numberOfChildren"
                                placeholder="Enter number of children..."
                                autocomplete="on" required
@@ -184,8 +184,8 @@
                     <fieldset>
                         <label for="numberOfPets"><b>Number of pets</b></label>
                         <p th:if="${#fields.hasErrors('numberOfPets')}"
-                               th:errors="*{numberOfPets}"
-                               class="text-danger">Number of pets message</p>
+                           th:errors="*{numberOfPets}"
+                           class="text-danger">Number of pets message</p>
                         <input type="number" id="numberOfPets"
                                placeholder="Enter number of pets ..."
                                autocomplete="on" required
@@ -194,22 +194,26 @@
                                th:value="${propertyEditBindingModel.getNumberOfPets()}">
                     </fieldset>
                     <fieldset>
-                        <label for="isNotHabitable"><b>Property is not habitable</b></label>
-                        <input name="isNotHabitable" id="isNotHabitable"
-                               type="checkbox"
+                        <input class="inp-cbx" name="isNotHabitable" id="isNotHabitable" type="checkbox"
                                th:field="*{notHabitable}"
-                               th:value="${property.notHabitable}">
+                               th:value="${property.notHabitable}"
+                               hidden="hidden">
+                        <label class="cbx" for="isNotHabitable">
+                        <span>
+                    <svg width="12px" height="10px" viewbox="0 0 12 10"><polyline
+                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                        </span>
+                            <span><b>Property is not habitable</b></span>
+                        </label>
                     </fieldset>
                     <fieldset>
                         <button type="submit" id="form-submit"
                                 class="orange-button">Submit
                         </button>
-                        <button class="orange-button" id="form-cancel-rej"
-                                type="button">
-                            <a th:href="@{/administration/property/active/{id}(id=${property.getResidentialEntity().getId()})}">
-                                <div class="text-light">Cancel</div>
-                            </a>
-                        </button>
+                        <a th:href="@{/administration/property/active/{id}(id=${property.getResidentialEntity().getId()})}">
+                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel
+                            </button>
+                        </a>
                     </fieldset>
                 </div>
             </form>

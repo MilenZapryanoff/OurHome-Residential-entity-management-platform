@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
 public interface PropertyRepository extends JpaRepository<Property, Long> {
 
-    @Query("SELECT COUNT(p) FROM properties p where p.isValidated = false AND p.isRejected = false AND p.residentialEntity.id=:id")
-    Long countNotVerifiedPropertiesByResidentialEntity(@Param("id") Long id);
+//    @Query("SELECT COUNT(p) FROM properties p where p.isValidated = false AND p.isRejected = false AND p.residentialEntity.id=:id")
+//    Long countNotVerifiedPropertiesByResidentialEntity(@Param("id") Long id);
 
     @Query("SELECT COUNT(p) FROM properties p where p.isObtained = false AND p.isRejected = false AND p.residentialEntity.id=:id AND p.propertyRegisterRequest is not null")
     Long countPendingPropertyObtainsByResidentialEntity(@Param("id") Long id);
@@ -32,6 +33,9 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
 
     @Query("SELECT p FROM properties p where p.isObtained = false AND p.isRejected = false AND p.residentialEntity.id=:residentialEntityId AND p.propertyRegisterRequest is not null ORDER BY p.number")
     List<Property> findPendingPropertyObtainsByResidentialEntity(Long residentialEntityId);
+
+    @Query("SELECT p FROM properties p where p.residentialEntity.id=:residentialEntityId AND p.propertyChangeRequest is not null AND p.propertyChangeRequest.isRejected = false ORDER BY p.number")
+    List<Property> findPendingChangeRequestsByResidentialEntity(Long residentialEntityId);
 
     @Query("SELECT p FROM properties p where p.residentialEntity.id=:residentialEntityId and p.monthlyFeeFundMm is not null ORDER BY p.number")
     List<Property> findAllPropertiesWithSetFee(Long residentialEntityId);
@@ -66,6 +70,9 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("SELECT count(p) FROM properties p where p.propertyType is null AND p.notHabitable = true AND p.residentialEntity.id=:residentialEntityId")
     Long countNonHabitablePropertiesWithoutPropertyTypeByREId(Long residentialEntityId);
 
+    @Query("SELECT sum(p.overpayment) FROM properties p where p.residentialEntity.id=:residentialEntityId")
+    BigDecimal sumOfAllOverpayments(Long residentialEntityId);
+
     @Query("SELECT p FROM properties p where p.residentialEntity.id=:id ORDER BY p.number, p.id")
     List<Property> findAllPropertiesByResidentialEntity(Long id);
 
@@ -78,4 +85,6 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("SELECT count(p) FROM properties p WHERE p.residentialEntity.id =:residentialEntityId AND p.autoFee = false")
     Long countAllPropertiesWithAutoFeeOff(Long residentialEntityId);
 
+    @Query("SELECT COUNT(p) FROM properties p where p.residentialEntity.id=:id AND p.propertyChangeRequest is not null AND p.propertyChangeRequest.isRejected = false")
+    Long countPropertiesWithActiveChangeRequest(@Param("id") Long id);
 }

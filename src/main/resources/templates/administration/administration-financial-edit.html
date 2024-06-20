@@ -94,7 +94,7 @@
     <div class="container">
         <div class="row">
             <h3>Edit expense</h3>
-            <h4 class="text-white"><i class="fa-regular fa-pen-to-square"></i></h4>
+            <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
         </div>
     </div>
 </div>
@@ -112,8 +112,8 @@
                     <fieldset>
                         <label for="expenseAmount"><b>Expense amount</b></label><br>
                         <p th:if="${#fields.hasErrors('expenseAmount')}"
-                               th:errors="*{expenseAmount}"
-                               class="text-danger">Expense amount error message</p>
+                           th:errors="*{expenseAmount}"
+                           class="text-danger">Expense amount error message</p>
                         <input type="number" step="any"
                                id="expenseAmount"
                                placeholder="Enter expense amount..."
@@ -125,8 +125,8 @@
                     <fieldset>
                         <label for="expenseDate"><b>Expense date</b></label>
                         <p th:if="${#fields.hasErrors('expenseDate')}"
-                               th:errors="*{expenseDate}"
-                               class="text-danger">Expense date error...</p>
+                           th:errors="*{expenseDate}"
+                           class="text-danger">Expense date error...</p>
                         <input type="date"
                                id="expenseDate"
                                th:field="*{expenseDate}"
@@ -136,8 +136,8 @@
                     <fieldset>
                         <label for="description"><b>Comment</b></label>
                         <p th:if="${#fields.hasErrors('description')}"
-                               th:errors="*{description}"
-                               class="text-danger">Description error message</p>
+                           th:errors="*{description}"
+                           class="text-danger">Description error message</p>
                         <input type="text"
                                id="description" required
                                placeholder="Enter comment..."
@@ -149,11 +149,9 @@
                         <button type="submit" id="form-submit"
                                 class="orange-button">Submit
                         </button>
-                        <button class="orange-button" id="form-cancel" type="button">
-                            <a th:href="@{/administration/financial/expenses/{id}(id=${entityId})}">
-                                <div class="text-light">Cancel</div>
-                            </a>
-                        </button>
+                        <a th:href="@{/administration/financial/expenses/{id}(id=${entityId})}">
+                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel</button>
+                        </a>
                     </fieldset>
                 </div>
             </form>

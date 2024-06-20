@@ -21,7 +21,6 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 
 </head>
-
 <body>
 
 <!-- ***** Preloader Start ***** -->
@@ -35,7 +34,6 @@
         </div>
     </div>
 </div>
-<!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
 <div th:replace="~{fragments/header}" class="sub-header">
@@ -99,127 +97,87 @@
             </div>
 
             <div th:if="${messageError}" class="err-msg">
-                <h5 class="text-white">Message not sent</h5>
-                <p class="text-white">Text length must be up to 2000 symbols!</p>
+                <h5 class="text-light">Message not sent</h5>
+                <p class="text-light">Text length must be up to 2000 symbols!</p>
             </div>
             <div th:if="${messageSent}" class="success-msg">
-                <h5 class="text-white">MESSAGE SENT!</h5>
+                <h5 class="text-light">MESSAGE SENT!</h5>
             </div>
 
             <div th:if="${residentRemoved}" class="success-msg">
-                <h5 class="text-white">Resident successfully removed from this Residential entity!</h5>
-                <p class="text-white">User's properties ownership has been updated!</p>
+                <h5 class="text-light">Resident successfully removed from this Residential entity!</h5>
+                <p class="text-light">User's properties ownership has been updated!</p>
             </div>
         </div>
     </div>
 </div>
-<br><br>
+<!--<br><br>-->
 
 <div class="container">
     <!--start of Sub-menu-->
-    <div class="single-property section" id="post-action-nav">
-        <div class="tabs-content">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <div class="button">
-                        <a class="nav-link" th:href="@{/administration}">
-                            <h5>Summary</h5>
-                            <p class="text-secondary">of residential entity</p></a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class="button">
-                        <a class="nav-link active"
-                           href="#">
-                            <h5 class="text-danger">Owners</h5>
-                            <p class="text-secondary">data & management</p></a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class="button">
-                        <a class="nav-link"
-                           th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Properties</h5>
-                            <p class="text-secondary">data & management</p></a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class="button">
-                        <a class="nav-link" th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Monthly fees</h5>
-                            <p class="text-secondary">calculations & management</p></a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class="button">
-                        <a class="nav-link"
-                           th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Financial</h5>
-                            <p class="text-secondary">reports & management</p></a>
-                    </div>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <div class="button">
-                        <a class="nav-link" th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
-                            <h5>Details</h5>
-                            <p class="text-secondary">data & settings</p></a>
-                    </div>
-                </li>
-            </ul>
-        </div>
+
+    <div class="administration-nav-bar">
+        <a th:href="@{/administration}">Summary</a>
+        <a href="#">Owners</a>
+        <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">Properties</a>
+        <a th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">Monthly fees</a>
+        <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Financial</a>
+        <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Details</a>
+        <div class="animation start-owners"></div>
     </div>
 
-    <!--Sub-menu buttons-->
-    <div class="section-contact" id="property-post-nav">
-        <div class="section administration">
-            <div class="tabs-content row">
-                <ul class="nav nav-tabs" style="gap: 10px; justify-content: center">
-                    <li class="nav-item">
-                        <div class="button" id="active-registrations">
-                            <a class="nav-link active"
-                               href=#active-registrations>
-                                <div class="text-light"><i class="fa-solid fa-user-check"></i> Owners
-                                    <sup th:if="${residentialEntity.getResidents().size()} > 0"
-                                         th:text="'  '+ ${residentialEntity.getResidents().size()}">
-                                    </sup>
-                                </div>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link"
-                               th:href="@{/administration/owners/pending/{id}(id=${residentialEntity.getId()})}">
-                                <div class="text-light"><i class="fa-solid fa-hourglass-half"></i> Pending requests
-                                    <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
-                                         th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
-                                    </sup>
-                                </div>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="button">
-                            <a class="nav-link"
-                               th:href="@{/administration/owners/rejected/{id}(id=${residentialEntity.getId()})}">
-                                <div class="text-light"><i class="fa-solid fa-ban"></i> Rejected requests
-                                    <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
-                                         th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
-                                    </sup>
-                                </div>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+
+    <div class="text-center administration-header">
+        <h4 class="category">OWNERS SECTION</h4>
+        <br>
+        <p>Owners section contains information about all users with access to the Residential entity.</p>
+        <p>Every user with access to this Residential Entity can request an ownership of a property. You will find such requests in <a th:href="@{/administration/owners/pending/{id}#active-registrations(id=${residentialEntity.getId()})}">Pending requests</a> section.</p>
+        <p>If request is approved, the owner of this property updates. Otherwise, if registration request is rejected by you, the property ownership won't be changed.</p>
+        <p><a th:href="@{/administration/owners/rejected/{id}#active-registrations(id=${residentialEntity.getId()})}">Rejected requests</a>
+            section contains information about such requests.</p>
     </div>
 
+    <!--Owners table-->
     <div class="administration">
-        <div class="info-table">
-            <!--Start of heading-->
+        <!--Submenu nav buttons-->
+        <div class="table-nav-section">
+            <a class="button active nav-link" id="active-registrations"
+               href=#active-registrations>
+                <div class="text-center">
+                    <i class="fa-solid fa-user-check"></i> <span>Owners</span>
+                    <sup th:if="${residentialEntity.getResidents().size()} > 0"
+                         th:text="'  '+ ${residentialEntity.getResidents().size()}">
+                    </sup>
+                </div>
+            </a>
+            <a class="button nav-link"
+               th:href="@{/administration/owners/pending/{id}(id=${residentialEntity.getId()})}">
+                <div class="text-center"><i class="fa-solid fa-hourglass-half"></i> <span>Pending requests</span>
+                    <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
+                         th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
+                    </sup>
+                </div>
+            </a>
+            <a class="button nav-link"
+               th:href="@{/administration/owners/rejected/{id}(id=${residentialEntity.getId()})}">
+                <div class="text-center"><i class="fa-solid fa-ban"></i> <span>Rejected requests</span>
+                    <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                         th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
+                    </sup>
+                </div>
+            </a>
+        </div>
+
+        <div class="info-table bottom-rounded">
             <div class="text-center">
                 <h4 class="category">LIST OF PROPERTY OWNERS</h4>
+                <br>
+                <p>This register contains a list of all users that have obtained access to this Residential entity.</p>
+                <p>Once entered a correct Residential entity ID and Access code users get access to Residential Entity
+                    and can request a property ownership.</p>
+                <p>You can remove users from the Residential entity by clicking "Remove" button. Residential entity
+                    Access code can be changed as well. This will prevent unauthorized access.</p>
+                <br>
             </div>
             <!--Start of counter-->
             <div class="tabs-content">
@@ -290,9 +248,11 @@
                              alt="No property registered">
                     </td>
                     <td>
-                        <div class="user-avatar-small" >
-                            <img th:if="${resident.getAvatarPath() != null}" th:src="@{${resident.getAvatarPath()}}" alt="Avatar">
-                            <img th:unless="${resident.getAvatarPath() != null}" src="/avatars/default.jpg" alt="Default Avatar">
+                        <div class="user-avatar-small">
+                            <img th:if="${resident.getAvatarPath() != null}" th:src="@{${resident.getAvatarPath()}}"
+                                 alt="Avatar">
+                            <img th:unless="${resident.getAvatarPath() != null}" src="/avatars/default.jpg"
+                                 alt="Default Avatar">
                         </div>
                     </td>
                     <td>
@@ -339,7 +299,7 @@
                             <button class="form-control text-bg-danger"
                                     title="Remove moderator access"
                                     th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}"
-                                    type="submit"><small class="text-white">Moderator</small>
+                                    type="submit"><small class="text-light">Moderator</small>
                             </button>
                         </form>
                     </td>
@@ -359,17 +319,17 @@
                             <div class="input-container">
                                 <label>
                                     <textarea class="messageText"
-                                          required
-                                          th:errorclass="bg-danger"
-                                          th:field="*{message}"
-                                          th:placeholder="'Send message to ' + ${resident.getFirstName()}"
-                                          type="text">
+                                              required
+                                              th:errorclass="bg-danger"
+                                              th:field="*{message}"
+                                              th:placeholder="'Send message to ' + ${resident.getFirstName()}"
+                                              type="text">
                                     </textarea>
                                 </label>
                                 <button class="send-message-button" onclick="return confirmSendMessage()"
                                         title="Send"
                                         type="submit"
-                                hidden="hidden">
+                                        hidden="hidden">
                                 </button>
                             </div>
                         </form>

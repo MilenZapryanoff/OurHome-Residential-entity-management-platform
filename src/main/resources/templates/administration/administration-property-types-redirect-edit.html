@@ -95,11 +95,11 @@
     <div class="container">
         <div class="row">
             <h3>Edit Property type</h3>
-            <p th:unless="${editFailed}" th:class="text-white"
+            <p th:unless="${editFailed}" th:class="text-light"
                th:text="'Propery Type : ' + ${propertyTypeEditBindingModel.getDescription()}"
                class="category text-black"></p>
             <div th:if="${editFailed}" class="err-msg">
-                <h5 class="text-white">Edit failed!</h5>
+                <h5 class="text-light">Edit failed!</h5>
             </div>
         </div>
     </div>

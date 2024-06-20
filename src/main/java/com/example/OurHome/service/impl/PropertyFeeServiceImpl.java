@@ -39,6 +39,20 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     }
 
     /**
+     * Method for setting monthlyFee params in case of Overpayment.
+     *
+     * @param totalMonthlyFee Total Monthly fee
+     * @param newMonthlyFee   NewMonthlyFee
+     */
+    private static void setMonthlyFeeWithoutOverpayment(PropertyFee newMonthlyFee, BigDecimal totalMonthlyFee) {
+        newMonthlyFee.setFeeAmount(totalMonthlyFee);
+        newMonthlyFee.setDueAmount(totalMonthlyFee);
+        newMonthlyFee.setPaid(false);
+        newMonthlyFee.setOverpaidAmountStart(BigDecimal.valueOf(0));
+        newMonthlyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
+    }
+
+    /**
      * Find PropertyFee by id
      *
      * @param propertyFeeId property Fee id
@@ -62,7 +76,6 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
         if (propertyCreationEvent.getProperty().getPropertyFees().isEmpty()) {
             PropertyFee newPropertyFee = new PropertyFee();
             LocalDate now = LocalDate.now();
-
             newPropertyFee.setFeeAmount(BigDecimal.ZERO);
             newPropertyFee.setFundRepairAmount(BigDecimal.ZERO);
             newPropertyFee.setFundMmAmount(BigDecimal.ZERO);
@@ -94,7 +107,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
         BigDecimal additionalPropertyFee = property.getAdditionalPropertyFee();
 
         //TODO: additional property fee (individual fee) is fixed as fundMM component!
-        // I can add a flag for to be able to select to which component the individual fee belongs.
+        // To add separation of additional property fee to FundRepair and FundMM.
         BigDecimal fundMm = property.getMonthlyFeeFundMm().add(additionalPropertyFee);
 
         BigDecimal fundRepair = property.getMonthlyFeeFundRepair();
@@ -182,6 +195,16 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             residentialEntityService.reversePaymentAmountFromIncomes(propertyFee, propertyFee.getProperty());
         }
 
+        //returning overpaid amount if propertyFee contains amount from overpayment
+        if (propertyFee.getOverpaidAmountStart().compareTo(BigDecimal.ZERO) > 0) {
+            Property property = propertyFee.getProperty();
+
+            BigDecimal overPaidAmountToReverse = propertyFee.getOverpaidAmountStart().subtract(propertyFee.getOverpaidAmountEnd());
+
+            property.setOverpayment(property.getOverpayment().add(overPaidAmountToReverse));
+            propertyRepository.save(property);
+        }
+
         propertyFeeRepository.delete(propertyFee);
     }
 
@@ -266,20 +289,6 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     }
 
     /**
-     * Method for setting monthlyFee params in case of Overpayment.
-     *
-     * @param totalMonthlyFee Total Monthly fee
-     * @param newMonthlyFee   NewMonthlyFee
-     */
-    private static void setMonthlyFeeWithoutOverpayment(PropertyFee newMonthlyFee, BigDecimal totalMonthlyFee) {
-        newMonthlyFee.setFeeAmount(totalMonthlyFee);
-        newMonthlyFee.setDueAmount(totalMonthlyFee);
-        newMonthlyFee.setPaid(false);
-        newMonthlyFee.setOverpaidAmountStart(BigDecimal.valueOf(0));
-        newMonthlyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
-    }
-
-    /**
      * Private Method for setting propertyFee params when adding new global or individual fee.
      *
      * @param property    property fee id
@@ -309,6 +318,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
 
     /**
      * Method for setting monthlyFee params in case of Overpayment.
+     * If fee is partially paid the overpaid amount is not added to RE incomes component until the whole propertyFee is paid.
      *
      * @param property        property fee id
      * @param overpayment     Overpaid amount
@@ -319,9 +329,6 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
                                               BigDecimal totalMonthlyFee, PropertyFee newMonthlyFee) {
 
         //Setting new propertyFee when overpaid amount < total monthly fee
-
-        //TODO: If fee is partially paid the overpaid amount is not added to RE incomes component until the whole propertyFee is paid.
-        //TODO: I can add a new field in RE entity for non-completed (pending partial overpayments) payments where the overpaid amount is kept until propertyFee is paid.
         if (overpayment.compareTo(totalMonthlyFee) < 0) {
 
             newMonthlyFee.setDueAmount(totalMonthlyFee.subtract(overpayment));

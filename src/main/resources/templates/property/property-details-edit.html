@@ -94,10 +94,10 @@
 <div class="page-heading header-text">
     <div class="container">
         <h3>Edit property data</h3>
-        <h4 class="text-white"><i class="fa-regular fa-pen-to-square"></i></h4>
+        <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
         <div th:if="${editFailed}" class="err-msg">
-            <h5 class="text-white">Edit failed!</h5>
-            <p class="text-white"
+            <h5 class="text-light">Edit failed!</h5>
+            <p class="text-light"
                th:text="'Something went wrong with data change of property №' + ${propertyEditBindingModel.getNumber()}"></p>
         </div>
     </div>
@@ -128,8 +128,8 @@
                     <fieldset>
                         <label for="number"><b>Property №</b></label>
                         <p th:if="${#fields.hasErrors('number')}"
-                               th:errors="*{number}"
-                               class="text-danger">Property № error message</p>
+                           th:errors="*{number}"
+                           class="text-danger">Property № error message</p>
                         <input type="number" id="number"
                                placeholder="Enter Property №..."
                                readonly="readonly"
@@ -140,8 +140,8 @@
                     <fieldset>
                         <label for="floor"><b>Floor number</b></label>
                         <p th:if="${#fields.hasErrors('floor')}"
-                               th:errors="*{floor}"
-                               class="text-danger">Floor error message</p>
+                           th:errors="*{floor}"
+                           class="text-danger">Floor error message</p>
                         <input type="number" id="floor"
                                placeholder="Enter floor..."
                                autocomplete="on"
@@ -169,18 +169,24 @@
                     <fieldset>
                         <label for="numberOfRooms"><b>Number of rooms</b> (optional)</label>
                         <p th:if="${#fields.hasErrors('numberOfRooms')}"
-                               th:errors="*{numberOfRooms}" class="text-danger">Rooms error
+                           th:errors="*{numberOfRooms}" class="text-danger">Rooms error
                             message</p>
                         <input type="number" id="numberOfRooms" placeholder="Enter number of rooms..."
                                th:field="*{numberOfRooms}"
                                th:errorclass="bg-danger">
                     </fieldset>
                     <fieldset>
-                        <label for="parkingAvailable"><b>Parking available</b> (optional)</label>
-                        <input name="parkingAvailable" id="parkingAvailable"
-                               type="checkbox"
+                        <input class="inp-cbx" name="parkingAvailable" id="parkingAvailable" type="checkbox"
                                th:field="*{parkingAvailable}"
-                               th:value="${property.parkingAvailable}">
+                               th:value="${property.parkingAvailable}"
+                               hidden="hidden">
+                        <label class="cbx" for="parkingAvailable">
+                        <span>
+                    <svg width="12px" height="10px" viewbox="0 0 12 10"><polyline
+                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                        </span>
+                            <span><b>Parking available</b> (optional)</span>
+                        </label>
                     </fieldset>
                     <br>
                     <h5>Inhabitants information</h5>
@@ -189,8 +195,8 @@
                     <fieldset>
                         <label for="numberOfAdults"><b>Number of adults</b></label>
                         <p th:if="${#fields.hasErrors('numberOfAdults')}"
-                               th:errors="*{numberOfAdults}"
-                               class="text-danger">Adults number error message</p>
+                           th:errors="*{numberOfAdults}"
+                           class="text-danger">Adults number error message</p>
                         <input type="number" id="numberOfAdults"
                                placeholder="Enter number of adults..."
                                autocomplete="on" required
@@ -201,8 +207,8 @@
                     <fieldset>
                         <label for="numberOfChildren"><b>Number of children</b></label>
                         <p th:if="${#fields.hasErrors('numberOfChildren')}"
-                               th:errors="*{numberOfChildren}"
-                               class="text-danger">Children error message</p>
+                           th:errors="*{numberOfChildren}"
+                           class="text-danger">Children error message</p>
                         <input type="number" id="numberOfChildren"
                                placeholder="Enter number of children..."
                                th:field="*{numberOfChildren}"
@@ -212,8 +218,8 @@
                     <fieldset>
                         <label for="numberOfPets"><b>Number of pets</b></label>
                         <p th:if="${#fields.hasErrors('numberOfPets')}"
-                               th:errors="*{numberOfPets}"
-                               class="text-danger">Number of pets message</p>
+                           th:errors="*{numberOfPets}"
+                           class="text-danger">Number of pets message</p>
                         <input type="number" id="numberOfPets"
                                placeholder="Enter number of pets ..."
                                required
@@ -222,11 +228,17 @@
                                th:value="${propertyEditBindingModel.getNumberOfPets()}">
                     </fieldset>
                     <fieldset>
-                        <label for="isNotHabitable"><b>Property is not habitable</b></label>
-                        <input name="isNotHabitable" id="isNotHabitable"
-                               type="checkbox"
+                        <input class="inp-cbx" name="isNotHabitable" id="isNotHabitable" type="checkbox"
                                th:field="*{notHabitable}"
-                               th:value="${property.notHabitable}">
+                               th:value="${property.notHabitable}"
+                               hidden="hidden">
+                        <label class="cbx" for="isNotHabitable">
+                        <span>
+                    <svg width="12px" height="10px" viewbox="0 0 12 10"><polyline
+                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                        </span>
+                            <span><b>Property is not habitable</b></span>
+                        </label>
                     </fieldset>
                     <fieldset>
                         <button type="submit" id="form-submit"
@@ -257,6 +269,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/input-data-control.js"></script>
+<!--<script src="/js/checkbox.js"></script>-->
 
 
 </body>

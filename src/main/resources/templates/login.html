@@ -86,7 +86,7 @@
             <div class="section-heading text-center">
                 <h6>| Login </h6>
                 <strong th:if="${bad_credentials}" class="text-danger">Wrong username or password!</strong>
-                <p class="text-white" th:unless="${bad_credentials}">Please enter your email and password to access your
+                <p class="text-light" th:unless="${bad_credentials}">Please enter your email and password to access your
                     residential
                     entity
                 </p>
@@ -98,7 +98,7 @@
 
 <div class="login">
     <div class="input-content text-center">
-        <div class="col-lg-4 center-form">
+        <div class="col-lg-3 center-form">
             <form id="input-form"
                   th:method="POST"
                   th:action="@{/login}">
@@ -114,12 +114,19 @@
                            th:value="${password}"
                            id="password" placeholder="Enter your password..." required>
                     <small class="fas fa-eye text-secondary fa-eye-slash" id="togglePassword"
-                       style="margin-left: -35px; cursor: pointer;"></small>
+                           style="margin-left: -35px; cursor: pointer;"></small>
                 </fieldset>
                 <fieldset>
-                    <label for="rememberMe"><b>Remember me</b></label>
-                    <input name="rememberMe" id="rememberMe" type="checkbox">
+                    <input class="inp-cbx" name="rememberMe" id="rememberMe" type="checkbox" style="display: none"/>
+                    <label class="cbx" for="rememberMe">
+                        <span>
+                    <svg width="12px" height="10px" viewbox="0 0 12 10"><polyline
+                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                        </span>
+                        <span>Remember me</span>
+                    </label>
                 </fieldset>
+
                 <fieldset>
                     <button type="submit" id="login" class="orange-button">Login</button>
                 </fieldset>

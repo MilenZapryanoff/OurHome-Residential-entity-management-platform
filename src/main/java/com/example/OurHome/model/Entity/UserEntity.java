@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,9 @@ public class UserEntity {
     @Column(nullable = false)
     @Size(min = 3, max = 20)
     private String username;
+
+    @Column(nullable = false)
+    private LocalDateTime registrationDateTime;
 
     @Column
     private String phoneNumber;
@@ -208,6 +212,22 @@ public class UserEntity {
     }
 
     public void setPropertyRequests(List<PropertyRegisterRequest> propertyRegisterRequests) {
+        this.propertyRegisterRequests = propertyRegisterRequests;
+    }
+
+    public LocalDateTime getRegistrationDateTime() {
+        return registrationDateTime;
+    }
+
+    public void setRegistrationDateTime(LocalDateTime registrationDateTime) {
+        this.registrationDateTime = registrationDateTime;
+    }
+
+    public List<PropertyRegisterRequest> getPropertyRegisterRequests() {
+        return propertyRegisterRequests;
+    }
+
+    public void setPropertyRegisterRequests(List<PropertyRegisterRequest> propertyRegisterRequests) {
         this.propertyRegisterRequests = propertyRegisterRequests;
     }
 }

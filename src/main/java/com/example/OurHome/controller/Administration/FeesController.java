@@ -330,9 +330,6 @@ public class FeesController {
                                         @Valid PropertyFeeEditBindingModel propertyFeeEditBindingModel,
                                         BindingResult bindingResult) {
 
-        //TODO: to disable the option to change a propertyFee, or the amounts of already paid fees.
-        //Edition may be allowed only for not paid fees, because if already paid i have to recalculate the RE income somehow.
-
         if (bindingResult.hasErrors()) {
             return new ModelAndView("administration/administration-property-fees-edit")
                     .addObject("userViewModel", getUserViewModel())

@@ -19,9 +19,9 @@ public interface PropertyService {
 
     void unlinkOwner(Long id, boolean deletedByManaged);
 
-    void approvePropertyWithDataChange(Long id, boolean noValidationNeed);
+    void approvePropertyRegistrationWithDataChange(Long id, boolean noValidationNeed);
 
-    void approvePropertyWithoutDataChange(Long id);
+    void approvePropertyRegistrationWithoutDataChange(Long id);
 
     void rejectProperty(Long id);
 
@@ -69,11 +69,16 @@ public interface PropertyService {
 
     void createSingleProperty(PropertyCreateBindingModel propertyCreateBindingModel, ResidentialEntity residentialEntity, PropertyType propertyType);
 
-    void updateNonFinancialPropertyFields(Property property, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType);
+    void updateNonFeeComponentData(Property property, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType);
 
     PropertyEditBindingModel mapChangeRequestToEditBindingModel(Property property);
 
     void turnAllPropertiesFeesOn(ResidentialEntity residentialEntity);
 
     void turnAllPropertiesFeesOff(ResidentialEntity residentialEntity);
+
+    void approvePropertyChangeRequest(Long propertyId);
+
+    void rejectPropertyChangeRequest(Long propertyId);
+
 }

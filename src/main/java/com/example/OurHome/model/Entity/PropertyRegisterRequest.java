@@ -2,6 +2,8 @@ package com.example.OurHome.model.Entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity(name = "property_register_requests")
 public class PropertyRegisterRequest {
 
@@ -27,6 +29,11 @@ public class PropertyRegisterRequest {
     private boolean parkingAvailable;
     @Column
     private boolean active;
+
+    @Column(nullable = false)
+    private LocalDateTime creationDateTime;
+    @Column(nullable = false)
+    private LocalDateTime lastModificationDateTime;
 
     @ManyToOne
     private PropertyType propertyType;
@@ -150,5 +157,21 @@ public class PropertyRegisterRequest {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public LocalDateTime getCreationDateTime() {
+        return creationDateTime;
+    }
+
+    public void setCreationDateTime(LocalDateTime creationDate) {
+        this.creationDateTime = creationDate;
+    }
+
+    public LocalDateTime getLastModificationDateTime() {
+        return lastModificationDateTime;
+    }
+
+    public void setLastModificationDateTime(LocalDateTime lastModificationDate) {
+        this.lastModificationDateTime = lastModificationDate;
     }
 }

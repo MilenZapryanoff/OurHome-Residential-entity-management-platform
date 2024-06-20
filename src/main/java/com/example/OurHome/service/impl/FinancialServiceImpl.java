@@ -43,7 +43,8 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * Expense creating
-     * @param residentialEntity The ResidentialEntity which the Expense belongs to.
+     *
+     * @param residentialEntity      The ResidentialEntity which the Expense belongs to.
      * @param expenseAddBindingModel data from Frontend
      */
     @Override
@@ -56,6 +57,7 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * Mapping between Expense and ExpenseEditBindingModel
+     *
      * @param expense Expense
      * @return mapped ExpenseEditBindingModel
      */
@@ -68,15 +70,20 @@ public class FinancialServiceImpl implements FinancialService {
     public IncomesBindingModel mapIncomesBindingModel(Long id) {
         IncomesBindingModel incomesBindingModel = new IncomesBindingModel();
 
-        residentialEntityService.findResidentialEntityById(id).ifPresent(residentialEntity -> incomesBindingModel.setIncomesAmount(residentialEntity.getIncomesTotalAmount()));
+        residentialEntityService.findResidentialEntityById(id).ifPresent(residentialEntity -> {
+            incomesBindingModel.setIncomesAmount(residentialEntity.getIncomesTotalAmount());
+            incomesBindingModel.setIncomesFundRepair(residentialEntity.getIncomesFundRepair());
+            incomesBindingModel.setIncomesFundMm(residentialEntity.getIncomesFundMm());
+        });
 
         return incomesBindingModel;
     }
 
     /**
      * Expense modification method
+     *
      * @param expenseEditBindingModel data from Frontend
-     * @param expense Expense that has to be modified
+     * @param expense                 Expense that has to be modified
      */
     @Override
     public void editExpense(ExpenseEditBindingModel expenseEditBindingModel, Expense expense) {
@@ -94,6 +101,7 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * Expense deletion
+     *
      * @param expense The expense that has to be deleted
      */
     @Override
@@ -104,6 +112,7 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * Default filter for expenses
+     *
      * @param residentialEntity Residential entity
      * @return ExpenseFilterBindingModel with start date the first day of the current month and end date, the last day
      * of the current month
@@ -123,8 +132,9 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * User selected filter for expenses
-     * @param startPeriod LocalDate start period
-     * @param endPeriod LocalDate end period
+     *
+     * @param startPeriod       LocalDate start period
+     * @param endPeriod         LocalDate end period
      * @param residentialEntity Residential entity
      * @return ExpenseFilterBindingModel with user selected start & end dates
      */
@@ -140,8 +150,9 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * Storing the uploaded expense document (picture format) in the file system.
+     *
      * @param file uploaded from manager document (picture)
-     * @param id Expense id
+     * @param id   Expense id
      * @return String with documentPath
      * @throws IOException If error occurs
      */
@@ -197,7 +208,7 @@ public class FinancialServiceImpl implements FinancialService {
     }
 
     /**
-     *Delete expense document method
+     * Delete expense document method
      */
     @Override
     public void deleteDocumentFromExpense(Expense expense) {
@@ -209,7 +220,8 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * Update of expense picturePath field.
-     * @param expense Expense entity
+     *
+     * @param expense      Expense entity
      * @param relativePath the path where the picture is stored
      */
     @Override
@@ -224,9 +236,10 @@ public class FinancialServiceImpl implements FinancialService {
 
     /**
      * Expense filter method.
-     * @param startPeriod LocalDate startPeriod
-     * @param endPeriod LocalDate startPeriod
-     * @param residentialEntity Residential entity
+     *
+     * @param startPeriod               LocalDate startPeriod
+     * @param endPeriod                 LocalDate startPeriod
+     * @param residentialEntity         Residential entity
      * @param expenseFilterBindingModel FrontEnd view
      * @return ExpenseFilterBindingModel
      */

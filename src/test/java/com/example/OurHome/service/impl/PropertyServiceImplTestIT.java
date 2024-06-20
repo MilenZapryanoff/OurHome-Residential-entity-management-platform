@@ -265,7 +265,7 @@ class PropertyServiceImplTestIT {
         for (Property property1 : all) {
             id = property1.getId();
         }
-        //TODO : to fix tests because of the new object propertyType
+
         PropertyType propertyType = new PropertyType();
 
         propertyServiceToTest.editProperty(id, propertyEditBindingModel, propertyType);
@@ -302,7 +302,6 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        //TODO : to fix tests because of the new object propertyType
         PropertyType propertyType = new PropertyType();
 
         propertyServiceToTest.editProperty(id, propertyEditBindingModel, propertyType);
@@ -320,7 +319,7 @@ class PropertyServiceImplTestIT {
     }
 
     @Test
-    void testApprovePropertyWithDataChange() {
+    void testApprovePropertyRegistrationWithDataChange() {
         Property testProperty = createTestProperty();
         testProperty.setResidentialEntity(createResidentialEntity());
         propertyRepository.save(testProperty);
@@ -331,7 +330,7 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        propertyServiceToTest.approvePropertyWithDataChange(id, true);
+        propertyServiceToTest.approvePropertyRegistrationWithDataChange(id, true);
 
         Optional<Property> property = propertyRepository.findById(id);
 

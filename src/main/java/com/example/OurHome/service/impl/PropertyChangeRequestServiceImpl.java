@@ -65,4 +65,10 @@ public class PropertyChangeRequestServiceImpl implements PropertyChangeRequestSe
         List<PropertyChangeRequest> allRequests = propertyChangeRequestRepository.findAllByResidentialEntity(residentialEntityId);
         propertyChangeRequestRepository.deleteAll(allRequests);
     }
+
+    @Override
+    public void markChangeRequestAsRejected(PropertyChangeRequest propertyChangeRequest) {
+        propertyChangeRequest.setRejected(true);
+        propertyChangeRequestRepository.save(propertyChangeRequest);
+    }
 }

@@ -98,13 +98,13 @@
                 <h3 th:if="${@messageRepository.countUnreadMessages(userViewModel.getId()) > 1}"
                     th:text="${@messageRepository.countUnreadMessages(userViewModel.getId())} + ' new messages'"></h3>
                 <div th:if="${messageError}" class="err-msg">
-                    <h5 class="text-white">Message not sent!</h5>
-                    <p class="text-white">Text length must be up to 2000 symbols!</p>
+                    <h5 class="text-light">Message not sent!</h5>
+                    <p class="text-light">Text length must be up to 2000 symbols!</p>
                 </div>
                 <div th:if="${messageSent}" class="success-msg">
-                    <h5 class="text-white">MESSAGE SENT!</h5>
+                    <h5 class="text-light">MESSAGE SENT!</h5>
                 </div>
-                <h4 class="text-white"><i class="fa-solid fa-envelope"></i></h4>
+                <h4 class="text-light"><i class="fa-solid fa-envelope"></i></h4>
             </div>
         </div>
 
@@ -157,77 +157,81 @@
 
         <!--MESSAGE container-->
         <div th:each="message: ${@messageRepository.findNotArchivedMessagesByUserId(userViewModel.getId())}"
-             class="message-container row">
+             class="row">
 
+            <div class="message-container row">
             <!--MESSAGE BODY-->
-            <div class="message-body col-lg-10">
-                <div class="form-control" style="margin-bottom: 30px">
-                    <div class="message-content">
-                        <p th:if="${message.getSender()} != null" class="text-secondary"
-                           th:text="'Sender: ' + ${message.getSender().getFirstName()} + ' ' + ${message.getSender().getLastName()}"></p>
-                        <div th:if="${message.getSender()} != null" class="user-avatar-medium">
-                            <img th:if="${message.getSender().getAvatarPath() != null}"
-                                 th:src="@{${message.getSender().getAvatarPath()}}" alt="Avatar">
-                        </div>
-                        <p class="text-secondary"
-                           th:text="'Received on : ' + ${message.getDate()} + ', ' + ${message.getTime()}"></p>
-                        <i th:if="${message.isRead()}" class="fa-regular fa-envelope-open"></i>
-                        <i th:unless="${message.isRead()}" class="fa-solid fa-envelope"></i>
-                        <hr>
-
-                        <p th:if="${message.isRead()}" th:text="${message.getText()}"></p>
-                        <p th:unless="${message.isRead()}" th:text="${message.getText()}" style="font-weight: 700"></p>
-                    </div>
-                    <div th:if="${message.getSender() != null}">
-                        <form th:action="@{/messages/send/{id} (id=${message.getId()})}"
-                              th:method="POST"
-                              th:object="${sendMessageBindingModel}">
-                            <label class="hidden">
-                                <select id="senderIdNotArchived"
-                                        th:field="*{receiverId}">
-                                    <option th:value="${message.getSender().getId()}"></option>
-                                </select>
-                            </label>
-
-                            <label class="hidden">
-                                <select id="receiverId"
-                                        th:field="*{senderId}">
-                                    <option th:value="${message.getReceiver().getId()}"></option>
-                                </select>
-                            </label>
-
-
-                            <div class="row" style="padding: 20px">
-                                <label for="messageText" class="hidden"></label>
-                                <textarea class="col-lg-10" id="messageText"
-                                          required type="text"
-                                          autocomplete="off"
-                                          th:field="*{message}"
-                                          th:placeholder="'Reply to ' + ${message.getSender().getFirstName()}"
-                                          th:errorclass="bg-danger">
-                                </textarea>
-                                <div class="col-lg-2" style="padding-top: 10px">
-                                    <button type="submit"
-                                            class="form-control text-bg-success">
-                                        <small><i class="fa-solid fa-reply"></i> Reply</small>
-                                    </button>
-                                </div>
+                <div class="message-body col-lg-10">
+                    <div class="form-control" style="margin: 25px 0">
+                        <div class="message-content">
+                            <p th:if="${message.getSender()} != null" class="text-secondary"
+                               th:text="'Sender: ' + ${message.getSender().getFirstName()} + ' ' + ${message.getSender().getLastName()}"></p>
+                            <div th:if="${message.getSender()} != null" class="user-avatar-medium">
+                                <img th:if="${message.getSender().getAvatarPath() != null}"
+                                     th:src="@{${message.getSender().getAvatarPath()}}" alt="Avatar">
                             </div>
-                        </form>
+                            <p class="text-secondary"
+                               th:text="'Received on : ' + ${#temporals.format(message.getDate(), 'dd.MM.yyyy')} + ', ' + ${message.getTime()}"></p>
+
+
+                            <i th:if="${message.isRead()}" class="fa-regular fa-envelope-open"></i>
+                            <i th:unless="${message.isRead()}" class="fa-solid fa-envelope"></i>
+                            <hr>
+
+                            <p th:if="${message.isRead()}" th:text="${message.getText()}"></p>
+                            <p th:unless="${message.isRead()}" th:text="${message.getText()}" style="font-weight: 700"></p>
+                        </div>
+                        <div th:if="${message.getSender() != null}">
+                            <form th:action="@{/messages/send/{id} (id=${message.getId()})}"
+                                  th:method="POST"
+                                  th:object="${sendMessageBindingModel}">
+                                <label class="hidden">
+                                    <select id="senderIdNotArchived"
+                                            th:field="*{receiverId}">
+                                        <option th:value="${message.getSender().getId()}"></option>
+                                    </select>
+                                </label>
+
+                                <label class="hidden">
+                                    <select id="receiverId"
+                                            th:field="*{senderId}">
+                                        <option th:value="${message.getReceiver().getId()}"></option>
+                                    </select>
+                                </label>
+
+
+                                <div class="row" style="padding: 20px">
+                                    <label for="messageText" class="hidden"></label>
+                                    <textarea class="col-lg-10" id="messageText"
+                                              required type="text"
+                                              autocomplete="off"
+                                              th:field="*{message}"
+                                              th:placeholder="'Reply to ' + ${message.getSender().getFirstName()}"
+                                              th:errorclass="bg-danger">
+                                    </textarea>
+                                    <div class="col-lg-2" style="padding-top: 10px">
+                                        <button type="submit"
+                                                class="form-control text-bg-success">
+                                            <small><i class="fa-solid fa-reply"></i> Reply</small>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!--MESSAGE SIDE-BUTTONS-->
-            <div class="single-message-control-buttons col-lg-2">
-                <form th:unless="${message.isRead()}"
-                      th:action="@{/messages/read/{id}(id=${message.getId()})}"
-                      method="POST" style="margin-bottom: 15px">
-                    <button type="submit" class="form-control">Mark as read</button>
-                </form>
-                <form th:action="@{/messages/archive/{id}(id=${message.getId()})}"
-                      method="POST">
-                    <button type="submit" class="form-control text-danger-emphasis">Archive</button>
-                </form>
+                <!--MESSAGE SIDE-BUTTONS-->
+                <div class="single-message-control-buttons col-lg-2" style="margin: 25px 0">
+                    <form th:unless="${message.isRead()}"
+                          th:action="@{/messages/read/{id}(id=${message.getId()})}"
+                          method="POST" style="margin-bottom: 15px">
+                        <button type="submit" class="form-control">Mark as read</button>
+                    </form>
+                    <form th:action="@{/messages/archive/{id}(id=${message.getId()})}"
+                          method="POST">
+                        <button type="submit" class="form-control text-danger-emphasis">Archive</button>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
