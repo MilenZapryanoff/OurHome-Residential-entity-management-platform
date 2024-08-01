@@ -2027,6 +2027,19 @@ textarea {
 }
 
 
+.input-content button {
+    background-color: #1e1e1e;
+    height: 44px;
+    border-radius: 5px;
+    padding: 0 20px;
+    color: #fff;
+    border: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all .5s;
+}
+
+
 /*
 ---------------------------------------------
 Registration form
@@ -2273,7 +2286,7 @@ Contact Page Style
     padding: 35px 30px;
     background-color: #fff;
     display: inline-block;
-    min-width: 360px;
+    width: 80%;
 }
 
 .contact-page .phone {

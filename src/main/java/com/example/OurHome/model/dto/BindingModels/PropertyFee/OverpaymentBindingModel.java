@@ -1,6 +1,5 @@
 package com.example.OurHome.model.dto.BindingModels.PropertyFee;
 
-import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 
 import java.math.BigDecimal;

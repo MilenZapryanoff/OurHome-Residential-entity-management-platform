@@ -614,12 +614,11 @@ public class PropertyServiceImpl implements PropertyService {
      */
     @Override
     public void setAdditionalPropertyFee(Property property, BigDecimal additionalPropertyFee) {
-        if (additionalPropertyFee == null) {
-            additionalPropertyFee = BigDecimal.ZERO;
-        }
 
-        property.setAdditionalPropertyFee(additionalPropertyFee);
-        updateTotalMonthlyFee(property, additionalPropertyFee);
+        property.setAdditionalPropertyFee(Objects.requireNonNullElse(additionalPropertyFee, BigDecimal.ZERO));
+        updateTotalMonthlyFee(property);
+        
+        propertyRepository.save(property);
     }
 
     @Override
@@ -643,17 +642,19 @@ public class PropertyServiceImpl implements PropertyService {
         newProperty.setMonthlyFeeFundMm(feeService.calculateFundMm(newProperty.getResidentialEntity(), newProperty));
         newProperty.setMonthlyFeeFundRepair(feeService.calculateFundRepair(newProperty.getResidentialEntity(), newProperty));
         newProperty.setAdditionalPropertyFee(BigDecimal.ZERO);
+        newProperty.setValidated(true);
+
         if (propertyType != null) {
             newProperty.setPropertyType(propertyType);
         }
+
         //update totalMonthlyFee
-        updateTotalMonthlyFee(newProperty, newProperty.getAdditionalPropertyFee());
+        updateTotalMonthlyFee(newProperty);
+
+        propertyRepository.save(newProperty);
 
         //publish event to create first fee.
         publishEvent(newProperty);
-        newProperty.setValidated(true);
-
-        propertyRepository.save(newProperty);
     }
 
     /**
@@ -684,7 +685,7 @@ public class PropertyServiceImpl implements PropertyService {
             newProperty.setValidated(false);
 
             //update totalMonthlyFee
-            updateTotalMonthlyFee(newProperty, newProperty.getAdditionalPropertyFee());
+            updateTotalMonthlyFee(newProperty);
 
             properties.add(newProperty);
         }
@@ -828,8 +829,10 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Private method for Total monthly fee update. Necessary in case of monthly fee modification!
      */
-    private void updateTotalMonthlyFee(Property property, BigDecimal additionalPropertyFee) {
-        property.setTotalMonthlyFee(Objects.requireNonNullElse(property.getMonthlyFeeFundMm(), BigDecimal.ZERO).add(property.getMonthlyFeeFundRepair()).add(additionalPropertyFee));
+    private void updateTotalMonthlyFee(Property property) {
+        property.setTotalMonthlyFee(Objects.requireNonNullElse(property.getMonthlyFeeFundMm(), BigDecimal.ZERO)
+                .add(property.getMonthlyFeeFundRepair())
+                .add(property.getAdditionalPropertyFee()));
     }
 
     /**
