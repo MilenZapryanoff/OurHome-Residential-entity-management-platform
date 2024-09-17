@@ -327,15 +327,25 @@
                                     </textarea>
                                 </label>
                                 <button class="send-message-button" onclick="return confirmSendMessage()"
-                                        title="Send"
-                                        type="submit"
-                                        hidden="hidden">
+                                        title="Send" type="submit" hidden="hidden">
                                 </button>
                             </div>
                         </form>
                     </td>
                     <!-- START: Delete button-->
                     <td>
+                        <!--custom pop-up confirmation window before <form>-->
+                        <div class="modal">
+                            <div class="modal-content">
+                                <strong class="text-danger-emphasis">Attention!</strong>
+                                <p class="text-dark">Remove user from this Residential Entity?</p>
+                                <small class="text-secondary">This action will remove user from the Residential Entity. The user will not be able to access any data and won't be able to register as property owner! The only way to join the Residential Entity again is by registering with Access code!</small>
+                                <div class="confirm-buttons-container">
+                                    <button id="yes-btn">Confirm</button>
+                                    <button id="no-btn">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
                         <form th:action="@{/administration/owners/delete/{id} (id=${resident.getId()})}"
                               th:method="POST"
                               th:object="${residentManageBindingModel}">
