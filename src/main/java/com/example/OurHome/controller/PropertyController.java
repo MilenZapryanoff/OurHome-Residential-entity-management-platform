@@ -176,7 +176,7 @@ public class PropertyController {
     public ModelAndView propertyEdit(@PathVariable("id") Long id) {
 
         Property property = getProperty(id);
-        PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
+        PropertyEditBindingModel propertyEditBindingModel;
 
         if (property.isRejected() && property.getPropertyRegisterRequest() != null) {
             //getting input fields from the active registration request. This way we hide the real property data
