@@ -1,3 +1,5 @@
+//Message pop-up window
+
 function openForm() {
     document.getElementById("messageText").value = "";
     document.getElementById("contactForm").style.display = "block";
