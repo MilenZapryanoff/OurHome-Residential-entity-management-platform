@@ -3048,7 +3048,7 @@ Registration/change request buttons
 }
 
 /*Button for cancellation of change request (performed by owner in Property details section)*/
-#cancel-change-request {
+.cancel-change-request {
     color: white;
     max-width: 100%;
     background-color: #DC3545;
@@ -3057,7 +3057,7 @@ Registration/change request buttons
     transition: 1.5s;
 }
 
-#cancel-change-request:hover {
+.cancel-change-request:hover {
     background-color: #ce3342;
     transition: 1s;
 }
@@ -3307,6 +3307,72 @@ Table nav bars
     border-bottom-right-radius: 5px;
 }
 
+/*custom pop-up confirmation window*/
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: fixed;
+    background-color: #eeeeee;
+    opacity: 0.9;
+    padding: 20px;
+    border: 1px solid #9d9d9d;
+    max-width: 400px;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.modal-content p {
+    padding: 10px;
+}
+
+.modal-content small {
+    font-size: 0.9em;
+    padding-bottom: 10px;
+}
+
+.confirm-buttons-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#yes-btn {
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin: 5px;
+    background-color: rgba(54, 54, 54, 0.87);
+    color: white;
+    transition: all 0.6s ease;
+}
+
+#yes-btn:hover {
+    transition: all 0.6s ease;
+    background-color: black;
+}
+
+#no-btn {
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin: 5px;
+    color: white;
+    background-color: rgba(244, 67, 54, 0.82);
+    transition: all 0.6s ease;
+}
+
+#no-btn:hover {
+    transition: all 0.6s ease;
+    background-color: #DC3545;
+}
 
 /*
 ---------------------------------------------
@@ -3553,14 +3619,23 @@ body {
     .page-heading h3 {
         font-size: 1.4em;
     }
+    .footer p {
+        font-size: 0.85em;
+    }
 }
 
-
 @media (max-width: 992px) {
-
+    footer {
+        min-height: initial;
+        padding: 20px 0 20px 0;
+    }
 
     .sub-header {
         display: none;
+    }
+
+    .footer p {
+        line-height: initial;
     }
 
     .header-area .main-nav .logo h1 {
