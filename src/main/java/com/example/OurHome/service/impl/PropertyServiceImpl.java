@@ -830,7 +830,8 @@ public class PropertyServiceImpl implements PropertyService {
      * Private method for Total monthly fee update. Necessary in case of monthly fee modification!
      */
     private void updateTotalMonthlyFee(Property property) {
-        property.setTotalMonthlyFee(Objects.requireNonNullElse(property.getMonthlyFeeFundMm(), BigDecimal.ZERO)
+        property.setTotalMonthlyFee(
+                Objects.requireNonNullElse(property.getMonthlyFeeFundMm(), BigDecimal.ZERO)
                 .add(property.getMonthlyFeeFundRepair())
                 .add(property.getAdditionalPropertyFee()));
     }
