@@ -40,6 +40,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     private final PropertyService propertyService;
     private final PropertyRegisterRequestServiceImpl propertyRegisterRequestService;
     private final PropertyChangeRequestService propertyChangeRequestService;
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
 
     public ResidentialEntityServiceImpl(ModelMapper modelMapper, CityRepository cityRepository, FeeService feeService, ResidentialEntityRepository residentialEntityRepository, PasswordEncoder passwordEncoder, PropertyService propertyService, PropertyRegisterRequestServiceImpl propertyRegisterRequestService, PropertyChangeRequestService propertyChangeRequestService) {
         this.modelMapper = modelMapper;
@@ -65,9 +66,9 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
         ResidentialEntity newResidentialEntity = modelMapper.map(residentialEntityRegisterBindingModel, ResidentialEntity.class);
 
         newResidentialEntity.setFee(feeService.createFee(newResidentialEntity));
-        newResidentialEntity.setIncomesFundMm(BigDecimal.ZERO);
-        newResidentialEntity.setIncomesFundRepair(BigDecimal.ZERO);
-        newResidentialEntity.setIncomesTotalAmount(BigDecimal.ZERO);
+        newResidentialEntity.setIncomesFundMm(DEFAULT_AMOUNT);
+        newResidentialEntity.setIncomesFundRepair(DEFAULT_AMOUNT);
+        newResidentialEntity.setIncomesTotalAmount(DEFAULT_AMOUNT);
         newResidentialEntity.setManager(loggedUser);
         newResidentialEntity.setIncomesVisible(true);
         newResidentialEntity.setExpensesVisible(true);

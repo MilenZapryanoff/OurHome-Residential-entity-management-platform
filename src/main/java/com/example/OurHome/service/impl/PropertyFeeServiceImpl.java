@@ -29,6 +29,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     private final ModelMapper modelMapper;
     private final MessageService messageService;
     private final ResidentialEntityService residentialEntityService;
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
 
     public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper, MessageService messageService, ResidentialEntityService residentialEntityService) {
         this.propertyFeeRepository = propertyFeeRepository;
@@ -48,8 +49,8 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
         newMonthlyFee.setFeeAmount(totalMonthlyFee);
         newMonthlyFee.setDueAmount(totalMonthlyFee);
         newMonthlyFee.setPaid(false);
-        newMonthlyFee.setOverpaidAmountStart(BigDecimal.valueOf(0));
-        newMonthlyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
+        newMonthlyFee.setOverpaidAmountStart(DEFAULT_AMOUNT);
+        newMonthlyFee.setOverpaidAmountEnd(DEFAULT_AMOUNT);
     }
 
     /**
@@ -76,17 +77,17 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
         if (propertyCreationEvent.getProperty().getPropertyFees().isEmpty()) {
             PropertyFee newPropertyFee = new PropertyFee();
             LocalDate now = LocalDate.now();
-            newPropertyFee.setFeeAmount(BigDecimal.ZERO);
-            newPropertyFee.setFundRepairAmount(BigDecimal.ZERO);
-            newPropertyFee.setFundMmAmount(BigDecimal.ZERO);
-            newPropertyFee.setDueAmount(BigDecimal.ZERO);
+            newPropertyFee.setFeeAmount(DEFAULT_AMOUNT);
+            newPropertyFee.setFundRepairAmount(DEFAULT_AMOUNT);
+            newPropertyFee.setFundMmAmount(DEFAULT_AMOUNT);
+            newPropertyFee.setDueAmount(DEFAULT_AMOUNT);
             newPropertyFee.setPeriodStart(now.withDayOfMonth(1));
             newPropertyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
             newPropertyFee.setProperty(propertyCreationEvent.getProperty());
             newPropertyFee.setDescription("Modify this record if old duties available");
             newPropertyFee.setNonFinancial(true);
-            newPropertyFee.setOverpaidAmountStart(BigDecimal.ZERO);
-            newPropertyFee.setOverpaidAmountEnd(BigDecimal.ZERO);
+            newPropertyFee.setOverpaidAmountStart(DEFAULT_AMOUNT);
+            newPropertyFee.setOverpaidAmountEnd(DEFAULT_AMOUNT);
             propertyFeeRepository.save(newPropertyFee);
         }
     }
@@ -334,13 +335,13 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             newMonthlyFee.setDueAmount(totalMonthlyFee.subtract(overpayment));
             newMonthlyFee.setPaid(false);
 
-            property.setOverpayment(BigDecimal.valueOf(0));
-            newMonthlyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
+            property.setOverpayment(DEFAULT_AMOUNT);
+            newMonthlyFee.setOverpaidAmountEnd(DEFAULT_AMOUNT);
         } else {
             //Setting new propertyFee when overpaid amount == total monthly fee
             if (overpayment.compareTo(totalMonthlyFee) == 0) {
-                property.setOverpayment(BigDecimal.valueOf(0));
-                newMonthlyFee.setOverpaidAmountEnd(BigDecimal.valueOf(0));
+                property.setOverpayment(DEFAULT_AMOUNT);
+                newMonthlyFee.setOverpaidAmountEnd(DEFAULT_AMOUNT);
             }
             //Setting new monthly fee when overpaid amount > total  monthly fee
             else if (overpayment.compareTo(totalMonthlyFee) > 0) {
@@ -348,7 +349,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
                 newMonthlyFee.setOverpaidAmountEnd(overpayment.subtract(totalMonthlyFee));
             }
 
-            newMonthlyFee.setDueAmount(BigDecimal.valueOf(0));
+            newMonthlyFee.setDueAmount(DEFAULT_AMOUNT);
             newMonthlyFee.setPaid(true);
             residentialEntityService.addPaymentAmountToIncomes(newMonthlyFee, property);
         }

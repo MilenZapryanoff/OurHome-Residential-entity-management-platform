@@ -32,6 +32,7 @@ public class PropertyServiceImpl implements PropertyService {
     private final ResidentialEntityRepository residentialEntityRepository;
     private final PropertyRegisterRequestService propertyRegisterRequestService;
     private final PropertyChangeRequestService propertyChangeRequestService;
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
 
 
     public PropertyServiceImpl(ModelMapper modelMapper, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService, ApplicationEventPublisher applicationEventPublisher, ResidentialEntityRepository residentialEntityRepository, PropertyRegisterRequestService propertyRegisterRequestService, PropertyChangeRequestService propertyChangeRequestService) {
@@ -605,7 +606,7 @@ public class PropertyServiceImpl implements PropertyService {
      */
     @Override
     public void updateOverpayment(Property property, BigDecimal overPayment) {
-        property.setOverpayment(Objects.requireNonNullElseGet(overPayment, () -> BigDecimal.valueOf(0)));
+        property.setOverpayment(Objects.requireNonNullElse(overPayment, DEFAULT_AMOUNT));
         propertyRepository.save(property);
     }
 
@@ -641,7 +642,7 @@ public class PropertyServiceImpl implements PropertyService {
         newProperty.setObtained(false);
         newProperty.setMonthlyFeeFundMm(feeService.calculateFundMm(newProperty.getResidentialEntity(), newProperty));
         newProperty.setMonthlyFeeFundRepair(feeService.calculateFundRepair(newProperty.getResidentialEntity(), newProperty));
-        newProperty.setAdditionalPropertyFee(BigDecimal.ZERO);
+        newProperty.setAdditionalPropertyFee(DEFAULT_AMOUNT);
         newProperty.setValidated(true);
 
         if (propertyType != null) {
@@ -670,7 +671,7 @@ public class PropertyServiceImpl implements PropertyService {
         for (int i = 1; i <= numberOfApartments; i++) {
 
             Property newProperty = new Property();
-            newProperty.setAdditionalPropertyFee(BigDecimal.ZERO);
+            newProperty.setAdditionalPropertyFee(DEFAULT_AMOUNT);
             newProperty.setAutoFee(true);
             newProperty.setNumber(i);
             newProperty.setNumberOfAdults(0);
