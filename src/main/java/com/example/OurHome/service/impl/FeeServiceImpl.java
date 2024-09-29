@@ -20,6 +20,7 @@ public class FeeServiceImpl implements FeeService {
     private final FeeRepository feeRepository;
     private final PropertyRepository propertyRepository;
     private final ModelMapper modelMapper;
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
 
     public FeeServiceImpl(FeeRepository feeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper) {
         this.feeRepository = feeRepository;
@@ -43,15 +44,15 @@ public class FeeServiceImpl implements FeeService {
     public Fee createFee(ResidentialEntity newResidentialEntity) {
 
         Fee fee = new Fee();
-        fee.setFixedFeeHabitable(BigDecimal.valueOf(0.00));
-        fee.setAdultFee(BigDecimal.valueOf(0.0));
-        fee.setChildFee(BigDecimal.valueOf(0.0));
-        fee.setPetFee(BigDecimal.valueOf(0.0));
-        fee.setAdditionalFeeHabitable(BigDecimal.valueOf(0.0));
-        fee.setFixedFeeNonHabitable(BigDecimal.valueOf(0.0));
-        fee.setAdditionalFeeNonHabitable(BigDecimal.valueOf(0.0));
-        fee.setFundRepairHabitable(BigDecimal.ZERO);
-        fee.setFundRepairNonHabitable(BigDecimal.ZERO);
+        fee.setFixedFeeHabitable(DEFAULT_AMOUNT);
+        fee.setAdultFee(DEFAULT_AMOUNT);
+        fee.setChildFee(DEFAULT_AMOUNT);
+        fee.setPetFee(DEFAULT_AMOUNT);
+        fee.setAdditionalFeeHabitable(DEFAULT_AMOUNT);
+        fee.setFixedFeeNonHabitable(DEFAULT_AMOUNT);
+        fee.setAdditionalFeeNonHabitable(DEFAULT_AMOUNT);
+        fee.setFundRepairHabitable(DEFAULT_AMOUNT);
+        fee.setFundRepairNonHabitable(DEFAULT_AMOUNT);
         feeRepository.save(fee);
 
         return fee;

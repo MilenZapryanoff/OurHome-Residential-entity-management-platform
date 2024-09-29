@@ -26,6 +26,7 @@ public class PropertyTypeServiceImpl implements PropertyTypeService {
     private final PropertyService propertyService;
     private final PropertyRepository propertyRepository;
     private final FeeService feeService;
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
 
     public PropertyTypeServiceImpl(ModelMapper modelMapper, PropertyTypeRepository propertyTypeRepository, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyRepository propertyRepository, FeeService feeService) {
         this.modelMapper = modelMapper;
@@ -54,8 +55,8 @@ public class PropertyTypeServiceImpl implements PropertyTypeService {
             newPropertyType.setDescription(propertyTypeAddBindingModel.getDescription());
             newPropertyType.setTotalFlatSpace(propertyTypeAddBindingModel.getTotalFlatSpace() == null ? BigDecimal.ZERO : propertyTypeAddBindingModel.getTotalFlatSpace());
             newPropertyType.setCommonPartsPercentage(propertyTypeAddBindingModel.getCommonPartsPercentage() == null ? BigDecimal.ZERO : propertyTypeAddBindingModel.getCommonPartsPercentage());
-            newPropertyType.setFundRepairHabitable(BigDecimal.ZERO);
-            newPropertyType.setFundRepairNotHabitable(BigDecimal.ZERO);
+            newPropertyType.setFundRepairHabitable(DEFAULT_AMOUNT);
+            newPropertyType.setFundRepairNotHabitable(DEFAULT_AMOUNT);
             newPropertyType.setResidentialEntity(residentialEntity);
             propertyTypeRepository.save(newPropertyType);
 

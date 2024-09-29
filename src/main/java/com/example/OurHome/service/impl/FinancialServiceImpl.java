@@ -29,7 +29,7 @@ public class FinancialServiceImpl implements FinancialService {
     private final FinancialRepository financialRepository;
     private final ResidentialEntityService residentialEntityService;
     private final ModelMapper modelMapper;
-
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
 
     public FinancialServiceImpl(FinancialRepository financialRepository, ModelMapper modelMapper, ResidentialEntityService residentialEntityService) {
         this.financialRepository = financialRepository;
@@ -245,7 +245,7 @@ public class FinancialServiceImpl implements FinancialService {
      */
 
     private ExpenseFilterBindingModel getExpenseFilterBindingModel(LocalDate startPeriod, LocalDate endPeriod, ResidentialEntity residentialEntity, ExpenseFilterBindingModel expenseFilterBindingModel) {
-        BigDecimal expensesTotalSum = BigDecimal.valueOf(0.0);
+        BigDecimal expensesTotalSum = DEFAULT_AMOUNT;
 
         List<Expense> filteredExpenses = financialRepository.findExpensesByDatesAndResidentialEntityId(startPeriod, endPeriod, residentialEntity.getId());
         for (Expense expense : filteredExpenses) {
