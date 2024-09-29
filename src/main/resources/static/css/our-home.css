@@ -3350,14 +3350,14 @@ Table nav bars
     padding: 10px 15px;
     border-radius: 5px;
     margin: 5px;
-    background-color: rgba(54, 54, 54, 0.87);
+    background-color: rgba(244, 67, 54, 0.82);
     color: white;
     transition: all 0.6s ease;
 }
 
 #yes-btn:hover {
     transition: all 0.6s ease;
-    background-color: black;
+    background-color: #DC3545;
 }
 
 #no-btn {
@@ -3365,13 +3365,13 @@ Table nav bars
     border-radius: 5px;
     margin: 5px;
     color: white;
-    background-color: rgba(244, 67, 54, 0.82);
+    background-color: rgba(54, 54, 54, 0.87);
     transition: all 0.6s ease;
 }
 
 #no-btn:hover {
     transition: all 0.6s ease;
-    background-color: #DC3545;
+    background-color: black;
 }
 
 /*
