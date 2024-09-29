@@ -310,7 +310,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
 
         propertyFeeRepository.save(propertyFee);
 
-        //Add amount to RE incomes in case of property fee is set as paid
+        //Add amount to RE incomes when property fee is set as paid
         if (propertyFee.isPaid()) {
             residentialEntityService.addPaymentAmountToIncomes(propertyFee, propertyFee.getProperty());
         }
