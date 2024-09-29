@@ -24,7 +24,7 @@ public class PropertyRegisterRequestServiceImpl implements PropertyRegisterReque
         int propertyNumber = propertyRegisterRequest.getNumber();
         Long residentialEntityId = propertyRegisterRequest.getResidentialEntityId();
 
-        //check again if there is no other active request for this property. Cannot exist more than ONE active request.
+        //check again if there is no other active request for this property. Cannot exist more than ONE active request!
         if (checkForNoActivePropertyRegisterRequest(propertyNumber, residentialEntityId)) {
             propertyRegisterRequestRepository.save(propertyRegisterRequest);
 
