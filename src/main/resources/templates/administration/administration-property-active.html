@@ -379,6 +379,18 @@
                         </form>
                     </td>
                     <td>
+                        <!--custom pop-up confirmation window-->
+                        <div class="modal">
+                            <div class="modal-content">
+                                <strong class="text-danger-emphasis">Attention!</strong>
+                                <p class="text-dark">Do you really want to delete this property?</p>
+                                <small class="text-secondary">Please note, that once deleted the property cannot be recovered and all it's data will be lost!</small>
+                                <div class="confirm-buttons-container">
+                                    <button id="yes-btn">Confirm</button>
+                                    <button id="no-btn">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
                         <form class="form-container"
                               th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"
                               th:method="POST"

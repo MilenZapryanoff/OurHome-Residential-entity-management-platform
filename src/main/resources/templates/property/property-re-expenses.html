@@ -147,11 +147,11 @@
                         </div>
                         <!--Expenses filter-->
                         <div class="expenses-report text-center col-lg-10">
-                            <div class="input-content">
-                                <form id="input-form"
-                                      th:method="POST"
-                                      th:action="@{/property/re/expenses/{id} (id=${property.getId()})}"
-                                      th:object="${expenseFilterBindingModel}">
+                            <form id="input-form"
+                                  th:method="POST"
+                                  th:action="@{/property/re/expenses/{id} (id=${property.getId()})}"
+                                  th:object="${expenseFilterBindingModel}">
+                                <div class="input-content">
                                     <div class="input-group">
                                         <div class="col-4">
                                             <fieldset>
@@ -196,14 +196,14 @@
                                                 class="orange-button col-lg-2">Filter
                                         </button>
                                     </fieldset>
-                                    <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active"
-                                             id="Properties" role="tabpanel"
-                                             aria-labelledby="properties-tab-tab">
-                                        </div>
+                                </div>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active"
+                                         id="Properties" role="tabpanel"
+                                         aria-labelledby="properties-tab-tab">
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
                         <!--Expenses list section-->
                         <div class="expenses-report row counter">
@@ -218,17 +218,17 @@
                                       class="category text-bg-success"></span>
                                 <hr>
                             </div>
-                            <table id="expenses-table" class="text-center">
+                            <table class="text-center">
                                 <tr>
-                                    <th>Amount</th>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Document</th>
+                                    <th><p>Amount</p></th>
+                                    <th><p>Date</p></th>
+                                    <th><p>Description</p></th>
+                                    <th><p>Document</p></th>
                                 </tr>
                                 <tr th:each="expense : ${expenseFilterBindingModel.getExpenseList()}">
-                                    <td th:text="${expense.getAmount()} + ' лв.'"></td>
-                                    <td th:text="${#temporals.format(expense.getExpenseDate(), 'dd.MM.yyyy')}"></td>
-                                    <td th:text="${expense.getDescription()}"></td>
+                                    <td><p th:text="${expense.getAmount()} + ' лв.'"></p></td>
+                                    <td><p th:text="${#temporals.format(expense.getExpenseDate(), 'dd.MM.yyyy')}"></p></td>
+                                    <td><p th:text="${expense.getDescription()}"></p></td>
                                     <td>
                                         <a th:if="${expense.getPicturePath()} != null"
                                            th:href="@{/expenses/details/{id} (id=${expense.getId()})}"

@@ -130,25 +130,38 @@
         <div class="info-table bottom-rounded">
             <!--Expenses search heading-->
             <div class="text-center">
+                <h6 class="text-dark">Setting access</h6>
+                <p>Allow members of this Residential entity to access expenses data</p>
+                <form th:action="@{/administration/financial/expenses/changeExpensesVisibility/{id}(id=${residentialEntity.getId()})}"
+                      method="POST">
+                    <fieldset>
+                        <label class="switch">
+                            <input name="expensesVisibilitySwitch" id="expensesVisibilitySwitch"
+                                   type="checkbox"
+                                   th:checked="${residentialEntity.isExpensesVisible()}"
+                                   onchange="submit()">
+                            <span class="slider round"></span>
+                        </label>
+                    </fieldset>
+                </form>
+                <hr>
                 <h4 class="category text-danger">EXPENSES SEARCH</h4>
             </div>
-            <div class="col-10" style="margin: 70px auto" id="filter">
-                <div class="input-content text-center">
-                    <div id="input-form">
-                        <form th:method="POST"
-                              th:action="@{/administration/financial/expenses/{id} (id=${id})}"
-                              th:object="${expenseFilterBindingModel}">
+            <div class="col-10 text-center" style="margin: 70px auto" id="filter">
 
+                <div id="input-form">
+                    <form th:method="POST"
+                          th:action="@{/administration/financial/expenses/{id} (id=${id})}"
+                          th:object="${expenseFilterBindingModel}">
+                        <div class="input-content">
                             <div class="input-group">
                                 <div class="col-4">
                                     <fieldset>
-                                        <label for="periodStart"><b>Start
-                                            period</b></label>
+                                        <label for="periodStart"><b>Start period</b></label>
                                         <br>
                                         <small th:if="${#fields.hasErrors('periodStart')}"
                                                th:errors="*{periodStart}"
-                                               class="text-danger">Fee start
-                                            period error...</small>
+                                               class="text-danger">Fee start period error...</small>
                                         <input type="date"
                                                id="periodStart"
                                                th:field="*{periodStart}"
@@ -183,22 +196,8 @@
                             <button type="submit" id="form-submit"
                                     class="orange-button col-lg-3">Filter
                             </button>
-                        </form>
-                        <hr>
-                        <span>Expenses data visible for residents:</span>
-                        <form th:action="@{/administration/financial/expenses/changeExpensesVisibility/{id}(id=${residentialEntity.getId()})}"
-                              method="POST">
-                            <fieldset>
-                                <label class="switch">
-                                    <input name="expensesVisibilitySwitch" id="expensesVisibilitySwitch"
-                                           type="checkbox"
-                                           th:checked="${residentialEntity.isExpensesVisible()}"
-                                           onchange="submit()">
-                                    <span class="slider round"></span>
-                                </label>
-                            </fieldset>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -285,6 +284,18 @@
                             </form>
                         </td>
                         <td align="center">
+                            <!--custom pop-up confirmation window-->
+                            <div class="modal">
+                                <div class="modal-content">
+                                    <strong class="text-danger-emphasis">Attention!</strong>
+                                    <p class="text-dark">Do you want to delete this expense?</p>
+                                    <small class="text-secondary">Please note, that once deleted the record cannot be recovered!</small>
+                                    <div class="confirm-buttons-container">
+                                        <button id="yes-btn">Confirm</button>
+                                        <button id="no-btn">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
                             <form class="form-container"
                                   th:action="@{/administration/financial/expenses/delete/{id} (id=${expense.getId()})}"
                                   th:method="POST">

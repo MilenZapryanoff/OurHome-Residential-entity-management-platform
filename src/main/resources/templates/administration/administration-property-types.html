@@ -242,6 +242,18 @@
                     </form>
                 </td>
                 <td class="table-image" align="center">
+                    <!--custom pop-up confirmation window-->
+                    <div class="modal">
+                        <div class="modal-content">
+                            <strong class="text-danger-emphasis">Attention!</strong>
+                            <p class="text-dark">Do you want to delete this property type?</p>
+                            <small class="text-secondary">Property types definitions help you to manage properties fees by property types!</small>
+                            <div class="confirm-buttons-container">
+                                <button id="yes-btn">Confirm</button>
+                                <button id="no-btn">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
                     <form class="form-container"
                           th:action="@{/administration/property/types/delete/{id} (id=${propertyType.getId()})}"
                           th:method="POST">

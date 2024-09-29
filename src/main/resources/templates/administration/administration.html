@@ -264,6 +264,18 @@
                                     residential entity. This will prevent any unwanted data loose!</p>
                                 <hr>
                                 <div class="col-lg-2">
+                                    <!--custom pop-up confirmation window-->
+                                    <div class="modal">
+                                        <div class="modal-content">
+                                            <strong class="text-danger-emphasis">Attention!</strong>
+                                            <p class="text-dark">Delete this Residential Entity?</p>
+                                            <small class="text-secondary">Please note, this action can be performed only if there are no registered owners! This protection will prevent any data loses!</small>
+                                            <div class="confirm-buttons-container">
+                                                <button id="yes-btn">Confirm</button>
+                                                <button id="no-btn">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <form th:action="@{/administration/remove/{id}(id=${residentialEntity.getId()})}"
                                           method="POST">
                                         <input type="hidden" th:value="${residentialEntity.getId()}"/>

@@ -221,11 +221,24 @@
                                         No pending change requests
                                     </li>
                                     <li th:if="${property.isObtained() and property.getPropertyChangeRequest() != null}">
+                                        <!--custom pop-up confirmation window-->
+                                        <div class="modal">
+                                            <div class="modal-content">
+                                                <strong class="text-danger-emphasis">Attention!</strong>
+                                                <p class="text-dark">Do you want to cancel request?</p>
+                                                <small class="text-secondary">This action will cancel data change request! Property will remain active and no data will be changed or lost.</small>
+                                                <div class="confirm-buttons-container">
+                                                    <button id="yes-btn">Confirm</button>
+                                                    <button id="no-btn">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <form th:method="POST"
-                                              th:action="@{/property/details/cancel-change-request/{id}(id=${property.getId()})}">
+                                              th:action="@{/property/details/cancel-change-request/{id}(id=${property.getId()})}"
+                                            id="form-confirm">
                                             <fieldset class="text-center">
-                                                <button onclick="return confirmCancelChange()" type="submit"
-                                                        id="cancel-change-request">Cancel request
+                                                <button type="button"
+                                                        class="cancel-change-request" id="delete-btn">Cancel request
                                                 </button>
                                             </fieldset>
                                         </form>

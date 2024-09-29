@@ -206,11 +206,23 @@
                             <div class="accordion-body">
                                 <div th:if="${property.isObtained()}">
                                     <p><b>Unlink property from your account.</b></p>
-                                    <p> This action will remove the ownership of this property.</p>
+                                    <p>This action will reset the ownership of this property.</p>
                                     <p>Your property will remain active and no data will be lost.</p>
-                                    <p>Residential Entity manager will still be able to manage it as usual and you will
+                                    <p>Residential Entity manager will still be able to manage it as usual, and you will
                                         still be able to link the property to your profile again later!</p>
                                     <hr>
+                                    <!--custom pop-up confirmation window-->
+                                    <div class="modal">
+                                        <div class="modal-content">
+                                            <strong class="text-danger-emphasis">Attention!</strong>
+                                            <p class="text-dark">Unlink property?</p>
+                                            <small class="text-secondary">This action will reset the ownership of this property! Your property will remain active and no data will be lost.</small>
+                                            <div class="confirm-buttons-container">
+                                                <button id="yes-btn">Confirm</button>
+                                                <button id="no-btn">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <form th:action="@{/property/delete/{id}(id=${property.getId()})}"
                                           method="POST">
                                         <input type="hidden"
@@ -237,6 +249,18 @@
                                     <p>Residential Entity manager will still be able to manage it as usual, and you will
                                         still be able to create a new registration request later!</p>
                                     <hr>
+                                    <!--custom pop-up confirmation window-->
+                                    <div class="modal">
+                                        <div class="modal-content">
+                                            <strong class="text-danger-emphasis">Attention!</strong>
+                                            <p class="text-dark">Cancel request?</p>
+                                            <small class="text-secondary">This action will cancel property registration request! Property will remain active and no data will be lost.</small>
+                                            <div class="confirm-buttons-container">
+                                                <button id="yes-btn">Confirm</button>
+                                                <button id="no-btn">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <form th:action="@{/property/delete/{id}(id=${property.getId()})}"
                                           method="POST">
                                         <input type="hidden"

@@ -606,6 +606,18 @@
                                  alt="Paid fee cannot be edited!">
                         </td>
                         <td class="table-image">
+                            <!--custom pop-up confirmation window-->
+                            <div class="modal">
+                                <div class="modal-content">
+                                    <strong class="text-danger-emphasis">Attention!</strong>
+                                    <p class="text-dark">Do you really want to delete this fee?</p>
+                                    <small class="text-secondary">Please note, that this action will erase the fee. This action will also trigger Residential Entity Incomes reversal for the amount of the fee. If fee contains overpaid amount it will be also refunded to the property account!</small>
+                                    <div class="confirm-buttons-container">
+                                        <button id="yes-btn">Confirm</button>
+                                        <button id="no-btn">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
                             <form class="form-container"
                                   th:action="@{/administration/fees/details/delete/{id} (id=${propertyFee.getId()})}"
                                   th:method="POST">

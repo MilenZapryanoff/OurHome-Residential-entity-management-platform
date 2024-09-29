@@ -1,0 +1,106 @@
+Sep 17, 2024 9:18:16 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/index, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:null
+Sep 17, 2024 9:18:16 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/favicon.ico, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:16 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/error, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:18 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:18 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/favicon.ico, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:18 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/error, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:21 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/fees/12037817, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:21 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/financial/expenses/12037817, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:36 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/fees/12037817, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:36 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/favicon.ico, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:36 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/error, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:45 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/fees/changeAutoFeeButton/2, Method:POST, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:46 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/fees/12037817, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:46 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/favicon.ico, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:46 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/error, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:48 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/fees/turnAllPropertiesFeesOn/12037817, Method:POST, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:48 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/fees/12037817, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:49 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/favicon.ico, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:49 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/error, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:18:50 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/fees/details/2, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:03 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/messages, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:03 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/favicon.ico, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:03 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/error, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:20 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/messages/send/4, Method:POST, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:20 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/favicon.ico, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:20 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/error, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:30 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/messages/send/4, Method:POST, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:30 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/favicon.ico, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:30 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/error, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:32 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/messages/send/4, Method:POST, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:32 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/favicon.ico, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:32 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/error, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:35 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:42 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/remove/12037817, Method:POST, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:43 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/favicon.ico, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:43 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/error, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:19:46 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/add, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:20:08 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/add, Method:POST, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:20:14 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/add, Method:POST, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:20:15 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:20:16 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/property/active/46622185, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:20:32 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/property/delete/16, Method:POST, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:20:32 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/property/active/46622185, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:20:35 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/property/change-requests/46622185, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:20:37 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/financial/expenses/46622185, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 17, 2024 9:20:39 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:F0BB77F8E163F093C95A151B0ABACC21
+Sep 29, 2024 12:40:03 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/messages, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:9691E6C9D38262F4D67A00272E2C4DF9
+Sep 29, 2024 12:40:07 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/index, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:20E89F973F7AB0F9274E10B8023032DA
+Sep 29, 2024 12:40:08 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:20E89F973F7AB0F9274E10B8023032DA
+Sep 29, 2024 12:40:12 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/fees/46622185, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:20E89F973F7AB0F9274E10B8023032DA
+Sep 29, 2024 12:40:24 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/property/active/46622185, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:20E89F973F7AB0F9274E10B8023032DA
+Sep 29, 2024 12:40:41 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/property/delete/17, Method:POST, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:20E89F973F7AB0F9274E10B8023032DA
+Sep 29, 2024 12:40:42 PM com.example.OurHome.service.LogInterceptor logRequestDetails
+INFO: Requested URL:http://localhost:8080/administration/property/active/46622185, Method:GET, Remote Address:127.0.0.1, Remote host:127.0.0.1, Requested Session id:20E89F973F7AB0F9274E10B8023032DA
