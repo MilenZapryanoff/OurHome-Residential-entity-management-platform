@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -366,6 +367,7 @@ class MessageServiceImplTestIT {
         user.setUsername("tester");
         user.setPassword("testPassword");
         user.setPhoneNumber("0666666666");
+        user.setRegistrationDateTime(LocalDateTime.now());
         user.setRole(role);
         userRepository.save(user);
         return user;
@@ -381,6 +383,7 @@ class MessageServiceImplTestIT {
         manager.setUsername("testerManager");
         manager.setPassword("testPassword");
         manager.setPhoneNumber("0777777777");
+        manager.setRegistrationDateTime(LocalDateTime.now());
         manager.setRole(role);
         userRepository.save(manager);
         return manager;
