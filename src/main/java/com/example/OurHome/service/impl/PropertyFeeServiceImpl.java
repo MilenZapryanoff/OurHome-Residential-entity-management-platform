@@ -29,7 +29,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     private final ModelMapper modelMapper;
     private final MessageService messageService;
     private final ResidentialEntityService residentialEntityService;
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
 
     public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper, MessageService messageService, ResidentialEntityService residentialEntityService) {
         this.propertyFeeRepository = propertyFeeRepository;
