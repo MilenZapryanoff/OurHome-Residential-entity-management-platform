@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -144,6 +146,9 @@ class ResidentialEntityServiceImplTestIT {
         residentialEntity.setCity(cityRepository.findByName(CityName.valueOf("София")));
         residentialEntity.setStreetName("test");
         residentialEntity.setStreetNumber(String.valueOf(1));
+        residentialEntity.setIncomesFundMm(BigDecimal.ZERO);
+        residentialEntity.setIncomesFundRepair(BigDecimal.ZERO);
+        residentialEntity.setIncomesTotalAmount(BigDecimal.ZERO);
         residentialEntityRepository.save(residentialEntity);
         return residentialEntity;
     }
@@ -158,6 +163,7 @@ class ResidentialEntityServiceImplTestIT {
         manager.setUsername("testerManager");
         manager.setPassword("testPassword");
         manager.setPhoneNumber("0777777777");
+        manager.setRegistrationDateTime(LocalDateTime.now());
         manager.setRole(role);
         userRepository.save(manager);
         return manager;
