@@ -29,7 +29,7 @@ public class FinancialServiceImpl implements FinancialService {
     private final FinancialRepository financialRepository;
     private final ResidentialEntityService residentialEntityService;
     private final ModelMapper modelMapper;
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
 
     public FinancialServiceImpl(FinancialRepository financialRepository, ModelMapper modelMapper, ResidentialEntityService residentialEntityService) {
         this.financialRepository = financialRepository;

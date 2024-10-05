@@ -36,3 +36,4 @@ build/
 src/.DS_Store
 src/main/resources/OurHomeApplication.log
 src/main/resources/OurHomeApplication.log.lck
+src/main/resources/static/avatars/avatar-1-testUser.jpg

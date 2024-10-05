@@ -55,6 +55,6 @@ class PropertyServiceImplTest {
 
         Property propertyById = serviceToTest.findPropertyById(1L);
 
-        assertEquals("99", propertyById.getNumber());
+        assertEquals(99, propertyById.getNumber());
     }
 }

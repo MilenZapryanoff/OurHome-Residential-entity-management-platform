@@ -127,6 +127,8 @@ class PropertyFeeServiceImplTestIT {
         propertyFeeEditBindingModel.setFeeAmount(BigDecimal.valueOf(10));
         propertyFeeEditBindingModel.setPeriodStart(LocalDate.parse("2023-11-01"));
         propertyFeeEditBindingModel.setPeriodEnd(LocalDate.parse("2023-11-30"));
+        propertyFeeEditBindingModel.setFundMmAmount(BigDecimal.TEN);
+        propertyFeeEditBindingModel.setFundRepairAmount(BigDecimal.TEN);
 
         Long id = null;
         List<PropertyFee> all = propertyFeeRepository.findAll();
@@ -138,7 +140,7 @@ class PropertyFeeServiceImplTestIT {
 
         Optional<PropertyFee> modifiedPropertyFee = propertyFeeRepository.findById(id);
 
-        assertEquals(0, modifiedPropertyFee.get().getFeeAmount().compareTo(BigDecimal.TEN));
+        assertEquals(0, modifiedPropertyFee.get().getFeeAmount().compareTo(BigDecimal.valueOf(20.00)));
     }
 
 
@@ -162,7 +164,8 @@ class PropertyFeeServiceImplTestIT {
         propertyRepository.save(property);
 
         PropertyFeeAddBindingModel propertyFeeAddBindingModel = new PropertyFeeAddBindingModel();
-        propertyFeeAddBindingModel.setFeeAmount(BigDecimal.valueOf(10));
+        propertyFeeAddBindingModel.setFundMmAmount(BigDecimal.valueOf(10));
+        propertyFeeAddBindingModel.setFundRepairAmount(BigDecimal.valueOf(10));
         propertyFeeAddBindingModel.setPeriodStart(LocalDate.parse("2023-11-01"));
         propertyFeeAddBindingModel.setPeriodEnd(LocalDate.parse("2023-11-30"));
         propertyFeeAddBindingModel.setDescription("test");
@@ -259,6 +262,9 @@ class PropertyFeeServiceImplTestIT {
         propertyFee.setFeeAmount(BigDecimal.valueOf(0));
         propertyFee.setPeriodStart(LocalDate.parse("2023-12-01"));
         propertyFee.setPeriodEnd(LocalDate.parse("2023-12-07"));
+        propertyFee.setDueAmount(BigDecimal.valueOf(0.00));
+        propertyFee.setFundMmAmount(BigDecimal.valueOf(0.00));
+        propertyFee.setFundRepairAmount(BigDecimal.valueOf(0.00));
         return propertyFee;
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -216,6 +217,9 @@ class FinancialServiceImplTestIT {
         residentialEntity.setStreetName("Test");
         residentialEntity.setStreetNumber(String.valueOf(1));
         residentialEntity.setCity(cityRepository.findByName(CityName.valueOf("София")));
+        residentialEntity.setIncomesFundMm(BigDecimal.valueOf(0.00));
+        residentialEntity.setIncomesFundRepair(BigDecimal.valueOf(0.00));
+        residentialEntity.setIncomesTotalAmount(BigDecimal.valueOf(0.00));
         return residentialEntity;
     }
 
@@ -237,6 +241,7 @@ class FinancialServiceImplTestIT {
         manager.setUsername("testerManager");
         manager.setPassword("testPassword");
         manager.setPhoneNumber("0777777777");
+        manager.setRegistrationDateTime(LocalDateTime.now());
         manager.setRole(role);
         userRepository.save(manager);
         return manager;

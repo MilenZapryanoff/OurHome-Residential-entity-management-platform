@@ -26,7 +26,7 @@ public class PropertyTypeServiceImpl implements PropertyTypeService {
     private final PropertyService propertyService;
     private final PropertyRepository propertyRepository;
     private final FeeService feeService;
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
 
     public PropertyTypeServiceImpl(ModelMapper modelMapper, PropertyTypeRepository propertyTypeRepository, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyRepository propertyRepository, FeeService feeService) {
         this.modelMapper = modelMapper;

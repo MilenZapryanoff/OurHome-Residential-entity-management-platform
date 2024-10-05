@@ -20,7 +20,7 @@ public class FeeServiceImpl implements FeeService {
     private final FeeRepository feeRepository;
     private final PropertyRepository propertyRepository;
     private final ModelMapper modelMapper;
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
 
     public FeeServiceImpl(FeeRepository feeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper) {
         this.feeRepository = feeRepository;
