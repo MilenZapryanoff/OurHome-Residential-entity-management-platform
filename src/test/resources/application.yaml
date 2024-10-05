@@ -84,9 +84,9 @@ spring:
         enabled: 'true'
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: root
+    username: ${db_username}
     #Change password before running tests
-    password: *
+    password: ${db_password}
     url: jdbc:mysql://localhost:3306/ourhome_test?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
   thymeleaf: # Thymeleaf
     cache: false
