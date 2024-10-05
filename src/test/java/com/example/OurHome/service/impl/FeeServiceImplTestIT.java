@@ -57,12 +57,12 @@ class FeeServiceImplTestIT {
         assertNotNull(createdFee);
 
         assertEquals(BigDecimal.valueOf(0.00), createdFee.getFixedFeeHabitable());
-        assertEquals(BigDecimal.valueOf(0.0), createdFee.getAdultFee());
-        assertEquals(BigDecimal.valueOf(0.0), createdFee.getChildFee());
-        assertEquals(BigDecimal.valueOf(0.0), createdFee.getPetFee());
-        assertEquals(BigDecimal.valueOf(0.0), createdFee.getAdditionalFeeHabitable());
-        assertEquals(BigDecimal.valueOf(0.0), createdFee.getFixedFeeNonHabitable());
-        assertEquals(BigDecimal.valueOf(0.0), createdFee.getAdditionalFeeNonHabitable());
+        assertEquals(BigDecimal.valueOf(0.00), createdFee.getAdultFee());
+        assertEquals(BigDecimal.valueOf(0.00), createdFee.getChildFee());
+        assertEquals(BigDecimal.valueOf(0.00), createdFee.getPetFee());
+        assertEquals(BigDecimal.valueOf(0.00), createdFee.getAdditionalFeeHabitable());
+        assertEquals(BigDecimal.valueOf(0.00), createdFee.getFixedFeeNonHabitable());
+        assertEquals(BigDecimal.valueOf(0.00), createdFee.getAdditionalFeeNonHabitable());
     }
 
     @Test
