@@ -32,7 +32,7 @@ public class PropertyServiceImpl implements PropertyService {
     private final ResidentialEntityRepository residentialEntityRepository;
     private final PropertyRegisterRequestService propertyRegisterRequestService;
     private final PropertyChangeRequestService propertyChangeRequestService;
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
 
 
     public PropertyServiceImpl(ModelMapper modelMapper, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService, ApplicationEventPublisher applicationEventPublisher, ResidentialEntityRepository residentialEntityRepository, PropertyRegisterRequestService propertyRegisterRequestService, PropertyChangeRequestService propertyChangeRequestService) {
