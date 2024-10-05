@@ -40,7 +40,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     private final PropertyService propertyService;
     private final PropertyRegisterRequestServiceImpl propertyRegisterRequestService;
     private final PropertyChangeRequestService propertyChangeRequestService;
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO;
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
 
     public ResidentialEntityServiceImpl(ModelMapper modelMapper, CityRepository cityRepository, FeeService feeService, ResidentialEntityRepository residentialEntityRepository, PasswordEncoder passwordEncoder, PropertyService propertyService, PropertyRegisterRequestServiceImpl propertyRegisterRequestService, PropertyChangeRequestService propertyChangeRequestService) {
         this.modelMapper = modelMapper;
