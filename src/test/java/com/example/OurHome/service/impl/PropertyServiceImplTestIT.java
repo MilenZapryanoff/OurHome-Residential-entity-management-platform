@@ -1,6 +1,7 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.*;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyCreateBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
@@ -373,6 +374,37 @@ class PropertyServiceImplTestIT {
         assertTrue(property.get().isValidated());
     }
 
+    @Test
+    void testCreateSingleProperty() {
+
+        PropertyCreateBindingModel propertyCreateBindingModel = creteTestPropertyCreateBindingModel();
+        ResidentialEntity residentialEntity = createResidentialEntity();
+        residentialEntityRepository.save(residentialEntity);
+
+        propertyServiceToTest.createSingleProperty(propertyCreateBindingModel, residentialEntity, null);
+
+        List<Property> allProperties = propertyRepository.findAll();
+        Property newProperty = allProperties.getFirst();
+
+        assertEquals(propertyCreateBindingModel.getFloor(), newProperty.getFloor());
+        assertEquals(propertyCreateBindingModel.getNumber(), newProperty.getNumber());
+        assertEquals(propertyCreateBindingModel.getNumberOfAdults(), newProperty.getNumberOfAdults());
+        assertEquals(propertyCreateBindingModel.getNumberOfChildren(), newProperty.getNumberOfChildren());
+        assertEquals(propertyCreateBindingModel.getNumberOfPets(), newProperty.getNumberOfPets());
+        assertEquals(propertyCreateBindingModel.isNotHabitable(), newProperty.isNotHabitable());
+
+    }
+
+    private PropertyCreateBindingModel creteTestPropertyCreateBindingModel() {
+        PropertyCreateBindingModel propertyCreateBindingModel = new PropertyCreateBindingModel();
+        propertyCreateBindingModel.setFloor("89");
+        propertyCreateBindingModel.setNumber(89);
+        propertyCreateBindingModel.setNumberOfAdults(22);
+        propertyCreateBindingModel.setNumberOfChildren(22);
+        propertyCreateBindingModel.setNumberOfPets(22);
+        propertyCreateBindingModel.setNotHabitable(true);
+        return  propertyCreateBindingModel;
+    }
 
     @Test
     void testApprovePropertyRegistrationWithDataChange() {
