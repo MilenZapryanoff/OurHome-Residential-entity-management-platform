@@ -6,12 +6,12 @@ import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddGlobalFeeBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
-import com.example.OurHome.service.events.PropertyCreationEvent;
 import com.example.OurHome.repo.PropertyFeeRepository;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.PropertyFeeService;
 import com.example.OurHome.service.ResidentialEntityService;
+import com.example.OurHome.service.events.PropertyCreationEvent;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.event.EventListener;
@@ -24,12 +24,12 @@ import java.util.List;
 @Service
 public class PropertyFeeServiceImpl implements PropertyFeeService {
 
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
     private final PropertyFeeRepository propertyFeeRepository;
     private final PropertyRepository propertyRepository;
     private final ModelMapper modelMapper;
     private final MessageService messageService;
     private final ResidentialEntityService residentialEntityService;
-    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
 
     public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper, MessageService messageService, ResidentialEntityService residentialEntityService) {
         this.propertyFeeRepository = propertyFeeRepository;
@@ -326,8 +326,7 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
      * @param totalMonthlyFee Total Monthly fee
      * @param newMonthlyFee   NewMonthlyFee
      */
-    private void setMonthlyFeeWithOverpayment(Property property, BigDecimal overpayment,
-                                              BigDecimal totalMonthlyFee, PropertyFee newMonthlyFee) {
+    private void setMonthlyFeeWithOverpayment(Property property, BigDecimal overpayment, BigDecimal totalMonthlyFee, PropertyFee newMonthlyFee) {
 
         //Setting new propertyFee when overpaid amount < total monthly fee
         if (overpayment.compareTo(totalMonthlyFee) < 0) {

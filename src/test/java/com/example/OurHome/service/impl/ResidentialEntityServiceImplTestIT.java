@@ -1,15 +1,13 @@
 package com.example.OurHome.service.impl;
 
+import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.Role;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityRegisterBindingModel;
 import com.example.OurHome.model.enums.CityName;
-import com.example.OurHome.repo.CityRepository;
-import com.example.OurHome.repo.ResidentialEntityRepository;
-import com.example.OurHome.repo.RoleRepository;
-import com.example.OurHome.repo.UserRepository;
+import com.example.OurHome.repo.*;
 import com.example.OurHome.service.ResidentialEntityService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,18 +32,22 @@ class ResidentialEntityServiceImplTestIT {
     @Autowired
     private ResidentialEntityRepository residentialEntityRepository;
     @Autowired
+    private PropertyRepository propertyRepository;
+    @Autowired
     private RoleRepository roleRepository;
     @Autowired
     private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
+        propertyRepository.deleteAll();
         residentialEntityRepository.deleteAll();
         userRepository.deleteAll();
     }
 
     @AfterEach
     void tearDown() {
+        propertyRepository.deleteAll();
         residentialEntityRepository.deleteAll();
         userRepository.deleteAll();
     }

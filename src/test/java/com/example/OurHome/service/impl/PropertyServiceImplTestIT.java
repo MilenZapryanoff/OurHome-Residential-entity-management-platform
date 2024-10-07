@@ -1,6 +1,7 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.*;
+import com.example.OurHome.model.dto.BindingModels.Property.PropertyCreateBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
@@ -258,9 +259,14 @@ class PropertyServiceImplTestIT {
     }
 
     @Test
-    void testModeratorEditProperty() {
+    void testModeratorEditPropertyIfPropertyNotHabitable() {
+        PropertyType propertyType = createTestPropertyType();
+        propertyTypeRepository.save(propertyType);
+
         Property testProperty = createTestProperty();
+        testProperty.setPropertyType(propertyType);
         testProperty.setResidentialEntity(createResidentialEntity());
+
         propertyRepository.save(testProperty);
 
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
@@ -277,20 +283,61 @@ class PropertyServiceImplTestIT {
             id = property1.getId();
         }
 
-        PropertyType propertyType = new PropertyType();
-
         propertyServiceToTest.editProperty(id, propertyEditBindingModel, propertyType);
-
         Optional<Property> property = propertyRepository.findById(id);
 
         assertNotNull(property);
         assertEquals(propertyEditBindingModel.getFloor(), property.get().getFloor());
         assertEquals(propertyEditBindingModel.getNumber(), property.get().getNumber());
-        assertEquals(propertyEditBindingModel.getNumberOfAdults(), property.get().getNumberOfAdults());
+        assertEquals(property.get().getNumberOfChildren(),0);
+        assertEquals(property.get().getNumberOfPets(),0);
+        assertEquals(property.get().getNumberOfAdults(),0);
+        assertTrue(property.get().isValidated());
+    }
+
+    @Test
+    void testModeratorEditPropertyIfPropertyIsHabitable() {
+        PropertyType propertyType = createTestPropertyType();
+        propertyTypeRepository.save(propertyType);
+
+        Property testProperty = createTestProperty();
+        testProperty.setPropertyType(propertyType);
+        testProperty.setValidated(false);
+        testProperty.setResidentialEntity(createResidentialEntity());
+
+        propertyRepository.save(testProperty);
+
+        PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
+        propertyEditBindingModel.setFloor(String.valueOf(10));
+        propertyEditBindingModel.setNumber(10);
+        propertyEditBindingModel.setNumberOfAdults(20);
+        propertyEditBindingModel.setNumberOfChildren(20);
+        propertyEditBindingModel.setNumberOfPets(20);
+        propertyEditBindingModel.setNotHabitable(false);
+
+        List<Property> allProperties = propertyRepository.findAll();
+
+        propertyServiceToTest.editProperty(allProperties.getFirst().getId(), propertyEditBindingModel, propertyType);
+        Optional<Property> property = propertyRepository.findById(allProperties.getFirst().getId());
+
+        assertNotNull(property);
+        assertEquals(propertyEditBindingModel.getFloor(), property.get().getFloor());
+        assertEquals(propertyEditBindingModel.getNumber(), property.get().getNumber());
         assertEquals(propertyEditBindingModel.getNumberOfChildren(), property.get().getNumberOfChildren());
         assertEquals(propertyEditBindingModel.getNumberOfPets(), property.get().getNumberOfPets());
-        assertEquals(propertyEditBindingModel.isNotHabitable(), property.get().isNotHabitable());
+        assertEquals(propertyEditBindingModel.getNumberOfAdults(),property.get().getNumberOfAdults());
         assertTrue(property.get().isValidated());
+    }
+
+    private PropertyType createTestPropertyType() {
+        PropertyType propertyType = new PropertyType();
+
+        propertyType.setFundRepairNotHabitable(BigDecimal.valueOf(8.0));
+        propertyType.setFundRepairHabitable(BigDecimal.valueOf(8.0));
+        propertyType.setCommonPartsPercentage(BigDecimal.valueOf(8.0));
+        propertyType.setTotalFlatSpace(BigDecimal.valueOf(8.0));
+        propertyType.setDescription("test property type");
+        return propertyType;
     }
 
     @Test
@@ -373,24 +420,72 @@ class PropertyServiceImplTestIT {
         assertTrue(property.get().isValidated());
     }
 
+    @Test
+    void testCreateSingleProperty() {
+
+        PropertyCreateBindingModel propertyCreateBindingModel = creteTestPropertyCreateBindingModel();
+        ResidentialEntity residentialEntity = createResidentialEntity();
+        residentialEntityRepository.save(residentialEntity);
+
+        propertyServiceToTest.createSingleProperty(propertyCreateBindingModel, residentialEntity, null);
+
+        List<Property> allProperties = propertyRepository.findAll();
+        Property newProperty = allProperties.getFirst();
+
+        assertEquals(propertyCreateBindingModel.getFloor(), newProperty.getFloor());
+        assertEquals(propertyCreateBindingModel.getNumber(), newProperty.getNumber());
+        assertEquals(propertyCreateBindingModel.getNumberOfAdults(), newProperty.getNumberOfAdults());
+        assertEquals(propertyCreateBindingModel.getNumberOfChildren(), newProperty.getNumberOfChildren());
+        assertEquals(propertyCreateBindingModel.getNumberOfPets(), newProperty.getNumberOfPets());
+        assertEquals(propertyCreateBindingModel.isNotHabitable(), newProperty.isNotHabitable());
+
+    }
+
+    private PropertyCreateBindingModel creteTestPropertyCreateBindingModel() {
+        PropertyCreateBindingModel propertyCreateBindingModel = new PropertyCreateBindingModel();
+        propertyCreateBindingModel.setFloor("89");
+        propertyCreateBindingModel.setNumber(89);
+        propertyCreateBindingModel.setNumberOfAdults(22);
+        propertyCreateBindingModel.setNumberOfChildren(22);
+        propertyCreateBindingModel.setNumberOfPets(22);
+        propertyCreateBindingModel.setNotHabitable(true);
+        return  propertyCreateBindingModel;
+    }
 
     @Test
     void testApprovePropertyRegistrationWithDataChange() {
+
+        ResidentialEntity residentialEntity = createResidentialEntity();
+        residentialEntityRepository.save(residentialEntity);
+
+        PropertyRegisterRequest testPropertyRegisterRequest = createTestpropertyRegisterRequest();
+        testPropertyRegisterRequest.setResidentialEntityId(100L);
+        propertyRegisterRequestRepository.save(testPropertyRegisterRequest);
+
         Property testProperty = createTestProperty();
-        testProperty.setResidentialEntity(createResidentialEntity());
+        testProperty.setResidentialEntity(residentialEntity);
+        testProperty.setPropertyRegisterRequest(testPropertyRegisterRequest);
         propertyRepository.save(testProperty);
 
+        UserEntity testOwner = createTestOwner();
+        userRepository.save(testOwner);
+
         Long id = null;
-        List<Property> all = propertyRepository.findAll();
-        for (Property property1 : all) {
-            id = property1.getId();
-        }
+        List<Property> allProperties = propertyRepository.findAll();
+        Property resultProperty = allProperties.getFirst();
 
-        propertyServiceToTest.approvePropertyRegistrationWithDataChange(id, true);
+        propertyServiceToTest.approvePropertyRegistrationWithDataChange(resultProperty.getId(), true);
 
-        Optional<Property> property = propertyRepository.findById(id);
+        Optional<Property> property = propertyRepository.findById(resultProperty.getId());
+        List<PropertyRegisterRequest> allPropertyRegisterRequests = propertyRegisterRequestRepository.findAll();
+        PropertyRegisterRequest resultPropertyRegisterRequest = allPropertyRegisterRequests.getFirst();
 
-        assertTrue(property.get().isValidated());
+        assertEquals(property.get().getNumberOfAdults(), testPropertyRegisterRequest.getNumberOfAdults());
+        assertEquals(property.get().getNumberOfChildren(), testPropertyRegisterRequest.getNumberOfChildren());
+        assertEquals(property.get().getNumberOfPets(), testPropertyRegisterRequest.getNumberOfPets());
+        assertTrue(property.get().isObtained());
+        assertNull(property.get().getPropertyRegisterRequest());
+        assertFalse(resultPropertyRegisterRequest.isActive());
     }
 
     @Test
@@ -597,6 +692,8 @@ class PropertyServiceImplTestIT {
         fee.setFixedFeeHabitable(BigDecimal.valueOf(0));
         fee.setFixedFeeNonHabitable(BigDecimal.valueOf(0));
         fee.setAdditionalFeeNonHabitable(BigDecimal.valueOf(0));
+        fee.setFundRepairHabitable(BigDecimal.valueOf(0));
+        fee.setFundRepairNonHabitable(BigDecimal.valueOf(0));
         return fee;
     }
 

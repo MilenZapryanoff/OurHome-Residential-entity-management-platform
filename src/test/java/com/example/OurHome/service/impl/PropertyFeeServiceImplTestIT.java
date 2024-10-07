@@ -1,11 +1,10 @@
 package com.example.OurHome.service.impl;
 
-import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.model.Entity.PropertyFee;
+import com.example.OurHome.model.Entity.*;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
-import com.example.OurHome.repo.PropertyFeeRepository;
-import com.example.OurHome.repo.PropertyRepository;
+import com.example.OurHome.model.enums.CityName;
+import com.example.OurHome.repo.*;
 import com.example.OurHome.service.PropertyFeeService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,21 +25,33 @@ class PropertyFeeServiceImplTestIT {
 
     @Autowired
     private PropertyFeeService propertyFeeServiceToTest;
-
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ResidentialEntityRepository residentialEntityRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private CityRepository cityRepository;
     @Autowired
     private PropertyFeeRepository propertyFeeRepository;
-
     @Autowired
     private PropertyRepository propertyRepository;
 
     @BeforeEach
     void setUp() {
         propertyFeeRepository.deleteAll();
+        propertyRepository.deleteAll();
+        residentialEntityRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @AfterEach
     void tearDown() {
         propertyFeeRepository.deleteAll();
+        propertyRepository.deleteAll();
+        residentialEntityRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -49,15 +61,10 @@ class PropertyFeeServiceImplTestIT {
 
         propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
-        Long id = null;
-        List<PropertyFee> all = propertyFeeRepository.findAll();
-        for (PropertyFee propertyFee : all) {
-            id = propertyFee.getId();
-        }
+        List<PropertyFee> allProperties = propertyFeeRepository.findAll();
+        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.getFirst().getId());
 
-        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(id);
-
-        assertEquals(0, propertyFee.get().getFeeAmount().compareTo(BigDecimal.TEN));
+        assertEquals(0, propertyFee.get().getFeeAmount().compareTo(BigDecimal.valueOf(20.00)));
     }
 
     @Test
@@ -68,34 +75,28 @@ class PropertyFeeServiceImplTestIT {
 
         propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
-        Long id = null;
-        List<PropertyFee> all = propertyFeeRepository.findAll();
-        for (PropertyFee propertyFee : all) {
-            id = propertyFee.getId();
-        }
+        List<PropertyFee> allProperties = propertyFeeRepository.findAll();
+        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.getFirst().getId());
 
-        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(id);
-
-        assertEquals(0, propertyFee.get().getFeeAmount().compareTo(BigDecimal.valueOf(5)));
+        assertEquals(0, propertyFee.get().getDueAmount().compareTo(BigDecimal.valueOf(15)));
     }
 
     @Test
     void testCreateMonthlyFeeWithOverpaymentEqualToMonthlyFee() {
+        ResidentialEntity residentialEntity = createResidentialEntity();
+        residentialEntityRepository.save(residentialEntity);
+
         Property property = createTestProperty();
-        property.setOverpayment(BigDecimal.valueOf(10));
+        property.setResidentialEntity(residentialEntity);
+        property.setOverpayment(BigDecimal.valueOf(20));
         propertyRepository.save(property);
 
         propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
-        Long id = null;
-        List<PropertyFee> all = propertyFeeRepository.findAll();
-        for (PropertyFee propertyFee : all) {
-            id = propertyFee.getId();
-        }
+        List<PropertyFee> allProperties = propertyFeeRepository.findAll();
+        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.getFirst().getId());
 
-        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(id);
-
-        assertEquals(0, propertyFee.get().getFeeAmount().compareTo(BigDecimal.TEN));
+        assertEquals(0, propertyFee.get().getDueAmount().compareTo(BigDecimal.ZERO));
     }
 
     @Test
@@ -106,15 +107,10 @@ class PropertyFeeServiceImplTestIT {
 
         propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
-        Long id = null;
-        List<PropertyFee> all = propertyFeeRepository.findAll();
-        for (PropertyFee propertyFee : all) {
-            id = propertyFee.getId();
-        }
+        List<PropertyFee> allProperties = propertyFeeRepository.findAll();
+        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.getFirst().getId());
 
-        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(id);
-
-        assertEquals(0, propertyFee.get().getFeeAmount().compareTo(BigDecimal.TEN));
+        assertEquals(0, propertyFee.get().getDueAmount().compareTo(BigDecimal.valueOf(5)));
     }
 
 
@@ -130,15 +126,11 @@ class PropertyFeeServiceImplTestIT {
         propertyFeeEditBindingModel.setFundMmAmount(BigDecimal.TEN);
         propertyFeeEditBindingModel.setFundRepairAmount(BigDecimal.TEN);
 
-        Long id = null;
-        List<PropertyFee> all = propertyFeeRepository.findAll();
-        for (PropertyFee fee : all) {
-            id = fee.getId();
-        }
+        List<PropertyFee> allProperties = propertyFeeRepository.findAll();
 
-        propertyFeeServiceToTest.editMonthlyFee(id, propertyFeeEditBindingModel);
+        propertyFeeServiceToTest.editMonthlyFee(allProperties.getFirst().getId(), propertyFeeEditBindingModel);
 
-        Optional<PropertyFee> modifiedPropertyFee = propertyFeeRepository.findById(id);
+        Optional<PropertyFee> modifiedPropertyFee = propertyFeeRepository.findById(allProperties.getFirst().getId());
 
         assertEquals(0, modifiedPropertyFee.get().getFeeAmount().compareTo(BigDecimal.valueOf(20.00)));
     }
@@ -146,8 +138,13 @@ class PropertyFeeServiceImplTestIT {
 
     @Test
     void testDeleteFee() {
+        Property testProperty = createTestProperty();
+        propertyRepository.save(testProperty);
+
         PropertyFee propertyFee = createTestPropertyFee();
+        propertyFee.setProperty(testProperty);
         PropertyFee propertyFee2 = createTestPropertyFee();
+        propertyFee.setProperty(testProperty);
         propertyFeeRepository.save(propertyFee);
         propertyFeeRepository.save(propertyFee2);
 
@@ -160,9 +157,25 @@ class PropertyFeeServiceImplTestIT {
 
     @Test
     void testAddFee() {
+        ResidentialEntity residentialEntity = createResidentialEntity();
+        residentialEntityRepository.save(residentialEntity);
+
         Property property = createTestProperty();
+        property.setResidentialEntity(residentialEntity);
         propertyRepository.save(property);
 
+        PropertyFeeAddBindingModel propertyFeeAddBindingModel = createTestPropertyFeeAddBindingModel();
+
+        propertyFeeServiceToTest.createSingleFee(property, propertyFeeAddBindingModel);
+
+        List<PropertyFee> allProperties = propertyFeeRepository.findAll();
+
+        Optional<PropertyFee> addedPropertyFee = propertyFeeRepository.findById(allProperties.getLast().getId());
+
+        assertEquals(propertyFeeAddBindingModel.getDescription(), addedPropertyFee.get().getDescription());
+    }
+
+    private PropertyFeeAddBindingModel createTestPropertyFeeAddBindingModel() {
         PropertyFeeAddBindingModel propertyFeeAddBindingModel = new PropertyFeeAddBindingModel();
         propertyFeeAddBindingModel.setFundMmAmount(BigDecimal.valueOf(10));
         propertyFeeAddBindingModel.setFundRepairAmount(BigDecimal.valueOf(10));
@@ -170,23 +183,20 @@ class PropertyFeeServiceImplTestIT {
         propertyFeeAddBindingModel.setPeriodEnd(LocalDate.parse("2023-11-30"));
         propertyFeeAddBindingModel.setDescription("test");
         propertyFeeAddBindingModel.setPaid(true);
-
-        propertyFeeServiceToTest.createSingleFee(property, propertyFeeAddBindingModel);
-
-        Long id = null;
-        List<PropertyFee> all = propertyFeeRepository.findAll();
-        for (PropertyFee fee : all) {
-            id = fee.getId();
-        }
-
-        Optional<PropertyFee> addedPropertyFee = propertyFeeRepository.findById(id);
-
-        assertEquals(propertyFeeAddBindingModel.getDescription(), addedPropertyFee.get().getDescription());
+        return propertyFeeAddBindingModel;
     }
 
     @Test
     void testChangePaymentStatusToPaid() {
+        ResidentialEntity residentialEntity = createResidentialEntity();
+        residentialEntityRepository.save(residentialEntity);
+
+        Property testProperty = createTestProperty();
+        testProperty.setResidentialEntity(residentialEntity);
+        propertyRepository.save(testProperty);
+
         PropertyFee propertyFee = createTestPropertyFee();
+        propertyFee.setProperty(testProperty);
         propertyFee.setPaid(false);
         propertyFeeRepository.save(propertyFee);
 
@@ -205,7 +215,15 @@ class PropertyFeeServiceImplTestIT {
 
     @Test
     void testChangePaymentStatusToUnpaid() {
+        ResidentialEntity residentialEntity = createResidentialEntity();
+        residentialEntityRepository.save(residentialEntity);
+
+        Property testProperty = createTestProperty();
+        testProperty.setResidentialEntity(residentialEntity);
+        propertyRepository.save(testProperty);
+
         PropertyFee propertyFee = createTestPropertyFee();
+        propertyFee.setProperty(testProperty);
         propertyFee.setPaid(true);
         propertyFeeRepository.save(propertyFee);
 
@@ -253,6 +271,7 @@ class PropertyFeeServiceImplTestIT {
         property.setNumberOfPets(2);
         property.setValidated(false);
         property.setMonthlyFeeFundMm(BigDecimal.valueOf(10));
+        property.setMonthlyFeeFundRepair(BigDecimal.valueOf(10));
         property.setAdditionalPropertyFee(BigDecimal.valueOf(0));
         return property;
     }
@@ -265,6 +284,40 @@ class PropertyFeeServiceImplTestIT {
         propertyFee.setDueAmount(BigDecimal.valueOf(0.00));
         propertyFee.setFundMmAmount(BigDecimal.valueOf(0.00));
         propertyFee.setFundRepairAmount(BigDecimal.valueOf(0.00));
+        propertyFee.setOverpaidAmountStart(BigDecimal.valueOf(5.00));
+        propertyFee.setOverpaidAmountEnd(BigDecimal.valueOf(6.00));
         return propertyFee;
+    }
+
+    private ResidentialEntity createResidentialEntity() {
+        UserEntity manager = getManager();
+        ResidentialEntity residentialEntity = new ResidentialEntity();
+        residentialEntity.setManager(manager);
+        residentialEntity.setId(100L);
+        residentialEntity.setAccessCode("test");
+        residentialEntity.setCity(cityRepository.findByName(CityName.valueOf("София")));
+        residentialEntity.setStreetName("test");
+        residentialEntity.setStreetNumber(String.valueOf(1));
+        residentialEntity.setIncomesFundMm(BigDecimal.ZERO);
+        residentialEntity.setIncomesFundRepair(BigDecimal.ZERO);
+        residentialEntity.setIncomesTotalAmount(BigDecimal.ZERO);
+        residentialEntityRepository.save(residentialEntity);
+        return residentialEntity;
+    }
+
+    private UserEntity getManager() {
+        UserEntity manager = new UserEntity();
+        Role role = roleRepository.findRoleByName("MANAGER");
+        roleRepository.save(role);
+        manager.setEmail("test@test.test");
+        manager.setFirstName("Test");
+        manager.setLastName("Test");
+        manager.setUsername("testerManager");
+        manager.setPassword("testPassword");
+        manager.setPhoneNumber("0777777777");
+        manager.setRegistrationDateTime(LocalDateTime.now());
+        manager.setRole(role);
+        userRepository.save(manager);
+        return manager;
     }
 }
