@@ -461,6 +461,7 @@ public class PropertyServiceImpl implements PropertyService {
         }
         //reset inhabitants count if property not habitable
         modelMapper.map(propertyEditBindingModel, property);
+
         if (property.isNotHabitable()) {
             property.setNumberOfPets(0);
             property.setNumberOfChildren(0);
