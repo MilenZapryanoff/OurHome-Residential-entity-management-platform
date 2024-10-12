@@ -56,6 +56,7 @@ class PropertyServiceImplTestIT {
         residentialEntityRepository.deleteAll();
         userRepository.deleteAll();
         propertyRegisterRequestRepository.deleteAll();
+        propertyTypeRepository.deleteAll();
     }
 
     @AfterEach
