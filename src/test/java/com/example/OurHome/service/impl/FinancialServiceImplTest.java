@@ -27,21 +27,18 @@ class FinancialServiceImplTest {
     private FinancialServiceImpl serviceToTest;
     @Mock
     private FinancialRepository mockFinancialRepository;
-
     @Mock
-    private ResidentialEntityService mockResidentialEntityService;
+    private ResidentialEntityService residentialEntityService;
     @Mock
     private ModelMapper mockModelMapper;
     @Mock
     private PasswordEncoder mockPasswordEncoder;
 
-    FinancialServiceImplTest(ResidentialEntityService mockResidentialEntityService) {
-        this.mockResidentialEntityService = mockResidentialEntityService;
-    }
 
     @BeforeEach
     void setUp() {
-        serviceToTest = new FinancialServiceImpl(mockFinancialRepository, mockModelMapper, mockResidentialEntityService);
+        mockFinancialRepository.deleteAll();
+        serviceToTest = new FinancialServiceImpl(mockFinancialRepository, mockModelMapper, residentialEntityService);
     }
 
     @Test
