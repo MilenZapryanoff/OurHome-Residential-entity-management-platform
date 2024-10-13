@@ -30,7 +30,7 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
 
-    # Custom health check to ensure MySQL is ready
+    # MySQL Health check to ensure MySQL is ready
     - name: Wait for MySQL to be ready
       run: |
         for i in {1..30}; do
@@ -42,12 +42,19 @@ jobs:
           sleep 5
         done
 
-    - name: Run tests
-      run: mvn clean verify
+    - name: Run UNIT TESTS
+      run: mvn test
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: root
         DB_PASSWORD: test1234
+        
+    - name: Run INTEGRATION TESTS
+      run: mvn integration-test
+      env:
+        DB_URL: jdbc:mysql://localhost:3306/ourhome_test
+        DB_USERNAME: root
+        DB_PASSWORD: test1234    
 
     # Print MySQL logs if the container fails
     #- name: Check MySQL logs
