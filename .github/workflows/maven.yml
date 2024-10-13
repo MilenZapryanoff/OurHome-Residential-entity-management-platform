@@ -44,7 +44,8 @@ jobs:
         done
 
     - name: Run Unit & Integration tests
-      run: run: mvn -q verify | grep -E "^\[INFO\]" || true
+      run: |
+        mvn -q verify | tee mvn_output.log | grep -E "^\[INFO\]"
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
