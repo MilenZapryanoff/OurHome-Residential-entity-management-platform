@@ -15,9 +15,9 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: test1234
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
           MYSQL_DATABASE: ourhome_test
-          MYSQL_LOG_CONSOLE: "error"  # Set log level to error to reduce verbosity
+          MYSQL_LOG_CONSOLE: "error"
         options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3 --health-start-period=30s
         ports:
           - 3306:3306
@@ -48,13 +48,13 @@ jobs:
       run: mvn test
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
-        DB_USERNAME: root
-        DB_PASSWORD: test1234
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         
     - name: Run INTEGRATION TESTS
       run: mvn integration-test
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
-        DB_USERNAME: root
-        DB_PASSWORD: test1234    
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
