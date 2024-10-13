@@ -653,7 +653,7 @@ public class PropertyServiceImpl implements PropertyService {
         //update totalMonthlyFee
         updateTotalMonthlyFee(newProperty);
 
-     //   propertyRepository.save(newProperty);
+        propertyRepository.save(newProperty);
 
         //publish event to create first fee.
         publishEvent(newProperty);
