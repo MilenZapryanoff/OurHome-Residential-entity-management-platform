@@ -760,7 +760,6 @@ public class PropertyServiceImpl implements PropertyService {
             propertyChangeRequestService.save(existingPropertyChangeRequest);
         }
 
-
         //sending message (notification) to manager
         messageService.propertyModificationMessageToManager(property);
     }
