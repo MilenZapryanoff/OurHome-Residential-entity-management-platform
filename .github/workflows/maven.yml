@@ -51,7 +51,7 @@ jobs:
         
     - name: Run INTEGRATION TESTS
       run: |
-       mvn -q verify | grep -E "(Tests run:|BUILD SUCCESS|Total time:|Finished at:)"
+       mvn verify | grep -E "[INFO] "
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: root
