@@ -62,7 +62,7 @@ class PropertyFeeServiceImplTestIT {
         propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
         List<PropertyFee> allProperties = propertyFeeRepository.findAll();
-        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.getFirst().getId());
+        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.get(0).getId());
 
         assertEquals(0, propertyFee.get().getFeeAmount().compareTo(BigDecimal.valueOf(20.00)));
     }
@@ -76,7 +76,7 @@ class PropertyFeeServiceImplTestIT {
         propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
         List<PropertyFee> allProperties = propertyFeeRepository.findAll();
-        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.getFirst().getId());
+        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.get(0).getId());
 
         assertEquals(0, propertyFee.get().getDueAmount().compareTo(BigDecimal.valueOf(15)));
     }
@@ -94,7 +94,7 @@ class PropertyFeeServiceImplTestIT {
         propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
         List<PropertyFee> allProperties = propertyFeeRepository.findAll();
-        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.getFirst().getId());
+        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.get(0).getId());
 
         assertEquals(0, propertyFee.get().getDueAmount().compareTo(BigDecimal.ZERO));
     }
@@ -108,7 +108,7 @@ class PropertyFeeServiceImplTestIT {
         propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
         List<PropertyFee> allProperties = propertyFeeRepository.findAll();
-        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.getFirst().getId());
+        Optional<PropertyFee> propertyFee = propertyFeeRepository.findById(allProperties.get(0).getId());
 
         assertEquals(0, propertyFee.get().getDueAmount().compareTo(BigDecimal.valueOf(5)));
     }
@@ -128,9 +128,9 @@ class PropertyFeeServiceImplTestIT {
 
         List<PropertyFee> allProperties = propertyFeeRepository.findAll();
 
-        propertyFeeServiceToTest.editMonthlyFee(allProperties.getFirst().getId(), propertyFeeEditBindingModel);
+        propertyFeeServiceToTest.editMonthlyFee(allProperties.get(0).getId(), propertyFeeEditBindingModel);
 
-        Optional<PropertyFee> modifiedPropertyFee = propertyFeeRepository.findById(allProperties.getFirst().getId());
+        Optional<PropertyFee> modifiedPropertyFee = propertyFeeRepository.findById(allProperties.get(0).getId());
 
         assertEquals(0, modifiedPropertyFee.get().getFeeAmount().compareTo(BigDecimal.valueOf(20.00)));
     }
@@ -170,7 +170,7 @@ class PropertyFeeServiceImplTestIT {
 
         List<PropertyFee> allProperties = propertyFeeRepository.findAll();
 
-        Optional<PropertyFee> addedPropertyFee = propertyFeeRepository.findById(allProperties.getLast().getId());
+        Optional<PropertyFee> addedPropertyFee = propertyFeeRepository.findById(allProperties.get(allProperties.size()-1).getId());
 
         assertEquals(propertyFeeAddBindingModel.getDescription(), addedPropertyFee.get().getDescription());
     }

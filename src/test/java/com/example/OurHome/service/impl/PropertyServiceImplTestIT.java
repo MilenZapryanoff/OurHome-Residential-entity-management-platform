@@ -318,8 +318,8 @@ class PropertyServiceImplTestIT {
 
         List<Property> allProperties = propertyRepository.findAll();
 
-        propertyServiceToTest.editProperty(allProperties.getFirst().getId(), propertyEditBindingModel, propertyType);
-        Optional<Property> property = propertyRepository.findById(allProperties.getFirst().getId());
+        propertyServiceToTest.editProperty(allProperties.get(0).getId(), propertyEditBindingModel, propertyType);
+        Optional<Property> property = propertyRepository.findById(allProperties.get(0).getId());
 
         assertNotNull(property);
         assertEquals(propertyEditBindingModel.getFloor(), property.get().getFloor());
@@ -431,7 +431,7 @@ class PropertyServiceImplTestIT {
         propertyServiceToTest.createSingleProperty(propertyCreateBindingModel, residentialEntity, null);
 
         List<Property> allProperties = propertyRepository.findAll();
-        Property newProperty = allProperties.getFirst();
+        Property newProperty = allProperties.get(0);
 
         assertEquals(propertyCreateBindingModel.getFloor(), newProperty.getFloor());
         assertEquals(propertyCreateBindingModel.getNumber(), newProperty.getNumber());
@@ -473,13 +473,13 @@ class PropertyServiceImplTestIT {
 
         Long id = null;
         List<Property> allProperties = propertyRepository.findAll();
-        Property resultProperty = allProperties.getFirst();
+        Property resultProperty = allProperties.get(0);
 
         propertyServiceToTest.approvePropertyRegistrationWithDataChange(resultProperty.getId(), true);
 
         Optional<Property> property = propertyRepository.findById(resultProperty.getId());
         List<PropertyRegisterRequest> allPropertyRegisterRequests = propertyRegisterRequestRepository.findAll();
-        PropertyRegisterRequest resultPropertyRegisterRequest = allPropertyRegisterRequests.getFirst();
+        PropertyRegisterRequest resultPropertyRegisterRequest = allPropertyRegisterRequests.get(0);
 
         assertEquals(property.get().getNumberOfAdults(), testPropertyRegisterRequest.getNumberOfAdults());
         assertEquals(property.get().getNumberOfChildren(), testPropertyRegisterRequest.getNumberOfChildren());
@@ -568,11 +568,11 @@ class PropertyServiceImplTestIT {
         propertyServiceToTest.requestToObtainProperty(propertyRegisterBindingModel, testOwner);
 
         List<Property> allProperties = propertyRepository.findAll();
-        Property property = allProperties.getFirst();
+        Property property = allProperties.get(0);
 
         //PropertyRequest is created
         List<PropertyRegisterRequest> allPropertyRegisterRequest = propertyRegisterRequestRepository.findAll();
-        PropertyRegisterRequest propertyRegisterRequest = allPropertyRegisterRequest.getFirst();
+        PropertyRegisterRequest propertyRegisterRequest = allPropertyRegisterRequest.get(0);
 
         //comparing propertyRegisterBindingModel with PropertyRequest
         assertEquals(propertyRegisterBindingModel.getNumberOfAdults(), propertyRegisterRequest.getNumberOfAdults());
@@ -610,11 +610,11 @@ class PropertyServiceImplTestIT {
         propertyServiceToTest.requestToObtainProperty(propertyRegisterBindingModel, testOwner);
 
         List<Property> allProperties = propertyRepository.findAll();
-        Property property = allProperties.getFirst();
+        Property property = allProperties.get(0);
 
         //PropertyRequest is created
         List<PropertyRegisterRequest> allPropertyRegisterRequest = propertyRegisterRequestRepository.findAll();
-        PropertyRegisterRequest resultPropertyRegisterRequest = allPropertyRegisterRequest.getFirst();
+        PropertyRegisterRequest resultPropertyRegisterRequest = allPropertyRegisterRequest.get(0);
 
         //comparing propertyRegisterBindingModel with PropertyRequest
         assertNotEquals(propertyRegisterBindingModel.getNumberOfAdults(), testPropertyRegisterRequest.getNumberOfAdults());
