@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Build and Test OurHome app
 
 on:
   push:
@@ -32,11 +32,10 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
 
-    # MySQL Health check
-    - name: Wait for MySQL to be ready
+    - name: Check if MySQL instance is running...
       run: |
         for i in {1..30}; do
-          if mysqladmin ping -h "127.0.0.1" --password="test1234" --silent; then
+          if mysqladmin ping -h "127.0.0.1" --password=${{ secrets.DB_PASSWORD }} --silent; then
             echo "MySQL is ready!"
             break
           fi
@@ -52,7 +51,7 @@ jobs:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         
     - name: Run INTEGRATION TESTS
-      run: mvn verify -DskipTests
+      run: mvn verify 
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
