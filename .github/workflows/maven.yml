@@ -8,8 +8,9 @@ on:
   workflow_dispatch:
   
 jobs:
-  build:
+  Build-and-Test:
     runs-on: ubuntu-latest
+    
     services:
       mysql:
         image: mysql:8.0
@@ -43,22 +44,16 @@ jobs:
         done
 
     - name: Run UNIT TESTS
-      run: mvn test
+      run: mvn -q test
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: root
         DB_PASSWORD: test1234
         
     - name: Run INTEGRATION TESTS
-      run: |
-       mvn verify | grep -E "[INFO] "
+      run: mvn -q intergration-test
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: root
         DB_PASSWORD: test1234    
-
-    # Print MySQL logs if the container fails
-    #- name: Check MySQL logs
-    #  if: failure()
-    #  run: docker logs $(docker ps -q --filter "ancestor=mysql:8.0")
 
