@@ -52,7 +52,7 @@ jobs:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         
     - name: Run INTEGRATION TESTS
-      run: mvn integration-test
+      run: mvn verify -DskipTests
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
