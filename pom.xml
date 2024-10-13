@@ -118,7 +118,7 @@
                 </executions>
                 <configuration>
                     <includes>
-                        <include>**/*TestIT.java</include> <!-- Integration tests naming convention -->
+                        <include>**/*IT.java</include> <!-- Integration tests naming convention -->
                     </includes>
                     <printSummary>true</printSummary>  <!-- Enable summary output -->
                     <redirectTestOutputToFile>true</redirectTestOutputToFile> <!-- Redirect test output to files -->
