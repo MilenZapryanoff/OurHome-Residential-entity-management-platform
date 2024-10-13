@@ -42,9 +42,15 @@ jobs:
           echo "Waiting for MySQL..."
           sleep 5
         done
-
-    - name: Run Unit & Integration tests
-      run: mvn -q verify | tee mvn_output.log | grep -E "^\[INFO\]" || true
+    - name: Run Unit tests
+      run: mvn test
+      env:
+        DB_URL: jdbc:mysql://localhost:3306/ourhome_test
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        
+    - name: Run Integration tests
+      run: mvn integration-test
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
