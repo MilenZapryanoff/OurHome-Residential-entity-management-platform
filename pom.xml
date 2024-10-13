@@ -95,8 +95,12 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <includes>
-                        <include>**/*Test*.java</include> <!-- Unit tests naming convention -->
+                        <include>**/*Test.java</include> <!-- Unit tests naming convention -->
+                        <include>**/*Tests.java</include> <!-- Unit tests naming convention -->
                     </includes>
+                    <printSummary>true</printSummary>  <!-- Enable summary output -->
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile> <!-- Redirect test output to files -->
+                    <useFile>false</useFile>  <!-- Don't print the output to console -->
                 </configuration>
             </plugin>
             <!-- Failsafe Plugin for integration tests -->
@@ -114,8 +118,11 @@
                 </executions>
                 <configuration>
                     <includes>
-                        <include>**/*IT.java</include> <!-- Integration tests naming convention -->
+                        <include>**/*TestIT.java</include> <!-- Integration tests naming convention -->
                     </includes>
+                    <printSummary>true</printSummary>  <!-- Enable summary output -->
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile> <!-- Redirect test output to files -->
+                    <useFile>false</useFile>  <!-- Don't print the output to console -->
                 </configuration>
             </plugin>
         </plugins>
