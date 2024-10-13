@@ -43,14 +43,7 @@ jobs:
           sleep 5
         done
 
-    - name: Run UNIT TESTS
-      run: mvn test
-      env:
-        DB_URL: jdbc:mysql://localhost:3306/ourhome_test
-        DB_USERNAME: ${{ secrets.DB_USERNAME }}
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        
-    - name: Run INTEGRATION TESTS
+    - name: Run Unit & Integration tests
       run: mvn verify 
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
