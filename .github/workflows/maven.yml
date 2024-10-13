@@ -43,14 +43,14 @@ jobs:
         done
 
     - name: Run UNIT TESTS
-      run: mvn -q test
+      run: mvn test
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: root
         DB_PASSWORD: test1234
         
     - name: Run INTEGRATION TESTS
-      run: mvn -q integration-test
+      run: mvn integration-test
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: root
