@@ -15,9 +15,7 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: test1234
           MYSQL_DATABASE: ourhome_test
-          MYSQL_USER: root
-          MYSQL_PASSWORD: test1234
-        options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3 --health-start-period=30s
+        options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=10 --health-start-period=60s
         ports:
           - 3306:3306
 
@@ -49,6 +47,11 @@ jobs:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: root
         DB_PASSWORD: test1234
+
+    # Print MySQL logs if the container fails
+    - name: Check MySQL logs
+      if: failure()
+      run: docker logs $(docker ps -q --filter "ancestor=mysql:8.0")
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
