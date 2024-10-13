@@ -17,7 +17,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: test1234
           MYSQL_DATABASE: ourhome_test
-        options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=10 --health-start-period=60s
+          MYSQL_LOG_CONSOLE: "error"  # Set log level to error to reduce verbosity
+        options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3 --health-start-period=30s
         ports:
           - 3306:3306
 
@@ -51,7 +52,7 @@ jobs:
         DB_PASSWORD: test1234
         
     - name: Run INTEGRATION TESTS
-      run: mvn -q intergration-test
+      run: mvn -q integration-test
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: root
