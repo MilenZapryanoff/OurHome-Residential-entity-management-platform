@@ -43,7 +43,7 @@ jobs:
         done
 
     - name: Run tests
-      run: mvn test
+      run: mvn clean verify
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: root
