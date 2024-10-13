@@ -20,10 +20,6 @@ jobs:
         options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3 --health-start-period=30s
         ports:
           - 3306:3306
-        # Waits for MySQL service to be healthy
-        health-check:
-          retries: 5
-          interval: 10s
 
     steps:
     - name: Checkout code
@@ -35,6 +31,7 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
 
+    # Custom health check to ensure MySQL is ready
     - name: Wait for MySQL to be ready
       run: |
         for i in {1..30}; do
