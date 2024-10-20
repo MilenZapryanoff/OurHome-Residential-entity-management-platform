@@ -713,7 +713,6 @@ public class PropertyServiceImpl implements PropertyService {
         if (property != null) {
             propertyEditBindingModel = modelMapper.map(property, PropertyEditBindingModel.class);
         }
-
         return propertyEditBindingModel;
     }
 
