@@ -1726,6 +1726,7 @@ Property Style
 .property .info-table {
     box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
     padding: 35px 30px;
+    border-radius: 5px;
 }
 
 .property .info-table ul li {
