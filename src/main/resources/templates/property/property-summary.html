@@ -113,9 +113,11 @@
             <div class="property-nav-bar">
                 <a th:href="@{/property}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
                 <a href=#>Summary</a>
-                <a th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">Monthly fees</a>
+                <a th:if="${property.isObtained()}" th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">Monthly fees</a>
+                <a th:unless="${property.isObtained()}" class="text-secondary">Monthly fees</a>
                 <a th:href="@{/property/details/{id}(id=${property.getId()})}">Property details</a>
-                <a th:href="@{/property/re/data/{id}(id=${property.getId()})}">Residential Entity</a>
+                <a th:if="${property.isObtained()}" th:href="@{/property/re/data/{id}(id=${property.getId()})}">Residential Entity</a>
+                <a th:unless="${property.isObtained()}" class="text-secondary">Residential Entity</a>
                 <div class="transition property-summary"></div>
             </div>
 
