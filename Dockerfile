@@ -2,41 +2,42 @@
 FROM eclipse-temurin:17-jdk-jammy AS build
 WORKDIR /OurHome
 
-# Копираме всички файлове в работната директория на контейнера
+# Copy all files in working directory of the container
 COPY . .
 
-# Даваме права за изпълнение на mvnw
+# Giving rights to mvnw (optional)
 RUN chmod +x ./mvnw
 
-# Изпълняваме Maven, за да изградим проекта (без тестове за по-бърза компилация)
+# Creating JAR file
 RUN ./mvnw clean package -DskipTests
 
-# Стъпка 2: Създаване на финалния образ
+# Creating final image
 FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /OurHome
 
-# Дефинираме аргумент за текущата дата
+# Defining variables
 ARG BUILD_DATE=unknown
 ARG BUILD_VERSION=unknown
 
-# Метаданни
+# Adding meta data
 LABEL MAINTAINER="Milen Zapryanov <milen.zapryanov@gmail.com>" \
       DESCRIPTION="OurHome Residential entity management platform" \
       VERSION=${BUILD_VERSION} \
       BUILD_DATE=${BUILD_DATE} \
       VCS-URL="https://github.com/MilenZapryanoff/OurHome-Residential-entity-management-platform"
 
-# Копираме JAR файла от предишната стъпка
+# Copuing JAR file
 COPY --from=build /OurHome/target/OurHome*.jar OurHome.jar
 
-# Копираме папката с ресурсите в контейнера
+# Copy recources folder. Important because of the upload photos and documents
 COPY --from=build /OurHome/src/main/resources /OurHome/src/main/resources
 
-# Експонираме порта, който приложението използва (8080 по подразбиране)
+# Port expose
 EXPOSE 8080
 
-# Дефинираме командата за стартиране на приложението
+# Starting the App
 ENTRYPOINT ["java", "-jar", "OurHome.jar"]
 
 # IMAGE BUILD
-# docker docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") --build-arg BUILD_VERSION=2.$(date -u +"%y.%m%d") -t milenzapryanov/ourhome:2.$(date -u +"%y.%m%d") .
+# docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") --build-arg BUILD_VERSION=2.$(date -u +"%y.%m%d") -t milenzapryanov/ourhome:2.$(date -u +"%y.%m%d") .
+# docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") --build-arg BUILD_VERSION=2.$(date -u +"%y.%m%d") -t milenzapryanov/ourhome:latest .
