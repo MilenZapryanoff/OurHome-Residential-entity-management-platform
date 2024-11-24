@@ -1,4 +1,4 @@
-# Стъпка 1: Изграждане на приложението
+# Building the app
 FROM eclipse-temurin:17-jdk-jammy AS build
 WORKDIR /OurHome
 
@@ -16,12 +16,13 @@ FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /OurHome
 
 # Дефинираме аргумент за текущата дата
-ARG BUILD_DATE
+ARG BUILD_DATE=unknown
+ARG BUILD_VERSION=unknown
 
 # Метаданни
 LABEL MAINTAINER="Milen Zapryanov <milen.zapryanov@gmail.com>" \
       DESCRIPTION="OurHome Residential entity management platform" \
-      VERSION="2.24.0620" \
+      VERSION=${BUILD_VERSION} \
       BUILD_DATE=${BUILD_DATE} \
       VCS-URL="https://github.com/MilenZapryanoff/OurHome-Residential-entity-management-platform"
 
@@ -38,4 +39,4 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "OurHome.jar"]
 
 # IMAGE BUILD
-# docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") -t milenzapryanov/ourhome:2.24.0620 .
+# docker docker build --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") --build-arg BUILD_VERSION=2.$(date -u +"%y.%m%d") -t milenzapryanov/ourhome:2.$(date -u +"%y.%m%d") .
