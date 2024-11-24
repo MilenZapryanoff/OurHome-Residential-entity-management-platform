@@ -73,10 +73,18 @@ jobs:
     - name: Build and Push Multi-Platform Docker Image
       if: success()
       run: |
+        # Generate the version tag in the format 2.<YY.MMDD>
+        BUILD_VERSION="2.$(date -u +"%y.%m%d")"
+        BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+        # Create a builder and use it
         docker buildx create --use
+
+        # Build the Docker image and tag it with the dynamically generated version
         docker buildx build \
           --platform linux/amd64,linux/arm64 \
-          --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
-          -t ${{ secrets.DOCKER_USERNAME }}/ourhome:${{ github.sha }} \
+          --build-arg BUILD_DATE=$BUILD_DATE \
+          --build-arg BUILD_VERSION=$BUILD_VERSION \
+          -t ${{ secrets.DOCKER_USERNAME }}/ourhome:$BUILD_VERSION \
           -t ${{ secrets.DOCKER_USERNAME }}/ourhome:latest \
           --push .
