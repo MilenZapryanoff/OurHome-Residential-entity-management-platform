@@ -84,26 +84,29 @@
     </dependencies>
     <build>
         <plugins>
+            <!-- Spring Boot Maven Plugin for packaging app as JAR -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                </configuration>
             </plugin>
-            <!-- Surefire Plugin for unit tests -->
+            <!-- Maven Surefire Plugin for Unit tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
                     <includes>
-                        <include>**/*Test.java</include> <!-- Unit tests naming convention -->
-                        <include>**/*Tests.java</include> <!-- Unit tests naming convention -->
+                        <include>**/*Test.java</include>
+                        <include>**/*Tests.java</include>
                     </includes>
-                    <printSummary>true</printSummary>  <!-- Enable summary output -->
-                    <redirectTestOutputToFile>true</redirectTestOutputToFile> <!-- Redirect test output to files -->
-                    <useFile>false</useFile>  <!-- Don't print the output to console -->
+                    <printSummary>true</printSummary>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <useFile>false</useFile>
                 </configuration>
             </plugin>
-            <!-- Failsafe Plugin for integration tests -->
+            <!-- Maven Failsafe Plugin for Integration tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -118,14 +121,23 @@
                 </executions>
                 <configuration>
                     <includes>
-                        <include>**/*IT.java</include> <!-- Integration tests naming convention -->
+                        <include>**/*IT.java</include>
                     </includes>
-                    <printSummary>true</printSummary>  <!-- Enable summary output -->
+                    <printSummary>true</printSummary> <!-- Enable summary output -->
                     <redirectTestOutputToFile>true</redirectTestOutputToFile> <!-- Redirect test output to files -->
-                    <useFile>false</useFile>  <!-- Don't print the output to console -->
+                    <useFile>false</useFile> <!-- Don't print the output to console -->
                 </configuration>
             </plugin>
-        </plugins>
-    </build>
 
+        </plugins>
+        <!-- Adding resources -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 </project>
