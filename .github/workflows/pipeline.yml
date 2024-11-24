@@ -1,12 +1,10 @@
-name: Build and Test OurHome app
+name: Build, Test, and Deploy OurHome app
 
 on:
-  #push:
-  #  branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
-  
+
 jobs:
   Build-and-Test:
     runs-on: ubuntu-latest
@@ -65,16 +63,19 @@ jobs:
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
-    - name: Build Docker image
-      if: success()
-      run: |
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-        docker build -t ourhome:${{ github.sha }} .
-        docker tag ourhome:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/ourhome:${{ github.sha }}
-        docker tag ourhome:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/ourhome:latest
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-    - name: Push Docker image to DockerHub
+    - name: Log in to DockerHub
+      if: success()
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Build and Push Multi-Platform Docker Image
       if: success()
       run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/ourhome:${{ github.sha }}
-        docker push ${{ secrets.DOCKER_USERNAME }}/ourhome:latest
+        docker buildx create --use
+        docker buildx build \
+          --platform linux/amd64,linux/arm64 \
+          -t ${{ secrets.DOCKER_USERNAME }}/ourhome:${{ github.sha }} \
+          -t ${{ secrets.DOCKER_USERNAME }}/ourhome:latest \
+          --push .
