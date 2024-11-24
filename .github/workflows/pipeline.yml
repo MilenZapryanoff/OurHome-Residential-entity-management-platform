@@ -10,7 +10,7 @@ on:
 jobs:
   Build-and-Test:
     runs-on: ubuntu-latest
-    
+
     services:
       mysql:
         image: mysql:8.0
@@ -42,13 +42,14 @@ jobs:
           echo "Waiting for MySQL..."
           sleep 5
         done
+
     - name: Run Unit tests
       run: mvn test
       env:
         DB_URL: jdbc:mysql://localhost:3306/ourhome_test
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        
+
     - name: Run Integration tests
       run: mvn verify
       env:
@@ -56,3 +57,24 @@ jobs:
         DB_USERNAME: ${{ secrets.DB_USERNAME }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
+    - name: Build JAR file
+      if: success()
+      run: mvn clean package -DskipTests
+      env:
+        DB_URL: jdbc:mysql://localhost:3306/ourhome_test
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    - name: Build Docker image
+      if: success()
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        docker build -t ourhome-app:${{ github.sha }} .
+        docker tag ourhome-app:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/ourhome-app:${{ github.sha }}
+        docker tag ourhome-app:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/ourhome-app:latest
+
+    - name: Push Docker image to DockerHub
+      if: success()
+      run: |
+        docker push ${{ secrets.DOCKER_USERNAME }}/ourhome-app:${{ github.sha }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/ourhome-app:latest
