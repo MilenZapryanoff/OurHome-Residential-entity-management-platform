@@ -1,7 +1,5 @@
 package com.example.OurHome.model.dto.BindingModels.ResidentialEntity;
 
-import jakarta.validation.constraints.Size;
-
 public class ResidentManageBindingModel {
 
     private Long userId;
