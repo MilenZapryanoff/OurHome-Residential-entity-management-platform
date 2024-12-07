@@ -59,7 +59,7 @@ class ResidentialEntityServiceImplTestIT {
         residentialEntityRegisterBindingModel.setAccessCode("test");
         residentialEntityRegisterBindingModel.setEntrance("A");
         residentialEntityRegisterBindingModel.setStreetName("Test");
-        residentialEntityRegisterBindingModel.setStreetNumber(111L);
+        residentialEntityRegisterBindingModel.setStreetNumber("111");
         residentialEntityRegisterBindingModel.setNumberOfApartments(100L);
         residentialEntityRegisterBindingModel.setCity(CityName.valueOf("София"));
 
