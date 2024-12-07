@@ -22,7 +22,7 @@ public class ResidentialEntityRegisterBindingModel {
     private String streetName;
 
     @NotNull
-    private Long streetNumber;
+    private String streetNumber;
 
     private String entrance;
 
@@ -64,11 +64,11 @@ public class ResidentialEntityRegisterBindingModel {
         this.streetName = streetName;
     }
 
-    public Long getStreetNumber() {
+    public String getStreetNumber() {
         return streetNumber;
     }
 
-    public void setStreetNumber(Long streetNumber) {
+    public void setStreetNumber(String streetNumber) {
         this.streetNumber = streetNumber;
     }
 
