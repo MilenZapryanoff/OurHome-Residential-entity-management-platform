@@ -42,7 +42,7 @@
         <div class="header-container">
             <form th:method="post" th:action="@{/setLanguage}" style="padding-right: 15px">
                 <div id="dropdown">
-                    <img src="/images/en-flag.png" alt="English" title="English">
+                    <img src="/images/bg-flag.png" alt="Български" title="Български">
                 </div>
                 <ul id="dropdown-menu">
                     <li style="padding: 5px; cursor: pointer;" onclick="selectLanguage('bg')">
@@ -72,11 +72,12 @@
                 </div>
             </th:block>
             <th:block sec:authorize="isAnonymous()">
-                <p>English</p>
+                    <p>Български език</p>
             </th:block>
         </div>
     </div>
 </div>
+
 
 <!-- ***** NavBar ***** -->
 <header class="header-area header-sticky">
@@ -85,14 +86,16 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
+
                     <div class="logo-image">
-                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;padding-top: 5px"
+                                              alt="OurHome"></a>
                     </div>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
-                        <li><a th:href="@{/}" class="active">Home</a></li>
-                        <li sec:authorize="isAuthenticated()"><a th:href="@{/messages}">Messages</a></li>
+                        <li><a th:href="@{/}" class="active">Начало</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/messages}">Съобщения</a></li>
                         <small sec:authorize="isAuthenticated()" th:with="userId=${userViewModel.getId()}">
                             <samp th:if="${@messageRepository.countUnreadMessages(userId) > 0}"
                                   th:with="userId=${userViewModel.getId()}"
@@ -100,20 +103,18 @@
                                   th:data-to="${@messageRepository.countUnreadMessages(userId)}"
                                   data-speed="1000"></samp>
                         </small>
-                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Администрация</a>
                         </li>
-                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
-                            property</a></li>
-                        <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
-                        <li><a th:href="@{/contact}">Contact Us</a></li>
-                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Моят имот</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Профил</a></li>
+                        <li><a th:href="@{/contact}">Контакти</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Регистрация</a></li>
                         <li sec:authorize="isAuthenticated()">
                             <form id="logout" th:action="@{/logout}" method="POST">
-                                <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                                <a onclick="logout.submit()" style="cursor: pointer;">Изход</a>
                             </form>
                         </li>
-                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
-
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Вход</a></li>
                     </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>
@@ -122,7 +123,6 @@
                 </nav>
             </div>
         </div>
-
     </div>
 </header>
 
@@ -148,7 +148,6 @@
             </div>
         </div>
     </div>
-
 </div>
 <!-- ***** Main Banner End ***** -->
 
@@ -161,7 +160,7 @@
                     <div class="counter">
                         <h2 class="timer count-title count-number"
                             th:data-to="${@residentialEntityRepository.count()}" data-speed="1000"></h2>
-                        <p class="count-text ">Residential <br>entities</p>
+                        <p class="count-text ">Регистрирани <br>ЕС</p>
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -169,14 +168,14 @@
                         <!--/*@thymesVar id="MANAGER" type="text" */-->
                         <h2 class="timer count-title count-number" th:data-to="${@propertyRepository.count()}"
                             data-speed="1000"></h2>
-                        <p class="count-text ">Registered<br>Homes</p>
+                        <p class="count-text ">Регистрирани<br>Имота</p>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="counter">
                         <h2 class="timer count-title count-number" th:data-to="${@userRepository.count()}"
                             data-speed="1000"></h2>
-                        <p class="count-text ">Registered<br>residents</p>
+                        <p class="count-text ">Регистрирани<br>потребители</p>
                     </div>
                 </div>
             </div>
@@ -192,8 +191,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-heading text-center">
-                    <h6>| Become a partner</h6>
-                    <h2>Get In Touch With Us</h2>
+                    <h6>| Стани партньор</h6>
+                    <h2>СВЪРЖИ СЕ С НАС</h2>
                 </div>
             </div>
         </div>
@@ -214,13 +213,13 @@
                     <div class="col-lg-5">
                         <div class="item phone">
                             <img src="/images/phone-icon.png" style="max-width: 30px;" alt="Phone:">
-                            <p><b>0886 277 333</b><br><span>Phone Number</span></p>
+                            <p><b>0886 277 333</b><br><span>мобилен</span></p>
                         </div>
                     </div>
                     <div class="col-lg-7">
                         <div class="item email">
                             <img src="/images/email-icon.png" alt="" style="max-width: 30px;">
-                            <p><b>office.ourhome@gmail.com</b><br><span>Business Email</span></p>
+                            <p><b>office.ourhome@gmail.com</b><br><span>email</span></p>
                         </div>
                     </div>
                 </div>
@@ -231,12 +230,14 @@
                         <div class="col-lg-12">
                             <a><img src="/images/OurMission.png" style="max-width: 200px;" alt="OurMission:"></a>
                             <hr>
-                            <p class="text-center"> OurHome is your gateway to seamless residential entity management.
-                                <br>Whether you're a
-                                dedicated manager or a valued resident, unlock the power of connection and convenience.
-                                <br>Join our platform to access vital information, connect with your community, and
-                                streamline the management of your residential entity and apartment. <br>Experience a new
-                                era of effortless living with OurHome!</p>
+                            <p class="text-center"> OurHome е вашият портал за управление на eтажна собственост.
+                                <br>Независимо дали сте
+                                специализиран мениджър или собственик на имот, отключете силата на връзката и
+                                удобството.
+                                <br>Присъединете се към нашата платформа за достъп до информация относно Вашата ЕС,
+                                свържете се с вашата общност и
+                                рационализирайте управлението на вашия имот <br>Изживейте нова
+                                ера на живот без усилия с OurHome!</p>
                         </div>
                     </div>
                 </div>

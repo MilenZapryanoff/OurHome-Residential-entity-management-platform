@@ -1,5 +1,6 @@
 # Building the app
 FROM eclipse-temurin:17-jdk-jammy AS build
+
 WORKDIR /OurHome
 
 # Copy all files in working directory of the container
@@ -26,10 +27,10 @@ LABEL MAINTAINER="Milen Zapryanov <milen.zapryanov@gmail.com>" \
       BUILD_DATE=${BUILD_DATE} \
       VCS-URL="https://github.com/MilenZapryanoff/OurHome-Residential-entity-management-platform"
 
-# Copuing JAR file
+# Copying JAR file
 COPY --from=build /OurHome/target/OurHome*.jar OurHome.jar
 
-# Copy recources folder. Important because of the upload photos and documents
+# Copy resources folder. Important because of the upload photos and documents
 COPY --from=build /OurHome/src/main/resources /OurHome/src/main/resources
 
 # Port expose

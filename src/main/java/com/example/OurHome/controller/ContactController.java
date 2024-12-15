@@ -3,12 +3,14 @@ package com.example.OurHome.controller;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.Contact.ContactFormBindingModel;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
+import com.example.OurHome.service.LanguageService;
 import com.example.OurHome.service.email.EmailService;
 import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,15 +21,20 @@ public class ContactController {
 
     private final UserService userService;
     private final EmailService emailService;
+    private final LanguageService languageService;
 
-    public ContactController(UserService userService, EmailService emailService) {
+    public ContactController(UserService userService, EmailService emailService, LanguageService languageService) {
         this.userService = userService;
         this.emailService = emailService;
+        this.languageService = languageService;
     }
 
     @GetMapping("/contact")
-    public ModelAndView contact(@ModelAttribute("contactFormBindingModel") ContactFormBindingModel contactFormBindingModel) {
-        ModelAndView modelAndView = new ModelAndView("contact");
+    public ModelAndView contact(@ModelAttribute("contactFormBindingModel") ContactFormBindingModel contactFormBindingModel,
+                                @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+
+        ModelAndView modelAndView = new ModelAndView(languageService.resolveView(lang, "contact"));
 
         if (SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser")) {
             return modelAndView;
@@ -39,11 +46,13 @@ public class ContactController {
     @PostMapping("/contact")
     public ModelAndView submitContactForm(@ModelAttribute("contactFormBindingModel")
                                           @Valid ContactFormBindingModel contactFormBindingModel,
-                                          BindingResult bindingResult) {
+                                          BindingResult bindingResult,
+                                          @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         boolean guestUser = SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser");
 
-        ModelAndView modelAndView = new ModelAndView("contact");
+        ModelAndView modelAndView = new ModelAndView(languageService.resolveView(lang, "contact"));
+
         if (bindingResult.hasErrors()) {
             if (guestUser) {
                 return modelAndView;

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <div class="logo-image">
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
+                    </div>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a th:href="@{/}">Начало</a></li>
+                        <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Администрация</a>
+                        </li>
+                        <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Моят имот</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Профил</a></li>
+                        <li><a th:href="@{/contact}">Контакти</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="active">Регистрация</a>
+                        </li>
+                        <li sec:authorize="isAuthenticated()">
+                            <form id="logout" th:action="@{/logout}" method="POST">
+                                <a onclick="logout.submit()" style="cursor: pointer;">Изход</a>
+                            </form>
+                        </li>
+                        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Вход</a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="contact section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 offset-lg-4">
+                <div class="section-heading text-center">
+                    <h6>| Регистрация като домоуправител</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="input-content text-center">
+        <div class="col-lg-5 center-form">
+            <form id="input-form"
+                  th:method="POST"
+                  th:action="@{/register/manager}"
+                  th:object="${managerRegisterBindingModel}">
+                <p>Моля попълнете Вашите данни за да се регистрирате като домоуправител</p>
+                <hr>
+                <fieldset>
+                    <label for="firstName"><b>Име</b></label>
+                    <p th:if="${#fields.hasErrors('firstName')}"
+                           th:errors="*{firstName}" class="text-danger">First name error message</p>
+                    <input type="text" id="firstName" placeholder="Въведете Вашето име..." autocomplete="on"
+                           required
+                           th:field="*{firstName}"
+                           th:errorclass="bg-danger">
+                </fieldset>
+                <fieldset>
+                    <label for="lastName"><b>Фамилно име</b></label>
+                    <p th:if="${#fields.hasErrors('lastName')}"
+                           th:errors="*{lastName}" class="text-danger">Last name error message</p>
+                    <input type="text" id="lastName" placeholder="Въведете Вашето фаминлно име..." autocomplete="on"
+                           required
+                           th:field="*{lastName}"
+                           th:errorclass="bg-danger">
+                </fieldset>
+                <fieldset>
+                    <label for="username"><b>Потребителско име</b></label>
+                    <p th:if="${#fields.hasErrors('username')}"
+                           th:errors="*{username}" class="text-danger">Username error message</p>
+                    <p th:if="${duplicatedUser}" class="text-danger">Потребител с това име съществува!</p>
+                    <input type="text" id="username" placeholder="Въведете потребителско име..." autocomplete="on" required
+                           th:field="*{username}"
+                           th:errorclass="bg-danger">
+                </fieldset>
+                <fieldset>
+                    <label for="email"><b>Имейл</b></label>
+                    <p th:if="${#fields.hasErrors('email')}"
+                           th:errors="*{email}" class="text-danger">Email error message</p>
+                    <p th:if="${duplicatedEmail}" class="text-danger">Регистрация с този имейл вече съществува!</p>
+                    <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*"
+                           placeholder="Въведете Вашият имейл..."
+                           required=""
+                           th:field="*{email}"
+                           th:errorclass="bg-danger">
+                </fieldset>
+                <fieldset>
+                    <label for="phoneNumber"><b>Телефонен номер</b></label>
+                    <p th:if="${#fields.hasErrors('phoneNumber')}"
+                           th:errors="*{phoneNumber}" class="text-danger">Phone number error message</p>
+                    <input type="text" name="phoneNumber" id="phoneNumber" placeholder="Въведете Вашият телефонен номер..."
+                           th:field="*{phoneNumber}"
+                           th:errorclass="bg-danger">
+                </fieldset>
+                <fieldset>
+                    <label for="password"><b>Парола</b></label>
+                    <p th:if="${#fields.hasErrors('password')}"
+                           th:errors="*{password}" class="text-danger">Password error message</p>
+                    <input type="password" id="password" placeholder="Въведете парола..." required
+                           th:field="*{password}"
+                           th:errorclass="bg-danger">
+                </fieldset>
+                <fieldset>
+                    <label for="confirmPassword"><b>Потвърди парола</b></label>
+                    <p th:if="${#fields.hasErrors('confirmPassword')}"
+                           th:errors="*{confirmPassword}" class="text-danger">Password error message</p>
+                    <small th:if="${noPasswordMatch}" class="text-danger">Въведената парола не съвпада!</small>
+                    <input type="password" id="confirmPassword"
+                           placeholder="Въведете повторно Вашата парола..." required
+                           th:field="*{confirmPassword}"
+                           th:errorclass="bg-danger">
+                </fieldset>
+                <fieldset>
+                    <button type="submit" id="form-submit" class="orange-button">
+                        Регистрирай се
+                    </button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+</body>
+</html>

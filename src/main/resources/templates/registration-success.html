@@ -2,7 +2,6 @@
 <html lang='en'
       xmlns:th='http://www.thymeleaf.org'
       xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
-
 <head>
 
     <meta charset="utf-8">
@@ -22,7 +21,6 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 
 </head>
-
 <body>
 
 <!-- ***** Preloader Start ***** -->
@@ -50,8 +48,7 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <div class="logo-image">
-                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;"
-                                              alt="OurHome"></img></a>
+                        <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
                     </div>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
@@ -81,57 +78,29 @@
     </div>
 </header>
 
+
 <div class="contact section">
     <div class="container">
-        <div class="col-lg-4 offset-lg-4">
-            <div class="section-heading text-center">
-                <h6>| PRE-AUTHENTICATION </h6>
+        <div class="row">
+            <div class="col-lg-4 offset-lg-4">
+                <div class="section-heading text-center">
+                    <h6>| pre-authentication | Register </h6>
+                    <p class="text-light">Registration successful!
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="register">
+
+<div class="container">
     <div class="input-content text-center">
-        <div class="col-lg-3 center-form">
-            <form id="input-form"
-                  th:method="POST"
-                  th:action="@{/register/auth}"
-                  th:object="${userAuthBindingModel}">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <p style="padding-bottom: 30px">Please provide Residential Entity ID and Access code to be able to complete your registration as resident.</p>
-                        <p th:if="${badResidentialEntity}" class="text-danger">Wrong residential entity ID or Access code!<br></p>
-                        <fieldset>
-                            <label for="residentialId"><b>Residential entity ID</b></label>
-                            <p th:if="${#fields.hasErrors('residentialId')}"
-                                   th:errors="*{residentialId}" class="text-danger">Residential Id error message</p>
-                            <input type="text" id="residentialId" placeholder="Enter residential ID..."
-                                   autocomplete="on"
-                                   required
-                                   th:field="*{residentialId}"
-                                   th:errorclass="bg-danger">
-                        </fieldset>
-                        <fieldset>
-                            <label for="residentialAccessCode"><b>Residential entity Access code</b></label>
-                            <p th:if="${#fields.hasErrors('residentialAccessCode')}"
-                                   th:errors="*{residentialAccessCode}" class="text-danger">Validation code error
-                                message</p>
-                            <input type="password" id="residentialAccessCode" placeholder="Enter Validation code..."
-                                   autocomplete="on" required
-                                   th:field="*{residentialAccessCode}"
-                                   th:errorclass="bg-danger">
-                            <small class="fas fa-eye text-danger fa-eye-slash" id="togglePassword"
-                                   style="margin-left: -35px; cursor: pointer;"></small>
-                        </fieldset>
-                    </div>
-                    <div class="col-lg-12">
-                        <fieldset>
-                            <button th:href="@{/register/auth/userEntity}" type="submit" id="form-submit"
-                                    class="orange-button">Next step
-                            </button>
-                        </fieldset>
-                    </div>
-                </div>
+        <div class="col-lg-5 center-form">
+            <form id="input-form">
+                <fieldset>
+                    <p>Your registration is completed!</p>
+                    <p>You can now login from <a class="text-danger-emphasis" th:href="@{/login}">here</a></p>
+                </fieldset>
             </form>
         </div>
     </div>
@@ -150,7 +119,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
-<script src="/js/accessCode-hide.js"></script>
+<script src="/js/password-hide.js"></script>
 
 </body>
 </html>

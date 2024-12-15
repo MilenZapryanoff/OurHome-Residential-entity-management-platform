@@ -2,6 +2,7 @@ package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
+import com.example.OurHome.service.LanguageService;
 import com.example.OurHome.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,12 +23,16 @@ public class HomeControllerTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private LanguageService languageService;
+
     @InjectMocks
     private HomeController homeController;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        when(languageService.resolveView(anyString(), eq("index"))).thenReturn("index");
     }
 
     @Test
@@ -40,7 +45,9 @@ public class HomeControllerTest {
         when(authentication.getName()).thenReturn("username");
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        ModelAndView modelAndView = homeController.home();
+        String mockLang = "bg";
+
+        ModelAndView modelAndView = homeController.home(mockLang);
 
         assertEquals("index", modelAndView.getViewName());
         assertEquals(UserViewModel.class, modelAndView.getModel().get("userViewModel").getClass());
@@ -53,7 +60,9 @@ public class HomeControllerTest {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        ModelAndView modelAndView = homeController.home();
+        String mockLang = "bg";
+
+        ModelAndView modelAndView = homeController.home(mockLang);
 
         assertEquals("index", modelAndView.getViewName());
         assertNull(modelAndView.getModel().get("userViewModel"));

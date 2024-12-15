@@ -53,21 +53,20 @@
             <!-- ***** Logo End ***** -->
             <!-- ***** Menu Start ***** -->
             <ul class="nav">
-                <li><a th:href="@{/}">Home</a></li>
-                <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Administration</a>
+                <li><a th:href="@{/}">Начало</a></li>
+                <li sec:authorize="hasAnyRole('MANAGER')"><a th:href="@{/administration}">Администрация</a>
                 </li>
-                <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Your
-                    property</a></li>
-                <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Profile</a></li>
-                <li><a th:href="@{/contact}">Contact Us</a></li>
-                <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="active">Register</a>
+                <li sec:authorize="hasAnyRole('RESIDENT')"><a th:href="@{/property}">Моят имот</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Профил</a></li>
+                <li><a th:href="@{/contact}">Контакти</a></li>
+                <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="active">Регистрация</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
                     <form id="logout" th:action="@{/logout}" method="POST">
-                        <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
+                        <a onclick="logout.submit()" style="cursor: pointer;">Изход</a>
                     </form>
                 </li>
-                <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
+                <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Вход</a></li>
             </ul>
             <a class='menu-trigger'>
                 <span>Menu</span>
@@ -81,7 +80,7 @@
     <div class="container">
         <div class="row">
             <div class="section-heading text-center">
-                <h6>| Register </h6>
+                <h6>| Регистрация </h6>
             </div>
         </div>
     </div>
@@ -91,15 +90,15 @@
 <div class="input-content">
     <div class="wrapper">
         <div class="title-text">
-            <div class="title login">SELECT YOUR ROLE</div>
-            <div class="title signup">SELECT YOUR ROLE</div>
+            <div class="title login">ИЗБЕРЕТЕ РОЛЯ</div>
+            <div class="title signup">ИЗБЕРЕТЕ РОЛЯ</div>
         </div>
         <div class="form-container">
             <div class="slide-controls">
                 <input type="radio" name="slide" id="login" checked>
                 <input type="radio" name="slide" id="signup">
-                <label for="login" class="slide login">Resident</label>
-                <label for="signup" class="slide signup">Manager</label>
+                <label for="login" class="slide login">Собственик на имот</label>
+                <label for="signup" class="slide signup">Домоуправител</label>
                 <div class="slider-tab"></div>
             </div>
             <div class="form-inner">
@@ -110,11 +109,9 @@
                         </div>
                         <div class="col-lg-9">
                             <div class="text-container">
-                                <p> Register as a resident in existing Residential entity.
-                                    In order to register as a resident  you should provide a valid 8-digit
-                                    Residential ID and Access code. If you do not
-                                    have this information, you should contact
-                                    your Residential Entity manager first.</p>
+                                <p> За да се регистрирате като собственик, трябва да
+                                    разполагате с валиден 8-цифрен идентификатор на етажната собственост (ID), както и код за достъп.
+                                    Ако не разполагате с тази информация, трябва да се свържете с Вашият домоуправител.</p>
                             </div>
                         </div>
                         <hr>
@@ -122,11 +119,11 @@
                     <div class="text-center">
                         <fieldset>
                             <a th:href="@{/register/auth}">
-                                <button type="button" class="orange-button ">Register as Resident
+                                <button type="button" class="orange-button ">Регистрирай ме
                                 </button>
                             </a>
                         </fieldset>
-                        <small>You already have registration? | <a href="/login">Login now</a></small>
+                        <small>Вече имате регистация? | <a href="/login">Вход</a></small>
                     </div>
                 </form>
                 <form class="signup">
@@ -136,11 +133,9 @@
                         </div>
                         <div class="col-lg-9">
                             <div class="text-container">
-                                <p>Registering as Manager will allow you to create
-                                    and manage your Residential Entity in OurHome
-                                    platform. As a first step you must register as
-                                    a manager. As soon as you complete registration
-                                    you will get access to the platform</p>
+                                <p>Регистрацията като домоуправител ще Ви позволи регистрация в платформата на етажната собственост (ЕС), която управлявате.
+                                    След като завършите Вашата регистрация ще получите пълен достъп до системата и нейните функционалности.
+                                </p>
                             </div>
                         </div>
                         <hr>
@@ -150,11 +145,11 @@
                         <fieldset>
                             <a th:href="@{/register/manager}">
                                 <button type="button"
-                                        class="orange-button">Register as Manager
+                                        class="orange-button">Регистрирай ме
                                 </button>
                             </a>
                         </fieldset>
-                        <small>You already have registration? | <a href="/login">Login now</a></small>
+                        <small>Вече имате регистация? | <a href="/login">Вход</a></small>
                     </div>
 
                 </form>

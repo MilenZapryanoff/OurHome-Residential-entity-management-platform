@@ -2,11 +2,13 @@ package com.example.OurHome.controller;
 
 import com.example.OurHome.model.dto.BindingModels.User.ManagerRegisterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.User.UserRegisterBindingModel;
-import com.example.OurHome.service.tokens.ResidentialEntityToken;
+import com.example.OurHome.service.LanguageService;
 import com.example.OurHome.service.UserService;
+import com.example.OurHome.service.tokens.ResidentialEntityToken;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,15 +19,19 @@ public class RegisterController {
 
     private final UserService userService;
     private final ResidentialEntityToken residentialEntityToken;
+    private final LanguageService languageService;
 
-    public RegisterController(UserService userService, ResidentialEntityToken residentialEntityToken) {
+    public RegisterController(UserService userService, ResidentialEntityToken residentialEntityToken, LanguageService languageService) {
         this.userService = userService;
         this.residentialEntityToken = residentialEntityToken;
+        this.languageService = languageService;
     }
 
     @GetMapping("/register")
-    public ModelAndView preRegistration(@ModelAttribute("managerRegisterBindingModel") ManagerRegisterBindingModel managerRegisterBindingModel) {
-        return new ModelAndView("register");
+    public ModelAndView preRegistration(@ModelAttribute("managerRegisterBindingModel") ManagerRegisterBindingModel managerRegisterBindingModel,
+                                        @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        return new ModelAndView(languageService.resolveView(lang, "register"));
     }
 
     /**
@@ -34,23 +40,28 @@ public class RegisterController {
 
     @GetMapping("/register/auth/user")
     public ModelAndView register(@ModelAttribute("userRegisterBindingModel")
-                                 UserRegisterBindingModel userRegisterBindingModel) {
+                                 UserRegisterBindingModel userRegisterBindingModel,
+                                 @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+
         if (!residentialEntityToken.isValid()) {
             return new ModelAndView("redirect:/register/auth");
         }
-        return new ModelAndView("register-user");
+
+        return new ModelAndView(languageService.resolveView(lang, "register-user"));
     }
 
     @PostMapping("/register/auth/user")
     public ModelAndView register(@ModelAttribute("userRegisterBindingModel")
                                  @Valid UserRegisterBindingModel userRegisterBindingModel,
-                                 BindingResult bindingResult) {
+                                 BindingResult bindingResult,
+                                 @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         if (!residentialEntityToken.isValid()) {
             return new ModelAndView("redirect:/register/auth");
         }
 
-        ModelAndView modelAndView = new ModelAndView("register-user");
+        ModelAndView modelAndView = new ModelAndView(languageService.resolveView(lang, "register-user"));
 
         if (bindingResult.hasErrors()) {
             return modelAndView;
@@ -65,24 +76,28 @@ public class RegisterController {
             return modelAndView;
         } else {
             userService.registerUser(userRegisterBindingModel, residentialEntityToken.getTokenId());
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView(languageService.resolveView(lang, "registration-success"));
         }
     }
-
 
     /**
      * MANAGER registration
      */
 
     @GetMapping("/register/manager")
-    public ModelAndView registerManager(@ModelAttribute("managerRegisterBindingModel") ManagerRegisterBindingModel managerRegisterBindingModel) {
-        return new ModelAndView("register-manager");
+    public ModelAndView registerManager(@ModelAttribute("managerRegisterBindingModel") ManagerRegisterBindingModel managerRegisterBindingModel,
+                                        @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        return new ModelAndView(languageService.resolveView(lang, "register-manager"));
     }
 
     @PostMapping("/register/manager")
     public ModelAndView register(@ModelAttribute("managerRegisterBindingModel")
-                                     @Valid ManagerRegisterBindingModel managerRegisterBindingModel, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView("register-manager");
+                                 @Valid ManagerRegisterBindingModel managerRegisterBindingModel,
+                                 BindingResult bindingResult,
+                                 @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView modelAndView = new ModelAndView(languageService.resolveView(lang, "register-manager"));
 
         if (bindingResult.hasErrors()) {
             return modelAndView;
@@ -97,7 +112,7 @@ public class RegisterController {
             return modelAndView;
         } else {
             userService.registerManager(managerRegisterBindingModel);
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView(languageService.resolveView(lang, "registration-success"));
         }
     }
 }

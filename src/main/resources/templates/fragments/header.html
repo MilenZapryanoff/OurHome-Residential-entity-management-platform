@@ -22,6 +22,7 @@
 </head>
 
 <body>
+
 <th:block sec:authorize="isAuthenticated()">
     <div th:fragment="header" class="sub-header">
         <div class="container">
@@ -35,6 +36,7 @@
                                  src="/avatars/default.jpg" alt="Default Avatar">
                         </a>
                     </button>
+
                 </div>
                 <div class="logged-user">
                     <p><b th:text="${userViewModel.getFirstName()} + ' ' + ${userViewModel.getLastName()}"></b></p>
