@@ -3,6 +3,7 @@ package com.example.OurHome.controller;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.UserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -21,6 +21,7 @@ public class HomeControllerTest {
 
     @Mock
     private UserService userService;
+
 
     @InjectMocks
     private HomeController homeController;
@@ -40,9 +41,11 @@ public class HomeControllerTest {
         when(authentication.getName()).thenReturn("username");
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        ModelAndView modelAndView = homeController.home();
+        String mockLang = "bg";
 
-        assertEquals("index", modelAndView.getViewName());
+        ModelAndView modelAndView = homeController.home(mockLang);
+
+        assertEquals("bg/index", modelAndView.getViewName());
         assertEquals(UserViewModel.class, modelAndView.getModel().get("userViewModel").getClass());
     }
 
@@ -53,10 +56,12 @@ public class HomeControllerTest {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        ModelAndView modelAndView = homeController.home();
+        String mockLang = "bg";
 
-        assertEquals("index", modelAndView.getViewName());
-        assertNull(modelAndView.getModel().get("userViewModel"));
+        ModelAndView modelAndView = homeController.home(mockLang);
+
+        assertEquals("bg/index", modelAndView.getViewName());
+        Assertions.assertNull(modelAndView.getModel().get("userViewModel"));
     }
 
 

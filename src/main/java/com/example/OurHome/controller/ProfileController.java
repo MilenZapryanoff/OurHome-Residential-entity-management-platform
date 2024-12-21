@@ -9,10 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,36 +22,46 @@ public class ProfileController {
 
     public ProfileController(UserService userService) {
         this.userService = userService;
-
     }
 
     /**
      * Profile section view
      *
-     * @return modelAndView
+     * @return resultView
      */
     @GetMapping("/profile")
-    public ModelAndView profile(ProfileEditBindingModel profileEditBindingModel) {
+    public ModelAndView profile(ProfileEditBindingModel profileEditBindingModel,
+                                @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("profile", "userViewModel", getUserViewModel()).addObject(profileEditBindingModel);
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/profile") : new ModelAndView("en/profile");
+
+        return view.addObject(profileEditBindingModel);
     }
 
     /**
      * Upload avatar method
      *
      * @param file uploaded file
-     * @return modelAndView
+     * @return resultView
      */
     @PostMapping("/uploadAvatar")
-    public ModelAndView uploadAvatar(@RequestParam("avatar") MultipartFile file) {
+    public ModelAndView uploadAvatar(@RequestParam("avatar") MultipartFile file,
+                                     @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+
+
 
         try {
             String relativePath = userService.saveAvatar(file, loggedUser.getId());
             userService.updateUserAvatar(loggedUser, relativePath);
         } catch (IllegalArgumentException | IOException e) {
-            return new ModelAndView("profile", "userViewModel", getUserViewModel())
-                    .addObject("errorMessage", e.getMessage());
+
+            ModelAndView view = resolveView(lang) ?
+                    new ModelAndView("bg/profile") : new ModelAndView("en/profile");
+
+            return view.addObject("errorMessage", e.getMessage());
         }
         return new ModelAndView("redirect:/profile");
     }
@@ -63,16 +70,19 @@ public class ProfileController {
     /**
      * Remove avatar method
      *
-     * @return modelAndView
+     * @return resultView
      */
     @PostMapping("/removeAvatar")
-    public ModelAndView removeAvatar() {
+    public ModelAndView removeAvatar(@CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         try {
             userService.removeAvatar(getUserViewModel().getId());
         } catch (IllegalArgumentException | IOException e) {
-            return new ModelAndView("profile", "userViewModel", getUserViewModel())
-                    .addObject("errorMessage", e.getMessage());
+
+            ModelAndView view = resolveView(lang) ?
+                    new ModelAndView("bg/profile") : new ModelAndView("en/profile");
+
+            return view.addObject("errorMessage", e.getMessage());
         }
 
         return new ModelAndView("redirect:/profile");
@@ -80,10 +90,13 @@ public class ProfileController {
 
     @GetMapping("/profile/edit/{id}")
     @PreAuthorize("@securityService.checkProfileEditAccess(#id, authentication)")
-    public ModelAndView profileEdit(@PathVariable("id") Long id) {
+    public ModelAndView profileEdit(@PathVariable("id") Long id,
+                                    @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("profile-edit", "userViewModel", getUserViewModel())
-                .addObject("profileEditBindingModel", userService.getProfileEditBindingModel(id));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/profile-edit") : new ModelAndView("en/profile-edit");
+
+        return view.addObject("profileEditBindingModel", userService.getProfileEditBindingModel(id));
     }
 
     /**
@@ -92,23 +105,26 @@ public class ProfileController {
      * @param id                      logged user id
      * @param profileEditBindingModel binding model bearing new data
      * @param bindingResult           validation result
-     * @return modelAndView
+     * @return resultView
      */
     @PostMapping("/profile/edit/{id}")
     @PreAuthorize("@securityService.checkProfileEditAccess(#id, authentication)")
     public ModelAndView profileEdit(@PathVariable("id") Long id,
                                     @Valid ProfileEditBindingModel profileEditBindingModel,
-                                    BindingResult bindingResult) {
+                                    BindingResult bindingResult,
+                                    @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        ModelAndView modelAndView = new ModelAndView("profile-edit", "userViewModel", getUserViewModel());
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/profile-edit") : new ModelAndView("en/profile-edit");
 
         if (bindingResult.hasErrors()) {
-            return modelAndView;
+            return view;
         }
 
         if (!getUserViewModel().getUsername().equals(profileEditBindingModel.getUsername()) &&
                 userService.duplicatedUsernameCheck(profileEditBindingModel.getUsername())) {
-            return modelAndView.addObject("duplicatedEmail", true);
+            return view.addObject("duplicatedEmail", true);
         }
 
         if (profileEditBindingModel.getNewPassword().isEmpty() &&
@@ -118,7 +134,7 @@ public class ProfileController {
         }
 
         if (!userService.passwordsMatch(profileEditBindingModel.getNewPassword(), profileEditBindingModel.getConfirmPassword())) {
-            return modelAndView.addObject("noPasswordsMatch", true);
+            return view.addObject("noPasswordsMatch", true);
         }
 
         userService.editProfile(id, profileEditBindingModel, true);
@@ -133,5 +149,14 @@ public class ProfileController {
     private UserViewModel getUserViewModel() {
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         return userService.getUserViewData(loggedUser);
+    }
+
+    /**
+     * Language resolver
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }

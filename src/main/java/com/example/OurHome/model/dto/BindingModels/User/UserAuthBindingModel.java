@@ -3,10 +3,10 @@ package com.example.OurHome.model.dto.BindingModels.User;
 import org.hibernate.validator.constraints.Length;
 
 public class UserAuthBindingModel {
-    @Length(min = 8, max = 8, message = "Please enter a valid Residential ID")
+    @Length(min = 8, max = 8, message = "Некорктен идентификатор на ЕС/Invalid Residential entity ID")
     private String residentialId;
 
-    @Length(min = 3, max = 20, message = "Access code must be at least 3 symbols long")
+    @Length(min = 3, max = 20, message = "Кодът за достъп трябва да съдържа минимум 3 сомвола/Access code must be at least 3 symbols long")
     private String residentialAccessCode;
 
     public String getResidentialId() {

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/bg/fragments/navbar}"></div>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Add new expense</h3>
+            <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Residential entity section *****-->
+
+<div class="container">
+    <div class="input-content text-center">
+        <div class="col-lg-6 center-form">
+            <form id="input-form"
+                  th:method="POST"
+                  th:action="@{/administration/financial/expenses/add/{id} (id=${id})}"
+                  th:object="${expenseAddBindingModel}">
+                <div class="col-lg-12">
+                    <fieldset>
+                        <label for="expenseAmount"><b>Expense amount</b></label><br>
+                        <p th:if="${#fields.hasErrors('expenseAmount')}"
+                               th:errors="*{expenseAmount}"
+                               class="text-danger">Expense amount error message</p>
+                        <input type="number" step="any"
+                               id="expenseAmount"
+                               placeholder="Enter expense amount..."
+                               autocomplete="on"
+                               required th:field="*{expenseAmount}"
+                               th:errorclass="bg-danger"
+                               th:value="${expenseAddBindingModel.getExpenseAmount()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="expenseDate"><b>Expense date</b></label>
+                        <p th:if="${#fields.hasErrors('expenseDate')}"
+                               th:errors="*{expenseDate}"
+                               class="text-danger">Expense date
+                            error...</p>
+                        <input type="date"
+                               id="expenseDate"
+                               th:field="*{expenseDate}"
+                               th:errorclass="bg-danger"
+                               th:value="${expenseAddBindingModel.getExpenseDate()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="description"><b>Comment</b></label>
+                        <p th:if="${#fields.hasErrors('description')}"
+                               th:errors="*{description}"
+                               class="text-danger">Description error
+                            message</p>
+                        <input type="text"
+                               id="description" required
+                               placeholder="Enter comment..."
+                               th:field="*{description}"
+                               th:errorclass="bg-danger"
+                               th:value="${expenseAddBindingModel.getDescription()}">
+                    </fieldset>
+                    <fieldset>
+                        <button type="submit" id="form-submit"
+                                class="orange-button">Add
+                        </button>
+                        <button type="button">
+                            <a class="orange-button"
+                               th:href="@{/administration/financial/expenses/{id}(id=${id})}">
+                                <p class="text-light">Cancel</p>
+                            </a>
+                        </button>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+
+</body>
+</html>

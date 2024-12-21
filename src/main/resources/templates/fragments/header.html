@@ -22,6 +22,7 @@
 </head>
 
 <body>
+
 <th:block sec:authorize="isAuthenticated()">
     <div th:fragment="header" class="sub-header">
         <div class="container">
@@ -29,15 +30,15 @@
                 <div class="avatar">
                     <button type="button">
                         <a th:href="@{/profile}">
-                            <img th:if="${userViewModel.avatarPath != null}"
-                                 th:src="@{${userViewModel.avatarPath}}" alt="Avatar">
-                            <img th:unless="${userViewModel.avatarPath != null}"
+                            <img th:if="${loggedUser.avatarPath != null}"
+                                 th:src="@{${loggedUser.avatarPath}}" alt="Avatar">
+                            <img th:unless="${loggedUser.avatarPath != null}"
                                  src="/avatars/default.jpg" alt="Default Avatar">
                         </a>
                     </button>
                 </div>
                 <div class="logged-user">
-                    <p><b th:text="${userViewModel.getFirstName()} + ' ' + ${userViewModel.getLastName()}"></b></p>
+                    <p><b th:text="${loggedUser.getFirstName()} + ' ' + ${loggedUser.getLastName()}"></b></p>
                 </div>
             </div>
         </div>

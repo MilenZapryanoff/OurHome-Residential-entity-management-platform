@@ -1,14 +1,11 @@
 package com.example.OurHome.controller;
 
-import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.Contact.ContactFormBindingModel;
-import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.email.EmailService;
-import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,53 +14,48 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ContactController {
 
-    private final UserService userService;
     private final EmailService emailService;
 
-    public ContactController(UserService userService, EmailService emailService) {
-        this.userService = userService;
+    public ContactController(EmailService emailService) {
         this.emailService = emailService;
     }
 
     @GetMapping("/contact")
-    public ModelAndView contact(@ModelAttribute("contactFormBindingModel") ContactFormBindingModel contactFormBindingModel) {
-        ModelAndView modelAndView = new ModelAndView("contact");
+    public ModelAndView contact(@ModelAttribute("contactFormBindingModel") ContactFormBindingModel contactFormBindingModel,
+                                @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        if (SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser")) {
-            return modelAndView;
-        }
-        return modelAndView.addObject("userViewModel", getUserViewModel());
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/contact") : new ModelAndView("en/contact");
+
+        return view;
     }
-
 
     @PostMapping("/contact")
     public ModelAndView submitContactForm(@ModelAttribute("contactFormBindingModel")
                                           @Valid ContactFormBindingModel contactFormBindingModel,
-                                          BindingResult bindingResult) {
+                                          BindingResult bindingResult,
+                                          @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        boolean guestUser = SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser");
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/contact") : new ModelAndView("en/contact");
 
-        ModelAndView modelAndView = new ModelAndView("contact");
         if (bindingResult.hasErrors()) {
-            if (guestUser) {
-                return modelAndView;
-            }
-            return modelAndView.addObject("userViewModel", getUserViewModel());
+            return view;
         }
 
         //TODO: if contact via email feature is not used the next line of code must be commented.
         emailService.sendContactFormEmail(contactFormBindingModel.getName(), contactFormBindingModel.getEmail(), contactFormBindingModel.getSubject(), contactFormBindingModel.getMessage());
-        modelAndView.addObject("mailSent", true);
-
-        if (guestUser) {
-            return modelAndView;
-        }
-        return modelAndView
-                .addObject("userViewModel", getUserViewModel());
+        view.addObject("mailSent", true);
+        return view;
     }
 
-    private UserViewModel getUserViewModel() {
-        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        return userService.getUserViewData(loggedUser);
+    /**
+     * Language resolver
+     *
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }

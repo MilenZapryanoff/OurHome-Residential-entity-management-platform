@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+
+<body onload="calcTotalSum()">
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/en/fragments/navbar}"></div>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Edit fee</h3>
+            <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
+            <div th:if="${feeChangeFailed}" class="err-msg">
+                <h5 class="text-light">Fee change failed!</h5>
+                <p class="text-light">Fee amount cannot be 0!<br>At lease one of the fee components must be number
+                    greater than 0!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Residential entity section *****-->
+
+<div class="container">
+    <div class="input-content text-center">
+        <div class="col-lg-6 center-form">
+            <form id="input-form"
+                  th:method="POST"
+                  th:action="@{/administration/fees/details/edit/{id} (id=${propertyFeeEditBindingModel.getId()})}"
+                  th:object="${propertyFeeEditBindingModel}">
+                <div class="col-lg-12">
+                    <fieldset>
+                        <label for="fundMmAmount"><b>Fund Maintenance <br> and management amount</b></label>
+                        <p th:if="${#fields.hasErrors('fundMmAmount')}"
+                           th:errors="*{fundMmAmount}"
+                           class="text-danger">Monthly fee error message</p>
+                        <input type="number" step="any"
+                               id="fundMmAmount"
+                               placeholder="Enter amount..."
+                               autocomplete="on"
+                               th:field="*{fundMmAmount}"
+                               th:errorclass="bg-danger"
+                               th:value="${propertyFeeEditBindingModel.getFundMmAmount()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="fundRepairAmount"><b>Fund Repair amount</b></label>
+                        <p th:if="${#fields.hasErrors('fundRepairAmount')}"
+                           th:errors="*{fundRepairAmount}"
+                           class="text-danger">Monthly fee error message</p>
+                        <input type="number" step="any"
+                               id="fundRepairAmount"
+                               placeholder="Enter amount..."
+                               autocomplete="on"
+                               th:field="*{fundRepairAmount}"
+                               th:errorclass="bg-danger"
+                               th:value="${propertyFeeEditBindingModel.getFundRepairAmount()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="feeAmount"><b>Total monthly fee amount</b></label>
+                        <p>The amount in this field is automatically calculated!
+                            The sum must be a greater than 0, so at least one of the amount components above must be a
+                            positive number!</p>
+                        <p th:if="${#fields.hasErrors('feeAmount')}"
+                           th:errors="*{feeAmount}"
+                           class="text-danger">Monthly fee error message</p>
+                        <input type="number" step="any"
+                               disabled="disabled"
+                               id="feeAmount"
+                               th:field="*{feeAmount}"
+                               th:errorclass="bg-danger">
+                    </fieldset>
+                    <fieldset>
+                        <label for="periodStart"><b>Fee start period</b></label>
+                        <p th:if="${#fields.hasErrors('periodStart')}"
+                           th:errors="*{periodStart}"
+                           class="text-danger">Fee start period error...</p>
+                        <input type="date"
+                               id="periodStart"
+                               th:field="*{periodStart}"
+                               th:errorclass="bg-danger"
+                               th:value="${propertyFeeEditBindingModel.getPeriodStart()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="periodEnd"><b>Fee end period</b></label>
+                        <p th:if="${#fields.hasErrors('periodEnd')}"
+                           th:errors="*{periodEnd}"
+                           class="text-danger">Fee end period error...</p>
+                        <input type="date"
+                               id="periodEnd"
+                               th:field="*{periodEnd}"
+                               th:errorclass="bg-danger"
+                               th:value="${propertyFeeEditBindingModel.getPeriodEnd()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="description"><b>Comment</b></label>
+                        <p th:if="${#fields.hasErrors('description')}"
+                           th:errors="*{description}"
+                           class="text-danger">Description error message</p>
+                        <input type="text"
+                               id="description"
+                               placeholder="Enter comment..."
+                               th:field="*{description}"
+                               th:errorclass="bg-danger"
+                               th:value="${propertyFeeEditBindingModel.getDescription()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="overPayment"><b>Overpayment</b></label>
+                        <p class="text-secondary">In case of overpayment for this
+                            property,<br> you can enter overpaid amount here.
+                            The amount will be used to cover future monthly fees and will
+                            automatically decrease until no money left.</p>
+                        <p th:if="${#fields.hasErrors('overPayment')}"
+                           th:errors="*{overPayment}"
+                           class="text-danger">Overpayment error message</p>
+                        <input type="number" step="any"
+                               id="overPayment"
+                               placeholder="Enter overpaid amount..."
+                               required th:field="*{overPayment}"
+                               th:errorclass="bg-danger"
+                               th:value="${propertyFeeEditBindingModel.getOverPayment()}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="isPaid"><b>Fee is paid</b></label>
+                        <input id="isPaid"
+                               type="checkbox"
+                               th:field="*{paid}"
+                               th:value="${propertyFeeEditBindingModel.isPaid}">
+                    </fieldset>
+                    <fieldset>
+                        <label for="id" class="hidden"></label>
+                        <input type="number" hidden="hidden" id="id"
+                               th:field="*{propertyId}"
+                               th:value="${propertyFeeEditBindingModel.getPropertyId()}">
+                    </fieldset>
+                    <fieldset>
+                        <button type="submit" id="form-submit"
+                                class="orange-button">Submit
+                        </button>
+                        <a th:href="@{/administration/fees/details/{id}(id=${propertyFeeEditBindingModel.getPropertyId()})}">
+                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel</button>
+                        </a>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/input-data-control.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/en/fragments/navbar}"></div>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Modify Monthly fees</h3>
+            <div class="col-lg-12">
+                <span th:text="'Residential Entity ID: ' + ${residentialEntity.getId()}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Residential entity section ***** -->
+<div class="single-property section">
+    <div class="container">
+        <!--Start of sub-menus-->
+        <div class="administration-nav-bar">
+            <a th:href="@{/administration}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
+            <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}">Summary</a>
+            <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Owners</a>
+            <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">Properties</a>
+            <a href=#>Monthly fees</a>
+            <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Reports</a>
+            <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Details</a>
+            <div class="animation start-fees"></div>
+        </div>
+
+        <div class="administration">
+            <div class="info-table bottom-rounded">
+
+                <div class="text-center" id="re-fees">
+                    <h4 class="text-danger">MODIFY RESIDENTIAL ENTITY FEES</h4>
+                    <p style="padding-bottom: 40px">This section contains data about the accepted by the residential entity
+                        monthly
+                        fee policy.<br>
+                        Monthly fees will be automatically calculated according to the values in the listed fields.<br>
+                        Changes will take effect immediately after change.</p>
+                </div>
+                <form id="input-form" style="margin: 0; padding: 0"
+                      th:method="POST"
+                      th:action="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}"
+                      th:object="${feeEditBindingModel}">
+
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                                <div class="info-table" style="margin-left: 0">
+                                    <h5 id="post-nav" class="text-danger text-center">FUND
+                                        "MANAGEMENT & MAINTENANCE"</h5>
+                                    <ul class="fee-table">
+                                        <li class="text-black"><b>1.</b> Fixed property fee
+                                            <p class="text-secondary">Monthly fee applied to
+                                                every single property.</p>
+                                            <div class="text-black inline"><b>A.</b>
+                                                habitable property:
+                                                <fieldset>
+                                                    <p th:if="${#fields.hasErrors('fixedFeeHabitable')}"
+                                                       th:errors="*{fixedFeeHabitable}"
+                                                       class="text-danger">Fixed fee
+                                                        error message</p>
+                                                    <input type="number" step="any"
+                                                           class="form-control-sm"
+                                                           id="fixedFeeHabitable"
+                                                           placeholder="Enter fee..."
+                                                           autocomplete="on" required
+                                                           th:field="*{fixedFeeHabitable}"
+                                                           th:errorclass="bg-danger"
+                                                           th:value="${feeEditBindingModel.getFixedFeeHabitable()}">
+                                                    <label for="fixedFeeHabitable"
+                                                           class="text-secondary"></label>
+                                                </fieldset>
+                                            </div>
+                                            <div class="text-black inline"><b>B.</b>
+                                                non-habitable property:
+                                                <fieldset>
+                                                    <p th:if="${#fields.hasErrors('fixedFeeNonHabitable')}"
+                                                       th:errors="*{fixedFeeNonHabitable}"
+                                                       class="text-danger">Fixed fee
+                                                        error message</p>
+                                                    <input type="number" step="any"
+                                                           class="form-control-sm"
+                                                           id="fixedFeeNonHabitable"
+                                                           placeholder="Enter fee..."
+                                                           autocomplete="on" required
+                                                           th:field="*{fixedFeeNonHabitable}"
+                                                           th:errorclass="bg-danger"
+                                                           th:value="${feeEditBindingModel.getFixedFeeNonHabitable()}">
+                                                    <label for="fixedFeeNonHabitable"
+                                                           class="text-secondary"></label>
+                                                </fieldset>
+                                            </div>
+                                            <p class="text-secondary"><i
+                                                    class="fa-solid fa-house"></i><small>
+                                                applies per
+                                                property</small></p>
+                                        </li>
+                                        <li class="text-black"><b>2.</b> Adult fee:
+                                            <fieldset>
+                                                <p th:if="${#fields.hasErrors('adultFee')}"
+                                                   th:errors="*{adultFee}"
+                                                   class="text-danger">Adult fee
+                                                    error message</p>
+                                                <input type="number" step="any"
+                                                       class="form-control-sm"
+                                                       id="adultFee"
+                                                       placeholder="Enter fee..."
+                                                       autocomplete="on" required
+                                                       th:field="*{adultFee}"
+                                                       th:errorclass="bg-danger"
+                                                       th:value="${feeEditBindingModel.getAdultFee()}">
+                                                <label for="adultFee"
+                                                       class="text-secondary"></label>
+                                            </fieldset>
+                                            <p class="text-secondary">Monthly fee for each
+                                                adult person living in the property.</p>
+                                            <p class="text-secondary"><i
+                                                    class="fa-solid fa-person"></i><small>
+                                                applies per
+                                                adult</small></p>
+                                        </li>
+                                        <li class="text-black"><b>3.</b> Child fee:
+                                            <fieldset>
+                                                <p th:if="${#fields.hasErrors('childFee')}"
+                                                   th:errors="*{childFee}"
+                                                   class="text-danger">Child fee
+                                                    error message</p>
+                                                <input type="number" step="any"
+                                                       class="form-control-sm"
+                                                       id="childFee"
+                                                       placeholder="Enter fee..."
+                                                       autocomplete="on" required
+                                                       th:field="*{childFee}"
+                                                       th:errorclass="bg-danger"
+                                                       th:value="${feeEditBindingModel.getChildFee()}">
+                                                <label for="childFee"
+                                                       class="text-secondary"></label>
+                                            </fieldset>
+                                            <p class="text-secondary">Monthly fee for each
+                                                child living in the property.</p>
+                                            <p class="text-secondary"><i
+                                                    class="fa-solid fa-child"></i><small>
+                                                applies per child</small>
+                                            </p>
+                                        </li>
+                                        <li class="text-black"><b>4.</b> Pet fee:
+                                            <fieldset>
+                                                <p th:if="${#fields.hasErrors('petFee')}"
+                                                   th:errors="*{petFee}"
+                                                   class="text-danger">Pet fee error
+                                                    message</p>
+                                                <input type="number" step="any"
+                                                       class="form-control-sm"
+                                                       id="petFee"
+                                                       placeholder="Enter fee..."
+                                                       autocomplete="on" required
+                                                       th:field="*{petFee}"
+                                                       th:errorclass="bg-danger"
+                                                       th:value="${feeEditBindingModel.getPetFee()}">
+                                                <label for="petFee"
+                                                       class="text-secondary"></label>
+                                            </fieldset>
+                                            <p class="text-secondary">Monthly fee for a pet
+                                                living in the property.</p>
+                                            <p class="text-secondary"><i
+                                                    class="fa-solid fa-dog"></i><small>
+                                                applies per pet</small></p>
+                                        </li>
+                                        <li class="text-black"><b>5.</b> Custom property fee
+                                            <p class="text-secondary">Custom fee applied to
+                                                every single property.</p>
+                                            <div class="text-black inline"><b>A.</b>
+                                                habitable property:
+                                                <fieldset>
+                                                    <p th:if="${#fields.hasErrors('additionalFeeHabitable')}"
+                                                       th:errors="*{additionalFeeHabitable}"
+                                                       class="text-danger">Additional
+                                                        fee error message</p>
+                                                    <input type="number" step="any"
+                                                           class="form-control-sm"
+                                                           id="additionalFeeHabitable"
+                                                           placeholder="Enter fee..."
+                                                           autocomplete="on" required
+                                                           th:field="*{additionalFeeHabitable}"
+                                                           th:errorclass="bg-danger"
+                                                           th:value="${feeEditBindingModel.getAdditionalFeeHabitable()}">
+                                                    <label for="additionalFeeHabitable"
+                                                           class="text-secondary"></label>
+                                                </fieldset>
+                                            </div>
+                                            <div class="text-black inline"><b>B.</b>
+                                                non-habitable property:
+                                                <fieldset>
+                                                    <p th:if="${#fields.hasErrors('additionalFeeNonHabitable')}"
+                                                       th:errors="*{additionalFeeNonHabitable}"
+                                                       class="text-danger">Other fee
+                                                        error message</p>
+                                                    <input type="number" step="any"
+                                                           class="form-control-sm"
+                                                           id="additionalFeeNonHabitable"
+                                                           placeholder="Enter fee..."
+                                                           autocomplete="on" required
+                                                           th:field="*{additionalFeeNonHabitable}"
+                                                           th:errorclass="bg-danger"
+                                                           th:value="${feeEditBindingModel.getAdditionalFeeNonHabitable()}">
+                                                    <label for="additionalFeeNonHabitable"
+                                                           class="text-secondary">Other
+                                                        Residential entity fee applied for
+                                                        every property.</label>
+                                                </fieldset>
+                                            </div>
+                                            <p class="text-secondary"><i
+                                                    class="fa-solid fa-house"></i><small>
+                                                applies per
+                                                property</small></p>
+                                        </li>
+                                        <li class="text-danger"><i
+                                                class="fa-solid fa-info-circle"></i> Forming
+                                            an individual property fee:
+                                            <p class="text-secondary">Fund "Management and
+                                                maintenance" is a fund that covers monthly
+                                                expenses of the Residential entity.
+                                                This fund is usually formed by monthly fees
+                                                of both habitable and non-habitable
+                                                properties.
+                                                <br>Every Residential entity defines its own
+                                                fee policy. In this section you can define
+                                                the fee components
+                                                according to your Residential entity fee
+                                                policy. Set fees will automatically apply to
+                                                all individual properties in this
+                                                residential entity.
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="info-table">
+                                <h5 class="text-danger text-center">FUND "REPAIR" <i
+                                        class="fa-solid fa-screwdriver-wrench"></i></h5>
+                                <ul class="fee-table">
+                                    <li class="text-black"><b>6.</b> Fixed 'Fund Repaid' fee
+                                        <p class="text-secondary">Monthly fee applied to every property with
+                                            no custom property type set.</p>
+                                        <div class="frame">
+                                            <div class="text-black inline"><b>A.</b>
+                                                habitable property:
+                                                <fieldset>
+                                                    <p th:if="${#fields.hasErrors('fundRepairHabitable')}"
+                                                       th:errors="*{fundRepairHabitable}"
+                                                       class="text-danger">Other fee
+                                                        error message</p>
+                                                    <input type="number" step="any"
+                                                           class="form-control-sm"
+                                                           id="fundRepairHabitable"
+                                                           placeholder="Enter fee..."
+                                                           autocomplete="on" required
+                                                           th:field="*{fundRepairHabitable}"
+                                                           th:errorclass="bg-danger"
+                                                           th:value="${feeEditBindingModel.getFundRepairHabitable()}">
+                                                    <label for="fundRepairHabitable"
+                                                           class="text-secondary"></label>
+                                                </fieldset>
+                                            </div>
+                                            <div class="text-black inline"><b>B.</b>
+                                                non-habitable property:
+                                                <fieldset>
+                                                    <p th:if="${#fields.hasErrors('fundRepairNonHabitable')}"
+                                                       th:errors="*{fundRepairNonHabitable}"
+                                                       class="text-danger">Other fee
+                                                        error message</p>
+                                                    <input type="number" step="any"
+                                                           class="form-control-sm"
+                                                           id="fundRepairNonHabitable"
+                                                           placeholder="Enter fee..."
+                                                           autocomplete="on" required
+                                                           th:field="*{fundRepairNonHabitable}"
+                                                           th:errorclass="bg-danger"
+                                                           th:value="${feeEditBindingModel.getFundRepairNonHabitable()}">
+                                                    <label for="fundRepairNonHabitable"
+                                                           class="text-secondary"></label>
+                                                </fieldset>
+                                                <br>
+                                            </div>
+                                        </div>
+                                        <p class="text-secondary"><i
+                                                class="fa-solid fa-house"></i><small>
+                                            applies per property</small></p>
+                                    </li>
+                                    <li th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}"
+                                        class="text-black"><b>7.</b> 'Fund Repair' fee by property type
+                                        <p class="text-secondary">'Fund Repair' fee applied according to the
+                                            property type set.</p>
+                                        <div class="frame">
+                                            <div th:each="propertyType: ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}"
+                                                 class="text-black inline">
+                                                <p>
+                                                    <i class="fa-solid fa-city"></i>
+                                                    <b th:text="${propertyType.getDescription()} + ', '"></b>
+                                                    <b th:text="${propertyType.getTotalFlatSpace()} + 'm2'"></b>
+                                                    <b style="padding-left: 5px" title="Edit fee"><a
+                                                            th:href="@{/administration/property/types/redirect/edit/{id}(id=${propertyType.getId()})}"><i
+                                                            class="fa-solid fa-edit"></i></a></b>
+                                                </p>
+
+                                                <div class="section" style="padding: 3px 15px">
+                                                    <span><b>A.</b> habitable property</span>
+                                                    <div class="info-box">
+                                                        <i th:text="${propertyType.getFundRepairHabitable()} + ' лв.'"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="section" style="padding: 3px 15px">
+                                                    <span><b>B.</b> non-habitable property</span>
+                                                    <div class="info-box">
+                                                        <i th:text="${propertyType.getFundRepairNotHabitable()} + ' лв.'"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="text-secondary"><i class="fa-solid fa-house"></i><small>
+                                            applies
+                                            per property type</small></p>
+
+                                    </li>
+                                    <li class="text-danger"><i
+                                            class="fa-solid fa-info-circle"></i>
+                                        Applying monthly fees
+                                        changes:
+                                        <p class="text-secondary">Changes to
+                                            residential entity fee policy will
+                                            affect
+                                            next month property fees. <br>Fees will
+                                            be automatically calculated according to
+                                            the new values.
+                                            <br>Total monthly fee is calculated as
+                                            follows :
+                                            <br> <b>I. FUND "MANAGEMENT &
+                                                MAINTENANCE" </b>
+                                            <br>For habitable property -
+                                            1A+2+3+4+5A
+                                            <br>For non-habitable property -
+                                            1B+5B
+
+                                            <br> <b>II. FUND "REPAIR" </b>
+                                            <br>For habitable property - 6A <b>OR</b> 7A (if set)
+                                            <br>For non-habitable property - 6B <b>OR</b> 7B (if set)
+                                        </p>
+                                    </li>
+
+
+                                </ul>
+
+
+                                <div class="col-lg-12">
+                                    <fieldset>
+                                        <hr>
+                                        <button type="submit" id="form-submit"
+                                                class="form-control text-bg-danger">
+                                            <small>Save changes</small>
+                                        </button>
+                                    </fieldset>
+                                    <div class="cancel-button text-center">
+                                        <a class="form-control text-bg-light"
+                                           th:href="@{/administration/fees/settings/{id}(id=${residentialEntity.getId()})}">
+                                            <small class="text-dark">Back</small></a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+
+</body>
+</html>

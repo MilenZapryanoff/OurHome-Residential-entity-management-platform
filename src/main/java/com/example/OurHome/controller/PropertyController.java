@@ -18,10 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -51,28 +48,32 @@ public class PropertyController {
      * PROPERTY section
      */
     @GetMapping("/property")
-    public ModelAndView property() {
+    public ModelAndView property(@CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("property/property", "userViewModel", getUserViewModel());
+        return resolveView(lang) ?
+                new ModelAndView("bg/property/property") : new ModelAndView("en/property/property");
     }
 
     /**
      * PROPERTY -> Add property
      */
     @GetMapping("/property/add")
-    public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel") PropertyRegisterBindingModel propertyRegisterBindingModel) {
+    public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel") PropertyRegisterBindingModel propertyRegisterBindingModel, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         UserViewModel loggedUser = getUserViewModel();
         UserAuthBindingModel userAuthBindingModel = new UserAuthBindingModel();
 
         if (loggedUser.getResidentialEntities().isEmpty()) {
-            return new ModelAndView("property/property-add-new-entity")
-                    .addObject("userViewModel", loggedUser)
-                    .addObject("userAuthRegisterBindingModel", userAuthBindingModel)
+
+            ModelAndView view = resolveView(lang) ?
+                    new ModelAndView("bg/property/property-add-new-entity") : new ModelAndView("en/property/property-add-new-entity");
+
+            return view.addObject("userAuthRegisterBindingModel", userAuthBindingModel)
                     .addObject("notJoinedToResidentialEntity", true);
         }
 
-        return new ModelAndView("property/property-add", "userViewModel", loggedUser);
+        return resolveView(lang) ?
+                new ModelAndView("bg/property/property-add") : new ModelAndView("en/property/property-add");
     }
 
     /**
@@ -80,19 +81,19 @@ public class PropertyController {
      * POST
      */
     @PostMapping("/property/add")
-    public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel")
-                                    @Valid PropertyRegisterBindingModel propertyRegisterBindingModel,
-                                    BindingResult bindingResult) {
+    public ModelAndView addProperty(@ModelAttribute("propertyRegisterBindingModel") @Valid PropertyRegisterBindingModel propertyRegisterBindingModel, BindingResult bindingResult, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/property/property-add") : new ModelAndView("en/property/property-add");
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("property/property-add", "userViewModel", getUserViewModel());
+            return view;
         }
 
         if (propertyService.requestToObtainProperty(propertyRegisterBindingModel, getLoggedUser())) {
             return new ModelAndView("redirect:/property");
         } else {
-            return new ModelAndView("property/property-add", "userViewModel", getUserViewModel())
-                    .addObject("registrationFailed", true);
+            return view.addObject("registrationFailed", true);
         }
     }
 
@@ -100,9 +101,11 @@ public class PropertyController {
      * PROPERTY -> Add property -> Add new RE
      */
     @GetMapping("/property/add/new")
-    public ModelAndView addPropertyInNewEntity(@ModelAttribute("userAuthRegisterBindingModel") UserAuthBindingModel userAuthBindingModel) {
+    public ModelAndView addPropertyInNewEntity(@ModelAttribute("userAuthRegisterBindingModel") UserAuthBindingModel userAuthBindingModel, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("property/property-add-new-entity", "userViewModel", getUserViewModel());
+
+        return resolveView(lang) ?
+                new ModelAndView("bg/property/property-add-new-entity") : new ModelAndView("en/property/property-add-new-entity");
     }
 
     /**
@@ -110,15 +113,19 @@ public class PropertyController {
      * POST
      */
     @PostMapping("/property/add/new")
-    public ModelAndView addPropertyInNewEntity(@ModelAttribute("userAuthRegisterBindingModel") @Valid UserAuthBindingModel userAuthBindingModel, BindingResult bindingResult) {
+    public ModelAndView addPropertyInNewEntity(@ModelAttribute("userAuthRegisterBindingModel") @Valid UserAuthBindingModel userAuthBindingModel, BindingResult bindingResult, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         Long residentialEntityId = userAuthBindingModel.parseResidentialIdToLong();
         String validationCode = userAuthBindingModel.getResidentialAccessCode();
 
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/property/property-add-new-entity") : new ModelAndView("en/property/property-add-new-entity");
+
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("property/property-add-new-entity", "userViewModel", getUserViewModel());
+            return view;
+
         } else if (!userService.residentialValidation(residentialEntityId, validationCode)) {
-            return new ModelAndView("property/property-add-new-entity", "userViewModel", getUserViewModel()).addObject("badResidentialEntity", true);
+            return view.addObject("badResidentialEntity", true);
 
         }
         userService.joinUserToNewResidentialEntity(userAuthBindingModel, getLoggedUser());
@@ -131,9 +138,16 @@ public class PropertyController {
      */
     @GetMapping("/property/summary/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
-    public ModelAndView residentialEntityDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id) {
+    public ModelAndView residentialEntityDetails(
+            @ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
+            @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel,
+            @PathVariable("id") Long id,
+            @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("property/property-summary", "userViewModel", getUserViewModel()).addObject("property", getProperty(id));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/property/property-summary") : new ModelAndView("en/property/property-summary");
+
+        return view.addObject("property", getProperty(id));
     }
 
     /**
@@ -142,20 +156,22 @@ public class PropertyController {
      */
     @PostMapping("/property/summary/messageToManager/{id}")
     @PreAuthorize("@securityService.checkMessageSenderAndReceiver(#propertyId, #sendMessageBindingModel.getSenderId() ,#sendMessageBindingModel.getReceiverId())")
-    public ModelAndView sendMessageToPropertyManager(@ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long propertyId) {
+    public ModelAndView sendMessageToPropertyManager(@ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long propertyId, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        ModelAndView modelAndView = new ModelAndView("property/property-summary")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("property", getProperty(propertyId))
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/property/property-summary") : new ModelAndView("en/property/property-summary");
+
+
+        view.addObject("property", getProperty(propertyId))
                 .addObject("sendMessageBindingModel", sendMessageBindingModel);
 
         if (sendMessageBindingModel.getMessage().length() > 2000) {
-            return modelAndView.addObject("messageError", true);
+            return view.addObject("messageError", true);
         }
 
         messageService.sendMessage(userService.findUserById(sendMessageBindingModel.getReceiverId()), userService.findUserById(sendMessageBindingModel.getSenderId()), sendMessageBindingModel.getMessage());
 
-        return modelAndView.addObject("messageSent", true);
+        return view.addObject("messageSent", true);
     }
 
     /**
@@ -163,9 +179,12 @@ public class PropertyController {
      */
     @GetMapping("/property/details/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
-    public ModelAndView propertyDetails(@ModelAttribute("propertyManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id) {
+    public ModelAndView propertyDetails(@ModelAttribute("propertyManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @PathVariable("id") Long id, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("property/property-details", "userViewModel", getUserViewModel()).addObject("property", getProperty(id));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/property/property-details") : new ModelAndView("en/property/property-details");
+
+        return view.addObject("property", getProperty(id));
     }
 
     /**
@@ -173,7 +192,7 @@ public class PropertyController {
      */
     @GetMapping("/property/details/edit/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
-    public ModelAndView propertyEdit(@PathVariable("id") Long id) {
+    public ModelAndView propertyEdit(@PathVariable("id") Long id, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         Property property = getProperty(id);
         PropertyEditBindingModel propertyEditBindingModel;
@@ -189,8 +208,10 @@ public class PropertyController {
             propertyEditBindingModel = propertyService.mapPropertyToEditBindingModel(property);
         }
 
-        return new ModelAndView("property/property-details-edit")
-                .addObject("userViewModel", getUserViewModel())
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/property/property-details-edit") : new ModelAndView("en/property/property-details-edit");
+
+        return view
                 .addObject("property", getProperty(id))
                 .addObject("propertyEditBindingModel", propertyEditBindingModel);
     }
@@ -202,15 +223,14 @@ public class PropertyController {
      */
     @PostMapping("/property/details/edit/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
-    public ModelAndView propertyEdit(
-            @PathVariable("id") Long id,
-            @Valid PropertyEditBindingModel propertyEditBindingModel, BindingResult bindingResult) {
+    public ModelAndView propertyEdit(@PathVariable("id") Long id, @Valid PropertyEditBindingModel propertyEditBindingModel, BindingResult bindingResult, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/property/property-details-edit") : new ModelAndView("en/property/property-details-edit");
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("property/property-details-edit")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("property", getProperty(id))
-                    .addObject("propertyEditBindingModel", propertyEditBindingModel);
+            return view.addObject("property", getProperty(id))
+                       .addObject("propertyEditBindingModel", propertyEditBindingModel);
         }
 
         PropertyType propertyType = null;
@@ -241,8 +261,7 @@ public class PropertyController {
         if (propertyService.processChangeRequest(id, propertyEditBindingModel, propertyType, getLoggedUser())) {
             return new ModelAndView("redirect:/property/details/" + id);
         } else {
-            return new ModelAndView("property/property-details-edit")
-                    .addObject("userViewModel", getUserViewModel())
+            return view
                     .addObject("property", getProperty(id))
                     .addObject("propertyEditBindingModel", propertyEditBindingModel)
                     .addObject("editFailed", true);
@@ -286,9 +305,12 @@ public class PropertyController {
      */
     @GetMapping("/property/monthlyfees/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
-    public ModelAndView propertyFeesDetails(@PathVariable("id") Long id) {
+    public ModelAndView propertyFeesDetails(@PathVariable("id") Long id, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("property/property-monthlyfees", "userViewModel", getUserViewModel()).addObject("property", getProperty(id));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/property/property-monthlyfees") : new ModelAndView("en/property/property-monthlyfees");
+
+        return view.addObject("property", getProperty(id));
     }
 
 
@@ -297,10 +319,10 @@ public class PropertyController {
      */
     @GetMapping("/property/re/data/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
-    public ModelAndView residentialEntityData
-    (@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel
-             residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel
-             sendMessageBindingModel, @PathVariable("id") Long id) {
+    public ModelAndView residentialEntityData(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/property/property-re-data") : new ModelAndView("en/property/property-re-data");
 
 
         Property property = getProperty(id);
@@ -308,9 +330,7 @@ public class PropertyController {
 
         ExpenseFilterBindingModel expenseFilter = financialService.createDefaultExpenseFilter(residentialEntity);
 
-
-        return new ModelAndView("property/property-re-data", "userViewModel", getUserViewModel())
-                .addObject("userViewModel", getUserViewModel())
+        return view
                 .addObject("property", property)
                 .addObject("expenseFilterBindingModel", expenseFilter);
     }
@@ -320,45 +340,41 @@ public class PropertyController {
      */
     @GetMapping("/property/re/expenses/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
-    public ModelAndView residentialEntityExpenses
-    (@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel
-             residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel
-             sendMessageBindingModel, @PathVariable("id") Long id) {
+    public ModelAndView residentialEntityExpenses(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/property/property-re-expenses") : new ModelAndView("en/property/property-re-expenses");
 
         Property property = getProperty(id);
         ResidentialEntity residentialEntity = getResidentialEntity(property.getResidentialEntity().getId());
 
         ExpenseFilterBindingModel expenseFilter = financialService.createDefaultExpenseFilter(residentialEntity);
 
-
-        return new ModelAndView("property/property-re-expenses", "userViewModel", getUserViewModel())
-                .addObject("userViewModel", getUserViewModel())
+        return view
                 .addObject("property", property)
                 .addObject("expenseFilterBindingModel", expenseFilter);
     }
 
     @PostMapping("/property/re/expenses/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
-    public ModelAndView residentialEntityFilterExpenses(@PathVariable("id") Long
-                                                                id, @Valid ExpenseFilterBindingModel expenseFilter, BindingResult bindingResult) {
+    public ModelAndView residentialEntityFilterExpenses(@PathVariable("id") Long id, @Valid ExpenseFilterBindingModel expenseFilter, BindingResult bindingResult, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         Property property = getProperty(id);
-        ModelAndView modelAndView = new ModelAndView("property/property-re-expenses")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("property", property);
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/property/property-re-expenses") : new ModelAndView("en/property/property-re-expenses");
+
+        view.addObject("property", property);
 
         if (bindingResult.hasErrors()) {
-            return modelAndView
-                    .addObject("expenseFilterBindingModel", expenseFilter);
+            return view.addObject("expenseFilterBindingModel", expenseFilter);
         }
 
         ResidentialEntity residentialEntity = getResidentialEntity(property.getResidentialEntity().getId());
 
         expenseFilter = financialService.createCustomExpenseFilter(expenseFilter.getPeriodStart(), expenseFilter.getPeriodEnd(), residentialEntity);
 
-        return modelAndView
-                .addObject("expenseFilterBindingModel", expenseFilter);
+        return view.addObject("expenseFilterBindingModel", expenseFilter);
     }
 
     /**
@@ -392,5 +408,15 @@ public class PropertyController {
      */
     private ResidentialEntity getResidentialEntity(Long id) {
         return residentialEntityService.findResidentialEntityById(id).orElse(null);
+    }
+
+    /**
+     * Language resolver
+     *
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }

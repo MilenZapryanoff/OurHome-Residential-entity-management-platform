@@ -32,19 +32,43 @@ public class ResidentialEntityController {
      * Administration section
      */
     @GetMapping("/administration")
-    public ModelAndView administration() {
+    public ModelAndView administration(@CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration", "userViewModel", getUserViewModel());
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration") : new ModelAndView("en/administration/administration");
+
+        return view.addObject("userViewModel", getUserViewModel());
     }
+
+    /**
+     * Administration section
+     */
+    @GetMapping("/administration/summary/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntitySummary(
+            @PathVariable("id") Long id,
+            @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-summary") : new ModelAndView("en/administration/administration-summary");
+
+        return view.addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
+    }
+
 
     /**
      * Create new Residential entity
      */
     @GetMapping("/administration/add")
     public ModelAndView addNewResidence(@ModelAttribute("residentialEntityRegisterBindingModel")
-                                        ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel) {
+                                        ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel,
+                                        @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-add-residence", "userViewModel", getUserViewModel());
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-add-residence") : new ModelAndView("en/administration/administration-add-residence");
+
+        return view.addObject("userViewModel", getUserViewModel());
     }
 
     /**
@@ -54,15 +78,22 @@ public class ResidentialEntityController {
      * @param bindingResult                         result
      */
     @PostMapping("/administration/add")
-    public ModelAndView addResidence(@ModelAttribute("residentialEntityRegisterBindingModel") @Valid ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel, BindingResult bindingResult) {
+    public ModelAndView addResidence(@ModelAttribute("residentialEntityRegisterBindingModel")
+                                     @Valid ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel,
+                                     BindingResult bindingResult,
+                                     @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-add-residence") : new ModelAndView("en/administration/administration-add-residence");
+
+        view.addObject("userViewModel", getUserViewModel());
+
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration/administration-add-residence", "userViewModel", getUserViewModel());
+            return view;
         } else if (!residentialEntityService.accessCodesMatchCheck(residentialEntityRegisterBindingModel.getAccessCode(), residentialEntityRegisterBindingModel.getConfirmAccessCode())) {
-            return new ModelAndView("administration/administration-add-residence", "userViewModel", getUserViewModel())
-                    .addObject("noAccessCodeMatch", true);
+            return view.addObject("noAccessCodeMatch", true);
         }
         residentialEntityService.newResidentialEntity(residentialEntityRegisterBindingModel, loggedUser);
 
@@ -76,15 +107,79 @@ public class ResidentialEntityController {
      */
     @PostMapping("/administration/remove/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityRemove(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityRemove(@PathVariable("id") Long id,
+                                                @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        ModelAndView modelAndView = new ModelAndView("administration/administration", "userViewModel", getUserViewModel());
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration") : new ModelAndView("en/administration/administration");
+
+        view.addObject("userViewModel", getUserViewModel());
 
         if (residentialEntityService.checkIfResidentialEntityDeletable(id)) {
             residentialEntityService.deleteResidentialEntity(id);
-            return modelAndView.addObject("deleted", true);
+            return view.addObject("deleted", true);
         }
-        return modelAndView.addObject("notDeleted", true);
+        return view.addObject("notDeleted", true);
+    }
+
+
+    /**
+     * Upload Residential entity picture method
+     *
+     * @param file uploaded file
+     * @return resultView
+     */
+    @PostMapping("/administration/uploadResidentialEntityPicture/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView uploadResidentialEntityPicture(@PathVariable("id") Long id,
+                                                       @RequestParam("picture") MultipartFile file,
+                                                       @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ResidentialEntity residentialEntity = getResidentialEntity(id);
+
+        try {
+            String relativePath = residentialEntityService.savePicture(file, residentialEntity);
+            residentialEntityService.updatePicturePath(residentialEntity, relativePath);
+        } catch (IllegalArgumentException | IOException e) {
+
+            ModelAndView view = resolveView(lang) ?
+                    new ModelAndView("bg/administration/administration") : new ModelAndView("en/administration/administration");
+
+            return view
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("errorMessage", e.getMessage());
+        }
+        return new ModelAndView("redirect:/administration/summary/" + id);
+    }
+
+    /**
+     * Remove residential entity picture method
+     *
+     * @return resultView
+     */
+    @PostMapping("/administration/removeResidentialEntityPicture/{id}")
+    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
+    public ModelAndView removeResidentialEntityPicture(@PathVariable("id") Long id,
+                                                       @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ResidentialEntity residentialEntity = getResidentialEntity(id);
+
+        try {
+            residentialEntityService.removeResidentialEntityPicture(residentialEntity);
+        } catch (IllegalArgumentException | IOException e) {
+
+            ModelAndView view = resolveView(lang) ?
+                    new ModelAndView("bg/administration/administration") : new ModelAndView("en/administration/administration");
+
+            return view
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("errorMessage", e.getMessage());
+        }
+        return new ModelAndView("redirect:/administration/summary/" + id);
+    }
+
+    private ResidentialEntity getResidentialEntity(Long id) {
+        return residentialEntityService.findResidentialEntityById(id).orElse(null);
     }
 
     /**
@@ -97,52 +192,13 @@ public class ResidentialEntityController {
         return userService.getUserViewData(loggedUser);
     }
 
-
     /**
-     * Upload Residential entity picture method
+     * Language resolver
      *
-     * @param file uploaded file
-     * @return modelAndView
+     * @param lang This value shows the language
+     * @return boolean
      */
-    @PostMapping("/administration/uploadResidentialEntityPicture/{id}")
-    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView uploadResidentialEntityPicture(@PathVariable("id") Long id,
-                                                       @RequestParam("picture") MultipartFile file) {
-
-        ResidentialEntity residentialEntity = getResidentialEntity(id);
-
-        try {
-            String relativePath = residentialEntityService.savePicture(file, residentialEntity);
-            residentialEntityService.updatePicturePath(residentialEntity, relativePath);
-        } catch (IllegalArgumentException | IOException e) {
-            return new ModelAndView("administration/administration", "userViewModel", getUserViewModel())
-                    .addObject("errorMessage", e.getMessage());
-        }
-        return new ModelAndView("redirect:/administration");
-    }
-
-
-    /**
-     * Remove residential entity picture method
-     *
-     * @return modelAndView
-     */
-    @PostMapping("/administration/removeResidentialEntityPicture/{id}")
-    @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView removeResidentialEntityPicture(@PathVariable("id") Long id) {
-
-        ResidentialEntity residentialEntity = getResidentialEntity(id);
-
-        try {
-            residentialEntityService.removeResidentialEntityPicture(residentialEntity);
-        } catch (IllegalArgumentException | IOException e) {
-            return new ModelAndView("administration/administration", "userViewModel", getUserViewModel())
-                    .addObject("errorMessage", e.getMessage());
-        }
-        return new ModelAndView("redirect:/administration");
-    }
-
-    private ResidentialEntity getResidentialEntity(Long id) {
-        return residentialEntityService.findResidentialEntityById(id).orElse(null);
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }

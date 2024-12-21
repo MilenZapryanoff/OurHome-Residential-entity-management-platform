@@ -10,10 +10,15 @@ import java.math.BigDecimal;
 
 public interface FeeService {
     Fee createFee(ResidentialEntity newResidentialEntity);
+
     BigDecimal calculateFundMm(ResidentialEntity residentialEntity, Property property);
+
     BigDecimal calculateFundRepair(ResidentialEntity residentialEntity, Property property);
+
     FeeEditBindingModel mapFeeToBindingModel(Fee fee);
+
     Fee findById(Long id);
+
     void changeFee(ResidentialEntity residentialEntity, FeeEditBindingModel feeEditBindingModel);
 
     BigDecimal calculateNewFundRepair(Property property, PropertyType newPropertyType);
