@@ -1477,7 +1477,7 @@ Administration sub menus
     align-items: center;
     margin: 20px auto 40px auto;
     position: relative;
-    max-width: 900px;
+    max-width: 100%;
     padding: 0;
     /*background-color: #a1a1a1;*/
     background-color: #212121;
@@ -1513,64 +1513,73 @@ Administration sub menus
     transition: all .5s ease 0s;
 }
 
-
 .administration-nav-bar a:nth-child(1) {
-    width: 16.66%;
+    width: 10%;
 }
 
 .administration-nav-bar a:nth-child(2) {
-    width: 16.66%;
+    width: 15%;
 }
 
 .administration-nav-bar a:nth-child(3) {
-    width: 16.66%;
+    width: 15%;
 }
 
 .administration-nav-bar a:nth-child(4) {
-    width: 16.66%;
+    width: 15%;
 }
 
 .administration-nav-bar a:nth-child(5) {
-    width: 16.66%;
+    width: 15%;
 }
 
 .administration-nav-bar a:nth-child(6) {
-    width: 16.66%;
+    width: 15%;
 }
 
-.administration-nav-bar .start-summary, a:nth-child(1):hover ~ .animation {
-    width: 16.66%;
+.administration-nav-bar a:nth-child(7) {
+    width: 15%;
+}
+
+.administration-nav-bar .start-back, a:nth-child(1):hover ~ .animation {
+    width: 10%;
     left: 0;
+    background-color: #808080;
+}
+
+.administration-nav-bar .start-summary, a:nth-child(2):hover ~ .animation {
+    width: 15%;
+    left: 10%;
     background-color: #DC3545;
 }
 
-.administration-nav-bar .start-owners, a:nth-child(2):hover ~ .animation {
-    width: 16.66%;
-    left: 16.66%;
+.administration-nav-bar .start-owners, a:nth-child(3):hover ~ .animation {
+    width: 15%;
+    left: 25%;
     background-color: #DC3545;
 }
 
-.administration-nav-bar .start-properties, a:nth-child(3):hover ~ .animation {
-    width: 16.66%;
-    left: 33.32%;
+.administration-nav-bar .start-properties, a:nth-child(4):hover ~ .animation {
+    width: 15%;
+    left: 40%;
     background-color: #DC3545;
 }
 
-.administration-nav-bar .start-fees, a:nth-child(4):hover ~ .animation {
-    width: 16.66%;
-    left: 49.98%;
+.administration-nav-bar .start-fees, a:nth-child(5):hover ~ .animation {
+    width: 15%;
+    left: 55%;
     background-color: #DC3545;
 }
 
-.administration-nav-bar .start-financial, a:nth-child(5):hover ~ .animation {
-    width: 16.66%;
-    left: 66.64%;
+.administration-nav-bar .start-financial, a:nth-child(6):hover ~ .animation {
+    width: 15%;
+    left: 70%;
     background-color: #DC3545;
 }
 
-.administration-nav-bar .start-details, a:nth-child(6):hover ~ .animation {
-    width: 16.66%;
-    left: 83.30%;
+.administration-nav-bar .start-details, a:nth-child(7):hover ~ .animation {
+    width: 15%;
+    left: 85%;
     background-color: #DC3545;
 }
 
@@ -1587,7 +1596,7 @@ Property sub menus
     align-items: center;
     margin: 20px auto 70px auto;
     position: relative;
-    max-width: 900px;
+    max-width: 100%;
     padding: 0;
     /*background-color: #a1a1a1;*/
     background-color: #212121;
@@ -1643,7 +1652,6 @@ Property sub menus
 .property-nav-bar a:nth-child(5) {
     width: 23.50%;
 }
-
 
 .property-nav-bar .property-back, a:nth-child(1):hover ~ .transition {
     width: 6%;
@@ -2576,10 +2584,8 @@ Residential entity section image
 
 .residential-entity-image {
     opacity: 85%;
-    border: 1px solid gray;
     border-radius: 5px;
     max-width: 200px;
-    box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.5);
     transition: 1.2s;
 }
 
@@ -3507,7 +3513,7 @@ body {
         width: 100%;
     }
 
-    .administration-nav-bar .start-summary, a:nth-child(1):hover ~ .animation {
+    .administration-nav-bar .start-back, a:nth-child(1):hover ~ .animation {
         background-color: #c1c1c1;
         height: 16.66%;
         width: 100%;
@@ -3515,7 +3521,7 @@ body {
         top: 0;
     }
 
-    .administration-nav-bar .start-owners, a:nth-child(2):hover ~ .animation {
+    .administration-nav-bar .start-summary, a:nth-child(2):hover ~ .animation {
         background-color: #c1c1c1;
         height: 16.66%;
         width: 100%;
@@ -3523,7 +3529,7 @@ body {
         top: 16.66%;
     }
 
-    .administration-nav-bar .start-properties, a:nth-child(3):hover ~ .animation {
+    .administration-nav-bar .start-owners, a:nth-child(3):hover ~ .animation {
         background-color: #c1c1c1;
         height: 16.66%;
         width: 100%;
@@ -3531,7 +3537,7 @@ body {
         top: 33.32%;
     }
 
-    .administration-nav-bar .start-fees, a:nth-child(4):hover ~ .animation {
+    .administration-nav-bar .start-properties, a:nth-child(4):hover ~ .animation {
         background-color: #c1c1c1;
         height: 16.66%;
         width: 100%;
@@ -3539,12 +3545,20 @@ body {
         top: 49.98%;
     }
 
-    .administration-nav-bar .start-financial, a:nth-child(5):hover ~ .animation {
+    .administration-nav-bar .start-fees, a:nth-child(5):hover ~ .animation {
         background-color: #c1c1c1;
         height: 16.66%;
         width: 100%;
         left: 0;
         top: 66.64%;
+    }
+
+    .administration-nav-bar .start-financial, a:nth-child(6):hover ~ .animation {
+        background-color: #c1c1c1;
+        height: 16.66%;
+        width: 100%;
+        left: 0;
+        top: 83.30%;
     }
 
     .administration-nav-bar .start-details, a:nth-child(6):hover ~ .animation {

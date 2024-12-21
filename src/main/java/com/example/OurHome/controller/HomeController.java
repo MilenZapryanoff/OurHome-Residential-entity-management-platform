@@ -2,7 +2,6 @@ package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
-import com.example.OurHome.service.LanguageService;
 import com.example.OurHome.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,21 +15,20 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class HomeController {
-    private final UserService userService;
-    private final LanguageService languageService;
 
-    public HomeController(UserService userService, LanguageService languageService) {
+    private final UserService userService;
+
+    public HomeController( UserService userService) {
         this.userService = userService;
-        this.languageService = languageService;
     }
 
     @GetMapping("/")
-    public ModelAndView home(@CookieValue(value = "lang",defaultValue = "bg") String lang) {
+    public ModelAndView home(@CookieValue(value = "lang", defaultValue = "bg") String lang) {
         return getIndexModelAndView(lang);
     }
 
     @GetMapping("/index")
-    public ModelAndView index(@CookieValue(value = "lang",defaultValue = "bg") String lang) {
+    public ModelAndView index(@CookieValue(value = "lang", defaultValue = "bg") String lang) {
         return getIndexModelAndView(lang);
     }
 
@@ -46,22 +44,28 @@ public class HomeController {
         return new ModelAndView("redirect:/index");
     }
 
-
     private ModelAndView getIndexModelAndView(String lang) {
 
-        String indexPage = languageService.resolveView(lang, "index");
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/index") : new ModelAndView("en/index");
 
-        // Handle anonymous users
         if (SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser")) {
-            return new ModelAndView(indexPage);
+            return view;
         }
-
-        // For authenticated users, add userViewModel
-        return new ModelAndView(indexPage, "userViewModel", getUserViewModel());
+        return view.addObject("userViewModel", getUserViewModel());
     }
 
     private UserViewModel getUserViewModel() {
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         return userService.getUserViewData(loggedUser);
+    }
+
+    /**
+     * Language resolver
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }

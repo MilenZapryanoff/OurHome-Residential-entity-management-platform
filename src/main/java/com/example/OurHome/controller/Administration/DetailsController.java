@@ -1,30 +1,21 @@
 package com.example.OurHome.controller.Administration;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityEditBindingModel;
-import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.ResidentialEntityService;
-import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class DetailsController {
 
-    private final UserService userService;
     private final ResidentialEntityService residentialEntityService;
 
-    public DetailsController(UserService userService, ResidentialEntityService residentialEntityService) {
-        this.userService = userService;
+    public DetailsController(ResidentialEntityService residentialEntityService) {
         this.residentialEntityService = residentialEntityService;
     }
 
@@ -36,11 +27,13 @@ public class DetailsController {
      */
     @GetMapping("/administration/details/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityDetails(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityDetails(@PathVariable("id") Long id,
+                                                 @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-details")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("residentialEntity", getResidentialEntity(id));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-details") : new ModelAndView("en/administration/administration-details");
+
+        return view.addObject("residentialEntity", getResidentialEntity(id));
     }
 
     /**
@@ -51,12 +44,15 @@ public class DetailsController {
      */
     @GetMapping("/administration/details/edit/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityEditDetails(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityEditDetails(@PathVariable("id") Long id,
+                                                     @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ResidentialEntityEditBindingModel residentialEntityEditBindingModel = residentialEntityService.mapEntityToEditBindingModel(getResidentialEntity(id));
 
-        return new ModelAndView("administration/administration-details-edit")
-                .addObject("userViewModel", getUserViewModel())
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-details-edit") : new ModelAndView("en/administration/administration-details-edit");
+
+        return view
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("residentialEntityEditBindingModel", residentialEntityEditBindingModel);
     }
@@ -72,40 +68,32 @@ public class DetailsController {
     @PostMapping("/administration/details/edit/{entityId}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#entityId, authentication)")
     public ModelAndView residentialEntityEditDetailsPost(@ModelAttribute("residentialEntityEditBindingModel")
-                                                         @Valid ResidentialEntityEditBindingModel residentialEntityEditBindingModel, @PathVariable("entityId") Long entityId, BindingResult bindingResult) {
+                                                         @Valid ResidentialEntityEditBindingModel residentialEntityEditBindingModel,
+                                                         @PathVariable("entityId") Long entityId, BindingResult bindingResult,
+                                                         @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        ModelAndView modelAndView = new ModelAndView("administration/administration-details-edit")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("residentialEntity", getResidentialEntity(entityId))
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-details-edit") : new ModelAndView("en/administration/administration-details-edit");
+
+        view.addObject("residentialEntity", getResidentialEntity(entityId))
                 .addObject("residentialEntityEditBindingModel", residentialEntityEditBindingModel);
 
         String accessCode = residentialEntityEditBindingModel.getAccessCode();
         String confirmAccessCode = residentialEntityEditBindingModel.getConfirmAccessCode();
 
         if (bindingResult.hasErrors()) {
-            return modelAndView;
+            return view;
         } else if (!accessCode.isEmpty()) {
             if (accessCode.length() <= 3 || accessCode.length() >= 20) {
-                return modelAndView.addObject("bad_accessCode", true);
+                return view.addObject("bad_accessCode", true);
             }
             if (!residentialEntityService.accessCodesMatchCheck(accessCode, confirmAccessCode)) {
-                return modelAndView.addObject("noAccessCodeMatch", true);
+                return view.addObject("noAccessCodeMatch", true);
             }
         }
         residentialEntityService.editResidentialEntity(entityId, residentialEntityEditBindingModel);
 
         return new ModelAndView("redirect:/administration/details/" + entityId);
-    }
-
-
-    /**
-     * Method returns currently logged user
-     *
-     * @return UserEntity
-     */
-    private UserViewModel getUserViewModel() {
-        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        return userService.getUserViewData(loggedUser);
     }
 
     /**
@@ -116,5 +104,15 @@ public class DetailsController {
      */
     private ResidentialEntity getResidentialEntity(Long id) {
         return residentialEntityService.findResidentialEntityById(id).orElse(null);
+    }
+
+    /**
+     * Language resolver
+     *
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }

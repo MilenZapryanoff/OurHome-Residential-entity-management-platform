@@ -2,7 +2,6 @@ package com.example.OurHome.controller;
 
 import com.example.OurHome.model.dto.BindingModels.User.ManagerRegisterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.User.UserRegisterBindingModel;
-import com.example.OurHome.service.LanguageService;
 import com.example.OurHome.service.UserService;
 import com.example.OurHome.service.tokens.ResidentialEntityToken;
 import jakarta.validation.Valid;
@@ -19,19 +18,18 @@ public class RegisterController {
 
     private final UserService userService;
     private final ResidentialEntityToken residentialEntityToken;
-    private final LanguageService languageService;
 
-    public RegisterController(UserService userService, ResidentialEntityToken residentialEntityToken, LanguageService languageService) {
+    public RegisterController(UserService userService, ResidentialEntityToken residentialEntityToken) {
         this.userService = userService;
         this.residentialEntityToken = residentialEntityToken;
-        this.languageService = languageService;
     }
 
     @GetMapping("/register")
     public ModelAndView preRegistration(@ModelAttribute("managerRegisterBindingModel") ManagerRegisterBindingModel managerRegisterBindingModel,
                                         @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView(languageService.resolveView(lang, "register"));
+        return resolveView(lang) ?
+                new ModelAndView("bg/register") : new ModelAndView("en/register");
     }
 
     /**
@@ -43,12 +41,12 @@ public class RegisterController {
                                  UserRegisterBindingModel userRegisterBindingModel,
                                  @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-
         if (!residentialEntityToken.isValid()) {
             return new ModelAndView("redirect:/register/auth");
         }
 
-        return new ModelAndView(languageService.resolveView(lang, "register-user"));
+        return resolveView(lang) ?
+                new ModelAndView("bg/register-user") : new ModelAndView("en/register-user");
     }
 
     @PostMapping("/register/auth/user")
@@ -61,22 +59,22 @@ public class RegisterController {
             return new ModelAndView("redirect:/register/auth");
         }
 
-        ModelAndView modelAndView = new ModelAndView(languageService.resolveView(lang, "register-user"));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/register-user") : new ModelAndView("en/register-user");
 
         if (bindingResult.hasErrors()) {
-            return modelAndView;
+            return view;
         } else if (userService.duplicatedUsernameCheck(userRegisterBindingModel.getUsername())) {
-            modelAndView.addObject("duplicatedUser", true);
-            return modelAndView;
+            return view.addObject("duplicatedUser", true);
         } else if (userService.preRegistrationEmailCheck(userRegisterBindingModel.getEmail())) {
-            modelAndView.addObject("duplicatedEmail", true);
-            return modelAndView;
+            return view.addObject("duplicatedEmail", true);
         } else if (!userService.passwordsMatch(userRegisterBindingModel.getPassword(), userRegisterBindingModel.getConfirmPassword())) {
-            modelAndView.addObject("noPasswordMatch", true);
-            return modelAndView;
+            return view.addObject("noPasswordMatch", true);
         } else {
             userService.registerUser(userRegisterBindingModel, residentialEntityToken.getTokenId());
-            return new ModelAndView(languageService.resolveView(lang, "registration-success"));
+            view = resolveView(lang) ?
+                    new ModelAndView("bg/registration-success") : new ModelAndView("en/registration-success");
+            return view;
         }
     }
 
@@ -88,7 +86,8 @@ public class RegisterController {
     public ModelAndView registerManager(@ModelAttribute("managerRegisterBindingModel") ManagerRegisterBindingModel managerRegisterBindingModel,
                                         @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView(languageService.resolveView(lang, "register-manager"));
+        return resolveView(lang) ?
+                new ModelAndView("bg/register-manager") : new ModelAndView("en/register-manager");
     }
 
     @PostMapping("/register/manager")
@@ -97,22 +96,33 @@ public class RegisterController {
                                  BindingResult bindingResult,
                                  @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        ModelAndView modelAndView = new ModelAndView(languageService.resolveView(lang, "register-manager"));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/register-manager") : new ModelAndView("en/register-manager");
 
         if (bindingResult.hasErrors()) {
-            return modelAndView;
+            return view;
         } else if (userService.duplicatedUsernameCheck(managerRegisterBindingModel.getUsername())) {
-            modelAndView.addObject("duplicatedUser", true);
-            return modelAndView;
+            return view.addObject("duplicatedUser", true);
         } else if (userService.preRegistrationEmailCheck(managerRegisterBindingModel.getEmail())) {
-            modelAndView.addObject("duplicatedEmail", true);
-            return modelAndView;
+            return view.addObject("duplicatedEmail", true);
         } else if (!userService.passwordsMatch(managerRegisterBindingModel.getPassword(), managerRegisterBindingModel.getConfirmPassword())) {
-            modelAndView.addObject("noPasswordMatch", true);
-            return modelAndView;
+            return view.addObject("noPasswordMatch", true);
         } else {
             userService.registerManager(managerRegisterBindingModel);
-            return new ModelAndView(languageService.resolveView(lang, "registration-success"));
+
+            view = resolveView(lang) ?
+                    new ModelAndView("bg/registration-success") : new ModelAndView("en/registration-success");
+            return view;
         }
+    }
+
+    /**
+     * Language resolver
+     *
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <title>OurHome - Home management platform</title>
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/en/fragments/navbar}"></div>
+
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 th:if="${loggedUser.getProperties().size() == 0}">
+                    0 Properties available
+                </h3>
+                <h3 th:if="${loggedUser.getProperties().size() == 1}"
+                    th:text="${loggedUser.getProperties().size()} +
+                    ' property available'"></h3>
+                <h3 th:if="${loggedUser.getProperties().size() > 1}"
+                    th:text="${loggedUser.getProperties().size()} +
+                    ' properties available'"></h3>
+                <span class="breadcrumb">
+                    <form th:method="GET"
+                          th:action="@{/property/add}">
+                         <button type="submit">
+                             <p class="text-danger">Add new Property</p>
+                         </button>
+                    </form>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p th:if="${loggedUser.getProperties().size() == 0}" class="text-center" style="margin: 14em auto">No registered
+    properties</p>
+
+
+<div th:if="${loggedUser.getProperties().size() > 0}" class="container">
+    <div class="properties">
+        <div th:each="property: ${loggedUser.getProperties()}">
+
+            <!--Active registration-->
+            <div th:if="${property.isObtained()}" class="item">
+                <a th:href="@{/property/summary/{id}(id=${property.getId()})}"><img
+                        src="/images/property-plan.jpg" alt="View details" title="View details"></a>
+                <span class="category text-bg-success text-light">Validated!</span>
+                <h4><a th:text="${property.getResidentialEntity().getCity().getName()} + ', ' +
+                                                            ${property.getResidentialEntity().getStreetName()} + ' ' +
+                                                            ${property.getResidentialEntity().getStreetNumber()} + ' ' +
+                                                            ${property.getResidentialEntity().getEntrance()}"></a></h4>
+                <ul>
+                    <li>Property №: <span th:text="${property.getNumber()}"></span></li>
+                    <li>Floor №: <span th:text="${property.getFloor()}"></span></li>
+                    <li>Owner: <span
+                            th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span>
+                    </li>
+                    <li>Monthly fee: <span
+                            th:text="${property.getTotalMonthlyFee()} + ' лв.'"></span></li>
+                    <li th:if="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} != null">
+                        Total due amount: <span class="text-danger"
+                                                th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"></span>
+                    </li>
+                    <li th:unless="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} != null">
+                        Total due amount: <span class="text-success">0.00 лв.</span></li>
+                </ul>
+                <div class="main-button">
+                    <div class="main-button">
+                        <a th:href="@{/property/summary/{id}(id=${property.getId()})}">View
+                            details</a>
+                    </div>
+                </div>
+            </div>
+
+            <!--Property rejected-->
+            <div th:if="${!property.isObtained()} and ${property.isRejected()}" class="item">
+                <a th:href="@{/property/summary/{id}(id=${property.getId()})}"><img
+                        src="/images/property-plan-X.jpg" alt=""></a>
+                <span class="category text-danger">Rejected<!doctype html>
+                                            </span>
+                <h6></h6>
+                <h4><a class="text-black" th:text="${property.getResidentialEntity().getCity().getName()} + ', ' +
+                            ${property.getResidentialEntity().getStreetName()} + ' ' +
+                            ${property.getResidentialEntity().getStreetNumber()} + ' ' +
+                            ${property.getResidentialEntity().getEntrance()}"></a></h4>
+                <ul>
+                    <li class="text-black">Property №: <span class="text-black"
+                                                             th:text="${property.getNumber()}"></span>
+                    </li>
+                    <li class="text-black">Floor №: <span class="text-black"
+                                                          th:text="${property.getFloor()}"></span>
+                    </li>
+                    <li class="text-black">Owner: <span class="text-black"
+                                                        th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span>
+                    </li>
+                    <br>
+                    <li>Monthly fee:</li>
+                    <br>
+                    <li>Total due amount: <span></span></li>
+                </ul>
+                <div class="main-button">
+                    <div class="main-button text-center">
+                        <a th:href="@{/property/summary/{id}(id=${property.getId()})}">View
+                            details</a>
+                    </div>
+                </div>
+            </div>
+
+            <!--Pending registration-->
+            <div th:if="${!property.isObtained()} and ${!property.isRejected()}" class="item">
+                <a th:href="@{/property/summary/{id}(id=${property.getId()})}"><img
+                        src="/images/property-plan-BW.jpg" alt="View details" title="View details"></a>
+                <span class="category text-bg-secondary">Waiting for validation<!doctype html></span>
+                <h4><a class="text-black" th:text="${property.getResidentialEntity().getCity().getName()} + ', ' +
+                            ${property.getResidentialEntity().getStreetName()} + ' ' +
+                            ${property.getResidentialEntity().getStreetNumber()} + ' ' +
+                            ${property.getResidentialEntity().getEntrance()}"></a></h4>
+                <ul>
+                    <li class="text-black">Property №: <span class="text-black"
+                                                             th:text="${property.getNumber()}"></span>
+                    </li>
+                    <li class="text-black">Floor №: <span class="text-black"
+                                                          th:text="${property.getFloor()}"></span>
+                    </li>
+                    <li class="text-black">Owner: <span class="text-black"
+                                                        th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span>
+                    </li>
+                    <br>
+                    <li>Monthly fee: <span></span></li>
+                    <br>
+                    <li>Total due amount: <span></span></li>
+                </ul>
+                <div class="main-button">
+                    <div class="main-button text-center">
+                        <a th:href="@{/property/summary/{id}(id=${property.getId()})}">View
+                            details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+</body>
+</html>

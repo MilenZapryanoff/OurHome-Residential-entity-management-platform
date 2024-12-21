@@ -1,7 +1,6 @@
 package com.example.OurHome.controller;
 
 import com.example.OurHome.model.dto.BindingModels.User.UserAuthBindingModel;
-import com.example.OurHome.service.LanguageService;
 import com.example.OurHome.service.UserService;
 import com.example.OurHome.service.tokens.ResidentialEntityToken;
 import jakarta.validation.Valid;
@@ -18,12 +17,10 @@ public class AuthenticationController {
 
     private final UserService userService;
     private final ResidentialEntityToken residentialEntityToken;
-    private final LanguageService languageService;
 
-    public AuthenticationController(UserService userService, ResidentialEntityToken residentialEntityToken, LanguageService languageService) {
+    public AuthenticationController(UserService userService, ResidentialEntityToken residentialEntityToken) {
         this.userService = userService;
         this.residentialEntityToken = residentialEntityToken;
-        this.languageService = languageService;
     }
 
     /**
@@ -35,7 +32,10 @@ public class AuthenticationController {
                                          UserAuthBindingModel userAuthBindingModel,
                                          @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView(languageService.resolveView(lang, "auth-user"));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/auth-user") : new ModelAndView("en/auth-user");
+
+        return view;
     }
 
     @PostMapping("/register/auth")
@@ -44,20 +44,29 @@ public class AuthenticationController {
                                          BindingResult bindingResult,
                                          @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        // Choose template based on the cookie value
-        String page = languageService.resolveView(lang, "auth-user");
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/auth-user") : new ModelAndView("en/auth-user");
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView(page);
+            return view;
         } else if (!userService.residentialValidation(userAuthBindingModel.parseResidentialIdToLong(),
                 userAuthBindingModel.getResidentialAccessCode())) {
-            return new ModelAndView(page)
-                    .addObject("badResidentialEntity", true);
+            return view.addObject("badResidentialEntity", true);
         }
 
         residentialEntityToken.setTokenId(userAuthBindingModel.parseResidentialIdToLong());
         residentialEntityToken.setValid(true);
 
         return new ModelAndView("redirect:/register/auth/user");
+    }
+
+    /**
+     * Language resolver
+     *
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header"></div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/bg/fragments/navbar}"></div>
+
+<div class="contact section">
+    <div class="container">
+        <div class="row">
+            <div class="section-heading text-center">
+                <h6>| Регистрация </h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="input-content">
+    <div class="wrapper">
+        <div class="title-text">
+            <div class="title login">ИЗБЕРЕТЕ РОЛЯ</div>
+            <div class="title signup">ИЗБЕРЕТЕ РОЛЯ</div>
+        </div>
+        <div class="form-container">
+            <div class="slide-controls">
+                <input type="radio" name="slide" id="login" checked>
+                <input type="radio" name="slide" id="signup">
+                <label for="login" class="slide login">Собственик на имот</label>
+                <label for="signup" class="slide signup">Домоуправител</label>
+                <div class="slider-tab"></div>
+            </div>
+            <div class="form-inner">
+                <form class="login">
+                    <div class="row">
+                        <div class="col-lg-3 text-center" style="align-content: center">
+                            <img src="/images/resident.jpg" alt="" style="max-width: 52px;">
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="text-container">
+                                <p> За да се регистрирате като собственик, трябва да
+                                    разполагате с валиден 8-цифрен идентификатор на етажната собственост (ID), както и код за достъп.
+                                    Ако не разполагате с тази информация, трябва да се свържете с Вашият домоуправител.</p>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="text-center">
+                        <fieldset>
+                            <a th:href="@{/register/auth}">
+                                <button type="button" class="orange-button ">Регистрирай ме
+                                </button>
+                            </a>
+                        </fieldset>
+                        <small>Вече имате регистация? | <a href="/login">Вход</a></small>
+                    </div>
+                </form>
+                <form class="signup">
+                    <div class="row">
+                        <div class="col-lg-3 text-center" style="align-content: center">
+                            <img src="/images/manager.jpg" alt="" style="max-width: 52px;">
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="text-container">
+                                <p>Регистрацията като домоуправител ще Ви позволи регистрация в платформата на етажната собственост (ЕС), която управлявате.
+                                    След като завършите Вашата регистрация ще получите пълен достъп до системата и нейните функционалности.
+                                </p>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div class="text-center">
+                        <fieldset>
+                            <a th:href="@{/register/manager}">
+                                <button type="button"
+                                        class="orange-button">Регистрирай ме
+                                </button>
+                            </a>
+                        </fieldset>
+                        <small>Вече имате регистация? | <a href="/login">Вход</a></small>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/register.js"></script>
+
+</body>
+</html>

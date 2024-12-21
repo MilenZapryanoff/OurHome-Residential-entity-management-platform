@@ -11,10 +11,7 @@ import com.example.OurHome.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -32,24 +29,29 @@ public class MessageController {
 
     @GetMapping("/messages")
     public ModelAndView messages(@ModelAttribute("sendMessageBindingModel")
-                                 SendMessageBindingModel sendMessageBindingModel) {
+                                 SendMessageBindingModel sendMessageBindingModel,
+                                 @CookieValue(value = "lang",defaultValue = "bg") String lang) {
 
-        return new ModelAndView("messages", "userViewModel", getUserViewModel())
-                .addObject("sendMessageBindingModel", sendMessageBindingModel);
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/messages") : new ModelAndView("en/messages");
+
+        return view.addObject("sendMessageBindingModel", sendMessageBindingModel);
     }
 
     @PostMapping("/messages/send/{id}")
     @PreAuthorize("@securityService.checkMessageSender(#messageId, #sendMessageBindingModel.getSenderId() ,authentication)")
     public ModelAndView sendMessage(@ModelAttribute("sendMessageBindingModel")
                                     SendMessageBindingModel sendMessageBindingModel,
-                                    @PathVariable("id") Long messageId) {
+                                    @PathVariable("id") Long messageId,
+                                    @CookieValue(value = "lang",defaultValue = "bg") String lang) {
 
-        ModelAndView modelAndView = new ModelAndView("messages")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("sendMessageBindingModel", sendMessageBindingModel);
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/messages") : new ModelAndView("en/messages");
+
+        view.addObject("sendMessageBindingModel", sendMessageBindingModel);
 
         if (sendMessageBindingModel.getMessage().length() > 2000) {
-            return modelAndView.addObject("messageError", true);
+            return view.addObject("messageError", true);
         }
 
         messageService.sendMessage(
@@ -59,15 +61,18 @@ public class MessageController {
         messageService.readMessage(messageId);
         sendMessageBindingModel.setMessage("");
 
-        return modelAndView.addObject("messageSent", true);
+        return view.addObject("messageSent", true);
     }
 
 
     @GetMapping("/messages/archives")
-    public ModelAndView messageArchives() {
+    public ModelAndView messageArchives(
+            @CookieValue(value = "lang",defaultValue = "bg") String lang) {
 
-        return new ModelAndView("messages-archives", "userViewModel", getUserViewModel());
+        return resolveView(lang) ?
+                new ModelAndView("bg/messages-archives") : new ModelAndView("en/messages-archives");
     }
+
 
     @PostMapping("/messages/delete/{id}")
     @PreAuthorize("@securityService.checkMessageUserAccess(#id, authentication)")
@@ -129,30 +134,22 @@ public class MessageController {
     @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
     public ModelAndView sendMessage(@ModelAttribute("residentManageBindingModel")
                                     ResidentManageBindingModel residentManageBindingModel,
-                                    @PathVariable("id") Long id) {
+                                    @PathVariable("id") Long id,
+                                    @CookieValue(value = "lang",defaultValue = "bg") String lang) {
 
-        ModelAndView modelAndView = new ModelAndView("administration/administration-owners")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-owners") : new ModelAndView("en/administration/administration-owners");
+
+        view.addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()));
 
         if (residentManageBindingModel.getMessage().length() > 2000) {
-            return modelAndView.addObject("messageError", true);
+            return view.addObject("messageError", true);
         }
 
         messageService.sendMessage(userService.findUserById(id), userService.findUserById(getUserViewModel().getId()), residentManageBindingModel.getMessage());
         residentManageBindingModel.setMessage("");
 
-        return modelAndView.addObject("messageSent", true);
-    }
-
-    /**
-     * Method returns currently logged user
-     *
-     * @return UserEntity
-     */
-    private UserViewModel getUserViewModel() {
-        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        return userService.getUserViewData(loggedUser);
+        return view.addObject("messageSent", true);
     }
 
     /**
@@ -163,5 +160,24 @@ public class MessageController {
      */
     private ResidentialEntity getResidentialEntity(Long id) {
         return residentialEntityService.findResidentialEntityById(id).orElse(null);
+    }
+
+    /**
+     * Method returns information about logged user
+     *
+     * @return userViewModel
+     */
+    private UserViewModel getUserViewModel() {
+        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        return userService.getUserViewData(loggedUser);
+    }
+
+    /**
+     * Language resolver
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }

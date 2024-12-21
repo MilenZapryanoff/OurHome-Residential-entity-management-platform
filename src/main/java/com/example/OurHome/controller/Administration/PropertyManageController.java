@@ -3,36 +3,30 @@ package com.example.OurHome.controller.Administration;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyType;
 import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyCreateBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyManageBindingModel;
-import com.example.OurHome.model.dto.ViewModels.UserViewModel;
-import com.example.OurHome.service.*;
+import com.example.OurHome.service.MessageService;
+import com.example.OurHome.service.PropertyService;
+import com.example.OurHome.service.PropertyTypeService;
+import com.example.OurHome.service.ResidentialEntityService;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Optional;
 
 @Controller
 public class PropertyManageController {
 
-    private final UserService userService;
+
     private final ResidentialEntityService residentialEntityService;
     private final PropertyService propertyService;
     private final MessageService messageService;
     private final PropertyTypeService propertyTypeService;
 
-    public PropertyManageController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, MessageService messageService, PropertyTypeService propertyTypeService) {
-        this.userService = userService;
+    public PropertyManageController(ResidentialEntityService residentialEntityService, PropertyService propertyService, MessageService messageService, PropertyTypeService propertyTypeService) {
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
         this.messageService = messageService;
@@ -48,11 +42,13 @@ public class PropertyManageController {
     @GetMapping("/administration/property/active/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityActiveProperties(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
-                                                          @PathVariable("id") Long id) {
+                                                          @PathVariable("id") Long id,
+                                                          @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-property-active")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("residentialEntity", getResidentialEntity(id));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-active") : new ModelAndView("en/administration/administration-property-active");
+
+        return view.addObject("residentialEntity", getResidentialEntity(id));
     }
 
     /**
@@ -63,11 +59,13 @@ public class PropertyManageController {
      */
     @GetMapping("/administration/property/change-requests/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityChangeRequests(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityChangeRequests(@PathVariable("id") Long id,
+                                                        @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-property-change-requests")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("residentialEntity", getResidentialEntity(id));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-change-requests") : new ModelAndView("en/administration/administration-property-change-requests");
+
+        return view.addObject("residentialEntity", getResidentialEntity(id));
     }
 
 
@@ -80,11 +78,13 @@ public class PropertyManageController {
     @GetMapping("/administration/property/pending/request/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView propertyChangeRequest(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
-                                              @PathVariable("id") Long id) {
+                                              @PathVariable("id") Long id,
+                                              @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-property-pending-request")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("property", getProperty(id));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-pending-request") : new ModelAndView("en/administration/administration-property-pending-request");
+
+        return view.addObject("property", getProperty(id));
     }
 
     /**
@@ -95,7 +95,7 @@ public class PropertyManageController {
     @PostMapping("/administration/property/pending/request/approve/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView propertyChangeRequestApprove(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
-                                              @PathVariable("id") Long id) {
+                                                     @PathVariable("id") Long id) {
 
         propertyService.approvePropertyChangeRequest(id);
 
@@ -110,14 +110,12 @@ public class PropertyManageController {
     @PostMapping("/administration/property/pending/request/reject/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView propertyChangeRequestReject(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
-                                              @PathVariable("id") Long id) {
+                                                    @PathVariable("id") Long id) {
 
         propertyService.rejectPropertyChangeRequest(id);
 
         return new ModelAndView("redirect:/administration/property/change-requests/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
     }
-
-
 
 
     /**
@@ -141,15 +139,17 @@ public class PropertyManageController {
      * Create single property in Residential entity
      *
      * @param id residential entitiy id
-     * @return view administration-property-create.html
+     * @return view administration-property-create-bg.html
      */
     @GetMapping("/administration/property/create/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityPropertyCreate(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityPropertyCreate(@PathVariable("id") Long id,
+                                                        @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-property-create")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("propertyCreateBindingModel", new PropertyCreateBindingModel())
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-create") : new ModelAndView("en/administration/administration-property-create");
+
+        return view.addObject("propertyCreateBindingModel", new PropertyCreateBindingModel())
                 .addObject("residentialEntity", getResidentialEntity(id));
     }
 
@@ -163,24 +163,27 @@ public class PropertyManageController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyCreate(@ModelAttribute("propertyCreateBindingModel")
                                                         @PathVariable("id") Long id,
-                                                        @Valid PropertyCreateBindingModel propertyCreateBindingModel, BindingResult bindingResult) {
+                                                        @Valid PropertyCreateBindingModel propertyCreateBindingModel,
+                                                        BindingResult bindingResult,
+                                                        @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-create") : new ModelAndView("en/administration/administration-property-create");
+
+        view.addObject("propertyCreateBindingModel", propertyCreateBindingModel)
+                .addObject("residentialEntity", getResidentialEntity(id));
+
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration/administration-property-create")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("propertyCreateBindingModel", propertyCreateBindingModel)
-                    .addObject("residentialEntity", getResidentialEntity(id));
+            return view;
         }
 
         int propertyNumber = propertyCreateBindingModel.getNumber();
 
         //check if this property number is already registered.
         if (propertyService.findPropertyByNumberAndResidentialEntity(propertyNumber, id) != null) {
-            return new ModelAndView("administration/administration-property-create")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("propertyCreateBindingModel", propertyCreateBindingModel)
-                    .addObject("residentialEntity", getResidentialEntity(id))
-                    .addObject("duplicatedProperty", true);
+            return view.addObject("duplicatedProperty", true);
         }
 
         PropertyType propertyType;
@@ -208,10 +211,13 @@ public class PropertyManageController {
      */
     @GetMapping("/administration/property/edit/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityPropertyEdit(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityPropertyEdit(@PathVariable("id") Long id,
+                                                      @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-property-edit")
-                .addObject("userViewModel", getUserViewModel())
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-edit") : new ModelAndView("en/administration/administration-property-edit");
+
+        return view
                 .addObject("property", getProperty(id))
                 .addObject("propertyEditBindingModel", propertyService.mapPropertyToEditBindingModel(getProperty(id)));
     }
@@ -227,12 +233,16 @@ public class PropertyManageController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPropertyEdit(@PathVariable("id") Long id,
                                                       @Valid PropertyEditBindingModel propertyEditBindingModel,
-                                                      BindingResult bindingResult) {
+                                                      BindingResult bindingResult,
+                                                      @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-edit") : new ModelAndView("en/administration/administration-property-edit");
+
+       view.addObject("property", getProperty(id));
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration/administration-property-edit")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("property", getProperty(id));
+            return view;
         }
 
         ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityByPropertyId(id);
@@ -248,10 +258,7 @@ public class PropertyManageController {
             //sending message (notification) to owner/resident
             messageService.propertyModificationMessageToResident(propertyService.findPropertyById(id));
 
-            return new ModelAndView("administration/administration-property-edit")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("property", getProperty(id))
-                    .addObject("editFailed", true);
+            return view.addObject("editFailed", true);
         }
     }
 
@@ -278,16 +285,6 @@ public class PropertyManageController {
         }
     }
 
-
-    /**
-     * Method returns currently logged user
-     *
-     * @return UserEntity
-     */
-    private UserViewModel getUserViewModel() {
-        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        return userService.getUserViewData(loggedUser);
-    }
 
     /**
      * Method returns a ResidentialEntity
@@ -317,5 +314,16 @@ public class PropertyManageController {
      */
     private PropertyType getPropertyType(Long id) {
         return propertyTypeService.findById(id);
+    }
+
+
+    /**
+     * Language resolver
+     *
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }

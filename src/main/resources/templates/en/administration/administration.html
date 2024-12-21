@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <title>OurHome - Home management platform</title>
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/en/fragments/navbar}"></div>
+
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 th:if="${@residentialEntityRepository.countByManager_Id(loggedUser.getId()) == 0}">
+                    0 registered Residential Entities
+                </h3>
+                <h3 th:if="${@residentialEntityRepository.countByManager_Id(loggedUser.getId()) == 1}"
+                    th:text="${@residentialEntityRepository.countByManager_Id(loggedUser.getId())} +
+                    ' registered Residential Entitiy'"></h3>
+                <h3 th:if="${@residentialEntityRepository.countByManager_Id(loggedUser.getId()) > 1}"
+                    th:text="${@residentialEntityRepository.countByManager_Id(loggedUser.getId())} +
+                    ' registered Residential Entities'"></h3>
+                <span class="breadcrumb">
+                    <form th:method="GET"
+                          th:action="@{/administration/add}">
+                         <button type="submit">
+                             <p class="text-danger">Register new Residential Entity</p>
+                         </button>
+                    </form>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) == 0}" class="text-center"
+   style="margin: 14em auto">No registered Residential Entities!</p>
+
+
+<div th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) > 0}" class="container">
+    <div class="properties">
+        <div th:each="residentialEntity: ${@residentialEntityRepository.findAllByManager_Id(userViewModel.getId())}">
+
+            <!--Active registration-->
+            <div class="item">
+                <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}">
+                    <img th:if="${residentialEntity.getPicturePath()} == null" src="/images/building-render.png"
+                         alt="View details" title="View Details">
+                    <img th:if="${residentialEntity.getPicturePath()} != null"
+                         th:src="@{${residentialEntity.picturePath}}" alt="View details" title="View Details"
+                         style="max-height: 300px">
+                </a>
+                <span class="category text-bg-success text-light">Active</span>
+                <h4><a th:text="${residentialEntity.getCity().getName()}"></a></h4>
+                <h4>
+                    <a th:text="${residentialEntity.getStreetName() + ' ' + residentialEntity.getStreetNumber() + ' ' + residentialEntity.getEntrance()}"></a>
+                </h4>
+                <ul>
+                    <li style="width: 100%">City: <span th:text="${residentialEntity.getCity().getName()}"></span></li>
+                    <li style="width: 100%">Address: <span th:text="${residentialEntity.getStreetName()}"></span></li>
+                    <li style="width: 100%">№: <span th:text="${residentialEntity.getStreetNumber()}"></span></li>
+                </ul>
+                <div class="main-button">
+                    <div class="main-button">
+                        <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}">View details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+</body>
+</html>

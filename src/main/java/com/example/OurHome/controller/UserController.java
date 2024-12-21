@@ -1,6 +1,5 @@
 package com.example.OurHome.controller;
 
-import com.example.OurHome.service.LanguageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,24 +10,32 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class UserController {
 
-    public UserController(LanguageService languageService) {
-        this.languageService = languageService;
-    }
-
-    private final LanguageService languageService;
-
     @GetMapping("/login")
-    public ModelAndView login(@CookieValue(value = "lang",defaultValue = "bg") String lang) {
+    public ModelAndView login(@CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-            return new ModelAndView(languageService.resolveView(lang, "login"));
+        return resolveView(lang) ?
+                new ModelAndView("bg/login") : new ModelAndView("en/login");
     }
 
     @PostMapping("/login/error")
-    public ModelAndView onFailure(@ModelAttribute("email") String email) {
+    public ModelAndView onFailure(@ModelAttribute("email") String email,
+                                  @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("login")
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/login") : new ModelAndView("en/login");
+
+        return view
                 .addObject("email", email)
                 .addObject("bad_credentials", true);
+    }
+
+    /**
+     * Language resolver
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }
 

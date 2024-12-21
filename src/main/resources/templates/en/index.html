@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div class="sub-header">
+    <div class="container">
+        <div class="header-container">
+            <form th:method="post" th:action="@{/setLanguage}" style="padding-right: 15px">
+                <div id="dropdown">
+                    <img src="/images/en-flag.png" alt="English" title="English">
+                </div>
+                <ul id="dropdown-menu">
+                    <li style="padding: 5px; cursor: pointer;" onclick="selectLanguage('bg')">
+                        <img src="/images/bg-flag.png" alt="Bulgarian" title="Bulgarian">
+                        <small class="text-danger-emphasis">Български</small>
+                    </li>
+                    <li style="padding: 5px; cursor: pointer;" onclick="selectLanguage('en')">
+                        <img src="/images/en-flag.png" alt="English" title="English">
+                        <small>English</small>
+                    </li>
+                </ul>
+                <input type="hidden" name="lang" id="selected-lang">
+            </form>
+            <th:block sec:authorize="isAuthenticated()">
+                <div class="avatar">
+                    <button type="button">
+                        <a th:href="@{/profile}">
+                            <img th:if="${loggedUser.avatarPath != null}"
+                                 th:src="@{${loggedUser.avatarPath}}" alt="Avatar">
+                            <img th:unless="${loggedUser.avatarPath != null}"
+                                 src="/avatars/default.jpg" alt="Default Avatar">
+                        </a>
+                    </button>
+                </div>
+                <div class="logged-user">
+                    <p><b th:text="${loggedUser.getFirstName()} + ' ' + ${loggedUser.getLastName()}"></b></p>
+                </div>
+            </th:block>
+            <th:block sec:authorize="isAnonymous()">
+                <p>English</p>
+            </th:block>
+        </div>
+    </div>
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/en/fragments/navbar}"></div>
+
+<!-- ***** Main Banner Start ***** -->
+<div class="main-banner">
+    <div class="owl-carousel owl-banner">
+        <div class="item item-1">
+            <div class="header-text">
+                <span class="category">Residential entity <em>management platform</em></span>
+                <h2>IT IS SO EASY NOW!</h2>
+            </div>
+        </div>
+        <div class="item item-2">
+            <div class="header-text">
+                <span class="category">Created just for <em>you</em></span>
+                <h2>A NEW ERA OF RESIDENTIAL ENTITY MANAGEMENT IS NOW HERE</h2>
+            </div>
+        </div>
+        <div class="item item-3">
+            <div class="header-text">
+                <span class="category">With care for the <em>future</em></span>
+                <h2>MAKE YOUR LIVING ENVIRONMENT BETTER</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- ***** Main Banner End ***** -->
+
+<!-- ***** Fun Facts Start ***** -->
+<div class="fun-facts">
+    <div class="container">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="counter">
+                        <h2 class="timer count-title count-number"
+                            th:data-to="${@residentialEntityRepository.count()}" data-speed="1000"></h2>
+                        <p class="count-text ">Residential <br>entities</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="counter">
+                        <!--/*@thymesVar id="MANAGER" type="text" */-->
+                        <h2 class="timer count-title count-number" th:data-to="${@propertyRepository.count()}"
+                            data-speed="1000"></h2>
+                        <p class="count-text ">Registered<br>Homes</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="counter">
+                        <h2 class="timer count-title count-number" th:data-to="${@userRepository.count()}"
+                            data-speed="1000"></h2>
+                        <p class="count-text ">Registered<br>residents</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Fun Facts Start ***** -->
+
+<!-- ***** Contact section Start ***** -->
+<div class="contact section-contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-heading text-center">
+                    <h6>| Become a partner</h6>
+                    <h2>Get In Touch With Us</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="input-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7">
+                <div id="map">
+                    <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA4dMp6ervBxmwa9av_R4vRj-RhYx22TGg&q=Software University,Sofia,Bulgaria"
+                            width="100%" height="350px"
+                            style="border:0; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);"
+                            allowfullscreen=""></iframe>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="item phone">
+                            <img src="/images/phone-icon.png" style="max-width: 30px;" alt="Phone:">
+                            <p><b>0886 277 333</b><br><span>Phone Number</span></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="item email">
+                            <img src="/images/email-icon.png" alt="" style="max-width: 30px;">
+                            <p><b>office.ourhome@gmail.com</b><br><span>Business Email</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div id="input-form">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a><img src="/images/OurMission.png" style="max-width: 200px;" alt="OurMission:"></a>
+                            <hr>
+                            <p class="text-center"> OurHome is your gateway to seamless residential entity management.
+                                <br>Whether you're a
+                                dedicated manager or a valued resident, unlock the power of connection and convenience.
+                                <br>Join our platform to access vital information, connect with your community, and
+                                streamline the management of your residential entity and apartment. <br>Experience a new
+                                era of effortless living with OurHome!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ***** Contact section End ***** -->
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/lang-selector.js"></script>
+
+</body>
+</html>

@@ -2,8 +2,8 @@ package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
-import com.example.OurHome.service.LanguageService;
 import com.example.OurHome.service.UserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -23,8 +22,6 @@ public class HomeControllerTest {
     @Mock
     private UserService userService;
 
-    @Mock
-    private LanguageService languageService;
 
     @InjectMocks
     private HomeController homeController;
@@ -32,7 +29,6 @@ public class HomeControllerTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        when(languageService.resolveView(anyString(), eq("index"))).thenReturn("index");
     }
 
     @Test
@@ -49,7 +45,7 @@ public class HomeControllerTest {
 
         ModelAndView modelAndView = homeController.home(mockLang);
 
-        assertEquals("index", modelAndView.getViewName());
+        assertEquals("bg/index", modelAndView.getViewName());
         assertEquals(UserViewModel.class, modelAndView.getModel().get("userViewModel").getClass());
     }
 
@@ -64,8 +60,8 @@ public class HomeControllerTest {
 
         ModelAndView modelAndView = homeController.home(mockLang);
 
-        assertEquals("index", modelAndView.getViewName());
-        assertNull(modelAndView.getModel().get("userViewModel"));
+        assertEquals("bg/index", modelAndView.getViewName());
+        Assertions.assertNull(modelAndView.getModel().get("userViewModel"));
     }
 
 

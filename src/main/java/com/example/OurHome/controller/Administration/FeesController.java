@@ -1,19 +1,23 @@
 package com.example.OurHome.controller.Administration;
 
-import com.example.OurHome.model.Entity.*;
+import com.example.OurHome.model.Entity.Property;
+import com.example.OurHome.model.Entity.PropertyFee;
+import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.Fee.BankDetailsBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Fee.FeeEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.OverpaymentBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddGlobalFeeBindingModel;
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
-import com.example.OurHome.model.dto.ViewModels.UserViewModel;
-import com.example.OurHome.service.*;
+import com.example.OurHome.service.FeeService;
+import com.example.OurHome.service.PropertyFeeService;
+import com.example.OurHome.service.PropertyService;
+import com.example.OurHome.service.ResidentialEntityService;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,14 +28,13 @@ import java.math.BigDecimal;
 @Controller
 public class FeesController {
 
-    private final UserService userService;
+
     private final ResidentialEntityService residentialEntityService;
     private final PropertyService propertyService;
     private final FeeService feeService;
     private final PropertyFeeService propertyFeeService;
 
-    public FeesController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, FeeService feeService, PropertyFeeService propertyFeeService) {
-        this.userService = userService;
+    public FeesController(ResidentialEntityService residentialEntityService, PropertyService propertyService, FeeService feeService, PropertyFeeService propertyFeeService) {
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
         this.feeService = feeService;
@@ -45,29 +48,35 @@ public class FeesController {
      */
     @GetMapping("/administration/fees/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityFees(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityFees(@PathVariable("id") Long id,
+                                              @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-fees")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("residentialEntity", getResidentialEntity(id));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-fees") : new ModelAndView("en/administration/administration-fees");
+
+        return view.addObject("residentialEntity", getResidentialEntity(id));
     }
 
     @GetMapping("/administration/fees/settings/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityFeeSettings(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityFeeSettings(@PathVariable("id") Long id,
+                                                     @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-fees-settings")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("residentialEntity", getResidentialEntity(id));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-fees-settings") : new ModelAndView("en/administration/administration-fees-settings");
+
+        return view.addObject("residentialEntity", getResidentialEntity(id));
     }
 
     @GetMapping("/administration/fees/bank-details/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityBankDetails(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityBankDetails(@PathVariable("id") Long id,
+                                                     @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-fees-bank-details")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("residentialEntity", getResidentialEntity(id));
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-fees-bank-details") : new ModelAndView("en/administration/administration-fees-bank-details");
+
+        return view.addObject("residentialEntity", getResidentialEntity(id));
     }
 
 
@@ -78,13 +87,15 @@ public class FeesController {
      */
     @GetMapping("/administration/fees/bank-details/edit/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityBankDetailsEdit(@PathVariable("id") Long id) {
+    public ModelAndView residentialEntityBankDetailsEdit(@PathVariable("id") Long id,
+                                                         @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         BankDetailsBindingModel bankDetailsBindingModel = residentialEntityService.mapEntityToBankDetailsBindingModel(getResidentialEntity(id));
 
-        return new ModelAndView("administration/administration-fees-bank-details-edit")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("residentialEntity", getResidentialEntity(id))
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-fees-bank-details-edit") : new ModelAndView("en/administration/administration-fees-bank-details-edit");
+
+        return view.addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("bankDetailsBindingModel", bankDetailsBindingModel);
     }
 
@@ -97,12 +108,14 @@ public class FeesController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityBankDetailsEdit(@PathVariable("id") Long id,
                                                          @Valid BankDetailsBindingModel bankDetailsBindingModel,
-                                                         BindingResult bindingResult) {
+                                                         BindingResult bindingResult,
+                                                         @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-fees-bank-details-edit") : new ModelAndView("en/administration/administration-fees-bank-details-edit");
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration/administration-fees-bank-details-edit")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("residentialEntity", getResidentialEntity(id));
+            return view.addObject("residentialEntity", getResidentialEntity(id));
         }
 
         residentialEntityService.updateResidentialEntityBankDetails(getResidentialEntity(id), bankDetailsBindingModel);
@@ -132,7 +145,8 @@ public class FeesController {
      */
     @GetMapping("/administration/fees/edit/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView editResidentialEntityFees(@PathVariable("id") Long id) {
+    public ModelAndView editResidentialEntityFees(@PathVariable("id") Long id,
+                                                  @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ResidentialEntity residentialEntity = getResidentialEntity(id);
         if (residentialEntity == null) {
@@ -141,8 +155,10 @@ public class FeesController {
 
         FeeEditBindingModel feeEditBindingModel = feeService.mapFeeToBindingModel(residentialEntity.getFee());
 
-        return new ModelAndView("administration/administration-fees-edit")
-                .addObject("userViewModel", getUserViewModel())
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-fees-edit") : new ModelAndView("en/administration/administration-fees-edit");
+
+        return view
                 .addObject("residentialEntity", getResidentialEntity(id))
                 .addObject("feeEditBindingModel", feeEditBindingModel);
     }
@@ -157,21 +173,23 @@ public class FeesController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView editResidentialEntityFees(@PathVariable("id") Long id,
                                                   @Valid FeeEditBindingModel feeEditBindingModel,
-                                                  BindingResult bindingResult) {
+                                                  BindingResult bindingResult,
+                                                  @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-fees-edit") : new ModelAndView("en/administration/administration-fees-edit");
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration/administration-fees-edit")
-                    .addObject("userViewModel", getUserViewModel())
+            return view
                     .addObject("residentialEntity", getResidentialEntity(id))
                     .addObject("feeEditBindingModel", feeEditBindingModel);
         }
 
         ResidentialEntity residentialEntity = getResidentialEntity(id);
-        if (residentialEntity == null) {
-            return new ModelAndView("redirect:/administration/fees/settings/" + id);
-        }
-        feeService.changeFee(residentialEntity, feeEditBindingModel);
 
+        if (residentialEntity != null) {
+            feeService.changeFee(residentialEntity, feeEditBindingModel);
+        }
         return new ModelAndView("redirect:/administration/fees/settings/" + id);
     }
 
@@ -182,13 +200,16 @@ public class FeesController {
      */
     @GetMapping("/administration/fees/details/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
-    public ModelAndView propertyFees(@PathVariable("id") Long id) {
+    public ModelAndView propertyFees(@PathVariable("id") Long id,
+                                     @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         Property property = propertyService.findPropertyById(id);
         OverpaymentBindingModel overpaymentBindingModel = propertyService.mapOverPaymentBindingModel(property);
 
-        return new ModelAndView("administration/administration-property-fees")
-                .addObject("userViewModel", getUserViewModel())
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-fees") : new ModelAndView("en/administration/administration-property-fees");
+
+        return view
                 .addObject("property", getProperty(id))
                 .addObject("overpaymentBindingModel", overpaymentBindingModel);
     }
@@ -265,11 +286,14 @@ public class FeesController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView setOverPayment(@PathVariable("id") Long id,
                                        @Valid OverpaymentBindingModel overpaymentBindingModel,
-                                       BindingResult bindingResult) {
+                                       BindingResult bindingResult,
+                                       @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-fees") : new ModelAndView("en/administration/administration-property-fees");
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration/administration-property-fees")
-                    .addObject("userViewModel", getUserViewModel())
+            return view
                     .addObject("property", getProperty(id))
                     .addObject("overpaymentBindingModel", overpaymentBindingModel);
         }
@@ -284,11 +308,14 @@ public class FeesController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView setAdditionalPropertyFee(@PathVariable("id") Long id,
                                                  @Valid OverpaymentBindingModel overpaymentBindingModel,
-                                                 BindingResult bindingResult) {
+                                                 BindingResult bindingResult,
+                                                 @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-fees") : new ModelAndView("en/administration/administration-property-fees");
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration/administration-property-fees")
-                    .addObject("userViewModel", getUserViewModel())
+            return view
                     .addObject("property", getProperty(id))
                     .addObject("overpaymentBindingModel", overpaymentBindingModel);
         }
@@ -305,16 +332,17 @@ public class FeesController {
      */
     @GetMapping("/administration/fees/details/edit/{id}")
     @PreAuthorize("@securityService.checkPropertyFeeModeratorAccess(#id, authentication)")
-    public ModelAndView editPropertyFee(@PathVariable("id") Long id) {
+    public ModelAndView editPropertyFee(@PathVariable("id") Long id,
+                                        @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         PropertyFeeEditBindingModel propertyFeeEditBindingModel = propertyFeeService.mapPropertyFeeToBindingModel(id);
         Long propertyId = propertyFeeEditBindingModel.getPropertyId();
         propertyFeeEditBindingModel.setOverPayment(getProperty(propertyId).getOverpayment());
 
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-fees-edit") : new ModelAndView("en/administration/administration-property-fees-edit");
 
-        return new ModelAndView("administration/administration-property-fees-edit")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("propertyFeeEditBindingModel", propertyFeeEditBindingModel);
+        return view.addObject("propertyFeeEditBindingModel", propertyFeeEditBindingModel);
     }
 
 
@@ -328,26 +356,28 @@ public class FeesController {
     @PreAuthorize("@securityService.checkPropertyFeeModeratorAccess(#id, authentication)")
     public ModelAndView editPropertyFee(@PathVariable("id") Long id,
                                         @Valid PropertyFeeEditBindingModel propertyFeeEditBindingModel,
-                                        BindingResult bindingResult) {
+                                        BindingResult bindingResult,
+                                        @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-fees-edit") : new ModelAndView("en/administration/administration-property-fees-edit");
+
+        view.addObject("propertyFeeEditBindingModel", propertyFeeEditBindingModel);
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration/administration-property-fees-edit")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("propertyFeeEditBindingModel", propertyFeeEditBindingModel);
+            return view;
         }
 
         if (propertyFeeEditBindingModel.getFundMmAmount() == null) {
             propertyFeeEditBindingModel.setFundMmAmount(BigDecimal.ZERO);
         }
+
         if (propertyFeeEditBindingModel.getFundRepairAmount() == null) {
             propertyFeeEditBindingModel.setFundRepairAmount(BigDecimal.ZERO);
         }
 
         if (propertyFeeEditBindingModel.getFundMmAmount().equals(BigDecimal.ZERO) && propertyFeeEditBindingModel.getFundRepairAmount().equals(BigDecimal.ZERO)) {
-            return new ModelAndView("administration/administration-property-fees-edit")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("propertyFeeEditBindingModel", propertyFeeEditBindingModel)
-                    .addObject("feeChangeFailed", true);
+            return view.addObject("feeChangeFailed", true);
         }
 
         propertyFeeService.editMonthlyFee(id, propertyFeeEditBindingModel);
@@ -363,10 +393,13 @@ public class FeesController {
      */
     @GetMapping("/administration/fees/details/add/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
-    public ModelAndView addPropertyFee(@PathVariable("id") Long id) {
+    public ModelAndView addPropertyFee(@PathVariable("id") Long id,
+                                       @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-property-fees-add")
-                .addObject("userViewModel", getUserViewModel())
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-fees-add") : new ModelAndView("en/administration/administration-property-fees-add");
+
+        return view
                 .addObject("propertyFeeAddBindingModel", new PropertyFeeAddBindingModel());
     }
 
@@ -380,26 +413,28 @@ public class FeesController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView addPropertyFee(@PathVariable("id") Long id,
                                        @Valid PropertyFeeAddBindingModel propertyFeeAddBindingModel,
-                                       BindingResult bindingResult) {
+                                       BindingResult bindingResult,
+                                       @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-property-fees-add") : new ModelAndView("en/administration/administration-property-fees-add");
+
+        view.addObject("propertyFeeAddBindingModel", propertyFeeAddBindingModel);
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration/administration-property-fees-add")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("propertyFeeAddBindingModel", propertyFeeAddBindingModel);
+            return view;
         }
 
         if (propertyFeeAddBindingModel.getFundMmAmount() == null) {
             propertyFeeAddBindingModel.setFundMmAmount(BigDecimal.ZERO);
         }
+
         if (propertyFeeAddBindingModel.getFundRepairAmount() == null) {
             propertyFeeAddBindingModel.setFundRepairAmount(BigDecimal.ZERO);
         }
 
         if (propertyFeeAddBindingModel.getFundMmAmount().equals(BigDecimal.ZERO) && propertyFeeAddBindingModel.getFundRepairAmount().equals(BigDecimal.ZERO)) {
-            return new ModelAndView("administration/administration-property-fees-add")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("propertyFeeAddBindingModel", propertyFeeAddBindingModel)
-                    .addObject("feeCreationFailed", true);
+            return view.addObject("feeCreationFailed", true);
         }
 
         Property property = propertyService.findPropertyById(id);
@@ -450,11 +485,13 @@ public class FeesController {
      */
     @GetMapping("/administration/fees/addglobalfee/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView addGlobalFee(@PathVariable("id") Long id) {
+    public ModelAndView addGlobalFee(@PathVariable("id") Long id,
+                                     @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("administration/administration-fees-addglobalfee")
-                .addObject("userViewModel", getUserViewModel())
-                .addObject("propertyFeeAddGlobalFeeBindingModel", new PropertyFeeAddGlobalFeeBindingModel());
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-fees-addglobalfee") : new ModelAndView("en/administration/administration-fees-addglobalfee");
+
+        return view.addObject("propertyFeeAddGlobalFeeBindingModel", new PropertyFeeAddGlobalFeeBindingModel());
     }
 
     /**
@@ -467,12 +504,16 @@ public class FeesController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView addGlobalFee(@PathVariable("id") Long id,
                                      @Valid PropertyFeeAddGlobalFeeBindingModel propertyFeeAddGlobalFeeBindingModel,
-                                     BindingResult bindingResult) {
+                                     BindingResult bindingResult,
+                                     @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-fees-addglobalfee") : new ModelAndView("en/administration/administration-fees-addglobalfee");
+
+        view.addObject("propertyFeeAddGlobalFeeBindingModel", propertyFeeAddGlobalFeeBindingModel);
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("administration/administration-fees-addglobalfee")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("propertyFeeAddGlobalFeeBindingModel", propertyFeeAddGlobalFeeBindingModel);
+            return view;
         }
 
         ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityById(id).orElse(null);
@@ -485,31 +526,19 @@ public class FeesController {
         }
 
         if (propertyFeeAddGlobalFeeBindingModel.getFundMmAmount().equals(BigDecimal.ZERO) && propertyFeeAddGlobalFeeBindingModel.getFundRepairAmount().equals(BigDecimal.ZERO)) {
-            return new ModelAndView("administration/administration-fees-addglobalfee")
-                    .addObject("userViewModel", getUserViewModel())
-                    .addObject("propertyFeeAddGlobalFeeBindingModel", propertyFeeAddGlobalFeeBindingModel)
-                    .addObject("globalFeeFailed", true);
+            return view.addObject("globalFeeFailed", true);
         }
 
         if (propertyFeeService.createMassFee(residentialEntity, propertyFeeAddGlobalFeeBindingModel)) {
-            return new ModelAndView("administration/administration-fees")
-                    .addObject("userViewModel", getUserViewModel())
+            view = resolveView(lang) ?
+                    new ModelAndView("bg/administration/administration-fees") : new ModelAndView("en/administration/administration-fees");
+
+            return view
                     .addObject("residentialEntity", getResidentialEntity(id))
                     .addObject("globalFeeAdded", true);
         }
 
         return new ModelAndView("redirect:/administration/fees/" + id);
-    }
-
-
-    /**
-     * Method returns currently logged user
-     *
-     * @return UserEntity
-     */
-    private UserViewModel getUserViewModel() {
-        UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        return userService.getUserViewData(loggedUser);
     }
 
     /**
@@ -530,5 +559,14 @@ public class FeesController {
      */
     private Property getProperty(Long id) {
         return propertyService.findPropertyById(id);
+    }
+
+    /**
+     * Language resolver
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }

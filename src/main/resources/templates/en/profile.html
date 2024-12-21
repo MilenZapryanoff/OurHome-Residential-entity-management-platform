@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/en/fragments/navbar}"></div>
+
+<!--BANNER start-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="column-gap-2">
+                        <br>
+                    </div>
+                </div>
+                <h3>Profile details</h3>
+                <p class="category text-white"
+                   th:text="${loggedUser.getFirstName()} + ' ' + ${loggedUser.getLastName()}"></p>
+                <h5 class="text-danger" th:if="${errorMessage}" th:text="${errorMessage.toString()}">
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Profile section ***** -->
+<div class="container">
+    <div class="property" style="padding-top: 80px;: ">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="profile"
+                 aria-labelledby="profile-tab">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="info-table profile">
+                            <ul>
+                                <li>
+                                    <div class="avatar-container">
+                                        <img th:if="${loggedUser.avatarPath != null}"
+                                             th:src="@{${loggedUser.avatarPath}}" alt="Avatar">
+                                        <img th:unless="${loggedUser.avatarPath != null}"
+                                             src="/avatars/default.jpg" alt="Default Avatar">
+                                    </div>
+                                    <div class="row">
+                                        <form th:action="@{/uploadAvatar}" method="post"
+                                              enctype="multipart/form-data" id="avatarForm">
+                                            <input type="file" id="avatarInput" name="avatar" accept="image/*"
+                                                   style="display: none;">
+                                            <div class="col-lg-12 text-center">
+                                                <button type="button" id="uploadButton">
+                                                    <small class="text-info-emphasis">Upload new picture <i
+                                                            class="fa-solid fa-arrow-up-from-bracket"></i></small>
+                                                </button>
+                                            </div>
+                                            <button type="submit" style="display: none;">Submit</button>
+                                        </form>
+
+
+                                        <form th:if="${loggedUser.avatarPath != null}
+                                                                                        AND ${!loggedUser.getAvatarPath().equals('/avatars/default-manager.jpg')}
+                                                                                        AND ${!loggedUser.getAvatarPath().equals('/avatars/default.jpg')}"
+                                              th:action="@{/removeAvatar}" method="post">
+                                            <div class="col-lg-12 text-center">
+                                                <button type="submit">
+                                                    <small class="text-info-emphasis">Remove picture <i
+                                                            class="fa-solid fa-eraser"></i></small>
+                                                </button>
+                                            </div>
+                                            <button type="submit" style="display: none;">Submit</button>
+                                        </form>
+                                    </div>
+
+                                    <div class="col-lg-12 text-center">
+                                        <div class="buttons">
+                                            <a th:href="@{/profile/edit/{id}(id=${loggedUser.getId()})}">
+                                                <p class="text-danger">Edit profile</p></a>
+                                        </div>
+                                    </div>
+
+
+                                </li>
+                                <li th:unless="${loggedUser.isValidated()}" class="text-black"><b>Status
+                                    :</b>
+                                    <p>INACTIVE</p>
+                                </li>
+                                <li th:if="${loggedUser.isValidated()}" class="text-black"><b>Status
+                                    :</b>
+                                    <p>ACTIVE</p>
+                                </li>
+                                <li class="text-black"><b>User type:</b>
+                                    <p th:text="${loggedUser.getRole().getName()}"></p>
+                                </li>
+                                <li th:if="${loggedUser.getRole().getName()} == 'RESIDENT'"
+                                    class="text-black"><b>Member of residential entities:</b>
+                                    <p th:text="${loggedUser.getResidentialEntities().size()}"></p>
+                                </li>
+                                <li th:if="${loggedUser.getRole().getName()} == 'RESIDENT'"
+                                    class="text-black"><b>Registered properties:</b>
+                                    <p th:text="${loggedUser.getProperties().size()}"></p>
+                                </li>
+                                <li th:if="${loggedUser.getRole().getName()} == 'MANAGER'"
+                                    class="text-black"><b>Managed Residential entities:</b>
+                                    <p>
+                                        <a th:text="${@residentialEntityRepository.countByManager_Id(loggedUser.getId())}" th:href="@{/administration}">Брой управлявани ЕС</a>
+                                    </p>
+                                </li>
+                                <li class="text-black"><b>Account created on:</b>
+                                    <p th:text="${#temporals.format(loggedUser.getRegistrationDateTime(), 'dd.MM.yyyy, HH:mm')}"></p>
+                                </li>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="info-table">
+                            <ul>
+                                <li class="text-black"><b>Firstname :</b>
+                                    <p th:text="${loggedUser.getFirstName()}"></p>
+                                </li>
+                                <li class="text-black"><b>Lastname :</b>
+                                    <p th:text="${loggedUser.getLastName()}"></p>
+                                </li>
+
+                                <li class="text-black"><b>Username :</b>
+                                    <p th:text="${loggedUser.getUsername()}"></p>
+                                </li>
+                                <li class="text-black"><b>Email :</b>
+                                    <p th:text="${loggedUser.getEmail()}"></p>
+                                </li>
+                                <li class="text-black"><b>Phone number:</b>
+                                    <p th:text="${loggedUser.getPhoneNumber()}"></p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/avatar.js" defer></script>
+
+</body>
+</html>

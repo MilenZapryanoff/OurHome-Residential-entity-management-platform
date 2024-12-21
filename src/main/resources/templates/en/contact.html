@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/our-home.css">
+    <link rel="stylesheet" href="/css/owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div th:replace="~{fragments/header}" class="sub-header">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/en/fragments/navbar}"></div>
+
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Contact Us</h3>
+                <h4 class="text-light"><i class="fa-solid fa-phone-flip"></i></h4>
+                <h4 th:if="${mailSent}" class="text-success">MESSAGE SENT</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="contact-page section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="section-heading">
+                    <h2>Get in touch</h2>
+                </div>
+                <p>Please contact us if you have any questions or if you want to become our partner.</p>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="item phone">
+                            <img src="/images/phone-icon.png" alt="" style="max-width: 52px;">
+                            <h6>0886 277 333<br><span>Phone Number</span></h6>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="item email">
+                            <img src="/images/email-icon.png" alt="" style="max-width: 52px;">
+                            <div><b>office.ourhome@gmail.com</b><br><span>Business Email</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <form th:method="POST"
+                      th:action="@{/contact}"
+                      th:object="${contactFormBindingModel}"
+                      id="contact-form" action="" method="post">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <label for="name">Full name</label>
+                                <small th:if="${#fields.hasErrors('name')}"
+                                       th:errors="*{name}"
+                                       class="text-danger">Name error message</small>
+                                <input type="text" id="name"
+                                       placeholder="Your name..."
+                                       autocomplete="on"
+                                       required
+                                       th:field="*{name}"
+                                       th:errorclass="bg-danger">
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <label for="email">Email Address</label>
+                                <small th:if="${#fields.hasErrors('email')}"
+                                       th:errors="*{email}"
+                                       class="text-danger">Email error message</small>
+                                <input type="email" id="email"
+                                       placeholder="Your email..."
+                                       autocomplete="on"
+                                       required
+                                       th:field="*{email}"
+                                       th:errorclass="bg-danger">
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <label for="subject">Subject</label>
+                                <small th:if="${#fields.hasErrors('subject')}"
+                                       th:errors="*{subject}"
+                                       class="text-danger">Name error message</small>
+                                <input type="text" id="subject"
+                                       placeholder="Mail subject..."
+                                       autocomplete="off"
+                                       required
+                                       th:field="*{subject}"
+                                       th:errorclass="bg-danger">
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <label for="message">Message</label>
+                                <small th:if="${#fields.hasErrors('message')}"
+                                       th:errors="*{subject}"
+                                       class="text-danger">Message error</small>
+                                <textarea type="text" id="message"
+                                          placeholder="Your message..."
+                                          required
+                                          th:field="*{message}"
+                                          th:errorclass="bg-danger">
+                    </textarea>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <button type="submit" id="form-submit" class="orange-button">Send Message</button>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-12">
+                <div id="map">
+                    <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA4dMp6ervBxmwa9av_R4vRj-RhYx22TGg&q=Software University,Sofia,Bulgaria"
+                            width="100%" height="500px"
+                            style="border:0; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);"
+                            allowfullscreen=""></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+</body>
+</html>

@@ -8,6 +8,7 @@ import com.example.OurHome.service.tokens.UserToken;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,8 +29,13 @@ public class ForgotPasswordController {
      * Handles email input from user.
      */
     @GetMapping("/forgot-password")
-    public ModelAndView forgotPassword(@ModelAttribute("forgotPasswordBindingModel") ForgotPasswordBindingModel forgotPasswordBindingModel) {
-        return new ModelAndView("password-forgot");
+    public ModelAndView forgotPassword(@ModelAttribute("forgotPasswordBindingModel") ForgotPasswordBindingModel forgotPasswordBindingModel,
+                                       @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/password-forgot") : new ModelAndView("en/password-forgot");
+
+        return view;
     }
 
     /**
@@ -37,11 +43,15 @@ public class ForgotPasswordController {
      */
     @PostMapping("/forgot-password")
     public ModelAndView forgotPassword(@ModelAttribute("forgotPasswordBindingModel")
-                                      @Valid ForgotPasswordBindingModel forgotPasswordBindingModel,
-                                      BindingResult bindingResult) {
+                                       @Valid ForgotPasswordBindingModel forgotPasswordBindingModel,
+                                       BindingResult bindingResult,
+                                       @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/password-forgot") : new ModelAndView("en/password-forgot");
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView();
+            return view;
         }
 
         UserEntity user = userService.findUserByEmail(forgotPasswordBindingModel.getEmail());
@@ -54,30 +64,36 @@ public class ForgotPasswordController {
             userToken.setValid(true);
             return new ModelAndView("redirect:/reset-password");
         }
-        return new ModelAndView("password-forgot").addObject("resetFailed", true);
+
+        return view.addObject("resetFailed", true);
     }
 
     @GetMapping("/reset-password")
     public ModelAndView resetPassword(@ModelAttribute("resetPasswordBindingModel")
-                                      ResetPasswordBindingModel resetPasswordBindingModel) {
+                                      ResetPasswordBindingModel resetPasswordBindingModel,
+                                      @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-        return new ModelAndView("password-reset")
-                .addObject("resetPasswordBindingModel", resetPasswordBindingModel);
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/password-reset") : new ModelAndView("en/password-reset");
+
+        return view.addObject("resetPasswordBindingModel", resetPasswordBindingModel);
     }
 
     @PostMapping("/reset-password")
     public ModelAndView resetPassword(@ModelAttribute("resetPasswordBindingModel")
-                                          @Valid ResetPasswordBindingModel resetPasswordBindingModel,
-                                          BindingResult bindingResult) {
+                                      @Valid ResetPasswordBindingModel resetPasswordBindingModel,
+                                      BindingResult bindingResult,
+                                      @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         if (!userToken.isValid()) {
             return new ModelAndView("redirect:/forgot-password");
         }
 
-        ModelAndView modelAndView = new ModelAndView("password-reset");
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/password-reset") : new ModelAndView("en/password-reset");
 
         if (bindingResult.hasErrors()) {
-            return modelAndView;
+            return view;
         }
 
         String newPassword = resetPasswordBindingModel.getNewPassword();
@@ -85,34 +101,47 @@ public class ForgotPasswordController {
 
         if (user != null) {
             if (!userService.verificationCodeMatch(user, resetPasswordBindingModel.getVerificationCode())) {
-                return modelAndView.addObject("invalidVerificationCode", true);
+                return view.addObject("invalidVerificationCode", true);
             }
             if (!userService.passwordsMatch(newPassword, resetPasswordBindingModel.getConfirmPassword())) {
-                return modelAndView
-                        .addObject("noPasswordMatch", true);
+                return view.addObject("noPasswordMatch", true);
             }
             userService.resetPassword(user, newPassword);
 
-            return modelAndView.addObject("resetSuccess", true);
+            return view.addObject("resetSuccess", true);
         }
-        return modelAndView.addObject("resetFailed", true);
+        return view.addObject("resetFailed", true);
     }
 
     @PostMapping("/reset-password/resend")
     public ModelAndView resendVerificationCode(@ModelAttribute("resetPasswordBindingModel")
-                                               ResetPasswordBindingModel resetPasswordBindingModel) {
+                                               ResetPasswordBindingModel resetPasswordBindingModel,
+                                               @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         if (!userToken.isValid()) {
             return new ModelAndView("redirect:/forgot-password");
         }
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/password-reset") : new ModelAndView("en/password-reset");
 
         UserEntity user = userService.findUserById(userToken.getUserId());
         if (user != null) {
             userService.sendVerificationCode(user);
             userToken.setUserId(user.getId());
             userToken.setValid(true);
-            return new ModelAndView("password-reset");
+            return view;
         }
-        return new ModelAndView("password-reset").addObject("codeResent", true);
+        return view.addObject("codeResent", true);
+    }
+
+    /**
+     * Language resolver
+     *
+     * @param lang This value shows the language
+     * @return boolean
+     */
+    private boolean resolveView(String lang) {
+        return "bg".equals(lang);
     }
 }
