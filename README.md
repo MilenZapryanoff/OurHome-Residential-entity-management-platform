@@ -80,6 +80,16 @@ A platform that allows the registration of both home owners and residential enti
 
 <h2>Updates</h2>
 
+<h4>v.2.25.0105</h4>
+  <ul>
+    <li>Bug fixes of server-side methods</li>
+    <li>Redesign of FE pages</li>
+    <li>Multi-language setting for receiving system notifications(messages)</li>
+    <li>Property classes added</li>
+    <li>Repeated html code extracted to fragments</li>
+    <li>html pages in BG version translated from EN</li>
+  </ul>
+
 <h4>v.2.24.0620</h4>
   <ul>
     <li>Added bank details in Residential Entity</li>
