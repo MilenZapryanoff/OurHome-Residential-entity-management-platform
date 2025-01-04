@@ -4,25 +4,25 @@
 >
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
     <title>OurHome - Home management platform</title>
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -35,12 +35,13 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
 <div th:replace="~{/bg/fragments/navbar}"></div>
 
+<!-- ***** BANNER *****-->
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
@@ -55,37 +56,41 @@
                     th:text="${@residentialEntityRepository.countByManager_Id(loggedUser.getId())} +
                     ' регистрирани етажни собствености'"></h3>
                 <span class="breadcrumb">
-                    <form th:method="GET"
-                          th:action="@{/administration/add}">
+                    <form th:action="@{/administration/add}"
+                          th:method="GET">
                          <button type="submit">
                              <p class="text-danger">Регистрирай нова Етажна собственост</p>
                          </button>
                     </form>
                 </span>
+                <div class="success-msg" th:if="${deleted}">
+                    <h5 class="text-light">Етажната собственост е успешно изтрита!</h5>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<p th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) == 0}" class="text-center"
-   style="margin: 14em auto">Нямате регистрирани
-    етажни собствености</p>
+<div class="properties" th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) == 0}">
+    <p class="text-center" style="margin: 14em auto"
+       th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) == 0}">Нямате регистрирани
+        етажни собствености</p>
+</div>
 
-
-<div th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) > 0}" class="container">
-    <div class="properties">
+<div class="properties" th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) > 0}">
+    <div class="container">
         <div th:each="residentialEntity: ${@residentialEntityRepository.findAllByManager_Id(userViewModel.getId())}">
-
             <!--Active registration-->
             <div class="item">
                 <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}">
-                    <img th:if="${residentialEntity.getPicturePath()} == null" src="/images/building-render.png"
-                         alt="View details" title="View Details">
-                    <img th:if="${residentialEntity.getPicturePath()} != null"
-                         th:src="@{${residentialEntity.picturePath}}" alt="View details" title="View Details"
-                         style="max-height: 300px">
+                    <img alt="View details" src="/images/building-render.png"
+                         th:if="${residentialEntity.getPicturePath()} == null" title="View Details">
+                    <img alt="View details"
+                         style="max-height: 300px" th:if="${residentialEntity.getPicturePath()} != null" th:src="@{${residentialEntity.picturePath}}"
+                         title="View Details">
                 </a>
-                <span class="category text-bg-success text-light">Активен</span>
+                <span class="category text-bg-success text-light"
+                      th:text="'Идентификатор ЕС: ' + ${residentialEntity.getId()}"></span>
                 <h4><a th:text="${residentialEntity.getCity().getName()}"></a></h4>
                 <h4>
                     <a th:text="${residentialEntity.getStreetName() + ' ' + residentialEntity.getStreetNumber() + ' ' + residentialEntity.getEntrance()}"></a>

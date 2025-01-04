@@ -1,5 +1,6 @@
 package com.example.OurHome.service.impl;
 
+import com.example.OurHome.model.Entity.Language;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.User.ManagerRegisterBindingModel;
@@ -7,6 +8,7 @@ import com.example.OurHome.model.dto.BindingModels.User.ProfileEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.User.UserAuthBindingModel;
 import com.example.OurHome.model.dto.BindingModels.User.UserRegisterBindingModel;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
+import com.example.OurHome.repo.LanguageRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
 import com.example.OurHome.repo.RoleRepository;
 import com.example.OurHome.repo.UserRepository;
@@ -29,6 +31,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -43,8 +46,9 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final MessageService messageService;
     private final EmailService emailService;
+    private final LanguageRepository languageRepository;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder, ModelMapper modelMapper, UserRepository userRepository, ResidentialEntityToken residentialEntityToken, UserToken userToken, ResidentialEntityRepository residentialEntityRepository, RoleRepository roleRepository, MessageService messageService, EmailService emailService) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, ModelMapper modelMapper, UserRepository userRepository, ResidentialEntityToken residentialEntityToken, UserToken userToken, ResidentialEntityRepository residentialEntityRepository, RoleRepository roleRepository, MessageService messageService, EmailService emailService, LanguageRepository languageRepository) {
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
@@ -54,6 +58,7 @@ public class UserServiceImpl implements UserService {
         this.roleRepository = roleRepository;
         this.messageService = messageService;
         this.emailService = emailService;
+        this.languageRepository = languageRepository;
     }
 
     /**
@@ -106,6 +111,7 @@ public class UserServiceImpl implements UserService {
         newUserEntity.setRole(roleRepository.findRoleByName("RESIDENT"));
         newUserEntity.setValidated(true);
         newUserEntity.setRegistrationDateTime(LocalDateTime.now());
+        newUserEntity.setLanguage(languageRepository.findLanguageByDescription("bulgarian"));
         newUserEntity.setAvatarPath("/avatars/default.jpg");
 
         userRepository.save(newUserEntity);
@@ -128,6 +134,7 @@ public class UserServiceImpl implements UserService {
         newManager.setRole(roleRepository.findRoleByName("MANAGER"));
         newManager.setAvatarPath("/avatars/default-manager.jpg");
         newManager.setRegistrationDateTime(LocalDateTime.now());
+        newManager.setLanguage(languageRepository.findLanguageByDescription("bulgarian"));
 
         userRepository.save(newManager);
     }
@@ -434,6 +441,25 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IllegalArgumentException("User does not have a custom avatar set!");
         }
+    }
+
+    /**
+     * Method for setting system messages languege. This setting is different from global language!
+     * @param lang is the selected FE language
+     * @param userViewModel is the current instance of users logged in
+     */
+    @Override
+    public void setSystemMessagesLanguage(String lang, UserViewModel userViewModel) {
+
+        UserEntity user = userRepository.findByEmail(userViewModel.getEmail()).orElse(null);
+
+        if ("bg".equals(lang) && user != null) {
+            user.setLanguage(languageRepository.findLanguageByDescription("bulgarian"));
+        } else if ("en".equals(lang) && user != null) {
+            user.setLanguage(languageRepository.findLanguageByDescription("english"));
+        }
+
+        userRepository.save(user);
     }
 
 

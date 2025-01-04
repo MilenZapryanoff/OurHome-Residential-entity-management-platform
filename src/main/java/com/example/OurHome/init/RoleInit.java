@@ -10,6 +10,7 @@ public class RoleInit {
     private final static String ROLE_ADMIN = "ADMIN";
     private final static String ROLE_MANAGER = "MANAGER";
     private final static String ROLE_RESIDENT = "RESIDENT";
+    private final static String ROLE_MODERATOR = "MODERATOR";
     private final RoleRepository roleRepository;
 
     public RoleInit(RoleRepository roleRepository) {
@@ -30,6 +31,9 @@ public class RoleInit {
         }
         if (roleRepository.countRoleByName(ROLE_RESIDENT) == 0) {
             roleRepository.save(new Role(ROLE_RESIDENT));
+        }
+        if (roleRepository.countRoleByName(ROLE_MODERATOR) == 0) {
+            roleRepository.save(new Role(ROLE_MODERATOR));
         }
     }
 }

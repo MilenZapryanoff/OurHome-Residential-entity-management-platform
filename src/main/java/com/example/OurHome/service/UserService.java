@@ -56,4 +56,6 @@ public interface UserService {
     void cleanUpPasswordRestoreVerificationCodes();
 
     void removeAvatar(Long loggedUserId) throws IOException;
+
+    void setSystemMessagesLanguage(String lang, UserViewModel userViewModel);
 }

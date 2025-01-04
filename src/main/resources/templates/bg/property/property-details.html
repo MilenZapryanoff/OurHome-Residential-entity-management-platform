@@ -81,16 +81,16 @@
                         <div class="col-lg-6" style="padding-bottom: 60px">
                             <div class="info-table">
                                 <ul>
-                                    <li><h5 class="text-danger text-center">Статус на имот:</h5>
-                                    </li>
+                                    <li th:if="${property.isObtained()}"><h5 class="text-danger text-center">Статус на имот:</h5></li>
+                                    <li th:if="${!property.isObtained() and !property.isRejected()} or ${property.isRejected()}"><h5 class="text-danger text-center">Заявка за регистрация:</h5></li>
                                     <li th:if="${property.isObtained()}" class="text-dark text-center">
                                         <b>Активен!</b>
                                     <li th:if="${!property.isObtained() and !property.isRejected()}"
                                         class="text-black text-center"><b>Изчаква валидация</b>
-                                        <p class="text-secondary text-center">Заявката за регистрация на имот очаква
-                                            валидация от домоуправител на ЕС.</p>
+                                        <p class="text-secondary text-center">Заявката за регистрация на дигитален имот очаква
+                                            валидация от домоуправител на Дигитална Етажна Собственост (ДЕС).</p>
                                     <li th:if="${property.isRejected()}" class="text-center">
-                                        <b class="text-danger">Отхвърлен!</b>
+                                        <b class="text-danger">Отхвърлена!</b>
                                         <p class="text-secondary text-center">Вашата заявка за регистрация на имот е
                                             отхвърлена от домоуправител на ЕС!
                                             Може да се свържете с домоуправител за да изясните причината за отхвърляне
@@ -122,7 +122,7 @@
                                     </li>
                                     <li class="text-black text-center"
                                         th:if="${property.getPropertyRegisterRequest() != null}"
-                                        th:text="'Създаден на: '+ ${#temporals.format(property.getPropertyRegisterRequest().getCreationDateTime(), 'dd.MM.yyyy, HH:mm')}">
+                                        th:text="'Създаден на: '+ ${#temporals.format(property.getPropertyRegisterRequest().getCreationDateTime(), 'dd.MM.yyyyг, HH:mmч.')}">
                                     </li>
                                 </ul>
 

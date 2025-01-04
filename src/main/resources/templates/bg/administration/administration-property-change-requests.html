@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,19 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +38,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -57,157 +57,153 @@
 </div>
 
 <!-- ***** Residential entity section ***** -->
-
-<div class="container">
-    <!--Start of sub-menu-->
-    <div class="administration-nav-bar">
-        <a th:href="@{/administration}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
-        <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}">Статус</a>
-        <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Собственици</a>
-        <a href=#>Имоти</a>
-        <a th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">Месечни такси</a>
-        <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Отчети</a>
-        <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Настройки</a>
-        <div class="animation start-properties"></div>
+<div class="page-content">
+    <!--start of Sub-menu-->
+    <div class="menu-container">
+        <div th:replace="~{/bg/fragments/adm-submenu}"></div>
     </div>
-
-    <!--Active registrations section-->
-    <div class="administration">
-        <!--Sub-menu buttons-->
-        <div class="table-nav-section">
-            <a class="button nav-link"
-               th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
-                <div class="text-center"><i class="fa-regular fa-building"></i> <span>Properties</span>
-                    <sup th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
-                         th:text="' '+ ${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())}">
-                    </sup>
-                </div>
-            </a>
-            <a class="button nav-link active"
-               href=#active-registrations>
-                <div class="text-center"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Change requests</span>
-                    <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
-                         th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
-                    </sup>
-                </div>
-            </a>
-            <a class="button nav-link"
-               th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
-                <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Property types</span>
-                </div>
-            </a>
-        </div>
-        <!--Active registrations table-->
-        <div class="info-table bottom-rounded" id="active-registrations">
-            <!--Active registrations header-->
-            <div class="text-center">
-                <h4 class="category text-secondary"><i class="fa-solid fa-hourglass-half"></i> PENDING PROPERTY CHANGE
-                    REQUESTS</h4>
-            </div>
-
-            <div class="due-amounts-header" style="padding: 10px 0">
-                <!--Records counter-->
-                <div class="counter">
-                        <span th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} == 1"
-                              th:text="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} + ' Record found'"
-                              class="category text-bg-success"></span>
-                    <span th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 1"
-                          th:text="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} + ' Records found'"
-                          class="category text-bg-success"></span>
-                </div>
-            </div>
-            <hr>
-
-            <p th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} == 0"
-               class="text-center">No pending changes requests found</p>
-
-            <!--Pending change requests list-->
-            <table th:unless="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} == 0"
-                   class="table text-center" id="pending-requests">
-                <tr>
-                    <th>
-                        <i class="fa-regular fa-calendar"></i>
-                        <p>Created on</p>
-                    </th>
-                    <th>
-                        <i class="fa-solid fa-list-ol"></i>
-                        <p>Property №</p>
-                    </th>
-                    <th>
-                        <i class="fa-solid fa-stairs"></i>
-                        <p>Floor</p>
-                    </th>
-                    <th th:if="${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId()).size() > 0}">
-                        <i class="fa-regular fa-building"></i>
-                        <p>Type</p>
-                    </th>
-                    <th>
-                        <i class="fa-solid fa-user-large"></i>
-                        <p>Requester</p>
-                    </th>
-                    <th>
-                        <i class="fa-solid fa-at"></i>
-                        <p>E-mail</p>
-                    </th>
-                    <th>
-                        <i class="fa-solid fa-phone"></i>
-                        <p>Phone</p>
-                    </th>
-                    <th>
-                        <p>Property habitable</p>
-                    </th>
-                    <th>
-                        <p>View request</p>
-                    </th>
-                </tr>
-                <tr th:each="property: ${@propertyRepository.findPendingChangeRequestsByResidentialEntity(residentialEntity.getId())}">
-                    <td>
-                        <p th:text="${#temporals.format(property.getPropertyChangeRequest().getCreationDateTime(), 'dd.MM.yyyy')}"></p>
-                        <p th:text="${#temporals.format(property.getPropertyChangeRequest().getCreationDateTime(), 'HH:mm')}"></p>
-                    </td>
-                    <td>
-                        <p th:text="${property.getNumber()}"></p>
-                    </td>
-                    <td><p th:text="${property.getFloor()}"></p></td>
-                    <td th:if="${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId()).size() > 0}">
-                        <p th:if="${property.getPropertyType()} != null"
-                           th:text="${property.getPropertyType().getDescription()}"></p>
-                        <p th:if="${property.getPropertyType()} == null"><i class="fa-solid fa-circle-info"
-                                                                            title="Not set"
-                                                                            style="color: rgba(222,193,1,0.86)"></i>
-                        </p></td>
-                    <td>
-                        <div class="user-avatar-small">
-                            <img th:if="${property.getOwner().getAvatarPath() != null}"
-                                 th:src="@{${property.getOwner().getAvatarPath()}}" alt="Avatar">
-                            <img th:unless="${property.getOwner().getAvatarPath() != null}" src="/avatars/default.jpg"
-                                 alt="Default Avatar">
-                            <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+    <div class="content">
+        <div class="container">
+            <!--Active registrations section-->
+            <div class="administration">
+                <!--Sub-menu buttons-->
+                <div class="table-nav-section">
+                    <a class="button nav-link"
+                       th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-regular fa-building"></i> <span>Самостоятелни обекти</span>
+                            <sup th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                 th:text="' '+ ${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())}">
+                            </sup>
                         </div>
-                    </td>
-                    <td>
-                        <p th:text="${property.getOwner().getEmail()}"></p>
-                    </td>
-                    <td>
-                        <p th:text="${property.getOwner().getPhoneNumber()}"></p>
-                    </td>
-                    <td th:if="${property.isNotHabitable()}">
-                        <img title="Property is not habitable"
-                             src="/images/check_no.png"
-                             style="width: 20px;" alt="Property is not habitable">
-                    </td>
-                    <td th:unless="${property.isNotHabitable()}">
-                        <img title="Property is habitable" src="/images/check_yes.png"
-                             style="width: 20px;" alt="Property is habitable">
-                    </td>
-                    <td>
-                        <a th:href="@{/administration/property/pending/request/{id}(id=${property.getId()})}">
-                            <small class="magnifier-expand">
-                                <i class="fa-solid fa-magnifying-glass-plus"></i></small>
-                        </a>
-                    </td>
-                </tr>
-            </table>
+                    </a>
+                    <a class="button nav-link active"
+                       href=#active-registrations>
+                        <div class="text-center"><i class="fa-solid fa-screwdriver-wrench"></i>
+                            <span>Заявки за промяна на данни</span>
+                            <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
+                                 th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
+                            </sup>
+                        </div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Типове самостоятелни обекти</span>
+                        </div>
+                    </a>
+                </div>
+                <!--Active registrations table-->
+                <div class="info-table bottom-rounded" id="active-registrations">
+                    <!--Active registrations header-->
+                    <div class="text-center">
+                        <h4 class="category text-secondary"><i class="fa-solid fa-hourglass-half"></i> ИЗЧАКВАЩИ ЗАЯВКИ ЗА ПРОМЯНА НА ДАННИ</h4>
+                    </div>
+
+                    <div class="due-amounts-header" style="padding: 10px 0">
+                        <!--Records counter-->
+                        <div class="counter">
+                        <span class="category text-bg-success"
+                              th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} == 1"
+                              th:text="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} + ' чакаща заявка'"></span>
+                            <span class="category text-bg-success"
+                                  th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 1"
+                                  th:text="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} + ' чакащи заявки'"></span>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <p class="text-center"
+                       th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} == 0">Нямате заявки за промяна на параметри</p>
+
+                    <!--Pending change requests list-->
+                    <table class="table text-center"
+                           id="pending-requests" th:unless="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} == 0">
+                        <tr>
+                            <th>
+                                <i class="fa-regular fa-calendar"></i>
+                                <p>Created on</p>
+                            </th>
+                            <th>
+                                <i class="fa-solid fa-list-ol"></i>
+                                <p>Property №</p>
+                            </th>
+                            <th>
+                                <i class="fa-solid fa-stairs"></i>
+                                <p>Floor</p>
+                            </th>
+                            <th th:if="${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId()).size() > 0}">
+                                <i class="fa-regular fa-building"></i>
+                                <p>Type</p>
+                            </th>
+                            <th>
+                                <i class="fa-solid fa-user-large"></i>
+                                <p>Requester</p>
+                            </th>
+                            <th>
+                                <i class="fa-solid fa-at"></i>
+                                <p>E-mail</p>
+                            </th>
+                            <th>
+                                <i class="fa-solid fa-phone"></i>
+                                <p>Phone</p>
+                            </th>
+                            <th>
+                                <p>Property habitable</p>
+                            </th>
+                            <th>
+                                <p>View request</p>
+                            </th>
+                        </tr>
+                        <tr th:each="property: ${@propertyRepository.findPendingChangeRequestsByResidentialEntity(residentialEntity.getId())}">
+                            <td>
+                                <p th:text="${#temporals.format(property.getPropertyChangeRequest().getCreationDateTime(), 'dd.MM.yyyy')}"></p>
+                                <p th:text="${#temporals.format(property.getPropertyChangeRequest().getCreationDateTime(), 'HH:mm')}"></p>
+                            </td>
+                            <td>
+                                <p th:text="${property.getNumber()}"></p>
+                            </td>
+                            <td><p th:text="${property.getFloor()}"></p></td>
+                            <td th:if="${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId()).size() > 0}">
+                                <p th:if="${property.getPropertyType()} != null"
+                                   th:text="${property.getPropertyType().getDescription()}"></p>
+                                <p th:if="${property.getPropertyType()} == null"><i class="fa-solid fa-circle-info"
+                                                                                    style="color: rgba(222,193,1,0.86)"
+                                                                                    title="Not set"></i>
+                                </p></td>
+                            <td>
+                                <div class="user-avatar-small">
+                                    <img alt="Avatar"
+                                         th:if="${property.getOwner().getAvatarPath() != null}" th:src="@{${property.getOwner().getAvatarPath()}}">
+                                    <img alt="Default Avatar"
+                                         src="/avatars/default.jpg"
+                                         th:unless="${property.getOwner().getAvatarPath() != null}">
+                                    <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                                </div>
+                            </td>
+                            <td>
+                                <p th:text="${property.getOwner().getEmail()}"></p>
+                            </td>
+                            <td>
+                                <p th:text="${property.getOwner().getPhoneNumber()}"></p>
+                            </td>
+                            <td th:if="${property.isNotHabitable()}">
+                                <img alt="Property is not habitable"
+                                     src="/images/check_no.png"
+                                     style="width: 20px;" title="Property is not habitable">
+                            </td>
+                            <td th:unless="${property.isNotHabitable()}">
+                                <img alt="Property is habitable" src="/images/check_yes.png"
+                                     style="width: 20px;" title="Property is habitable">
+                            </td>
+                            <td>
+                                <a th:href="@{/administration/property/pending/request/{id}(id=${property.getId()})}">
+                                    <small class="magnifier-expand">
+                                        <i class="fa-solid fa-magnifying-glass-plus"></i></small>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

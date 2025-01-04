@@ -49,14 +49,14 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3 th:if="${property.isValidated()}">Edit property data</h3>
-            <h3 th:unless="${property.isValidated()}">Set property data</h3>
-            <p th:unless="${editFailed}" th:class="text-light" th:text="'Propery №: ' + ${property.getNumber()}"
+            <h3 th:if="${property.isValidated()}">Промяна на имот</h3>
+            <h3 th:unless="${property.isValidated()}">Параметризация на имот</h3>
+            <p th:unless="${editFailed}" th:class="text-light" th:text="'Имот №: ' + ${property.getNumber()}"
                class="category text-black"></p>
             <div th:if="${editFailed}" class="err-msg">
-                <h5 class="text-light">Edit failed!</h5>
+                <h5 class="text-light">Проблем с параметризацията!</h5>
                 <p class="text-light"
-                   th:text="'Property №' + ${propertyEditBindingModel.getNumber()} + ' already exists in this Residential entity!'"></p>
+                   th:text="'Имот №' + ${propertyEditBindingModel.getNumber()} + ' е вече регистриран в тази Дигитална Етажна Собственост!'"></p>
             </div>
         </div>
     </div>
@@ -72,18 +72,33 @@
                   th:object="${propertyEditBindingModel}">
                 <div class="col-lg-12">
                     <fieldset>
-                        <label for="number"><b>Property №</b></label>
+                        <label for="number"><b>Имот №</b></label>
                         <p th:if="${#fields.hasErrors('number')}"
                            th:errors="*{number}"
-                           class="text-danger">Street name error message</p>
+                           class="text-danger">Property error message</p>
                         <input type="number" id="number"
-                               placeholder="Enter street name..." required
+                               placeholder="Въведете номер на имот..." required
                                th:field="*{number}"
                                th:errorclass="bg-danger"
                                th:value="${propertyEditBindingModel.getNumber()}">
                     </fieldset>
+                    <fieldset>
+                        <label for="propertyTypeId"><b>Категория самостоятелен обект</b></label>
+                        <select class="form-control" id="propertyClassId"
+                                th:field="*{propertyClass}">
+                            <option th:if="${propertyEditBindingModel.getPropertyClass() == null}" th:value="''"
+                                    th:text="'---'"></option>
+                            <option th:each="propertyClass : ${@propertyClassRepository.findAll()}"
+                                    th:value="${propertyClass.getId()}"
+                                    th:text="${propertyClass.name}">
+                            </option>
+                            <option th:if="${propertyEditBindingModel.getPropertyClass() != null}" th:value="''"
+                                    th:text="'---'"></option>
+                        </select>
+                        <br>
+                    </fieldset>
                     <fieldset th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0}">
-                        <label for="propertyTypeId"><b>Property type</b></label>
+                        <label for="propertyTypeId"><b>Вид самостоятелен обект</b></label>
                         <select class="form-control" id="propertyTypeId"
                                 th:field="*{propertyType}">
                             <option th:if="${property.getPropertyType() != null}" class="text-secondary"
@@ -101,48 +116,48 @@
                         <br>
                     </fieldset>
                     <fieldset>
-                        <label for="floor"><b>Floor</b></label>
+                        <label for="floor"><b>Етаж</b></label>
                         <p th:if="${#fields.hasErrors('floor')}"
                            th:errors="*{floor}"
                            class="text-danger">Floor error message</p>
                         <input type="text" id="floor"
-                               placeholder="Enter floor..."
+                               placeholder="Въведете етаж..."
                                autocomplete="on"
                                required th:field="*{floor}"
                                th:errorclass="bg-danger"
                                th:value="${propertyEditBindingModel.getFloor()}">
                     </fieldset>
                     <fieldset>
-                        <label for="numberOfAdults"><b>Number of adults</b></label>
+                        <label for="numberOfAdults"><b>Брой възрастни</b></label>
                         <p th:if="${#fields.hasErrors('numberOfAdults')}"
                            th:errors="*{numberOfAdults}"
                            class="text-danger">Adults number error message</p>
                         <input type="number" id="numberOfAdults"
-                               placeholder="Enter number of adults..."
+                               placeholder="Въведете брой на възрастни..."
                                autocomplete="on" required
                                th:field="*{numberOfAdults}"
                                th:errorclass="bg-danger"
                                th:value="${propertyEditBindingModel.getNumberOfAdults()}">
                     </fieldset>
                     <fieldset>
-                        <label for="numberOfChildren"><b>Number of children</b></label>
+                        <label for="numberOfChildren"><b>Брой деца</b></label>
                         <p th:if="${#fields.hasErrors('numberOfChildren')}"
                            th:errors="*{numberOfChildren}"
                            class="text-danger">Children error message</p>
                         <input type="number" id="numberOfChildren"
-                               placeholder="Enter number of children..."
+                               placeholder="Въведете брой деца..."
                                autocomplete="on" required
                                th:field="*{numberOfChildren}"
                                th:errorclass="bg-danger"
                                th:value="${propertyEditBindingModel.getNumberOfChildren()}">
                     </fieldset>
                     <fieldset>
-                        <label for="numberOfPets"><b>Number of pets</b></label>
+                        <label for="numberOfPets"><b>Брой на дом. любимци</b></label>
                         <p th:if="${#fields.hasErrors('numberOfPets')}"
                            th:errors="*{numberOfPets}"
                            class="text-danger">Number of pets message</p>
                         <input type="number" id="numberOfPets"
-                               placeholder="Enter number of pets ..."
+                               placeholder="Въведете брой на дом. любимци ..."
                                autocomplete="on" required
                                th:field="*{numberOfPets}"
                                th:errorclass="bg-danger"
@@ -158,15 +173,15 @@
                     <svg width="12px" height="10px" viewbox="0 0 12 10"><polyline
                             points="1.5 6 4.5 9 10.5 1"></polyline></svg>
                         </span>
-                            <span><b>Property is not habitable</b></span>
+                            <span><b>Имотът е необитаем</b></span>
                         </label>
                     </fieldset>
                     <fieldset>
                         <button type="submit" id="form-submit"
-                                class="orange-button">Submit
+                                class="orange-button">Потвърди
                         </button>
                         <a th:href="@{/administration/property/active/{id}(id=${property.getResidentialEntity().getId()})}">
-                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel
+                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Отказ
                             </button>
                         </a>
                     </fieldset>

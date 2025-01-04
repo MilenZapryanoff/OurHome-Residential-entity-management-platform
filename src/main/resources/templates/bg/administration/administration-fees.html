@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,19 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +38,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -50,219 +50,219 @@
     <div class="col-lg-12">
         <span th:text="'Идентификатор на ЕС: ' + ${residentialEntity.getId()}"></span>
     </div>
-    <div th:if="${globalFeeAdded}" class="success-msg">
+    <div class="success-msg" th:if="${globalFeeAdded}">
         <h5 class="text-light">Fee successfully created!</h5>
     </div>
 </div>
 
-<!-- ***** Monthly fees-Fees by property section ***** -->
-<div class="container">
-    <!--Start of Sub-menus-->
-    <div class="administration-nav-bar">
-        <a th:href="@{/administration}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
-        <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}">Статус</a>
-        <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Собственици</a>
-        <a  th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">Имоти</a>
-        <a href=#>Месечни такси</a>
-        <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Отчети</a>
-        <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Настройки</a>
-        <div class="animation start-fees"></div>
+<!-- ***** Property Fees section ***** -->
+<div class="page-content">
+    <div class="menu-container">
+        <div th:replace="~{/bg/fragments/adm-submenu}"></div>
     </div>
-
-    <div class="administration">
-        <!--Sub-menu buttons-->
-        <div class="table-nav-section">
-            <a class="button nav-link active"
-               href=#due-amounts-table>
-                <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Fees by property</span>
+    <div class="content">
+        <div class="container">
+            <div class="administration">
+                <!--Sub-menu buttons-->
+                <div class="table-nav-section">
+                    <a class="button nav-link active"
+                       href=#due-amounts-table>
+                        <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i>
+                            <span>Fees by property</span>
+                        </div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/fees/settings/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Residential entity fees</span>
+                        </div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/fees/bank-details/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-landmark"></i> <span>Bank details</span></div>
+                    </a>
                 </div>
-            </a>
-            <a class="button nav-link"
-               th:href="@{/administration/fees/settings/{id}(id=${residentialEntity.getId()})}">
-                <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Residential entity fees</span></div>
-            </a>
-            <a class="button nav-link"
-               th:href="@{/administration/fees/bank-details/{id}(id=${residentialEntity.getId()})}">
-                <div class="text-center"><i class="fa-solid fa-landmark"></i> <span>Bank details</span></div>
-            </a>
-        </div>
-        <!--Start of table-->
-        <div class="info-table bottom-rounded" id="due-amounts-table">
+                <!--Start of table-->
+                <div class="info-table bottom-rounded" id="due-amounts-table">
 
-            <!--Section heading-->
-            <div class="text-center">
-                <h5 class="category text-danger">
-                    MONTHLY FEES BY PROPERTY</h5>
-            </div>
+                    <!--Section heading-->
+                    <div class="text-center">
+                        <h5 class="category text-danger">
+                            MONTHLY FEES BY PROPERTY</h5>
+                    </div>
 
-            <div class="due-amounts-header" style="padding: 10px 0">
-                <!--Records counter-->
-                <div class="main-content">
-            <span style="padding: 1px 5px; border-radius: 5px"
+                    <div class="due-amounts-header" style="padding: 10px 0">
+                        <!--Records counter-->
+                        <div class="main-content">
+            <span class="category text-bg-success"
+                  style="padding: 1px 5px; border-radius: 5px"
                   th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} == 1"
-                  th:text="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} + ' Record found'"
-                  class="category text-bg-success"></span>
-                    <span style="padding: 1px 5px; border-radius: 5px"
-                          th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 1"
-                          th:text="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} + ' Records found'"
-                          class="category text-bg-success"></span>
-                    <br>
-                </div>
-                <!--Add global fee button-->
-                <div th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 0">
-                    <form th:action="@{/administration/fees/addglobalfee/{id} (id=${residentialEntity.getId()})}">
-                        <button type="submit">
-                            <img title="Add monthly fee"
-                                 src="/images/add_button.png"
-                                 style="max-width: 20px;"
-                                 alt="Add monthly fee">
-                            <p>Add global fee</p>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <hr>
-
-            <p th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} == 0"
-               class="text-center">No records found</p>
-
-            <table class="table text-center" id="monthly-fees-table"
-                   th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 0">
-                <tr>
-                    <th>
-                        <p>Property №</p>
-                    </th>
-                    <th>
-                        <p>Owner</p>
-                    </th>
-                    <th>
-                        <p>Monthly fee amt.</p>
-                    </th>
-                    <th>
-                        <p>Overpaid amt. left</p>
-                    </th>
-                    <th>
-                        <p>Auto fees</p>
-                        <div style="display: flex; justify-content: center">
-                            <form th:if="${@propertyRepository.countAllPropertiesWithAutoFeeOn(residentialEntity.getId()) < residentialEntity.getProperties().size()}"
-                                  class="form-container"
-                                  th:action="@{/administration/fees/turnAllPropertiesFeesOn/{id}(id=${residentialEntity.getId()})}"
-                                  th:method="POST">
+                  th:text="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} + ' Record found'"></span>
+                            <span class="category text-bg-success"
+                                  style="padding: 1px 5px; border-radius: 5px"
+                                  th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 1"
+                                  th:text="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} + ' Records found'"></span>
+                            <br>
+                        </div>
+                        <!--Add global fee button-->
+                        <div th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 0">
+                            <form th:action="@{/administration/fees/addglobalfee/{id} (id=${residentialEntity.getId()})}">
                                 <button type="submit">
-                                    <img title="Turn all monthly fees ON"
-                                         src="/images/on.jpg"
-                                         style="width: 20px;"
-                                         alt="Turn all properties monthly fee ON">
-                                </button>
-                            </form>
-                            <form th:if="${@propertyRepository.countAllPropertiesWithAutoFeeOff(residentialEntity.getId()) < residentialEntity.getProperties().size()}"
-                                  class="form-container"
-                                  th:action="@{/administration/fees/turnAllPropertiesFeesOff/{id}(id=${residentialEntity.getId()})}"
-                                  th:method="POST">
-                                <button type="submit">
-                                    <img title="Turn all monthly fees OFF" src="/images/off.jpg" style="width: 20px;"
-                                         alt="Turn monthly fee ON">
+                                    <img alt="Add monthly fee"
+                                         src="/images/add_button.png"
+                                         style="max-width: 20px;"
+                                         title="Add monthly fee">
+                                    <p>Add global fee</p>
                                 </button>
                             </form>
                         </div>
-                    </th>
-                    <th>
-                        <p>Additional data</p>
-                    </th>
-                    <th>
-                        <p>Total due amt.</p>
-                    </th>
-                    <th>
-                        <p>View details</p>
-                    </th>
-                </tr>
-                <tr th:each="property: ${@propertyRepository.findAllPropertiesWithSetFee(residentialEntity.getId())}">
-                    <td>
-                        <p th:text="${property.getNumber()}"></p>
-                    </td>
-                    <td>
-                        <p th:if="${property.isObtained()}"
-                           th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
-                        <p th:unless="${property.isObtained()}"><i title="Not assigned"
-                                                                   class="fa-solid fa-user-large-slash text-secondary"></i>
-                        </p>
-                    </td>
-                    <td>
-                        <p th:if="${!property.isValidated()}">Waiting parametrization</p>
-                        <p th:unless="${!property.isValidated()}"
-                           th:text="${property.getTotalMonthlyFee()} + ' лв.'"></p>
-                    </td>
-                    <td th:if="${property.getOverpayment()} > 0">
-                        <p th:text="${property.getOverpayment()} + ' лв.'"></p>
-                    </td>
-                    <td th:unless="${property.getOverpayment()} > 0">
-                        <p>-</p>
-                    </td>
-                    <!--Turn on/off monthly fees buttons-->
-                    <td>
-                        <form class="form-container"
-                              th:action="@{/administration/fees/changeAutoFeeButton/{id}(id=${property.getId()})}"
-                              th:method="POST">
+                    </div>
+                    <hr>
 
-                            <div th:id="'customDialog_' + ${property.getId()}" class="custom-dialog"
-                                 style="display: none;">
-                                <p th:id="'customDialogText_' + ${property.getId()}"></p>
-                                <button class="custom-dialog-ok"
-                                        th:onclick="'closeCustomDialog(\'' + ${property.getId()} + '\')'">OK
-                                </button>
-                            </div>
+                    <p class="text-center"
+                       th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} == 0">
+                        No records found</p>
 
-                            <button th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Monthly fee switched OFF!\nTurning monthly fee OFF will deactivate the creation of periodical fees for this property.\')'"
-                                    th:if="${property.isValidated()} and ${property.isAutoFee()}"
-                                    type="button">
-                                <img title="Monthly fee is ON"
-                                     src="/images/on.jpg"
+                    <table class="table text-center" id="monthly-fees-table"
+                           th:if="${@propertyRepository.countAllPropertiesWithSetFeeByResidentialEntity(residentialEntity.getId())} > 0">
+                        <tr>
+                            <th>
+                                <p>Property №</p>
+                            </th>
+                            <th>
+                                <p>Owner</p>
+                            </th>
+                            <th>
+                                <p>Monthly fee amt.</p>
+                            </th>
+                            <th>
+                                <p>Overpaid amt. left</p>
+                            </th>
+                            <th>
+                                <p>Auto fees</p>
+                                <div style="display: flex; justify-content: center">
+                                    <form class="form-container"
+                                          th:action="@{/administration/fees/turnAllPropertiesFeesOn/{id}(id=${residentialEntity.getId()})}"
+                                          th:if="${@propertyRepository.countAllPropertiesWithAutoFeeOn(residentialEntity.getId()) < residentialEntity.getProperties().size()}"
+                                          th:method="POST">
+                                        <button type="submit">
+                                            <img alt="Turn all properties monthly fee ON"
+                                                 src="/images/on.jpg"
+                                                 style="width: 20px;"
+                                                 title="Turn all monthly fees ON">
+                                        </button>
+                                    </form>
+                                    <form class="form-container"
+                                          th:action="@{/administration/fees/turnAllPropertiesFeesOff/{id}(id=${residentialEntity.getId()})}"
+                                          th:if="${@propertyRepository.countAllPropertiesWithAutoFeeOff(residentialEntity.getId()) < residentialEntity.getProperties().size()}"
+                                          th:method="POST">
+                                        <button type="submit">
+                                            <img alt="Turn monthly fee ON" src="/images/off.jpg"
+                                                 style="width: 20px;"
+                                                 title="Turn all monthly fees OFF">
+                                        </button>
+                                    </form>
+                                </div>
+                            </th>
+                            <th>
+                                <p>Additional data</p>
+                            </th>
+                            <th>
+                                <p>Total due amt.</p>
+                            </th>
+                            <th>
+                                <p>View details</p>
+                            </th>
+                        </tr>
+                        <tr th:each="property: ${@propertyRepository.findAllPropertiesWithSetFee(residentialEntity.getId())}">
+                            <td>
+                                <p th:text="${property.getNumber()}"></p>
+                            </td>
+                            <td>
+                                <p th:if="${property.isObtained()}"
+                                   th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                                <p th:unless="${property.isObtained()}"><i
+                                        class="fa-solid fa-user-large-slash text-secondary"
+                                        title="Not assigned"></i>
+                                </p>
+                            </td>
+                            <td>
+                                <p th:if="${!property.isValidated()}">Waiting parametrization</p>
+                                <p th:text="${property.getTotalMonthlyFee()} + ' лв.'"
+                                   th:unless="${!property.isValidated()}"></p>
+                            </td>
+                            <td th:if="${property.getOverpayment()} > 0">
+                                <p th:text="${property.getOverpayment()} + ' лв.'"></p>
+                            </td>
+                            <td th:unless="${property.getOverpayment()} > 0">
+                                <p>-</p>
+                            </td>
+                            <!--Turn on/off monthly fees buttons-->
+                            <td>
+                                <form class="form-container"
+                                      th:action="@{/administration/fees/changeAutoFeeButton/{id}(id=${property.getId()})}"
+                                      th:method="POST">
+
+                                    <div class="custom-dialog" style="display: none;"
+                                         th:id="'customDialog_' + ${property.getId()}">
+                                        <p th:id="'customDialogText_' + ${property.getId()}"></p>
+                                        <button class="custom-dialog-ok"
+                                                th:onclick="'closeCustomDialog(\'' + ${property.getId()} + '\')'">OK
+                                        </button>
+                                    </div>
+
+                                    <button th:if="${property.isValidated()} and ${property.isAutoFee()}"
+                                            th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Monthly fee switched OFF!\nTurning monthly fee OFF will deactivate the creation of periodical fees for this property.\')'"
+                                            type="button">
+                                        <img alt="Monthly fee is ON"
+                                             src="/images/on.jpg"
+                                             style="width: 20px;"
+                                             title="Monthly fee is ON">
+                                    </button>
+
+                                    <button th:if="${property.isValidated()} and ${!property.isAutoFee()}"
+                                            th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Monthly fee switched ON!\nTurning monthly fee ON will activate the creation of periodical fees for this property. \n Fees will be calculated according to Residential entity fee policy..\')'"
+                                            type="button">
+                                        <img alt="Monthly fee is OFF" src="/images/off.jpg" style="width: 20px;"
+                                             title="Monthly fee is OFF">
+                                    </button>
+                                </form>
+                                <!--Attention button-->
+                                <img alt="No automatic monthly fee generation"
+                                     src="/images/attention.png"
                                      style="width: 20px;"
-                                     alt="Monthly fee is ON">
-                            </button>
-
-                            <button th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Monthly fee switched ON!\nTurning monthly fee ON will activate the creation of periodical fees for this property. \n Fees will be calculated according to Residential entity fee policy..\')'"
-                                    th:if="${property.isValidated()} and ${!property.isAutoFee()}"
-                                    type="button">
-                                <img title="Monthly fee is OFF" src="/images/off.jpg" style="width: 20px;"
-                                     alt="Monthly fee is OFF">
-                            </button>
-                        </form>
-                        <!--Attention button-->
-                        <img th:if="${!property.isValidated()}"
-                             title="No automatic monthly fee generation"
-                             src="/images/attention.png"
-                             style="width: 20px;"
-                             alt="No automatic monthly fee generation">
-                    </td>
-                    <td>
-                        <small th:if="${property.isValidated()}">-</small>
-                        <small th:if="${!property.isValidated()}"
-                               th:class="text-danger"><a
-                                class="text-danger"
-                                th:href="@{/administration/property/active/{id}#active-registrations (id=${id})}">
-                            Property status : Not ready<br>
-                            <small class="text-secondary">Please set property data to activate automatic
-                                monthly fee generation!
-                            </small></a>
-                        </small>
-                    </td>
-                    <td th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">
-                        <p class="text-danger"
-                           th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"></p>
-                    </td>
-                    <td th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">
-                        <p>0.00 лв.</p>
-                    </td>
-                    <td>
-                        <a th:href="@{/administration/fees/details/{id} (id=${property.getId()})}"><img
-                                title="View details"
-                                src="/images/magnifier.png"
-                                style="width: 20px;"
-                                alt="View details"></a>
-                    </td>
-                </tr>
-            </table>
+                                     th:if="${!property.isValidated()}"
+                                     title="No automatic monthly fee generation">
+                            </td>
+                            <td>
+                                <small th:if="${property.isValidated()}">-</small>
+                                <small th:class="text-danger"
+                                       th:if="${!property.isValidated()}"><a
+                                        class="text-danger"
+                                        th:href="@{/administration/property/active/{id}#active-registrations (id=${id})}">
+                                    Property status : Not ready<br>
+                                    <small class="text-secondary">Please set property data to activate automatic
+                                        monthly fee generation!
+                                    </small></a>
+                                </small>
+                            </td>
+                            <td th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">
+                                <p class="text-danger"
+                                   th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"></p>
+                            </td>
+                            <td th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">
+                                <p>0.00 лв.</p>
+                            </td>
+                            <td>
+                                <a th:href="@{/administration/fees/details/{id} (id=${property.getId()})}"><img
+                                        alt="View details"
+                                        src="/images/magnifier.png"
+                                        style="width: 20px;"
+                                        title="View details"></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

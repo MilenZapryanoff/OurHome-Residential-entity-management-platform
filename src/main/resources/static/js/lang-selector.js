@@ -7,7 +7,7 @@
     // Handle language selection
     function selectLanguage(lang) {
     document.getElementById('selected-lang').value = lang; // Set the selected language
-    document.querySelector('form').submit(); // Automatically submit the form
+    document.getElementById('langSelector').submit(); // Automatically submit the form
 }
 
     // Hide the dropdown if clicked outside

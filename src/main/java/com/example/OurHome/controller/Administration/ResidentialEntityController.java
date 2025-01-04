@@ -111,13 +111,21 @@ public class ResidentialEntityController {
                                                 @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ModelAndView view = resolveView(lang) ?
-                new ModelAndView("bg/administration/administration") : new ModelAndView("en/administration/administration");
+                new ModelAndView("bg/administration/administration-summary") : new ModelAndView("en/administration/administration-summary");
 
-        view.addObject("userViewModel", getUserViewModel());
+        view
+                .addObject("userViewModel", getUserViewModel())
+                .addObject("residentialEntity", getResidentialEntity(id));
 
         if (residentialEntityService.checkIfResidentialEntityDeletable(id)) {
             residentialEntityService.deleteResidentialEntity(id);
-            return view.addObject("deleted", true);
+
+            ModelAndView deletionView = resolveView(lang) ?
+                    new ModelAndView("bg/administration/administration") : new ModelAndView("en/administration/administration");
+
+            return deletionView
+                    .addObject("userViewModel", getUserViewModel())
+                    .addObject("deleted", true);
         }
         return view.addObject("notDeleted", true);
     }
@@ -143,7 +151,7 @@ public class ResidentialEntityController {
         } catch (IllegalArgumentException | IOException e) {
 
             ModelAndView view = resolveView(lang) ?
-                    new ModelAndView("bg/administration/administration") : new ModelAndView("en/administration/administration");
+                    new ModelAndView("bg/administration/administration-summary") : new ModelAndView("en/administration/administration-summary");
 
             return view
                     .addObject("userViewModel", getUserViewModel())

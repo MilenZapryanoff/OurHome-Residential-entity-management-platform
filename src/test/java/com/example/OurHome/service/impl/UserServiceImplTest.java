@@ -4,6 +4,7 @@ import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.User.ProfileEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.User.UserAuthBindingModel;
+import com.example.OurHome.repo.LanguageRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
 import com.example.OurHome.repo.RoleRepository;
 import com.example.OurHome.repo.UserRepository;
@@ -49,6 +50,8 @@ class UserServiceImplTest {
     @Mock
     private RoleRepository mockRoleRepository;
     @Mock
+    private LanguageRepository mockLanguageRepository;
+    @Mock
     private MessageService mockMessageService;
     @Mock
     private EmailService mockEmailService;
@@ -59,7 +62,7 @@ class UserServiceImplTest {
     void setUp() {
         serviceToTest = new UserServiceImpl(mockPasswordEncoder, mockModelMapper, mockUserRepository,
                 mockResidentialEntityToken, mockUserToken, mockResidentialEntityRepository, mockRoleRepository,
-                mockMessageService, mockEmailService);
+                mockMessageService, mockEmailService, mockLanguageRepository);
     }
 
 

@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/css/our-home.css">
     <link rel="stylesheet" href="/css/owl.css">
     <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 
 </head>
@@ -55,20 +56,13 @@
     </div>
 </div>
 
-<!-- ***** Monthly fees-Fees by property section ***** -->
-<div class="container">
-    <!--Start of Sub-menus-->
-    <div class="administration-nav-bar">
-        <a th:href="@{/administration}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
-        <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}">Статус</a>
-        <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Собственици</a>
-        <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">Имоти</a>
-        <a href=#>Месечни такси</a>
-        <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Отчети</a>
-        <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Настройки</a>
-        <div class="animation start-fees"></div>
+<!-- ***** Bank-details section ***** -->
+<div class="page-content">
+    <div class="menu-container">
+        <div th:replace="~{/bg/fragments/adm-submenu}"></div>
     </div>
-
+    <div class="content">
+<div class="container">
     <div class="administration">
         <!--Sub-menu buttons-->
         <div class="table-nav-section">
@@ -187,6 +181,8 @@
         </div>
     </div>
 </div>
+    </div>
+    </div>
 
 
 <!-- Footer -->

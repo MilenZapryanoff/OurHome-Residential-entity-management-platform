@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,17 +14,17 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
 </head>
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -40,30 +40,30 @@
 <div class="sub-header">
     <div class="container">
         <div class="header-container">
-            <form th:method="post" th:action="@{/setLanguage}" style="padding-right: 15px">
+            <form id="langSelector" style="padding-right: 15px" th:action="@{/setLanguage}" th:method="post">
                 <div id="dropdown">
-                    <img src="/images/bg-flag.png" alt="Български" title="Български">
+                    <img alt="Български" src="/images/bg-flag.png" title="Български">
                 </div>
                 <ul id="dropdown-menu">
-                    <li style="padding: 5px; cursor: pointer;" onclick="selectLanguage('bg')">
-                        <img src="/images/bg-flag.png" alt="Bulgarian" title="Bulgarian">
+                    <li onclick="selectLanguage('bg')" style="padding: 5px; cursor: pointer;">
+                        <img alt="Bulgarian" src="/images/bg-flag.png" title="Bulgarian">
                         <small class="text-danger-emphasis">Български</small>
                     </li>
-                    <li style="padding: 5px; cursor: pointer;" onclick="selectLanguage('en')">
-                        <img src="/images/en-flag.png" alt="English" title="English">
+                    <li onclick="selectLanguage('en')" style="padding: 5px; cursor: pointer;">
+                        <img alt="English" src="/images/en-flag.png" title="English">
                         <small>English</small>
                     </li>
                 </ul>
-                <input type="hidden" name="lang" id="selected-lang">
+                <input id="selected-lang" name="lang" type="hidden">
             </form>
             <th:block sec:authorize="isAuthenticated()">
                 <div class="avatar">
                     <button type="button">
                         <a th:href="@{/profile}">
-                            <img th:if="${loggedUser.avatarPath != null}"
-                                 th:src="@{${loggedUser.avatarPath}}" alt="Avatar">
-                            <img th:unless="${loggedUser.avatarPath != null}"
-                                 src="/avatars/default.jpg" alt="Default Avatar">
+                            <img alt="Avatar"
+                                 th:if="${loggedUser.avatarPath != null}" th:src="@{${loggedUser.avatarPath}}">
+                            <img alt="Default Avatar"
+                                 src="/avatars/default.jpg" th:unless="${loggedUser.avatarPath != null}">
                         </a>
                     </button>
                 </div>
@@ -72,12 +72,11 @@
                 </div>
             </th:block>
             <th:block sec:authorize="isAnonymous()">
-                    <p>Български език</p>
+                <p>Български език</p>
             </th:block>
         </div>
     </div>
 </div>
-
 
 <!-- ***** NavBar ***** -->
 <div th:replace="~{bg/fragments/navbar}"></div>
@@ -105,33 +104,176 @@
         </div>
     </div>
 </div>
-<!-- ***** Main Banner End ***** -->
 
-<!-- ***** Fun Facts Start ***** -->
-<div class="fun-facts">
+<!-- ***** About us ***** -->
+<div class="container">
+    <div class="section-contact">
+        <div class="text-center">
+            <a><img alt="OurMission:" src="/images/OurMission.png" style="max-width: 300px;"></a>
+        </div>
+    </div>
+    <div class="about-us">
+        <div class="col-lg-8">
+            <hr>
+            <p><b>Our</b><b class="text-danger">Home</b> е дигитална платформа създадена с цел да помага на настоящи и
+                бъдещи домоуправители на
+                етажни собствености изберали платформата за свой основен помощник! </p>
+            <p>OurHome не е домоуправител, а негов пръв приятел!</p>
+            <br>
+            <p>Всички наши усилия са насочени към това, да предоставяме напълно безплатно и свободно възможности, които
+                да улеснят работата на всеки един домоуправител, независимо от опита с който разполага.</p>
+            <br>
+            <p>За целта създадохме множество функционалности и възможности за индивидиална параметризация на всяка
+                отделна дигитална етажна собственост, чрез които по-лесно и ефективно да управлявате процесите във
+                Вашата етажна собственост.</p>
+            <br>
+            <p>Платформата е предназначена за всички домоуправители и собственици на имоти в сгради. Чрез нея всеки
+                собственик на имот може лесно и бързо да проверява всичко най-важно, случващо се в сградата, в това
+                число дължими такси, събития, сигнали за нередности и др. </p>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Our product ***** -->
+<div class="container-wrapper">
     <div class="container">
-        <div class="col-lg-12">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="counter">
-                        <h2 class="timer count-title count-number"
-                            th:data-to="${@residentialEntityRepository.count()}" data-speed="1000"></h2>
-                        <p class="count-text ">Регистрирани <br>ЕС</p>
+        <h1 class="text-center">За функционалностите</h1>
+        <div class="our-product">
+            <div class="service">
+                <i class="fa-solid fa-file-invoice-dollar text-danger-emphasis"></i>
+                <h5>Месечни такси</h5>
+                <p>Автоматично начисляване на месечни такси по имоти.</p>
+            </div>
+            <div class="service">
+                <i class="fa-regular fa-envelope text-success-emphasis"></i>
+                <h5>Съобщения</h5>
+                <p>Обмен на съобщения между домоуправител и собственици на имоти</p>
+            </div>
+            <div class="service">
+                <i class="fa-regular fa-calendar-check text-info-emphasis"></i>
+                <h5>Събития</h5>
+                <p>Създаване и известяване за събития на етажната собственост.</p>
+            </div>
+            <div class="service">
+                <i class="fa-solid fa-triangle-exclamation text-warning"></i>
+                <h5>Сигнали</h5>
+                <p>Обмен на съобщения между домоуправител и собственици на дигитални имоти</p>
+            </div>
+            <div class="service">
+                <i class="fa-solid fa-filter-circle-dollar text-info-emphasis"></i>
+                <h5>Отчети</h5>
+                <p>Достъп до информация касаеща приходи, разходи, наличности и др. на дЕС</p>
+            </div>
+            <div class="service">
+                <i class="fa-solid fa-sliders text-secondary-emphasis"></i>
+                <h5>Поребителски права</h5>
+                <p>Възможност за възлагане на допълнителни права за определени потребители в дЕС</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** FAQ ***** -->
+<div class="container">
+    <div class="faq">
+        <h1 class="text-center">Често задавани въпроси</h1>
+        <!--Question 1-->
+        <div class="accordion" id="FAQAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button aria-controls="collapseOne" aria-expanded="true" class="accordion-button collapsed"
+                            data-bs-target="#collapseOne" data-bs-toggle="collapse" type="button">
+                        <span>За кого е предназначена платформата? </span>
+                    </button>
+                </h2>
+                <div aria-labelledby="headingOne" class="accordion-collapse collapse"
+                     data-bs-parent="#accordionExample"
+                     id="collapseOne">
+                    <div class="accordion-body text-dark">
+                        <p>OurHome е предназначена, както за домоуправители, така и за собственици и живущи в дадена
+                            етажна собственост!</p>
+                        <p></p>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="counter">
-                        <!--/*@thymesVar id="MANAGER" type="text" */-->
-                        <h2 class="timer count-title count-number" th:data-to="${@propertyRepository.count()}"
-                            data-speed="1000"></h2>
-                        <p class="count-text ">Регистрирани<br>Имота</p>
+            </div>
+            <!--Question 2-->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button aria-controls="collapseOne" aria-expanded="false" class="accordion-button collapsed"
+                            data-bs-target="#collapseTwo" data-bs-toggle="collapse" type="button">
+                        <span>Какво ще ми струва регистрацията в платформата?</span>
+                    </button>
+                </h2>
+                <div aria-labelledby="headingTwo" class="accordion-collapse collapse"
+                     data-bs-parent="#FAQAccordion"
+                     id="collapseTwo">
+                    <div class="accordion-body">
+                        <b>Нищо!</b>
+                        <p>Използването на платформата е напълно безплатно и свободно за всички потребители гласували ни
+                            своето доверие!</p>
+                        <p>Стремежът ни е да запазим трайно тази концепция във времето за да можем да предоставяме
+                            услуги, които да подобрят прецесите по управление на ЕС.</p>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="counter">
-                        <h2 class="timer count-title count-number" th:data-to="${@userRepository.count()}"
-                            data-speed="1000"></h2>
-                        <p class="count-text ">Регистрирани<br>потребители</p>
+            </div>
+            <!--Question 3-->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button aria-controls="collapseTwo" aria-expanded="false" class="accordion-button collapsed"
+                            data-bs-target="#collapseThree" data-bs-toggle="collapse" type="button">
+                        <span>OurHome професинален домоуправител ли е?</span>
+                    </button>
+                </h2>
+                <div aria-labelledby="headingThree" class="accordion-collapse collapse"
+                     data-bs-parent="#FAQAccordion"
+                     id="collapseThree">
+                    <div class="accordion-body">
+                        <b>Не!</b>
+                        <p>OurHome не е професионален домоуправител или каквато и да било форма на управление на ЕС!</p>
+                        <p>Основната цел на платформата е чрез своите функционалности да се превърне в главен помощник
+                            на всеки един настоящ и бъдещ домоуправител при управлението на процесите в етажната
+                            собственост!</p>
+                    </div>
+                </div>
+            </div>
+            <!--Question 4-->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button aria-controls="collapseThree" aria-expanded="false" class="accordion-button collapsed"
+                            data-bs-target="#collapseFour" data-bs-toggle="collapse" type="button">
+                        <span>Аз съм домоуправител. Как да започна да използвам платформата?</span>
+                    </button>
+                </h2>
+                <div aria-labelledby="headingFour" class="accordion-collapse collapse"
+                     data-bs-parent="#FAQAccordion" id="collapseFour">
+                    <div class="accordion-body">
+                        <p>За да започне съществуването си една дигитална етажна собственост (дЕС) и необходимо
+                            домоуправителя да регистрира управляването от него ЕС в платформата!</p>
+                        <p>След успешна регистрацията на дЕС ще получите достъп до функционалностите, които сме създали
+                            за Вас, за да Ви помогнем с управлението на Вашата ЕС.</p>
+                        <p>След първоначалните настройки и параметризации можете да поканите собствениците/ползватели на
+                            имоти в рамките на Вашата ЕС да се регистрират в системата.</p>
+                    </div>
+                </div>
+            </div>
+            <!--Question 5-->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive">
+                    <button aria-controls="collapseThree" aria-expanded="false" class="accordion-button collapsed"
+                            data-bs-target="#collapseFive" data-bs-toggle="collapse" type="button">
+                        <span>Аз съм собственик или ползвател на имот. Как да се регистрирам?</span>
+                    </button>
+                </h2>
+                <div aria-labelledby="headingFive" class="accordion-collapse collapse"
+                     data-bs-parent="#FAQAccordion" id="collapseFive">
+                    <div class="accordion-body">
+                        <p>За да можете да се регистрирате в платформата като собственик/ползвател на дигитален имот е
+                            необходимо наличието на регистрирана дигитална етажна собственост.</p>
+                        <p>В случай, че Вашата ЕС е вече регистрирана в платформата то вероятно вече сте получили от
+                            Вашия домоуправител необходимите данни, които да Ви позволят да стартирате регистрацията си
+                            като собственик/ползвател на имот.</p>
+                        <p>В случай, че не разполагате с индетификатор на дигитална етажна собственост и код за достъп
+                            Ви препоръчваме да се свържете с Вашия домоуправител за да Ви бъдат предоставени такива.</p>
                     </div>
                 </div>
             </div>
@@ -140,6 +282,35 @@
 </div>
 
 <!-- ***** Fun Facts Start ***** -->
+<div class="container-wrapper">
+    <div class="fun-facts" th:if="${@propertyRepository.count()} > 0">
+        <div class="container">
+            <div class="col-lg-12">
+                <div class="section-heading text-center">
+                    <h1>Колко от Вас ни се довериха</h1>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h2 class="timer count-title count-number"
+                            data-speed="1000" th:data-to="${@residentialEntityRepository.count()}"></h2>
+                        <p class="count-text ">Регистрирани <br>дигитални ЕС</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <!--/*@thymesVar id="MANAGER" type="text" */-->
+                        <h2 class="timer count-title count-number" data-speed="1000"
+                            th:data-to="${@propertyRepository.count()}"></h2>
+                        <p class="count-text ">Регистрирани<br>дигитални имота</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h2 class="timer count-title count-number" data-speed="1000"
+                            th:data-to="${@userRepository.count()}"></h2>
+                        <p class="count-text">Регистрирани<br>потребителя</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- ***** Contact section Start ***** -->
 <div class="contact section-contact">
@@ -154,27 +325,27 @@
         </div>
     </div>
 </div>
-
 <div class="input-content">
     <div class="container">
         <div class="row">
             <div class="col-lg-7">
                 <div id="map">
-                    <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA4dMp6ervBxmwa9av_R4vRj-RhYx22TGg&q=Software University,Sofia,Bulgaria"
-                            width="100%" height="350px"
+                    <iframe allowfullscreen=""
+                            height="350px"
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA4dMp6ervBxmwa9av_R4vRj-RhYx22TGg&q=Software University,Sofia,Bulgaria"
                             style="border:0; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);"
-                            allowfullscreen=""></iframe>
+                            width="100%"></iframe>
                 </div>
                 <div class="row">
                     <div class="col-lg-5">
                         <div class="item phone">
-                            <img src="/images/phone-icon.png" style="max-width: 30px;" alt="Phone:">
+                            <img alt="Phone:" src="/images/phone-icon.png" style="max-width: 30px;">
                             <p><b>0886 277 333</b><br><span>мобилен</span></p>
                         </div>
                     </div>
                     <div class="col-lg-7">
                         <div class="item email">
-                            <img src="/images/email-icon.png" alt="" style="max-width: 30px;">
+                            <img alt="" src="/images/email-icon.png" style="max-width: 30px;">
                             <p><b>office.ourhome@gmail.com</b><br><span>email</span></p>
                         </div>
                     </div>
@@ -183,25 +354,22 @@
             <div class="col-lg-5">
                 <div id="input-form">
                     <div class="row">
-                        <div class="col-lg-12">
-                            <a><img src="/images/OurMission.png" style="max-width: 200px;" alt="OurMission:"></a>
-                            <hr>
-                            <p class="text-center"> OurHome е вашият портал за управление на eтажна собственост.
-                                <br>Независимо дали сте
-                                специализиран мениджър или собственик на имот, отключете силата на връзката и
-                                удобството.
-                                <br>Присъединете се към нашата платформа за достъп до информация относно Вашата ЕС,
-                                свържете се с вашата общност и
-                                рационализирайте управлението на вашия имот <br>Изживейте нова
-                                ера на живот без усилия с OurHome!</p>
-                        </div>
+                        <a><img alt="OurMission:" src="/images/OurMission.png" style="max-width: 200px;"></a>
+                        <hr>
+                        <p class="text-center"> OurHome е вашият портал за управление на eтажна собственост.
+                            <br>Независимо дали сте
+                            специализиран мениджър или собственик на имот, отключете силата на връзката и
+                            удобството.
+                            <br>Присъединете се към нашата платформа за достъп до информация относно Вашата ЕС,
+                            свържете се с вашата общност и
+                            рационализирайте управлението на вашия имот <br>Изживейте нова
+                            ера на живот без усилия с OurHome!</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- ***** Contact section End ***** -->
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">

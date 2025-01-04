@@ -75,13 +75,7 @@
             <!--Start of sub-menu-->
 
             <div class="administration-nav-bar">
-                <a th:href="@{/administration}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
-                <a href=#>Summary</a>
-                <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Owners</a>
-                <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">Properties</a>
-                <a th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">Monthly fees</a>
-                <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Reports</a>
-                <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Details</a>
+                <div th:replace="~{/en/fragments/adm-submenu}"></div>
                 <div class="animation start-summary"></div>
             </div>
 

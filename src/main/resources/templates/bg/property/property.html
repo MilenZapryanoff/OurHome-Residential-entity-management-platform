@@ -67,12 +67,12 @@
     </div>
 </div>
 
-<p th:if="${loggedUser.getProperties().size() == 0}" class="text-center" style="margin: 14em auto">Нямате регистрирани
-    имоти</p>
-
-
-<div th:if="${loggedUser.getProperties().size() > 0}" class="container">
-    <div class="properties">
+<!--Properties section start-->
+<div th:if="${loggedUser.getProperties().size() == 0}" class="properties">
+<p class="text-center" style="margin: 14em auto">Нямате регистрирани имоти</p>
+</div>
+<div th:if="${loggedUser.getProperties().size() > 0}" class="properties">
+    <div class="container">
         <div th:each="property: ${loggedUser.getProperties()}">
 
             <!--Active registration-->
@@ -172,7 +172,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">

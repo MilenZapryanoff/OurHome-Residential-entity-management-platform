@@ -390,7 +390,6 @@ Pre-loader Style
     border-radius: 50%;
 }
 
-
 /*
 ---------------------------------------------
 Profile Style
@@ -415,6 +414,16 @@ Profile Style
     flex-direction: row;
     justify-content: center;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 /*
@@ -558,6 +567,7 @@ Header Style
 .background-header .main-nav .logo h1 {
     line-height: 80px;
 }
+
 
 .header-area .main-nav ul.nav {
     flex-basis: 100%;
@@ -754,6 +764,7 @@ Header Style
 .visible {
     display: inline !important;
 }
+
 
 @media (max-width: 1200px) {
     .header-area .main-nav .nav li {
@@ -1123,19 +1134,155 @@ Fun Facts Style
 .fun-facts .counter h2 {
     margin-right: 25px;
     font-size: 40px;
-    color: #bfbfbf;
+    color: #2c2c2c;
 }
 
-.fun-facts .counter:after {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    background-color: #bfbfbf;
-    border-radius: 50%;
-    content: '';
-    right: 0;
-    top: 0;
+.count-text {
+    padding-bottom: 70px;
 }
+
+/*
+---------------------------------------------
+Index wrapper
+---------------------------------------------
+*/
+
+
+.container-wrapper {
+    background-color: rgba(152, 152, 152, 0.16);
+}
+
+.container-wrapper .container h1 {
+    padding: 20px 10px;
+}
+
+
+/*
+---------------------------------------------
+Index About us
+---------------------------------------------
+*/
+.about-us {
+    display: flex;
+    justify-content: center;
+    margin-top: 70px;
+    margin-bottom: 150px;
+}
+
+.about-us img {
+    padding: 20px;
+}
+
+.about-us p {
+    padding: 0 20px;
+    font-size: 1em;
+    text-align: justify;
+}
+
+/*
+---------------------------------------------
+Index Our product
+---------------------------------------------
+*/
+
+.our-product {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 70px 0;
+    gap: 50px;
+}
+
+.our-product .service {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 5px 10px 20px rgba(68, 68, 68, 0.5);
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 350px;
+    min-height: 450px;
+    transition: 1s;
+}
+
+.our-product .service:hover {
+    box-shadow: 5px 10px 60px rgba(68, 68, 68, 0.8);
+    transition: 1s;
+}
+
+.our-product .service i {
+    margin: 0 auto;
+    padding-top: 20px;
+    font-size: 2em;
+}
+
+.our-product .service h5 {
+    color: rgba(105, 105, 105, 0.41);
+    transition: 1.5s;
+    margin: 0 auto;
+    padding-top: 20px;
+    font-size: 1.5em;
+}
+
+.our-product .service:hover h5 {
+    transition: 1s;
+    color: rgba(0, 0, 0, 0.71);
+}
+
+.our-product .service p {
+    margin-top: 40px;
+    padding: 0 30px;
+    font-size: 1em;
+    text-align: center;
+}
+
+/*
+---------------------------------------------
+Index FAQ
+---------------------------------------------
+*/
+
+.faq {
+    padding: 70px 0;
+}
+
+.faq .accordion {
+    cursor: pointer;
+    margin-top: 60px;
+    margin-left: 0;
+    margin-right: 0;
+    --bs-accordion-bg: #ffffff;
+    --bs-accordion-border-color: none;
+    border: none !important;
+}
+
+.faq .accordion-button {
+    box-shadow: none;
+    font-size: 17px;
+    font-weight: 500;
+    color: #1e1e1e;
+}
+
+.faq .accordion-button:not(.collapsed) {
+    color: #DC3545;
+    background-color: transparent;
+    outline: none;
+    transition: 1s;
+}
+
+.faq .accordion-button::after {
+    display: none;
+}
+
+.faq b {
+    color: #7a7a7a;
+}
+
+.faq p {
+    color: #7a7a7a;
+}
+
 
 
 /*
@@ -1467,125 +1614,6 @@ Administration Style
 
 /*
 ---------------------------------------------
-Administration sub menus
----------------------------------------------
-*/
-
-.administration-nav-bar {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 20px auto 40px auto;
-    position: relative;
-    max-width: 100%;
-    padding: 0;
-    /*background-color: #a1a1a1;*/
-    background-color: #212121;
-    border-radius: 5px;
-    font-size: 0;
-    box-shadow: 5px 5px 10px rgba(68, 68, 68, 0.5);
-    border: 1px solid rgba(112, 112, 112, 0.5);
-}
-
-.administration-nav-bar a {
-    line-height: 50px;
-    font-size: 15px;
-    display: inline-block;
-    position: relative;
-    z-index: 1;
-    text-decoration: none;
-    text-align: center;
-    color: #ffffff;
-    cursor: pointer;
-}
-
-.administration-nav-bar a:hover {
-    color: white;
-    transition: all .7s ease 0s;
-}
-
-
-.administration-nav-bar .animation {
-    position: absolute;
-    height: 100%;
-    top: 0;
-    z-index: 0;
-    transition: all .5s ease 0s;
-}
-
-.administration-nav-bar a:nth-child(1) {
-    width: 10%;
-}
-
-.administration-nav-bar a:nth-child(2) {
-    width: 15%;
-}
-
-.administration-nav-bar a:nth-child(3) {
-    width: 15%;
-}
-
-.administration-nav-bar a:nth-child(4) {
-    width: 15%;
-}
-
-.administration-nav-bar a:nth-child(5) {
-    width: 15%;
-}
-
-.administration-nav-bar a:nth-child(6) {
-    width: 15%;
-}
-
-.administration-nav-bar a:nth-child(7) {
-    width: 15%;
-}
-
-.administration-nav-bar .start-back, a:nth-child(1):hover ~ .animation {
-    width: 10%;
-    left: 0;
-    background-color: #808080;
-}
-
-.administration-nav-bar .start-summary, a:nth-child(2):hover ~ .animation {
-    width: 15%;
-    left: 10%;
-    background-color: #DC3545;
-}
-
-.administration-nav-bar .start-owners, a:nth-child(3):hover ~ .animation {
-    width: 15%;
-    left: 25%;
-    background-color: #DC3545;
-}
-
-.administration-nav-bar .start-properties, a:nth-child(4):hover ~ .animation {
-    width: 15%;
-    left: 40%;
-    background-color: #DC3545;
-}
-
-.administration-nav-bar .start-fees, a:nth-child(5):hover ~ .animation {
-    width: 15%;
-    left: 55%;
-    background-color: #DC3545;
-}
-
-.administration-nav-bar .start-financial, a:nth-child(6):hover ~ .animation {
-    width: 15%;
-    left: 70%;
-    background-color: #DC3545;
-}
-
-.administration-nav-bar .start-details, a:nth-child(7):hover ~ .animation {
-    width: 15%;
-    left: 85%;
-    background-color: #DC3545;
-}
-
-
-/*
----------------------------------------------
 Property sub menus
 ---------------------------------------------
 */
@@ -1789,6 +1817,7 @@ Messages Style
     margin-top: 70px;
     background-color: #ffffff;
     padding: 100px 0;
+    min-height: 350px;
 }
 
 .messages .tabs-content .nav-link {
@@ -2215,7 +2244,7 @@ footer {
 
 footer p {
     text-align: center;
-    line-height: 100px;
+    line-height: 50px;
     color: #fff;
     font-size: 16px;
     font-weight: 400;
@@ -2241,10 +2270,11 @@ Page Header Style
 
 .page-heading {
     background-image: url(../images/page-heading-bg.jpg);
-    background-position: center bottom;
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     padding: 50px 0;
+    width: 100%;
     text-align: center;
 }
 
@@ -3264,12 +3294,13 @@ Table nav bars
 */
 
 .table-nav-section {
+    margin-top: 20px;
     width: 100%;
     display: flex;
     flex-direction: row;
+    flex-shrink: 100;
     gap: 1px;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
+    border-radius: 5px;
     overflow: hidden;
 }
 
@@ -3278,7 +3309,7 @@ Table nav bars
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    background-color: #a1a1a1;
+    background-color: #212121;
     transition: 1.2s;
 }
 
@@ -3308,11 +3339,6 @@ Table nav bars
 
 .rounded {
     border-radius: 5px;
-}
-
-.bottom-rounded {
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
 }
 
 /*custom pop-up confirmation window*/
@@ -3466,109 +3492,6 @@ body {
     }
 
 
-    .administration-nav-bar {
-        min-width: 80%;
-        flex-direction: column;
-        max-width: 50%;
-        background-color: white;
-    }
-
-    .administration-nav-bar a {
-        line-height: 27px;
-        color: black;
-    }
-
-    .administration-nav-bar .animation {
-        height: 16.66%;
-        width: 100%;
-    }
-
-    .administration-nav-bar a:nth-child(1) {
-        height: 16.66%;
-        width: 100%;
-    }
-
-    .administration-nav-bar a:nth-child(2) {
-        height: 16.66%;
-        width: 100%;
-    }
-
-    .administration-nav-bar a:nth-child(3) {
-        height: 16.66%;
-        width: 100%;
-    }
-
-    .administration-nav-bar a:nth-child(4) {
-        height: 16.66%;
-        width: 100%;
-    }
-
-    .administration-nav-bar a:nth-child(5) {
-        height: 16.66%;
-        width: 100%;
-    }
-
-    .administration-nav-bar a:nth-child(6) {
-        height: 16.66%;
-        width: 100%;
-    }
-
-    .administration-nav-bar .start-back, a:nth-child(1):hover ~ .animation {
-        background-color: #c1c1c1;
-        height: 16.66%;
-        width: 100%;
-        left: 0;
-        top: 0;
-    }
-
-    .administration-nav-bar .start-summary, a:nth-child(2):hover ~ .animation {
-        background-color: #c1c1c1;
-        height: 16.66%;
-        width: 100%;
-        left: 0;
-        top: 16.66%;
-    }
-
-    .administration-nav-bar .start-owners, a:nth-child(3):hover ~ .animation {
-        background-color: #c1c1c1;
-        height: 16.66%;
-        width: 100%;
-        left: 0;
-        top: 33.32%;
-    }
-
-    .administration-nav-bar .start-properties, a:nth-child(4):hover ~ .animation {
-        background-color: #c1c1c1;
-        height: 16.66%;
-        width: 100%;
-        left: 0;
-        top: 49.98%;
-    }
-
-    .administration-nav-bar .start-fees, a:nth-child(5):hover ~ .animation {
-        background-color: #c1c1c1;
-        height: 16.66%;
-        width: 100%;
-        left: 0;
-        top: 66.64%;
-    }
-
-    .administration-nav-bar .start-financial, a:nth-child(6):hover ~ .animation {
-        background-color: #c1c1c1;
-        height: 16.66%;
-        width: 100%;
-        left: 0;
-        top: 83.30%;
-    }
-
-    .administration-nav-bar .start-details, a:nth-child(6):hover ~ .animation {
-        background-color: #c1c1c1;
-        height: 16.66%;
-        width: 100%;
-        left: 0;
-        top: 83.30%;
-    }
-
     .property-nav-bar {
         min-width: 80%;
         flex-direction: column;
@@ -3669,7 +3592,7 @@ body {
         display: none;
     }
 
-    p, b, label, strong, a, span, li, input, button, small, h1, h3 h2, h4, h6, .text-light {
+    p, b, label, strong, span, li, input, button, small, h1, h3 h2, h4, h6, .text-light {
         font-size: 0.8em;
     }
 
@@ -3682,6 +3605,10 @@ body {
     }
 
     .footer p {
+        font-size: 0.85em;
+    }
+
+    .about-us p {
         font-size: 0.85em;
     }
 }

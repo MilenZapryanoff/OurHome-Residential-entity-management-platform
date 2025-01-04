@@ -4,6 +4,8 @@ import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.User.ProfileEditBindingModel;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,13 +32,14 @@ public class ProfileController {
      * @return resultView
      */
     @GetMapping("/profile")
-    public ModelAndView profile(ProfileEditBindingModel profileEditBindingModel,
-                                @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+    public ModelAndView profile(@CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ModelAndView view = resolveView(lang) ?
                 new ModelAndView("bg/profile") : new ModelAndView("en/profile");
 
-        return view.addObject(profileEditBindingModel);
+        view.addObject("userViewModel", getUserViewModel());
+
+        return view;
     }
 
     /**
@@ -50,7 +53,6 @@ public class ProfileController {
                                      @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         UserEntity loggedUser = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-
 
 
         try {
@@ -88,6 +90,15 @@ public class ProfileController {
         return new ModelAndView("redirect:/profile");
     }
 
+    @PostMapping("/setSystemMessagesLanguage")
+    public ModelAndView setSystemMessagesLanguage(@RequestParam("lang") String lang) {
+
+        userService.setSystemMessagesLanguage(lang, getUserViewModel());
+
+        return new ModelAndView("redirect:/profile");
+    }
+
+
     @GetMapping("/profile/edit/{id}")
     @PreAuthorize("@securityService.checkProfileEditAccess(#id, authentication)")
     public ModelAndView profileEdit(@PathVariable("id") Long id,
@@ -98,6 +109,9 @@ public class ProfileController {
 
         return view.addObject("profileEditBindingModel", userService.getProfileEditBindingModel(id));
     }
+
+
+
 
     /**
      * User edit request

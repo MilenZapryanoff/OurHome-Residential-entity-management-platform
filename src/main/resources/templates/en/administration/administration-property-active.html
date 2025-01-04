@@ -60,13 +60,7 @@
 <div class="container">
     <!--Start of sub-menu-->
     <div class="administration-nav-bar">
-        <a th:href="@{/administration}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
-        <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}">Summary</a>
-        <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Owners</a>
-        <a href=#>Properties</a>
-        <a th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">Monthly fees</a>
-        <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Reports</a>
-        <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Details</a>
+        <div th:replace="~{/en/fragments/adm-submenu}"></div>
         <div class="animation start-properties"></div>
     </div>
 
@@ -149,8 +143,11 @@
                     <th class="gray-field">
                         <p>Owner control</p>
                     </th>
+                    <th>
+                        <p>Category</p>
+                    </th>
                     <th th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
-                        <p>Property Type</p>
+                        <p>Type</p>
                     </th>
                     <th>
                         <p>Floor</p>
@@ -179,7 +176,7 @@
                         <p th:text="${property.getNumber()}"></p>
                     </td>
                     <td>
-                        <i class="fa-regular fa-circle-check text-success help"
+                        <i class="fa-solid fa-circle-check text-success help"
                            th:if="${property.isValidated() and property.getPropertyRegisterRequest() == null and (property.getPropertyChangeRequest() == null or property.getPropertyChangeRequest().isRejected() == true )}"
                            title="Status OK"></i>
                         <form class="form-container" th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
@@ -276,6 +273,10 @@
                         </form>
                         <p th:if="${property.getOwner()} == null">-</p>
                     </td>
+                    <td>
+                        <p th:if="${property.getPropertyClass() != null}" th:text="${property.getPropertyClass().getName()}"></p>
+                        <p th:if="${property.getPropertyClass() == null}">-</p>
+                    </td>
                     <td th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
                         <p th:if="${property.getPropertyType()} != null"
                            th:text="${property.getPropertyType().getDescription()}"></p>
@@ -298,10 +299,10 @@
                         <p th:unless="${!property.isNotHabitable()}">-</p>
                     </td>
                     <td th:if="${property.isValidated()}">
-                        <i class="fa-solid fa-house-chimney help text-danger"
+                        <i class="fa-regular fa-xmark-circle help text-danger"
                            th:if="${property.isNotHabitable()}"
                            title="Property is not habitable"></i>
-                        <i class="fa-solid fa-house-chimney-user text-success-emphasis help"
+                        <i class="fa-regular fa-check-circle text-success-emphasis help"
                            th:unless="${property.isNotHabitable()}"
                            title="Property is habitable"></i>
                     </td>

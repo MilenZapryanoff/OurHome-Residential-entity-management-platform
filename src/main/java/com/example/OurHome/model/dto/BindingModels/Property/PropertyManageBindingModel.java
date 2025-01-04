@@ -1,9 +1,13 @@
 package com.example.OurHome.model.dto.BindingModels.Property;
 
+import com.example.OurHome.model.Entity.PropertyClass;
+
 public class PropertyManageBindingModel {
 
     private Long propertyId;
+
     private Long entityId;
+
     private String action;
 
     public PropertyManageBindingModel() {
@@ -31,5 +35,16 @@ public class PropertyManageBindingModel {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    private PropertyClass propertyClass;
+
+
+    public PropertyClass getPropertyClass() {
+        return propertyClass;
+    }
+
+    public void setPropertyClass(PropertyClass propertyClass) {
+        this.propertyClass = propertyClass;
     }
 }

@@ -37,6 +37,8 @@ class PropertyFeeServiceImplTestIT {
     private PropertyFeeRepository propertyFeeRepository;
     @Autowired
     private PropertyRepository propertyRepository;
+    @Autowired
+    private LanguageRepository languageRepository;
 
     @BeforeEach
     void setUp() {
@@ -308,6 +310,8 @@ class PropertyFeeServiceImplTestIT {
     private UserEntity getManager() {
         UserEntity manager = new UserEntity();
         Role role = roleRepository.findRoleByName("MANAGER");
+        Language language = languageRepository.findLanguageByDescription("bulgarian");
+
         roleRepository.save(role);
         manager.setEmail("test@test.test");
         manager.setFirstName("Test");
@@ -317,6 +321,7 @@ class PropertyFeeServiceImplTestIT {
         manager.setPhoneNumber("0777777777");
         manager.setRegistrationDateTime(LocalDateTime.now());
         manager.setRole(role);
+        manager.setLanguage(language);
         userRepository.save(manager);
         return manager;
     }

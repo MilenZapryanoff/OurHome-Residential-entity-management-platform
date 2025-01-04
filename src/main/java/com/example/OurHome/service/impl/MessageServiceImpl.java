@@ -18,6 +18,16 @@ import java.util.List;
 @Service
 public class MessageServiceImpl implements MessageService {
 
+    private static final String WELCOME_MSG_USER_BG = "Благодарим Ви, за регистрацията в платформата OurHome! За да получите достъп до Вашата дигитална етажна собственост първо трябва да се регистрирате, като собственик на имот. След като Вашата регистрация бъде завършена ще получите пълен достъп до наличната информация!";
+    private static final String WELCOME_MSG_USER_ENG = "Thanks for your registration! To access your digital residential entity data you should first add a property. After your residential entity manager verifies your request you will get full access.";
+    private static final String PENDING_REGISTRATION_BG = "Нова заявка за регистрация на дигитален имот, която изисква верификация от Ваша страна! Можете да достъпите заявката през меню Администрация -> Потребители -> Чакащи заявки";
+    private static final String PENDING_REGISTRATION_ENG = "New digital property registration needs you verification! You can access the request via Administration panel";
+    private static final String SUCCESS_REGISTRATION_BG = "Нова успешна регистрация на имот във Вашата дигитална етажна собственост! Заявката не изисква допълнителна верификация от Ваша страна!";
+    private static final String SUCCESS_REGISTRATION_ENG = "New successful digital property registration!. Request is auto-confirmed as there is no data change in the registration request.No action needed from your side!";
+    private static final String PROMOTED_MODERATOR_BG = "Вие получихте роля Модератор на етажна собственост. Този достъп Ви осигурява достъп до допълнителна информация и функционалности свързани с Вашата дигитална етажна собственост!";
+    private static final String PROMOTED_MODERATOR_ENG = "You have been promoted as Moderator of Residential entity. You can access all the data related to this Residential entity via the Administration section!";
+
+
     private final MessageRepository messageRepository;
 
     public MessageServiceImpl(MessageRepository messageRepository) {
@@ -29,16 +39,26 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void sendRegistrationMessageToUser(UserEntity userEntity) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "Thanks for your registration! To access your residential entity data you should first" +
-                                " add a property. After your residential entity manager verifies your request " +
-                                "you will get full access.",
-                        userEntity,
-                        false,
-                        false));
+
+        Message message = createMessage();
+        message.setReceiver(userEntity);
+
+        if (userEntity.getLanguage().getDescription().equals("bulgarian")) {
+            message.setText("Здравейте, " + userEntity.getFirstName() + "! " + WELCOME_MSG_USER_BG);
+        } else if (userEntity.getLanguage().getDescription().equals("english")) {
+            message.setText("Hello, " + userEntity.getFirstName() + "! " + WELCOME_MSG_USER_ENG);
+        }
+
+        messageRepository.save(message);
+    }
+
+    private static Message createMessage() {
+        Message message = new Message();
+        message.setDate(LocalDate.now());
+        message.setTime(Time.valueOf(LocalTime.now()));
+        message.setRead(false);
+        message.setArchived(false);
+        return message;
     }
 
     /**
@@ -47,15 +67,21 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void propertyPendingRegistrationMessageToManager(ResidentialEntity residentialEntity) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "New property registration in Residential entity ID: "
-                                + residentialEntity.getId() + ". You can access the request via Administration panel",
-                        residentialEntity.getManager(),
-                        false,
-                        false));
+
+
+        Message message = createMessage();
+
+        UserEntity manager = residentialEntity.getManager();
+        message.setReceiver(manager);
+
+        if (manager.getLanguage().getDescription().equals("bulgarian")) {
+            message.setText("Етажна собственост " + residentialEntity.getId() + ": " +  PENDING_REGISTRATION_BG);
+        } else if (manager.getLanguage().getDescription().equals("english")) {
+            message.setText("Residential entity " + residentialEntity.getId() + ": " +  PENDING_REGISTRATION_ENG);
+            message.setText(PENDING_REGISTRATION_ENG);
+        }
+
+        messageRepository.save(message);
     }
 
     /**
@@ -64,15 +90,20 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void propertyRegistrationMessageToManager(ResidentialEntity residentialEntity) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "New property registration in Residential entity ID: "
-                                + residentialEntity.getId() + ". Request is auto-confirmed as there is no data change in the registration request.\nNo action needed from your side! ",
-                        residentialEntity.getManager(),
-                        false,
-                        false));
+
+        Message message = createMessage();
+
+        UserEntity manager = residentialEntity.getManager();
+        message.setReceiver(manager);
+
+        if (manager.getLanguage().getDescription().equals("bulgarian")) {
+
+            message.setText("Етажна собственост " + residentialEntity.getId() + ": " +  SUCCESS_REGISTRATION_BG);
+        } else if (manager.getLanguage().getDescription().equals("english")) {
+            message.setText("Residential entity " + residentialEntity.getId() + ": " +  SUCCESS_REGISTRATION_ENG);
+        }
+
+        messageRepository.save(message);
     }
 
     /**
@@ -115,15 +146,17 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void newModeratorMessage(UserEntity userEntity, ResidentialEntity residentialEntity) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "You have been promoted as Moderator of Residential entity ID: "
-                                + residentialEntity.getId() + ". You can access all the data related to this Residential entity via the Administration section",
-                        userEntity,
-                        false,
-                        false));
+
+        Message message = createMessage();
+
+        UserEntity manager = residentialEntity.getManager();
+        message.setReceiver(userEntity);
+        if (userEntity.getLanguage().getDescription().equals("bulgarian")) {
+            message.setText("Здравейте, " + userEntity.getFirstName() + "! " + PROMOTED_MODERATOR_BG);
+        } else if (userEntity.getLanguage().getDescription().equals("english")) {
+            message.setText("Hello, " + userEntity.getFirstName() + "! " + PROMOTED_MODERATOR_ENG);
+        }
+        messageRepository.save(message);
     }
 
     /**

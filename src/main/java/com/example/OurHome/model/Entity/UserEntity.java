@@ -33,6 +33,10 @@ public class UserEntity {
     @Column
     private String phoneNumber;
 
+    @NotNull
+    @ManyToOne
+    private Language language;
+
     private String avatarPath;
 
     @Email
@@ -229,5 +233,13 @@ public class UserEntity {
 
     public void setPropertyRegisterRequests(List<PropertyRegisterRequest> propertyRegisterRequests) {
         this.propertyRegisterRequests = propertyRegisterRequests;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(@NotNull Language language) {
+        this.language = language;
     }
 }

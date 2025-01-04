@@ -8,13 +8,17 @@ import java.util.List;
 
 @Entity(name = "cities")
 public class City {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Enumerated(EnumType.STRING)
     private CityName name;
+
     @Column(nullable = false)
     private String country;
+
     @OneToMany(mappedBy = "city")
     private List<ResidentialEntity> residentialEntity;
 
