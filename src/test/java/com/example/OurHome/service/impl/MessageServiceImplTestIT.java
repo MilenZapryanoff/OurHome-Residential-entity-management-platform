@@ -2,10 +2,7 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.*;
 import com.example.OurHome.model.enums.CityName;
-import com.example.OurHome.repo.CityRepository;
-import com.example.OurHome.repo.MessageRepository;
-import com.example.OurHome.repo.RoleRepository;
-import com.example.OurHome.repo.UserRepository;
+import com.example.OurHome.repo.*;
 import com.example.OurHome.service.MessageService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +37,8 @@ class MessageServiceImplTestIT {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private LanguageRepository languageRepository;
 
     @BeforeEach
     void setUp() {
@@ -359,6 +358,8 @@ class MessageServiceImplTestIT {
     private UserEntity createTestOwner() {
         Role role = roleRepository.findRoleByName("RESIDENT");
         roleRepository.save(role);
+        Language language = languageRepository.findLanguageByDescription("bulgarian");
+        languageRepository.save(language);
 
         UserEntity user = new UserEntity();
         user.setEmail("test@mail.bg");
@@ -369,6 +370,7 @@ class MessageServiceImplTestIT {
         user.setPhoneNumber("0666666666");
         user.setRegistrationDateTime(LocalDateTime.now());
         user.setRole(role);
+        user.setLanguage(language);
         userRepository.save(user);
         return user;
     }
@@ -377,6 +379,8 @@ class MessageServiceImplTestIT {
         UserEntity manager = new UserEntity();
         Role role = roleRepository.findRoleByName("MANAGER");
         roleRepository.save(role);
+        Language language = languageRepository.findLanguageByDescription("bulgarian");
+        languageRepository.save(language);
         manager.setEmail("test@test.test");
         manager.setFirstName("Test");
         manager.setLastName("Test");
@@ -385,6 +389,7 @@ class MessageServiceImplTestIT {
         manager.setPhoneNumber("0777777777");
         manager.setRegistrationDateTime(LocalDateTime.now());
         manager.setRole(role);
+        manager.setLanguage(language);
         userRepository.save(manager);
         return manager;
     }

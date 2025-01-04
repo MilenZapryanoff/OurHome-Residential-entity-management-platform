@@ -1,9 +1,6 @@
 package com.example.OurHome.model.dto.ViewModels;
 
-import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.model.Entity.Message;
-import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.Role;
+import com.example.OurHome.model.Entity.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,6 +21,7 @@ public class UserViewModel {
     private List<Message> messages;
     private Role role;
     private boolean validated;
+    private Language language;
 
     private String avatarPath;
 
@@ -143,5 +141,13 @@ public class UserViewModel {
 
     public void setRegistrationDateTime(LocalDateTime registrationDateTime) {
         this.registrationDateTime = registrationDateTime;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 }

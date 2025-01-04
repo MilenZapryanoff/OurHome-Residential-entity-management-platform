@@ -1,10 +1,11 @@
 package com.example.OurHome.init;
 
+import com.example.OurHome.model.Entity.Language;
 import com.example.OurHome.model.Entity.Role;
 import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.repo.LanguageRepository;
 import com.example.OurHome.repo.RoleRepository;
 import com.example.OurHome.repo.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -18,12 +19,16 @@ public class AdminInit implements CommandLineRunner {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleInit roleInit;
+    private final LanguageInit languageInit;
+    private final LanguageRepository languageRepository;
 
-    public AdminInit(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, RoleInit roleInit) {
+    public AdminInit(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, RoleInit roleInit, LanguageInit languageInit, LanguageRepository languageRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleInit = roleInit;
+        this.languageInit = languageInit;
+        this.languageRepository = languageRepository;
     }
 
     /**
@@ -40,6 +45,10 @@ public class AdminInit implements CommandLineRunner {
         roleInit.roleInitialization();
         Role role = roleRepository.findRoleByName("ADMIN");
 
+        //Language initialization
+        languageInit.languageInitialization();
+        Language language = languageRepository.findLanguageByDescription("bulgarian");
+
         if (userRepository.countAllByRole(role) == 0) {
             UserEntity admin = new UserEntity();
 
@@ -53,6 +62,7 @@ public class AdminInit implements CommandLineRunner {
             admin.setPassword(passwordEncoder.encode("${OurHome.remember.me.key}"));
             admin.setValidated(true);
             admin.setRole(role);
+            admin.setLanguage(language);
             userRepository.save(admin);
         }
     }

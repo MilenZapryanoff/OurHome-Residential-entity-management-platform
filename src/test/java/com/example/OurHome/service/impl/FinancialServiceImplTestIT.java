@@ -1,9 +1,6 @@
 package com.example.OurHome.service.impl;
 
-import com.example.OurHome.model.Entity.Expense;
-import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.Role;
-import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.Entity.*;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseFilterBindingModel;
@@ -44,6 +41,8 @@ class FinancialServiceImplTestIT {
 
     @Autowired
     private CityRepository cityRepository;
+    @Autowired
+    private LanguageRepository languageRepository;
 
     @BeforeEach
     void setUp() {
@@ -235,6 +234,9 @@ class FinancialServiceImplTestIT {
         UserEntity manager = new UserEntity();
         Role role = roleRepository.findRoleByName("MANAGER");
         roleRepository.save(role);
+        Language language = languageRepository.findLanguageByDescription("bulgarian");
+        languageRepository.save(language);
+
         manager.setEmail("test@test.test");
         manager.setFirstName("Test");
         manager.setLastName("Test");
@@ -243,6 +245,7 @@ class FinancialServiceImplTestIT {
         manager.setPhoneNumber("0777777777");
         manager.setRegistrationDateTime(LocalDateTime.now());
         manager.setRole(role);
+        manager.setLanguage(language);
         userRepository.save(manager);
         return manager;
     }

@@ -82,6 +82,21 @@
                                th:errorclass="bg-danger"
                                th:value="${propertyEditBindingModel.getNumber()}">
                     </fieldset>
+                    <fieldset>
+                        <label for="propertyTypeId"><b>Category</b></label>
+                        <select class="form-control" id="propertyClassId"
+                                th:field="*{propertyClass}">
+                            <option th:if="${propertyEditBindingModel.getPropertyClass() == null}" th:value="''"
+                                    th:text="'---'"></option>
+                            <option th:each="propertyClass : ${@propertyClassRepository.findAll()}"
+                                    th:value="${propertyClass.getId()}"
+                                    th:text="${propertyClass.name}">
+                            </option>
+                            <option th:if="${propertyEditBindingModel.getPropertyClass() != null}" th:value="''"
+                                    th:text="'---'"></option>
+                        </select>
+                        <br>
+                    </fieldset>
                     <fieldset th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0}">
                         <label for="propertyTypeId"><b>Property type</b></label>
                         <select class="form-control" id="propertyTypeId"

@@ -146,6 +146,24 @@
                                 <li class="text-black"><b>Account created on:</b>
                                     <p th:text="${#temporals.format(loggedUser.getRegistrationDateTime(), 'dd.MM.yyyy, HH:mm')}"></p>
                                 </li>
+                                <li class="text-black"><b>Preferred language for system messages:</b>
+                                    <form id="langSelector" th:method="POST" th:action="@{/setSystemMessagesLanguage}" style="padding-right: 15px">
+                                        <div id="dropdown">
+                                            <img th:if="${userViewModel.getLanguage().getDescription() == 'bulgarian'}" src="/images/bg-flag.png" alt="Български" title="Български">
+                                            <img th:if="${userViewModel.getLanguage().getDescription() == 'english'}" src="/images/en-flag.png" alt="English" title="English">
+                                        </div>
+                                        <ul id="dropdown-menu">
+                                            <li style="padding: 5px; cursor: pointer;" onclick="selectLanguage('bg')">
+                                                <img src="/images/bg-flag.png" alt="Bulgarian" title="Bulgarian">
+                                                <small class="text-danger-emphasis">Български</small>
+                                            </li>
+                                            <li style="padding: 5px; cursor: pointer;" onclick="selectLanguage('en')">
+                                                <img src="/images/en-flag.png" alt="English" title="English">
+                                                <small class="text-dark">English</small>
+                                            </li>
+                                        </ul>
+                                        <input type="hidden" name="lang" id="selected-lang">
+                                    </form>
                                 </li>
                             </ul>
                         </div>
@@ -191,6 +209,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/avatar.js" defer></script>
+<script src="/js/lang-selector.js"></script>
 
 </body>
 </html>

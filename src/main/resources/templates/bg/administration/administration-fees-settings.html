@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,19 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +38,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -52,268 +52,277 @@
     </div>
 </div>
 
-
-<!-- ***** Monthly fees-Residential entity fees section ***** -->
-<div class="container">
-    <!--Start of Sub-menus-->
-    <div class="administration-nav-bar">
-        <a th:href="@{/administration}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
-        <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}">Статус</a>
-        <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Собственици</a>
-        <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">Имоти</a>
-        <a href=#>Месечни такси</a>
-        <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Отчети</a>
-        <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Настройки</a>
-        <div class="animation start-fees"></div>
+<!-- ***** Property Fees section ***** -->
+<div class="page-content">
+    <div class="menu-container">
+        <div th:replace="~{/bg/fragments/adm-submenu}"></div>
     </div>
-
-    <div class="administration">
-        <!--Start of Sub-menu-buttons-->
-        <div class="table-nav-section">
-            <a class="button nav-link"
-               th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
-                <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Fees by property</span>
+    <div class="content">
+        <div class="container">
+            <div class="administration">
+                <!--Start of Sub-menu-buttons-->
+                <div class="table-nav-section">
+                    <a class="button nav-link"
+                       th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i>
+                            <span>Fees by property</span>
+                        </div>
+                    </a>
+                    <a class="button nav-link active"
+                       href=#re-fees>
+                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Residential entity fees</span>
+                        </div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/fees/bank-details/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-landmark"></i> <span>Bank details</span></div>
+                    </a>
                 </div>
-            </a>
-            <a class="button nav-link active"
-               href=#re-fees>
-                <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Residential entity fees</span>
-                </div>
-            </a>
-            <a class="button nav-link"
-               th:href="@{/administration/fees/bank-details/{id}(id=${residentialEntity.getId()})}">
-                <div class="text-center"><i class="fa-solid fa-landmark"></i> <span>Bank details</span></div>
-            </a>
-        </div>
-        <!--Start of RE fee settings-->
-        <div class="info-table bottom-rounded">
-            <!--Fee section info table heading-->
-            <div class="text-center" id="re-fees">
-                <h4 class="text-danger">RESIDENTIAL ENTITY FEES</h4>
-                <p style="padding-bottom: 40px">This section contains data about the accepted by the residential entity
-                    monthly
-                    fee policy.<br>
-                    Monthly fees will be automatically calculated according to the values in the listed fields.<br>
-                    Changes will take effect immediately after change.</p>
-            </div>
-
-            <!--Fee section info table-->
-            <div class="row">
-                <!--Section-A-->
-                <div class="col-lg-6">
-                    <div class="info-table">
-                        <h5 id="post-nav" class="text-danger text-center">FUND "MANAGEMENT & MAINTENANCE"</h5>
-                        <ul class="fee-table">
-                            <li class="text-black"><b>1.</b> Fixed property fee
-                                <p class="text-secondary">Monthly fee applied to every single property.</p>
-                                <div class="text-black inline"><b>A.</b> habitable property:
-                                    <div class="info-box">
-                                        <i th:text="${residentialEntity.getFee().getFixedFeeHabitable()} + ' лв.'"></i>
-                                    </div>
-                                </div>
-                                <div class="text-black inline"><b>B.</b> non-habitable property:
-                                    <div class="info-box">
-                                        <i th:text="${residentialEntity.getFee().getFixedFeeNonHabitable()} + ' лв.'"></i>
-                                    </div>
-                                </div>
-                                <p class="text-secondary"><i class="fa-solid fa-house"></i><small> applies per
-                                    property</small></p>
-                            </li>
-                            <li class="text-black"><b>2.</b> Adult fee:
-                                <div class="info-box" style="font-size: 0.9em">
-                                    <i th:text="${residentialEntity.getFee().getAdultFee()} + ' лв.'"></i>
-                                </div>
-                                <p class="text-secondary">Monthly fee for each adult person living in the property.</p>
-                                <p class="text-secondary"><i class="fa-solid fa-person"></i><small> applies per
-                                    adult</small></p>
-                            </li>
-                            <li class="text-black"><b>3.</b> Child fee:
-                                <div class="info-box" style="font-size: 0.9em">
-                                    <i th:text="${residentialEntity.getFee().getChildFee()} + ' лв.'"></i>
-                                </div>
-                                <p class="text-secondary">Monthly fee for each child living in the property.</p>
-                                <p class="text-secondary"><i class="fa-solid fa-child"></i><small> applies per
-                                    child</small>
-                                </p>
-                            </li>
-                            <li class="text-black"><b>4.</b> Pet fee:
-                                <div class="info-box" style="font-size: 0.9em">
-                                    <i th:text="${residentialEntity.getFee().getPetFee()} + ' лв.'"></i>
-                                </div>
-                                <p class="text-secondary">Monthly fee for a pet living in the property.</p>
-                                <p class="text-secondary"><i class="fa-solid fa-dog"></i><small> applies per pet</small>
-                                </p>
-                            </li>
-                            <li class="text-black"><b>5.</b> Custom property fee
-                                <p class="text-secondary">Custom fee applied to every single property.</p>
-                                <div class="text-black inline"><b>A.</b> habitable property:
-                                    <div class="info-box">
-                                        <i th:text="${residentialEntity.getFee().getAdditionalFeeHabitable()} + ' лв.'"></i>
-                                    </div>
-                                </div>
-                                <div class="text-black inline"><b>B.</b> non-habitable property:
-                                    <div class="info-box">
-                                        <i th:text="${residentialEntity.getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></i>
-                                    </div>
-                                </div>
-                                <p class="text-secondary"><i class="fa-solid fa-house"></i><small> applies per
-                                    property</small></p>
-                            </li>
-                            <li class="text-danger"><i class="fa-solid fa-info-circle"></i> Forming an individual
-                                property
-                                fee:
-                                <p class="text-secondary">Fund "Management and maintenance" is a fund that covers
-                                    monthly
-                                    expenses of the Residential entity.
-                                    This fund is usually formed by monthly fees of both habitable and non-habitable
-                                    properties.
-                                    <br>Every Residential entity defines its own fee policy. In this section you can
-                                    define
-                                    the fee components
-                                    according to your Residential entity fee policy. Set fees will automatically apply
-                                    to
-                                    all individual properties in this residential entity.
-                                </p>
-                            </li>
-                        </ul>
+                <!--Start of RE fee settings-->
+                <div class="info-table bottom-rounded">
+                    <!--Fee section info table heading-->
+                    <div class="text-center" id="re-fees">
+                        <h4 class="text-danger">RESIDENTIAL ENTITY FEES</h4>
+                        <p style="padding-bottom: 40px">This section contains data about the accepted by the residential
+                            entity
+                            monthly
+                            fee policy.<br>
+                            Monthly fees will be automatically calculated according to the values in the listed
+                            fields.<br>
+                            Changes will take effect immediately after change.</p>
                     </div>
-                </div>
-                <!--Section-B-->
-                <div class="col-lg-6">
-                    <div class="info-table">
-                        <h5 class="text-danger text-center">FUND "REPAIR" <i class="fa-solid fa-screwdriver-wrench"></i>
-                        </h5>
-                        <ul class="fee-table">
-                            <li class="text-black"><b>6.</b> Fixed 'Fund Repair' fee
-                                <p class="text-secondary">Monthly fee applied to every property with no custom property
-                                    type set.</p>
-                                <div class="frame">
-                                    <div class="text-black inline"><b>A.</b> habitable property:
-                                        <div class="info-box">
-                                            <i th:text="${residentialEntity.getFee().getFundRepairHabitable()} + ' лв.'"></i>
-                                        </div>
-                                        <div class="property-counter">
-                                            <p class="text-secondary" style="font-size: 0.8em"
-                                               th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 0}">
-                                                No properties in this category.
-                                            </p>
-                                            <p class="text-danger" style="font-size: 0.8em"
-                                               th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 1}">
-                                                1 property in this category.
-                                            </p>
-                                            <p class="text-danger" style="font-size: 0.8em"
-                                               th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) > 1}"
-                                               th:text="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId())} + ' properties in this category.'">
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="text-black inline"><b>B.</b> non-habitable property:
-                                        <div class="info-box">
-                                            <i th:text="${residentialEntity.getFee().getFundRepairNonHabitable()} + ' лв.'"></i>
-                                        </div>
-                                        <div class="property-counter">
-                                            <p class="text-secondary" style="font-size: 0.8em"
-                                               th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 0}">
-                                                No properties in this category.
-                                            </p>
-                                            <p class="text-danger" style="font-size: 0.8em"
-                                               th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 1}">
-                                                1 property in this category.
-                                            </p>
-                                            <p class="text-danger" style="font-size: 0.8em"
-                                               th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) > 1}"
-                                               th:text="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId())} + ' properties in this category.'">
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-secondary"><i class="fa-solid fa-house"></i><small> applies per
-                                    property</small></p>
-                            </li>
 
-                            <li th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}"
-                                class="text-black"><b>7.</b> 'Fund Repair' fee by property type
-                                <p class="text-secondary">'Fund Repair' fee applied according to the property type
-                                    set.</p>
-                                <div class="frame">
-
-                                    <div th:each="propertyType: ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}"
-                                         class="text-black inline">
-                                        <i class="fa-solid fa-city"></i>
-                                        <b th:text="${propertyType.getDescription()} + ', '"></b>
-                                        <b th:text="${propertyType.getTotalFlatSpace()} + 'm2'"></b>
-                                        <div class="section" style="padding: 3px 15px">
-                                            <span><b>A.</b> habitable property</span>
+                    <!--Fee section info table-->
+                    <div class="row">
+                        <!--Section-A-->
+                        <div class="col-lg-6">
+                            <div class="info-table">
+                                <h5 class="text-danger text-center" id="post-nav">FUND "MANAGEMENT & MAINTENANCE"</h5>
+                                <ul class="fee-table">
+                                    <li class="text-black"><b>1.</b> Fixed property fee
+                                        <p class="text-secondary">Monthly fee applied to every single property.</p>
+                                        <div class="text-black inline"><b>A.</b> habitable property:
                                             <div class="info-box">
-                                                <i th:text="${propertyType.getFundRepairHabitable()} + ' лв.'"></i>
-                                            </div>
-                                            <div class="property-counter">
-                                                <p class="text-secondary" style="font-size: 0.8em"
-                                                   th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) == 0}">
-                                                    No properties in this category.
-                                                </p>
-                                                <p class="text-danger" style="font-size: 0.8em"
-                                                   th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) == 1}">
-                                                    1 property in this category.
-                                                </p>
-                                                <p class="text-danger" style="font-size: 0.8em"
-                                                   th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) > 1}"
-                                                   th:text="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType)} + ' properties in this category.'">
-                                                </p>
+                                                <i th:text="${residentialEntity.getFee().getFixedFeeHabitable()} + ' лв.'"></i>
                                             </div>
                                         </div>
-
-                                        <div class="section" style="padding: 3px 15px">
-                                            <span><b>B.</b> non-habitable property</span>
+                                        <div class="text-black inline"><b>B.</b> non-habitable property:
                                             <div class="info-box">
-                                                <i th:text="${propertyType.getFundRepairNotHabitable()} + ' лв.'"></i>
-                                            </div>
-                                            <div class="property-counter">
-                                                <p class="text-secondary" style="font-size: 0.8em"
-                                                   th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) == 0}">
-                                                    No properties in this category.
-                                                </p>
-                                                <p class="text-danger" style="font-size: 0.8em"
-                                                   th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) == 1}">
-                                                    1 property in this category.
-                                                </p>
-                                                <p class="text-danger" style="font-size: 0.8em"
-                                                   th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) > 1}"
-                                                   th:text="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType)} + ' properties in this category.'">
-                                                </p>
+                                                <i th:text="${residentialEntity.getFee().getFixedFeeNonHabitable()} + ' лв.'"></i>
                                             </div>
                                         </div>
+                                        <p class="text-secondary"><i class="fa-solid fa-house"></i><small> applies per
+                                            property</small></p>
+                                    </li>
+                                    <li class="text-black"><b>2.</b> Adult fee:
+                                        <div class="info-box" style="font-size: 0.9em">
+                                            <i th:text="${residentialEntity.getFee().getAdultFee()} + ' лв.'"></i>
+                                        </div>
+                                        <p class="text-secondary">Monthly fee for each adult person living in the
+                                            property.</p>
+                                        <p class="text-secondary"><i class="fa-solid fa-person"></i><small> applies per
+                                            adult</small></p>
+                                    </li>
+                                    <li class="text-black"><b>3.</b> Child fee:
+                                        <div class="info-box" style="font-size: 0.9em">
+                                            <i th:text="${residentialEntity.getFee().getChildFee()} + ' лв.'"></i>
+                                        </div>
+                                        <p class="text-secondary">Monthly fee for each child living in the property.</p>
+                                        <p class="text-secondary"><i class="fa-solid fa-child"></i><small> applies per
+                                            child</small>
+                                        </p>
+                                    </li>
+                                    <li class="text-black"><b>4.</b> Pet fee:
+                                        <div class="info-box" style="font-size: 0.9em">
+                                            <i th:text="${residentialEntity.getFee().getPetFee()} + ' лв.'"></i>
+                                        </div>
+                                        <p class="text-secondary">Monthly fee for a pet living in the property.</p>
+                                        <p class="text-secondary"><i class="fa-solid fa-dog"></i><small> applies per
+                                            pet</small>
+                                        </p>
+                                    </li>
+                                    <li class="text-black"><b>5.</b> Custom property fee
+                                        <p class="text-secondary">Custom fee applied to every single property.</p>
+                                        <div class="text-black inline"><b>A.</b> habitable property:
+                                            <div class="info-box">
+                                                <i th:text="${residentialEntity.getFee().getAdditionalFeeHabitable()} + ' лв.'"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text-black inline"><b>B.</b> non-habitable property:
+                                            <div class="info-box">
+                                                <i th:text="${residentialEntity.getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></i>
+                                            </div>
+                                        </div>
+                                        <p class="text-secondary"><i class="fa-solid fa-house"></i><small> applies per
+                                            property</small></p>
+                                    </li>
+                                    <li class="text-danger"><i class="fa-solid fa-info-circle"></i> Forming an
+                                        individual
+                                        property
+                                        fee:
+                                        <p class="text-secondary">Fund "Management and maintenance" is a fund that
+                                            covers
+                                            monthly
+                                            expenses of the Residential entity.
+                                            This fund is usually formed by monthly fees of both habitable and
+                                            non-habitable
+                                            properties.
+                                            <br>Every Residential entity defines its own fee policy. In this section you
+                                            can
+                                            define
+                                            the fee components
+                                            according to your Residential entity fee policy. Set fees will automatically
+                                            apply
+                                            to
+                                            all individual properties in this residential entity.
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--Section-B-->
+                        <div class="col-lg-6">
+                            <div class="info-table">
+                                <h5 class="text-danger text-center">FUND "REPAIR" <i
+                                        class="fa-solid fa-screwdriver-wrench"></i>
+                                </h5>
+                                <ul class="fee-table">
+                                    <li class="text-black"><b>6.</b> Fixed 'Fund Repair' fee
+                                        <p class="text-secondary">Monthly fee applied to every property with no custom
+                                            property
+                                            type set.</p>
+                                        <div class="frame">
+                                            <div class="text-black inline"><b>A.</b> habitable property:
+                                                <div class="info-box">
+                                                    <i th:text="${residentialEntity.getFee().getFundRepairHabitable()} + ' лв.'"></i>
+                                                </div>
+                                                <div class="property-counter">
+                                                    <p class="text-secondary" style="font-size: 0.8em"
+                                                       th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 0}">
+                                                        No properties in this category.
+                                                    </p>
+                                                    <p class="text-danger" style="font-size: 0.8em"
+                                                       th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 1}">
+                                                        1 property in this category.
+                                                    </p>
+                                                    <p class="text-danger" style="font-size: 0.8em"
+                                                       th:if="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) > 1}"
+                                                       th:text="${@propertyRepository.countHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId())} + ' properties in this category.'">
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="text-black inline"><b>B.</b> non-habitable property:
+                                                <div class="info-box">
+                                                    <i th:text="${residentialEntity.getFee().getFundRepairNonHabitable()} + ' лв.'"></i>
+                                                </div>
+                                                <div class="property-counter">
+                                                    <p class="text-secondary" style="font-size: 0.8em"
+                                                       th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 0}">
+                                                        No properties in this category.
+                                                    </p>
+                                                    <p class="text-danger" style="font-size: 0.8em"
+                                                       th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) == 1}">
+                                                        1 property in this category.
+                                                    </p>
+                                                    <p class="text-danger" style="font-size: 0.8em"
+                                                       th:if="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId()) > 1}"
+                                                       th:text="${@propertyRepository.countNonHabitablePropertiesWithoutPropertyTypeByREId(residentialEntity.getId())} + ' properties in this category.'">
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="text-secondary"><i class="fa-solid fa-house"></i><small> applies per
+                                            property</small></p>
+                                    </li>
 
-                                        <br>
-                                    </div>
-                                </div>
-                                <p class="text-secondary"><i class="fa-solid fa-house"></i><small> applies per property
-                                    type</small></p>
-                            </li>
+                                    <li class="text-black"
+                                        th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
+                                        <b>7.</b> 'Fund Repair' fee by property type
+                                        <p class="text-secondary">'Fund Repair' fee applied according to the property
+                                            type
+                                            set.</p>
+                                        <div class="frame">
+
+                                            <div class="text-black inline"
+                                                 th:each="propertyType: ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}">
+                                                <i class="fa-solid fa-city"></i>
+                                                <b th:text="${propertyType.getDescription()} + ', '"></b>
+                                                <b th:text="${propertyType.getTotalFlatSpace()} + 'm2'"></b>
+                                                <div class="section" style="padding: 3px 15px">
+                                                    <p><b>A.</b> habitable property</p>
+                                                    <div class="info-box">
+                                                        <i th:text="${propertyType.getFundRepairHabitable()} + ' лв.'"></i>
+                                                    </div>
+                                                    <div class="property-counter">
+                                                        <p class="text-secondary" style="font-size: 0.8em"
+                                                           th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) == 0}">
+                                                            No properties in this category.
+                                                        </p>
+                                                        <p class="text-danger" style="font-size: 0.8em"
+                                                           th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) == 1}">
+                                                            1 property in this category.
+                                                        </p>
+                                                        <p class="text-danger" style="font-size: 0.8em"
+                                                           th:if="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType) > 1}"
+                                                           th:text="${@propertyRepository.countHabitablePropertiesByPropertyType(propertyType)} + ' properties in this category.'">
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="section" style="padding: 3px 15px">
+                                                    <p><b>B.</b> non-habitable property</p>
+                                                    <div class="info-box">
+                                                        <i th:text="${propertyType.getFundRepairNotHabitable()} + ' лв.'"></i>
+                                                    </div>
+                                                    <div class="property-counter">
+                                                        <p class="text-secondary" style="font-size: 0.8em"
+                                                           th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) == 0}">
+                                                            No properties in this category.
+                                                        </p>
+                                                        <p class="text-danger" style="font-size: 0.8em"
+                                                           th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) == 1}">
+                                                            1 property in this category.
+                                                        </p>
+                                                        <p class="text-danger" style="font-size: 0.8em"
+                                                           th:if="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType) > 1}"
+                                                           th:text="${@propertyRepository.countNotHabitablePropertiesByPropertyType(propertyType)} + ' properties in this category.'">
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <br>
+                                            </div>
+                                        </div>
+                                        <p class="text-secondary"><i class="fa-solid fa-house"></i><small> applies per
+                                            property
+                                            type</small></p>
+                                    </li>
 
 
-                        </ul>
-                        <!--Modify/Set monthly fees button -->
-                        <div class="modify-fee-button">
-                            <div th:if="${residentialEntity.getFee().getAdditionalFeeHabitable() == 0} and ${residentialEntity.getFee().getAdditionalFeeNonHabitable() == 0} and
+                                </ul>
+                                <!--Modify/Set monthly fees button -->
+                                <div class="modify-fee-button">
+                                    <div class="cancel-button text-center"
+                                         th:if="${residentialEntity.getFee().getAdditionalFeeHabitable() == 0} and ${residentialEntity.getFee().getAdditionalFeeNonHabitable() == 0} and
                                         ${residentialEntity.getFee().getAdultFee() == 0} and ${residentialEntity.getFee().getChildFee() == 0} and
                                         ${residentialEntity.getFee().getPetFee() == 0} and ${residentialEntity.getFee().getFixedFeeHabitable() == 0} and
                                         ${residentialEntity.getFee().getFixedFeeNonHabitable() == 0} and ${residentialEntity.getFee().getFundRepairHabitable() == 0} and
-                                        ${residentialEntity.getFee().getFundRepairNonHabitable() == 0}"
-                                 class="cancel-button text-center">
-                                <a class="form-control text-bg-danger"
-                                   th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
-                                    <p class="text-light">Set fees</p></a>
-                            </div>
-                            <div th:if="${residentialEntity.getFee().getAdditionalFeeHabitable() > 0} or
+                                        ${residentialEntity.getFee().getFundRepairNonHabitable() == 0}">
+                                        <a class="form-control text-bg-danger"
+                                           th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
+                                            <p class="text-light">Set fees</p></a>
+                                    </div>
+                                    <div class="cancel-button text-center"
+                                         th:if="${residentialEntity.getFee().getAdditionalFeeHabitable() > 0} or
                                         ${residentialEntity.getFee().getAdditionalFeeNonHabitable() > 0} or ${residentialEntity.getFee().getAdultFee() > 0} or
                                         ${residentialEntity.getFee().getChildFee() > 0} or ${residentialEntity.getFee().getPetFee() > 0} or
                                         ${residentialEntity.getFee().getFixedFeeHabitable() > 0} or ${residentialEntity.getFee().getFixedFeeNonHabitable() > 0} or
-                                        ${residentialEntity.getFee().getFundRepairHabitable() > 0} or ${residentialEntity.getFee().getFundRepairNonHabitable() > 0}"
-                                 class="cancel-button text-center">
-                                <a class="form-control text-bg-danger"
-                                   th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
-                                    <p class="text-light">Modify fees</p></a>
+                                        ${residentialEntity.getFee().getFundRepairHabitable() > 0} or ${residentialEntity.getFee().getFundRepairNonHabitable() > 0}">
+                                        <a class="form-control text-bg-danger"
+                                           th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
+                                            <p class="text-light">Modify fees</p></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

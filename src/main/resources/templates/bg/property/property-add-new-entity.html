@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <h3>
-                    JOIN NEW RESIDENTIAL ENTITY
+                    Присъединяване към Дигитална ЕС
                 </h3>
                 <h4 class="text-light"><i class="fa-regular fa-building"></i></h4>
             </div>
@@ -72,49 +72,47 @@
                   th:object="${userAuthRegisterBindingModel}">
                 <div class="col-lg-12">
                     <div th:if="${notJoinedToResidentialEntity}">
-                        <p class="text-danger">You are not a member of any Residential Entity!!</p>
-                        <p class="text-danger">To be able to proceed with your property registration you must join to
-                            existing Residential Entity!</p>
+                        <p class="text-danger">Не сте член Дигитална Етажна Собственост!</p>
+                        <p class="text-danger">За да се регистрирате като собственик на Дигитален имот е необходимо преди това да се присъедените към етажна собственост!</p>
                     </div>
                     <div th:unless="${notJoinedToResidentialEntity}">
-                        <p><b>Join to new Residential entity.</b></p>
-                        <p>The number of Residential Entities you are part of is not limited.</p>
+                        <p><b>Присъединяване към нова Дигитална Етажна Собственост (ДЕС)</b></p>
+                        <p>Няма ограничение в броя ДЕС, в които може да членувате</p>
                     </div>
                     <hr>
 
-                    <p th:if="${badResidentialEntity}" class="text-danger">Wrong residential entity ID or
-                        Access code!</p>
+                    <p th:if="${badResidentialEntity}" class="text-danger">Грешен идентификатор на етажна собственост или Код за достъп!</p>
                     <fieldset>
-                        <label for="residentialId"><b>Residential Entity ID</b></label>
+                        <label for="residentialId"><b>Идентификатор на ЕС</b></label>
                         <p th:if="${#fields.hasErrors('residentialId')}"
                            th:errors="*{residentialId}" class="text-danger">Residential entity ID error
                             message</p>
-                        <input type="text" id="residentialId" placeholder="Enter Residential entity ID..." required
+                        <input type="text" id="residentialId" placeholder="Въведете идентификатор на ЕС..." required
                                th:field="*{residentialId}"
                                th:errorclass="bg-danger">
                     </fieldset>
                     <fieldset>
-                        <label for="residentialAccessCode"><b>Residential entity Access code</b></label>
+                        <label for="residentialAccessCode"><b>Код за достъп</b></label>
                         <p th:if="${#fields.hasErrors('residentialAccessCode')}"
                            th:errors="*{residentialAccessCode}" class="text-danger">Access code error
                             message</p>
-                        <input type="password" id="residentialAccessCode" placeholder="Enter Access code..."
+                        <input type="password" id="residentialAccessCode" placeholder="Въведете код за достъп..."
                                required
                                th:field="*{residentialAccessCode}"
                                th:errorclass="bg-danger">
                     </fieldset>
                     <fieldset>
                         <button th:href="@{/property/add/new}" type="submit" id="form-submit" class="orange-button">
-                            Add
+                            Присъедини се
                         </button>
                         <button th:if="${notJoinedToResidentialEntity}" class="orange-button" type="button">
                             <a th:href="@{/property}">
-                                <div class="text-light">Cancel</div>
+                                <div class="text-light">Отказ</div>
                             </a>
                         </button>
                         <button th:unless="${notJoinedToResidentialEntity}" class="orange-button" type="button">
                             <a th:href="@{/property/add}">
-                                <div class="text-light">Back</div>
+                                <div class="text-light">Назад</div>
                             </a>
                         </button>
                     </fieldset>

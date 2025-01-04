@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,19 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -35,10 +35,9 @@
         </div>
     </div>
 </div>
-<!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -57,250 +56,265 @@
 </div>
 
 <!-- ***** Incomes section ***** -->
-<div class="container">
-    <!--Start of sub-menu-->
-    <div class="administration-nav-bar">
-        <a th:href="@{/administration}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
-        <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}">Статус</a>
-        <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Собственици</a>
-        <a  th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">Имоти</a>
-        <a th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">Месечни такси</a>
-        <a href=#>Отчети</a>
-        <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Настройки</a>
-        <div class="animation start-financial"></div>
+<div class="page-content">
+    <div class="menu-container">
+        <div th:replace="~{/bg/fragments/adm-submenu}"></div>
     </div>
-
-    <div class="administration">
-        <!--Sub-menu buttons-->
-        <div class="table-nav-section">
-            <a class="button nav-link"
-               th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
-                <div class="text-center"><i class="fa-solid fa-file-invoice-dollar"></i> <span>Expenses</span></div>
-            </a>
-            <a class="button nav-link active"
-               href=#>
-                <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Incomes</span></div>
-            </a>
-        </div>
-        <!--Incomes data-->
-        <div class="info-table bottom-rounded" style="margin: 0 auto">
-
-            <div class="row" style="justify-content: space-around">
-                <ul>
-
-                    <li class="text-center">
-                        <h5 class="text-danger">Residential entity Incomes </h5>
-                        <p class="text-secondary">Residential entity incomes amount is the total amount collected by
-                            fee
-                            component.</p>
-                    </li>
-                    <li class="text-center">
-                        <h6 class="text-dark">Setting access</h6>
-                        <p>Allow members of this Residential entity to access incomes data</p>
-                        <form id="dataVisible"
-                              th:action="@{/administration/financial/changeIncomesVisibility/{id}(id=${residentialEntity.getId()})}"
-                              method="POST">
-                            <fieldset>
-                                <label class="switch">
-                                    <input name="incomesVisibilitySwitch" id="incomesVisibilitySwitch"
-                                           type="checkbox"
-                                           th:checked="${residentialEntity.isIncomesVisible()}"
-                                           onchange="submit()">
-                                    <span class="slider round"></span>
-                                </label>
-                            </fieldset>
-                        </form>
-                        <br>
-                    </li>
-                </ul>
-                <div class="info-table rounded col-lg-11" style="margin-top: 30px">
+    <div class="content">
+        <div class="container">
+            <div class="administration">
+                <!--Sub-menu buttons-->
+                <div class="table-nav-section">
+                    <a class="button nav-link"
+                       th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-file-invoice-dollar"></i> <span>Expenses</span>
+                        </div>
+                    </a>
+                    <a class="button nav-link active"
+                       href=#>
+                        <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Incomes</span>
+                        </div>
+                    </a>
+                </div>
+                <!--Incomes data-->
+                <div class="row" style="justify-content: space-around">
                     <ul>
-                        <li class="text-center">
-                            <form id="input-form"
-                                  th:method="POST"
-                                  th:action="@{/administration/financial/incomes/edit/{id}(id=${residentialEntity.getId()})}"
-                                  th:object="${incomesBindingModel}">
+                        <li class="text-center" style="margin-top: 50px">
+                            <h6 class="text-dark">Setting access</h6>
+                            <p>Allow members of this Residential entity to access incomes data</p>
+                            <form id="dataVisible"
+                                  method="POST"
+                                  th:action="@{/administration/financial/changeIncomesVisibility/{id}(id=${residentialEntity.getId()})}">
                                 <fieldset>
-                                    <p class="text-dark"><b class="text-danger">Fund Repair balance</b></p>
-                                    <small class="text-secondary">Fund Repair fee component is usually dedicated for
-                                        repair
-                                        activities of every Residential Entity.
-                                        The sum in this field is the collected fund Repair amount from all monthly fees
-                                        in this
-                                        Residential Entity.<br>
-                                        <b>You can manually update this amount if needed!</b>
-                                    </small>
-                                    <div class="incomes-container">
-                                        <label for="fund-repair-incomes" class="text-secondary"></label>
-                                        <input type="number" step="any" class="form-control-sm"
-                                               id="fund-repair-incomes" placeholder="Fund Repair..." autocomplete="on"
-                                               required
-                                               style="background-color: #ffffff"
-                                               th:field="*{incomesFundRepair}"
-                                               th:errorclass="bg-danger"
-                                               th:value="${incomesBindingModel.getIncomesFundRepair()}">
-                                    </div>
-                                </fieldset>
-                                <hr>
-                                <fieldset>
-                                    <p class="text-dark"><b class="text-danger">Fund Management & Maintenance
-                                        balance</b></p>
-                                    <small class="text-secondary">Fund Management & Maintenance fee component is usually
-                                        dedicated for common expenses of every Residential Entity.
-                                        The sum in this field is the collected fund Management & Maintenance from all
-                                        monthly
-                                        fees in this Residential Entity.<br>
-                                        <b>You can manually update this amount if needed!</b>
-                                    </small>
-                                    <div class="incomes-container">
-                                        <label for="fund-mm-incomes" class="text-secondary"></label>
-                                        <input type="number" step="any" class="form-control-sm"
-                                               id="fund-mm-incomes" placeholder="Fund Management & Maintenance..."
-                                               autocomplete="on" required style="background-color: #ffffff"
-                                               th:field="*{incomesFundMm}"
-                                               th:errorclass="bg-danger"
-                                               th:value="${incomesBindingModel.getIncomesFundMm()}">
-                                    </div>
-                                </fieldset>
-                                <hr>
-                                <fieldset>
-                                    <p class="text-dark"><b class="text-danger">TOTAL balance</b></p>
-                                    <small class="text-secondary">Total incomes amount is the sum of Fund Repair and
-                                        Fund
-                                        Management & Maintenance fee components
-                                    </small>
-                                    <div class="incomes-container">
-                                        <label for="incomes" class="text-secondary"></label>
-                                        <input type="number" step="any" class="form-control-sm" readonly
-                                               id="incomes" placeholder="Total amount..." required
-                                               style="font-weight: bold"
-                                               th:field="*{incomesAmount}"
-                                               th:errorclass="bg-danger"
-                                               th:value="${incomesBindingModel.getIncomesAmount()}">
-                                    </div>
-                                </fieldset>
-                                <br>
-                                <fieldset>
-                                    <button type="submit" id="form-submit" style="max-width: 220px; margin: 0 auto;"
-                                            class="form-control text-bg-dark">
-                                        <small>Manually update amount</small>
-                                    </button>
-                                    <br>
+                                    <label class="switch">
+                                        <input id="incomesVisibilitySwitch" name="incomesVisibilitySwitch"
+                                               onchange="submit()"
+                                               th:checked="${residentialEntity.isIncomesVisible()}"
+                                               type="checkbox">
+                                        <span class="slider round"></span>
+                                    </label>
                                 </fieldset>
                             </form>
                         </li>
                     </ul>
-
-                </div>
-                <div class="info-table rounded col-lg-11" style="margin: 50px 0">
-                    <ul>
-                        <li class="text-center">
-                            <fieldset>
-                                <p class="text-dark"><b class="text-dark">Overpayments balance</b></p>
-                                <small class="text-secondary">Sum of prepaid amounts for future periods by property
-                                    owners.
-                                    <br>Overpaid amounts will transfer to income balances according to the
-                                    Residential
-                                    Entity fee
-                                    policy and after the completion of the covered payment periods.</small>
-                                <div class="incomes-container">
-                                    <label for="overpaid-amounts" class="text-secondary"></label>
-                                    <input type="number" step="any" class="form-control-sm" readonly
-                                           id="overpaid-amounts" placeholder="Total amount..."
-                                           th:value="${@propertyRepository.sumOfAllOverpayments(residentialEntity.getId())}">
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <small class="text-secondary">Sum of blocked overpayments waiting for monthly fee
-                                    finalization (monthly fees with partial prepaid coverage)
-                                    <br>Amounts will be transferred to income balances as soon as the corresponding
-                                    monthly
-                                    fees are marked as paid.</small>
-
-                                <div class="incomes-container">
-                                    <label for="blocked-overpaid-amounts" class="text-secondary"></label>
-                                    <input type="number" step="any" class="form-control-sm" readonly
-                                           id="blocked-overpaid-amounts" placeholder="Total amount..."
-                                           th:value="${@propertyFeeRepository.sumOfAllBlockedOverpayments(residentialEntity.getId())}">
-                                </div>
-                                <div class="accordion-header" id="heading">
-                                    <button onclick="feeComponentMagnifierChange()"
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#collapse"
-                                            aria-expanded="false">
-                                        <small class="text-danger">View fees with partial prepaid coverage
-                                            <small class="magnifier-expand">
-                                                <i id="fee-component" class="fa-solid fa-magnifying-glass-plus"></i>
-                                            </small>
+                    <div class="info-table rounded col-lg-11" style="margin-top: 30px">
+                        <ul>
+                            <li class="text-center">
+                                <h5 class="text-danger">Residential entity Incomes </h5>
+                                <p class="text-secondary">Residential entity incomes amount is the total amount
+                                    collected by
+                                    fee
+                                    component.</p>
+                            </li>
+                            <li class="text-center">
+                                <form id="input-form"
+                                      th:action="@{/administration/financial/incomes/edit/{id}(id=${residentialEntity.getId()})}"
+                                      th:method="POST"
+                                      th:object="${incomesBindingModel}">
+                                    <fieldset>
+                                        <p class="text-dark"><b class="text-danger">Fund Repair balance</b></p>
+                                        <small class="text-secondary">Fund Repair fee component is usually dedicated
+                                            for
+                                            repair
+                                            activities of every Residential Entity.
+                                            The sum in this field is the collected fund Repair amount from all
+                                            monthly fees
+                                            in this
+                                            Residential Entity.<br>
+                                            <b>You can manually update this amount if needed!</b>
                                         </small>
-                                    </button>
-                                </div>
-                                <div id="collapse" class="accordion-collapse collapse">
-                                    <div class="table" style="padding-top: 20px">
-                                        <table class="table text-center" id="blocked-overpayments">
-                                            <tr>
-                                                <th><p>Property №</p></th>
-                                                <th><p>Property owner</p></th>
-                                                <th><p>Fee ID</p></th>
-                                                <th><p>Fee Description</p></th>
-                                                <th><p>Fee amount</p></th>
-                                                <th style="background-color: #efefef"><p>Prepaid amount</p></th>
-                                                <th><p>Due amount</p></th>
-                                                <th><p>Payment status</p></th>
-                                                <th><p>View fees</p></th>
-                                            </tr>
-                                            <tr th:each="propertyFee: ${@propertyFeeRepository.findFeesWithBlockedOverpayments(residentialEntity.getId())}">
-                                                <td><p th:text="${propertyFee.getProperty().getNumber()}"></p></td>
-                                                <td>
-                                                    <p th:if="${propertyFee.getProperty().isObtained()}"
-                                                       th:text="${propertyFee.getProperty().getOwner().getFirstName()} + ' ' + ${propertyFee.getProperty().getOwner().getLastName()}"></p>
-                                                    <p th:unless="${propertyFee.getProperty().isObtained()}">-</p>
-                                                </td>
-                                                <td><p th:text="${propertyFee.getId()}"></p></td>
-                                                <td><p th:text="${propertyFee.getDescription()}"></p></td>
-                                                <td><p th:text="${propertyFee.getFeeAmount()}"></p></td>
-                                                <td style="background-color: #efefef">
-                                                    <p class="text-success-emphasis"
-                                                       th:text="${propertyFee.getOverpaidAmountStart() - propertyFee.getOverpaidAmountEnd()}"></p>
-                                                </td>
-                                                <td><p class="text-danger"
-                                                       th:text="${propertyFee.getDueAmount()}"></p></td>
-                                                <td>
-                                                    <img th:if="${propertyFee.isPaid()}"
-                                                         title="Fee is paid"
-                                                         src="/images/check_yes.png"
-                                                         style="width: 20px;"
-                                                         alt="Fee is paid">
-                                                    <img th:unless="${propertyFee.isPaid()}"
-                                                         title="Fee not paid"
-                                                         src="/images/check_no.png"
-                                                         style="width: 20px;"
-                                                         alt="Fee not paid">
-                                                </td>
-                                                <td>
-                                                    <a th:href="@{/administration/fees/details/{id} (id=${propertyFee.getProperty().getId()})}">
-                                                        <img
-                                                                title="View details"
-                                                                src="/images/magnifier.png"
-                                                                style="width: 20px;"
-                                                                alt="View details"></a>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                        <div class="incomes-container">
+                                            <label class="text-secondary" for="fund-repair-incomes"></label>
+                                            <input autocomplete="on" class="form-control-sm"
+                                                   id="fund-repair-incomes"
+                                                   placeholder="Fund Repair..." required
+                                                   step="any"
+                                                   style="background-color: #ffffff"
+                                                   th:errorclass="bg-danger"
+                                                   th:field="*{incomesFundRepair}"
+                                                   th:value="${incomesBindingModel.getIncomesFundRepair()}"
+                                                   type="number">
+                                        </div>
+                                    </fieldset>
+                                    <hr>
+                                    <fieldset>
+                                        <p class="text-dark"><b class="text-danger">Fund Management & Maintenance
+                                            balance</b></p>
+                                        <small class="text-secondary">Fund Management & Maintenance fee component is
+                                            usually
+                                            dedicated for common expenses of every Residential Entity.
+                                            The sum in this field is the collected fund Management & Maintenance
+                                            from all
+                                            monthly
+                                            fees in this Residential Entity.<br>
+                                            <b>You can manually update this amount if needed!</b>
+                                        </small>
+                                        <div class="incomes-container">
+                                            <label class="text-secondary" for="fund-mm-incomes"></label>
+                                            <input autocomplete="on" class="form-control-sm" id="fund-mm-incomes"
+                                                   placeholder="Fund Management & Maintenance..."
+                                                   required
+                                                   step="any" style="background-color: #ffffff"
+                                                   th:errorclass="bg-danger"
+                                                   th:field="*{incomesFundMm}"
+                                                   th:value="${incomesBindingModel.getIncomesFundMm()}"
+                                                   type="number">
+                                        </div>
+                                    </fieldset>
+                                    <hr>
+                                    <fieldset>
+                                        <p class="text-dark"><b class="text-danger">TOTAL balance</b></p>
+                                        <small class="text-secondary">Total incomes amount is the sum of Fund Repair
+                                            and
+                                            Fund
+                                            Management & Maintenance fee components
+                                        </small>
+                                        <div class="incomes-container">
+                                            <label class="text-secondary" for="incomes"></label>
+                                            <input class="form-control-sm" id="incomes"
+                                                   placeholder="Total amount..." readonly
+                                                   required step="any" style="font-weight: bold"
+                                                   th:errorclass="bg-danger"
+                                                   th:field="*{incomesAmount}"
+                                                   th:value="${incomesBindingModel.getIncomesAmount()}"
+                                                   type="number">
+                                        </div>
+                                    </fieldset>
+                                    <br>
+                                    <fieldset>
+                                        <button class="form-control text-bg-dark" id="form-submit"
+                                                style="max-width: 220px; margin: 0 auto;"
+                                                type="submit">
+                                            <small>Manually update amount</small>
+                                        </button>
+                                        <br>
+                                    </fieldset>
+                                </form>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="info-table rounded col-lg-11" style="margin: 50px 0">
+                        <ul>
+                            <li class="text-center">
+                                <fieldset>
+                                    <p class="text-dark"><b class="text-dark">Overpayments balance</b></p>
+                                    <small class="text-secondary">Sum of prepaid amounts for future periods by
+                                        property
+                                        owners.
+                                        <br>Overpaid amounts will transfer to income balances according to the
+                                        Residential
+                                        Entity fee
+                                        policy and after the completion of the covered payment periods.</small>
+                                    <div class="incomes-container">
+                                        <label class="text-secondary" for="overpaid-amounts"></label>
+                                        <input class="form-control-sm" id="overpaid-amounts"
+                                               placeholder="Total amount..." readonly
+                                               step="any"
+                                               th:value="${@propertyRepository.sumOfAllOverpayments(residentialEntity.getId())}"
+                                               type="number">
                                     </div>
-                                </div>
-                            </fieldset>
-                        </li>
-                    </ul>
+                                </fieldset>
+                                <fieldset>
+                                    <small class="text-secondary">Sum of blocked overpayments waiting for monthly
+                                        fee
+                                        finalization (monthly fees with partial prepaid coverage)
+                                        <br>Amounts will be transferred to income balances as soon as the
+                                        corresponding
+                                        monthly
+                                        fees are marked as paid.</small>
+
+                                    <div class="incomes-container">
+                                        <label class="text-secondary" for="blocked-overpaid-amounts"></label>
+                                        <input class="form-control-sm" id="blocked-overpaid-amounts"
+                                               placeholder="Total amount..." readonly
+                                               step="any"
+                                               th:value="${@propertyFeeRepository.sumOfAllBlockedOverpayments(residentialEntity.getId())}"
+                                               type="number">
+                                    </div>
+                                    <div class="accordion-header" id="heading">
+                                        <button aria-expanded="false"
+                                                data-bs-target="#collapse"
+                                                data-bs-toggle="collapse"
+                                                onclick="feeComponentMagnifierChange()"
+                                                type="button">
+                                            <small class="text-danger">View fees with partial prepaid coverage
+                                                <small class="magnifier-expand">
+                                                    <i class="fa-solid fa-magnifying-glass-plus"
+                                                       id="fee-component"></i>
+                                                </small>
+                                            </small>
+                                        </button>
+                                    </div>
+                                    <div class="accordion-collapse collapse" id="collapse">
+                                        <div class="table" style="padding-top: 20px">
+                                            <table class="table text-center" id="blocked-overpayments">
+                                                <tr>
+                                                    <th><p>Property №</p></th>
+                                                    <th><p>Property owner</p></th>
+                                                    <th><p>Fee ID</p></th>
+                                                    <th><p>Fee Description</p></th>
+                                                    <th><p>Fee amount</p></th>
+                                                    <th style="background-color: #efefef"><p>Prepaid amount</p></th>
+                                                    <th><p>Due amount</p></th>
+                                                    <th><p>Payment status</p></th>
+                                                    <th><p>View fees</p></th>
+                                                </tr>
+                                                <tr th:each="propertyFee: ${@propertyFeeRepository.findFeesWithBlockedOverpayments(residentialEntity.getId())}">
+                                                    <td><p th:text="${propertyFee.getProperty().getNumber()}"></p>
+                                                    </td>
+                                                    <td>
+                                                        <p th:if="${propertyFee.getProperty().isObtained()}"
+                                                           th:text="${propertyFee.getProperty().getOwner().getFirstName()} + ' ' + ${propertyFee.getProperty().getOwner().getLastName()}"></p>
+                                                        <p th:unless="${propertyFee.getProperty().isObtained()}">
+                                                            -</p>
+                                                    </td>
+                                                    <td><p th:text="${propertyFee.getId()}"></p></td>
+                                                    <td><p th:text="${propertyFee.getDescription()}"></p></td>
+                                                    <td><p th:text="${propertyFee.getFeeAmount()}"></p></td>
+                                                    <td style="background-color: #efefef">
+                                                        <p class="text-success-emphasis"
+                                                           th:text="${propertyFee.getOverpaidAmountStart() - propertyFee.getOverpaidAmountEnd()}"></p>
+                                                    </td>
+                                                    <td><p class="text-danger"
+                                                           th:text="${propertyFee.getDueAmount()}"></p></td>
+                                                    <td>
+                                                        <img alt="Fee is paid"
+                                                             src="/images/check_yes.png"
+                                                             style="width: 20px;"
+                                                             th:if="${propertyFee.isPaid()}"
+                                                             title="Fee is paid">
+                                                        <img alt="Fee not paid"
+                                                             src="/images/check_no.png"
+                                                             style="width: 20px;"
+                                                             th:unless="${propertyFee.isPaid()}"
+                                                             title="Fee not paid">
+                                                    </td>
+                                                    <td>
+                                                        <a th:href="@{/administration/fees/details/{id} (id=${propertyFee.getProperty().getId()})}">
+                                                            <img
+                                                                    alt="View details"
+                                                                    src="/images/magnifier.png"
+                                                                    style="width: 20px;"
+                                                                    title="View details"></a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+
             </div>
 
         </div>
 
+
     </div>
-
-
+</div>
 </div>
 
 

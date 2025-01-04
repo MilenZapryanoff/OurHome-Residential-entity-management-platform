@@ -49,6 +49,8 @@ class PropertyServiceImplTestIT {
 
     @Autowired
     private PropertyTypeRepository propertyTypeRepository;
+    @Autowired
+    private LanguageRepository languageRepository;
 
     @BeforeEach
     void setUp() {
@@ -671,6 +673,8 @@ class PropertyServiceImplTestIT {
     private UserEntity createTestManager() {
         UserEntity manager = new UserEntity();
         Role role = roleRepository.findRoleByName("MANAGER");
+        Language language = languageRepository.findLanguageByDescription("bulgarian");
+
         roleRepository.save(role);
         manager.setEmail("test@test.test");
         manager.setFirstName("Test");
@@ -680,6 +684,7 @@ class PropertyServiceImplTestIT {
         manager.setPhoneNumber("0777777777");
         manager.setRegistrationDateTime(LocalDateTime.now());
         manager.setRole(role);
+        manager.setLanguage(language);
         userRepository.save(manager);
         return manager;
     }
@@ -702,6 +707,8 @@ class PropertyServiceImplTestIT {
         Role role = roleRepository.findRoleByName("RESIDENT");
         roleRepository.save(role);
 
+        Language language = languageRepository.findLanguageByDescription("bulgarian");
+
         UserEntity user = new UserEntity();
         user.setEmail("test@mail.bg");
         user.setFirstName("Test");
@@ -711,6 +718,7 @@ class PropertyServiceImplTestIT {
         user.setPhoneNumber("0666666666");
         user.setRegistrationDateTime(LocalDateTime.now());
         user.setRole(role);
+        user.setLanguage(language);
         userRepository.save(user);
         return user;
     }

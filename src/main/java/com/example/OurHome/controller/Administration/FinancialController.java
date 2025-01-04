@@ -66,14 +66,14 @@ public class FinancialController {
         ModelAndView view = resolveView(lang) ?
                 new ModelAndView("bg/administration/administration-financial-expenses") : new ModelAndView("en/administration/administration-financial-expenses");
 
-        view.addObject("residentialEntity", getResidentialEntity(id))
-                .addObject("expenseFilterBindingModel", expenseFilter);
+        view.addObject("residentialEntity", getResidentialEntity(id));
+
 
         if (bindingResult.hasErrors()) {
             return view;
         }
 
-        financialService.createCustomExpenseFilter(expenseFilter.getPeriodStart(), expenseFilter.getPeriodEnd(), getResidentialEntity(id));
+        view.addObject("expenseFilterBindingModel", financialService.createCustomExpenseFilter(expenseFilter.getPeriodStart(), expenseFilter.getPeriodEnd(), getResidentialEntity(id)));
 
         return view;
     }

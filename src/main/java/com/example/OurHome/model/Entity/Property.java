@@ -1,6 +1,7 @@
 package com.example.OurHome.model.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -78,6 +79,9 @@ public class Property {
 
     @ManyToOne
     private PropertyType propertyType;
+
+    @ManyToOne
+    private PropertyClass propertyClass;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "property",cascade = CascadeType.REMOVE)
     private List<PropertyFee> propertyFees;
@@ -277,5 +281,13 @@ public class Property {
 
     public void setPropertyChangeRequest(PropertyChangeRequest propertyChangeRequest) {
         this.propertyChangeRequest = propertyChangeRequest;
+    }
+
+    public PropertyClass getPropertyClass() {
+        return propertyClass;
+    }
+
+    public void setPropertyClass(PropertyClass propertyClass) {
+        this.propertyClass = propertyClass;
     }
 }

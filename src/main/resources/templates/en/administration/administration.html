@@ -84,7 +84,7 @@
                          th:src="@{${residentialEntity.picturePath}}" alt="View details" title="View Details"
                          style="max-height: 300px">
                 </a>
-                <span class="category text-bg-success text-light">Active</span>
+                <span class="category text-bg-success text-light" th:text="'Res. Entity ID: ' + ${residentialEntity.getId()}"></span>
                 <h4><a th:text="${residentialEntity.getCity().getName()}"></a></h4>
                 <h4>
                     <a th:text="${residentialEntity.getStreetName() + ' ' + residentialEntity.getStreetNumber() + ' ' + residentialEntity.getEntrance()}"></a>

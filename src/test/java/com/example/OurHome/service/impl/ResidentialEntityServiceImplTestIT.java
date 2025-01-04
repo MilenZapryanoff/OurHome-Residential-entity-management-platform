@@ -1,9 +1,6 @@
 package com.example.OurHome.service.impl;
 
-import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.Role;
-import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.Entity.*;
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityRegisterBindingModel;
 import com.example.OurHome.model.enums.CityName;
@@ -37,6 +34,8 @@ class ResidentialEntityServiceImplTestIT {
     private RoleRepository roleRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private LanguageRepository languageRepository;
 
     @BeforeEach
     void setUp() {
@@ -159,6 +158,9 @@ class ResidentialEntityServiceImplTestIT {
         UserEntity manager = new UserEntity();
         Role role = roleRepository.findRoleByName("MANAGER");
         roleRepository.save(role);
+        Language language = languageRepository.findLanguageByDescription("bulgarian");
+        languageRepository.save(language);
+
         manager.setEmail("test@test.test");
         manager.setFirstName("Test");
         manager.setLastName("Test");
@@ -167,6 +169,7 @@ class ResidentialEntityServiceImplTestIT {
         manager.setPhoneNumber("0777777777");
         manager.setRegistrationDateTime(LocalDateTime.now());
         manager.setRole(role);
+        manager.setLanguage(language);
         userRepository.save(manager);
         return manager;
     }

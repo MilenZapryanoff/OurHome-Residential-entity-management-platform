@@ -1,5 +1,6 @@
 package com.example.OurHome.model.dto.BindingModels.Property;
 
+import com.example.OurHome.model.Entity.PropertyClass;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -10,13 +11,16 @@ public class PropertyEditBindingModel {
     @NotNull
     @Positive(message = "Property number must be a positive digit")
     private int number;
+
     @NotNull
     private String floor;
 
     @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
     private int numberOfAdults;
+
     @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
     private int numberOfChildren;
+
     @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
     private int numberOfPets;
 
@@ -28,6 +32,8 @@ public class PropertyEditBindingModel {
     private boolean notHabitable;
 
     private Long propertyType;
+
+    private PropertyClass propertyClass;
 
     public PropertyEditBindingModel() {
     }
@@ -104,5 +110,11 @@ public class PropertyEditBindingModel {
         this.propertyType = propertyType;
     }
 
+    public PropertyClass getPropertyClass() {
+        return propertyClass;
+    }
 
+    public void setPropertyClass(PropertyClass propertyClass) {
+        this.propertyClass = propertyClass;
+    }
 }

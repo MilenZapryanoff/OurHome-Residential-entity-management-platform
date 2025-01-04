@@ -1,5 +1,7 @@
 package com.example.OurHome.model.dto.BindingModels.Property;
 
+import com.example.OurHome.model.Entity.PropertyClass;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -16,10 +18,14 @@ public class PropertyCreateBindingModel {
 
     @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
     private int numberOfAdults;
+
     @PositiveOrZero(message = "Number of children must be a positive digit or 0")
     private int numberOfChildren;
+
     @PositiveOrZero(message = "Number of pets must be a positive digit or 0")
     private int numberOfPets;
+
+    private PropertyClass propertyClass;
 
     private boolean notHabitable;
 
@@ -82,5 +88,13 @@ public class PropertyCreateBindingModel {
 
     public void setPropertyType(Long propertyType) {
         this.propertyType = propertyType;
+    }
+
+    public PropertyClass getPropertyClass() {
+        return propertyClass;
+    }
+
+    public void setPropertyClass(PropertyClass propertyClass) {
+        this.propertyClass = propertyClass;
     }
 }

@@ -37,9 +37,14 @@ public class HomeController {
                                      HttpServletResponse response) {
 
         Cookie cookie = new Cookie("lang", lang);
-        cookie.setMaxAge(60 * 60 * 24 * 30); // 30 days
+        cookie.setMaxAge(60 * 60 * 24 * 90); // 90 days
         cookie.setPath("/"); // Cookie accessible across the app
         response.addCookie(cookie);
+
+        //setting system messages language according to general language selection if user is not a guest (anonymous).
+        if (!SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser")) {
+            userService.setSystemMessagesLanguage(lang, getUserViewModel());
+        }
 
         return new ModelAndView("redirect:/index");
     }
