@@ -39,7 +39,7 @@ public class PropertyTypeServiceImpl implements PropertyTypeService {
 
     /**
      * Property type add method.
-     * Performed by Residential entity MANAGER.
+     * Performed by Condominium MANAGER.
      *
      * @param id                          property type id
      * @param propertyTypeAddBindingModel data input from user (manager)
@@ -66,7 +66,7 @@ public class PropertyTypeServiceImpl implements PropertyTypeService {
 
     /**
      * Property type edit method.
-     * Performed by Residential entity MANAGER.
+     * Performed by Condominium MANAGER.
      *
      * @param id                           property type id
      * @param propertyTypeEditBindingModel data input from user (manager)
@@ -92,7 +92,7 @@ public class PropertyTypeServiceImpl implements PropertyTypeService {
 
     /**
      * Property type delete method.
-     * Performed by Residential entity MANAGER.
+     * Performed by Condominium MANAGER.
      *
      * @param id property type id
      */

@@ -1,11 +1,29 @@
-<!--Administration page EN Sub menus-->
-<a class="nav-link" th:href="@{/administration}"><i class="fa-solid fa-reply"></i></a>
-<a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}">Summary</a>
-<a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">Owners</a>
-<a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">Properties</a>
-<a th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">Monthly fees</a>
-<a th:href="@{/administration/events/{id}(id=${residentialEntity.getId()})}">Events</a>
-<a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">Reports</a>
-<a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">Settings</a>
-
-
+<!--Administration page BG Sub menus-->
+<div class="menu-bar">
+    <ul class="menu-bar__menu">
+        <li class="menu-bar__item">
+            <a th:href="@{/administration}" class="menu-bar__link"><i class="fa-solid fa-reply"></i><span>Back</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/summary/')} ? 'text-danger' : ''" class="fa-solid fa-sliders"></i><span>Status</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/owners/')} ? 'text-danger' : ''" class="fa-solid fa-users"></i><span>Owners</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/property/')} ? 'text-danger' : ''" class="fa-solid fa-building"></i><span>Properties</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/fees/')} ? 'text-danger' : ''" class="fa-solid fa-hand-holding-dollar"></i><span>Monthly fees</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/administration/events/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/events/')} ? 'text-danger' : ''"  class="fa-regular fa-calendar"></i><span>Events</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/financial/')} ? 'text-danger' : ''" class="fa-solid fa-filter-circle-dollar"></i><span>Reports</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/details/')} ? 'text-danger' : ''" class="fa-solid fa-gear"></i><span>Settings</span></a>
+        </li>
+    </ul>
+</div>

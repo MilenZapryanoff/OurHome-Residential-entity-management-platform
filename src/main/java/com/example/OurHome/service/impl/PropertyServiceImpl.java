@@ -126,11 +126,11 @@ public class PropertyServiceImpl implements PropertyService {
 
             if (verificationRequired) {
                 property.setPropertyRegisterRequest(newPropertyRegisterRequest);
-                //sending message to residential entity manager for pending approval
+                //sending message to Condominium manager for pending approval
                 messageService.propertyPendingRegistrationMessageToManager(residentialEntity);
             } else {
                 property.setObtained(true);
-                //sending message to residential entity manager for auto-approval
+                //sending message to Condominium manager for auto-approval
                 messageService.propertyRegistrationMessageToManager(residentialEntity);
             }
 
@@ -213,7 +213,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     /**
      * Property approval with data change.
-     * Performed by Residential entity MANAGER
+     * Performed by Condominium MANAGER
      *
      * @param id property id
      */
@@ -251,7 +251,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     /**
      * Property approval without data change (ignore data change input from owner).
-     * Performed by Residential entity MANAGER
+     * Performed by Condominium MANAGER
      *
      * @param id property id
      */
@@ -286,7 +286,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     /**
      * Data change request approval.
-     * Performed by Residential entity MANAGER
+     * Performed by Condominium MANAGER
      *
      * @param propertyId property id
      */
@@ -320,7 +320,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     /**
      * Data change request rejection.
-     * Performed by Residential entity MANAGER
+     * Performed by Condominium MANAGER
      *
      * @param propertyId property id
      */
@@ -343,7 +343,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     /**
      * Property reject.
-     * Performed by Residential entity MANAGER
+     * Performed by Condominium MANAGER
      *
      * @param id property id
      */
@@ -409,10 +409,10 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     /**
-     * Method for setting all properties monthly (auto) fee in current residential entity ON
-     * Performed only by Residential Entity manager!
+     * Method for setting all properties monthly (auto) fee in current Condominium ON
+     * Performed only by Condominium manager!
      *
-     * @param residentialEntity current residential entity
+     * @param residentialEntity current Condominium
      */
     @Override
     public void turnAllPropertiesFeesOn(ResidentialEntity residentialEntity) {
@@ -425,10 +425,10 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     /**
-     * Method for setting all properties monthly (auto) fee in current residential entity OFF
-     * Performed only by Residential Entity manager!
+     * Method for setting all properties monthly (auto) fee in current Condominium OFF
+     * Performed only by Condominium manager!
      *
-     * @param residentialEntity current residential entity
+     * @param residentialEntity current Condominium
      */
     @Override
     public void turnAllPropertiesFeesOff(ResidentialEntity residentialEntity) {
@@ -442,7 +442,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     /**
      * Property edit method.
-     * Performed only by Residential Entity manager!
+     * Performed only by Condominium manager!
      *
      * @param id                       property id
      * @param propertyEditBindingModel the binding model with the data returning from frontend
@@ -750,7 +750,13 @@ public class PropertyServiceImpl implements PropertyService {
             PropertyChangeRequest existingPropertyChangeRequest = property.getPropertyChangeRequest();
 
             //update existing change request data
-            modelMapper.map(propertyEditBindingModel, existingPropertyChangeRequest);
+            existingPropertyChangeRequest.setFloor(propertyEditBindingModel.getFloor());
+            existingPropertyChangeRequest.setNumberOfAdults(propertyEditBindingModel.getNumberOfAdults());
+            existingPropertyChangeRequest.setNumberOfChildren(propertyEditBindingModel.getNumberOfChildren());
+            existingPropertyChangeRequest.setNumberOfPets(propertyEditBindingModel.getNumberOfPets());
+            existingPropertyChangeRequest.setNumberOfRooms(propertyEditBindingModel.getNumberOfRooms());
+            existingPropertyChangeRequest.setParkingAvailable(propertyEditBindingModel.isParkingAvailable());
+            existingPropertyChangeRequest.setNotHabitable(propertyEditBindingModel.isNotHabitable());
             existingPropertyChangeRequest.setActive(true);
             existingPropertyChangeRequest.setRejected(false);
             existingPropertyChangeRequest.setPropertyType(propertyType);

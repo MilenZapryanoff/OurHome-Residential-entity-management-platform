@@ -164,9 +164,13 @@
                                 <i class="fa-solid fa-stairs"></i>
                                 <p>Етаж</p>
                             </th>
-                            <th th:if="${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId()).size() > 0}">
+                            <th>
                                 <i class="fa-regular fa-building"></i>
-                                <p>Тип</p>
+                                <p>Клас</p>
+                            </th>
+                            <th th:if="${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId()).size() > 0}">
+                                <i class="fa-solid fa-building"></i>
+                                <p>Кагегория</p>
                             </th>
                             <th>
                                 <i class="fa-solid fa-user-large"></i>
@@ -196,13 +200,15 @@
                                 <p th:text="${property.getNumber()}"></p>
                             </td>
                             <td><p th:text="${property.getFloor()}"></p></td>
+                            <td>
+                                <p th:text="${property.getPropertyClass().getName()}"
+                                   th:unless="${property.getPropertyClass() == null}"></p>
+                                <p th:if="${property.getPropertyClass() == null}">-</p>
+                            </td>
                             <td th:if="${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId()).size() > 0}">
                                 <p th:if="${property.getPropertyType()} != null"
                                    th:text="${property.getPropertyType().getDescription()}"></p>
-                                <p th:if="${property.getPropertyType()} == null"><i class="fa-solid fa-circle-info"
-                                                                                    style="color: rgb(232,163,11)"
-                                                                                    title="Не е избран тип на имота"></i>
-                                </p></td>
+                                <p th:if="${property.getPropertyType()} == null">-</p></td>
                             <td>
                                 <div class="user-avatar-small">
                                     <img alt="Avatar"

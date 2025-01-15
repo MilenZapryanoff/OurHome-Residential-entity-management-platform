@@ -50,7 +50,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <h3>Expenses</h3>
-                <span th:text="'RESIDENTIAL ENTITY: ' + ${property.getResidentialEntity().getCity().getName()}
+                <span th:text="'Condominium: ' + ${property.getResidentialEntity().getCity().getName()}
                 + ', ' + ${property.getResidentialEntity().getStreetName()}
                 + ' № ' +${property.getResidentialEntity().getStreetNumber()}
                 + ', entrance: ' +${property.getResidentialEntity().getEntrance()}"></span>
@@ -60,7 +60,7 @@
 </div>
 
 
-<!-- ***** Residential entity section ***** -->
+<!-- ***** Condominium section ***** -->
 <div class="container">
     <!--        start of buttons-->
     <div class="property-nav-bar">
@@ -68,7 +68,7 @@
         <a th:href="@{/property/summary/{id}(id=${property.getId()})}">Summary</a>
         <a th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">Monthly fees</a>
         <a th:href="@{/property/details/{id}(id=${property.getId()})}">Property details</a>
-        <a href=#>Residential Entity</a>
+        <a href=#>Condominium</a>
         <div class="transition property-re"></div>
     </div>
     <!--end of buttons-->
@@ -94,9 +94,9 @@
                     <div th:if="${property.getResidentialEntity().isExpensesVisible()} or ${@residentialEntityRepository.isUserModeratorOfResidentialEntity(property.getResidentialEntity().getId(), loggedUser.getId()) >= 1}"
                          class="expenses-container">
                         <div class="expenses-header">
-                            <h5>Residential entity expenses report</h5>
+                            <h5>Condominium expenses report</h5>
                             <br>
-                            <p class="text-secondary">In this section you will find data about your residential entity
+                            <p class="text-secondary">In this section you will find data about your Condominium
                                 expenses.
                                 <br>You can see your current month expenses, or select a specific period of time.</p>
                         </div>
@@ -199,9 +199,9 @@
                         </div>
                     </div>
                     <div th:if="${!property.getResidentialEntity().isExpensesVisible()} and ${@residentialEntityRepository.isUserModeratorOfResidentialEntity(property.getResidentialEntity().getId(), loggedUser.getId()) == 0}">
-                        <h5>Residential entity expenses report</h5>
+                        <h5>Condominium expenses report</h5>
                         <br>
-                        <p class="text-danger">Residential entity manager has not authorized you to access this
+                        <p class="text-danger">Condominium manager has not authorized you to access this
                             data!</p>
                     </div>
                 </div>

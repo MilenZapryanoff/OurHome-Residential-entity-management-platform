@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Method for checking residential entity id and access code, when accessing a new residential entity. .
+     * Method for checking Condominium id and access code, when accessing a new Condominium. .
      *
      * @return : boolean
      */
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * This method gives the user MODERATOR rights in residential entities.
+     * This method gives the user MODERATOR rights in Condominiums.
      */
     @Override
     public void createModerator(Long residentId, Long entityId) {
@@ -194,7 +194,7 @@ public class UserServiceImpl implements UserService {
 
 
     /**
-     * This method removes the user MODERATOR rights in residential entities.
+     * This method removes the user MODERATOR rights in Condominiums.
      */
     @Override
     public void removeModerator(Long residentId, Long entityId) {
@@ -218,8 +218,8 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * This method removes the user from residential entities. Also removes owner's property from the
-     * residential entity.
+     * This method removes the user from Condominiums. Also removes owner's property from the
+     * Condominium.
      *
      * @param id, residentialEntity
      */
@@ -274,7 +274,7 @@ public class UserServiceImpl implements UserService {
 
 
     /**
-     * Method for joining user to new Residential entity.
+     * Method for joining user to new Condominium.
      */
     @Override
     public void joinUserToNewResidentialEntity(UserAuthBindingModel userAuthBindingModel, UserEntity loggedUser) {
@@ -282,7 +282,7 @@ public class UserServiceImpl implements UserService {
         ResidentialEntity newResidentialEntity = residentialEntityRepository.findById(Long.valueOf(userAuthBindingModel.getResidentialId())).orElse(null);
 
         if (newResidentialEntity != null) {
-            //Check if this residential entity already preset for this user
+            //Check if this Condominium already preset for this user
             List<ResidentialEntity> userResidentialEntities = loggedUser.getResidentialEntities();
             for (ResidentialEntity residentialEntityList : userResidentialEntities) {
                 if (residentialEntityList.getId().equals(newResidentialEntity.getId())) {

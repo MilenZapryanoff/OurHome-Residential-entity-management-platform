@@ -130,7 +130,7 @@
                                     <p th:text="${loggedUser.getRole().getName()}"></p>
                                 </li>
                                 <li th:if="${loggedUser.getRole().getName()} == 'RESIDENT'"
-                                    class="text-black"><b>Member of residential entities:</b>
+                                    class="text-black"><b>Member of Condominiums:</b>
                                     <p th:text="${loggedUser.getResidentialEntities().size()}"></p>
                                 </li>
                                 <li th:if="${loggedUser.getRole().getName()} == 'RESIDENT'"
@@ -138,7 +138,7 @@
                                     <p th:text="${loggedUser.getProperties().size()}"></p>
                                 </li>
                                 <li th:if="${loggedUser.getRole().getName()} == 'MANAGER'"
-                                    class="text-black"><b>Managed Residential entities:</b>
+                                    class="text-black"><b>Managed Condominiums:</b>
                                     <p>
                                         <a th:text="${@residentialEntityRepository.countByManager_Id(loggedUser.getId())}" th:href="@{/administration}">Брой управлявани ЕС</a>
                                     </p>

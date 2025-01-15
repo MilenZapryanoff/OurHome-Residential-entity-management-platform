@@ -237,19 +237,6 @@
                                      style="width: 20px;" title="Property is habitable">
                             </td>
                             <td>
-                                <!--custom pop-up confirmation window-->
-                                <div class="modal">
-                                    <div class="modal-content">
-                                        <strong class="text-danger-emphasis">ВНИМАНИЕ!</strong>
-                                        <p class="text-dark">Желаете ли да изтриете тази заявка?</p>
-                                        <small class="text-secondary">Това действие ще нулира собствеността върху
-                                            дигиталния имот!</small>
-                                        <div class="confirm-buttons-container">
-                                            <button id="yes-btn">Потвърди</button>
-                                            <button id="no-btn">Назад</button>
-                                        </div>
-                                    </div>
-                                </div>
                                 <form class="form-container"
                                       th:action="@{/administration/owners/property/unlink/{id} (id=${property.getId()})}"
                                       th:method="POST"
@@ -285,6 +272,10 @@
     </div>
 </div>
 
+<!--Custom pop-up confirmation window-->
+<div th:replace="~{bg/fragments/confirm-popup}">
+</div>
+
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
 </footer>
@@ -297,7 +288,8 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
-<script src="/js/delete-button.js"></script>
+<script src="/js/buttons.js"></script>
+<script src="/js/confirm.js"></script>
 
 </body>
 </html>

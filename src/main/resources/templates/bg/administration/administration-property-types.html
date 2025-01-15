@@ -97,7 +97,7 @@
                     <div class="text-center">
                         <h4 class="category text-danger">PROPERTY TYPES</h4>
                         <p>Creating property types allows you to apply different monthly fees for
-                            different <br> property types and according to the accepted by the Residential entity fee
+                            different <br> property types and according to the accepted by the Condominium fee
                             policy.<br> If there are types set, property owners can choose between them while
                             registering.<br>
                             You can also manage it later in
@@ -195,19 +195,6 @@
                                 </form>
                             </td>
                             <td align="center" class="table-image">
-                                <!--custom pop-up confirmation window-->
-                                <div class="modal">
-                                    <div class="modal-content">
-                                        <strong class="text-danger-emphasis">Attention!</strong>
-                                        <p class="text-dark">Do you want to delete this property type?</p>
-                                        <small class="text-secondary">Property types definitions help you to manage
-                                            properties fees by property types!</small>
-                                        <div class="confirm-buttons-container">
-                                            <button id="yes-btn">Confirm</button>
-                                            <button id="no-btn">Cancel</button>
-                                        </div>
-                                    </div>
-                                </div>
                                 <form class="form-container"
                                       th:action="@{/administration/property/types/delete/{id} (id=${propertyType.getId()})}"
                                       th:method="POST">
@@ -232,6 +219,9 @@
     </div>
 </div>
 
+<!--Custom pop-up confirmation window-->
+<div th:replace="~{bg/fragments/confirm-popup}">
+</div>
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
@@ -246,7 +236,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/confirm.js"></script>
-<script src="/js/delete-button.js"></script>
+<script src="/js/buttons.js"></script>
 
 </body>
 </html>

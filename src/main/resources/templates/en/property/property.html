@@ -49,11 +49,9 @@
                     0 Properties available
                 </h3>
                 <h3 th:if="${loggedUser.getProperties().size() == 1}"
-                    th:text="${loggedUser.getProperties().size()} +
-                    ' property available'"></h3>
+                    th:text="${loggedUser.getProperties().size()} + ' property available'"></h3>
                 <h3 th:if="${loggedUser.getProperties().size() > 1}"
-                    th:text="${loggedUser.getProperties().size()} +
-                    ' properties available'"></h3>
+                    th:text="${loggedUser.getProperties().size()} + ' properties available'"></h3>
                 <span class="breadcrumb">
                     <form th:method="GET"
                           th:action="@{/property/add}">
@@ -71,8 +69,8 @@
 <div th:if="${loggedUser.getProperties().size() == 0}" class="properties">
 <p class="text-center" style="margin: 14em auto">No registered properties</p>
 </div>
-<div th:if="${loggedUser.getProperties().size() > 0}" class="properties">
-    <div class="container">
+<div th:if="${loggedUser.getProperties().size() > 0}" class="container">
+    <div class="properties">
         <div th:each="property: ${loggedUser.getProperties()}">
 
             <!--Active registration-->

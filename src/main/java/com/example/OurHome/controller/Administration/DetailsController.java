@@ -37,7 +37,7 @@ public class DetailsController {
     }
 
     /**
-     * Residential entity edit form in Administration
+     * Condominium edit form in Administration
      *
      * @param id property id
      * @return view administration-details-edit
@@ -58,7 +58,7 @@ public class DetailsController {
     }
 
     /**
-     * Residential entity edit form in Administration
+     * Condominium edit form in Administration
      *
      * @param residentialEntityEditBindingModel carries info about new values
      * @param entityId                          RE id
@@ -99,7 +99,7 @@ public class DetailsController {
     /**
      * Method returns a ResidentialEntity
      *
-     * @param id residential entity id
+     * @param id Condominium id
      * @return ResidentialEntity
      */
     private ResidentialEntity getResidentialEntity(Long id) {

@@ -2608,7 +2608,7 @@ table {
 
 /*
 ---------------------------------------------
-Residential entity section image
+Condominium section image
 ---------------------------------------------
 */
 
@@ -3002,88 +3002,25 @@ Registration/change request section
 
 /*
 ---------------------------------------------
-Registration/change request buttons
+Owner registration/change submit button
 ---------------------------------------------
 */
 
-.buttons-container {
-    display: flex;
-    gap: 1px;
-    flex-direction: row;
-    justify-content: space-between;
-    padding-top: 10px;
-}
-
-.buttons-container form {
-    min-width: 33.3%;
-    width: 50%;
-    background-color: #1f1f1f;
-}
-
-.buttons-container form button p {
-    color: #ffffff;
-    padding: 0;
-    margin: 0;
-    font-size: 0.95em;
-}
-
-#approve-with-change {
+#request-process-button {
+    margin-top: 20px;
     width: 100%;
-    height: 100%;
-    padding: 0 5px;
-    transition: 1.5s;
-}
-
-#approve-with-change:hover {
-    background-color: #278a15;
-    transition: 0.5s;
-}
-
-#approve-without-change {
-    width: 100%;
-    height: 100%;
-    padding: 0 5px;
-    transition: 1.5s;
-}
-
-#approve-without-change:hover {
-    background-color: #278a15;
-    transition: 0.5s;
-}
-
-#approve-without-change-inactive {
-    width: 100%;
-    height: 100%;
-    padding: 0 5px;
-    transition: 1.5s;
-    background-color: #bcbcbc;
-}
-
-#approve-change-request {
+    padding: 8px 14px;
+    background: #DC3545;
     color: white;
-    width: 100%;
-    background-color: #000000;
-    padding: 8px 10px;
+    border-radius: 10px;
     transition: 1.5s;
 }
 
-#approve-change-request:hover {
-    background-color: #147700;
-    transition: 0.5s;
-}
-
-#reject {
-    width: 100%;
-    height: 100%;
-    color: white;
-    padding: 8px 10px;
+#request-process-button:hover {
+    background: #9b111e;
     transition: 1.5s;
 }
 
-#reject:hover {
-    background-color: #DC3545;
-    transition: 0.5s;
-}
 
 /*Button for cancellation of change request (performed by owner in Property details section)*/
 .cancel-change-request {

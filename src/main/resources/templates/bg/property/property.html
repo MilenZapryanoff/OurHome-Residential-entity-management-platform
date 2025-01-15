@@ -4,25 +4,25 @@
 >
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
     <title>OurHome - Home management platform</title>
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -35,7 +35,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -49,14 +49,12 @@
                     0 регистрирани имота
                 </h3>
                 <h3 th:if="${loggedUser.getProperties().size() == 1}"
-                    th:text="${loggedUser.getProperties().size()} +
-                    ' регистриран имот'"></h3>
+                    th:text="${loggedUser.getProperties().size()} + ' регистриран имот'"></h3>
                 <h3 th:if="${loggedUser.getProperties().size() > 1}"
-                    th:text="${loggedUser.getProperties().size()} +
-                    ' регистрирани имота'"></h3>
+                    th:text="${loggedUser.getProperties().size()} + ' регистрирани имота'"></h3>
                 <span class="breadcrumb">
-                    <form th:method="GET"
-                          th:action="@{/property/add}">
+                    <form th:action="@{/property/add}"
+                          th:method="GET">
                          <button type="submit">
                              <p class="text-danger">Регистрирай имот</p>
                          </button>
@@ -68,17 +66,17 @@
 </div>
 
 <!--Properties section start-->
-<div th:if="${loggedUser.getProperties().size() == 0}" class="properties">
-<p class="text-center" style="margin: 14em auto">Нямате регистрирани имоти</p>
+<div class="properties" th:if="${loggedUser.getProperties().size() == 0}">
+    <p class="text-center" style="margin: 14em auto">Нямате регистрирани имоти</p>
 </div>
-<div th:if="${loggedUser.getProperties().size() > 0}" class="properties">
-    <div class="container">
+<div class="container" th:if="${loggedUser.getProperties().size() > 0}">
+    <div class="properties">
         <div th:each="property: ${loggedUser.getProperties()}">
 
             <!--Active registration-->
-            <div th:if="${property.isObtained()}" class="item">
+            <div class="item" th:if="${property.isObtained()}">
                 <a th:href="@{/property/summary/{id}(id=${property.getId()})}"><img
-                        src="/images/property-plan.jpg" alt="View details" title="View details"></a>
+                        alt="View details" src="/images/property-plan.jpg" title="View details"></a>
                 <span class="category text-bg-success text-light">Активен</span>
                 <h4><a th:text="${property.getResidentialEntity().getCity().getName()} + ', ' +
                                                             ${property.getResidentialEntity().getStreetName()} + ' ' +
@@ -107,9 +105,9 @@
             </div>
 
             <!--Property rejected-->
-            <div th:if="${!property.isObtained()} and ${property.isRejected()}" class="item">
+            <div class="item" th:if="${!property.isObtained()} and ${property.isRejected()}">
                 <a th:href="@{/property/summary/{id}(id=${property.getId()})}"><img
-                        src="/images/property-plan-X.jpg" alt=""></a>
+                        alt="" src="/images/property-plan-X.jpg"></a>
                 <span class="category text-danger">Отхвърлен<!doctype html>
                                             </span>
                 <h6></h6>
@@ -140,9 +138,9 @@
             </div>
 
             <!--Pending registration-->
-            <div th:if="${!property.isObtained()} and ${!property.isRejected()}" class="item">
+            <div class="item" th:if="${!property.isObtained()} and ${!property.isRejected()}">
                 <a th:href="@{/property/summary/{id}(id=${property.getId()})}"><img
-                        src="/images/property-plan-BW.jpg" alt="View details" title="View details"></a>
+                        alt="View details" src="/images/property-plan-BW.jpg" title="View details"></a>
                 <span class="category text-bg-secondary">Очаква валидация<!doctype html></span>
                 <h4><a class="text-black" th:text="${property.getResidentialEntity().getCity().getName()} + ', ' +
                             ${property.getResidentialEntity().getStreetName()} + ' ' +

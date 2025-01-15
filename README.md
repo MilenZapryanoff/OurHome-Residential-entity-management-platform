@@ -77,8 +77,14 @@ A platform that allows the registration of both home owners and residential enti
 </ul>
 
 
-
 <h2>Updates</h2>
+
+
+<h4>v.2.25.0115</h4>
+  <ul>
+    <li>Bug fixes</li>
+    <li>Redesign of FE pages</li>
+  </ul>
 
 <h4>v.2.25.0105</h4>
   <ul>

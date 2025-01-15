@@ -35,7 +35,6 @@
         </div>
     </div>
 </div>
-<!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
 <div class="sub-header" th:replace="~{fragments/header}">
@@ -56,7 +55,7 @@
     </div>
 </div>
 
-<!-- ***** Residential entity section ***** -->
+<!-- ***** Condominium section ***** -->
 <div class="page-content">
     <!--start of Sub-menu-->
     <div class="menu-container">
@@ -78,7 +77,8 @@
                 <div class="table-nav-section">
                     <a class="button nav-link active"
                        href=#active-registrations>
-                        <div class="text-center"><i class="fa-regular fa-building"></i> <span>Самостоятелни обекти</span>
+                        <div class="text-center"><i class="fa-regular fa-building"></i>
+                            <span>Самостоятелни обекти</span>
                             <sup th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
                                  th:text="' '+ ${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())}">
                             </sup>
@@ -95,7 +95,8 @@
                     </a>
                     <a class="button nav-link"
                        th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Типове самостоятелни обекти</span>
+                        <div class="text-center"><i class="fa-solid fa-gears"></i>
+                            <span>Типове самостоятелни обекти</span>
                         </div>
                     </a>
                 </div>
@@ -133,7 +134,6 @@
                     <hr>
 
                     <!--Active registrations list-->
-
                     <table class="table text-center" id="properties-list">
                         <tr>
                             <th>
@@ -152,10 +152,10 @@
                                 <p>Контрол собств.</p>
                             </th>
                             <th>
-                                <p>Категория</p>
+                                <p>Клас</p>
                             </th>
                             <th th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
-                                <p>Вид</p>
+                                <p>Категория</p>
                             </th>
                             <th>
                                 <p>Етаж</p>
@@ -268,26 +268,25 @@
                                       th:if="${property.getOwner()} != null"
                                       th:method="POST"
                                       th:object="${propertyManageBindingModel}">
-                                    <label class="hidden"
-                                           for="unlinkOwner"></label>
-                                    <select class="form-control hidden"
-                                            id="unlinkOwner"
-                                            th:field="*{entityId}">
-                                        <option
-                                                th:text="${residentialEntity.getId()}"
-                                                th:value="${residentialEntity.getId()}">
-                                        </option>
+                                    <label class="hidden" for="unlinkOwner"></label>
+                                    <select class="form-control hidden" id="unlinkOwner" th:field="*{entityId}">
+                                        <option th:text="${residentialEntity.getId()}"
+                                                th:value="${residentialEntity.getId()}"></option>
                                     </select>
-                                    <button onclick="return confirmUnlinkOwner()" type="submit">
-                                        <p><i class="table-button"
-                                              title="Премахни този потребител като собственик на имота"><i
-                                                class="fa-solid fa-user-xmark"></i></i></p>
+                                    <button class="modal-button" type="button">
+                                        <p>
+                                            <i class="table-button"
+                                               title="Премахни този потребител като собственик на имота">
+                                                <i class="fa-solid fa-user-xmark"></i>
+                                            </i>
+                                        </p>
                                     </button>
                                 </form>
                                 <p th:if="${property.getOwner()} == null">-</p>
                             </td>
                             <td>
-                                <p th:if="${property.getPropertyClass() != null}" th:text="${property.getPropertyClass().getName()}"></p>
+                                <p th:if="${property.getPropertyClass() != null}"
+                                   th:text="${property.getPropertyClass().getName()}"></p>
                                 <p th:if="${property.getPropertyClass() == null}">-</p>
                             </td>
                             <td th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
@@ -349,32 +348,17 @@
                                 </form>
                             </td>
                             <td>
-                                <!--custom pop-up confirmation window-->
-                                <div class="modal">
-                                    <div class="modal-content">
-                                        <strong class="text-danger-emphasis">ВНИМАНИЕ!</strong>
-                                        <p class="text-dark">Желаете ли да изтриете този дигитален имот?</p>
-                                        <small class="text-secondary">Това действие е необратимо и наличната информация
-                                            за този дигитален имот ще бъде трайно изгубена!</small>
-                                        <div class="confirm-buttons-container">
-                                            <button id="yes-btn">Потвърди</button>
-                                            <button id="no-btn">Назад</button>
-                                        </div>
-                                    </div>
-                                </div>
                                 <form class="form-container"
+                                      data-popup-description="Желаете ли да изтриете този имот?"
+                                      data-popup-detail="Това действие е необратимо и информацията ще бъде трайно изгубена."
                                       th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"
                                       th:method="POST"
                                       th:object="${propertyManageBindingModel}">
-                                    <label class="hidden"
-                                           for="activeEntityIdDelete"></label>
-                                    <select class="form-control hidden"
-                                            id="activeEntityIdDelete"
+                                    <label class="hidden" for="activeEntityIdDelete"></label>
+                                    <select class="form-control hidden" id="activeEntityIdDelete"
                                             th:field="*{entityId}">
-                                        <option
-                                                th:text="${residentialEntity.getId()}"
-                                                th:value="${residentialEntity.getId()}">
-                                        </option>
+                                        <option th:text="${residentialEntity.getId()}"
+                                                th:value="${residentialEntity.getId()}"></option>
                                     </select>
                                     <button class="delete-button" type="button">
                                         <div class="icon">
@@ -402,6 +386,9 @@
     </div>
 </div>
 
+<!--Custom pop-up confirmation window-->
+<div th:replace="~{bg/fragments/confirm-popup}">
+</div>
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
@@ -416,7 +403,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/confirm.js"></script>
-<script src="/js/delete-button.js"></script>
+<script src="/js/buttons.js"></script>
 
 </body>
 </html>

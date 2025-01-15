@@ -19,13 +19,13 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
 
     private static final String WELCOME_MSG_USER_BG = "Благодарим Ви, за регистрацията в платформата OurHome! За да получите достъп до Вашата дигитална етажна собственост първо трябва да се регистрирате, като собственик на имот. След като Вашата регистрация бъде завършена ще получите пълен достъп до наличната информация!";
-    private static final String WELCOME_MSG_USER_ENG = "Thanks for your registration! To access your digital residential entity data you should first add a property. After your residential entity manager verifies your request you will get full access.";
+    private static final String WELCOME_MSG_USER_ENG = "Thanks for your registration! To access your digital Condominium data you should first add a property. After your Condominium manager verifies your request you will get full access.";
     private static final String PENDING_REGISTRATION_BG = "Нова заявка за регистрация на дигитален имот, която изисква верификация от Ваша страна! Можете да достъпите заявката през меню Администрация -> Потребители -> Чакащи заявки";
     private static final String PENDING_REGISTRATION_ENG = "New digital property registration needs you verification! You can access the request via Administration panel";
     private static final String SUCCESS_REGISTRATION_BG = "Нова успешна регистрация на имот във Вашата дигитална етажна собственост! Заявката не изисква допълнителна верификация от Ваша страна!";
     private static final String SUCCESS_REGISTRATION_ENG = "New successful digital property registration!. Request is auto-confirmed as there is no data change in the registration request.No action needed from your side!";
     private static final String PROMOTED_MODERATOR_BG = "Вие получихте роля Модератор на етажна собственост. Този достъп Ви осигурява достъп до допълнителна информация и функционалности свързани с Вашата дигитална етажна собственост!";
-    private static final String PROMOTED_MODERATOR_ENG = "You have been promoted as Moderator of Residential entity. You can access all the data related to this Residential entity via the Administration section!";
+    private static final String PROMOTED_MODERATOR_ENG = "You have been promoted as Moderator of Condominium. You can access all the data related to this Condominium via the Administration section!";
 
 
     private final MessageRepository messageRepository;
@@ -77,7 +77,7 @@ public class MessageServiceImpl implements MessageService {
         if (manager.getLanguage().getDescription().equals("bulgarian")) {
             message.setText("Етажна собственост " + residentialEntity.getId() + ": " +  PENDING_REGISTRATION_BG);
         } else if (manager.getLanguage().getDescription().equals("english")) {
-            message.setText("Residential entity " + residentialEntity.getId() + ": " +  PENDING_REGISTRATION_ENG);
+            message.setText("Condominium " + residentialEntity.getId() + ": " +  PENDING_REGISTRATION_ENG);
             message.setText(PENDING_REGISTRATION_ENG);
         }
 
@@ -100,7 +100,7 @@ public class MessageServiceImpl implements MessageService {
 
             message.setText("Етажна собственост " + residentialEntity.getId() + ": " +  SUCCESS_REGISTRATION_BG);
         } else if (manager.getLanguage().getDescription().equals("english")) {
-            message.setText("Residential entity " + residentialEntity.getId() + ": " +  SUCCESS_REGISTRATION_ENG);
+            message.setText("Condominium " + residentialEntity.getId() + ": " +  SUCCESS_REGISTRATION_ENG);
         }
 
         messageRepository.save(message);
@@ -115,7 +115,7 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Data change for property № " + property.getNumber() + " in Residential entity ID: "
+                        "Data change for property № " + property.getNumber() + " in Condominium ID: "
                                 + property.getResidentialEntity().getId() + ". You can access the request via Administration panel",
                         property.getResidentialEntity().getManager(),
                         false,
@@ -131,7 +131,7 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Your Residential entity manager made changes for property №" + property.getNumber() + ". " +
+                        "Your Condominium manager made changes for property №" + property.getNumber() + ". " +
                                 "You can track changes in Property section",
                         property.getOwner(),
                         false,
@@ -170,7 +170,7 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Your registration/modification request for property № " + property.getNumber() + " id Residential entity ID: "
+                        "Your registration/modification request for property № " + property.getNumber() + " id Condominium ID: "
                                 + property.getResidentialEntity().getId() + " has been APPROVED. You can now access your data and reports.",
                         property.getOwner(),
                         false,
@@ -188,9 +188,9 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Your registration request for property № " + property.getNumber() + " id Residential entity ID: "
-                                + property.getResidentialEntity().getId() + " has been REJECTED. You can contact your Residential entity manager for more details " +
-                                "about the reason for this action. If you still have an access to the Residential entity, You can edit the record and submit " +
+                        "Your registration request for property № " + property.getNumber() + " id Condominium ID: "
+                                + property.getResidentialEntity().getId() + " has been REJECTED. You can contact your Condominium manager for more details " +
+                                "about the reason for this action. If you still have an access to the Condominium, You can edit the record and submit " +
                                 "it again.",
                         property.getOwner(),
                         false,
@@ -208,9 +208,9 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Your property № " + property.getNumber() + " has been REMOVED from Residential entity ID: "
-                                + property.getResidentialEntity().getId() + ". You can contact your Residential entity manager for more details " +
-                                "about the reason for this action. If you still have an access to the Residential entity, You can submit new " +
+                        "Your property № " + property.getNumber() + " has been REMOVED from Condominium ID: "
+                                + property.getResidentialEntity().getId() + ". You can contact your Condominium manager for more details " +
+                                "about the reason for this action. If you still have an access to the Condominium, You can submit new " +
                                 "property registration request.",
                         property.getOwner(),
                         false,
@@ -223,7 +223,7 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Registration request for property № " + property.getNumber() + " in Residential entity ID: "
+                        "Registration request for property № " + property.getNumber() + " in Condominium ID: "
                                 + property.getResidentialEntity().getId() + " has been Canceled by user.",
                         property.getResidentialEntity().getManager(),
                         false,
@@ -382,7 +382,7 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Your registration request for property № " + property.getNumber() + " in Residential entity ID: "
+                        "Your registration request for property № " + property.getNumber() + " in Condominium ID: "
                                 + property.getResidentialEntity().getId() + " has been APPROVED. Please note, that there " +
                                 "was a difference between your input data and the preset data for this property. " +
                                 " Your input data was ignored and no changes were made for this property." +
@@ -398,7 +398,7 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Your change request for property № " + property.getNumber() + " in Residential entity ID: "
+                        "Your change request for property № " + property.getNumber() + " in Condominium ID: "
                                 + property.getResidentialEntity().getId() + " has been APPROVED. Changes applied to your property!",
                         property.getOwner(),
                         false,
@@ -411,7 +411,7 @@ public class MessageServiceImpl implements MessageService {
                 new Message(
                         LocalDate.now(),
                         Time.valueOf(LocalTime.now()),
-                        "Your change request for property № " + property.getNumber() + " in Residential entity ID: "
+                        "Your change request for property № " + property.getNumber() + " in Condominium ID: "
                                 + property.getResidentialEntity().getId() + " has been REJECTED. Your changes will not take affect. You can still send new change request if needed!",
                         property.getOwner(),
                         false,

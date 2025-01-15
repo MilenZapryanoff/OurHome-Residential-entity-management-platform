@@ -17,6 +17,7 @@
     <link href="/css/our-home.css" rel="stylesheet">
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
 </head>
@@ -49,342 +50,345 @@
         <div class="row">
             <h3>Properties data</h3>
             <div class="col-lg-12">
-                <span th:text="'Residential Entity ID: ' + ${residentialEntity.getId()}"></span>
+                <span th:text="'Condominium ID: ' + ${residentialEntity.getId()}"></span>
             </div>
         </div>
     </div>
 </div>
 
-<!-- ***** Residential entity section ***** -->
-
-<div class="container">
-    <!--Start of sub-menu-->
-    <div class="administration-nav-bar">
+<!-- ***** Condominium section ***** -->
+<div class="page-content">
+    <!--start of Sub-menu-->
+    <div class="menu-container">
         <div th:replace="~{/en/fragments/adm-submenu}"></div>
-        <div class="animation start-properties"></div>
     </div>
+    <div class="content">
+        <div class="container">
+            <!--Active registrations section-->
+            <div class="administration">
+                <!--Sub-menu buttons-->
+                <div class="table-nav-section">
+                    <a class="button nav-link active"
+                       href=#active-registrations>
+                        <div class="text-center"><i class="fa-regular fa-building"></i> <span>Properties</span>
+                            <sup th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                 th:text="' '+ ${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())}">
+                            </sup>
 
-    <!--Active registrations section-->
-    <div class="administration">
-        <!--Sub-menu buttons-->
-        <div class="table-nav-section">
-            <a class="button nav-link active"
-               href=#active-registrations>
-                <div class="text-center"><i class="fa-regular fa-building"></i> <span>Properties</span>
-                    <sup th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
-                         th:text="' '+ ${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())}">
-                    </sup>
-
+                        </div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/property/change-requests/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-screwdriver-wrench"></i>
+                            <span>Change requests</span>
+                            <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
+                                 th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
+                            </sup>
+                        </div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Property types</span>
+                        </div>
+                    </a>
                 </div>
-            </a>
-            <a class="button nav-link"
-               th:href="@{/administration/property/change-requests/{id}(id=${residentialEntity.getId()})}">
-                <div class="text-center"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Change requests</span>
-                    <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
-                         th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
-                    </sup>
-                </div>
-            </a>
-            <a class="button nav-link"
-               th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
-                <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Property types</span>
-                </div>
-            </a>
-        </div>
-        <!--Active registrations table-->
-        <div class="info-table rounded-bottom" id="active-registrations">
+                <!--Active registrations table-->
+                <div class="info-table rounded-bottom" id="active-registrations">
 
-            <!--Active registrations header-->
-            <div class="text-center">
-                <h4 class="category text-danger">LIST OF PROPERTIES</h4>
-            </div>
+                    <!--Active registrations header-->
+                    <div class="text-center">
+                        <h4 class="category text-danger">LIST OF PROPERTIES</h4>
+                    </div>
 
-            <div class="due-amounts-header" style="padding: 10px 0">
-                <!--Records counter-->
-                <div class="counter">
+                    <div class="due-amounts-header" style="padding: 10px 0">
+                        <!--Records counter-->
+                        <div class="counter">
                         <span class="category text-bg-success"
                               th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} == 1"
                               th:text="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} + ' Record found'"></span>
-                    <span class="category text-bg-success"
-                          th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 1"
-                          th:text="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} + ' Records found'"></span>
+                            <span class="category text-bg-success"
+                                  th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 1"
+                                  th:text="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} + ' Records found'"></span>
 
+                        </div>
+                        <!--Add global fee button-->
+
+                        <form th:action="@{/administration/property/create/{id} (id=${residentialEntity.getId()})}">
+                            <button type="submit">
+                                <img alt="Create new property"
+                                     src="/images/add_button.png"
+                                     style="max-width: 20px;"
+                                     title="Create new property">
+                                <p>Create new property</p>
+                            </button>
+                        </form>
+                    </div>
+                    <hr>
+
+                    <!--Active registrations list-->
+                    <table class="table text-center" id="properties-list">
+                        <tr>
+                            <th>
+                                <p>Property №</p>
+                            </th>
+                            <th>
+                                <p>Property Status</p>
+                            </th>
+                            <th class="gray-field">
+                                <p>Owner</p>
+                            </th>
+                            <th class="gray-field">
+                                <p>Owner status</p>
+                            </th>
+                            <th class="gray-field">
+                                <p>Owner control</p>
+                            </th>
+                            <th>
+                                <p>Class</p>
+                            </th>
+                            <th th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
+                                <p>Category</p>
+                            </th>
+                            <th>
+                                <p>Floor</p>
+                            </th>
+                            <th>
+                                <p><i class="fa-solid fa-person help" style="font-size: 20px;"
+                                      title="Number of adults"></i></p>
+                            </th>
+                            <th>
+                                <p><i class="fa-solid fa-child help" title="Number of children"></i></p>
+                            </th>
+                            <th>
+                                <p><i class="fa-solid fa-dog help" title="Number of pets"></i></p>
+                            </th>
+                            <th>
+                                <p>Property habitable</p>
+                            </th>
+                            <th>
+                                <p>Options</p>
+                            </th>
+                            <th>
+                                <p>Delete property</p>
+                            </th>
+                        </tr>
+                        <tr th:each="property: ${@propertyRepository.findAllPropertiesByResidentialEntity(residentialEntity.getId())}">
+                            <td>
+                                <p th:text="${property.getNumber()}"></p>
+                            </td>
+                            <td>
+                                <i class="fa-solid fa-circle-check text-success help"
+                                   th:if="${property.isValidated() and property.getPropertyRegisterRequest() == null and (property.getPropertyChangeRequest() == null or property.getPropertyChangeRequest().isRejected() == true )}"
+                                   title="Status OK"></i>
+                                <form class="form-container"
+                                      th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
+                                      th:object="${propertyManageBindingModel}"
+                                      th:unless="${property.isValidated()}">
+                                    <label class="hidden"
+                                           for="activeEntityIdEdit"></label>
+                                    <label>
+                                        <select class="form-control hidden"
+                                                th:field="*{entityId}">
+                                            <option
+                                                    th:text="${residentialEntity.getId()}"
+                                                    th:value="${residentialEntity.getId()}">
+                                            </option>
+                                        </select>
+                                    </label>
+                                    <button type="submit">
+                                        <i class="fa-solid fa-triangle-exclamation text-danger"
+                                           title="Parametrization required"></i>
+                                    </button>
+                                </form>
+                                <form class="form-container"
+                                      th:action="@{/administration/property/change-requests/{id} (id=${residentialEntity.getId()})}"
+                                      th:if="${property.getPropertyChangeRequest() != null} and ${property.getPropertyChangeRequest().isRejected() == false} and ${property.isValidated()}">
+                                    <button type="submit">
+                                        <i class="fa-solid fa-triangle-exclamation text-danger"
+                                           title="Property data change request from owner"></i>
+                                    </button>
+                                </form>
+                                <div th:if="${property.getPropertyRegisterRequest() != null} and ${property.isValidated()}">
+                                    <form class="form-container"
+                                          th:action="@{/administration/owners/pending/{id}#pending-registrations (id=${residentialEntity.getId()})}"
+                                          th:if="${property.getOwner() != null} AND ${!property.isObtained()} AND ${!property.isRejected()}">
+                                        <button type="submit">
+                                            <i class="fa-solid fa-triangle-exclamation warning"
+                                               title="Pending owner registration request for this property"></i>
+                                        </button>
+                                    </form>
+                                    <form class="form-container"
+                                          th:action="@{/administration/owners/rejected/{id}#rejected-registrations (id=${residentialEntity.getId()})}"
+                                          th:if="${property.isRejected()}">
+                                        <button type="submit">
+                                            <i class="fa-solid fa-triangle-exclamation text-danger"
+                                               title="Rejected owner registration request for this property"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                            <td class="gray-field">
+                                <p th:if="${property.isObtained()}"
+                                   th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                                <p class="text-secondary"
+                                   th:if="${!property.isObtained()} and ${property.getOwner() != null}"
+                                   th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                                <p th:if="(${!property.isObtained()} and ${property.getOwner() == null})">
+                                    <i class="fa-solid fa-user-large-slash help" style="font-size: 0.85em"
+                                       title="No registered owner for this property"></i>
+                                </p>
+                            </td>
+                            <td class="gray-field">
+                                <p th:if="${property.getOwner() != null} AND ${!property.isObtained()} AND ${!property.isRejected()}">
+                                    <a th:href="@{/administration/owners/pending/{id}#pending-registrations (id=${id})}">
+                                        <i class="fa-solid fa-user-clock warning"
+                                           title="Pending owner registration request for this property"></i></a>
+                                </p>
+                                <p th:if="${property.isRejected()}">
+                                    <a th:href="@{/administration/owners/rejected/{id}#rejected-registrations (id=${id})}">
+                                        <i class="fa-solid fa-user-gear text-danger"
+                                           title="Rejected owner registration for this property"></i></a>
+                                </p>
+                                <p class="help" th:if="${property.getOwner()} != null and ${property.isObtained()}"
+                                   title="Property owner registration is completed!">OK</p>
+                                <p th:if="${property.getOwner()} == null and ${!property.isObtained()}">-</p>
+                            </td>
+                            <td class="gray-field">
+                                <form class="form-container"
+                                      style="background-color: initial"
+                                      th:action="@{/administration/property/unlink/{id} (id=${property.getId()})}"
+                                      th:if="${property.getOwner()} != null"
+                                      th:method="POST"
+                                      th:object="${propertyManageBindingModel}">
+                                    <label class="hidden"
+                                           for="unlinkOwner"></label>
+                                    <select class="form-control hidden"
+                                            id="unlinkOwner"
+                                            th:field="*{entityId}">
+                                        <option
+                                                th:text="${residentialEntity.getId()}"
+                                                th:value="${residentialEntity.getId()}">
+                                        </option>
+                                    </select>
+                                    <button class="modal-button" type="button">
+                                        <p>
+                                            <i class="table-button" title="Remove user as owner of this property">
+                                                <i class="fa-solid fa-user-xmark"></i>
+                                            </i>
+                                        </p>
+                                    </button>
+                                </form>
+                                <p th:if="${property.getOwner()} == null">-</p>
+                            </td>
+                            <td>
+                                <p th:if="${property.getPropertyClass() != null}"
+                                   th:text="${property.getPropertyClass().getName()}"></p>
+                                <p th:if="${property.getPropertyClass() == null}">-</p>
+                            </td>
+                            <td th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
+                                <p th:if="${property.getPropertyType()} != null"
+                                   th:text="${property.getPropertyType().getDescription()}"></p>
+                                <p class="help" th:if="${property.getPropertyType()} == null"
+                                   title="No specific property type set for this property. Standard fee rate applies">
+                                    -</p>
+                            </td>
+                            <td>
+                                <p th:text="${property.getFloor()}"></p>
+                            </td>
+                            <td>
+                                <p th:if="${!property.isNotHabitable()}" th:text="${property.getNumberOfAdults()}"></p>
+                                <p th:unless="${!property.isNotHabitable()}">-</p>
+                            </td>
+                            <td>
+                                <p th:if="${!property.isNotHabitable()}"
+                                   th:text="${property.getNumberOfChildren()}"></p>
+                                <p th:unless="${!property.isNotHabitable()}">-</p>
+                            </td>
+                            <td>
+                                <p th:if="${!property.isNotHabitable()}" th:text="${property.getNumberOfPets()}"></p>
+                                <p th:unless="${!property.isNotHabitable()}">-</p>
+                            </td>
+                            <td th:if="${property.isValidated()}">
+                                <i class="fa-regular fa-xmark-circle help text-danger"
+                                   th:if="${property.isNotHabitable()}"
+                                   title="Property is not habitable"></i>
+                                <i class="fa-regular fa-check-circle text-success-emphasis help"
+                                   th:unless="${property.isNotHabitable()}"
+                                   title="Property is habitable"></i>
+                            </td>
+                            <td th:unless="${property.isValidated()}">-</td>
+                            <td>
+                                <form class="form-container"
+                                      th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
+                                      th:object="${propertyManageBindingModel}">
+                                    <label class="hidden"
+                                           for="activeEntityIdEdit"></label>
+                                    <select class="form-control hidden"
+                                            id="activeEntityIdEdit"
+                                            th:field="*{entityId}">
+                                        <option
+                                                th:text="${residentialEntity.getId()}"
+                                                th:value="${residentialEntity.getId()}">
+                                        </option>
+                                    </select>
+                                    <button th:if="${property.isValidated()}" type="submit">
+                                        <img alt="Edit property"
+                                             src="/images/edit.png"
+                                             style="width: 20px;"
+                                             title="Edit property">
+                                    </button>
+
+                                    <button th:unless="${property.isValidated()}" type="submit">
+                                        <i class="fa-solid fa-gear text-dark"
+                                           title="Set property data"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form class="form-container"
+                                      th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"
+                                      th:method="POST"
+                                      th:object="${propertyManageBindingModel}">
+                                    <label class="hidden"
+                                           for="activeEntityIdDelete"></label>
+                                    <select class="form-control hidden"
+                                            id="activeEntityIdDelete"
+                                            th:field="*{entityId}">
+                                        <option
+                                                th:text="${residentialEntity.getId()}"
+                                                th:value="${residentialEntity.getId()}">
+                                        </option>
+                                    </select>
+                                    <button class="delete-button" type="button">
+                                        <div class="icon">
+                                            <svg class="top" viewBox="0 0 24 24">
+                                                <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
+                                            </svg>
+                                            <svg class="bottom" viewBox="0 0 24 24">
+                                                <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="text">Delete</div>
+                                    </button>
+                                </form>
+                            </td>
+
+                        </tr>
+                    </table>
+
+                    <p class="text-center"
+                       th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} == 0">
+                        No
+                        records found</p>
                 </div>
-                <!--Add global fee button-->
-
-                <form th:action="@{/administration/property/create/{id} (id=${residentialEntity.getId()})}">
-                    <button type="submit">
-                        <img alt="Create new property"
-                             src="/images/add_button.png"
-                             style="max-width: 20px;"
-                             title="Create new property">
-                        <p>Create new property</p>
-                    </button>
-                </form>
             </div>
-            <hr>
-
-            <!--Active registrations list-->
-
-            <table class="table text-center" id="properties-list">
-                <tr>
-                    <th>
-                        <p>Property №</p>
-                    </th>
-                    <th>
-                        <p>Property Status</p>
-                    </th>
-                    <th class="gray-field">
-                        <p>Owner</p>
-                    </th>
-                    <th class="gray-field">
-                        <p>Owner status</p>
-                    </th>
-                    <th class="gray-field">
-                        <p>Owner control</p>
-                    </th>
-                    <th>
-                        <p>Category</p>
-                    </th>
-                    <th th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
-                        <p>Type</p>
-                    </th>
-                    <th>
-                        <p>Floor</p>
-                    </th>
-                    <th>
-                        <p><i class="fa-solid fa-person help" style="font-size: 20px;" title="Number of adults"></i></p>
-                    </th>
-                    <th>
-                        <p><i class="fa-solid fa-child help" title="Number of children"></i></p>
-                    </th>
-                    <th>
-                        <p><i class="fa-solid fa-dog help" title="Number of pets"></i></p>
-                    </th>
-                    <th>
-                        <p>Property habitable</p>
-                    </th>
-                    <th>
-                        <p>Options</p>
-                    </th>
-                    <th>
-                        <p>Delete property</p>
-                    </th>
-                </tr>
-                <tr th:each="property: ${@propertyRepository.findAllPropertiesByResidentialEntity(residentialEntity.getId())}">
-                    <td>
-                        <p th:text="${property.getNumber()}"></p>
-                    </td>
-                    <td>
-                        <i class="fa-solid fa-circle-check text-success help"
-                           th:if="${property.isValidated() and property.getPropertyRegisterRequest() == null and (property.getPropertyChangeRequest() == null or property.getPropertyChangeRequest().isRejected() == true )}"
-                           title="Status OK"></i>
-                        <form class="form-container" th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
-                              th:object="${propertyManageBindingModel}"
-                              th:unless="${property.isValidated()}">
-                            <label class="hidden"
-                                   for="activeEntityIdEdit"></label>
-                            <label>
-                                <select class="form-control hidden"
-                                        th:field="*{entityId}">
-                                    <option
-                                            th:text="${residentialEntity.getId()}"
-                                            th:value="${residentialEntity.getId()}">
-                                    </option>
-                                </select>
-                            </label>
-                            <button type="submit">
-                                <i class="fa-solid fa-triangle-exclamation text-danger"
-                                   title="Parametrization required"></i>
-                            </button>
-                        </form>
-                        <form class="form-container"
-                              th:action="@{/administration/property/change-requests/{id} (id=${residentialEntity.getId()})}"
-                              th:if="${property.getPropertyChangeRequest() != null} and ${property.getPropertyChangeRequest().isRejected() == false} and ${property.isValidated()}">
-                            <button type="submit">
-                                <i class="fa-solid fa-triangle-exclamation text-danger"
-                                   title="Property data change request from owner"></i>
-                            </button>
-                        </form>
-                        <div th:if="${property.getPropertyRegisterRequest() != null} and ${property.isValidated()}">
-                            <form class="form-container"
-                                  th:action="@{/administration/owners/pending/{id}#pending-registrations (id=${residentialEntity.getId()})}"
-                                  th:if="${property.getOwner() != null} AND ${!property.isObtained()} AND ${!property.isRejected()}">
-                                <button type="submit">
-                                    <i class="fa-solid fa-triangle-exclamation warning"
-                                       title="Pending owner registration request for this property"></i>
-                                </button>
-                            </form>
-                            <form class="form-container" th:action="@{/administration/owners/rejected/{id}#rejected-registrations (id=${residentialEntity.getId()})}"
-                                  th:if="${property.isRejected()}">
-                                <button type="submit">
-                                    <i class="fa-solid fa-triangle-exclamation text-danger"
-                                       title="Rejected owner registration request for this property"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </td>
-                    <td class="gray-field">
-                        <p th:if="${property.isObtained()}"
-                           th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
-                        <p class="text-secondary"
-                           th:if="${!property.isObtained()} and ${property.getOwner() != null}"
-                           th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
-                        <p th:if="(${!property.isObtained()} and ${property.getOwner() == null})">
-                            <i class="fa-solid fa-user-large-slash help" style="font-size: 0.85em"
-                               title="No registered owner for this property"></i>
-                        </p>
-                    </td>
-                    <td class="gray-field">
-                        <p th:if="${property.getOwner() != null} AND ${!property.isObtained()} AND ${!property.isRejected()}">
-                            <a th:href="@{/administration/owners/pending/{id}#pending-registrations (id=${id})}">
-                                <i class="fa-solid fa-user-clock warning"
-                                   title="Pending owner registration request for this property"></i></a>
-                        </p>
-                        <p th:if="${property.isRejected()}">
-                            <a th:href="@{/administration/owners/rejected/{id}#rejected-registrations (id=${id})}">
-                                <i class="fa-solid fa-user-gear text-danger"
-                                   title="Rejected owner registration for this property"></i></a>
-                        </p>
-                        <p class="help" th:if="${property.getOwner()} != null and ${property.isObtained()}"
-                           title="Property owner registration is completed!">OK</p>
-                        <p th:if="${property.getOwner()} == null and ${!property.isObtained()}">-</p>
-                    </td>
-                    <td class="gray-field">
-                        <form class="form-container"
-                              style="background-color: initial" th:action="@{/administration/property/unlink/{id} (id=${property.getId()})}"
-                              th:if="${property.getOwner()} != null"
-                              th:method="POST"
-                              th:object="${propertyManageBindingModel}">
-                            <label class="hidden"
-                                   for="unlinkOwner"></label>
-                            <select class="form-control hidden"
-                                    id="unlinkOwner"
-                                    th:field="*{entityId}">
-                                <option
-                                        th:text="${residentialEntity.getId()}"
-                                        th:value="${residentialEntity.getId()}">
-                                </option>
-                            </select>
-                            <button onclick="return confirmUnlinkOwner()" type="submit">
-                                <p><i class="table-button" title="Remove property owner"><i
-                                        class="fa-solid fa-user-xmark"></i></i></p>
-                            </button>
-                        </form>
-                        <p th:if="${property.getOwner()} == null">-</p>
-                    </td>
-                    <td>
-                        <p th:if="${property.getPropertyClass() != null}" th:text="${property.getPropertyClass().getName()}"></p>
-                        <p th:if="${property.getPropertyClass() == null}">-</p>
-                    </td>
-                    <td th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
-                        <p th:if="${property.getPropertyType()} != null"
-                           th:text="${property.getPropertyType().getDescription()}"></p>
-                        <p class="help" th:if="${property.getPropertyType()} == null"
-                           title="No specific property type set for this property. Standard fee rate applies">-</p>
-                    </td>
-                    <td>
-                        <p th:text="${property.getFloor()}"></p>
-                    </td>
-                    <td>
-                        <p th:if="${!property.isNotHabitable()}" th:text="${property.getNumberOfAdults()}"></p>
-                        <p th:unless="${!property.isNotHabitable()}">-</p>
-                    </td>
-                    <td>
-                        <p th:if="${!property.isNotHabitable()}" th:text="${property.getNumberOfChildren()}"></p>
-                        <p th:unless="${!property.isNotHabitable()}">-</p>
-                    </td>
-                    <td>
-                        <p th:if="${!property.isNotHabitable()}" th:text="${property.getNumberOfPets()}"></p>
-                        <p th:unless="${!property.isNotHabitable()}">-</p>
-                    </td>
-                    <td th:if="${property.isValidated()}">
-                        <i class="fa-regular fa-xmark-circle help text-danger"
-                           th:if="${property.isNotHabitable()}"
-                           title="Property is not habitable"></i>
-                        <i class="fa-regular fa-check-circle text-success-emphasis help"
-                           th:unless="${property.isNotHabitable()}"
-                           title="Property is habitable"></i>
-                    </td>
-                    <td th:unless="${property.isValidated()}">-</td>
-                    <td>
-                        <form class="form-container"
-                              th:action="@{/administration/property/edit/{id} (id=${property.getId()})}"
-                              th:object="${propertyManageBindingModel}">
-                            <label class="hidden"
-                                   for="activeEntityIdEdit"></label>
-                            <select class="form-control hidden"
-                                    id="activeEntityIdEdit"
-                                    th:field="*{entityId}">
-                                <option
-                                        th:text="${residentialEntity.getId()}"
-                                        th:value="${residentialEntity.getId()}">
-                                </option>
-                            </select>
-                            <button th:if="${property.isValidated()}" type="submit">
-                                <img alt="Edit property"
-                                     src="/images/edit.png"
-                                     style="width: 20px;"
-                                     title="Edit property">
-                            </button>
-
-                            <button th:unless="${property.isValidated()}" type="submit">
-                                <i class="fa-solid fa-gear text-dark"
-                                   title="Set property data"></i>
-                            </button>
-                        </form>
-                    </td>
-                    <td>
-                        <!--custom pop-up confirmation window-->
-                        <div class="modal">
-                            <div class="modal-content">
-                                <strong class="text-danger-emphasis">Attention!</strong>
-                                <p class="text-dark">Do you really want to delete this property?</p>
-                                <small class="text-secondary">Please note, that once deleted the property cannot be
-                                    recovered and all it's data will be lost!</small>
-                                <div class="confirm-buttons-container">
-                                    <button id="yes-btn">Confirm</button>
-                                    <button id="no-btn">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                        <form class="form-container"
-                              th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"
-                              th:method="POST"
-                              th:object="${propertyManageBindingModel}">
-                            <label class="hidden"
-                                   for="activeEntityIdDelete"></label>
-                            <select class="form-control hidden"
-                                    id="activeEntityIdDelete"
-                                    th:field="*{entityId}">
-                                <option
-                                        th:text="${residentialEntity.getId()}"
-                                        th:value="${residentialEntity.getId()}">
-                                </option>
-                            </select>
-                            <button class="delete-button" type="button">
-                                <div class="icon">
-                                    <svg class="top" viewBox="0 0 24 24">
-                                        <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
-                                    </svg>
-                                    <svg class="bottom" viewBox="0 0 24 24">
-                                        <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
-                                    </svg>
-                                </div>
-                                <div class="text">Delete</div>
-                            </button>
-                        </form>
-                    </td>
-
-                </tr>
-            </table>
-
-            <p class="text-center"
-               th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} == 0">No records found</p>
         </div>
     </div>
 </div>
 
+<!--custom pop-up confirmation window-->
+<div th:replace="~{en/fragments/confirm-popup}">
+</div>
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
@@ -399,7 +403,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/confirm.js"></script>
-<script src="/js/delete-button.js"></script>
+<script src="/js/buttons.js"></script>
 
 </body>
 </html>

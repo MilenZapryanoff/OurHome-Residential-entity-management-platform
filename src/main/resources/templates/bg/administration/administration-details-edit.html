@@ -48,7 +48,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Modify residential entity</h3>
+            <h3>Промяна на данни</h3>
             <div class="col-lg-12">
                 <span th:text="'Идентификатор на ЕС: ' + ${residentialEntity.getId()}"></span>
             </div>
@@ -56,7 +56,7 @@
     </div>
 </div>
 
-<!-- ***** Residential entity section ***** -->
+<!-- ***** Condominium section ***** -->
 <div class="container">
     <div class="input-data text-center">
         <div class="input-content col-lg-6" style="margin: -80px auto">
@@ -66,7 +66,7 @@
                   th:object="${residentialEntityEditBindingModel}">
                 <div class="col-lg-12">
                     <fieldset>
-                        <label for="city"><b>City</b></label>
+                        <label for="city"><b>Населено място</b></label>
                         <select class="form-control" id="city"
                                 th:field="*{city}">
                             <option th:each="cityOption : ${T(com.example.OurHome.model.enums.CityName).values()}"
@@ -80,48 +80,46 @@
                            th:errors="*{city}" class="text-danger">City error
                         message</small>
                     <fieldset>
-                        <label for="streetName"><b>Street
-                            Name</b></label>
+                        <label for="streetName"><b>Адрес</b></label>
                         <p th:if="${#fields.hasErrors('streetName')}"
                            th:errors="*{streetName}"
                            class="text-danger">Street name error
                             message</p>
                         <input type="text" id="streetName"
-                               placeholder="Enter street name..."
+                               placeholder="Въведете адрес..."
                                autocomplete="on"
                                required th:field="*{streetName}"
                                th:errorclass="bg-danger"
                                th:value="${residentialEntityEditBindingModel.streetName}">
                     </fieldset>
                     <fieldset>
-                        <label for="streetNumber"><b>Street
-                            №</b></label>
+                        <label for="streetNumber"><b>№</b></label>
                         <p th:if="${#fields.hasErrors('streetNumber')}"
                            th:errors="*{streetNumber}"
                            class="text-danger">Street number error
                             message</p>
                         <input type="text" id="streetNumber"
-                               placeholder="Enter street №..."
+                               placeholder="Въедете №..."
                                autocomplete="on" required
                                th:field="*{streetNumber}"
                                th:errorclass="bg-danger"
                                th:value="${residentialEntityEditBindingModel.streetNumber}">
                     </fieldset>
                     <fieldset>
-                        <label for="entrance"><b>Entrance №</b></label>
+                        <label for="entrance"><b>Вход №</b></label>
                         <p th:if="${#fields.hasErrors('entrance')}"
                            th:errors="*{entrance}"
                            class="text-danger">Entrance error
                             message</p>
                         <input type="text" id="entrance"
-                               placeholder="Enter Entrance №..."
+                               placeholder="Въведете вход №..."
                                th:field="*{entrance}"
                                th:errorclass="bg-danger"
                                th:value="${residentialEntityEditBindingModel.entrance}">
                     </fieldset>
                     <fieldset>
-                        <label for="accessCode"><b>Access code</b>
-                            (optional)</label>
+                        <label for="accessCode"><b>Код за достъп</b>
+                            (незадължително)</label>
                         <p th:if="${#fields.hasErrors('accessCode')}"
                            th:errors="*{accessCode}"
                            class="text-danger">Access code
@@ -130,34 +128,31 @@
                                class="text-danger">Access code must be
                             between 3 and 20 symbols!</small>
                         <input type="password" id="accessCode"
-                               placeholder="Enter new access code..."
+                               placeholder="Въведете нов код за достъп..."
                                autocomplete="on"
                                th:field="*{accessCode}"
                                th:errorclass="bg-danger">
                     </fieldset>
                     <fieldset>
-                        <label for="confirmAccessCode"><b>Confirm access
-                            code</b> (optional)</label>
+                        <label for="confirmAccessCode"><b>Потвърди код за достъп</b> (незадължително)</label>
                         <p th:if="${#fields.hasErrors('confirmAccessCode')}"
                            th:errors="*{confirmAccessCode}"
-                           class="text-danger">Confirm access code
-                            error</p>
+                           class="text-danger">Confirm access code error...</p>
                         <small th:if="${noAccessCodeMatch}"
-                               class="text-danger">Confirm access code
-                            do not match!</small>
+                               class="text-danger">Кодът за достъп не съвпада!</small>
                         <input type="password" id="confirmAccessCode"
-                               placeholder="Confirm access code..."
+                               placeholder="Потвърди нов код за достъп..."
                                autocomplete="on"
                                th:field="*{confirmAccessCode}"
                                th:errorclass="bg-danger">
                     </fieldset>
                     <fieldset>
                         <button type="submit" id="form-submit"
-                                class="orange-button">Submit
+                                class="orange-button">Потвърди
                         </button>
                         <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
                             <button class="orange-button text-light" id="form-cancel" type="button">
-                                Cancel
+                                Отказ
                             </button>
                         </a>
                     </fieldset>

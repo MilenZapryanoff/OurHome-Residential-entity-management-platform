@@ -56,7 +56,7 @@
     </div>
 </div>
 
-<!-- ***** Residential entity section ***** -->
+<!-- ***** Condominium section ***** -->
 <div class="page-content">
     <!--start of Sub-menu-->
     <div class="menu-container">
@@ -70,7 +70,8 @@
                 <div class="table-nav-section">
                     <a class="button nav-link"
                        th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-regular fa-building"></i> <span>Самостоятелни обекти</span>
+                        <div class="text-center"><i class="fa-regular fa-building"></i>
+                            <span>Самостоятелни обекти</span>
                             <sup th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
                                  th:text="' '+ ${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())}">
                             </sup>
@@ -87,7 +88,8 @@
                     </a>
                     <a class="button nav-link"
                        th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Типове самостоятелни обекти</span>
+                        <div class="text-center"><i class="fa-solid fa-gears"></i>
+                            <span>Типове самостоятелни обекти</span>
                         </div>
                     </a>
                 </div>
@@ -95,7 +97,8 @@
                 <div class="info-table bottom-rounded" id="active-registrations">
                     <!--Active registrations header-->
                     <div class="text-center">
-                        <h4 class="category text-secondary"><i class="fa-solid fa-hourglass-half"></i> ИЗЧАКВАЩИ ЗАЯВКИ ЗА ПРОМЯНА НА ДАННИ</h4>
+                        <h4 class="category text-secondary"><i class="fa-solid fa-hourglass-half"></i> ИЗЧАКВАЩИ ЗАЯВКИ
+                            ЗА ПРОМЯНА НА ДАННИ</h4>
                     </div>
 
                     <div class="due-amounts-header" style="padding: 10px 0">
@@ -112,11 +115,13 @@
                     <hr>
 
                     <p class="text-center"
-                       th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} == 0">Нямате заявки за промяна на параметри</p>
+                       th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} == 0">
+                        Нямате заявки за промяна на параметри</p>
 
                     <!--Pending change requests list-->
                     <table class="table text-center"
-                           id="pending-requests" th:unless="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} == 0">
+                           id="pending-requests"
+                           th:unless="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} == 0">
                         <tr>
                             <th>
                                 <i class="fa-regular fa-calendar"></i>
@@ -172,7 +177,8 @@
                             <td>
                                 <div class="user-avatar-small">
                                     <img alt="Avatar"
-                                         th:if="${property.getOwner().getAvatarPath() != null}" th:src="@{${property.getOwner().getAvatarPath()}}">
+                                         th:if="${property.getOwner().getAvatarPath() != null}"
+                                         th:src="@{${property.getOwner().getAvatarPath()}}">
                                     <img alt="Default Avatar"
                                          src="/avatars/default.jpg"
                                          th:unless="${property.getOwner().getAvatarPath() != null}">
@@ -222,7 +228,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/confirm.js"></script>
-<script src="/js/delete-button.js"></script>
+<script src="/js/buttons.js"></script>
 
 </body>
 </html>

@@ -72,8 +72,8 @@
                         </div>
                     </a>
                     <a class="button nav-link"
-                       th:href="@{/administration/fees/settings/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Residential entity fees</span>
+                       th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Condominium fees</span>
                         </div>
                     </a>
                     <a class="button nav-link"
@@ -83,13 +83,11 @@
                 </div>
                 <!--Start of table-->
                 <div class="info-table bottom-rounded" id="due-amounts-table">
-
                     <!--Section heading-->
                     <div class="text-center">
                         <h5 class="category text-danger">
                             MONTHLY FEES BY PROPERTY</h5>
                     </div>
-
                     <div class="due-amounts-header" style="padding: 10px 0">
                         <!--Records counter-->
                         <div class="main-content">
@@ -220,7 +218,7 @@
                                     </button>
 
                                     <button th:if="${property.isValidated()} and ${!property.isAutoFee()}"
-                                            th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Monthly fee switched ON!\nTurning monthly fee ON will activate the creation of periodical fees for this property. \n Fees will be calculated according to Residential entity fee policy..\')'"
+                                            th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Monthly fee switched ON!\nTurning monthly fee ON will activate the creation of periodical fees for this property. \n Fees will be calculated according to Condominium fee policy..\')'"
                                             type="button">
                                         <img alt="Monthly fee is OFF" src="/images/off.jpg" style="width: 20px;"
                                              title="Monthly fee is OFF">
@@ -266,7 +264,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">

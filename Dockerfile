@@ -22,7 +22,7 @@ ARG BUILD_VERSION=unknown
 
 # Adding meta data
 LABEL MAINTAINER="Milen Zapryanov <milen.zapryanov@gmail.com>" \
-      DESCRIPTION="OurHome Residential entity management platform" \
+      DESCRIPTION="OurHome Residential Entity management platform" \
       VERSION=${BUILD_VERSION} \
       BUILD_DATE=${BUILD_DATE} \
       VCS-URL="https://github.com/MilenZapryanoff/OurHome-Residential-entity-management-platform"

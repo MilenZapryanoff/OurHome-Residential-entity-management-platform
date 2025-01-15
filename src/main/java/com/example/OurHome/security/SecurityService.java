@@ -11,7 +11,7 @@ public interface SecurityService {
     boolean checkProfileEditAccess(Long userId, Authentication authentication);
 
     /**
-     * Residential entity access check
+     * Condominium access check
      */
     boolean checkResidentialEntityModeratorAccess(Long residentialEntityId, Authentication authentication);
 

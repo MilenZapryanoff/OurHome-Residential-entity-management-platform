@@ -216,7 +216,6 @@ public class PropertyController {
                 .addObject("propertyEditBindingModel", propertyEditBindingModel);
     }
 
-
     /**
      * PROPERTY -> DETAILS -> Edit Section
      * POST
@@ -403,7 +402,7 @@ public class PropertyController {
     /**
      * Method returns a ResidentialEntity
      *
-     * @param id residential entity id
+     * @param id Condominium id
      * @return ResidentialEntity
      */
     private ResidentialEntity getResidentialEntity(Long id) {

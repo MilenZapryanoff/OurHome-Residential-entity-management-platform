@@ -63,10 +63,10 @@
                   th:object="${userAuthBindingModel}">
                 <div class="row">
                     <div class="col-lg-12">
-                        <p style="padding-bottom: 30px">Please provide Residential Entity ID and Access code to be able to complete your registration as resident.</p>
-                        <p th:if="${badResidentialEntity}" class="text-danger">Wrong residential entity ID or Access code!<br></p>
+                        <p style="padding-bottom: 30px">Please provide Condominium ID and Access code to be able to complete your registration as resident.</p>
+                        <p th:if="${badResidentialEntity}" class="text-danger">Wrong Condominium ID or Access code!<br></p>
                         <fieldset>
-                            <label for="residentialId"><b>Residential entity ID</b></label>
+                            <label for="residentialId"><b>Condominium ID</b></label>
                             <p th:if="${#fields.hasErrors('residentialId')}"
                                    th:errors="*{residentialId}" class="text-danger">Residential Id error message</p>
                             <input type="text" id="residentialId" placeholder="Enter residential ID..."
@@ -76,7 +76,7 @@
                                    th:errorclass="bg-danger">
                         </fieldset>
                         <fieldset>
-                            <label for="residentialAccessCode"><b>Residential entity Access code</b></label>
+                            <label for="residentialAccessCode"><b>Condominium Access code</b></label>
                             <p th:if="${#fields.hasErrors('residentialAccessCode')}"
                                    th:errors="*{residentialAccessCode}" class="text-danger">Validation code error
                                 message</p>

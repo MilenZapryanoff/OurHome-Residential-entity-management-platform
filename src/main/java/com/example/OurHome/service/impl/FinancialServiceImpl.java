@@ -113,7 +113,7 @@ public class FinancialServiceImpl implements FinancialService {
     /**
      * Default filter for expenses
      *
-     * @param residentialEntity Residential entity
+     * @param residentialEntity Condominium
      * @return ExpenseFilterBindingModel with start date the first day of the current month and end date, the last day
      * of the current month
      */
@@ -135,7 +135,7 @@ public class FinancialServiceImpl implements FinancialService {
      *
      * @param startPeriod       LocalDate start period
      * @param endPeriod         LocalDate end period
-     * @param residentialEntity Residential entity
+     * @param residentialEntity Condominium
      * @return ExpenseFilterBindingModel with user selected start & end dates
      */
     @Override
@@ -239,7 +239,7 @@ public class FinancialServiceImpl implements FinancialService {
      *
      * @param startPeriod               LocalDate startPeriod
      * @param endPeriod                 LocalDate startPeriod
-     * @param residentialEntity         Residential entity
+     * @param residentialEntity         Condominium
      * @param expenseFilterBindingModel FrontEnd view
      * @return ExpenseFilterBindingModel
      */

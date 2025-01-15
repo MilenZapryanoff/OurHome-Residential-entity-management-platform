@@ -44,7 +44,7 @@ public class FeesController {
     /**
      * Administration -> Monthly Fees
      *
-     * @param id Residential entity ID
+     * @param id Condominium ID
      */
     @GetMapping("/administration/fees/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -83,7 +83,7 @@ public class FeesController {
     /**
      * Administration -> Monthly Fees -> Bank Details Edit page get mapping
      *
-     * @param id Residential entity ID
+     * @param id Condominium ID
      */
     @GetMapping("/administration/fees/bank-details/edit/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -102,7 +102,7 @@ public class FeesController {
     /**
      * Administration -> Monthly Fees -> Bank Details Edit page POST mapping
      *
-     * @param id Residential entity ID
+     * @param id Condominium ID
      */
     @PostMapping("/administration/fees/bank-details/edit/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -126,7 +126,7 @@ public class FeesController {
     /**
      * Administration -> Monthly Fees -> Bank Details Delete POST mapping
      *
-     * @param id Residential entity ID
+     * @param id Condominium ID
      */
     @PostMapping("/administration/fees/bank-details/delete/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -141,7 +141,7 @@ public class FeesController {
     /**
      * Administration -> Monthly Fees -> Edit
      *
-     * @param id Residential entity ID
+     * @param id Condominium ID
      */
     @GetMapping("/administration/fees/edit/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -166,7 +166,7 @@ public class FeesController {
     /**
      * Administration -> Monthly Fees -> Edit
      *
-     * @param id Residential entity ID
+     * @param id Condominium ID
      *           POST
      */
     @PostMapping("/administration/fees/edit/{id}")
@@ -190,7 +190,7 @@ public class FeesController {
         if (residentialEntity != null) {
             feeService.changeFee(residentialEntity, feeEditBindingModel);
         }
-        return new ModelAndView("redirect:/administration/fees/settings/" + id);
+        return new ModelAndView("redirect:/administration/fees/edit/" + id);
     }
 
     /**
@@ -481,7 +481,7 @@ public class FeesController {
     /**
      * Administration -> Monthly Fees -> Add fee for all properties
      *
-     * @param id Residential entity ID
+     * @param id Condominium ID
      */
     @GetMapping("/administration/fees/addglobalfee/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -544,7 +544,7 @@ public class FeesController {
     /**
      * Method returns a ResidentialEntity
      *
-     * @param id residential entity id
+     * @param id Condominium id
      * @return ResidentialEntity
      */
     private ResidentialEntity getResidentialEntity(Long id) {
