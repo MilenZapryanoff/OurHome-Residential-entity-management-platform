@@ -46,19 +46,19 @@
         <div class="row">
             <div class="col-lg-12">
                 <h3 th:if="${@residentialEntityRepository.countByManager_Id(loggedUser.getId()) == 0}">
-                    0 registered Residential Entities
+                    0 registered Condominiums
                 </h3>
                 <h3 th:if="${@residentialEntityRepository.countByManager_Id(loggedUser.getId()) == 1}"
                     th:text="${@residentialEntityRepository.countByManager_Id(loggedUser.getId())} +
-                    ' registered Residential Entitiy'"></h3>
+                    ' registered Condominium'"></h3>
                 <h3 th:if="${@residentialEntityRepository.countByManager_Id(loggedUser.getId()) > 1}"
                     th:text="${@residentialEntityRepository.countByManager_Id(loggedUser.getId())} +
-                    ' registered Residential Entities'"></h3>
+                    ' registered Condominiums'"></h3>
                 <span class="breadcrumb">
                     <form th:method="GET"
                           th:action="@{/administration/add}">
                          <button type="submit">
-                             <p class="text-danger">Register new Residential Entity</p>
+                             <p class="text-danger">Register new Condominium</p>
                          </button>
                     </form>
                 </span>
@@ -68,7 +68,7 @@
 </div>
 
 <p th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) == 0}" class="text-center"
-   style="margin: 14em auto">No registered Residential Entities!</p>
+   style="margin: 14em auto">No registered Condominiums!</p>
 
 
 <div th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) > 0}" class="container">
@@ -84,7 +84,7 @@
                          th:src="@{${residentialEntity.picturePath}}" alt="View details" title="View Details"
                          style="max-height: 300px">
                 </a>
-                <span class="category text-bg-success text-light" th:text="'Res. Entity ID: ' + ${residentialEntity.getId()}"></span>
+                <span class="category text-bg-success text-light" th:text="'Condominium ID: ' + ${residentialEntity.getId()}"></span>
                 <h4><a th:text="${residentialEntity.getCity().getName()}"></a></h4>
                 <h4>
                     <a th:text="${residentialEntity.getStreetName() + ' ' + residentialEntity.getStreetNumber() + ' ' + residentialEntity.getEntrance()}"></a>

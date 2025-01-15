@@ -83,7 +83,7 @@
                                th:value="${propertyEditBindingModel.getNumber()}">
                     </fieldset>
                     <fieldset>
-                        <label for="propertyTypeId"><b>Категория самостоятелен обект</b></label>
+                        <label for="propertyTypeId"><b>Клас на имота</b></label>
                         <select class="form-control" id="propertyClassId"
                                 th:field="*{propertyClass}">
                             <option th:if="${propertyEditBindingModel.getPropertyClass() == null}" th:value="''"
@@ -98,7 +98,7 @@
                         <br>
                     </fieldset>
                     <fieldset th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0}">
-                        <label for="propertyTypeId"><b>Вид самостоятелен обект</b></label>
+                        <label for="propertyTypeId"><b>Категория на имота</b></label>
                         <select class="form-control" id="propertyTypeId"
                                 th:field="*{propertyType}">
                             <option th:if="${property.getPropertyType() != null}" class="text-secondary"

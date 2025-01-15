@@ -61,7 +61,7 @@
     </div>
 </div>
 
-<!-- ***** Residential entity section ***** -->
+<!-- ***** Condominium section ***** -->
 <div class="section single-property">
     <div class="container">
         <div class="row">
@@ -161,18 +161,6 @@
                                     <p>Информацията свързана с този имот ще се запази в системата, а домоуправителя ще продължи да осъществява контрол върху
                                     таксите и параметрите на имота, както до момента.</p>
                                     <hr>
-                                    <!--custom pop-up confirmation window-->
-                                    <div class="modal">
-                                        <div class="modal-content">
-                                            <strong class="text-danger-emphasis">ВНИМАНИЕ!</strong>
-                                            <p class="text-dark">Желаете ли да премахнете имота?</p>
-                                            <small class="text-secondary">След изпълнение на това действие вие ще изгубите достъпа си до информация касаеща този имот!</small>
-                                            <div class="confirm-buttons-container">
-                                                <button id="yes-btn">Потвърди</button>
-                                                <button id="no-btn">Назад</button>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <form th:action="@{/property/delete/{id}(id=${property.getId()})}"
                                           method="POST">
                                         <input type="hidden"
@@ -187,7 +175,7 @@
                                                     <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
                                                 </svg>
                                             </div>
-                                            <div class="text">Премахни</div>
+                                            <div class="text">Изтрий</div>
                                         </button>
                                     </form>
                                 </div>
@@ -198,18 +186,6 @@
                                     <p>Информацията свързана с този имот ще се запази в системата, а домоуправителя ще продължи да осъществява контрол върху
                                         таксите и параметрите на имота, както до момента.</p>
                                     <hr>
-                                    <!--custom pop-up confirmation window-->
-                                    <div class="modal">
-                                        <div class="modal-content">
-                                            <strong class="text-danger-emphasis">ВНИМАНИЕ!</strong>
-                                            <p class="text-dark">Анулиране на заявка за регистрация?</p>
-                                            <small class="text-secondary">This action will cancel property registration request! Property will remain active and no data will be lost.</small>
-                                            <div class="confirm-buttons-container">
-                                                <button id="yes-btn">Анулирай</button>
-                                                <button id="no-btn">Назад</button>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <form th:action="@{/property/delete/{id}(id=${property.getId()})}"
                                           method="POST">
                                         <input type="hidden"
@@ -322,6 +298,10 @@
     </div>
 </div>
 
+<!--Custom pop-up confirmation window-->
+<div th:replace="~{bg/fragments/confirm-popup}">
+</div>
+
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
 </footer>
@@ -335,7 +315,8 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/message.js"></script>
-<script src="/js/delete-button.js"></script>
+<script src="/js/buttons.js"></script>
+<script src="/js/confirm.js"></script>
 
 </body>
 </html>

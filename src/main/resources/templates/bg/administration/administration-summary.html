@@ -68,7 +68,7 @@
     </div>
 </div>
 
-<!-- ***** Residential entity section ***** -->
+<!-- ***** Condominium section ***** -->
 <div class="page-content">
     <div class="menu-container">
         <div th:replace="~{/bg/fragments/adm-submenu}"></div>
@@ -220,22 +220,6 @@
                                             първо трябва да премахнете всички собственици от ЕС!</p>
                                         <hr>
                                         <div class="col-lg-2">
-                                            <!--custom pop-up confirmation window-->
-                                            <div class="modal">
-                                                <div class="modal-content">
-                                                    <strong class="text-danger-emphasis">ВНИМАНИЕ!</strong>
-                                                    <p class="text-dark">Закриване на Етажна собственост?</p>
-                                                    <small class="text-secondary">Действието може да бъде изпълнено
-                                                        единствено в случай, че в дигиталната етажна собственост няма
-                                                        рагистрирани собственици на имоти!
-                                                        Закриването на етажна собственост е необратимо действие и всички
-                                                        данни ще бъдат безвъзвратно изгубени!</small>
-                                                    <div class="confirm-buttons-container">
-                                                        <button id="yes-btn">Потвърди</button>
-                                                        <button id="no-btn">Назад</button>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <form method="POST"
                                                   th:action="@{/administration/remove/{id}(id=${residentialEntity.getId()})}">
                                                 <input th:value="${residentialEntity.getId()}" type="hidden"/>
@@ -311,7 +295,7 @@
                             <br>
                             <div class="mt-3 rounded badge-warning">
                                 <ul>
-                                    <li>Град: <a class="text-black"
+                                    <li>Населено място: <a class="text-black"
                                                  th:text="${residentialEntity.getCity().getName()}"></a>
                                     </li>
                                     <li>Адрес: <a class="text-black" th:text="${residentialEntity.getStreetName()}"></a>
@@ -345,6 +329,11 @@
         </div>
     </div>
 </div>
+
+<!--Custom pop-up confirmation window-->
+<div th:replace="~{bg/fragments/confirm-popup}">
+</div>
+
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
 </footer>
@@ -357,7 +346,8 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
-<script src="/js/delete-button.js"></script>
+<script src="/js/buttons.js"></script>
+<script src="/js/confirm.js"></script>
 <script src="/js/residence-picture.js"></script>
 
 

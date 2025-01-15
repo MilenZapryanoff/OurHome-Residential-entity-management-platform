@@ -58,7 +58,7 @@ public class ResidentialEntityController {
 
 
     /**
-     * Create new Residential entity
+     * Create new Condominium
      */
     @GetMapping("/administration/add")
     public ModelAndView addNewResidence(@ModelAttribute("residentialEntityRegisterBindingModel")
@@ -72,7 +72,7 @@ public class ResidentialEntityController {
     }
 
     /**
-     * Create new Residential entity
+     * Create new Condominium
      *
      * @param residentialEntityRegisterBindingModel carries register information
      * @param bindingResult                         result
@@ -101,9 +101,9 @@ public class ResidentialEntityController {
     }
 
     /**
-     * Residential entity (RE) deletion
+     * Condominium (RE) deletion
      *
-     * @param id Residential entity id
+     * @param id Condominium id
      */
     @PostMapping("/administration/remove/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -132,7 +132,7 @@ public class ResidentialEntityController {
 
 
     /**
-     * Upload Residential entity picture method
+     * Upload Condominium picture method
      *
      * @param file uploaded file
      * @return resultView
@@ -161,7 +161,7 @@ public class ResidentialEntityController {
     }
 
     /**
-     * Remove residential entity picture method
+     * Remove Condominium picture method
      *
      * @return resultView
      */

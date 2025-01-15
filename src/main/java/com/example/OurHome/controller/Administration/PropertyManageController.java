@@ -87,34 +87,29 @@ public class PropertyManageController {
         return view.addObject("property", getProperty(id));
     }
 
+
     /**
-     * Approve property pending change request
+     * Processing property change request.
      *
-     * @param id property id
+     * @param propertyManageBindingModel carries information about the entityId
+     * @param id                         property id
+     * @return "redirect:/administration/property/change-requests/{entityId}"
      */
-    @PostMapping("/administration/property/pending/request/approve/{id}")
+    @PostMapping("/administration/property/pending/request/process/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
-    public ModelAndView propertyChangeRequestApprove(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
+    public ModelAndView propertyChangeRequestProcess(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
                                                      @PathVariable("id") Long id) {
 
-        propertyService.approvePropertyChangeRequest(id);
+        Property property = propertyService.findPropertyById(id);
 
-        return new ModelAndView("redirect:/administration/property/change-requests/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
-    }
+        if (propertyManageBindingModel.getAction().equals("approveWithChange")) {
+            propertyService.approvePropertyChangeRequest(id);
+        }
+        if (propertyManageBindingModel.getAction().equals("reject")) {
+            propertyService.rejectPropertyChangeRequest(id);
+        }
 
-    /**
-     * Reject property pending change request
-     *
-     * @param id property id
-     */
-    @PostMapping("/administration/property/pending/request/reject/{id}")
-    @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
-    public ModelAndView propertyChangeRequestReject(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
-                                                    @PathVariable("id") Long id) {
-
-        propertyService.rejectPropertyChangeRequest(id);
-
-        return new ModelAndView("redirect:/administration/property/change-requests/" + propertyManageBindingModel.getEntityId() + "#pending-registrations");
+        return new ModelAndView("redirect:/administration/property/change-requests/" + property.getResidentialEntity().getId() + "#pending-registrations");
     }
 
 
@@ -136,7 +131,7 @@ public class PropertyManageController {
 
 
     /**
-     * Create single property in Residential entity
+     * Create single property in Condominium
      *
      * @param id residential entitiy id
      * @return view administration-property-create-bg.html
@@ -154,7 +149,7 @@ public class PropertyManageController {
     }
 
     /**
-     * Create single property in Residential entity
+     * Create single property in Condominium
      *
      * @param id residential entitiy id
      * @return view administration-property-create.html
@@ -204,7 +199,7 @@ public class PropertyManageController {
 
 
     /**
-     * Property edit in Residential entity
+     * Property edit in Condominium
      *
      * @param id property id
      * @return view administration-property-edit.html
@@ -223,7 +218,7 @@ public class PropertyManageController {
     }
 
     /**
-     * Property edit in Residential entity
+     * Property edit in Condominium
      *
      * @param propertyEditBindingModel property data
      * @param id                       property id
@@ -289,7 +284,7 @@ public class PropertyManageController {
     /**
      * Method returns a ResidentialEntity
      *
-     * @param id residential entity id
+     * @param id Condominium id
      * @return ResidentialEntity
      */
     private ResidentialEntity getResidentialEntity(Long id) {

@@ -61,7 +61,7 @@
     </div>
 </div>
 
-<!-- ***** Residential entity section ***** -->
+<!-- ***** Condominium section ***** -->
 <div class="section single-property">
     <div class="container">
         <div class="row">
@@ -72,8 +72,8 @@
                 <a th:if="${property.isObtained()}" th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">Monthly fees</a>
                 <a th:unless="${property.isObtained()}" class="text-secondary">Monthly fees</a>
                 <a th:href="@{/property/details/{id}(id=${property.getId()})}">Property details</a>
-                <a th:if="${property.isObtained()}" th:href="@{/property/re/data/{id}(id=${property.getId()})}">Residential Entity</a>
-                <a th:unless="${property.isObtained()}" class="text-secondary">Residential Entity</a>
+                <a th:if="${property.isObtained()}" th:href="@{/property/re/data/{id}(id=${property.getId()})}">Condominium</a>
+                <a th:unless="${property.isObtained()}" class="text-secondary">Condominium</a>
                 <div class="transition property-summary"></div>
             </div>
 
@@ -94,7 +94,7 @@
                                 <div th:if="${property.isObtained()}">
                                     <p>Property is
                                         <strong class="text-success">Validated</strong>!
-                                    <p>You are authorized to access property date and Residential Entity reports.</p>
+                                    <p>You are authorized to access property date and Condominium reports.</p>
                                     <p>If you need to change some of your property data, you can do it via Property
                                         details
                                         section.</p>
@@ -104,11 +104,11 @@
 
                                 <div th:if="${!property.isObtained() and !property.isRejected()}">
                                     <p>Property is <strong
-                                            class="text-danger">waiting for Validation</strong> from Residential Entity manager!
+                                            class="text-danger">waiting for Validation</strong> from Condominium manager!
                                     <p>At this moment You still have no access to data and reports related to you
                                         property.</p>
                                     <p>If your registration does not get confirmed in a few days, you can
-                                        contact your Residential entity Manager for assistance.</p>
+                                        contact your Condominium Manager for assistance.</p>
                                     <p>As soon as your registration gets approved you will get access property
                                         data.</p>
                                 </div>
@@ -117,7 +117,7 @@
                                     <p>This property is <strong class="text-danger">REJECTED</strong> from your manager!
                                     </p>
                                     <p>You do not have access to data and reports related to your property.</p>
-                                    <p>Please contact Residential Entity Manager to find out the reason for the
+                                    <p>Please contact Condominium Manager to find out the reason for the
                                         rejection.</p>
                                     <p>You are able to edit and resend this property registration request or to Cancel
                                         it and try again by adding new property.</p>
@@ -142,7 +142,7 @@
                                     about the fees your property is charged with.</p>
                                 <p>Fees are automatically applied in the
                                     beginning of every new month. Fees are
-                                    calculated according to your residential entity fee policy.</p>
+                                    calculated according to your Condominium fee policy.</p>
                             </div>
                             <div th:unless="${property.isObtained()}" class="accordion-body">
                                 <p>Monthly fees data is available only for Validated properties.</p>
@@ -166,21 +166,9 @@
                                     <p><b>Unlink property from your account.</b></p>
                                     <p>This action will reset the ownership of this property.</p>
                                     <p>Your property will remain active and no data will be lost.</p>
-                                    <p>Residential Entity manager will still be able to manage it as usual, and you will
+                                    <p>Condominium manager will still be able to manage it as usual, and you will
                                         still be able to link the property to your profile again later!</p>
                                     <hr>
-                                    <!--custom pop-up confirmation window-->
-                                    <div class="modal">
-                                        <div class="modal-content">
-                                            <strong class="text-danger-emphasis">Attention!</strong>
-                                            <p class="text-dark">Unlink property?</p>
-                                            <small class="text-secondary">This action will reset the ownership of this property! Your property will remain active and no data will be lost.</small>
-                                            <div class="confirm-buttons-container">
-                                                <button id="yes-btn">Confirm</button>
-                                                <button id="no-btn">Cancel</button>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <form th:action="@{/property/delete/{id}(id=${property.getId()})}"
                                           method="POST">
                                         <input type="hidden"
@@ -204,21 +192,9 @@
                                     <p><b>Cancel property registration request!</b></p>
                                     <p>This action will cancel property registration request.</p>
                                     <p>Your property will remain active and no data will be lost.</p>
-                                    <p>Residential Entity manager will still be able to manage it as usual, and you will
+                                    <p>Condominium manager will still be able to manage it as usual, and you will
                                         still be able to create a new registration request later!</p>
                                     <hr>
-                                    <!--custom pop-up confirmation window-->
-                                    <div class="modal">
-                                        <div class="modal-content">
-                                            <strong class="text-danger-emphasis">Attention!</strong>
-                                            <p class="text-dark">Cancel request?</p>
-                                            <small class="text-secondary">This action will cancel property registration request! Property will remain active and no data will be lost.</small>
-                                            <div class="confirm-buttons-container">
-                                                <button id="yes-btn">Confirm</button>
-                                                <button id="no-btn">Cancel</button>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <form th:action="@{/property/delete/{id}(id=${property.getId()})}"
                                           method="POST">
                                         <input type="hidden"
@@ -332,6 +308,10 @@
     </div>
 </div>
 
+<!--Custom pop-up confirmation window-->
+<div th:replace="~{en/fragments/confirm-popup}">
+</div>
+
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
 </footer>
@@ -345,7 +325,8 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/message.js"></script>
-<script src="/js/delete-button.js"></script>
+<script src="/js/buttons.js"></script>
+<script src="/js/confirm.js"></script>
 
 </body>
 </html>

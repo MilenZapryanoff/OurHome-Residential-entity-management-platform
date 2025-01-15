@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,17 +13,17 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
 </head>
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -37,7 +36,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -114,63 +113,51 @@
                 <li>
                     <div class="row">
                         <div class="col-lg-6">
-                            <form th:action="@{/uploadDocument/{id}(id=${expense.getId()})}"
-                                  method="post"
-                                  enctype="multipart/form-data" id="documentForm"
-                                  class="text-center">
-                                <input type="file" id="documentInput" name="document"
-                                       accept="image/*"
-                                       style="display: none;">
+                            <form class="text-center"
+                                  enctype="multipart/form-data"
+                                  id="documentForm" method="post"
+                                  th:action="@{/uploadDocument/{id}(id=${expense.getId()})}">
+                                <input accept="image/*" id="documentInput" name="document"
+                                       style="display: none;"
+                                       type="file">
                                 <div class="col-lg-12">
-                                    <button th:if="${expense.picturePath == null}"
-                                            type="button" id="uploadButton"
-                                            class="text-info-emphasis">Upload document
-                                        <img title="Upload document"
+                                    <button class="text-info-emphasis"
+                                            id="uploadButton" th:if="${expense.picturePath == null}"
+                                            type="button">Upload document
+                                        <img alt="Upload document"
                                              src="/images/upload.png"
-                                             style="width: 20px;" alt="Upload document">
+                                             style="width: 20px;" title="Upload document">
                                     </button>
-                                    <button th:unless="${expense.picturePath == null}"
-                                            type="button" id="uploadButton"
-                                            class="text-info-emphasis">Replace document
-                                        <img title="Replace document"
+                                    <button class="text-info-emphasis"
+                                            id="uploadButton" th:unless="${expense.picturePath == null}"
+                                            type="button">Replace document
+                                        <img alt="Replace document"
                                              src="/images/replace.png"
-                                             style="width: 20px;" alt="Replace document">
+                                             style="width: 20px;" title="Replace document">
                                     </button>
                                 </div>
-                                <button type="submit" style="display: none;">Submit
+                                <button style="display: none;" type="submit">Submit
                                 </button>
                             </form>
                         </div>
                         <div class="col-lg-6">
                             <div class="text-center">
                                 <div th:if="${expense.picturePath == null}">Delete document
-                                    <img title="Delete document"
+                                    <img alt=""
                                          src="/images/delete_inactive.png"
-                                         style="width: 20px;" alt=""></div>
-                                <!--custom pop-up confirmation window-->
-                                <div class="modal">
-                                    <div class="modal-content">
-                                        <strong class="text-danger-emphasis">Attention!</strong>
-                                        <p class="text-dark">Do you want to delete this document?</p>
-                                        <small class="text-secondary">Please note, that once deleted the document cannot be recovered!</small>
-                                        <div class="confirm-buttons-container">
-                                            <button id="yes-btn">Confirm</button>
-                                            <button id="no-btn">Cancel</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <form th:unless="${expense.picturePath == null}"
+                                         style="width: 20px;" title="Delete document"></div>
+                                <form id="form-confirm"
                                       th:action="@{/deleteDocument/{id} (id=${expense.getId()})}"
                                       th:method="POST"
-                                      id="form-confirm">
-                                    <label for="entityIdDeleteResident" class="hidden"></label>
+                                      th:unless="${expense.picturePath == null}">
+                                    <label class="hidden" for="entityIdDeleteResident"></label>
                                     <select class="form-control hidden"
                                             id="entityIdDeleteResident"></select>
-                                    <button type="button" class="text-danger-emphasis" id="delete-btn">
+                                    <button class="text-danger-emphasis" id="delete-btn" type="button">
                                         Delete document
-                                        <img title="Delete document"
+                                        <img alt=""
                                              src="/images/delete.jpg"
-                                             style="width: 20px;" alt="">
+                                             style="width: 20px;" title="Delete document">
                                     </button>
                                 </form>
                             </div>
@@ -180,17 +167,20 @@
 
                 <li class="text-black">
                     <div class="text-center">
-                        <small th:if="${expense.getPicturePath() == null}"
-                               class="text-secondary">No document available for this expense.</small>
+                        <small class="text-secondary"
+                               th:if="${expense.getPicturePath() == null}">No document available for this expense.</small>
                     </div>
-                    <img th:if="${expense.picturePath != null}"
-                         th:src="@{${expense.picturePath}}" alt="Document">
+                    <img alt="Document"
+                         th:if="${expense.picturePath != null}" th:src="@{${expense.picturePath}}">
                 </li>
             </ul>
         </div>
     </div>
 </div>
 
+<!--Custom pop-up confirmation window-->
+<div th:replace="~{en/fragments/confirm-popup}">
+</div>
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
@@ -204,9 +194,10 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
-<script src="/js/avatar.js" defer></script>
-<script src="/js/document.js" defer></script>
+<script defer src="/js/avatar.js"></script>
+<script defer src="/js/document.js"></script>
 <script src="/js/confirm.js"></script>
+<script src="/js/buttons.js"></script>
 
 </body>
 </html>

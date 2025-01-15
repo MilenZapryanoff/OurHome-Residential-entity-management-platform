@@ -34,7 +34,7 @@ public class FinancialController {
     /**
      * Administration -> Financial
      *
-     * @param id Residential entity Id
+     * @param id Condominium Id
      */
     @GetMapping("/administration/financial/expenses/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -54,7 +54,7 @@ public class FinancialController {
     /**
      * Administration -> Financial -> Custom filter
      *
-     * @param id Residential entity Id
+     * @param id Condominium Id
      */
     @PostMapping("/administration/financial/expenses/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -81,7 +81,7 @@ public class FinancialController {
     /**
      * Administration -> Financial -> Add expense
      *
-     * @param id Residential entity Id
+     * @param id Condominium Id
      */
     @GetMapping("/administration/financial/expenses/add/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -102,7 +102,7 @@ public class FinancialController {
     /**
      * Administration -> Financial -> Add expense
      *
-     * @param id Residential entity id
+     * @param id Condominium id
      *           POST
      */
     @PostMapping("/administration/financial/expenses/add/{id}")
@@ -127,7 +127,7 @@ public class FinancialController {
     /**
      * Administration -> Financial -> Edit expense
      *
-     * @param id Residential entity Id
+     * @param id Condominium Id
      */
     @GetMapping("/administration/financial/expenses/edit/{id}")
     @PreAuthorize("@securityService.checkExpenseModeratorAccess(#id, authentication)")
@@ -147,7 +147,7 @@ public class FinancialController {
     /**
      * Administration -> Financial -> Edit expense
      *
-     * @param id Residential entity id
+     * @param id Condominium id
      *           POST
      */
     @PostMapping("/administration/financial/expenses/edit/{id}")
@@ -173,7 +173,7 @@ public class FinancialController {
     /**
      * Administration -> Financial -> Delete expense
      *
-     * @param id Residential entity id
+     * @param id Condominium id
      *           POST
      */
     @PostMapping("/administration/financial/expenses/delete/{id}")
@@ -288,7 +288,7 @@ public class FinancialController {
 
 
     /**
-     * View residential entity expense doc by property owner (member of this Residential entity)
+     * View Condominium expense doc by property owner (member of this Condominium)
      * Used in Property -> ExpensesRE -> Doc
      *
      * @param id expense id
@@ -307,7 +307,7 @@ public class FinancialController {
     /**
      * Administration -> Financial -> Incomes
      *
-     * @param id Residential entity Id
+     * @param id Condominium Id
      */
     @GetMapping("/administration/financial/incomes/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
@@ -341,7 +341,7 @@ public class FinancialController {
     /**
      * Method returns a ResidentialEntity
      *
-     * @param id residential entity id
+     * @param id Condominium id
      * @return ResidentialEntity
      */
     private ResidentialEntity getResidentialEntity(Long id) {

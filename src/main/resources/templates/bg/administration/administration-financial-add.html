@@ -48,13 +48,13 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Add new expense</h3>
+            <h3>Добави нов разход</h3>
             <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
         </div>
     </div>
 </div>
 
-<!-- ***** Residential entity section *****-->
+<!-- ***** Condominium section *****-->
 
 <div class="container">
     <div class="input-content text-center">
@@ -65,24 +65,23 @@
                   th:object="${expenseAddBindingModel}">
                 <div class="col-lg-12">
                     <fieldset>
-                        <label for="expenseAmount"><b>Expense amount</b></label><br>
+                        <label for="expenseAmount"><b>Сума</b></label><br>
                         <p th:if="${#fields.hasErrors('expenseAmount')}"
                                th:errors="*{expenseAmount}"
-                               class="text-danger">Expense amount error message</p>
+                               class="text-danger">Expense amount error message...</p>
                         <input type="number" step="any"
                                id="expenseAmount"
-                               placeholder="Enter expense amount..."
+                               placeholder="Въведе сума на разхода..."
                                autocomplete="on"
                                required th:field="*{expenseAmount}"
                                th:errorclass="bg-danger"
                                th:value="${expenseAddBindingModel.getExpenseAmount()}">
                     </fieldset>
                     <fieldset>
-                        <label for="expenseDate"><b>Expense date</b></label>
+                        <label for="expenseDate"><b>Дата</b></label>
                         <p th:if="${#fields.hasErrors('expenseDate')}"
                                th:errors="*{expenseDate}"
-                               class="text-danger">Expense date
-                            error...</p>
+                               class="text-danger">Expense date error...</p>
                         <input type="date"
                                id="expenseDate"
                                th:field="*{expenseDate}"
@@ -90,26 +89,26 @@
                                th:value="${expenseAddBindingModel.getExpenseDate()}">
                     </fieldset>
                     <fieldset>
-                        <label for="description"><b>Comment</b></label>
+                        <label for="description"><b>Описание</b></label>
                         <p th:if="${#fields.hasErrors('description')}"
                                th:errors="*{description}"
                                class="text-danger">Description error
                             message</p>
                         <input type="text"
                                id="description" required
-                               placeholder="Enter comment..."
+                               placeholder="Въведете описание..."
                                th:field="*{description}"
                                th:errorclass="bg-danger"
                                th:value="${expenseAddBindingModel.getDescription()}">
                     </fieldset>
                     <fieldset>
                         <button type="submit" id="form-submit"
-                                class="orange-button">Add
+                                class="orange-button">Потвърди
                         </button>
                         <button type="button">
                             <a class="orange-button"
                                th:href="@{/administration/financial/expenses/{id}(id=${id})}">
-                                <p class="text-light">Cancel</p>
+                                <p class="text-light">Отказ</p>
                             </a>
                         </button>
                     </fieldset>

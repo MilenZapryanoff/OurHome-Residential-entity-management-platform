@@ -52,7 +52,7 @@
             <h5 class="text-light">Property registration failed!</h5>
             <p class="text-light"
                th:text="'A problem occured with the registration of Property №' + ${propertyRegisterBindingModel.getNumber()}"></p>
-            <p class="text-light">Please contact your Residential entity manager for further information.</p>
+            <p class="text-light">Please contact your Condominium manager for further information.</p>
         </div>
     </div>
 </div>
@@ -68,7 +68,7 @@
                     <h5 class="text-danger">Property information</h5>
                     <br>
                     <fieldset>
-                        <label for="residentialEntity"><b>Residential entity</b></label>
+                        <label for="residentialEntity"><b>Condominium</b></label>
                         <select class="form-control" id="residentialEntity"
                                 th:field="*{residentialEntity}">
                             <option th:each="residentialEntity : ${loggedUser.getResidentialEntities()}"
@@ -77,7 +77,7 @@
                                 ${residentialEntity.getStreetNumber()} + ' ' + ${residentialEntity.getEntrance()}">
                             </option>
                         </select>
-                        <a class="small" th:href="@{/property/add/new}">Add new residential entity</a>
+                        <a class="small" th:href="@{/property/add/new}">Add new Condominium</a>
                     </fieldset>
                     <fieldset>
                         <br>

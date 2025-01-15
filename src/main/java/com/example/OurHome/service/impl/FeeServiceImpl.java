@@ -37,7 +37,7 @@ public class FeeServiceImpl implements FeeService {
      * New fee creation method.
      * Default values set to - 0.00.
      *
-     * @param newResidentialEntity Residential Entity of the new fee
+     * @param newResidentialEntity Condominium of the new fee
      * @return Fee
      */
     @Override
@@ -61,7 +61,7 @@ public class FeeServiceImpl implements FeeService {
     /**
      * Calculation of Fund Management and Maintenance amount.
      *
-     * @param residentialEntity Residential entity
+     * @param residentialEntity Condominium
      * @param property          Property
      * @return BigDecimal value
      */
@@ -142,9 +142,9 @@ public class FeeServiceImpl implements FeeService {
     }
 
     /**
-     * Residential entity Fee modification method.
+     * Condominium Fee modification method.
      *
-     * @param residentialEntity   Residential entity
+     * @param residentialEntity   Condominium
      * @param feeEditBindingModel FeeEditBindingModel carries data form user input
      */
     @Override
@@ -172,9 +172,9 @@ public class FeeServiceImpl implements FeeService {
 
     /**
      * Private method for applying new set Fees to all properties in RE.
-     * This method is used when changing Residential entity monthly fees settings.
+     * This method is used when changing Condominium monthly fees settings.
      *
-     * @param residentialEntity Residential entity
+     * @param residentialEntity Condominium
      */
     private void applyNewFeesToAllProperties(ResidentialEntity residentialEntity) {
 

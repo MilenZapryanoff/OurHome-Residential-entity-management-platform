@@ -237,31 +237,27 @@
                                       th:action="@{/administration/owners/edit_role/{id} (id=${resident.getId()})}"
                                       th:method="POST"
                                       th:object="${residentManageBindingModel}">
-                                    <label class="hidden" for="userId">Role change</label>
-                                    <select class="form-control hidden" id="userId"
-                                            th:field="*{userId}">
-                                        <option th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}"
-                                                th:value="${resident.getId()}">
-                                        </option>
-                                        <option th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}"
-                                                value="">
-                                        </option>
-                                    </select>
-                                    <label class="hidden" for="entityId"></label>
-                                    <select class="form-control hidden" id="entityId"
-                                            th:field="*{entityId}">
-                                        <option th:value="${residentialEntity.getId()}"></option>
-                                    </select>
-                                    <button class="form-control"
-                                            th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}"
-                                            title="Направи модератор"
-                                            type="submit"><small>Потребител</small>
-                                    </button>
-                                    <button class="form-control text-bg-danger"
-                                            th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}"
-                                            title="Премахни права на модератор"
-                                            type="submit"><small class="text-light">Модератор</small>
-                                    </button>
+                                    <fieldset style="padding-top: 15px">
+                                        <label class="hidden" for="userId">Role change</label>
+                                        <select class="form-control hidden" id="userId" th:field="*{userId}">
+                                            <option th:value="${resident.getId()}"></option>
+                                        </select>
+                                        <label class="hidden" for="entityId"></label>
+                                        <select class="form-control hidden" id="entityId" th:field="*{entityId}">
+                                            <option th:value="${residentialEntity.getId()}"></option>
+                                        </select>
+                                        <button class="form-control"
+                                                th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}"
+                                                title="Направи модератор"
+                                                type="submit"><small>Потребител</small>
+                                        </button>
+                                        <button class="form-control text-bg-danger"
+                                                th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}"
+                                                title="Премахни права на модератор"
+                                                type="submit"><small class="text-light">Модератор</small>
+                                        </button>
+                                        <br>
+                                    </fieldset>
                                 </form>
                             </td>
                             <!-- START: Message button-->
@@ -287,32 +283,13 @@
                                               type="text">
                                     </textarea>
                                         </label>
-                                        <button class="send-message-button" hidden="hidden"
-                                                onclick="return confirmSendMessage()" title="Send" type="submit">
+                                        <button type="button" class="send-message-button modal-button" hidden="hidden" title="Изпрати съобщение">
                                         </button>
                                     </div>
                                 </form>
                             </td>
                             <!-- START: Delete button-->
                             <td>
-                                <!--custom pop-up confirmation window before <form>-->
-                                <div class="modal">
-                                    <div class="modal-content">
-                                        <strong class="text-danger-emphasis">ВНИМАНИЕ!</strong>
-                                        <p class="text-dark">Премахни потребител от дигитална ЕС?</p>
-                                        <small class="text-secondary">Това действие ще премахне потребителя от
-                                            дигиталната етажна собственост.
-                                            Достъпът до информация касаеща дигиталната етажна собственост и
-                                            регистрирания имот ще бъде ограничен!
-                                            Потребителят може да се присъедини отново към дигиталната етажна собственост
-                                            единствено в случай, че разполага с Идентификатор на ЕС и Код за
-                                            достъп!</small>
-                                        <div class="confirm-buttons-container">
-                                            <button id="yes-btn">Потвърди</button>
-                                            <button id="no-btn">Назад</button>
-                                        </div>
-                                    </div>
-                                </div>
                                 <form th:action="@{/administration/owners/delete/{id} (id=${resident.getId()})}"
                                       th:method="POST"
                                       th:object="${residentManageBindingModel}">
@@ -344,6 +321,10 @@
     </div>
 </div>
 
+<!--Custom pop-up confirmation window-->
+<div th:replace="~{bg/fragments/confirm-popup}">
+</div>
+
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
 </footer>
@@ -358,7 +339,7 @@
 <script src="/js/custom.js"></script>
 <script src="/js/message.js"></script>
 <script src="/js/confirm.js"></script>
-<script src="/js/delete-button.js"></script>
+<script src="/js/buttons.js"></script>
 
 </body>
 </html>

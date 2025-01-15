@@ -112,7 +112,7 @@ public class SecurityServiceImpl implements SecurityService {
 
         UserEntity loggedUser = getUserEntity(authentication);
 
-        //grant access if logged user has apartment in member of expense's residential entity
+        //grant access if logged user has apartment in member of expense's Condominium
         List<ResidentialEntity> residentialEntities = loggedUser.getResidentialEntities();
         for (ResidentialEntity residentialEntity : residentialEntities) {
 
@@ -123,7 +123,7 @@ public class SecurityServiceImpl implements SecurityService {
                 return true;
             }
         }
-        //grant access if logged user is residential entity manager
+        //grant access if logged user is Condominium manager
         return loggedUser.getId().equals(expense.getResidentialEntity().getManager().getId());
     }
 

@@ -218,9 +218,9 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     }
 
     /**
-     * Global fee add - Adds a fee to every single property in the common Residential entity.
+     * Global fee add - Adds a fee to every single property in the common Condominium.
      *
-     * @param residentialEntity                   Residential entity data
+     * @param residentialEntity                   Condominium data
      * @param propertyFeeAddGlobalFeeBindingModel add global fee input data
      * @return boolean
      */

@@ -30,7 +30,7 @@ public class PropertyTypeController {
     /**
      * PropertyType in Administration
      *
-     * @param id residential entity id
+     * @param id Condominium id
      * @return view administration - PROPERTY TYPES
      */
     @GetMapping("/administration/property/types/{id}")
@@ -45,7 +45,7 @@ public class PropertyTypeController {
     /**
      * Add (new) new propertyType in Administration -> Properties -> PROPERTY TYPES
      *
-     * @param id residential entity id
+     * @param id Condominium id
      * @return view administration - PROPERTY TYPES add form
      */
     @GetMapping("/administration/property/types/add/{id}")
@@ -63,7 +63,7 @@ public class PropertyTypeController {
     /**
      * Add (new) new propertyType in Administration -> Properties -> PROPERTY TYPES
      *
-     * @param id residential entity id
+     * @param id Condominium id
      * @return view administration - PROPERTY TYPES add form
      */
     @PostMapping("/administration/property/types/add/{id}")
@@ -213,7 +213,7 @@ public class PropertyTypeController {
     /**
      * Method returns a ResidentialEntity
      *
-     * @param id residential entity id
+     * @param id Condominium id
      * @return ResidentialEntity
      */
     private ResidentialEntity getResidentialEntity(Long id) {

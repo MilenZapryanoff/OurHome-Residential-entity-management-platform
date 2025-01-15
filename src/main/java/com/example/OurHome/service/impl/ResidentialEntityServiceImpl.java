@@ -54,7 +54,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     }
 
     /**
-     * New Residential entity creation method.
+     * New Condominium creation method.
      *
      * @return boolean
      */
@@ -152,7 +152,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
      * Method maps ResidentialEntity to ResidentialEntityEditBindingModel used for edit of residential
      * entity data.
      *
-     * @param residentialEntity actual Residential entity from DB
+     * @param residentialEntity actual Condominium from DB
      * @return ResidentialEntityEditBindingModel
      */
     @Override
@@ -211,7 +211,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
 
 
     /**
-     * Method for setting expense visibility of Residential Entity. Turning ON or OFF
+     * Method for setting expense visibility of Condominium. Turning ON or OFF
      *
      * @param id Residential Expense id
      */
@@ -247,9 +247,9 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     }
 
     /**
-     * Method for update of Residential Entity Bank details
+     * Method for update of Condominium Bank details
      *
-     * @param residentialEntity       current Residential Entity
+     * @param residentialEntity       current Condominium
      * @param bankDetailsBindingModel input data
      */
     @Override
@@ -263,9 +263,9 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     }
 
     /**
-     * Method for deletion of Residential Entity Bank details
+     * Method for deletion of Condominium Bank details
      *
-     * @param residentialEntity current Residential Entity
+     * @param residentialEntity current Condominium
      */
     @Override
     public void deleteResidentialEntityBankDetails(ResidentialEntity residentialEntity) {
@@ -279,7 +279,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
 
     /**
      * @param file              upload file
-     * @param residentialEntity current residential entity
+     * @param residentialEntity current Condominium
      * @return String picturePath
      * @throws IOException IOException or IllegalArgumentException
      */
@@ -356,7 +356,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     /**
      * Update of picturePath in the DB.
      *
-     * @param residentialEntity current Residential entity
+     * @param residentialEntity current Condominium
      */
     @Override
     public void removeResidentialEntityPicture(ResidentialEntity residentialEntity) throws IOException {
@@ -378,7 +378,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
                 throw new IOException("Failed to delete the file!", e);
             }
         } else {
-            throw new IllegalArgumentException("Residential entity does not have a custom picture set!");
+            throw new IllegalArgumentException("Condominium does not have a custom picture set!");
         }
     }
 
@@ -398,7 +398,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     /**
      * Update of picturePath in the DB.
      *
-     * @param residentialEntity current Residential entity
+     * @param residentialEntity current Condominium
      * @param picturePath       the path of the user picture stored in DB
      */
     public void updatePicturePath(ResidentialEntity residentialEntity, String picturePath) {
@@ -406,7 +406,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
             residentialEntity.setPicturePath(picturePath);
             residentialEntityRepository.save(residentialEntity);
         } else {
-            throw new IllegalArgumentException("Residential Entity is null!");
+            throw new IllegalArgumentException("Condominium is null!");
         }
     }
 }

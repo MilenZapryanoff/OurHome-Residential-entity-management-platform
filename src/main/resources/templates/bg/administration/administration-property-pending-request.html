@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,18 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +37,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -54,8 +53,7 @@
     </div>
 </div>
 
-
-<!-- Property registration request form -->
+<!-- Property change request form -->
 <div class="container">
     <div class="property">
         <div class="tab-content" id="myTabContent">
@@ -67,47 +65,57 @@
                     </li>
                 </ul>
             </div>
-            <div class="tab-pane fade show active" id="profile"
-                 aria-labelledby="profile-tab">
+            <div aria-labelledby="profile-tab" class="tab-pane fade show active"
+                 id="profile">
                 <div class="row">
                     <div class="col-lg-6" style="padding-bottom: 20px">
                         <div class="info-table">
                             <ul>
                                 <li>
                                     <section class="text-center">
-                                        <h5 class="text-danger">Property data</h5>
-                                        <p>Property data set for this property.</p>
-                                        <p>Please note, that most of the data in this section may be
-                                            part of the components involved in the calculation of the monthly fee for
-                                            this property.</p>
-                                        <p><b>It is important to keep this data correct.</b></p>
+                                        <h5 class="text-dark">Данни за имот</h5>
+                                        <hr>
+                                        <p><i class="fa-solid fa-circle-info text-warning"> </i>Секцията съдъража
+                                            информация за текущите параметри на
+                                            дигиталния имот в състава на етажната собственост. Обикновено въз основа на
+                                            тези данни се начисляват месечните такси за всеки един имот.</p>
+                                        <p><b>Ето защо е важно да поддържате тези данни актуални!</b></p>
                                     </section>
                                 </li>
-                                <li class="text-black text-center"><i class="fa-solid fa-list-ol"></i> Property №:
+                                <li class="text-black text-center"><i class="fa-solid fa-list-ol"></i> Имот №:
                                     <b th:text="${property.getNumber()}"></b>
                                 </li>
-                                <li class="text-black text-center"><i class="fa-solid fa-stairs"></i> Property floor
-                                    number:
+                                <li class="text-black text-center" th:if="${property.getPropertyClass() != null}">
+                                    <i class="fa-regular fa-building"></i> Клас на имота:
+                                    <b th:text="${property.getPropertyClass().getName()}"></b>
+                                </li>
+                                <li class="text-black text-center"
+                                    th:if="${property.getPropertyType() != null}"><i class="fa-solid fa-building"></i>
+                                    Категория на
+                                    имота:
+                                    <b th:text="${property.getPropertyType().getDescription()}"></b>
+                                </li>
+                                <li class="text-black text-center"><i class="fa-solid fa-stairs"></i> Етаж:
                                     <b th:text="${property.getFloor()}"></b>
                                 </li>
-                                <li class="text-black text-center"><i class="fa-solid fa-person"></i> Number of adults:
+                                <li class="text-black text-center"><i class="fa-solid fa-person"></i> Брой възрастни:
                                     <b th:text="${property.getNumberOfAdults()}"></b>
                                 </li>
-                                <li class="text-black text-center"><i class="fa-solid fa-child"></i> Number of children:
+                                <li class="text-black text-center"><i class="fa-solid fa-child"></i> Брой деца:
                                     <b th:text="${property.getNumberOfChildren()}"></b>
                                 </li>
-                                <li class="text-black text-center"><i class="fa-solid fa-dog"></i> Number of pets:
+                                <li class="text-black text-center"><i class="fa-solid fa-dog"></i> Брой дом. любимци:
                                     <b th:text="${property.getNumberOfPets()}"></b>
                                 </li>
                                 <li class="text-black text-center"><i class="fa-solid fa-house-chimney-user"></i>
-                                    Property is habitable:
+                                    Обитаем:
                                     <b th:if="${property.isNotHabitable()}"><i
                                             class="fa-solid fa-circle-xmark text-danger"></i></b>
                                     <b th:unless="${property.isNotHabitable()}"><i
                                             class="fa-solid fa-circle-check text-success"></i></b>
                                 </li>
-                                <li th:if="${property.getPropertyType() != null}"
-                                    class="text-black text-center"><i class="fa-solid fa-building"></i> Property type:
+                                <li class="text-black text-center"
+                                    th:if="${property.getPropertyType() != null}"><i class="fa-solid fa-building"></i> Property type:
                                     <b th:text="${property.getPropertyType().getDescription()}"></b>
                                 </li>
                             </ul>
@@ -118,24 +126,27 @@
                             <ul>
                                 <li>
                                     <section class="text-center">
-                                        <h5 class="text-danger">Data change request</h5>
-                                        <p>This section contains new data set by the owner.</p>
+                                        <h5 class="text-danger">ЗАЯВКА ЗА ПРОМЯНА НА ДАННИ ЗА ИМОТ</h5>
+                                        <hr>
+                                        <p><i class="fa-solid fa-circle-info text-warning"> </i>В заявката се съдържат
+                                            данни за потребителя желаещ да се регистрира като собственик/ползвател на
+                                            този имот.</p>
                                     </section>
                                     <div class="requester-container">
                                         <ul>
                                             <li class="text-center text-dark">
-                                                <h6>Requester:</h6>
+                                                <h6>Заявител:</h6>
                                                 <div class="request-wrapper">
                                                     <div class="user-avatar-medium">
-                                                        <img th:if="${property.getOwner().getAvatarPath() != null}"
-                                                             th:src="@{${property.getOwner().getAvatarPath()}}"
-                                                             alt="Avatar">
+                                                        <img alt="Avatar"
+                                                             th:if="${property.getOwner().getAvatarPath() != null}"
+                                                             th:src="@{${property.getOwner().getAvatarPath()}}">
                                                         <b th:text="${property.getOwner().getFirstName() + ' ' + property.getOwner().getLastName()}"></b>
                                                     </div>
-                                                    <p class="text-center text-dark">Request created on:
+                                                    <p class="text-center text-dark">Заявката е създадена на:
                                                         <b th:text="${#temporals.format(property.getPropertyChangeRequest().getCreationDateTime(), 'dd.MM.yyyy, HH:mm')}"></b>
                                                     </p>
-                                                    <p class="text-center text-dark">Request last modification on:
+                                                    <p class="text-center text-dark">Последна промяна по заявката:
                                                         <b th:text="${#temporals.format(property.getPropertyChangeRequest().getLastModificationDateTime(), 'dd.MM.yyyy, HH:mm')}"></b>
                                                     </p>
                                                 </div>
@@ -146,124 +157,130 @@
                                 <li>
                                     <div class="request-container">
                                         <section class="text-center">
-                                            <h6>Data input:</h6>
+                                            <h6>ВНИМАНИЕ:</h6>
                                         </section>
                                         <div class="request-wrapper">
                                             <ul>
                                                 <li>
-                                                    <p class="text-secondary text-center">Detected differences <i
+                                                    <p class="text-secondary text-center">Засечени са разлики <i
                                                             class="fa-solid fa-triangle-exclamation text-danger"></i>
-                                                        between property preset data and owner request data!</p>
+                                                        между някои от данните въведени в системата за този имот, и
+                                                        данните въведени от заявителя!</p>
                                                 </li>
                                                 <li>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.getNumber() != property.getPropertyChangeRequest().getNumber()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-list-ol"></i> Property №:
-                                                        <b th:text="${property.getPropertyChangeRequest().getNumber()}"></b>
-                                                    </p>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.getFloor() != property.getPropertyChangeRequest().getFloor()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-stairs"></i> Property floor number:
-                                                        <b th:text="${property.getPropertyChangeRequest().getFloor()}"></b>
-                                                    </p>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.getNumberOfAdults() != property.getPropertyChangeRequest().getNumberOfAdults()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-person"></i> Number of adults:
-                                                        <b th:text="${property.getPropertyChangeRequest().getNumberOfAdults()}"></b>
-                                                    </p>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.getNumberOfChildren() != property.getPropertyChangeRequest().getNumberOfChildren()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-child"></i> Number of children:
-                                                        <b th:text="${property.getPropertyChangeRequest().getNumberOfChildren()}"></b>
-                                                    </p>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.getNumberOfPets() != property.getPropertyChangeRequest().getNumberOfPets()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-dog"></i> Number of pets:
-                                                        <b th:text="${property.getPropertyChangeRequest().getNumberOfPets()}"></b>
-
-                                                    </p>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.isNotHabitable() != property.getPropertyChangeRequest().isNotHabitable()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-house-chimney-user"></i> Property is
-                                                        habitable:
-                                                        <b th:if="${property.getPropertyChangeRequest().isNotHabitable()}"><i
-                                                                class="fa-solid fa-circle-xmark text-danger"></i></b>
-                                                        <b th:unless="${property.getPropertyChangeRequest().isNotHabitable()}"><i
-                                                                class="fa-solid fa-circle-check text-success"></i></b>
-                                                    </p>
-                                                    <p th:if="${property.getPropertyChangeRequest().getPropertyType() != null}"
-                                                       class="text-black text-center">
-                                                        <b th:if="${property.getPropertyType() != property.getPropertyChangeRequest().getPropertyType()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-building">
-                                                        </i> Property type:
-                                                        <b th:text="${property.getPropertyChangeRequest.getPropertyType().getDescription()}"></b>
-                                                    </p>
+                                                    <div class="text-center">
+                                                        <p class="text-danger"
+                                                           th:if="${property.getNumber() != property.getPropertyChangeRequest().getNumber()}">
+                                                            <i class="fa-solid fa-list-ol"></i> Имот №: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumber()}"></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getNumber() != property.getPropertyChangeRequest().getNumber()}">
+                                                            <i class="fa-solid fa-list-ol"></i> Имот №: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumber()}"></b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <p class="text-danger"
+                                                           th:if="${property.getFloor() != property.getPropertyChangeRequest().getFloor()}">
+                                                            <i class="fa-solid fa-stairs"></i> Етаж: <b
+                                                                th:text="${property.getPropertyChangeRequest().getFloor()}"></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getFloor() != property.getPropertyChangeRequest().getFloor()}">
+                                                            <i class="fa-solid fa-stairs"></i> Етаж: <b
+                                                                th:text="${property.getPropertyChangeRequest().getFloor()}"></b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <p class="text-danger"
+                                                           th:if="${property.getNumberOfAdults() != property.getPropertyChangeRequest().getNumberOfAdults()}">
+                                                            <i class="fa-solid fa-person"></i> Брой възрастни: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfAdults()}"></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getNumberOfAdults() != property.getPropertyChangeRequest().getNumberOfAdults()}">
+                                                            <i class="fa-solid fa-person"></i> Брой възрастни: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfAdults()}"></b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <p class="text-danger"
+                                                           th:if="${property.getNumberOfChildren() != property.getPropertyChangeRequest().getNumberOfChildren()}">
+                                                            <i class="fa-solid fa-child"></i> Брой деца: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfChildren()}"></b>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getNumberOfChildren() != property.getPropertyChangeRequest().getNumberOfChildren()}">
+                                                            <i class="fa-solid fa-child"></i> Брой деца: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfChildren()}"></b>
+                                                    </div>
+                                                    <div class="text-black text-center">
+                                                        <p class="text-danger"
+                                                           th:if="${property.getNumberOfPets() != property.getPropertyChangeRequest().getNumberOfPets()}">
+                                                            <i class="fa-solid fa-dog"></i> Брой дом. любимци: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfPets()}"></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getNumberOfPets() != property.getPropertyChangeRequest().getNumberOfPets()}">
+                                                            <i class="fa-solid fa-dog"></i> Брой дом. любимци: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfPets()}"></b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <p class="text-danger"
+                                                           th:if="${property.isNotHabitable() != property.getPropertyChangeRequest().isNotHabitable()}">
+                                                            <i class="fa-solid fa-house-chimney-user"></i> Имотът е
+                                                            обитаем:
+                                                            <b th:if="${property.getPropertyChangeRequest().isNotHabitable()}"><i
+                                                                    class="fa-solid fa-circle-xmark text-danger"></i></b>
+                                                            <b th:unless="${property.getPropertyChangeRequest().isNotHabitable()}"><i
+                                                                    class="fa-solid fa-circle-check text-success"></i></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.isNotHabitable() != property.getPropertyChangeRequest().isNotHabitable()}">
+                                                            <i class="fa-solid fa-house-chimney-user"></i> Имотът е
+                                                            обитаем:
+                                                            <b th:if="${property.getPropertyChangeRequest().isNotHabitable()}"><i
+                                                                    class="fa-solid fa-circle-xmark text-danger"></i></b>
+                                                            <b th:unless="${property.getPropertyChangeRequest().isNotHabitable()}"><i
+                                                                    class="fa-solid fa-circle-check text-success"></i></b>
+                                                        </p>
+                                                        <br>
+                                                    </div>
                                                 </li>
                                             </ul>
-                                        </div>
-
-                                        <div class="buttons-container">
-                                            <form class="form-container"
-                                                  th:action="@{/administration/property/pending/request/approve/{id} (id=${property.getId()})}"
-                                                  th:method="POST"
-                                                  th:object="${propertyManageBindingModel}">
-                                                <div th:id="'customDialog_' + ${property.getId()}"
-                                                     class="custom-dialog" style="display: none;">
-                                                    <p th:id="'customDialogText_' + ${property.getId()}"></p>
-                                                    <button class="custom-dialog-ok"
-                                                            th:onclick="'closeCustomDialog(\'' + ${property.getId()} + '\')'">
-                                                        OK
-                                                    </button>
-                                                </div>
-                                                <label for="entityId-approve-with-change" class="hidden"></label>
-                                                <select class="form-control hidden" id="entityId-approve-with-change"
-                                                        th:field="*{entityId}">
-                                                    <option th:value="${property.getResidentialEntity().getId()}"></option>
-                                                </select>
-                                                <button id="approve-change-request"
-                                                        th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property approved.\')'"
-                                                        type="submit"
-                                                        title="This action will set property owner and modify existing data!">
-                                                    <p>Approve change request</p>
-                                                </button>
-                                            </form>
-                                            <form class="form-container"
-                                                  th:action="@{/administration/property/pending/request/reject/{id} (id=${property.getId()})}"
-                                                  th:method="POST"
-                                                  th:object="${propertyManageBindingModel}">
-                                                <label for="entityId-reject" class="hidden"></label>
-                                                <select class="form-control hidden" id="entityId-reject"
-                                                        th:field="*{entityId}">
-                                                    <option th:value="${property.getResidentialEntity().getId()}"></option>
-                                                </select>
-                                                <button id="reject" class="text-center"
-                                                        th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property rejected.\')'"
-                                                        type="submit"><p>Reject change request</p>
-                                                </button>
-                                            </form>
                                         </div>
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="text-center">
-                                        <p>Approving change request will apply new data to this property.</p>
-                                        <p>Rejecting request will discard all changes. Property owner will be able to
-                                            edit and resend change request again.</p>
-                                    </div>
+                                    <p><b class="text-danger">Може да изберете една от следните опции:</b></p>
+                                    <br>
+                                    <p><b>Одобри заявка</b></p>
+                                    <p><i class="fa-regular fa-check-circle text-success"></i> Данните за имота ще бъдат
+                                        променени спрямо данните посочени в заявката за регистрация!</p>
+                                    <br>
+                                    <p><b>Отхвърли заявка</b></p>
+                                    <p><i class="fa-regular fa-xmark-circle text-danger"></i> Данните за имота ще
+                                        останат непроменени!</p>
+                                    <br>
+                                    <form id="input-form"
+                                          th:action="@{/administration/property/pending/request/process/{id}(id=${property.getId()})}"
+                                          th:method="POST"
+                                          th:object="${propertyManageBindingModel}">
+                                        <label for="action" hidden="hidden"></label>
+                                        <select class="form-control" id="action"
+                                                th:field="*{action}">
+                                            <option th:text="'Одобри'"
+                                                    th:value="approveWithChange">
+                                            </option>
+                                            <option th:text="'Отхвърли'"
+                                                    th:value="reject">
+                                            </option>
+                                        </select>
+                                        <button id="request-process-button"
+                                                type="submit">Потвърди
+                                        </button>
+                                    </form>
                                 </li>
                             </ul>
                         </div>
