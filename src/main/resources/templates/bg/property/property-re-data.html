@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,27 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +46,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -50,7 +58,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <h3>Данни за етажна собственост</h3>
-                <span th:text="'Етажна собственост: ' + ${property.getResidentialEntity().getCity().getName()}
+                <span th:text="${property.getResidentialEntity().getCity().getName()}
                 + ', ' + ${property.getResidentialEntity().getStreetName()}
                 + ' № ' +${property.getResidentialEntity().getStreetNumber()}
                 + ', entrance: ' +${property.getResidentialEntity().getEntrance()}"></span>
@@ -59,193 +67,218 @@
     </div>
 </div>
 
-<!-- ***** Condominium section ***** -->
-
-
-<div class="container">
-    <!--Start of sub-menus-->
-    <div class="property-nav-bar">
-        <a th:href="@{/property}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
-        <a th:href="@{/property/summary/{id}(id=${property.getId()})}">Статус</a>
-        <a th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">Месечни такси</a>
-        <a th:href="@{/property/details/{id}(id=${property.getId()})}">Настройки</a>
-        <a href=#>Етажна собственост</a>
-        <div class="transition property-re"></div>
+<!-- ***** Property section ***** -->
+<div class="page-content">
+    <!--start of Sub-menu-->
+    <div class="menu-container">
+        <div th:replace="~{/bg/fragments/prop-submenu}"></div>
     </div>
+    <div class="content">
+        <div class="container">
+            <div class="administration">
+                <div class="col-lg-11 center-form">
+                <div class="table-nav-section">
+                    <a class="button nav-link active"
+                       href=#>
+                        <div class="text-center"><span>Информация</span></div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/property/re/expenses/{id}(id=${property.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i>
+                            <span>Отчет разходи</span>
+                        </div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/property/re/incomes/{id}(id=${property.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i>
+                            <span>Отчет приходи</span>
+                        </div>
+                    </a>
+                </div>
+                <!--Start of Data section-->
+                <div class="property">
+                    <div class="tabs-content">
+                        <div class="info-table text-dark bottom-rounded" th:if="${property.isValidated()}">
+                            <div>
+                                <ul>
+                                    <li><h5 class="text-center text-danger">Информация за етажна собственост</h5></li>
+                                    <li style="display: flex">
+                                        <ul class="col-lg-9">
 
-    <div class="table-nav-section">
-        <a class="button nav-link active"
-           href=#>
-            <div class="text-center"> <span>Информация</span></div>
-        </a>
-        <a class="button nav-link"
-           th:href="@{/property/re/expenses/{id}(id=${property.getId()})}">
-            <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Отчет разходи</span></div>
-        </a>
-        <a class="button nav-link"
-           th:href="@{/property/re/incomes/{id}(id=${property.getId()})}">
-            <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Отчет приходи</span></div>
-        </a>
-    </div>
-
-    <!--Start of Data section-->
-    <div class="property">
-        <div class="tabs-content">
-            <div th:if="${property.isValidated()}" class="info-table text-dark bottom-rounded">
-                <div>
-                    <ul>
-                        <li><h5 class="text-center text-danger">Информация за етажна собственост</h5></li>
-                        <li style="display: flex">
-                            <ul class="col-lg-9">
-
-                                <li class="text-dark">Идентификатор на ЕС: <b
-                                        th:text="${property.getResidentialEntity().getId()}"></b>
-                                </li>
-                                <li class="text-dark">Адрес на ЕС: <b
-                                        th:text="${property.getResidentialEntity().getCity().getName()}
+                                            <li class="text-dark">Идентификатор на ЕС: <b
+                                                    th:text="${property.getResidentialEntity().getId()}"></b>
+                                            </li>
+                                            <li class="text-dark">Адрес на ЕС: <b
+                                                    th:text="${property.getResidentialEntity().getCity().getName()}
                                                             + ', ' + ${property.getResidentialEntity().getStreetName()}
                                                             + ', №' + ${property.getResidentialEntity().getStreetNumber()}"> </b>
-                                </li>
-                                <li class="text-dark">Брой имоти: <b
-                                        th:text="${@propertyRepository.countAllPropertiesByResidentialEntity(property.getResidentialEntity().getId())}"></b>
-                                </li>
-                                <li class="text-dark">Домоуправител: <b
-                                        th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +
+                                            </li>
+                                            <li class="text-dark">Брой имоти: <b
+                                                    th:text="${@propertyRepository.countAllPropertiesByResidentialEntity(property.getResidentialEntity().getId())}"></b>
+                                            </li>
+                                            <li th:if="${property.getResidentialEntity().getEmail().length()} > 0" class="text-black">
+                                                Имейл ЕС:
+                                                <a th:href="'mailto:' + ${property.getResidentialEntity().getEmail()}"><b th:text="${property.getResidentialEntity().getEmail()}"></b>
+                                                </a>
+                                            </li>
+                                            <li th:if="${property.getResidentialEntity().getFacebookUrl().length()} > 0" class="text-black">
+                                                Facebook страница:
+                                                <a th:href="${property.getResidentialEntity().getFacebookUrl()}" target="_blank" rel="noopener noreferrer">
+                                                    <i class="fa-brands fa-facebook"></i>
+                                                </a>
+                                            </li>
+                                            <br>
+                                            <li class="text-dark">Домоуправител: <b
+                                                    th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' +
                                                                     ${property.getResidentialEntity().getManager().getLastName()}"></b>
-                                </li>
-                                <li class="text-dark">Тел. номер: <b
-                                        th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b>
-                                </li>
-                                <li class="text-dark">Имейл: <b
-                                        th:text="${property.getResidentialEntity().getManager().getEmail()}"></b>
-                                </li>
-                            </ul>
-                            <ul style="margin: 0 auto">
-                                <li th:if="${property.getResidentialEntity().getPicturePath() != null}">
-                                    <img th:src="@{${property.getResidentialEntity().picturePath}}"
-                                         alt="No image available" class="residential-entity-image">
-                                </li>
-                                <li th:if="${property.getResidentialEntity().getPicturePath() == null}">
-                                    <img src="/images/No_Image_Available.jpg" alt="No image available"
-                                         class="residential-entity-image">
-                                </li>
-                            </ul>
-                        </li>
+                                            </li>
+                                            <li class="text-dark">Тел. номер: <b
+                                                    th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b>
+                                            </li>
+                                            <li class="text-black">
+                                                Имейл домоуправител:
+                                                <a th:href="'mailto:' + ${property.getResidentialEntity().getManager().getEmail()}"><b th:text="${property.getResidentialEntity().getManager().getEmail()}"></b>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <ul style="margin: 0 auto">
+                                            <li th:if="${property.getResidentialEntity().getPicturePath() != null}">
+                                                <img alt="No image available"
+                                                     class="residential-entity-image"
+                                                     th:src="@{${property.getResidentialEntity().picturePath}}">
+                                            </li>
+                                            <li th:if="${property.getResidentialEntity().getPicturePath() == null}">
+                                                <img alt="No image available" class="residential-entity-image"
+                                                     src="/images/No_Image_Available.jpg">
+                                            </li>
+                                        </ul>
+                                    </li>
 
 
-                        <li>
-                            <div class="text-center">
-                                <br>
-                                <h5 class="text-danger">Приложими такси на Етажната сожственост</h5>
-                                <p class="text-secondary">Възприетата политика за формиране на месечните такси определя механизма, по който се формира месечната
-                                    такса за всеки един имот в ЕС.
-                                    <br>Тук можете да откриете приложимите за вашия имот такси спрямо политиката на ЕС.<br>
-                                </p>
+                                    <li>
+                                        <div class="text-center">
+                                            <br>
+                                            <h5 class="text-danger">Ставки Етажната сожственост</h5>
+                                            <p class="text-secondary">Възприетата политика за формиране на месечните
+                                                такси
+                                                определя
+                                                механизма, по който се формира месечната
+                                                такса за всеки един имот в ЕС.
+                                                <br>Тук можете да откриете приложимите за вашия имот такси спрямо
+                                                политиката
+                                                на
+                                                ЕС.<br>
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li class="text-dark">
+                                        <h5>Компоненти на таксата (обитаеми самостоятелни обекти)</h5>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>Фиксирана такса: <b
+                                                th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' лв.'"></b>
+                                        </p>
+                                        <p class="text-secondary">
+                                            <i class="fa-solid fa-house-chimney"></i><small> прилага се на самостоятелен обект</small>
+                                        </p>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>Такса възрастен: <b
+                                                th:text="${property.getResidentialEntity().getFee().getAdultFee()} + ' лв.'"></b>
+                                        </p>
+                                        <p class="text-secondary">
+                                            <i class="fa-solid fa-person"></i><small> прилага се на възрастен</small>
+                                        </p>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>Такса дете: <b
+                                                th:text="${property.getResidentialEntity().getFee().getChildFee()} + ' лв.'"></b>
+                                        </p>
+                                        <p class="text-secondary">
+                                            <i class="fa-solid fa-child"></i><small> прилага се на дете</small>
+                                        </p>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>Такса дом. любимец: <b
+                                                th:text="${property.getResidentialEntity().getFee().getPetFee()} + ' лв.'"></b>
+                                        </p>
+                                        <p class="text-secondary">
+                                            <i class="fa-solid fa-dog"></i><small> прилага се на дом. любимец</small>
+                                        </p>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>Допълнителна такса: <b
+                                                th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
+                                        </p>
+                                        <p class="text-secondary">
+                                            <i class="fa-solid fa-gem"></i><small> прилага се на самостоятелен обект</small>
+                                        </p>
+                                    </li>
+                                    <li class="text-dark">
+                                        <h5>Компоненти на таксата (необитаеми самостоятелни обекти)</h5>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>Фиксирана такса: <b
+                                                th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
+                                        </p>
+                                        <p class="text-secondary">
+                                            <i class="fa-solid fa-house"></i><small> прилага се на самостоятелен обект</small>
+                                        </p>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>Друга такса: <b
+                                                th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
+                                        </p>
+                                        <p class="text-secondary">
+                                            <i class="fa-solid fa-gem"></i><small> прилага се на самостоятелен обект</small>
+                                        </p>
+                                    </li>
+                                    <li class="text-dark">
+                                        <h5>Индивидуална такса</h5>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>Специфична за имота такса: <b
+                                                th:text="${property.getAdditionalPropertyFee()} + ' лв.'"></b></p>
+                                        <p class="text-secondary">
+                                            <i class="fa-solid fa-gears"></i><small> прилага се само за този
+                                            самостоятелен обект</small>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <div class="text-center">
+                                            <br>
+                                            <h5 class="text-danger">Информация за банкова сметка на ЕС <i
+                                                    class="fa-solid fa-landmark"></i></h5>
+                                            <p class="text-secondary">Данни за сметка и титуляр на сметката на ЕС.</p>
+                                        </div>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>IBAN: <b class="text-danger"
+                                                    th:if="${property.getResidentialEntity().getBankIban() != null}"
+                                                    th:text="${property.getResidentialEntity().getBankIban()}"></b></p>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>Титуляр на сметката: <b class="text-danger"
+                                                                   th:if="${property.getResidentialEntity().getBankAccountHolder()  != null}"
+                                                                   th:text="${property.getResidentialEntity().getBankAccountHolder()}"></b>
+                                        </p>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>Банка: <b class="text-danger"
+                                                     th:if="${property.getResidentialEntity().getBankName() != null}"
+                                                     th:text="${property.getResidentialEntity().getBankName()}"></b></p>
+                                    </li>
+                                    <li class="text-black">
+                                        <p>Допълнителна информация: <b class="text-danger"
+                                                                       th:if="${property.getResidentialEntity().getBankAdditionalData() != null}"
+                                                                       th:text="${property.getResidentialEntity().getBankAdditionalData()}"></b>
+                                        </p>
+                                    </li>
+                                </ul>
                             </div>
-                        </li>
-                        <li class="text-dark">
-                            <h5>Компоненти на таксата (обитаеми имоти)</h5>
-                        </li>
-                        <li class="text-black">
-                            <p>Фиксирана такса: <b
-                                    th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' лв.'"></b>
-                            </p>
-                            <p class="text-secondary">
-                                <i class="fa-solid fa-house-chimney"></i><small> прилага се на имот</small>
-                            </p>
-                        </li>
-                        <li class="text-black">
-                            <p>Такса възрастен: <b
-                                    th:text="${property.getResidentialEntity().getFee().getAdultFee()} + ' лв.'"></b>
-                            </p>
-                            <p class="text-secondary">
-                                <i class="fa-solid fa-person"></i><small> прилага се на възрастен</small>
-                            </p>
-                        </li>
-                        <li class="text-black">
-                            <p>Такса дете: <b
-                                    th:text="${property.getResidentialEntity().getFee().getChildFee()} + ' лв.'"></b>
-                            </p>
-                            <p class="text-secondary">
-                                <i class="fa-solid fa-child"></i><small> прилага се на дете</small>
-                            </p>
-                        </li>
-                        <li class="text-black">
-                            <p>Такса дом. любимец: <b
-                                    th:text="${property.getResidentialEntity().getFee().getPetFee()} + ' лв.'"></b>
-                            </p>
-                            <p class="text-secondary">
-                                <i class="fa-solid fa-dog"></i><small> прилага се на дом. любимец</small>
-                            </p>
-                        </li>
-                        <li class="text-black">
-                            <p>Other Condominium fee: <b
-                                    th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
-                            </p>
-                            <p class="text-secondary">
-                                <i class="fa-solid fa-gem"></i><small> applies per property</small>
-                            </p>
-                        </li>
-                        <li class="text-dark">
-                            <h5>Компоненти на таксата (необитаеми имоти)</h5>
-                        </li>
-                        <li class="text-black">
-                            <p>Фиксирана такса: <b
-                                    th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
-                            </p>
-                            <p class="text-secondary">
-                                <i class="fa-solid fa-house"></i><small> прилага се на имот</small>
-                            </p>
-                        </li>
-                        <li class="text-black">
-                            <p>Друга такса: <b
-                                    th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
-                            </p>
-                            <p class="text-secondary">
-                                <i class="fa-solid fa-gem"></i><small> прилага се на имот</small>
-                            </p>
-                        </li>
-                        <li class="text-dark">
-                            <h5>Индивидуална такса имот</h5>
-                        </li>
-                        <li class="text-black">
-                            <p>Специфична за имота такса: <b
-                                    th:text="${property.getAdditionalPropertyFee()} + ' лв.'"></b></p>
-                            <p class="text-secondary">
-                                <i class="fa-solid fa-gears"></i><small> прилага се само за този имот</small>
-                            </p>
-                        </li>
-                        <li>
-                            <div class="text-center">
-                                <br>
-                                <h5 class="text-danger">Информация за банкова сметка на ЕС <i
-                                        class="fa-solid fa-landmark"></i></h5>
-                                <p class="text-secondary">Данни за сметка и титуляр на сметката на ЕС.</p>
-                            </div>
-                        </li>
-                        <li class="text-black">
-                            <p>IBAN: <b class="text-danger"
-                                        th:if="${property.getResidentialEntity().getBankIban() != null}"
-                                        th:text="${property.getResidentialEntity().getBankIban()}"></b></p>
-                        </li>
-                        <li class="text-black">
-                            <p>Титуляр на сметката: <b class="text-danger"
-                                                       th:if="${property.getResidentialEntity().getBankAccountHolder()  != null}"
-                                                       th:text="${property.getResidentialEntity().getBankAccountHolder()}"></b>
-                            </p>
-                        </li>
-                        <li class="text-black">
-                            <p>Банка: <b class="text-danger"
-                                             th:if="${property.getResidentialEntity().getBankName() != null}"
-                                             th:text="${property.getResidentialEntity().getBankName()}"></b></p>
-                        </li>
-                        <li class="text-black">
-                            <p>Допълнителна информация: <b class="text-danger"
-                                                   th:if="${property.getResidentialEntity().getBankAdditionalData() != null}"
-                                                   th:text="${property.getResidentialEntity().getBankAdditionalData()}"></b>
-                            </p>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>

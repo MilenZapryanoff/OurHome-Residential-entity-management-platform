@@ -4,6 +4,7 @@ import com.example.OurHome.model.Entity.Message;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.dto.BindingModels.ReportBug.ReportBugBindingModel;
 
 import java.math.BigDecimal;
 

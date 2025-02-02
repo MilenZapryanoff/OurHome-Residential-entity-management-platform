@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,19 +13,26 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-    <script src="../../static/js/isotope.min.js"></script>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -39,7 +45,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -51,9 +57,9 @@
         <div class="row">
             <h3 th:if="${property.isValidated()}">Edit property data</h3>
             <h3 th:unless="${property.isValidated()}">Set property data</h3>
-            <p th:unless="${editFailed}" th:class="text-light" th:text="'Propery №: ' + ${property.getNumber()}"
-               class="category text-black"></p>
-            <div th:if="${editFailed}" class="err-msg">
+            <p class="category text-black" th:class="text-light" th:text="'Propery №: ' + ${property.getNumber()}"
+               th:unless="${editFailed}"></p>
+            <div class="err-msg" th:if="${editFailed}">
                 <h5 class="text-light">Edit failed!</h5>
                 <p class="text-light"
                    th:text="'Property №' + ${propertyEditBindingModel.getNumber()} + ' already exists in this Condominium!'"></p>
@@ -67,33 +73,33 @@
     <div class="input-content text-center">
         <div class="col-lg-6 center-form">
             <form id="input-form"
-                  th:method="POST"
                   th:action="@{/administration/property/edit/{id}(id=${property.getId()})}"
+                  th:method="POST"
                   th:object="${propertyEditBindingModel}">
                 <div class="col-lg-12">
                     <fieldset>
                         <label for="number"><b>Property №</b></label>
-                        <p th:if="${#fields.hasErrors('number')}"
+                        <p class="text-danger"
                            th:errors="*{number}"
-                           class="text-danger">Street name error message</p>
-                        <input type="number" id="number"
-                               placeholder="Enter street name..." required
+                           th:if="${#fields.hasErrors('number')}">Street name error message</p>
+                        <input id="number" placeholder="Enter street name..."
+                               required th:errorclass="bg-danger"
                                th:field="*{number}"
-                               th:errorclass="bg-danger"
-                               th:value="${propertyEditBindingModel.getNumber()}">
+                               th:value="${propertyEditBindingModel.getNumber()}"
+                               type="number">
                     </fieldset>
                     <fieldset>
                         <label for="propertyTypeId"><b>Property class</b></label>
                         <select class="form-control" id="propertyClassId"
                                 th:field="*{propertyClass}">
-                            <option th:if="${propertyEditBindingModel.getPropertyClass() == null}" th:value="''"
-                                    th:text="'---'"></option>
+                            <option th:if="${propertyEditBindingModel.getPropertyClass() == null}" th:text="'---'"
+                                    th:value="''"></option>
                             <option th:each="propertyClass : ${@propertyClassRepository.findAll()}"
-                                    th:value="${propertyClass.getId()}"
-                                    th:text="${propertyClass.name}">
+                                    th:text="${propertyClass.name}"
+                                    th:value="${propertyClass.getId()}">
                             </option>
-                            <option th:if="${propertyEditBindingModel.getPropertyClass() != null}" th:value="''"
-                                    th:text="'---'"></option>
+                            <option th:if="${propertyEditBindingModel.getPropertyClass() != null}" th:text="'---'"
+                                    th:value="''"></option>
                         </select>
                         <br>
                     </fieldset>
@@ -101,84 +107,84 @@
                         <label for="propertyTypeId"><b>Property category</b></label>
                         <select class="form-control" id="propertyTypeId"
                                 th:field="*{propertyType}">
-                            <option th:if="${property.getPropertyType() != null}" class="text-secondary"
-                                    th:value="${property.getPropertyType().getId()}"
-                                    th:text="${property.getPropertyType().getDescription()} + ' (Selected)'"></option>
-                            <option th:if="${property.getPropertyType() == null}" th:value="''"
-                                    th:text="'---'"></option>
+                            <option class="text-secondary" th:if="${property.getPropertyType() != null}"
+                                    th:text="${property.getPropertyType().getDescription()} + ' (Selected)'"
+                                    th:value="${property.getPropertyType().getId()}"></option>
+                            <option th:if="${property.getPropertyType() == null}" th:text="'---'"
+                                    th:value="''"></option>
                             <option th:each="propertyType : ${@propertyTypeRepository.findPropertyTypesByRE(property.getResidentialEntity().getId())}"
-                                    th:value="${propertyType.getId()}"
-                                    th:text="${propertyType.description}">
+                                    th:text="${propertyType.description}"
+                                    th:value="${propertyType.getId()}">
                             </option>
-                            <option th:if="${property.getPropertyType() != null}" th:value="''"
-                                    th:text="'---'"></option>
+                            <option th:if="${property.getPropertyType() != null}" th:text="'---'"
+                                    th:value="''"></option>
                         </select>
                         <br>
                     </fieldset>
                     <fieldset>
                         <label for="floor"><b>Floor</b></label>
-                        <p th:if="${#fields.hasErrors('floor')}"
+                        <p class="text-danger"
                            th:errors="*{floor}"
-                           class="text-danger">Floor error message</p>
-                        <input type="text" id="floor"
+                           th:if="${#fields.hasErrors('floor')}">Floor error message</p>
+                        <input autocomplete="on" id="floor"
                                placeholder="Enter floor..."
-                               autocomplete="on"
-                               required th:field="*{floor}"
-                               th:errorclass="bg-danger"
-                               th:value="${propertyEditBindingModel.getFloor()}">
+                               required
+                               th:errorclass="bg-danger" th:field="*{floor}"
+                               th:value="${propertyEditBindingModel.getFloor()}"
+                               type="text">
                     </fieldset>
                     <fieldset>
                         <label for="numberOfAdults"><b>Number of adults</b></label>
-                        <p th:if="${#fields.hasErrors('numberOfAdults')}"
+                        <p class="text-danger"
                            th:errors="*{numberOfAdults}"
-                           class="text-danger">Adults number error message</p>
-                        <input type="number" id="numberOfAdults"
+                           th:if="${#fields.hasErrors('numberOfAdults')}">Adults number error message</p>
+                        <input autocomplete="on" id="numberOfAdults"
                                placeholder="Enter number of adults..."
-                               autocomplete="on" required
+                               required th:errorclass="bg-danger"
                                th:field="*{numberOfAdults}"
-                               th:errorclass="bg-danger"
-                               th:value="${propertyEditBindingModel.getNumberOfAdults()}">
+                               th:value="${propertyEditBindingModel.getNumberOfAdults()}"
+                               type="number">
                     </fieldset>
                     <fieldset>
                         <label for="numberOfChildren"><b>Number of children</b></label>
-                        <p th:if="${#fields.hasErrors('numberOfChildren')}"
+                        <p class="text-danger"
                            th:errors="*{numberOfChildren}"
-                           class="text-danger">Children error message</p>
-                        <input type="number" id="numberOfChildren"
+                           th:if="${#fields.hasErrors('numberOfChildren')}">Children error message</p>
+                        <input autocomplete="on" id="numberOfChildren"
                                placeholder="Enter number of children..."
-                               autocomplete="on" required
+                               required th:errorclass="bg-danger"
                                th:field="*{numberOfChildren}"
-                               th:errorclass="bg-danger"
-                               th:value="${propertyEditBindingModel.getNumberOfChildren()}">
+                               th:value="${propertyEditBindingModel.getNumberOfChildren()}"
+                               type="number">
                     </fieldset>
                     <fieldset>
                         <label for="numberOfPets"><b>Number of pets</b></label>
-                        <p th:if="${#fields.hasErrors('numberOfPets')}"
+                        <p class="text-danger"
                            th:errors="*{numberOfPets}"
-                           class="text-danger">Number of pets message</p>
-                        <input type="number" id="numberOfPets"
+                           th:if="${#fields.hasErrors('numberOfPets')}">Number of pets message</p>
+                        <input autocomplete="on" id="numberOfPets"
                                placeholder="Enter number of pets ..."
-                               autocomplete="on" required
+                               required th:errorclass="bg-danger"
                                th:field="*{numberOfPets}"
-                               th:errorclass="bg-danger"
-                               th:value="${propertyEditBindingModel.getNumberOfPets()}">
+                               th:value="${propertyEditBindingModel.getNumberOfPets()}"
+                               type="number">
                     </fieldset>
                     <fieldset>
-                        <input class="inp-cbx" name="isNotHabitable" id="isNotHabitable" type="checkbox"
+                        <input class="inp-cbx" hidden="hidden" id="isNotHabitable" name="isNotHabitable"
                                th:field="*{notHabitable}"
                                th:value="${property.notHabitable}"
-                               hidden="hidden">
+                               type="checkbox">
                         <label class="cbx" for="isNotHabitable">
                         <span>
-                    <svg width="12px" height="10px" viewbox="0 0 12 10"><polyline
+                    <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
                             points="1.5 6 4.5 9 10.5 1"></polyline></svg>
                         </span>
                             <span><b>Property is not habitable</b></span>
                         </label>
                     </fieldset>
                     <fieldset>
-                        <button type="submit" id="form-submit"
-                                class="orange-button">Submit
+                        <button class="orange-button" id="form-submit"
+                                type="submit">Submit
                         </button>
                         <a th:href="@{/administration/property/active/{id}(id=${property.getResidentialEntity().getId()})}">
                             <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel

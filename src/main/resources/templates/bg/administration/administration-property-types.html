@@ -21,6 +21,14 @@
     <link href="/css/navbar.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
 </head>
 
 <body>
@@ -49,7 +57,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Properties data</h3>
+            <h3>Самостоятелни обекти</h3>
             <div class="col-lg-12">
                 <span th:text="'Идентификатор на ЕС: ' + ${residentialEntity.getId()}"></span>
             </div>
@@ -70,7 +78,7 @@
                 <div class="table-nav-section">
                     <a class="button nav-link"
                        th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-regular fa-building"></i> <span>Properties</span>
+                        <div class="text-center"><i class="fa-regular fa-building"></i> <span>Самостоятелни обекти</span>
                             <sup th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
                                  th:text="' '+ ${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())}">
                             </sup>
@@ -79,7 +87,7 @@
                     <a class="button nav-link"
                        th:href="@{/administration/property/change-requests/{id}(id=${residentialEntity.getId()})}">
                         <div class="text-center"><i class="fa-solid fa-screwdriver-wrench"></i>
-                            <span>Change requests</span>
+                            <span>Заявки за промяна на данни</span>
                             <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
                                  th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
                             </sup>
@@ -87,7 +95,7 @@
                     </a>
                     <a class="button nav-link active"
                        href=#property-types>
-                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Property types</span>
+                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Категории самостоятелни обекти</span>
                         </div>
                     </a>
                 </div>
@@ -95,13 +103,11 @@
 
                     <!--Active registrations header-->
                     <div class="text-center">
-                        <h4 class="category text-danger">PROPERTY TYPES</h4>
-                        <p>Creating property types allows you to apply different monthly fees for
-                            different <br> property types and according to the accepted by the Condominium fee
-                            policy.<br> If there are types set, property owners can choose between them while
-                            registering.<br>
-                            You can also manage it later in
-                            property settings.</p>
+                        <h4 class="category text-danger">Категория самостоятелни обекти</h4>
+                        <br>
+                        <p>Създаването на различни категории имоти ви позволява да дефинирате месечни такси по перо Фонд "Ремонт" в зависимост от приетите от етажната собственост такси.</p>
+                        <p>Избирайте говорими имена за съответните категории, така че собствениците на имоти да се ориентират лесно при попълване на данните за регистрация на имот.</p>
+                        <p>Можете да добавяте, променяте и премахвате категории във всеки един момент.</p>
                     </div>
 
 
@@ -115,23 +121,23 @@
                             <span class="category text-bg-success"
                                   style="padding: 1px 5px; border-radius: 5px"
                                   th:if="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} == 1"
-                                  th:text="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} + ' Record found'"></span>
+                                  th:text="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} + ' запис'"></span>
                             <span class="category text-bg-success"
                                   style="padding: 1px 5px; border-radius: 5px"
                                   th:if="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} > 1"
-                                  th:text="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} + ' Records found'"></span>
+                                  th:text="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} + ' записа'"></span>
                             <br>
                         </div>
                         <!--Add global fee button-->
                         <div class="add-fee">
                             <form th:action="@{/administration/property/types/add/{id} (id=${residentialEntity.getId()})}">
                                 <button type="submit">
-                                    <img alt="Create new property type"
+                                    <img alt="Създай нова категория"
                                          src="/images/add_button.png"
                                          style="max-width: 20px;"
                                          title="Create new property type">
                                     <p class="text-dark">
-                                        Create new property type
+                                        Създай нова категория
                                 </button>
                             </form>
                         </div>
@@ -139,33 +145,32 @@
                     <hr>
 
                     <p class="text-center"
-                       th:if="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} == 0"><br>No
-                        property types defined</p>
+                       th:if="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} == 0"><br>Няма дефинирани категории</p>
                     <!--Property types list-->
                     <table class="table text-center"
                            id="property-types-table"
                            th:unless="${@propertyTypeRepository.countPropertyTypes(residentialEntity.getId())} == 0">
                         <tr>
                             <th>
-                                <p>Description</p>
+                                <p>Описание</p>
                             </th>
                             <th>
-                                <p>Common parts %</p>
+                                <p>% общи части</p>
                             </th>
                             <th>
-                                <p>Total flat space</p>
+                                <p>Квадратура</p>
                             </th>
                             <th>
-                                <p>Fund "Repair" (habitable)</p>
+                                <p>Фонд "Ремонт" (обитаем)</p>
                             </th>
                             <th>
-                                <p>Fund "Repair" (non-habitable)</p>
+                                <p>Фонд "Ремонт" (необитаем)</p>
                             </th>
                             <th>
-                                <p>Edit</p>
+                                <p>Промяна</p>
                             </th>
                             <th>
-                                <p>Delete</p>
+                                <p>Изтриване</p>
                             </th>
                         </tr>
                         <tr th:each="propertyType: ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}">
@@ -188,10 +193,10 @@
                                 <form class="form-container"
                                       th:action="@{/administration/property/types/edit/{id} (id=${propertyType.getId()})}">
                                     <button type="submit">
-                                        <img alt="Edit property"
+                                        <img alt="Промени данни"
                                              src="/images/edit.png"
                                              style="width: 20px;"
-                                             title="Edit property type"></button>
+                                             title="Промени данни"></button>
                                 </form>
                             </td>
                             <td align="center" class="table-image">
@@ -207,7 +212,7 @@
                                                 <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
                                             </svg>
                                         </div>
-                                        <div class="text">Delete</div>
+                                        <div class="text">Изтрий</div>
                                     </button>
                                 </form>
                             </td>

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,26 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +45,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -50,7 +57,7 @@
             <div class="col-lg-12">
                 <h3>Contact Us</h3>
                 <h4 class="text-light"><i class="fa-solid fa-phone-flip"></i></h4>
-                <h4 th:if="${mailSent}" class="text-success">Събщението е успешно изпратено!</h4>
+                <h4 class="text-success" th:if="${mailSent}">Събщението е успешно изпратено!</h4>
             </div>
         </div>
     </div>
@@ -68,83 +75,83 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="item phone">
-                            <img src="/images/phone-icon.png" alt="" style="max-width: 52px;">
+                            <img alt="" src="/images/phone-icon.png" style="max-width: 52px;">
                             <h6>+359 886 277 333<br><span>тел. номер</span></h6>
                         </div>
                     </div>
                     <div class="col-lg-12">
                         <div class="item email">
-                            <img src="/images/email-icon.png" alt="" style="max-width: 52px;">
+                            <img alt="" src="/images/email-icon.png" style="max-width: 52px;">
                             <div><b>office.ourhome@gmail.com</b><br><span>Имейл</span></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <form th:method="POST"
-                      th:action="@{/contact}"
-                      th:object="${contactFormBindingModel}"
-                      id="contact-form" action="" method="post">
+                <form action=""
+                      id="contact-form"
+                      method="post"
+                      th:action="@{/contact}" th:method="POST" th:object="${contactFormBindingModel}">
                     <div class="row">
                         <div class="col-lg-12">
                             <fieldset>
                                 <label for="name">Вашите имена</label>
-                                <small th:if="${#fields.hasErrors('name')}"
+                                <small class="text-danger"
                                        th:errors="*{name}"
-                                       class="text-danger">Name error message</small>
-                                <input type="text" id="name"
+                                       th:if="${#fields.hasErrors('name')}">Name error message</small>
+                                <input autocomplete="on" id="name"
                                        placeholder="Моля въведете Вашите имена..."
-                                       autocomplete="on"
                                        required
+                                       th:errorclass="bg-danger"
                                        th:field="*{name}"
-                                       th:errorclass="bg-danger">
+                                       type="text">
                             </fieldset>
                         </div>
                         <div class="col-lg-12">
                             <fieldset>
                                 <label for="email">Имейл</label>
-                                <small th:if="${#fields.hasErrors('email')}"
+                                <small class="text-danger"
                                        th:errors="*{email}"
-                                       class="text-danger">Email error message</small>
-                                <input type="email" id="email"
+                                       th:if="${#fields.hasErrors('email')}">Email error message</small>
+                                <input autocomplete="on" id="email"
                                        placeholder="Вашият имейл..."
-                                       autocomplete="on"
                                        required
+                                       th:errorclass="bg-danger"
                                        th:field="*{email}"
-                                       th:errorclass="bg-danger">
+                                       type="email">
                             </fieldset>
                         </div>
                         <div class="col-lg-12">
                             <fieldset>
                                 <label for="subject">Тема</label>
-                                <small th:if="${#fields.hasErrors('subject')}"
+                                <small class="text-danger"
                                        th:errors="*{subject}"
-                                       class="text-danger">Name error message</small>
-                                <input type="text" id="subject"
+                                       th:if="${#fields.hasErrors('subject')}">Name error message</small>
+                                <input autocomplete="off" id="subject"
                                        placeholder="Тема на Вашето съобщение..."
-                                       autocomplete="off"
                                        required
+                                       th:errorclass="bg-danger"
                                        th:field="*{subject}"
-                                       th:errorclass="bg-danger">
+                                       type="text">
                             </fieldset>
                         </div>
                         <div class="col-lg-12">
                             <fieldset>
                                 <label for="message">Съобщение</label>
-                                <small th:if="${#fields.hasErrors('message')}"
+                                <small class="text-danger"
                                        th:errors="*{subject}"
-                                       class="text-danger">Message error</small>
-                                <textarea type="text" id="message"
-                                          placeholder="Вашето съобщение..."
+                                       th:if="${#fields.hasErrors('message')}">Message error</small>
+                                <textarea id="message" placeholder="Вашето съобщение..."
                                           required
+                                          th:errorclass="bg-danger"
                                           th:field="*{message}"
-                                          th:errorclass="bg-danger">
+                                          type="text">
                     </textarea>
                             </fieldset>
                         </div>
                         <div class="col-lg-12">
                             <fieldset>
-                                <button type="submit" id="form-submit" class="orange-button">Изпрати</button>
+                                <button class="orange-button" id="form-submit" type="submit">Изпрати</button>
                             </fieldset>
                         </div>
                     </div>
@@ -152,10 +159,11 @@
             </div>
             <div class="col-lg-12">
                 <div id="map">
-                    <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA4dMp6ervBxmwa9av_R4vRj-RhYx22TGg&q=Software University,Sofia,Bulgaria"
-                            width="100%" height="500px"
+                    <iframe allowfullscreen=""
+                            height="500px"
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA4dMp6ervBxmwa9av_R4vRj-RhYx22TGg&q=Software University,Sofia,Bulgaria"
                             style="border:0; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);"
-                            allowfullscreen=""></iframe>
+                            width="100%"></iframe>
                 </div>
             </div>
         </div>

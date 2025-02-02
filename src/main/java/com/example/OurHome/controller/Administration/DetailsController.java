@@ -69,7 +69,8 @@ public class DetailsController {
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#entityId, authentication)")
     public ModelAndView residentialEntityEditDetailsPost(@ModelAttribute("residentialEntityEditBindingModel")
                                                          @Valid ResidentialEntityEditBindingModel residentialEntityEditBindingModel,
-                                                         @PathVariable("entityId") Long entityId, BindingResult bindingResult,
+                                                         BindingResult bindingResult,
+                                                         @PathVariable("entityId") Long entityId,
                                                          @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ModelAndView view = resolveView(lang) ?

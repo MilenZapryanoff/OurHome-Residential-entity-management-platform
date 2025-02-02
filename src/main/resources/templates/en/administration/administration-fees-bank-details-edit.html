@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,26 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +45,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -56,61 +63,61 @@
     <div class="input-content text-center">
         <div class="col-lg-6 center-form">
             <form id="input-form"
-                  th:method="POST"
                   th:action="@{/administration/fees/bank-details/edit/{id}(id=${residentialEntity.getId()})}"
+                  th:method="POST"
                   th:object="${bankDetailsBindingModel}">
                 <div class="col-lg-12">
                     <fieldset>
                         <label for="bankIban"><b>IBAN</b></label>
-                        <p th:if="${#fields.hasErrors('bankIban')}"
+                        <p class="text-danger"
                            th:errors="*{bankIban}"
-                           class="text-danger">IBAN error message</p>
-                        <input type="text" id="bankIban"
-                               placeholder="Enter IBAN..." required
+                           th:if="${#fields.hasErrors('bankIban')}">IBAN error message</p>
+                        <input id="bankIban" placeholder="Enter IBAN..."
+                               required th:errorclass="bg-danger"
                                th:field="*{bankIban}"
-                               th:errorclass="bg-danger"
-                               th:value="${bankDetailsBindingModel.getBankIban()}">
+                               th:value="${bankDetailsBindingModel.getBankIban()}"
+                               type="text">
                     </fieldset>
 
                     <fieldset>
                         <label for="bankAccountHolder"><b>Account holder name</b></label>
-                        <p th:if="${#fields.hasErrors('bankAccountHolder')}"
+                        <p class="text-danger"
                            th:errors="*{bankAccountHolder}"
-                           class="text-danger">Bank account holder error message</p>
-                        <input type="text" id="bankAccountHolder"
+                           th:if="${#fields.hasErrors('bankAccountHolder')}">Bank account holder error message</p>
+                        <input autocomplete="on" id="bankAccountHolder"
                                placeholder="Enter account holder names..."
-                               autocomplete="on"
-                               required th:field="*{bankAccountHolder}"
-                               th:errorclass="bg-danger"
-                               th:value="${bankDetailsBindingModel.getBankAccountHolder()}">
+                               required
+                               th:errorclass="bg-danger" th:field="*{bankAccountHolder}"
+                               th:value="${bankDetailsBindingModel.getBankAccountHolder()}"
+                               type="text">
                     </fieldset>
                     <fieldset>
                         <label for="bankName"><b>Bank name</b></label>
-                        <p th:if="${#fields.hasErrors('bankName')}"
+                        <p class="text-danger"
                            th:errors="*{bankName}"
-                           class="text-danger">Adults number error message</p>
-                        <input type="text" id="bankName"
+                           th:if="${#fields.hasErrors('bankName')}">Adults number error message</p>
+                        <input autocomplete="on" id="bankName"
                                placeholder="Enter bank name..."
-                               autocomplete="on" required
+                               required th:errorclass="bg-danger"
                                th:field="*{bankName}"
-                               th:errorclass="bg-danger"
-                               th:value="${bankDetailsBindingModel.getBankName()}">
+                               th:value="${bankDetailsBindingModel.getBankName()}"
+                               type="text">
                     </fieldset>
                     <fieldset>
                         <label for="bankAdditionalData"><b>Additional details</b></label>
-                        <p th:if="${#fields.hasErrors('bankAdditionalData')}"
+                        <p class="text-danger"
                            th:errors="*{bankAdditionalData}"
-                           class="text-danger">Additional data error message</p>
-                        <input type="text" id="bankAdditionalData"
+                           th:if="${#fields.hasErrors('bankAdditionalData')}">Additional data error message</p>
+                        <input autocomplete="on" id="bankAdditionalData"
                                placeholder="Enter additional data..."
-                               autocomplete="on"
-                               th:field="*{bankAdditionalData}"
                                th:errorclass="bg-danger"
-                               th:value="${bankDetailsBindingModel.getBankAdditionalData()}">
+                               th:field="*{bankAdditionalData}"
+                               th:value="${bankDetailsBindingModel.getBankAdditionalData()}"
+                               type="text">
                     </fieldset>
                     <fieldset>
-                        <button type="submit" id="form-submit"
-                                class="orange-button">Submit
+                        <button class="orange-button" id="form-submit"
+                                type="submit">Submit
                         </button>
                         <a th:href="@{/administration/fees/bank-details/{id}(id=${residentialEntity.getId()})}">
                             <button class="orange-button text-light" type="button">

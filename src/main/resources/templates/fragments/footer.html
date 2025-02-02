@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
 </head>
@@ -16,19 +16,28 @@
             <p sec:authorize="isAuthenticated()">Logged as: <span th:text="${loggedUser.getUsername()}"></span></p>
         </div>
     </div>
-    <div th:fragment="header" class="sub-header">
+    <div class="sub-header" th:fragment="header">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 col-md-8">
+                <div class="col-lg-6 col-md-8">
                     <ul class="info">
                         <li><i class="fa fa-envelope"></i> info@ourhome.bg</li>
                         <li><i class="fa fa-map"></i>Sofia, Bulgaria</li>
                     </ul>
                 </div>
-                <div class="col-lg-4 col-md-4">
+                <div class="col-lg-5 col-md-4">
                     <ul class="social-links">
                         <li><a href="#"><i class="fab fa-facebook"></i></a></li>
                         <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-1 col-md-4">
+                    <ul class="social-links">
+                        <li>
+                            <a th:href="@{/report/bug}">
+                                <i class="fa-solid fa-bug" title="Докладвай нередност"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

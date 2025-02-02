@@ -20,6 +20,14 @@
     <link href="/css/navbar.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
 </head>
 <body>
 
@@ -101,11 +109,23 @@
                                     th:text="${residentialEntity.getManager().getFirstName()} + ' ' + ${residentialEntity.getManager().getLastName()}"></b>
                             </li>
                             <li class="text-black">
+                                Condominium email:
+                                <a th:href="'mailto:' + ${residentialEntity.getEmail()}"><b th:text="${residentialEntity.getEmail()}"></b>
+                                </a>
+                            </li>
+                            <li class="text-black">
+                                Facebook page:
+                                <a th:if="${residentialEntity.getFacebookUrl().length()} > 0" th:href="${residentialEntity.getFacebookUrl()}" target="_blank" rel="noopener noreferrer">
+                                    <i class="fa-brands fa-facebook"></i>
+                                </a>
+                            </li>
+                            <li class="text-black">
                                 Access code hint:
                                 <strong class="fas fa-eye text-danger fa-eye-slash" id="togglePassword"
                                         style="cursor: pointer;" title="Press icon to show password hint"></strong>
                                 <input id="residentialAccessCode"
-                                       style="max-width: 90%; border: none; background-color: white; caret-color: transparent;" th:value="${residentialEntity.getAccessCodeHint()}"
+                                       style="max-width: 90%; border: none; background-color: white; caret-color: transparent;"
+                                       th:value="${residentialEntity.getAccessCodeHint()}"
                                        type="password">
                             </li>
                         </ul>

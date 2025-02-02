@@ -1,6 +1,7 @@
 package com.example.OurHome.security.impl;
 
 import com.example.OurHome.model.Entity.*;
+import com.example.OurHome.repo.ReportRepository;
 import com.example.OurHome.security.SecurityService;
 import com.example.OurHome.service.*;
 import org.springframework.security.core.Authentication;
@@ -18,8 +19,9 @@ public class SecurityServiceImpl implements SecurityService {
     private final MessageService messageService;
     private final FinancialService financialService;
     private final PropertyTypeService propertyTypeService;
+    private final ReportRepository reportRepository;
 
-    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, MessageService messageService, FinancialService financialService, PropertyTypeService propertyTypeService) {
+    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, MessageService messageService, FinancialService financialService, PropertyTypeService propertyTypeService, ReportRepository reportRepository) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
@@ -27,6 +29,7 @@ public class SecurityServiceImpl implements SecurityService {
         this.messageService = messageService;
         this.financialService = financialService;
         this.propertyTypeService = propertyTypeService;
+        this.reportRepository = reportRepository;
     }
 
     @Override
@@ -154,12 +157,50 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public boolean checkPropertyOwnerAccessToFinancialData(Long propertyId, Authentication authentication) {
+    public boolean checkPropertyOwnerFullAccess(Long propertyId, Authentication authentication) {
         Property property = propertyService.findPropertyById(propertyId);
         UserEntity loggedUser = getUserEntity(authentication);
         return property.getOwner().getId().equals(loggedUser.getId()) && property.isObtained();
     }
 
+    @Override
+    public boolean checkReportUserViewAccess(Long reportId, Authentication authentication) {
+        UserEntity loggedUser = getUserEntity(authentication);
+
+        return reportRepository.findById(reportId)
+                .map(Report::getResidentialEntity)
+                .map(ReportResidentialEntity ->
+                        loggedUser.getResidentialEntities().stream()
+                                .anyMatch(residentialEntity -> residentialEntity.getId().equals(ReportResidentialEntity.getId()))
+                )
+                .orElse(false);
+    }
+
+    @Override
+    public boolean checkReportImageViewAccess(Long reportId, Authentication authentication) {
+        UserEntity loggedUser = getUserEntity(authentication);
+
+        return reportRepository.findById(reportId)
+                .map(report ->
+                        loggedUser.getResidentialEntities().stream()
+                                .anyMatch(residential -> residential.getId().equals(report.getResidentialEntity().getId()))
+                                || report.getResidentialEntity().getManager().getId().equals(loggedUser.getId())
+                )
+                .orElse(false);
+    }
+
+    @Override
+    public boolean checkReportModeratorAccess(Long reportId, Authentication authentication) {
+        ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityByReportId(reportId);
+        return residentialEntity != null && residentialEntity.getManager().getId().equals(getUserEntity(authentication).getId());
+    }
+
+    @Override
+    public boolean checkReportOwnerAccess(Long reportId, Authentication authentication) {
+        return reportRepository.findById(reportId)
+                .map(report -> report.getCreator().getId().equals(getUserEntity(authentication).getId()))
+                .orElse(false);
+    }
 
     @Override
     public boolean checkPropertyTypeModeratorAccess(Long propertyTypeId, Authentication authentication) {
@@ -167,3 +208,4 @@ public class SecurityServiceImpl implements SecurityService {
         return residentialEntityByPropertyType != null && residentialEntityByPropertyType.getManager().getId().equals(getUserEntity(authentication).getId());
     }
 }
+

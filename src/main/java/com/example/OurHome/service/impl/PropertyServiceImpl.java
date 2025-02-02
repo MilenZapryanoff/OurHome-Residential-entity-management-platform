@@ -340,7 +340,6 @@ public class PropertyServiceImpl implements PropertyService {
 
     }
 
-
     /**
      * Property reject.
      * Performed by Condominium MANAGER

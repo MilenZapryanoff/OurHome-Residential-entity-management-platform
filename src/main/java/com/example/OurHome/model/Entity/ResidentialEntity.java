@@ -1,6 +1,7 @@
 package com.example.OurHome.model.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -57,12 +58,22 @@ public class ResidentialEntity {
 
     @Column
     private String bankIban;
+
     @Column
     private String bankAccountHolder;
+
     @Column
     private String bankName;
+
     @Column
     private String bankAdditionalData;
+
+    @Column
+    private String facebookUrl;
+
+    @Column
+    @Email
+    private String email;
 
     @Column
     private boolean bankDetailsSet;
@@ -72,6 +83,12 @@ public class ResidentialEntity {
 
     @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
     private List<Property> properties;
+
+    @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
+    private List<Report> reports;
+
+    @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
+    private List<Event> events;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "residentialEntities")
     private List<UserEntity> residents;
@@ -91,6 +108,8 @@ public class ResidentialEntity {
         moderators = new ArrayList<>();
         expenses = new ArrayList<>();
         propertyTypes = new ArrayList<>();
+        reports = new ArrayList<>();
+        events = new ArrayList<>();
     }
 
     public String getAccessCode() {
@@ -292,4 +311,37 @@ public class ResidentialEntity {
     public void setPicturePath(String picturePath) {
         this.picturePath = picturePath;
     }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
+    }
+
+    public String getFacebookUrl() {
+        return facebookUrl;
+    }
+
+    public void setFacebookUrl(String facebookUrl) {
+        this.facebookUrl = facebookUrl;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
+

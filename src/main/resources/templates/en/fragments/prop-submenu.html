@@ -1,0 +1,38 @@
+<!--Administration page BG Sub menus-->
+<div class="menu-bar">
+    <ul class="menu-bar__menu">
+        <li class="menu-bar__item">
+            <a th:href="@{/property}" class="menu-bar__link"><i class="fa-solid fa-reply"></i><span>Назад</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/property/summary/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/summary/')} ? 'text-danger' : ''" class="fa-solid fa-sliders"></i><span>Status</span></a>
+        </li>
+        <li th:if="${property.isObtained()}" class="menu-bar__item">
+            <a th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/monthlyfees/')} ? 'text-danger' : ''" class="fa-solid fa-hand-holding-dollar"></i><span>Monthly fees</span></a>
+        </li>
+        <li th:unless="${property.isObtained()}" class="menu-bar__item" title="Inactive manu">
+            <a href=# class="menu-bar__link"><i class="text-secondary fa-solid fa-hand-holding-dollar"></i><span class="text-bg-secondary">Monthly fees</span></a>
+        </li>
+        <li th:if="${property.isObtained()}" class="menu-bar__item">
+            <a th:href="@{/property/events/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/events/')} ? 'text-danger' : ''" class="fa-regular fa-calendar"></i><span>Events</span></a>
+        </li>
+        <li th:unless="${property.isObtained()}" class="menu-bar__item" title="Inactive manu">
+            <a href=# class="menu-bar__link"><i class="text-secondary fa-regular fa-calendar"></i><span class="text-bg-secondary">Events</span></a>
+        </li>
+        <li th:if="${property.isObtained()}" class="menu-bar__item">
+            <a th:href="@{/property/reports/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/reports/')} ? 'text-danger' : ''" class="fa-solid fa-triangle-exclamation"></i><span>Reports</span></a>
+        </li>
+        <li th:unless="${property.isObtained()}" class="menu-bar__item" title="Inactive manu">
+            <a href=# class="menu-bar__link"><i class="text-secondary fa-solid fa-triangle-exclamation"></i><span class="text-bg-secondary">Reports</span></a>
+        </li>
+        <li th:if="${property.isObtained()}" class="menu-bar__item">
+            <a th:href="@{/property/re/data/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/re/data/')} ? 'text-danger' : ''"  class="fa-solid fa-building"></i><span>Condominium</span></a>
+        </li>
+        <li th:unless="${property.isObtained()}" class="menu-bar__item" title="Inactive manu">
+            <a href=# class="menu-bar__link"><i class="text-secondary fa-solid fa-building"></i><span class="text-bg-secondary">Condominium</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/property/details/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/details/')} ? 'text-danger' : ''" class="fa-solid fa-gear"></i><span>Settings</span></a>
+        </li>
+    </ul>
+</div>

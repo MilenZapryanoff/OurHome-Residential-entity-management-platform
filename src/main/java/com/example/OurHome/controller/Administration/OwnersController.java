@@ -5,6 +5,7 @@ import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyManageBindingModel;
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentManageBindingModel;
 import com.example.OurHome.service.PropertyService;
+import com.example.OurHome.service.ReportService;
 import com.example.OurHome.service.ResidentialEntityService;
 import com.example.OurHome.service.UserService;
 import jakarta.validation.Valid;
@@ -19,11 +20,13 @@ public class OwnersController {
     private final UserService userService;
     private final ResidentialEntityService residentialEntityService;
     private final PropertyService propertyService;
+    private final ReportService reportService;
 
-    public OwnersController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService) {
+    public OwnersController(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, ReportService reportService) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
+        this.reportService = reportService;
     }
 
     /**
@@ -170,6 +173,8 @@ public class OwnersController {
         userService.removeResidentFromResidentialEntity(id, residentialEntity);
         //unlink properties from user
         propertyService.unlinkAllPropertiesFromOwner(id, residentialEntity);
+        //unlink reports from user
+        reportService.unlinkAllReportsFromOwner(id, residentialEntity);
 
         ModelAndView view = resolveView(lang) ?
                 new ModelAndView("bg/administration/administration-owners") : new ModelAndView("en/administration/administration-owners");

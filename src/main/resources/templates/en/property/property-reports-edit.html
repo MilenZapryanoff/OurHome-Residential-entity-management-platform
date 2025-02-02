@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'>
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div class="js-preloader" id="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div class="sub-header" th:replace="~{fragments/header}">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/en/fragments/navbar}"></div>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Edit Report</h3>
+            <div class="err-msg" th:if="${editFailed}">
+                <h5 class="text-light">Report edit failed!!</h5>
+                <p class="text-light" th:text="${errorMsg}"></p>
+            </div>
+            <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
+        </div>
+    </div>
+</div>
+
+
+<!-- Property edit input form -->
+<div class="container">
+    <div class="input-content text-center">
+        <div class="col-lg-9 center-form">
+            <form enctype="multipart/form-data"
+                  id="input-form"
+                  th:action="@{/property/reports/edit/{id}(id=${id}, propertyId=${propertyId})}"
+                  th:method="POST"
+                  th:object="${reportEditBindingModel}">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <fieldset>
+                            <label for="category"><b>Category</b></label>
+                            <select class="form-control" id="category"
+                                    th:field="*{category}">
+                                <option th:text="'Technical problem'" th:value="'Технически проблем'"></option>
+                                <option th:text="'Financial problem'" th:value="'Финансов проблем'"></option>
+                                <option th:text="'Organizational problem'" th:value="'Организационен проблем'"></option>
+                                <option th:text="'Other'" th:value="'Друго'"></option>
+                            </select>
+                        </fieldset>
+                        <br>
+                        <fieldset>
+                            <label for="priority"><b>Priority</b></label>
+                            <select class="form-control" id="priority"
+                                    th:field="*{priority}">
+                                <option th:text="'High'" th:value="'Висок'"></option>
+                                <option th:text="'Low'" th:value="'Нисък'"></option>
+                            </select>
+                        </fieldset>
+                        <br>
+                        <fieldset>
+                            <label for="contactInfo"><b>Contact Information</b></label>
+                            <p class="text-danger"
+                               th:errors="*{contactInfo}"
+                               th:if="${#fields.hasErrors('description')}">Contact info error message</p>
+                            <input autocomplete="on" id="contactInfo"
+                                   placeholder="Enter your phone number or email..."
+                                   required
+                                   th:errorclass="bg-danger" th:field="*{contactInfo}"
+                                   th:value="${reportEditBindingModel.getContactInfo()}"
+                                   type="text">
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6">
+                        <fieldset>
+                            <label for="subCategory"><b>Subcategory</b></label>
+                            <select class="form-control" id="subCategory"
+                                    th:field="*{subCategory}">
+
+                                <option th:text="'Problem with common areas'" th:value="'Проблем с общи части'"></option>
+                                <option th:text="'Problem with Individual unit'" th:value="'Проблем със самостоятелен обект'"></option>
+                            </select>
+                        </fieldset>
+                        <br>
+                        <fieldset>
+                            <label for="source"><b>Report Submitter</b></label>
+                            <select class="form-control" id="source"
+                                    th:field="*{source}">
+                                <option th:text="'Owner'" th:value="'Собственик'"></option>
+                                <option th:text="'Institution'" th:value="'Институция'"></option>
+                                <option th:text="'Subcontractor'" th:value="'Подизпълнител'"></option>
+                            </select>
+                        </fieldset>
+                        <br>
+                        <fieldset>
+                            <label for="status"><b>Status</b></label>
+                            <p class="text-danger"
+                               th:errors="*{status}"
+                               th:if="${#fields.hasErrors('description')}">Contact info error message</p>
+                            <select class="form-control" id="status" disabled
+                                    th:field="*{status}">
+                                <option th:text="'Submitted'" th:value="'Входиран'"></option>
+                                <option th:text="'Accepted'" th:value="'Приет'"></option>
+                                <option th:text="'Completed'" th:value="'Завършен'"></option>
+                                <option th:text="'Unfinished'" th:value="'Незавършен'"></option>
+                            </select>
+                        </fieldset>
+
+                    </div>
+                    <fieldset>
+                        <label for="message"><b>Problem description</b></label>
+                        <small class="text-danger"
+                               th:errors="*{description}"
+                               th:if="${#fields.hasErrors('description')}">Message error</small>
+                        <textarea id="message" placeholder="Enter problem description..."
+                                  required
+                                  style="height: 200px"
+                                  th:errorclass="bg-danger"
+                                  th:field="*{description}"
+                                  type="text">
+                    </textarea>
+                    </fieldset>
+                    <br>
+                    <fieldset>
+                        <p th:if="${report.getImage1() != null} or ${report.getImage2() != null} or ${report.getImage3() != null}">
+                            <br>Attached images:</p>
+                        <div class="report-images-container">
+                            <!-- Първа снимка -->
+                            <div class="report-image"
+                                 style="position: relative; cursor: pointer;"
+                                 th:if="${report.getImage1()} != null">
+                                <a target="_blank"
+                                   th:href="@{/reports/details/{id}(id=${id}, picture=${1})}">
+                                    <img alt="No image available" th:src="@{${report.getImage1()}}"
+                                         title="Виж в цял размер">
+                                </a>
+                            </div>
+                            <!-- Втора снимка -->
+                            <div class="report-image"
+                                 style="position: relative; cursor: pointer;"
+                                 th:if="${report.getImage2()} != null">
+                                <a target="_blank"
+                                   th:href="@{/reports/details/{id}(id=${id}, picture=${2})}">
+                                    <img alt="No image available" th:src="@{${report.getImage2()}}"
+                                         title="Виж в цял размер">
+                                </a>
+                            </div>
+                            <!-- Трета снимка -->
+                            <div class="report-image"
+                                 style="position: relative; cursor: pointer;"
+                                 th:if="${report.getImage3()} != null">
+                                <a target="_blank"
+                                   th:href="@{/reports/details/{id}(id=${id}, picture=${3})}">
+                                    <img alt="No image available" th:src="@{${report.getImage3()}}"
+                                         title="Виж в цял размер">
+                                </a>
+                            </div>
+                        </div>
+                    </fieldset>
+
+
+                </div>
+                <br>
+                <fieldset>
+                    <input class="inp-cbx" id="publicReport" name="publicReport" style="display: none"
+                           th:field="*{publicReport}"
+                           type="checkbox"/>
+                    <label class="cbx" for="publicReport">
+                        <span>
+                    <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                        </span>
+                        <span>Public report</span>
+                        <br></br>
+                        <span class="text-secondary">If the report is classified as Public, it will be visible to all owners of individual units in the digital condominium.</span>
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <hr>
+                    <label for="message"><b class="text-danger">Resolution</b></label>
+                    <textarea disabled
+                              id="resolution"
+                              placeholder="There is still no resolution from manager" style="height: 200px"
+                              th:text="${report.getResolution()}"
+                              type="text">
+                    </textarea>
+                </fieldset>
+                <br>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <fieldset th:if="${report.getProcessedBy()} != null">
+                            <label for="processedByName"><b>Processed by</b></label>
+                            <input autocomplete="on" disabled id="processedByName"
+                                   placeholder=""
+                                   th:value="${report.getProcessedBy().getFirstName() + ' ' + report.getProcessedBy().getLastName()}"
+                                   type="text">
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6">
+                        <fieldset th:if="${report.getResolveDateTime()} != null">
+                            <label for="creationDateTime"><b>Processing date</b></label>
+                            <input autocomplete="on" disabled id="creationDateTime"
+                                   placeholder="Сигналът е приет на:"
+                                   th:value="${#temporals.format(report.getResolveDateTime(), 'dd.MM.yyyy, HH:mm')}"
+                                   type="text">
+                        </fieldset>
+                    </div>
+                </div>
+                <br>
+                <fieldset>
+                    <button class="orange-button" id="form-submit"
+                            type="submit">Save
+                    </button>
+                    <a th:href="@{/property/reports/my/{id}(id=${propertyId})}">
+                        <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel
+                        </button>
+                    </a>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/report-image-upload.js"></script>
+
+
+</body>
+</html>

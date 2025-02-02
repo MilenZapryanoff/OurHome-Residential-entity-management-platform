@@ -20,6 +20,14 @@
     <link href="/css/navbar.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
 </head>
 <body>
 
@@ -46,7 +54,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Condominium Expenses</h3>
+            <h3>Reports</h3>
             <div class="col-lg-12">
                 <span th:text="'Condominium ID: ' + ${residentialEntity.getId()}"></span>
             </div>
@@ -64,11 +72,14 @@
             <div class="administration">
                 <!-- Sub-menu buttons -->
                 <div class="table-nav-section">
-                    <a class="button nav-link" th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-file-invoice-dollar"></i> <span>Expenses</span></div>
+                    <a class="button nav-link"
+                       th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-file-invoice-dollar"></i> <span>Expenses</span>
+                        </div>
                     </a>
                     <a class="button nav-link active" href="#">
-                        <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Incomes</span></div>
+                        <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Incomes</span>
+                        </div>
                     </a>
                 </div>
                 <!-- Incomes data -->
@@ -77,58 +88,83 @@
                         <li class="text-center" style="margin-top: 50px">
                             <h6 class="text-dark">Setting access</h6>
                             <p>Allow members of this Condominium to access incomes data</p>
-                            <form id="dataVisible" method="POST" th:action="@{/administration/financial/changeIncomesVisibility/{id}(id=${residentialEntity.getId()})}">
+                            <form id="dataVisible" method="POST"
+                                  th:action="@{/administration/financial/changeIncomesVisibility/{id}(id=${residentialEntity.getId()})}">
                                 <fieldset>
                                     <label class="switch">
-                                        <input id="incomesVisibilitySwitch" name="incomesVisibilitySwitch" onchange="submit()" th:checked="${residentialEntity.isIncomesVisible()}" type="checkbox">
+                                        <input id="incomesVisibilitySwitch" name="incomesVisibilitySwitch"
+                                               onchange="submit()" th:checked="${residentialEntity.isIncomesVisible()}"
+                                               type="checkbox">
                                         <span class="slider round"></span>
                                     </label>
                                 </fieldset>
                             </form>
                         </li>
                     </ul>
-                    <div class="info-table rounded col-lg-12" style="margin-top: 30px">
+                    <div class="info-table rounded col-lg-11" style="margin-top: 30px">
                         <ul>
                             <li class="text-center">
                                 <h5 class="text-danger">Condominium Incomes</h5>
-                                <p class="text-secondary">Condominium incomes amount is the total amount collected by fee component.</p>
+                                <p class="text-secondary">Condominium incomes amount is the total amount collected by
+                                    fee component.</p>
                             </li>
                             <li class="text-center">
-                                <form id="input-form" th:action="@{/administration/financial/incomes/edit/{id}(id=${residentialEntity.getId()})}" th:method="POST" th:object="${incomesBindingModel}">
+                                <form id="input-form"
+                                      th:action="@{/administration/financial/incomes/edit/{id}(id=${residentialEntity.getId()})}"
+                                      th:method="POST" th:object="${incomesBindingModel}">
                                     <fieldset>
                                         <p class="text-dark"><b class="text-danger">Fund Repair balance</b></p>
                                         <small class="text-secondary">
-                                            Fund Repair fee component is usually dedicated for repair activities of every Condominium.
-                                            The sum in this field is the collected fund Repair amount from all monthly fees in this Condominium.<br>
+                                            Fund Repair fee component is usually dedicated for repair activities of
+                                            every Condominium.
+                                            The sum in this field is the collected fund Repair amount from all monthly
+                                            fees in this Condominium.<br>
                                             <b>You can manually update this amount if needed!</b>
                                         </small>
                                         <div class="incomes-container">
-                                            <input autocomplete="on" class="form-control-sm" id="fund-repair-incomes" placeholder="Fund Repair..." required step="any" style="background-color: #ffffff" th:errorclass="bg-danger" th:field="*{incomesFundRepair}" th:value="${incomesBindingModel.getIncomesFundRepair()}" type="number">
+                                            <input autocomplete="on" class="form-control-sm" id="fund-repair-incomes"
+                                                   placeholder="Fund Repair..." required step="any"
+                                                   style="background-color: #ffffff" th:errorclass="bg-danger"
+                                                   th:field="*{incomesFundRepair}"
+                                                   th:value="${incomesBindingModel.getIncomesFundRepair()}"
+                                                   type="number">
                                         </div>
                                     </fieldset>
                                     <hr>
                                     <fieldset>
-                                        <p class="text-dark"><b class="text-danger">Fund Management & Maintenance balance</b></p>
+                                        <p class="text-dark"><b class="text-danger">Fund Management & Maintenance
+                                            balance</b></p>
                                         <small class="text-secondary">
-                                            Fund Management & Maintenance fee component is usually dedicated for common expenses of every Condominium.
-                                            The sum in this field is the collected fund Management & Maintenance from all monthly fees in this Condominium.<br>
+                                            Fund Management & Maintenance fee component is usually dedicated for common
+                                            expenses of every Condominium.
+                                            The sum in this field is the collected fund Management & Maintenance from
+                                            all monthly fees in this Condominium.<br>
                                             <b>You can manually update this amount if needed!</b>
                                         </small>
                                         <div class="incomes-container">
-                                            <input autocomplete="on" class="form-control-sm" id="fund-mm-incomes" placeholder="Fund Management & Maintenance..." required step="any" style="background-color: #ffffff" th:errorclass="bg-danger" th:field="*{incomesFundMm}" th:value="${incomesBindingModel.getIncomesFundMm()}" type="number">
+                                            <input autocomplete="on" class="form-control-sm" id="fund-mm-incomes"
+                                                   placeholder="Fund Management & Maintenance..." required step="any"
+                                                   style="background-color: #ffffff" th:errorclass="bg-danger"
+                                                   th:field="*{incomesFundMm}"
+                                                   th:value="${incomesBindingModel.getIncomesFundMm()}" type="number">
                                         </div>
                                     </fieldset>
                                     <hr>
                                     <fieldset>
                                         <p class="text-dark"><b class="text-danger">TOTAL balance</b></p>
-                                        <small class="text-secondary">Total incomes amount is the sum of Fund Repair and Fund Management & Maintenance fee components.</small>
+                                        <small class="text-secondary">Total incomes amount is the sum of Fund Repair and
+                                            Fund Management & Maintenance fee components.</small>
                                         <div class="incomes-container">
-                                            <input class="form-control-sm" id="incomes" placeholder="Total amount..." readonly required step="any" style="font-weight: bold" th:errorclass="bg-danger" th:field="*{incomesAmount}" th:value="${incomesBindingModel.getIncomesAmount()}" type="number">
+                                            <input class="form-control-sm" id="incomes" placeholder="Total amount..."
+                                                   readonly required step="any" style="font-weight: bold"
+                                                   th:errorclass="bg-danger" th:field="*{incomesAmount}"
+                                                   th:value="${incomesBindingModel.getIncomesAmount()}" type="number">
                                         </div>
                                     </fieldset>
                                     <br>
                                     <fieldset>
-                                        <button class="form-control text-bg-dark" id="form-submit" style="max-width: 220px; margin: 0 auto;" type="submit">
+                                        <button class="form-control text-bg-dark" id="form-submit"
+                                                style="max-width: 220px; margin: 0 auto;" type="submit">
                                             <small>Manually update amount</small>
                                         </button>
                                     </fieldset>
@@ -136,7 +172,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="info-table rounded col-lg-12" style="margin: 50px 0">
+                    <div class="info-table rounded col-lg-11" style="margin: 50px 0">
                         <ul>
                             <li class="text-center">
                                 <fieldset>

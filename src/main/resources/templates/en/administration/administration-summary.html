@@ -5,7 +5,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +14,26 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +46,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -53,15 +61,15 @@
                 <div class="col-lg-12">
                     <span th:text="'Residential enitiy ID: ' + ${residentialEntity.getId()}"></span>
                 </div>
-                <div th:if="${notDeleted}" class="err-msg">
+                <div class="err-msg" th:if="${notDeleted}">
                     <h5 class="text-light">Record not deleted!</h5>
                     <p class="text-light">Cannot delete entity with already registered owners!</p>
                 </div>
-                <div th:if="${deleted}" class="success-msg">
+                <div class="success-msg" th:if="${deleted}">
                     <h5 class="text-light">Record deleted!</h5>
                     <p class="text-light">Condominium successfully deleted!</p>
                 </div>
-                <div th:if="${errorMessage}" class="err-msg">
+                <div class="err-msg" th:if="${errorMessage}">
                     <h5 class="text-light" th:text="${errorMessage.toString()}"></h5>
                 </div>
             </div>
@@ -104,9 +112,14 @@
                                     <div class="accordion-body text-dark">
                                         <div th:if="${@propertyRepository.countNotParametrizedPropertiesByResidentialEntity(residentialEntity.getId()) > 0}">
                                             <p>Welcome to your digital Condominium!</p>
-                                            <p>To use the full functionality of the platform, you need to configure the individual properties in the condominium.</p>
-                                            <p>You can use the link below to start configuring the properties. This will allow you to utilize the automatic monthly fee calculation feature for the properties in this Condominium.</p>
-                                            <p>On the properties page, use the <i class="fa-solid fa-gear text-danger"></i> button to configure the necessary settings.</p>
+                                            <p>To use the full functionality of the platform, you need to configure the
+                                                individual properties in the condominium.</p>
+                                            <p>You can use the link below to start configuring the properties. This will
+                                                allow you to utilize the automatic monthly fee calculation feature for
+                                                the properties in this Condominium.</p>
+                                            <p>On the properties page, use the <i
+                                                    class="fa-solid fa-gear text-danger"></i> button to configure the
+                                                necessary settings.</p>
                                             <hr>
                                             <p>You have
                                                 <strong class="timer count-title text-danger"
@@ -116,11 +129,13 @@
                                             </p>
                                             <p>
                                                 <a th:href="@{/administration/property/active/{id}#active-registrations(id=${residentialEntity.getId()})}"
-                                                   th:if="${@propertyRepository.countNotParametrizedPropertiesByResidentialEntity(residentialEntity.getId()) > 0}">Configure now!</a></p>
+                                                   th:if="${@propertyRepository.countNotParametrizedPropertiesByResidentialEntity(residentialEntity.getId()) > 0}">Configure
+                                                    now!</a></p>
                                         </div>
                                         <div th:unless="${@propertyRepository.countNotParametrizedPropertiesByResidentialEntity(residentialEntity.getId()) > 0}">
                                             <p>Welcome to your digital Condominium!</p>
-                                            <p><i class="fa-solid fa-check text-success"></i> All registered properties in your Condominium are configured!</p>
+                                            <p><i class="fa-solid fa-check text-success"></i> All registered properties
+                                                in your Condominium are configured!</p>
                                             <hr>
                                         </div>
                                     </div>
@@ -139,9 +154,12 @@
                                      data-bs-parent="#accordionExample"
                                      id="collapseTwo">
                                     <div class="accordion-body">
-                                        <p>Each property owner in the Condominium can register on the platform to receive up-to-date information about their property.</p>
-                                        <p>If the owner provides information different from the data entered by the administrator, additional validation will be required.</p>
-                                        <p>If the data matches, the user will be automatically listed as the property owner.</p>
+                                        <p>Each property owner in the Condominium can register on the platform to
+                                            receive up-to-date information about their property.</p>
+                                        <p>If the owner provides information different from the data entered by the
+                                            administrator, additional validation will be required.</p>
+                                        <p>If the data matches, the user will be automatically listed as the property
+                                            owner.</p>
                                         <hr>
                                         <p>You have
                                             <strong class="timer count-title text-danger"
@@ -153,7 +171,8 @@
                                             pending registration requests for your Condominium.
                                             <br>
                                             <a th:href="@{/administration/owners/pending/{id}(id=${residentialEntity.getId()})}"
-                                               th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId()) > 0}">Review requests!</a>
+                                               th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId()) > 0}">Review
+                                                requests!</a>
                                         </p>
                                     </div>
                                 </div>
@@ -171,7 +190,8 @@
                                      id="collapseThree">
                                     <div class="accordion-body">
                                         <p>You can manage the list of property owners in your Condominium from <a
-                                                th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">here</a>.</p>
+                                                th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">here</a>.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -188,7 +208,10 @@
                                      data-bs-parent="#accordionExample"
                                      id="collapseFour">
                                     <div class="accordion-body">
-                                        <p>Closing a digital condominium is only possible if there are no registered property owners. This measure is to prevent accidental data loss. If you still wish to close the digital condominium, you must first remove all owners!</p>
+                                        <p>Closing a digital condominium is only possible if there are no registered
+                                            property owners. This measure is to prevent accidental data loss. If you
+                                            still wish to close the digital condominium, you must first remove all
+                                            owners!</p>
                                         <hr>
                                         <div class="col-lg-2">
                                             <form method="POST"
@@ -267,7 +290,8 @@
                                     <li>City: <a class="text-black"
                                                  th:text="${residentialEntity.getCity().getName()}"></a>
                                     </li>
-                                    <li>Address: <a class="text-black" th:text="${residentialEntity.getStreetName()}"></a>
+                                    <li>Address: <a class="text-black"
+                                                    th:text="${residentialEntity.getStreetName()}"></a>
                                     </li>
                                     <li>№: <a class="text-black" th:text="${residentialEntity.getStreetNumber()}"></a>
                                     </li>

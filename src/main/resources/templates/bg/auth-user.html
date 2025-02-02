@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -15,18 +14,26 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -39,7 +46,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -58,40 +65,44 @@
     <div class="input-content text-center">
         <div class="col-lg-3 center-form">
             <form id="input-form"
-                  th:method="POST"
                   th:action="@{/register/auth}"
+                  th:method="POST"
                   th:object="${userAuthBindingModel}">
                 <div class="row">
                     <div class="col-lg-12">
-                        <p style="padding-bottom: 30px">Моля въведете идентификатор на етажна собственост (ЕС) и код за достъп за да се регистрирате като собственик на имот.</p>
-                        <p th:if="${badResidentialEntity}" class="text-danger">Грешен идентификатор на етажна собственост или код за достъп!<br></p>
+                        <p style="padding-bottom: 30px">Моля въведете идентификатор на етажна собственост (ЕС) и код за
+                            достъп за да се регистрирате като собственик на имот.</p>
+                        <p class="text-danger" th:if="${badResidentialEntity}">Грешен идентификатор на етажна
+                            собственост или код за достъп!<br></p>
                         <fieldset>
                             <label for="residentialId"><b>Идентификатор на ЕС</b></label>
-                            <p th:if="${#fields.hasErrors('residentialId')}"
-                                   th:errors="*{residentialId}" class="text-danger">Residential Id error message</p>
-                            <input type="text" id="residentialId" placeholder="Въведете идентификатор..."
-                                   autocomplete="on"
+                            <p class="text-danger"
+                               th:errors="*{residentialId}" th:if="${#fields.hasErrors('residentialId')}">Residential Id
+                                error message</p>
+                            <input autocomplete="on" id="residentialId" placeholder="Въведете идентификатор..."
                                    required
+                                   th:errorclass="bg-danger"
                                    th:field="*{residentialId}"
-                                   th:errorclass="bg-danger">
+                                   type="text">
                         </fieldset>
                         <fieldset>
                             <label for="residentialAccessCode"><b>Код за достъп</b></label>
-                            <p th:if="${#fields.hasErrors('residentialAccessCode')}"
-                                   th:errors="*{residentialAccessCode}" class="text-danger">Validation code error
+                            <p class="text-danger"
+                               th:errors="*{residentialAccessCode}"
+                               th:if="${#fields.hasErrors('residentialAccessCode')}">Validation code error
                                 message</p>
-                            <input type="password" id="residentialAccessCode" placeholder="Въведете код за достъп..."
-                                   autocomplete="on" required
+                            <input autocomplete="on" id="residentialAccessCode" placeholder="Въведете код за достъп..."
+                                   required th:errorclass="bg-danger"
                                    th:field="*{residentialAccessCode}"
-                                   th:errorclass="bg-danger">
+                                   type="password">
                             <small class="fas fa-eye text-danger fa-eye-slash" id="togglePassword"
                                    style="margin-left: -35px; cursor: pointer;"></small>
                         </fieldset>
                     </div>
                     <div class="col-lg-12">
                         <fieldset>
-                            <button th:href="@{/register/auth/userEntity}" type="submit" id="form-submit"
-                                    class="orange-button">Продължи
+                            <button class="orange-button" id="form-submit" th:href="@{/register/auth/userEntity}"
+                                    type="submit">Продължи
                             </button>
                             <button class="orange-button" id="form-cancel" type="button">
                                 <a th:href="@{/register}">

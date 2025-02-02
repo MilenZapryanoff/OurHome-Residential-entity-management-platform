@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,26 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +45,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -67,8 +74,8 @@
                     </li>
                 </ul>
             </div>
-            <div class="tab-pane fade show active" id="profile"
-                 aria-labelledby="profile-tab">
+            <div aria-labelledby="profile-tab" class="tab-pane fade show active"
+                 id="profile">
                 <div class="row">
                     <div class="col-lg-6" style="padding-bottom: 20px">
                         <div class="info-table">
@@ -106,8 +113,8 @@
                                     <b th:unless="${property.isNotHabitable()}"><i
                                             class="fa-solid fa-circle-check text-success"></i></b>
                                 </li>
-                                <li th:if="${property.getPropertyType() != null}"
-                                    class="text-black text-center"><i class="fa-solid fa-building"></i> Property type:
+                                <li class="text-black text-center"
+                                    th:if="${property.getPropertyType() != null}"><i class="fa-solid fa-building"></i> Property type:
                                     <b th:text="${property.getPropertyType().getDescription()}"></b>
                                 </li>
                             </ul>
@@ -127,9 +134,9 @@
                                                 <h6>Requester:</h6>
                                                 <div class="request-wrapper">
                                                     <div class="user-avatar-medium">
-                                                        <img th:if="${property.getOwner().getAvatarPath() != null}"
-                                                             th:src="@{${property.getOwner().getAvatarPath()}}"
-                                                             alt="Avatar">
+                                                        <img alt="Avatar"
+                                                             th:if="${property.getOwner().getAvatarPath() != null}"
+                                                             th:src="@{${property.getOwner().getAvatarPath()}}">
                                                         <b th:text="${property.getOwner().getFirstName() + ' ' + property.getOwner().getLastName()}"></b>
                                                     </div>
                                                     <p class="text-center text-dark">Request created on:
@@ -203,8 +210,8 @@
                                                         <b th:unless="${property.getPropertyChangeRequest().isNotHabitable()}"><i
                                                                 class="fa-solid fa-circle-check text-success"></i></b>
                                                     </p>
-                                                    <p th:if="${property.getPropertyChangeRequest().getPropertyType() != null}"
-                                                       class="text-black text-center">
+                                                    <p class="text-black text-center"
+                                                       th:if="${property.getPropertyChangeRequest().getPropertyType() != null}">
                                                         <b th:if="${property.getPropertyType() != property.getPropertyChangeRequest().getPropertyType()}">
                                                             <i class="fa-solid fa-triangle-exclamation text-danger help"
                                                                title="Difference between property data and registration request data"></i></b>
@@ -221,23 +228,23 @@
                                                   th:action="@{/administration/property/pending/request/approve/{id} (id=${property.getId()})}"
                                                   th:method="POST"
                                                   th:object="${propertyManageBindingModel}">
-                                                <div th:id="'customDialog_' + ${property.getId()}"
-                                                     class="custom-dialog" style="display: none;">
+                                                <div class="custom-dialog"
+                                                     style="display: none;" th:id="'customDialog_' + ${property.getId()}">
                                                     <p th:id="'customDialogText_' + ${property.getId()}"></p>
                                                     <button class="custom-dialog-ok"
                                                             th:onclick="'closeCustomDialog(\'' + ${property.getId()} + '\')'">
                                                         OK
                                                     </button>
                                                 </div>
-                                                <label for="entityId-approve-with-change" class="hidden"></label>
+                                                <label class="hidden" for="entityId-approve-with-change"></label>
                                                 <select class="form-control hidden" id="entityId-approve-with-change"
                                                         th:field="*{entityId}">
                                                     <option th:value="${property.getResidentialEntity().getId()}"></option>
                                                 </select>
                                                 <button id="approve-change-request"
                                                         th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property approved.\')'"
-                                                        type="submit"
-                                                        title="This action will set property owner and modify existing data!">
+                                                        title="This action will set property owner and modify existing data!"
+                                                        type="submit">
                                                     <p>Approve change request</p>
                                                 </button>
                                             </form>
@@ -245,12 +252,12 @@
                                                   th:action="@{/administration/property/pending/request/reject/{id} (id=${property.getId()})}"
                                                   th:method="POST"
                                                   th:object="${propertyManageBindingModel}">
-                                                <label for="entityId-reject" class="hidden"></label>
+                                                <label class="hidden" for="entityId-reject"></label>
                                                 <select class="form-control hidden" id="entityId-reject"
                                                         th:field="*{entityId}">
                                                     <option th:value="${property.getResidentialEntity().getId()}"></option>
                                                 </select>
-                                                <button id="reject" class="text-center"
+                                                <button class="text-center" id="reject"
                                                         th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property rejected.\')'"
                                                         type="submit"><p>Reject change request</p>
                                                 </button>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'>
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div class="js-preloader" id="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div class="sub-header" th:replace="~{fragments/header}">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/en/fragments/navbar}"></div>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Report dateils</h3>
+            <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
+        </div>
+    </div>
+</div>
+
+
+<!-- Property edit input form -->
+<div class="container">
+    <div class="input-content text-center">
+
+        <div class="col-lg-9 center-form">
+            <form enctype="multipart/form-data"
+                  id="input-form">
+                <H5 class="text-danger">Information</H5>
+                <br>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <fieldset>
+                            <label for="creationDateTime"><b>Created on:</b></label>
+                            <input autocomplete="on" disabled id="creationDateTime"
+                                   placeholder="Сигналът е създаден на:"
+                                   th:value="${#temporals.format(report.getCreationDateTime(), 'dd.MM.yyyy, HH:mm')} + 'ч.'"
+                                   type="text">
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6">
+                        <fieldset th:if="${report.getCreator()} != null">
+                            <label for="creatorName"><b>Created by:</b></label>
+                            <input autocomplete="on" disabled id="creatorName"
+                                   th:value="${report.getCreator().getFirstName()} + ' ' + ${report.getCreator().getLastName()}"
+                                   type="text">
+                        </fieldset>
+                        <fieldset th:if="${report.getCreator()} == null">
+                            <label for="creatorNameNull"><b>Created by:</b></label>
+                            <input autocomplete="on" disabled id="creatorNameNull"
+                                   th:value="'Unknown'"
+                                   type="text">
+                        </fieldset>
+                    </div>
+                    <fieldset>
+                        <label for="message"><b>Problem description</b></label>
+                        <textarea disabled id="message" required
+                                  style="height: 200px"
+                                  th:text="${report.getDescription()}"
+                                  type="text">
+                    </textarea>
+                    </fieldset>
+                    <br>
+                    <fieldset>
+                        <p th:if="${report.getImage1() != null} or ${report.getImage2() != null} or ${report.getImage3() != null}">
+                            <br>Attached images</p>
+                        <div class="report-images-container">
+                            <!-- Първа снимка -->
+                            <div class="report-image"
+                                 style="position: relative; cursor: pointer;"
+                                 th:if="${report.getImage1()} != null">
+                                <a target="_blank"
+                                   th:href="@{/reports/details/{id}(id=${id}, picture=${1})}">
+                                    <img alt="No image available" th:src="@{${report.getImage1()}}"
+                                         title="View image">
+                                </a>
+                            </div>
+                            <!-- Втора снимка -->
+                            <div class="report-image"
+                                 style="position: relative; cursor: pointer;"
+                                 th:if="${report.getImage2()} != null">
+                                <a target="_blank"
+                                   th:href="@{/reports/details/{id}(id=${id}, picture=${2})}">
+                                    <img alt="No image available" th:src="@{${report.getImage2()}}"
+                                         title="View image">
+                                </a>
+                            </div>
+                            <!-- Трета снимка -->
+                            <div class="report-image"
+                                 style="position: relative; cursor: pointer;"
+                                 th:if="${report.getImage3()} != null">
+                                <a target="_blank"
+                                   th:href="@{/reports/details/{id}(id=${id}, picture=${3})}">
+                                    <img alt="No image available" th:src="@{${report.getImage3()}}"
+                                         title="View image">
+                                </a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <fieldset>
+                            <label for="category"><b>Category</b></label>
+                            <input autocomplete="on" disabled id="category"
+                                   th:value="${report.getCategory()}"
+                                   type="text">
+                        </fieldset>
+                        <br>
+                        <fieldset>
+                            <label for="priority"><b>Priority</b></label>
+                            <input autocomplete="on" disabled id="priority"
+                                   th:value="${report.getPriority()}"
+                                   type="text">
+                        </fieldset>
+                        <br>
+                    </div>
+                    <div class="col-lg-6">
+                        <fieldset>
+                            <label for="subCategory"><b>Subcategory</b></label>
+                            <input autocomplete="on" disabled id="subCategory"
+                                   th:value="${report.getSubCategory()}"
+                                   type="text">
+                        </fieldset>
+                        <br>
+                        <fieldset>
+                            <label for="source"><b>Problem reported by:</b></label>
+                            <input autocomplete="on" disabled id="source"
+                                   th:value="${report.getSource()}"
+                                   type="text">
+                        </fieldset>
+                        <br>
+                    </div>
+                </div>
+                <fieldset>
+                    <hr>
+                    <label for="message"><b class="text-danger">Resolution</b></label>
+                    <textarea disabled
+                              id="resolution"
+                              placeholder="There is still no resolution from manager" style="height: 200px"
+                              th:text="${report.getResolution()}"
+                              type="text">
+                    </textarea>
+                </fieldset>
+                <br>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <fieldset th:if="${report.getProcessedBy()} != null">
+                            <label for="processedByName"><b>Processed by:</b></label>
+                            <input autocomplete="on" disabled id="processedByName"
+                                   th:value="${report.getProcessedBy().getFirstName() + ' ' + report.getProcessedBy().getLastName()}"
+                                   type="text">
+                        </fieldset>
+                        <fieldset th:if="${report.getProcessedBy()} == null">
+                            <label for="processedByNameNull"><b>Processed by:</b></label>
+                            <input autocomplete="on" disabled id="processedByNameNull"
+                                   type="text">
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6">
+                        <fieldset th:if="${report.getResolveDateTime()} != null">
+                            <label for="resolveDateTime"><b>Processing date:</b></label>
+                            <input autocomplete="on" disabled id="resolveDateTime"
+                                   placeholder="Сигналът е приет на:"
+                                   th:value="${#temporals.format(report.getResolveDateTime(), 'dd.MM.yyyy, HH:mm')} + 'ч.'"
+                                   type="text">
+                        </fieldset>
+                        <fieldset th:if="${report.getResolveDateTime()} == null">
+                            <label for="resolveDateTimeNull"><b>Processing date:</b></label>
+                            <input autocomplete="on" disabled id="resolveDateTimeNull"
+                                   type="text">
+                        </fieldset>
+                    </div>
+                    <fieldset>
+                        <label for="status"><b>Status</b></label>
+                        <input autocomplete="on" disabled id="status"
+                               placeholder="Status"
+                               th:value="${report.getStatus()}"
+                               type="text">
+                    </fieldset>
+                </div>
+                <br>
+                <fieldset>
+                    <a th:href="@{/property/reports/{id}(id=${property.getId()})}">
+                        <button class="orange-button text-light" id="form-cancel-rej" type="button">Back
+                        </button>
+                    </a>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/report-image-upload.js"></script>
+
+
+</body>
+</html>

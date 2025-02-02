@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'>
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div class="js-preloader" id="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div class="sub-header" th:replace="~{fragments/header}">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/bg/fragments/navbar}"></div>
+
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Докладвай нередност</h3>
+                <h4 class="text-light"><i class="fa-solid fa-bug"></i></h4>
+                <div class="err-msg" th:if="${bugSubmitFailed}">
+                    <h5 class="text-light">Неуспешно докладване на сигнал!</h5>
+                    <p class="text-light" th:text="${errorMsg}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="contact-page section">
+    <div class="container">
+        <div class="col-lg-6 center-form">
+            <form action=""
+                  id="contact-form"
+                  method="post"
+                  th:action="@{/report/bug}"
+                  th:method="POST"
+                  th:object="${reportBugBindingModel}">
+                <fieldset>
+                    <label for="source">Категория</label>
+                    <select class="form-control" id="source"
+                            th:field="*{subject}">
+                        <option th:text="'Проблем със страница'" th:value="'Проблем със страница'"></option>
+                        <option th:text="'Проблем с функционалност'" th:value="'Проблем с функционалност'"></option>
+                        <option th:text="'Грешно съдържание'" th:value="'Грешно съдържание'"></option>
+                        <option th:text="'Проблем с изчисление на месечни такси'"
+                                th:value="'Проблем с изчисление на месечни такси'"></option>
+                        <option th:text="'Предложение за подобрение'"
+                                th:value="'Предложение за подобрение'"></option>
+                        <option th:text="'Друго'" th:value="'Друго'"></option>
+
+                    </select>
+                </fieldset>
+                <fieldset style="margin-top: 20px">
+                    <label for="message">Описание на проблема</label>
+                    <small class="text-danger"
+                           th:errors="*{subject}"
+                           th:if="${#fields.hasErrors('message')}">Description error message</small>
+                    <textarea id="message" placeholder="Въведете описание на проблема..."
+                              required
+                              th:errorclass="bg-danger"
+                              th:field="*{message}"
+                              type="textarea">
+                    </textarea>
+                </fieldset>
+                <fieldset>
+                    <label for="name">Вашите имена (незадължително)</label>
+                    <small class="text-danger"
+                           th:errors="*{name}"
+                           th:if="${#fields.hasErrors('name')}">Name error message</small>
+                    <input autocomplete="on" id="name"
+                           placeholder="Въведете вашите имена..."
+                           th:errorclass="bg-danger"
+                           th:field="*{name}"
+                           type="text">
+                </fieldset>
+                <fieldset>
+                    <label for="email">Имейл (незадължително)</label>
+                    <small class="text-danger"
+                           th:errors="*{email}"
+                           th:if="${#fields.hasErrors('email')}">Email error message</small>
+                    <input autocomplete="on" id="email"
+                           placeholder="Въведете вашият имейл..."
+                           th:errorclass="bg-danger"
+                           th:field="*{email}"
+                           type="email">
+                </fieldset>
+                <fieldset class="text-center">
+                    <button class="orange-button" id="form-submit" type="submit">Изпрати</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+</body>
+</html>

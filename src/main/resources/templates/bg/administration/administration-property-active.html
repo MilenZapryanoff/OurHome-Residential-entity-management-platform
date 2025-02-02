@@ -20,6 +20,14 @@
     <link href="/css/navbar.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
 </head>
 
 <body>
@@ -47,7 +55,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Properties data</h3>
+            <h3>Самостоятелни обекти</h3>
             <div class="col-lg-12">
                 <span th:text="'Идентификатор на ЕС: ' + ${residentialEntity.getId()}"></span>
             </div>
@@ -96,7 +104,7 @@
                     <a class="button nav-link"
                        th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
                         <div class="text-center"><i class="fa-solid fa-gears"></i>
-                            <span>Типове самостоятелни обекти</span>
+                            <span>Категории самостоятелни обекти</span>
                         </div>
                     </a>
                 </div>
@@ -343,7 +351,7 @@
 
                                     <button th:unless="${property.isValidated()}" type="submit">
                                         <i class="fa-solid fa-gear text-dark"
-                                           title="Set property data"></i>
+                                           title="Параметризирай"></i>
                                     </button>
                                 </form>
                             </td>

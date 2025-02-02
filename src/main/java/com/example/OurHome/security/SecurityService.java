@@ -47,11 +47,19 @@ public interface SecurityService {
 
     boolean checkPropertyOwnerAccess(Long propertyId, Authentication authentication);
 
-    boolean checkPropertyOwnerAccessToFinancialData(Long propertyId, Authentication authentication);
+    boolean checkPropertyOwnerFullAccess(Long propertyId, Authentication authentication);
 
     /**
      * PropertyType access check
      */
     boolean checkPropertyTypeModeratorAccess(Long propertyTypeId, Authentication authentication);
+
+    boolean checkReportModeratorAccess(Long reportId, Authentication authentication);
+
+    boolean checkReportOwnerAccess(Long reportId, Authentication authentication);
+
+    boolean checkReportUserViewAccess(Long reportId, Authentication authentication);
+
+    boolean checkReportImageViewAccess(Long reportId, Authentication authentication);
 }
 

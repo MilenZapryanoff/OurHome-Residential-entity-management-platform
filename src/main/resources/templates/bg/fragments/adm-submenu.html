@@ -20,7 +20,10 @@
             <a th:href="@{/administration/events/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/events/')} ? 'text-danger' : ''"  class="fa-regular fa-calendar"></i><span>Събития</span></a>
         </li>
         <li class="menu-bar__item">
-            <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/financial/')} ? 'text-danger' : ''" class="fa-solid fa-filter-circle-dollar"></i><span>Отчети</span></a>
+            <a th:href="@{/administration/reports/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/reports/')} ? 'text-danger' : ''" class="fa-solid fa-triangle-exclamation"></i><span>Сигнали</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/administration/financial/expenses/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/financial/')} ? 'text-danger' : ''" class="fa-solid fa-filter-circle-dollar"></i><span>Финансови отчети</span></a>
         </li>
         <li class="menu-bar__item">
             <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/details/')} ? 'text-danger' : ''" class="fa-solid fa-gear"></i><span>Настройки</span></a>

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,26 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +45,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -61,8 +68,8 @@
     <div class="input-data text-center">
         <div class="input-content col-lg-6" style="margin: -80px auto">
             <form id="input-form"
-                  th:method="POST"
                   th:action="@{/administration/details/edit/{entityId}(entityId=${residentialEntity.getId()})}"
+                  th:method="POST"
                   th:object="${residentialEntityEditBindingModel}">
                 <div class="col-lg-12">
                     <fieldset>
@@ -70,90 +77,115 @@
                         <select class="form-control" id="city"
                                 th:field="*{city}">
                             <option th:each="cityOption : ${T(com.example.OurHome.model.enums.CityName).values()}"
-                                    th:value="${cityOption}"
+                                    th:selected="${cityOption == residentialEntityEditBindingModel.getCity()}"
                                     th:text="${cityOption}"
-                                    th:selected="${cityOption == residentialEntityEditBindingModel.getCity()}">
+                                    th:value="${cityOption}">
                             </option>
                         </select>
                     </fieldset>
-                    <small th:if="${#fields.hasErrors('city')}"
-                           th:errors="*{city}" class="text-danger">City error
+                    <small class="text-danger"
+                           th:errors="*{city}" th:if="${#fields.hasErrors('city')}">City error
                         message</small>
                     <fieldset>
                         <label for="streetName"><b>Street
                             Name</b></label>
-                        <p th:if="${#fields.hasErrors('streetName')}"
+                        <p class="text-danger"
                            th:errors="*{streetName}"
-                           class="text-danger">Street name error
+                           th:if="${#fields.hasErrors('streetName')}">Street name error
                             message</p>
-                        <input type="text" id="streetName"
+                        <input autocomplete="on" id="streetName"
                                placeholder="Enter street name..."
-                               autocomplete="on"
-                               required th:field="*{streetName}"
-                               th:errorclass="bg-danger"
-                               th:value="${residentialEntityEditBindingModel.streetName}">
+                               required
+                               th:errorclass="bg-danger" th:field="*{streetName}"
+                               th:value="${residentialEntityEditBindingModel.streetName}"
+                               type="text">
                     </fieldset>
                     <fieldset>
                         <label for="streetNumber"><b>Street
                             №</b></label>
-                        <p th:if="${#fields.hasErrors('streetNumber')}"
+                        <p class="text-danger"
                            th:errors="*{streetNumber}"
-                           class="text-danger">Street number error
+                           th:if="${#fields.hasErrors('streetNumber')}">Street number error
                             message</p>
-                        <input type="text" id="streetNumber"
+                        <input autocomplete="on" id="streetNumber"
                                placeholder="Enter street №..."
-                               autocomplete="on" required
+                               required th:errorclass="bg-danger"
                                th:field="*{streetNumber}"
-                               th:errorclass="bg-danger"
-                               th:value="${residentialEntityEditBindingModel.streetNumber}">
+                               th:value="${residentialEntityEditBindingModel.streetNumber}"
+                               type="text">
                     </fieldset>
                     <fieldset>
                         <label for="entrance"><b>Entrance №</b></label>
-                        <p th:if="${#fields.hasErrors('entrance')}"
+                        <p class="text-danger"
                            th:errors="*{entrance}"
-                           class="text-danger">Entrance error
+                           th:if="${#fields.hasErrors('entrance')}">Entrance error
                             message</p>
-                        <input type="text" id="entrance"
-                               placeholder="Enter Entrance №..."
-                               th:field="*{entrance}"
+                        <input id="entrance" placeholder="Enter Entrance №..."
                                th:errorclass="bg-danger"
-                               th:value="${residentialEntityEditBindingModel.entrance}">
+                               th:field="*{entrance}"
+                               th:value="${residentialEntityEditBindingModel.entrance}"
+                               type="text">
                     </fieldset>
                     <fieldset>
                         <label for="accessCode"><b>Access code</b>
                             (optional)</label>
-                        <p th:if="${#fields.hasErrors('accessCode')}"
+                        <p class="text-danger"
                            th:errors="*{accessCode}"
-                           class="text-danger">Access code
+                           th:if="${#fields.hasErrors('accessCode')}">Access code
                             error</p>
-                        <small th:if="${bad_accessCode}"
-                               class="text-danger">Access code must be
+                        <small class="text-danger"
+                               th:if="${bad_accessCode}">Access code must be
                             between 3 and 20 symbols!</small>
-                        <input type="password" id="accessCode"
+                        <input autocomplete="on" id="accessCode"
                                placeholder="Enter new access code..."
-                               autocomplete="on"
+                               th:errorclass="bg-danger"
                                th:field="*{accessCode}"
-                               th:errorclass="bg-danger">
+                               type="password">
                     </fieldset>
                     <fieldset>
                         <label for="confirmAccessCode"><b>Confirm access
                             code</b> (optional)</label>
-                        <p th:if="${#fields.hasErrors('confirmAccessCode')}"
+                        <p class="text-danger"
                            th:errors="*{confirmAccessCode}"
-                           class="text-danger">Confirm access code
+                           th:if="${#fields.hasErrors('confirmAccessCode')}">Confirm access code
                             error</p>
-                        <small th:if="${noAccessCodeMatch}"
-                               class="text-danger">Confirm access code
+                        <small class="text-danger"
+                               th:if="${noAccessCodeMatch}">Confirm access code
                             do not match!</small>
-                        <input type="password" id="confirmAccessCode"
+                        <input autocomplete="on" id="confirmAccessCode"
                                placeholder="Confirm access code..."
-                               autocomplete="on"
+                               th:errorclass="bg-danger"
                                th:field="*{confirmAccessCode}"
-                               th:errorclass="bg-danger">
+                               type="password">
                     </fieldset>
                     <fieldset>
-                        <button type="submit" id="form-submit"
-                                class="orange-button">Submit
+                        <label for="email"><b>Condominium email</b></label>
+                        <p class="text-danger"
+                           th:errors="*{email}"
+                           th:if="${#fields.hasErrors('email')}">Email error message</p>
+                        <input id="email" name="email" pattern="[^ @]*@[^ @]*" placeholder="Enter condominium email..."
+                               autocomplete="on"
+                               th:errorclass="bg-danger"
+                               th:field="*{email}"
+                               th:value="${residentialEntityEditBindingModel.email}"
+                               type="email">
+                    </fieldset>
+                    <fieldset>
+                        <label for="facebookUrl"><b>Facebook page</b></label>
+                        <p class="text-danger"
+                           th:errors="*{facebookUrl}"
+                           th:if="${#fields.hasErrors('facebookUrl')}">Facebook page error
+                            message</p>
+                        <input autocomplete="on" id="facebookUrl"
+                               placeholder="Enter Facebook page link..."
+                               th:errorclass="bg-danger"
+                               th:field="*{facebookUrl}"
+                               th:value="${residentialEntityEditBindingModel.facebookUrl}"
+                               type="text">
+                    </fieldset>
+                    <fieldset>
+                        <button class="orange-button" id="form-submit"
+                                type="submit">Submit
                         </button>
                         <a th:href="@{/administration/details/{id}(id=${residentialEntity.getId()})}">
                             <button class="orange-button text-light" id="form-cancel" type="button">

@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -15,18 +14,26 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -39,7 +46,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header"></div>
+<div class="sub-header" th:replace="~{fragments/header}"></div>
 
 <!-- ***** NavBar ***** -->
 <div th:replace="~{/bg/fragments/navbar}"></div>
@@ -63,23 +70,25 @@
         </div>
         <div class="form-container">
             <div class="slide-controls">
-                <input type="radio" name="slide" id="login" checked>
-                <input type="radio" name="slide" id="signup">
-                <label for="login" class="slide login">Собственик на имот</label>
-                <label for="signup" class="slide signup">Домоуправител</label>
+                <input checked id="login" name="slide" type="radio">
+                <input id="signup" name="slide" type="radio">
+                <label class="slide login" for="login">Собственик на имот</label>
+                <label class="slide signup" for="signup">Домоуправител</label>
                 <div class="slider-tab"></div>
             </div>
             <div class="form-inner">
                 <form class="login">
                     <div class="row">
                         <div class="col-lg-3 text-center" style="align-content: center">
-                            <img src="/images/resident.jpg" alt="" style="max-width: 52px;">
+                            <img alt="" src="/images/resident.jpg" style="max-width: 52px;">
                         </div>
                         <div class="col-lg-9">
                             <div class="text-container">
                                 <p> За да се регистрирате като собственик, трябва да
-                                    разполагате с валиден 8-цифрен идентификатор на етажната собственост (ID), както и код за достъп.
-                                    Ако не разполагате с тази информация, трябва да се свържете с Вашият домоуправител.</p>
+                                    разполагате с валиден 8-цифрен идентификатор на етажната собственост (ID), както и
+                                    код за достъп.
+                                    Ако не разполагате с тази информация, трябва да се свържете с Вашият
+                                    домоуправител.</p>
                             </div>
                         </div>
                         <hr>
@@ -87,7 +96,7 @@
                     <div class="text-center">
                         <fieldset>
                             <a th:href="@{/register/auth}">
-                                <button type="button" class="orange-button ">Регистрирай ме
+                                <button class="orange-button " type="button">Регистрирай ме
                                 </button>
                             </a>
                         </fieldset>
@@ -97,12 +106,14 @@
                 <form class="signup">
                     <div class="row">
                         <div class="col-lg-3 text-center" style="align-content: center">
-                            <img src="/images/manager.jpg" alt="" style="max-width: 52px;">
+                            <img alt="" src="/images/manager.jpg" style="max-width: 52px;">
                         </div>
                         <div class="col-lg-9">
                             <div class="text-container">
-                                <p>Регистрацията като домоуправител ще Ви позволи регистрация в платформата на етажната собственост (ЕС), която управлявате.
-                                    След като завършите Вашата регистрация ще получите пълен достъп до системата и нейните функционалности.
+                                <p>Регистрацията като домоуправител ще Ви позволи регистрация в платформата на етажната
+                                    собственост (ЕС), която управлявате.
+                                    След като завършите Вашата регистрация ще получите пълен достъп до системата и
+                                    нейните функционалности.
                                 </p>
                             </div>
                         </div>
@@ -112,8 +123,8 @@
                     <div class="text-center">
                         <fieldset>
                             <a th:href="@{/register/manager}">
-                                <button type="button"
-                                        class="orange-button">Регистрирай ме
+                                <button class="orange-button"
+                                        type="button">Регистрирай ме
                                 </button>
                             </a>
                         </fieldset>

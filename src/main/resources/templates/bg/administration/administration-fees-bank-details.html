@@ -20,6 +20,14 @@
     <link href="/css/navbar.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
 </head>
 
 <body>
@@ -46,12 +54,9 @@
 
 <!-- ***** BANNER *****-->
 <div class="page-heading header-text">
-    <h3>Monthly fees</h3>
+    <h3>Месечни такси</h3>
     <div class="col-lg-12">
         <span th:text="'Идентификатор на ЕС: ' + ${residentialEntity.getId()}"></span>
-    </div>
-    <div class="success-msg" th:if="${globalFeeAdded}">
-        <h5 class="text-light">Fee successfully created!</h5>
     </div>
 </div>
 
@@ -68,17 +73,17 @@
                     <a class="button nav-link"
                        th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
                         <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i>
-                            <span>Fees by property</span>
+                            <span>Дължими суми по имоти</span>
                         </div>
                     </a>
                     <a class="button nav-link"
                        th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Condominium fees</span>
+                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Ставки на етажна собственост</span>
                         </div>
                     </a>
                     <a class="button nav-link active"
                        href="#">
-                        <div class="text-center"><i class="fa-solid fa-landmark"></i> <span>Bank details</span></div>
+                        <div class="text-center"><i class="fa-solid fa-landmark"></i> <span>Банкови данни</span></div>
                     </a>
                 </div>
                 <!--Start of table-->
@@ -87,7 +92,7 @@
                     <!--Section heading-->
                     <div class="text-center">
                         <h5 class="category text-danger">
-                            Condominium BANK DETAILS</h5>
+                            Бнакови данни</h5>
                     </div>
                     <br>
                     <div style="padding-bottom: 50px">
@@ -99,22 +104,22 @@
                                 </th>
                                 <th>
                                     <i class="fa-solid fa-user-tie"></i>
-                                    <p>Account holder</p>
+                                    <p>Титуляр</p>
                                 </th>
                                 <th>
                                     <i class="fa-solid fa-landmark"></i>
-                                    <p>Bank name</p>
+                                    <p>Банка</p>
                                 </th>
                                 <th>
                                     <i class="fa-solid fa-user-large"></i>
-                                    <p>Additional data</p>
+                                    <p>Допълнителна информация</p>
                                 </th>
                                 <th>
-                                    <p th:if="${residentialEntity.isBankDetailsSet()}">Edit data</p>
-                                    <p th:unless="${residentialEntity.isBankDetailsSet()}">Set data</p>
+                                    <p th:if="${residentialEntity.isBankDetailsSet()}">Промени</p>
+                                    <p th:unless="${residentialEntity.isBankDetailsSet()}">Настрой</p>
                                 </th>
                                 <th th:if="${residentialEntity.isBankDetailsSet()}">
-                                    <p>Delete</p>
+                                    <p>Изтрий</p>
                                 </th>
                             </tr>
                             <tr>
@@ -140,10 +145,10 @@
                                 <td>
                                     <button type="button">
                                         <a th:href="@{/administration/fees/bank-details/edit/{id} (id=${residentialEntity.getId()})}">
-                                            <img alt="Modify data"
+                                            <img alt="Промени данни"
                                                  src="/images/edit.png"
                                                  style="width: 20px;"
-                                                 title="Modify data">
+                                                 title="Промени данни">
                                         </a>
                                     </button>
                                 </td>
@@ -160,7 +165,7 @@
                                                     <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
                                                 </svg>
                                             </div>
-                                            <div class="text">Delete</div>
+                                            <div class="text">Изтрий</div>
                                         </button>
                                     </form>
                                 </td>

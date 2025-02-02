@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'>
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div class="js-preloader" id="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div class="sub-header" th:replace="~{fragments/header}">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/en/fragments/navbar}"></div>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Irregularity Reports</h3>
+                <span th:text="${property.getResidentialEntity().getCity().getName()}
+                + ', ' + ${property.getResidentialEntity().getStreetName()}
+                + ' № ' +${property.getResidentialEntity().getStreetNumber()}
+                + ', entrance: ' +${property.getResidentialEntity().getEntrance()}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Property section ***** -->
+<div class="page-content">
+    <!--start of Sub-menu-->
+    <div class="menu-container">
+        <div th:replace="~{/en/fragments/prop-submenu}"></div>
+    </div>
+    <div class="content">
+        <div class="container">
+            <div class="administration">
+                <div class="col-lg-11 center-form">
+                    <div class="table-nav-section">
+                        <a class="button nav-link active"
+                           href=#>
+                            <div class="text-center"><span>All Public Reports</span>
+                                <sup th:if="${@reportRepository.countPublicReports(property.getResidentialEntity().getId())} > 0"
+                                     th:text="'  '+ ${@reportRepository.countPublicReports(property.getResidentialEntity().getId())}">
+                                </sup>
+                            </div>
+                        </a>
+                        <a class="button nav-link"
+                           th:href="@{/property/reports/my/{id}(id=${property.getId()})}">
+                            <div class="text-center">
+                                <span>My Reports</span>
+                                <sup th:if="${@reportRepository.countMyReports(property.getResidentialEntity().getId(), loggedUser.getId())} > 0"
+                                     th:text="'  '+ ${@reportRepository.countMyReports(property.getResidentialEntity().getId(), loggedUser.getId())}">
+                                </sup>
+                            </div>
+                        </a>
+                    </div>
+                    <!--Start of Data section-->
+                    <div class="tabs-content">
+                        <div class="text-dark bottom-rounded" th:if="${property.isValidated()}">
+                            <div>
+                                <div class="info-table rounded-bottom" id="property-types">
+                                    <!--Active registrations header-->
+                                    <div class="text-center">
+                                        <h4 class="category text-danger">Irregularity Reports</h4>
+                                        <p>Here you will find all public reports of irregularities related to common areas of the condominium or individual properties.</p>
+                                        <p>For detailed information, enter the corresponding record!</p>
+                                    </div>
+
+                                    <div class="due-amounts-header" style="padding: 10px 0">
+                                        <!--Records counter-->
+                                        <div class="main-content">
+                     <span class="category text-bg-success"
+                           style="padding: 1px 5px; border-radius: 5px"
+                           th:if="${@reportRepository.countPublicReports(property.getResidentialEntity().getId())} == 0"
+                           th:text="'0 records'"></span>
+                                            <span class="category text-bg-success"
+                                                  style="padding: 1px 5px; border-radius: 5px"
+                                                  th:if="${@reportRepository.countPublicReports(property.getResidentialEntity().getId())} == 1"
+                                                  th:text="${@reportRepository.countPublicReports(property.getResidentialEntity().getId())} + ' record'"></span>
+                                            <span class="category text-bg-success"
+                                                  style="padding: 1px 5px; border-radius: 5px"
+                                                  th:if="${@reportRepository.countPublicReports(property.getResidentialEntity().getId())} > 1"
+                                                  th:text="${@reportRepository.countPublicReports(property.getResidentialEntity().getId())} + ' records'"></span>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <p class="text-center"
+                                       th:if="${@reportRepository.countPublicReports(property.getResidentialEntity().getId())} == 0">
+                                        <br>No registered reports!</p>
+                                    <!--Property types list-->
+                                    <table class="table text-center"
+                                           id="property-types-table"
+                                           th:unless="${@reportRepository.countPublicReports(property.getResidentialEntity().getId())} == 0">
+                                        <tr>
+                                            <th>
+                                                <p>Status</p>
+                                            </th>
+                                            <th>
+                                                <p>Created on:</p>
+                                            </th>
+                                            <th>
+                                                <p>Creator</p>
+                                            </th>
+                                            <th>
+                                                <p>Category</p>
+                                            </th>
+                                            <th>
+                                                <p>Subcategory</p>
+                                            </th>
+                                            <th>
+                                                <p>View details</p>
+                                            </th>
+                                        </tr>
+                                        <tr th:each="report: ${@reportRepository.findPublicReportsByRE(property.getResidentialEntity().getId())}">
+                                            <td>
+                                                <p th:if="${report.getStatus()} == 'Входиран'"><i
+                                                        class="text-warning fa-solid fa-triangle-exclamation"></i>
+                                                </p>
+                                                <p th:if="${report.getStatus()} == 'Приет'"><i
+                                                        class="fa-solid fa-play"></i></p>
+                                                <p th:if="${report.getStatus()} == 'Завършен'"><i
+                                                        class="text-success-emphasis fa-solid fa-circle-check"></i>
+                                                </p>
+                                                <p th:if="${report.getStatus()} == 'Незавършен'"><i
+                                                        class="text-danger fa-solid fa-circle-xmark"></i></p>
+                                                <p th:if="${report.getStatus()} == 'Входиран'" th:text="Submitted"></p>
+                                                <p th:if="${report.getStatus()} == 'Приет'" th:text="Accepted"></p>
+                                                <p th:if="${report.getStatus()} == 'Завършен'" th:text="Completed"></p>
+                                                <p th:if="${report.getStatus()} == 'Незавършен'" th:text="Unfinished"></p>
+                                            </td>
+                                            <td>
+                                                <p th:text="${#temporals.format(report.getCreationDateTime(), 'dd.MM.yyyy, HH:mm')}"></p>
+                                            </td>
+                                            <td>
+                                                <p th:if="${report.getCreator()} != null"
+                                                   th:text="${report.getCreator().getFirstName()} + ' ' + ${report.getCreator().getLastName()}"></p>
+                                                <p th:unless="${report.getCreator()} != null">-</p>
+                                            </td>
+                                            <td>
+                                                <p th:if="${report.getCategory()} == 'Технически проблем'" th:text="'Technical problem'"></p>
+                                                <p th:if="${report.getCategory()} == 'Финансов проблем'" th:text="'Financial problem'"></p>
+                                                <p th:if="${report.getCategory()} == 'Организационен проблем'" th:text="'Organizational problem'"></p>
+                                                <p th:if="${report.getCategory()} == 'Друго'" th:text="'Other'"></p>
+                                            </td>
+                                            <td>
+                                                <p th:if="${report.getSubCategory()} == 'Проблем с общи части'" th:text="'Problem with common areas'"></p>
+                                                <p th:if="${report.getSubCategory()} == 'Проблем със самостоятелен обект'" th:text="'Problem with individual unit'"></p>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/property/reports/view/{id}(id=${report.getId()}, propertyId=${property.getId()})}">
+                                                    <small class="magnifier-expand">
+                                                        <i class="fa-solid fa-magnifying-glass-plus"></i></small>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+
+
+</body>
+</html>

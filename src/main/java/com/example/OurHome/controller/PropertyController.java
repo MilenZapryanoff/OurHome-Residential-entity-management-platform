@@ -113,7 +113,10 @@ public class PropertyController {
      * POST
      */
     @PostMapping("/property/add/new")
-    public ModelAndView addPropertyInNewEntity(@ModelAttribute("userAuthRegisterBindingModel") @Valid UserAuthBindingModel userAuthBindingModel, BindingResult bindingResult, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+    public ModelAndView addPropertyInNewEntity(@ModelAttribute("userAuthRegisterBindingModel")
+                                               @Valid UserAuthBindingModel userAuthBindingModel,
+                                               BindingResult bindingResult,
+                                               @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         Long residentialEntityId = userAuthBindingModel.parseResidentialIdToLong();
         String validationCode = userAuthBindingModel.getResidentialAccessCode();
@@ -138,7 +141,7 @@ public class PropertyController {
      */
     @GetMapping("/property/summary/{id}")
     @PreAuthorize("@securityService.checkPropertyOwnerAccess(#id, authentication)")
-    public ModelAndView residentialEntityDetails(
+    public ModelAndView propertySummary(
             @ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
             @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel,
             @PathVariable("id") Long id,
@@ -229,7 +232,7 @@ public class PropertyController {
 
         if (bindingResult.hasErrors()) {
             return view.addObject("property", getProperty(id))
-                       .addObject("propertyEditBindingModel", propertyEditBindingModel);
+                    .addObject("propertyEditBindingModel", propertyEditBindingModel);
         }
 
         PropertyType propertyType = null;
@@ -303,7 +306,7 @@ public class PropertyController {
      * PROPERTY -> MONTHLY FEES Section
      */
     @GetMapping("/property/monthlyfees/{id}")
-    @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
+    @PreAuthorize("@securityService.checkPropertyOwnerFullAccess(#id, authentication)")
     public ModelAndView propertyFeesDetails(@PathVariable("id") Long id, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ModelAndView view = resolveView(lang) ?
@@ -317,7 +320,7 @@ public class PropertyController {
      * PROPERTY -> RE -> Data Section
      */
     @GetMapping("/property/re/data/{id}")
-    @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
+    @PreAuthorize("@securityService.checkPropertyOwnerFullAccess(#id, authentication)")
     public ModelAndView residentialEntityData(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ModelAndView view = resolveView(lang) ?
@@ -338,7 +341,7 @@ public class PropertyController {
      * PROPERTY -> RE -> EXPENSES Section
      */
     @GetMapping("/property/re/expenses/{id}")
-    @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
+    @PreAuthorize("@securityService.checkPropertyOwnerFullAccess(#id, authentication)")
     public ModelAndView residentialEntityExpenses(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel, @ModelAttribute("sendMessageBindingModel") SendMessageBindingModel sendMessageBindingModel, @PathVariable("id") Long id, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ModelAndView view = resolveView(lang) ?
@@ -355,7 +358,7 @@ public class PropertyController {
     }
 
     @PostMapping("/property/re/expenses/{id}")
-    @PreAuthorize("@securityService.checkPropertyOwnerAccessToFinancialData(#id, authentication)")
+    @PreAuthorize("@securityService.checkPropertyOwnerFullAccess(#id, authentication)")
     public ModelAndView residentialEntityFilterExpenses(@PathVariable("id") Long id, @Valid ExpenseFilterBindingModel expenseFilter, BindingResult bindingResult, @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         Property property = getProperty(id);
@@ -375,6 +378,7 @@ public class PropertyController {
 
         return view.addObject("expenseFilterBindingModel", expenseFilter);
     }
+
 
     /**
      * This private method returns a Property by id

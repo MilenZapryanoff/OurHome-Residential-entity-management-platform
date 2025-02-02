@@ -1,10 +1,7 @@
 package com.example.OurHome.model.dto.BindingModels.ResidentialEntity;
 
 import com.example.OurHome.model.enums.CityName;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public class ResidentialEntityRegisterBindingModel {
 
@@ -25,6 +22,11 @@ public class ResidentialEntityRegisterBindingModel {
     private String streetNumber;
 
     private String entrance;
+
+    private String facebookUrl;
+
+    @Email
+    private String email;
 
     @NotNull
     @Positive(message = "Number of apartments must be between 0 and 500")
@@ -86,5 +88,21 @@ public class ResidentialEntityRegisterBindingModel {
 
     public void setNumberOfApartments(Long numberOfApartments) {
         this.numberOfApartments = numberOfApartments;
+    }
+
+    public String getFacebookUrl() {
+        return facebookUrl;
+    }
+
+    public void setFacebookUrl(String facebookUrl) {
+        this.facebookUrl = facebookUrl;
+    }
+
+    public @Email String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@Email String email) {
+        this.email = email;
     }
 }

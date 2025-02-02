@@ -134,6 +134,8 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
             residentialEntity.setStreetName(bindingModel.getStreetName());
             residentialEntity.setStreetNumber(bindingModel.getStreetNumber());
             residentialEntity.setEntrance(bindingModel.getEntrance());
+            residentialEntity.setFacebookUrl(bindingModel.getFacebookUrl());
+            residentialEntity.setEmail(bindingModel.getEmail());
 
             if (accessCode.length() >= 3) {
                 residentialEntity.setAccessCode(passwordEncoder.encode(accessCode));
@@ -380,6 +382,11 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
         } else {
             throw new IllegalArgumentException("Condominium does not have a custom picture set!");
         }
+    }
+
+    @Override
+    public ResidentialEntity findResidentialEntityByReportId(Long reportId) {
+        return residentialEntityRepository.findResidentialEntityByReportId(reportId);
     }
 
 
