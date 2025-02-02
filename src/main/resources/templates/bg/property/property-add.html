@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,17 +13,25 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -37,7 +44,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -48,7 +55,7 @@
     <div class="container">
         <h3>Регистрация на имот</h3>
         <h4 class="text-light"><i class="fa-regular fa-building"></i></h4>
-        <div th:if="${registrationFailed}" class="err-msg">
+        <div class="err-msg" th:if="${registrationFailed}">
             <h5 class="text-light">Регистрацията е неуспешна!</h5>
             <p class="text-light"
                th:text="'Появи се проблем с регистрацията на имот №' + ${propertyRegisterBindingModel.getNumber()}"></p>
@@ -61,8 +68,8 @@
     <div class="input-content text-center">
         <div class="col-lg-5 center-form">
             <form id="input-form"
-                  th:method="POST"
                   th:action="@{/property/add}"
+                  th:method="POST"
                   th:object="${propertyRegisterBindingModel}">
                 <div class="col-lg-12">
                     <h5 class="text-danger">Информация за дигитален имот</h5>
@@ -72,9 +79,9 @@
                         <select class="form-control" id="residentialEntity"
                                 th:field="*{residentialEntity}">
                             <option th:each="residentialEntity : ${loggedUser.getResidentialEntities()}"
-                                    th:value="${residentialEntity.getId()}"
                                     th:text="'ID: '+ ${residentialEntity.getId()} + ' - ' + ${residentialEntity.getCity().getName()} + |, | + ${residentialEntity.getStreetName()} + ' №' +
-                                ${residentialEntity.getStreetNumber()} + ' ' + ${residentialEntity.getEntrance()}">
+                                ${residentialEntity.getStreetNumber()} + ' ' + ${residentialEntity.getEntrance()}"
+                                    th:value="${residentialEntity.getId()}">
                             </option>
                         </select>
                         <a class="small" th:href="@{/property/add/new}">Присъедини се към нова етажна собственост</a>
@@ -82,35 +89,35 @@
                     <fieldset>
                         <br>
                         <label for="number"><b>Имот №</b></label>
-                        <p th:if="${#fields.hasErrors('number')}"
-                           th:errors="*{number}" class="text-danger">Property № error message</p>
-                        <input type="number" id="number" placeholder="Въведете номер на имот..." required
+                        <p class="text-danger"
+                           th:errors="*{number}" th:if="${#fields.hasErrors('number')}">Property № error message</p>
+                        <input id="number" placeholder="Въведете номер на имот..." required th:errorclass="bg-danger"
                                th:field="*{number}"
-                               th:errorclass="bg-danger">
+                               type="number">
                     </fieldset>
                     <fieldset>
                         <label for="floor"><b>Етаж</b></label>
-                        <p th:if="${#fields.hasErrors('floor')}"
-                           th:errors="*{floor}" class="text-danger">Floor error message</p>
-                        <input type="number" id="floor" placeholder="Въведете етаж..." required
+                        <p class="text-danger"
+                           th:errors="*{floor}" th:if="${#fields.hasErrors('floor')}">Floor error message</p>
+                        <input id="floor" placeholder="Въведете етаж..." required th:errorclass="bg-danger"
                                th:field="*{floor}"
-                               th:errorclass="bg-danger">
+                               type="number">
                     </fieldset>
                     <fieldset>
                         <label for="numberOfRooms"><b>Брой стаи</b></label>
-                        <p th:if="${#fields.hasErrors('numberOfRooms')}"
-                           th:errors="*{numberOfRooms}" class="text-danger">Rooms error message</p>
-                        <input type="number" id="numberOfRooms" placeholder="Въведете брой стаи..." required
+                        <p class="text-danger"
+                           th:errors="*{numberOfRooms}" th:if="${#fields.hasErrors('numberOfRooms')}">Rooms error message</p>
+                        <input id="numberOfRooms" placeholder="Въведете брой стаи..." required th:errorclass="bg-danger"
                                th:field="*{numberOfRooms}"
-                               th:errorclass="bg-danger">
+                               type="number">
                     </fieldset>
                     <fieldset>
-                        <input class="inp-cbx" name="parkingAvailable" id="parkingAvailable" type="checkbox"
+                        <input class="inp-cbx" hidden="hidden" id="parkingAvailable" name="parkingAvailable"
                                th:field="*{parkingAvailable}"
-                               hidden="hidden">
+                               type="checkbox">
                         <label class="cbx" for="parkingAvailable">
                         <span>
-                    <svg width="12px" height="10px" viewbox="0 0 12 10"><polyline
+                    <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
                             points="1.5 6 4.5 9 10.5 1"></polyline></svg>
                         </span>
                             <span><b>Наличен паркинг</b> (незадължително)</span>
@@ -120,39 +127,39 @@
                     <hr>
                     <fieldset>
                         <label for="numberOfAdults"><b>Брой възрастни </b></label>
-                        <p th:if="${#fields.hasErrors('numberOfAdults')}"
-                           th:errors="*{numberOfAdults}" class="text-danger">Adults error message</p>
-                        <input type="number" id="numberOfAdults" placeholder="Въведете брой възрастни..."
-                               autocomplete="on" required
+                        <p class="text-danger"
+                           th:errors="*{numberOfAdults}" th:if="${#fields.hasErrors('numberOfAdults')}">Adults error message</p>
+                        <input autocomplete="on" id="numberOfAdults" placeholder="Въведете брой възрастни..."
+                               required th:errorclass="bg-danger"
                                th:field="*{numberOfAdults}"
-                               th:errorclass="bg-danger">
+                               type="number">
                     </fieldset>
                     <fieldset>
                         <label for="numberOfChildren"><b>Брой деца </b></label>
-                        <p th:if="${#fields.hasErrors('numberOfAdults')}"
-                           th:errors="*{numberOfChildren}" class="text-danger">Children error message</p>
-                        <input type="number" id="numberOfChildren" placeholder="Въведете брой деца... (0 or more)"
-                               autocomplete="on" required
+                        <p class="text-danger"
+                           th:errors="*{numberOfChildren}" th:if="${#fields.hasErrors('numberOfAdults')}">Children error message</p>
+                        <input autocomplete="on" id="numberOfChildren" placeholder="Въведете брой деца... (0 or more)"
+                               required th:errorclass="bg-danger"
                                th:field="*{numberOfChildren}"
-                               th:errorclass="bg-danger">
+                               type="number">
                     </fieldset>
                     <fieldset>
                         <label for="numberOfPets"><b>Брой дом. любимци</b></label>
-                        <p th:if="${#fields.hasErrors('numberOfPets')}"
-                           th:errors="*{numberOfPets}" class="text-danger">Adults error message</p>
-                        <input type="number" id="numberOfPets" placeholder="Брой дом. любимци...(0 or more)"
-                               autocomplete="on" required
+                        <p class="text-danger"
+                           th:errors="*{numberOfPets}" th:if="${#fields.hasErrors('numberOfPets')}">Adults error message</p>
+                        <input autocomplete="on" id="numberOfPets" placeholder="Брой дом. любимци...(0 or more)"
+                               required th:errorclass="bg-danger"
                                th:field="*{numberOfPets}"
-                               th:errorclass="bg-danger">
+                               type="number">
                     </fieldset>
                     <div class="col-lg-12">
                         <fieldset>
-                            <input class="inp-cbx" name="isNotHabitable" id="isNotHabitable" type="checkbox"
+                            <input class="inp-cbx" hidden="hidden" id="isNotHabitable" name="isNotHabitable"
                                    th:field="*{notHabitable}"
-                                   hidden="hidden">
+                                   type="checkbox">
                             <label class="cbx" for="isNotHabitable">
                         <span>
-                    <svg width="12px" height="10px" viewbox="0 0 12 10"><polyline
+                    <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
                             points="1.5 6 4.5 9 10.5 1"></polyline></svg>
                         </span>
                                 <span><b>Имотът е необитаем</b></span>
@@ -160,7 +167,7 @@
                         </fieldset>
                     </div>
                     <fieldset>
-                        <button th:href="@{/property}" id="form-submit" class="orange-button">Add
+                        <button class="orange-button" id="form-submit" th:href="@{/property}">Add
                         </button>
                         <button class="orange-button" id="form-cancel" type="button">
                             <a href=/property>

@@ -19,6 +19,14 @@
     <link href="/css/animate.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
 </head>
 
 <body>
@@ -61,7 +69,7 @@
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
                         <a class="nav-link text-light"
-                           th:href="@{/administration/property/change-requests/{id}(id=${property.getResidentialEntity().getId()})}">Back</a>
+                           th:href="@{/administration/property/change-requests/{id}(id=${property.getResidentialEntity().getId()})}">Назад</a>
                     </li>
                 </ul>
             </div>
@@ -115,7 +123,8 @@
                                             class="fa-solid fa-circle-check text-success"></i></b>
                                 </li>
                                 <li class="text-black text-center"
-                                    th:if="${property.getPropertyType() != null}"><i class="fa-solid fa-building"></i> Property type:
+                                    th:if="${property.getPropertyType() != null}"><i class="fa-solid fa-building"></i>
+                                    Property type:
                                     <b th:text="${property.getPropertyType().getDescription()}"></b>
                                 </li>
                             </ul>
@@ -257,7 +266,7 @@
                                     <br>
                                     <p><b>Одобри заявка</b></p>
                                     <p><i class="fa-regular fa-check-circle text-success"></i> Данните за имота ще бъдат
-                                        променени спрямо данните посочени в заявката за регистрация!</p>
+                                        променени спрямо данните посочени в заявката за промяна на параметри!</p>
                                     <br>
                                     <p><b>Отхвърли заявка</b></p>
                                     <p><i class="fa-regular fa-xmark-circle text-danger"></i> Данните за имота ще

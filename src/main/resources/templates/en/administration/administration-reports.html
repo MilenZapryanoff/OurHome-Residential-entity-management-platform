@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+>
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div class="js-preloader" id="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div class="sub-header" th:replace="~{fragments/header}">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/en/fragments/navbar}"></div>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Irregularity Reports</h3>
+            <div class="err-msg" th:if="${deleteFailed}">
+                <h5 class="text-light">Failed to delete the report!</h5>
+                <p class="text-light" th:text="${errorMsg}"></p>
+            </div>
+            <div class="col-lg-12">
+                <span th:text="'Entity ID: ' + ${residentialEntity.getId()}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ***** Property types section ***** -->
+<div class="page-content">
+    <!--start of Sub-menu-->
+    <div class="menu-container">
+        <div th:replace="~{/en/fragments/adm-submenu}"></div>
+    </div>
+    <div class="content">
+        <div class="container">
+            <div class="administration">
+                <div class="info-table rounded-bottom" id="property-types">
+                    <!--Active registrations header-->
+                    <div class="text-center">
+                        <h4 class="category text-danger">Irregularity Reports</h4>
+                        <br>
+                        <p>In this section, you will find all user-submitted reports about irregularities related to shared spaces or individual units.</p>
+                        <p>You can manage the reports by updating their status, adding detailed information about the case, or addressing the problem.</p>
+                        <p>Depending on whether the report is public or not, it will be visible only to the submitter or all users with access to the digital condominium.</p>
+                    </div>
+
+                    <div class="due-amounts-header" style="padding: 10px 0">
+                        <!--Records counter-->
+                        <div class="main-content">
+                            <span class="category text-bg-success"
+                                  style="padding: 1px 5px; border-radius: 5px"
+                                  th:if="${@reportRepository.countReports(residentialEntity.getId())} == 0"
+                                  th:text="'0 Record found'"></span>
+                            <span class="category text-bg-success"
+                                  style="padding: 1px 5px; border-radius: 5px"
+                                  th:if="${@reportRepository.countReports(residentialEntity.getId())} == 1"
+                                  th:text="${@reportRepository.countReports(residentialEntity.getId())} + ' record'"></span>
+                            <span class="category text-bg-success"
+                                  style="padding: 1px 5px; border-radius: 5px"
+                                  th:if="${@reportRepository.countReports(residentialEntity.getId())} > 1"
+                                  th:text="${@reportRepository.countReports(residentialEntity.getId())} + ' records'"></span>
+                        </div>
+                        <!--Add new report button-->
+                        <div class="add-fee">
+                            <form th:action="@{/administration/reports/add/{id} (id=${residentialEntity.getId()})}">
+                                <button type="submit">
+                                    <img alt="Create new report"
+                                         src="/images/add_button.png"
+                                         style="max-width: 20px;"
+                                         title="Create new report">
+                                    <p class="text-dark">
+                                        New Report
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="text-center"
+                       th:if="${@reportRepository.countReports(residentialEntity.getId())} == 0"><br>No registered
+                        reports</p>
+                    <!--Reports list-->
+                    <table class="table text-center"
+                           id="property-types-table"
+                           th:unless="${@reportRepository.countReports(residentialEntity.getId())} == 0">
+                        <tr>
+                            <th>Status</th>
+                            <th>Created on:</th>
+                            <th>Submitter</th>
+                            <th>Priority</th>
+                            <th>Category</th>
+                            <th>Subcategory</th>
+                            <th>Public</th>
+                            <th>View Details</th>
+                            <th>Delete</th>
+                        </tr>
+                        <tr th:each="report: ${@reportRepository.findReportsByRE(residentialEntity.getId())}">
+                            <td>
+                                <p th:if="${report.getStatus()} == 'Входиран'"><i
+                                        class="text-warning fa-solid fa-triangle-exclamation"></i></p>
+                                <p th:if="${report.getStatus()} == 'Приет'"><i
+                                        class="fa-solid fa-play"></i></p>
+                                <p th:if="${report.getStatus()} == 'Завършен'"><i
+                                        class="text-success-emphasis fa-solid fa-circle-check"></i></p>
+                                <p th:if="${report.getStatus()} == 'Незавършен'"><i
+                                        class="text-danger fa-solid fa-circle-xmark"></i></p>
+                                <p th:if="${report.getStatus()} == 'Входиран'" th:text="Submitted"></p>
+                                <p th:if="${report.getStatus()} == 'Приет'" th:text="Accepted"></p>
+                                <p th:if="${report.getStatus()} == 'Завършен'" th:text="Completed"></p>
+                                <p th:if="${report.getStatus()} == 'Незавършен'" th:text="Unfinished"></p>
+                            </td>
+                            <td>
+                                <p th:text="${#temporals.format(report.getCreationDateTime(), 'dd.MM.yyyy, HH:mm')}"></p>
+                            </td>
+                            <td>
+                                <p th:if="${report.getCreator()} != null" th:text="${report.getCreator().getFirstName()} + ' ' + ${report.getCreator().getLastName()}"></p>
+                                <p th:unless="${report.getCreator()} != null">-</p>
+                            </td>
+                            <td>
+                                 <p th:if="${report.getPriority()} == 'Нисък'" th:text="Low"></p>
+                                 <p th:if="${report.getPriority()} == 'Висок'" th:text="High"></p>
+                            </td>
+                            <td>
+                                <p th:if="${report.getCategory()} == 'Технически проблем'" th:text="'Technical problem'"></p>
+                                <p th:if="${report.getCategory()} == 'Финансов проблем'" th:text="'Financial problem'"></p>
+                                <p th:if="${report.getCategory()} == 'Организационен проблем'" th:text="'Organizational problem'"></p>
+                                <p th:if="${report.getCategory()} == 'Друг'" th:text="'Other'"></p>
+                            </td>
+
+                            <td>
+                                <p th:if="${report.getSubCategory()} == 'Проблем с общи части'" th:text="'Problem with common areas'"></p>
+                                <p th:if="${report.getSubCategory()} == 'Проблем със самостоятелен обект'" th:text="'Problem with individual unit'"></p>
+                            </td>
+
+                            <td>
+                                <p th:if="${report.isPublicReport()}"><i
+                                        class="text-success-emphasis fa-regular fa-circle-check"></i></p>
+                                <p th:unless="${report.isPublicReport()}"><i
+                                        class="text-danger fa-regular fa-circle-xmark"></i></p>
+                            </td>
+                            <td>
+                                <a th:href="@{/administration/reports/edit/{id}(id=${report.getId()})}">
+                                    <small class="magnifier-expand">
+                                        <i class="fa-solid fa-magnifying-glass-plus"></i></small>
+                                </a>
+                            </td>
+                            <td align="center" class="table-image">
+                                <form class="form-container"
+                                      th:action="@{/administration/reports/delete/{id} (id=${report.getId()})}"
+                                      th:method="POST">
+                                    <button class="delete-button" type="button">
+                                        <div class="icon">
+                                            <svg class="top" viewBox="0 0 24 24">
+                                                <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
+                                            </svg>
+                                            <svg class="bottom" viewBox="0 0 24 24">
+                                                <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="text">Delete</div>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Custom pop-up confirmation window-->
+<div th:replace="~{en/fragments/confirm-popup}">
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/confirm.js"></script>
+<script src="/js/buttons.js"></script>
+
+</body>
+</html>

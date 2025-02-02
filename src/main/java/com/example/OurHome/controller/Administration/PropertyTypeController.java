@@ -219,13 +219,4 @@ public class PropertyTypeController {
     private ResidentialEntity getResidentialEntity(Long id) {
         return residentialEntityService.findResidentialEntityById(id).orElse(null);
     }
-
-    /**
-     * Language resolver
-     * @param lang This value shows the language
-     * @return boolean
-     */
-    private boolean resolveView(String lang) {
-        return "bg".equals(lang);
-    }
 }

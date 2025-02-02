@@ -19,6 +19,14 @@
     <link href="/css/animate.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
 </head>
 <body>
 
@@ -75,7 +83,8 @@
             </ul>
         </div>
         <!-- ***** Archive messages ***** -->
-        <p class="text-center" th:if="${@messageRepository.countArchivedMessages(loggedUser.getId()) == 0}"> No archived messages</p>
+        <p class="text-center" th:if="${@messageRepository.countArchivedMessages(loggedUser.getId()) == 0}"> No archived
+            messages</p>
         <section th:if="${@messageRepository.countArchivedMessages(loggedUser.getId()) > 0}">
 
             <!--DELETE ALL BUTTON START-->
@@ -101,7 +110,8 @@
                                    th:text="'Sender: ' + ${message.getSender().getFirstName()} + ' ' + ${message.getSender().getLastName()}"></p>
                                 <div class="user-avatar-medium" th:if="${message.getSender()} != null">
                                     <img alt="Avatar"
-                                         th:if="${message.getSender().getAvatarPath() != null}" th:src="@{${message.getSender().getAvatarPath()}}">
+                                         th:if="${message.getSender().getAvatarPath() != null}"
+                                         th:src="@{${message.getSender().getAvatarPath()}}">
                                 </div>
                                 <p class="text-secondary"
                                    th:text="'Received on : ' + ${#temporals.format(message.getDate(), 'dd.MM.yyyy')} + ', ' + ${message.getTime()}"></p>

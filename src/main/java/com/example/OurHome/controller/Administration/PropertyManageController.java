@@ -20,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class PropertyManageController {
 
-
     private final ResidentialEntityService residentialEntityService;
     private final PropertyService propertyService;
     private final MessageService messageService;

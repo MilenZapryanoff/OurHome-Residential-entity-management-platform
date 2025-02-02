@@ -1,11 +1,11 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,26 +14,34 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 </head>
 
 <body>
 
 <th:block sec:authorize="isAuthenticated()">
-    <div th:fragment="header" class="sub-header">
+    <div class="sub-header" th:fragment="header">
         <div class="container">
             <div class="header-container">
                 <div class="avatar">
                     <button type="button">
                         <a th:href="@{/profile}">
-                            <img th:if="${loggedUser.avatarPath != null}"
-                                 th:src="@{${loggedUser.avatarPath}}" alt="Avatar">
-                            <img th:unless="${loggedUser.avatarPath != null}"
-                                 src="/avatars/default.jpg" alt="Default Avatar">
+                            <img alt="Avatar"
+                                 th:if="${loggedUser.avatarPath != null}" th:src="@{${loggedUser.avatarPath}}">
+                            <img alt="Default Avatar"
+                                 src="/avatars/default.jpg" th:unless="${loggedUser.avatarPath != null}">
                         </a>
                     </button>
                 </div>

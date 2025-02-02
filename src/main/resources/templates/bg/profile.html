@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,17 +13,25 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -37,7 +44,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -67,45 +74,45 @@
 <div class="container">
     <div class="property" style="padding-top: 80px;: ">
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="profile"
-                 aria-labelledby="profile-tab">
+            <div aria-labelledby="profile-tab" class="tab-pane fade show active"
+                 id="profile">
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="info-table profile">
                             <ul>
                                 <li>
                                     <div class="avatar-container">
-                                        <img th:if="${loggedUser.avatarPath != null}"
-                                             th:src="@{${loggedUser.avatarPath}}" alt="Avatar">
-                                        <img th:unless="${loggedUser.avatarPath != null}"
-                                             src="/avatars/default.jpg" alt="Default Avatar">
+                                        <img alt="Avatar"
+                                             th:if="${loggedUser.avatarPath != null}" th:src="@{${loggedUser.avatarPath}}">
+                                        <img alt="Default Avatar"
+                                             src="/avatars/default.jpg" th:unless="${loggedUser.avatarPath != null}">
                                     </div>
                                     <div class="row">
-                                        <form th:action="@{/uploadAvatar}" method="post"
-                                              enctype="multipart/form-data" id="avatarForm">
-                                            <input type="file" id="avatarInput" name="avatar" accept="image/*"
-                                                   style="display: none;">
+                                        <form enctype="multipart/form-data" id="avatarForm"
+                                              method="post" th:action="@{/uploadAvatar}">
+                                            <input accept="image/*" id="avatarInput" name="avatar" style="display: none;"
+                                                   type="file">
                                             <div class="col-lg-12 text-center">
-                                                <button type="button" id="uploadButton">
+                                                <button id="uploadButton" type="button">
                                                     <small class="text-info-emphasis">Качи снимка <i
                                                             class="fa-solid fa-arrow-up-from-bracket"></i></small>
                                                 </button>
                                             </div>
-                                            <button type="submit" style="display: none;">Submit</button>
+                                            <button style="display: none;" type="submit">Submit</button>
                                         </form>
 
 
-                                        <form th:if="${loggedUser.avatarPath != null}
+                                        <form method="post"
+                                              th:action="@{/removeAvatar}" th:if="${loggedUser.avatarPath != null}
                                                                                         AND ${!loggedUser.getAvatarPath().equals('/avatars/default-manager.jpg')}
-                                                                                        AND ${!loggedUser.getAvatarPath().equals('/avatars/default.jpg')}"
-                                              th:action="@{/removeAvatar}" method="post">
+                                                                                        AND ${!loggedUser.getAvatarPath().equals('/avatars/default.jpg')}">
                                             <div class="col-lg-12 text-center">
                                                 <button type="submit">
                                                     <small class="text-info-emphasis">Премахни снимка <i
                                                             class="fa-solid fa-eraser"></i></small>
                                                 </button>
                                             </div>
-                                            <button type="submit" style="display: none;">Submit</button>
+                                            <button style="display: none;" type="submit">Submit</button>
                                         </form>
                                     </div>
 
@@ -127,41 +134,45 @@
                                     <p th:if="${loggedUser.getRole().getName()} == 'RESIDENT'">Собственик на имот</p>
                                     <p th:if="${loggedUser.getRole().getName()} == 'MANAGER'">Домоуправител</p>
                                 </li>
-                                <li th:if="${loggedUser.getRole().getName()} == 'RESIDENT'"
-                                    class="text-black"><b>Брой ЕС в които участвате:</b>
+                                <li class="text-black"
+                                    th:if="${loggedUser.getRole().getName()} == 'RESIDENT'"><b>Брой ЕС в които участвате:</b>
                                     <p th:text="${loggedUser.getResidentialEntities().size()}"></p>
                                 </li>
-                                <li th:if="${loggedUser.getRole().getName()} == 'RESIDENT'"
-                                    class="text-black"><b>Регистрирани имоти:</b>
+                                <li class="text-black"
+                                    th:if="${loggedUser.getRole().getName()} == 'RESIDENT'"><b>Регистрирани имоти:</b>
                                     <p th:text="${loggedUser.getProperties().size()}"></p>
                                 </li>
-                                <li th:if="${loggedUser.getRole().getName()} == 'MANAGER'"
-                                    class="text-black"><b>Брой управлявани ЕС:</b>
+                                <li class="text-black"
+                                    th:if="${loggedUser.getRole().getName()} == 'MANAGER'"><b>Брой управлявани ЕС:</b>
                                     <p>
-                                    <a th:text="${@residentialEntityRepository.countByManager_Id(loggedUser.getId())}" th:href="@{/administration}">Брой управлявани ЕС</a>
+                                        <a th:href="@{/administration}"
+                                           th:text="${@residentialEntityRepository.countByManager_Id(loggedUser.getId())}">Брой управлявани ЕС</a>
                                     </p>
                                 </li>
                                 <li class="text-black"><b>Дата на създаване:</b>
                                     <p th:text="${#temporals.format(loggedUser.getRegistrationDateTime(), 'dd.MM.yyyy, HH:mm')} + 'ч.'"></p>
                                 </li>
                                 <li class="text-black"><b>Предпочитан език за системни съобщения:</b>
-                                <form id="langSelector" th:method="POST" th:action="@{/setSystemMessagesLanguage}" style="padding-right: 15px">
-                                    <div id="dropdown">
-                                        <img th:if="${userViewModel.getLanguage().getDescription() == 'bulgarian'}" src="/images/bg-flag.png" alt="Български" title="Български">
-                                        <img th:if="${userViewModel.getLanguage().getDescription() == 'english'}" src="/images/en-flag.png" alt="English" title="English">
-                                    </div>
-                                    <ul id="dropdown-menu">
-                                        <li style="padding: 5px; cursor: pointer;" onclick="selectLanguage('bg')">
-                                            <img src="/images/bg-flag.png" alt="Bulgarian" title="Bulgarian">
-                                            <small class="text-danger-emphasis">Български</small>
-                                        </li>
-                                        <li style="padding: 5px; cursor: pointer;" onclick="selectLanguage('en')">
-                                            <img src="/images/en-flag.png" alt="English" title="English">
-                                            <small class="text-dark">English</small>
-                                        </li>
-                                    </ul>
-                                    <input type="hidden" name="lang" id="selected-lang">
-                                </form>
+                                    <form id="langSelector" style="padding-right: 15px" th:action="@{/setSystemMessagesLanguage}"
+                                          th:method="POST">
+                                        <div id="dropdown">
+                                            <img alt="Български"
+                                                 src="/images/bg-flag.png" th:if="${userViewModel.getLanguage().getDescription() == 'bulgarian'}" title="Български">
+                                            <img alt="English"
+                                                 src="/images/en-flag.png" th:if="${userViewModel.getLanguage().getDescription() == 'english'}" title="English">
+                                        </div>
+                                        <ul id="dropdown-menu">
+                                            <li onclick="selectLanguage('bg')" style="padding: 5px; cursor: pointer;">
+                                                <img alt="Bulgarian" src="/images/bg-flag.png" title="Bulgarian">
+                                                <small class="text-danger-emphasis">Български</small>
+                                            </li>
+                                            <li onclick="selectLanguage('en')" style="padding: 5px; cursor: pointer;">
+                                                <img alt="English" src="/images/en-flag.png" title="English">
+                                                <small class="text-dark">English</small>
+                                            </li>
+                                        </ul>
+                                        <input id="selected-lang" name="lang" type="hidden">
+                                    </form>
                                 </li>
                             </ul>
                         </div>
@@ -206,7 +217,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
-<script src="/js/avatar.js" defer></script>
+<script defer src="/js/avatar.js"></script>
 <script src="/js/lang-selector.js"></script>
 
 </body>

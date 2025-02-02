@@ -26,4 +26,7 @@ public interface ResidentialEntityRepository extends JpaRepository<ResidentialEn
     @Query("SELECT r FROM residential_entities r JOIN r.properties p WHERE p.id = :id")
     ResidentialEntity findResidentialEntityByPropertyId(Long id);
 
+    @Query("SELECT re FROM residential_entities re JOIN re.reports r WHERE r.id = :id")
+    ResidentialEntity findResidentialEntityByReportId(Long id);
+
 }

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,11 +14,19 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 </head>
 
 <body>
@@ -31,45 +39,53 @@
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
                         <div class="logo-image">
-                            <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
+                            <a href="/index"><img alt="OurHome" src="/images/OurHome.png" style="max-width: 200px;"></a>
                         </div>
                         <!-- ***** Logo End ***** -->
 
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
                             <li>
-                                <a th:href="@{/}" th:classappend="${currentURI == '/' or currentURI == '/index'} ? 'active' : ''">Home</a>
+                                <a th:classappend="${currentURI == '/' or currentURI == '/index'} ? 'active' : ''"
+                                   th:href="@{/}">Home</a>
                             </li>
                             <li sec:authorize="isAuthenticated()">
-                                <a th:classappend="${currentURI.startsWith('/messages')} ? 'active' : ''" th:href="@{/messages}">Messages</a>
+                                <a th:classappend="${currentURI.startsWith('/messages')} ? 'active' : ''"
+                                   th:href="@{/messages}">Messages</a>
                             </li>
                             <small th:with="userId=${loggedUser.getId()}">
-                                <samp th:if="${@messageRepository.countUnreadMessages(userId) > 0}"
-                                      th:with="userId=${loggedUser.getId()}"
-                                      class="timer count-title text-danger"
+                                <samp class="timer count-title text-danger"
+                                      data-speed="1000"
                                       th:data-to="${@messageRepository.countUnreadMessages(userId)}"
-                                      data-speed="1000"></samp>
+                                      th:if="${@messageRepository.countUnreadMessages(userId) > 0}"
+                                      th:with="userId=${loggedUser.getId()}"></samp>
                             </small>
                             <li sec:authorize="hasAnyRole('MANAGER')">
-                                <a th:classappend="${currentURI.startsWith('/administration')} ? 'active' : ''" th:href="@{/administration}">Administration</a>
+                                <a th:classappend="${currentURI.startsWith('/administration')} ? 'active' : ''"
+                                   th:href="@{/administration}">Administration</a>
                             </li>
                             <li sec:authorize="hasAnyRole('RESIDENT')">
-                                <a th:classappend="${currentURI.startsWith('/property')} ? 'active' : ''" th:href="@{/property}">My property</a>
+                                <a th:classappend="${currentURI.startsWith('/property')} ? 'active' : ''"
+                                   th:href="@{/property}">My property</a>
                             </li>
                             <li sec:authorize="isAuthenticated()">
-                                <a th:classappend="${currentURI.startsWith('/profile')} ? 'active' : ''" th:href="@{/profile}">Profile</a>
+                                <a th:classappend="${currentURI.startsWith('/profile')} ? 'active' : ''"
+                                   th:href="@{/profile}">Profile</a>
                             </li>
                             <li>
-                                <a th:classappend="${currentURI.startsWith('/contact')} ? 'active' : ''" th:href="@{/contact}">Contacts</a>
+                                <a th:classappend="${currentURI.startsWith('/contact')} ? 'active' : ''"
+                                   th:href="@{/contact}">Contacts</a>
                             </li>
                             <li sec:authorize="!isAuthenticated()">
-                                <a th:classappend="${currentURI.startsWith('/register')} ? 'active' : ''" th:href="@{/register}">Registration</a>
+                                <a th:classappend="${currentURI.startsWith('/register')} ? 'active' : ''"
+                                   th:href="@{/register}">Registration</a>
                             </li>
                             <li sec:authorize="!isAuthenticated()">
-                                <a th:classappend="${currentURI.startsWith('/login')} ? 'active' : ''" th:href="@{/login}">Login</a>
+                                <a th:classappend="${currentURI.startsWith('/login')} ? 'active' : ''"
+                                   th:href="@{/login}">Login</a>
                             </li>
                             <li sec:authorize="isAuthenticated()">
-                                <form id="logout" th:action="@{/logout}" method="POST">
+                                <form id="logout" method="POST" th:action="@{/logout}">
                                     <a onclick="logout.submit()" style="cursor: pointer;">Logout</a>
                                 </form>
                             </li>
@@ -92,23 +108,27 @@
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
                         <div class="logo-image">
-                            <a href="/index"><img src="/images/OurHome.png" style="max-width: 200px;" alt="OurHome"></a>
+                            <a href="/index"><img alt="OurHome" src="/images/OurHome.png" style="max-width: 200px;"></a>
                         </div>
                         <!-- ***** Logo End ***** -->
 
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
                             <li>
-                                <a th:href="@{/}" th:classappend="${currentURI == '/' or currentURI == '/index'} ? 'active' : ''">Home</a>
+                                <a th:classappend="${currentURI == '/' or currentURI == '/index'} ? 'active' : ''"
+                                   th:href="@{/}">Home</a>
                             </li>
                             <li>
-                                <a th:classappend="${currentURI.startsWith('/contact')} ? 'active' : ''" th:href="@{/contact}">Contacts</a>
+                                <a th:classappend="${currentURI.startsWith('/contact')} ? 'active' : ''"
+                                   th:href="@{/contact}">Contacts</a>
                             </li>
                             <li>
-                                <a th:classappend="${currentURI.startsWith('/register')} ? 'active' : ''" th:href="@{/register}">Registration</a>
+                                <a th:classappend="${currentURI.startsWith('/register')} ? 'active' : ''"
+                                   th:href="@{/register}">Registration</a>
                             </li>
                             <li sec:authorize="!isAuthenticated()">
-                                <a th:classappend="${currentURI.startsWith('/login')} ? 'active' : ''" th:href="@{/login}">Login</a>
+                                <a th:classappend="${currentURI.startsWith('/login')} ? 'active' : ''"
+                                   th:href="@{/login}">Login</a>
                             </li>
                         </ul>
                         <a class='menu-trigger'>

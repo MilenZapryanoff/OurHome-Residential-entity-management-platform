@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,17 +13,25 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -37,7 +44,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -76,52 +83,53 @@
             </ul>
         </div>
         <!-- ***** Archive messages ***** -->
-        <p class="text-center" th:if="${@messageRepository.countArchivedMessages(loggedUser.getId()) == 0}">Нямате архивирани съобщения</p>
+        <p class="text-center" th:if="${@messageRepository.countArchivedMessages(loggedUser.getId()) == 0}">Нямате
+            архивирани съобщения</p>
         <section th:if="${@messageRepository.countArchivedMessages(loggedUser.getId()) > 0}">
 
             <!--DELETE ALL BUTTON START-->
             <div class="mass-message-control-buttons row" style="margin-bottom: 30px">
                 <div class="col-lg-2">
-                    <form th:action="@{/messages/delete/all/{id}(id=${loggedUser.getId()})}"
-                          method="POST">
-                        <button type="submit" class="form-control text-bg-danger">Изтрии всички</button>
+                    <form method="POST"
+                          th:action="@{/messages/delete/all/{id}(id=${loggedUser.getId()})}">
+                        <button class="form-control text-bg-danger" type="submit">Изтрии всички</button>
                     </form>
                 </div>
             </div>
 
             <!--MESSAGE container-->
-            <div th:each="message: ${@messageRepository.findArchivedMessagesByUserId(loggedUser.getId())}"
-                 class="row">
+            <div class="row"
+                 th:each="message: ${@messageRepository.findArchivedMessagesByUserId(loggedUser.getId())}">
 
                 <div class="message-container row">
                     <!--MESSAGE BODY-->
                     <div class="message-body col-lg-10" style="margin: 25px 0 0 0">
                         <div class="form-control" style="margin-bottom: 30px">
                             <div class="message-content">
-                                <p th:if="${message.getSender()} != null" class="text-secondary"
+                                <p class="text-secondary" th:if="${message.getSender()} != null"
                                    th:text="'Подател: ' + ${message.getSender().getFirstName()} + ' ' + ${message.getSender().getLastName()}"></p>
-                                <div th:if="${message.getSender()} != null" class="user-avatar-medium">
-                                    <img th:if="${message.getSender().getAvatarPath() != null}"
-                                         th:src="@{${message.getSender().getAvatarPath()}}" alt="Avatar">
+                                <div class="user-avatar-medium" th:if="${message.getSender()} != null">
+                                    <img alt="Avatar"
+                                         th:if="${message.getSender().getAvatarPath() != null}" th:src="@{${message.getSender().getAvatarPath()}}">
                                 </div>
                                 <p class="text-secondary"
                                    th:text="'Полу§ено на : ' + ${#temporals.format(message.getDate(), 'dd.MM.yyyy')} + 'г. ' + ${message.getTime()}+ 'ч. '"></p>
-                                <i th:if="${message.isRead()}" class="fa-regular fa-envelope-open"></i>
-                                <i th:unless="${message.isRead()}" class="fa-solid fa-envelope"></i>
+                                <i class="fa-regular fa-envelope-open" th:if="${message.isRead()}"></i>
+                                <i class="fa-solid fa-envelope" th:unless="${message.isRead()}"></i>
                                 <hr>
 
                                 <p th:if="${message.isRead()}" th:text="${message.getText()}"></p>
-                                <p th:unless="${message.isRead()}" th:text="${message.getText()}"
-                                   style="font-weight: 700"></p>
+                                <p style="font-weight: 700" th:text="${message.getText()}"
+                                   th:unless="${message.isRead()}"></p>
                             </div>
 
                         </div>
                     </div>
                     <!--MESSAGE SIDE-BUTTONS-->
                     <div class="single-message-control-buttons col-lg-2" style="margin: 25px 0">
-                        <form th:action="@{'/messages/delete/' + ${message.getId()} + '?tab=archive'}"
-                              method="POST">
-                            <button type="submit" class="form-control text-danger-emphasis">Изтрий</button>
+                        <form method="POST"
+                              th:action="@{'/messages/delete/' + ${message.getId()} + '?tab=archive'}">
+                            <button class="form-control text-danger-emphasis" type="submit">Изтрий</button>
                         </form>
                     </div>
                 </div>

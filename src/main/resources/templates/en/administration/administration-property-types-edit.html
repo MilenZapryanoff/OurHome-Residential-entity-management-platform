@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,19 +13,26 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-    <script src="../../static/js/isotope.min.js"></script>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -39,7 +45,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -51,10 +57,10 @@
         <div class="row">
             <h3>Edit Property type</h3>
             <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
-            <p th:unless="${editFailed}" th:class="text-light"
+            <p class="category text-black" th:class="text-light"
                th:text="'Propery Type : ' + ${propertyTypeEditBindingModel.getDescription()}"
-               class="category text-black"></p>
-            <div th:if="${editFailed}" class="err-msg">
+               th:unless="${editFailed}"></p>
+            <div class="err-msg" th:if="${editFailed}">
                 <h5 class="text-light">Edit failed!</h5>
             </div>
         </div>
@@ -67,75 +73,75 @@
     <div class="input-content text-center">
         <div class="col-lg-5 center-form">
             <form id="input-form"
-                  th:method="POST"
                   th:action="@{/administration/property/types/edit/{id}(id=${id})}"
+                  th:method="POST"
                   th:object="${propertyTypeEditBindingModel}">
                 <div class="col-lg-12">
                     <fieldset>
                         <label for="description"><b>Description</b></label>
-                        <p th:if="${#fields.hasErrors('description')}"
+                        <p class="text-danger"
                            th:errors="*{description}"
-                           class="text-danger">Description error message</p>
-                        <input type="text" id="description"
+                           th:if="${#fields.hasErrors('description')}">Description error message</p>
+                        <input autocomplete="on" id="description"
                                placeholder="Enter property type description..."
-                               autocomplete="on"
-                               required th:field="*{description}"
-                               th:errorclass="bg-danger"
-                               th:value="${propertyTypeEditBindingModel.getDescription()}">
+                               required
+                               th:errorclass="bg-danger" th:field="*{description}"
+                               th:value="${propertyTypeEditBindingModel.getDescription()}"
+                               type="text">
                     </fieldset>
                     <fieldset>
                         <label for="commonPartsPercentage"><b>Common Parts percentage (%)</b></label>
-                        <p th:if="${#fields.hasErrors('commonPartsPercentage')}"
+                        <p class="text-danger"
                            th:errors="*{commonPartsPercentage}"
-                           class="text-danger">Common parts error message</p>
-                        <input type="text" id="commonPartsPercentage"
+                           th:if="${#fields.hasErrors('commonPartsPercentage')}">Common parts error message</p>
+                        <input autocomplete="on" id="commonPartsPercentage"
                                placeholder="Enter common parts %..."
-                               autocomplete="on"
-                               th:field="*{commonPartsPercentage}"
                                th:errorclass="bg-danger"
-                               th:value="${propertyTypeEditBindingModel.getCommonPartsPercentage()}">
+                               th:field="*{commonPartsPercentage}"
+                               th:value="${propertyTypeEditBindingModel.getCommonPartsPercentage()}"
+                               type="text">
                     </fieldset>
                     <fieldset>
                         <label for="totalFlatSpace"><b>Total flat space (square meters)</b></label>
-                        <p th:if="${#fields.hasErrors('totalFlatSpace')}"
+                        <p class="text-danger"
                            th:errors="*{totalFlatSpace}"
-                           class="text-danger">Total flat space error message</p>
-                        <input type="text" id="totalFlatSpace"
+                           th:if="${#fields.hasErrors('totalFlatSpace')}">Total flat space error message</p>
+                        <input autocomplete="on" id="totalFlatSpace"
                                placeholder="Enter total flat space..."
-                               autocomplete="on" required
+                               required th:errorclass="bg-danger"
                                th:field="*{totalFlatSpace}"
-                               th:errorclass="bg-danger"
-                               th:value="${propertyTypeEditBindingModel.getTotalFlatSpace()}">
+                               th:value="${propertyTypeEditBindingModel.getTotalFlatSpace()}"
+                               type="text">
                     </fieldset>
                     <fieldset>
                         <label for="totalFlatSpace"><b>Fund "Repair" (habitable)</b></label>
-                        <p th:if="${#fields.hasErrors('fundRepairHabitable')}"
+                        <p class="text-danger"
                            th:errors="*{fundRepairHabitable}"
-                           class="text-danger">Fund repair error message</p>
+                           th:if="${#fields.hasErrors('fundRepairHabitable')}">Fund repair error message</p>
                         <label for="fundRepairAmount"></label>
-                        <input type="text" id="fundRepairAmount"
+                        <input autocomplete="on" id="fundRepairAmount"
                                placeholder="Enter amount..."
-                               autocomplete="on"
-                               th:field="*{fundRepairHabitable}"
                                th:errorclass="bg-danger"
-                               th:value="${propertyTypeEditBindingModel.getFundRepairHabitable()}">
+                               th:field="*{fundRepairHabitable}"
+                               th:value="${propertyTypeEditBindingModel.getFundRepairHabitable()}"
+                               type="text">
                     </fieldset>
                     <fieldset>
                         <label for="totalFlatSpace"><b>Fund "Repair" (non-habitable)</b></label>
-                        <p th:if="${#fields.hasErrors('fundRepairNotHabitable')}"
+                        <p class="text-danger"
                            th:errors="*{fundRepairNotHabitable}"
-                           class="text-danger">Fund repair error message</p>
+                           th:if="${#fields.hasErrors('fundRepairNotHabitable')}">Fund repair error message</p>
                         <label for="fundRepairNotHabitable"></label>
-                        <input type="text" id="fundRepairNotHabitable"
+                        <input autocomplete="on" id="fundRepairNotHabitable"
                                placeholder="Enter amount..."
-                               autocomplete="on"
-                               th:field="*{fundRepairNotHabitable}"
                                th:errorclass="bg-danger"
-                               th:value="${propertyTypeEditBindingModel.getFundRepairNotHabitable()}">
+                               th:field="*{fundRepairNotHabitable}"
+                               th:value="${propertyTypeEditBindingModel.getFundRepairNotHabitable()}"
+                               type="text">
                     </fieldset>
                     <fieldset>
-                        <button type="submit" id="form-submit"
-                                class="orange-button">Submit
+                        <button class="orange-button" id="form-submit"
+                                type="submit">Submit
                         </button>
                         <a th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
                             <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel</button>

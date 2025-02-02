@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security' xmlns="http://www.w3.org/1999/html">
+      xmlns="http://www.w3.org/1999/html"
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,17 +14,25 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -54,11 +62,11 @@
                     th:text="'1 ново съобщение'"></h3>
                 <h3 th:if="${@messageRepository.countUnreadMessages(loggedUser.getId()) > 1}"
                     th:text="${@messageRepository.countUnreadMessages(loggedUser.getId())} + ' нови съобщения'"></h3>
-                <div th:if="${messageError}" class="err-msg">
+                <div class="err-msg" th:if="${messageError}">
                     <h5 class="text-light">Съобщението не е изпратено!</h5>
                     <p class="text-light">Дължината на съобщението не може да бъде повече от 2000 символа!</p>
                 </div>
-                <div th:if="${messageSent}" class="success-msg">
+                <div class="success-msg" th:if="${messageSent}">
                     <h5 class="text-light">Съобщението е изпратено!</h5>
                 </div>
                 <h4 class="text-light"><i class="fa-solid fa-envelope"></i></h4>
@@ -90,50 +98,52 @@
             </ul>
         </div>
         <!-- ***** Messages ***** -->
-        <p class="text-center" th:if="${@messageRepository.countNotArchivedMessages(loggedUser.getId()) == 0}"> Нямате съобщения</p>
+        <p class="text-center" th:if="${@messageRepository.countNotArchivedMessages(loggedUser.getId()) == 0}"> Нямате
+            съобщения</p>
         <section th:if="${@messageRepository.countNotArchivedMessages(loggedUser.getId()) > 0}">
 
             <!--READ ALL, ARCHIVE ALL BUTTONS START-->
             <div class="mass-message-control-buttons row" style="margin-bottom: 30px">
                 <div class="col-lg-2">
-                    <form th:action="@{/messages/read/all/{id}(id=${loggedUser.getId()})}"
-                          method="POST">
-                        <button type="submit" class="form-control text-bg-dark">Маркирай всички като прочетени</button>
+                    <form method="POST"
+                          th:action="@{/messages/read/all/{id}(id=${loggedUser.getId()})}">
+                        <button class="form-control text-bg-dark" type="submit">Маркирай всички като прочетени</button>
                     </form>
                 </div>
                 <div class="col-lg-2">
-                    <form th:action="@{/messages/archive/all/{id}(id=${loggedUser.getId()})}"
-                          method="POST">
-                        <button type="submit" class="form-control text-bg-dark">Архивиране на всички съобщения</button>
+                    <form method="POST"
+                          th:action="@{/messages/archive/all/{id}(id=${loggedUser.getId()})}">
+                        <button class="form-control text-bg-dark" type="submit">Архивиране на всички съобщения</button>
                     </form>
                 </div>
             </div>
 
             <!--MESSAGE container-->
-            <div th:each="message: ${@messageRepository.findNotArchivedMessagesByUserId(loggedUser.getId())}"
-                 class="row">
+            <div class="row"
+                 th:each="message: ${@messageRepository.findNotArchivedMessagesByUserId(loggedUser.getId())}">
 
                 <div class="message-container row">
                     <!--MESSAGE BODY-->
                     <div class="message-body col-lg-10">
                         <div class="form-control" style="margin: 25px 0">
                             <div class="message-content">
-                                <p th:if="${message.getSender()} != null" class="text-secondary"
+                                <p class="text-secondary" th:if="${message.getSender()} != null"
                                    th:text="'Подател: ' + ${message.getSender().getFirstName()} + ' ' + ${message.getSender().getLastName()}"></p>
-                                <div th:if="${message.getSender()} != null" class="user-avatar-medium">
-                                    <img th:if="${message.getSender().getAvatarPath() != null}"
-                                         th:src="@{${message.getSender().getAvatarPath()}}" alt="Avatar">
+                                <div class="user-avatar-medium" th:if="${message.getSender()} != null">
+                                    <img alt="Avatar"
+                                         th:if="${message.getSender().getAvatarPath() != null}" th:src="@{${message.getSender().getAvatarPath()}}">
                                 </div>
                                 <p class="text-secondary"
                                    th:text="'Получено на : ' + ${#temporals.format(message.getDate(), 'dd.MM.yyyy')} + 'г. ' + ${message.getTime()} + 'ч.'"></p>
 
 
-                                <i th:if="${message.isRead()}" class="fa-regular fa-envelope-open"></i>
-                                <i th:unless="${message.isRead()}" class="fa-solid fa-envelope"></i>
+                                <i class="fa-regular fa-envelope-open" th:if="${message.isRead()}"></i>
+                                <i class="fa-solid fa-envelope" th:unless="${message.isRead()}"></i>
                                 <hr>
 
                                 <p th:if="${message.isRead()}" th:text="${message.getText()}"></p>
-                                <p th:unless="${message.isRead()}" th:text="${message.getText()}" style="font-weight: 700"></p>
+                                <p style="font-weight: 700" th:text="${message.getText()}"
+                                   th:unless="${message.isRead()}"></p>
                             </div>
                             <div th:if="${message.getSender() != null}">
                                 <form th:action="@{/messages/send/{id} (id=${message.getId()})}"
@@ -155,17 +165,17 @@
 
 
                                     <div class="row" style="padding: 20px">
-                                        <label for="messageText" class="hidden"></label>
-                                        <textarea class="col-lg-10" id="messageText"
-                                                  required type="text"
-                                                  autocomplete="off"
+                                        <label class="hidden" for="messageText"></label>
+                                        <textarea autocomplete="off" class="col-lg-10"
+                                                  id="messageText" required
+                                                  th:errorclass="bg-danger"
                                                   th:field="*{message}"
                                                   th:placeholder="'Отговори на ' + ${message.getSender().getFirstName()}"
-                                                  th:errorclass="bg-danger">
+                                                  type="text">
                                     </textarea>
                                         <div class="col-lg-2" style="padding-top: 10px">
-                                            <button type="submit"
-                                                    class="form-control text-bg-success">
+                                            <button class="form-control text-bg-success"
+                                                    type="submit">
                                                 <small><i class="fa-solid fa-reply"></i> Отговори</small>
                                             </button>
                                         </div>
@@ -176,14 +186,14 @@
                     </div>
                     <!--MESSAGE SIDE-BUTTONS-->
                     <div class="single-message-control-buttons col-lg-2" style="margin: 25px 0">
-                        <form th:unless="${message.isRead()}"
-                              th:action="@{/messages/read/{id}(id=${message.getId()})}"
-                              method="POST" style="margin-bottom: 15px">
-                            <button type="submit" class="form-control">Прочетено</button>
+                        <form method="POST"
+                              style="margin-bottom: 15px"
+                              th:action="@{/messages/read/{id}(id=${message.getId()})}" th:unless="${message.isRead()}">
+                            <button class="form-control" type="submit">Прочетено</button>
                         </form>
-                        <form th:action="@{/messages/archive/{id}(id=${message.getId()})}"
-                              method="POST">
-                            <button type="submit" class="form-control text-danger-emphasis">Архивирай</button>
+                        <form method="POST"
+                              th:action="@{/messages/archive/{id}(id=${message.getId()})}">
+                            <button class="form-control text-danger-emphasis" type="submit">Архивирай</button>
                         </form>
                     </div>
                 </div>

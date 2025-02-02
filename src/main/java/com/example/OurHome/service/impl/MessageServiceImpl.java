@@ -4,6 +4,7 @@ import com.example.OurHome.model.Entity.Message;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
+import com.example.OurHome.model.dto.BindingModels.ReportBug.ReportBugBindingModel;
 import com.example.OurHome.repo.MessageRepository;
 import com.example.OurHome.service.MessageService;
 import org.springframework.stereotype.Service;
@@ -417,8 +418,6 @@ public class MessageServiceImpl implements MessageService {
                         false,
                         false));
     }
-
-
 
     @Override
     public Message findMessageById(Long id) {

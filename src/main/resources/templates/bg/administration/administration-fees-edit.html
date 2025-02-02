@@ -19,6 +19,14 @@
     <link href="/css/navbar.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
 </head>
 
 <body>
@@ -48,7 +56,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Modify Monthly fees</h3>
+            <h3>МЕСЕЧНИ ТАКСИ</h3>
             <div class="col-lg-12">
                 <span th:text="'Идентификатор на ЕС: ' + ${residentialEntity.getId()}"></span>
             </div>
@@ -68,29 +76,26 @@
                     <a class="button nav-link"
                        th:href="@{/administration/fees/{id}(id=${residentialEntity.getId()})}">
                         <div class="text-center"><i class="fa-solid fa-hand-holding-dollar"></i>
-                            <span>Fees by property</span>
+                            <span>Дължими суми по имоти</span>
                         </div>
                     </a>
                     <a class="button nav-link active"
                        href=#re-fees>
-                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Condominium fees</span>
+                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Ставки на етажна собственост</span>
                         </div>
                     </a>
                     <a class="button nav-link"
                        th:href="@{/administration/fees/bank-details/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-landmark"></i> <span>Bank details</span></div>
+                        <div class="text-center"><i class="fa-solid fa-landmark"></i> <span>Банкови данни</span></div>
                     </a>
                 </div>
                 <div class="bottom-rounded" style="margin-top: 25px">
                     <div class="text-center" id="re-fees">
-                        <h4 class="text-danger">MODIFY Condominium FEES</h4>
-                        <p style="padding-bottom: 40px">This section contains data about the accepted by the
-                            Condominium
-                            monthly
-                            fee policy.<br>
-                            Monthly fees will be automatically calculated according to the values in the listed
-                            fields.<br>
-                            Changes will take effect immediately after change.</p>
+                        <h4 class="text-danger">Параметризация на ставки</h4>
+                        <hr>
+                        <p style="padding-bottom: 40px">В тази секция ще откриете информация за ставките на дигиталната етажна собственост.<br>
+                            Автоматичните месечни такси по имоти се изчисляват въз основа на ставките приети от общото събрание на етажната собственост.<br>
+                            Промените в ставките ще окажат влияние на месечните такси за следващ отчетен период.</p>
                     </div>
                     <form id="input-form" style="margin: 0; padding: 0"
                           th:action="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}"
@@ -100,14 +105,12 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="info-table" style="margin-left: 0">
-                                    <h5 class="text-danger text-center" id="post-nav">FUND
-                                        "MANAGEMENT & MAINTENANCE"</h5>
+                                    <h5 class="text-danger text-center" id="post-nav">Фонд "Етажна собственост"</h5>
                                     <ul class="fee-table">
-                                        <li class="text-black"><b>1.</b> Fixed property fee
-                                            <p class="text-secondary">Monthly fee applied to
-                                                every single property.</p>
-                                            <div class="text-black inline"><b>A.</b>
-                                                habitable property:
+                                        <li class="text-black"><b>1.</b> Фиксирана такса
+
+                                            <div class="text-black inline"><b>А.</b>
+                                                Обитаем имот:
                                                 <fieldset>
                                                     <p class="text-danger"
                                                        th:errors="*{fixedFeeHabitable}"
@@ -115,7 +118,7 @@
                                                         error message</p>
                                                     <input autocomplete="on" class="form-control-sm"
                                                            id="fixedFeeHabitable"
-                                                           placeholder="Enter fee..."
+                                                           placeholder="Въведете сума..."
                                                            required
                                                            step="any" th:errorclass="bg-danger"
                                                            th:field="*{fixedFeeHabitable}"
@@ -125,8 +128,8 @@
                                                            for="fixedFeeHabitable"></label>
                                                 </fieldset>
                                             </div>
-                                            <div class="text-black inline"><b>B.</b>
-                                                non-habitable property:
+                                            <div class="text-black inline"><b>Б.</b>
+                                                Необитаем имот:
                                                 <fieldset>
                                                     <p class="text-danger"
                                                        th:errors="*{fixedFeeNonHabitable}"
@@ -134,7 +137,7 @@
                                                         error message</p>
                                                     <input autocomplete="on" class="form-control-sm"
                                                            id="fixedFeeNonHabitable"
-                                                           placeholder="Enter fee..."
+                                                           placeholder="Въведете сума..."
                                                            required
                                                            step="any" th:errorclass="bg-danger"
                                                            th:field="*{fixedFeeNonHabitable}"
@@ -144,12 +147,12 @@
                                                            for="fixedFeeNonHabitable"></label>
                                                 </fieldset>
                                             </div>
+                                            <p class="text-secondary">Твърда такса, която се начислява на всеки имот от етажната собственост.</p>
                                             <p class="text-secondary"><i
                                                     class="fa-solid fa-house"></i><small>
-                                                applies per
-                                                property</small></p>
+                                                прилага се към имота</small></p>
                                         </li>
-                                        <li class="text-black"><b>2.</b> Adult fee:
+                                        <li class="text-black"><b>2.</b> Такса възрастен:
                                             <fieldset>
                                                 <p class="text-danger"
                                                    th:errors="*{adultFee}"
@@ -157,7 +160,7 @@
                                                     error message</p>
                                                 <input autocomplete="on" class="form-control-sm"
                                                        id="adultFee"
-                                                       placeholder="Enter fee..."
+                                                       placeholder="Въведете сума..."
                                                        required
                                                        step="any" th:errorclass="bg-danger"
                                                        th:field="*{adultFee}"
@@ -166,14 +169,12 @@
                                                 <label class="text-secondary"
                                                        for="adultFee"></label>
                                             </fieldset>
-                                            <p class="text-secondary">Monthly fee for each
-                                                adult person living in the property.</p>
+                                            <p class="text-secondary">Такса възрастен според приетите от ОС такси. Начислява се на бр. възрастни обитаващи самостоятелния обект.</p>
                                             <p class="text-secondary"><i
                                                     class="fa-solid fa-person"></i><small>
-                                                applies per
-                                                adult</small></p>
+                                                прилага се спрямо брой възрастни обитаващи имота</small></p>
                                         </li>
-                                        <li class="text-black"><b>3.</b> Child fee:
+                                        <li class="text-black"><b>3.</b> Такса дете:
                                             <fieldset>
                                                 <p class="text-danger"
                                                    th:errors="*{childFee}"
@@ -190,14 +191,13 @@
                                                 <label class="text-secondary"
                                                        for="childFee"></label>
                                             </fieldset>
-                                            <p class="text-secondary">Monthly fee for each
-                                                child living in the property.</p>
+                                            <p class="text-secondary">Такса дете според приетите от ОС такси. Начислява се на бр. деца обитаващи самостоятелния обект.</p>
                                             <p class="text-secondary"><i
                                                     class="fa-solid fa-child"></i><small>
-                                                applies per child</small>
+                                                прилага се спрямо брой деца обитаващи имота</small>
                                             </p>
                                         </li>
-                                        <li class="text-black"><b>4.</b> Pet fee:
+                                        <li class="text-black"><b>4.</b> Такса дом. любимец:
                                             <fieldset>
                                                 <p class="text-danger"
                                                    th:errors="*{petFee}"
@@ -205,7 +205,7 @@
                                                     message</p>
                                                 <input autocomplete="on" class="form-control-sm"
                                                        id="petFee"
-                                                       placeholder="Enter fee..."
+                                                       placeholder="Въведете сума..."
                                                        required
                                                        step="any" th:errorclass="bg-danger"
                                                        th:field="*{petFee}"
@@ -214,17 +214,15 @@
                                                 <label class="text-secondary"
                                                        for="petFee"></label>
                                             </fieldset>
-                                            <p class="text-secondary">Monthly fee for a pet
-                                                living in the property.</p>
+                                            <p class="text-secondary">Такса домашен любимец според приетите от ОС такси. Начислява се на бр. домашни любимци обитаващи самостоятелния обект</p>
                                             <p class="text-secondary"><i
                                                     class="fa-solid fa-dog"></i><small>
-                                                applies per pet</small></p>
+                                                прилага се спрямо брой дом. любимци обитаващи имота</small></p>
                                         </li>
-                                        <li class="text-black"><b>5.</b> Custom property fee
-                                            <p class="text-secondary">Custom fee applied to
-                                                every single property.</p>
-                                            <div class="text-black inline"><b>A.</b>
-                                                habitable property:
+                                        <li class="text-black"><b>5.</b> Допълнителна такса
+                                            <p class="text-secondary">Допълнителна такса определена от ОС на ЕС.</p>
+                                            <div class="text-black inline"><b>А.</b>
+                                                Обитаем имот:
                                                 <fieldset>
                                                     <p class="text-danger"
                                                        th:errors="*{additionalFeeHabitable}"
@@ -232,7 +230,7 @@
                                                         fee error message</p>
                                                     <input autocomplete="on" class="form-control-sm"
                                                            id="additionalFeeHabitable"
-                                                           placeholder="Enter fee..."
+                                                           placeholder="Въведете сума..."
                                                            required
                                                            step="any" th:errorclass="bg-danger"
                                                            th:field="*{additionalFeeHabitable}"
@@ -242,8 +240,8 @@
                                                            for="additionalFeeHabitable"></label>
                                                 </fieldset>
                                             </div>
-                                            <div class="text-black inline"><b>B.</b>
-                                                non-habitable property:
+                                            <div class="text-black inline"><b>Б.</b>
+                                                Необитаем имот:
                                                 <fieldset>
                                                     <p class="text-danger"
                                                        th:errors="*{additionalFeeNonHabitable}"
@@ -252,39 +250,27 @@
                                                         error message</p>
                                                     <input autocomplete="on" class="form-control-sm"
                                                            id="additionalFeeNonHabitable"
-                                                           placeholder="Enter fee..."
+                                                           placeholder="Въведете сума..."
                                                            required
                                                            step="any" th:errorclass="bg-danger"
                                                            th:field="*{additionalFeeNonHabitable}"
                                                            th:value="${feeEditBindingModel.getAdditionalFeeNonHabitable()}"
                                                            type="number">
                                                     <label class="text-secondary"
-                                                           for="additionalFeeNonHabitable">Other
-                                                        Condominium fee applied for
-                                                        every property.</label>
+                                                           for="additionalFeeNonHabitable"></label>
                                                 </fieldset>
                                             </div>
+                                            <p class="text-secondary">Възможност за дефиниране на допълнителна такса за всички самостоятелни единици в етажната собственост. Например целево събиране на средства или др.</p>
+
                                             <p class="text-secondary"><i
                                                     class="fa-solid fa-house"></i><small>
-                                                applies per
-                                                property</small></p>
+                                                прилага се към имота</small></p>
                                         </li>
                                         <li class="text-danger"><i
-                                                class="fa-solid fa-info-circle"></i> Forming
-                                            an individual property fee:
-                                            <p class="text-secondary">Fund "Management and
-                                                maintenance" is a fund that covers monthly
-                                                expenses of the Condominium.
-                                                This fund is usually formed by monthly fees
-                                                of both habitable and non-habitable
-                                                properties.
-                                                <br>Every Condominium defines its own
-                                                fee policy. In this section you can define
-                                                the fee components
-                                                according to your Condominium fee
-                                                policy. Set fees will automatically apply to
-                                                all individual properties in this
-                                                Condominium.
+                                                class="fa-solid fa-info-circle"></i> Формиране на месечна такса по имот:
+                                            <p class="text-secondary">Фонт "Етажна собственост" е предназначен да покрива месечните разходи на етажната собственост.</p>
+                                            <p class="text-secondary">Всяка етажна собственост определя своите месечни такси според приетите на общо събрание правила и ставки.</p>
+                                            <p class="text-secondary">Дефинирането на ставки по отделните пера Ви дава възможност за автоматично калкулиране и начисляване на месечни такси по самостоятелните единици.
                                             </p>
                                         </li>
                                     </ul>
@@ -292,15 +278,14 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="info-table">
-                                    <h5 class="text-danger text-center">FUND "REPAIR" <i
+                                    <h5 class="text-danger text-center">Фонд "Ремонт" <i
                                             class="fa-solid fa-screwdriver-wrench"></i></h5>
                                     <ul class="fee-table">
-                                        <li class="text-black"><b>6.</b> Fixed 'Fund Repaid' fee
-                                            <p class="text-secondary">Monthly fee applied to every property with
-                                                no custom property type set.</p>
+                                        <li class="text-black"><b>6.</b> Фиксирана такса
+                                            <p class="text-secondary">Прилага се за всички самостоятелни единици без дефинирана категория!</p>
                                             <div class="frame">
-                                                <div class="text-black inline"><b>A.</b>
-                                                    habitable property:
+                                                <div class="text-black inline"><b>А.</b>
+                                                    Обитаем имот:
                                                     <fieldset>
                                                         <p class="text-danger"
                                                            th:errors="*{fundRepairHabitable}"
@@ -308,7 +293,7 @@
                                                             error message</p>
                                                         <input autocomplete="on" class="form-control-sm"
                                                                id="fundRepairHabitable"
-                                                               placeholder="Enter fee..."
+                                                               placeholder="Въведете сума..."
                                                                required
                                                                step="any" th:errorclass="bg-danger"
                                                                th:field="*{fundRepairHabitable}"
@@ -318,8 +303,8 @@
                                                                for="fundRepairHabitable"></label>
                                                     </fieldset>
                                                 </div>
-                                                <div class="text-black inline"><b>B.</b>
-                                                    non-habitable property:
+                                                <div class="text-black inline"><b>Б.</b>
+                                                    Необитаем имот:
                                                     <fieldset>
                                                         <p class="text-danger"
                                                            th:errors="*{fundRepairNonHabitable}"
@@ -328,7 +313,7 @@
                                                             error message</p>
                                                         <input autocomplete="on" class="form-control-sm"
                                                                id="fundRepairNonHabitable"
-                                                               placeholder="Enter fee..."
+                                                               placeholder="Въведете сума..."
                                                                required
                                                                step="any" th:errorclass="bg-danger"
                                                                th:field="*{fundRepairNonHabitable}"
@@ -342,33 +327,32 @@
                                             </div>
                                             <p class="text-secondary"><i
                                                     class="fa-solid fa-house"></i><small>
-                                                applies per property</small></p>
+                                                прилага се към имота</small></p>
                                         </li>
                                         <li class="text-black"
                                             th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
-                                            <b>7.</b> 'Fund Repair' fee by property type
-                                            <p class="text-secondary">'Fund Repair' fee applied according to the
-                                                property type set.</p>
+                                            <b>7.</b> Фиксирана такса според категорията на имота
+                                            <p class="text-secondary">Прилага се според дефинираните ставки по категория на самостоятелния обект</p>
                                             <div class="frame">
                                                 <div class="text-black inline"
                                                      th:each="propertyType: ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}">
                                                     <p>
                                                         <i class="fa-solid fa-city"></i>
                                                         <b th:text="${propertyType.getDescription()} + ', '"></b>
-                                                        <b th:text="${propertyType.getTotalFlatSpace()} + 'm2'"></b>
-                                                        <b style="padding-left: 5px" title="Edit fee"><a
+                                                        <b th:text="${propertyType.getTotalFlatSpace()} + ' кв. м.'"></b>
+                                                        <b style="padding-left: 5px" title="Промени"><a
                                                                 th:href="@{/administration/property/types/redirect/edit/{id}(id=${propertyType.getId()})}"><i
                                                                 class="fa-solid fa-edit"></i></a></b>
                                                     </p>
 
                                                     <div class="section" style="padding: 3px 15px">
-                                                        <p><b>A.</b> habitable property</p>
+                                                        <p><b>А.</b> Обитаем имот</p>
                                                         <div class="info-box">
                                                             <i th:text="${propertyType.getFundRepairHabitable()} + ' лв.'"></i>
                                                         </div>
                                                     </div>
                                                     <div class="section" style="padding: 3px 15px">
-                                                        <p><b>B.</b> non-habitable property</p>
+                                                        <p><b>Б.</b> Необитаем имот</p>
                                                         <div class="info-box">
                                                             <i th:text="${propertyType.getFundRepairNotHabitable()} + ' лв.'"></i>
                                                         </div>
@@ -376,45 +360,29 @@
                                                 </div>
                                             </div>
                                             <p class="text-secondary"><i class="fa-solid fa-house"></i><small>
-                                                applies
-                                                per property type</small></p>
+                                                прилага се към имота</small></p>
 
                                         </li>
                                         <li class="text-danger"><i
                                                 class="fa-solid fa-info-circle"></i>
-                                            Applying monthly fees
-                                            changes:
-                                            <p class="text-secondary">Changes to
-                                                Condominium fee policy will
-                                                affect
-                                                next month property fees. <br>Fees will
-                                                be automatically calculated according to
-                                                the new values.
-                                                <br>Total monthly fee is calculated as
-                                                follows :
-                                                <br> <b>I. FUND "MANAGEMENT &
-                                                    MAINTENANCE" </b>
-                                                <br>For habitable property -
-                                                1A+2+3+4+5A
-                                                <br>For non-habitable property -
-                                                1B+5B
-
-                                                <br> <b>II. FUND "REPAIR" </b>
-                                                <br>For habitable property - 6A <b>OR</b> 7A (if set)
-                                                <br>For non-habitable property - 6B <b>OR</b> 7B (if set)
-                                            </p>
+                                            Формиране на месечни такси:
+                                            <p class="text-secondary">Промени по месечните ставки ще окажат влияние при формирането на месечни такси по самостоятелни единици за бъдещи периоди.</p>
+                                            <br>
+                                            <p class="text-secondary">Месечните такси се формират както следва:</p>
+                                            <p class="text-secondary"><b>I. Фонд "Етажна собственост"</b></p>
+                                            <p class="text-secondary">За обитаем имот - 1А+2+3+4+5А</p>
+                                            <p class="text-secondary">За необитаем имот - 1Б+5Б</p>
+                                            <p class="text-secondary"><b>II. Фонд "Ремонт" </b></p>
+                                            <p class="text-secondary">За обитаем имот - 6A <b>или</b> 7A (ако е избрана категория)</p>
+                                            <p class="text-secondary">За необитаем имот - 6Б <b>или</b> 7Б (ако е избрана категория)</p>
                                         </li>
-
-
                                     </ul>
-
-
                                     <div class="col-lg-12">
                                         <fieldset>
                                             <hr>
                                             <button class="form-control text-bg-danger" id="form-submit"
                                                     type="submit">
-                                                <small>Save changes</small>
+                                                <small>Запази промените</small>
                                             </button>
                                         </fieldset>
                                     </div>

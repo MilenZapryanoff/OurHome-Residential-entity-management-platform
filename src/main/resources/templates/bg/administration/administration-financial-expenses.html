@@ -20,6 +20,14 @@
     <link href="/css/navbar.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
 </head>
 
 <body>
@@ -81,7 +89,8 @@
                 <!--Expenses search heading-->
                 <div class="text-center" style="margin: 50px auto">
                     <h6 class="text-dark">Достъп до информацията</h6>
-                    <p>Разрешаване на достъпа до отчетите за разходи за всични собственици/ползватели на самостиятелни единици (имоти) в дигиталната етажна собственост</p>
+                    <p>Разрешаване на достъпа до отчетите за разходи за всични собственици/ползватели на самостиятелни
+                        единици (имоти) в дигиталната етажна собственост</p>
                     <br>
                     <form method="POST"
                           th:action="@{/administration/financial/expenses/changeExpensesVisibility/{id}(id=${residentialEntity.getId()})}">
@@ -95,11 +104,13 @@
                             </label>
                         </fieldset>
                     </form>
-                    <p th:if="${residentialEntity.isExpensesVisible()}" class="text-success-emphasis">Достъпът е разрешен!</p>
-                    <p th:if="${!residentialEntity.isExpensesVisible()}" class="text-danger-emphasis">Достъпът е забранен!</p>
+                    <p class="text-success-emphasis" th:if="${residentialEntity.isExpensesVisible()}">Достъпът е
+                        разрешен!</p>
+                    <p class="text-danger-emphasis" th:if="${!residentialEntity.isExpensesVisible()}">Достъпът е
+                        забранен!</p>
                 </div>
                 <div class="row" style="justify-content: space-around">
-                    <div class="info-table col-lg-12">
+                    <div class="info-table col-lg-11">
                         <h4 class="text-center text-danger">Търсене</h4>
                         <div class="col-10 text-center" id="filter" style="margin: 70px auto">
                             <div id="input-form">
@@ -158,13 +169,13 @@
                         <div class="administration" id="expenses">
 
                             <!--Expenses list section-->
-                            <div class="main-content"><span style="padding: 1px 5px; border-radius: 5px"
-                                    class="category text-bg-danger"
-                                    th:if="${expenseFilterBindingModel.getExpenseList().size()} == 0">0 записа</span>
-                                <span style="padding: 1px 5px; border-radius: 5px" class="category text-bg-success"
+                            <div class="main-content"><span class="category text-bg-danger"
+                                                            style="padding: 1px 5px; border-radius: 5px"
+                                                            th:if="${expenseFilterBindingModel.getExpenseList().size()} == 0">0 записа</span>
+                                <span class="category text-bg-success" style="padding: 1px 5px; border-radius: 5px"
                                       th:if="${expenseFilterBindingModel.getExpenseList().size()} == 1"
                                       th:text="${expenseFilterBindingModel.getExpenseList().size()} + ' запис'"></span>
-                                <span style="padding: 1px 5px; border-radius: 5px" class="category text-bg-success"
+                                <span class="category text-bg-success" style="padding: 1px 5px; border-radius: 5px"
                                       th:if="${expenseFilterBindingModel.getExpenseList().size()} > 1"
                                       th:text="${expenseFilterBindingModel.getExpenseList().size()} + ' записа'"></span>
                             </div>

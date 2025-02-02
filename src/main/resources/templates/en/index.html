@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,17 +14,25 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -40,30 +48,30 @@
 <div class="sub-header">
     <div class="container">
         <div class="header-container">
-            <form id="langSelector" th:method="post" th:action="@{/setLanguage}" style="padding-right: 15px">
+            <form id="langSelector" style="padding-right: 15px" th:action="@{/setLanguage}" th:method="post">
                 <div id="dropdown">
-                    <img src="/images/en-flag.png" alt="English" title="English">
+                    <img alt="English" src="/images/en-flag.png" title="English">
                 </div>
                 <ul id="dropdown-menu">
-                    <li style="padding: 5px; cursor: pointer;" onclick="selectLanguage('bg')">
-                        <img src="/images/bg-flag.png" alt="Bulgarian" title="Bulgarian">
+                    <li onclick="selectLanguage('bg')" style="padding: 5px; cursor: pointer;">
+                        <img alt="Bulgarian" src="/images/bg-flag.png" title="Bulgarian">
                         <small class="text-danger-emphasis">Български</small>
                     </li>
-                    <li style="padding: 5px; cursor: pointer;" onclick="selectLanguage('en')">
-                        <img src="/images/en-flag.png" alt="English" title="English">
+                    <li onclick="selectLanguage('en')" style="padding: 5px; cursor: pointer;">
+                        <img alt="English" src="/images/en-flag.png" title="English">
                         <small>English</small>
                     </li>
                 </ul>
-                <input type="hidden" name="lang" id="selected-lang">
+                <input id="selected-lang" name="lang" type="hidden">
             </form>
             <th:block sec:authorize="isAuthenticated()">
                 <div class="avatar">
                     <button type="button">
                         <a th:href="@{/profile}">
-                            <img th:if="${loggedUser.avatarPath != null}"
-                                 th:src="@{${loggedUser.avatarPath}}" alt="Avatar">
-                            <img th:unless="${loggedUser.avatarPath != null}"
-                                 src="/avatars/default.jpg" alt="Default Avatar">
+                            <img alt="Avatar"
+                                 th:if="${loggedUser.avatarPath != null}" th:src="@{${loggedUser.avatarPath}}">
+                            <img alt="Default Avatar"
+                                 src="/avatars/default.jpg" th:unless="${loggedUser.avatarPath != null}">
                         </a>
                     </button>
                 </div>
@@ -116,14 +124,20 @@
     <div class="about-us">
         <div class="col-lg-8">
             <hr>
-            <p><b>Our</b><b class="text-danger">Home</b> is a digital platform designed to assist current and future building managers who have chosen the platform as their primary helper! </p>
+            <p><b>Our</b><b class="text-danger">Home</b> is a digital platform designed to assist current and future
+                building managers who have chosen the platform as their primary helper! </p>
             <p>OurHome is not a building manager but its closest friend!</p>
             <br>
-            <p>All our efforts are focused on providing completely free and accessible tools to simplify the work of every building manager, regardless of their level of experience.</p>
+            <p>All our efforts are focused on providing completely free and accessible tools to simplify the work of
+                every building manager, regardless of their level of experience.</p>
             <br>
-            <p>To achieve this, we have developed numerous features and options for individual customization of each digital condominium. These tools make managing processes within your building easier and more efficient.</p>
+            <p>To achieve this, we have developed numerous features and options for individual customization of each
+                digital condominium. These tools make managing processes within your building easier and more
+                efficient.</p>
             <br>
-            <p>The platform is intended for all building managers and property owners. Through it, every property owner can quickly and easily check all important matters in the building, including due fees, events, reports of irregularities, and more. </p>
+            <p>The platform is intended for all building managers and property owners. Through it, every property owner
+                can quickly and easily check all important matters in the building, including due fees, events, reports
+                of irregularities, and more. </p>
 
         </div>
     </div>
@@ -186,7 +200,8 @@
                      data-bs-parent="#accordionExample"
                      id="collapseOne">
                     <div class="accordion-body text-dark">
-                        <p>OurHome is designed for both building managers and property owners or residents in a condominium!</p>
+                        <p>OurHome is designed for both building managers and property owners or residents in a
+                            condominium!</p>
                     </div>
                 </div>
             </div>
@@ -204,7 +219,8 @@
                     <div class="accordion-body">
                         <b>Nothing!</b>
                         <p>Using the platform is completely free and open for all users who trust us!</p>
-                        <p>We strive to maintain this concept over time to provide services that enhance condominium management processes.</p>
+                        <p>We strive to maintain this concept over time to provide services that enhance condominium
+                            management processes.</p>
                     </div>
                 </div>
             </div>
@@ -221,7 +237,8 @@
                      id="collapseThree">
                     <div class="accordion-body">
                         <p>No! OurHome is not a professional building manager or any form of condominium management!</p>
-                        <p>The primary goal of the platform is to become the main assistant for every current and future building manager in managing condominium processes through its features.</p>
+                        <p>The primary goal of the platform is to become the main assistant for every current and future
+                            building manager in managing condominium processes through its features.</p>
                     </div>
                 </div>
             </div>
@@ -236,9 +253,12 @@
                 <div aria-labelledby="headingFour" class="accordion-collapse collapse"
                      data-bs-parent="#FAQAccordion" id="collapseFour">
                     <div class="accordion-body">
-                        <p>To create a digital condominium (DC), the building manager must register their condominium in the platform.</p>
-                        <p>After successfully registering the DC, you will gain access to the features we've developed to help you manage your condominium.</p>
-                        <p>After completing the initial setup and configurations, you can invite property owners/users in your condominium to register in the system.</p>
+                        <p>To create a digital condominium (DC), the building manager must register their condominium in
+                            the platform.</p>
+                        <p>After successfully registering the DC, you will gain access to the features we've developed
+                            to help you manage your condominium.</p>
+                        <p>After completing the initial setup and configurations, you can invite property owners/users
+                            in your condominium to register in the system.</p>
                     </div>
                 </div>
             </div>
@@ -253,9 +273,12 @@
                 <div aria-labelledby="headingFive" class="accordion-collapse collapse"
                      data-bs-parent="#FAQAccordion" id="collapseFive">
                     <div class="accordion-body">
-                        <p>To register as a property owner/user in the platform, a registered digital condominium is required.</p>
-                        <p>If your condominium is already registered, you should have received the necessary details from your building manager to start your registration as a property owner/user.</p>
-                        <p>If you do not have a digital condominium identifier and access code, we recommend contacting your building manager to obtain them.</p>
+                        <p>To register as a property owner/user in the platform, a registered digital condominium is
+                            required.</p>
+                        <p>If your condominium is already registered, you should have received the necessary details
+                            from your building manager to start your registration as a property owner/user.</p>
+                        <p>If you do not have a digital condominium identifier and access code, we recommend contacting
+                            your building manager to obtain them.</p>
                     </div>
                 </div>
             </div>
@@ -314,21 +337,21 @@
         <div class="row">
             <div class="col-lg-7">
                 <div id="map">
-                    <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA4dMp6ervBxmwa9av_R4vRj-RhYx22TGg&q=Software University,Sofia,Bulgaria"
-                            width="100%" height="350px"
+                    <iframe allowfullscreen=""
+                            height="350px" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA4dMp6ervBxmwa9av_R4vRj-RhYx22TGg&q=Software University,Sofia,Bulgaria"
                             style="border:0; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);"
-                            allowfullscreen=""></iframe>
+                            width="100%"></iframe>
                 </div>
                 <div class="row">
                     <div class="col-lg-5">
                         <div class="item phone">
-                            <img src="/images/phone-icon.png" style="max-width: 30px;" alt="Phone:">
+                            <img alt="Phone:" src="/images/phone-icon.png" style="max-width: 30px;">
                             <p><b>0886 277 333</b><br><span>Phone Number</span></p>
                         </div>
                     </div>
                     <div class="col-lg-7">
                         <div class="item email">
-                            <img src="/images/email-icon.png" alt="" style="max-width: 30px;">
+                            <img alt="" src="/images/email-icon.png" style="max-width: 30px;">
                             <p><b>office.ourhome@gmail.com</b><br><span>Business Email</span></p>
                         </div>
                     </div>
@@ -338,7 +361,7 @@
                 <div id="input-form">
                     <div class="row">
                         <div class="col-lg-12">
-                            <a><img src="/images/OurMission.png" style="max-width: 200px;" alt="OurMission:"></a>
+                            <a><img alt="OurMission:" src="/images/OurMission.png" style="max-width: 200px;"></a>
                             <hr>
                             <p class="text-center"> OurHome is your gateway to seamless Condominium management.
                                 <br>Whether you're a

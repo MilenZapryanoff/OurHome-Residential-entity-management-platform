@@ -19,6 +19,12 @@
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 <body>
@@ -99,6 +105,17 @@
                             </li>
                             <li class="text-black">Домоуправител: <b
                                     th:text="${residentialEntity.getManager().getFirstName()} + ' ' + ${residentialEntity.getManager().getLastName()}"></b>
+                            </li>
+                            <li class="text-black">
+                                Имейл ЕС:
+                                <a th:href="'mailto:' + ${residentialEntity.getEmail()}"><b th:text="${residentialEntity.getEmail()}"></b>
+                                </a>
+                            </li>
+                            <li class="text-black">
+                                Facebook страница:
+                                <a th:if="${residentialEntity.getFacebookUrl().length()} > 1" th:href="${residentialEntity.getFacebookUrl()}" target="_blank" rel="noopener noreferrer">
+                                    <i class="fa-brands fa-facebook"></i>
+                                </a>
                             </li>
                             <li class="text-black">
                                 Код за достъп (hint):

@@ -1,0 +1,38 @@
+<!--Administration page BG Sub menus-->
+<div class="menu-bar">
+    <ul class="menu-bar__menu">
+        <li class="menu-bar__item">
+            <a th:href="@{/property}" class="menu-bar__link"><i class="fa-solid fa-reply"></i><span>Назад</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/property/summary/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/summary/')} ? 'text-danger' : ''" class="fa-solid fa-sliders"></i><span>Статус</span></a>
+        </li>
+        <li th:if="${property.isObtained()}" class="menu-bar__item">
+            <a th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/monthlyfees/')} ? 'text-danger' : ''" class="fa-solid fa-hand-holding-dollar"></i><span>Месечни такси</span></a>
+        </li>
+        <li th:unless="${property.isObtained()}" class="menu-bar__item" title="Неактивно меню">
+            <a href=# class="menu-bar__link"><i class="text-secondary fa-solid fa-hand-holding-dollar"></i><span class="text-bg-secondary">Месечни такси</span></a>
+        </li>
+        <li th:if="${property.isObtained()}" class="menu-bar__item">
+            <a th:href="@{/property/events/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/events/')} ? 'text-danger' : ''" class="fa-regular fa-calendar"></i><span>Събития</span></a>
+        </li>
+        <li th:unless="${property.isObtained()}" class="menu-bar__item" title="Неактивно меню">
+            <a href=# class="menu-bar__link"><i class="text-secondary fa-regular fa-calendar"></i><span class="text-bg-secondary">Събития</span></a>
+        </li>
+        <li th:if="${property.isObtained()}" class="menu-bar__item">
+            <a th:href="@{/property/reports/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/reports/')} ? 'text-danger' : ''" class="fa-solid fa-triangle-exclamation"></i><span>Сигнали</span></a>
+        </li>
+        <li th:unless="${property.isObtained()}" class="menu-bar__item" title="Неактивно меню">
+            <a href=# class="menu-bar__link"><i class="text-secondary fa-solid fa-triangle-exclamation"></i><span class="text-bg-secondary">Сигнали</span></a>
+        </li>
+        <li th:if="${property.isObtained()}" class="menu-bar__item">
+            <a th:href="@{/property/re/data/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/re/data/')} ? 'text-danger' : ''"  class="fa-solid fa-building"></i><span>Етажна собственост</span></a>
+        </li>
+        <li th:unless="${property.isObtained()}" class="menu-bar__item" title="Неактивно меню">
+            <a href=# class="menu-bar__link"><i class="text-secondary fa-solid fa-building"></i><span class="text-bg-secondary">Етажна собственост</span></a>
+        </li>
+        <li class="menu-bar__item">
+            <a th:href="@{/property/details/{id}(id=${property.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/property/details/')} ? 'text-danger' : ''" class="fa-solid fa-gear"></i><span>Настройки</span></a>
+        </li>
+    </ul>
+</div>

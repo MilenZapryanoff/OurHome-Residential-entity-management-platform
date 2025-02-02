@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,26 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +45,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -96,7 +103,7 @@
                 <!--Section-A-->
                 <div class="col-lg-6">
                     <div class="info-table">
-                        <h5 id="post-nav" class="text-danger text-center">FUND "MANAGEMENT & MAINTENANCE"</h5>
+                        <h5 class="text-danger text-center" id="post-nav">FUND "MANAGEMENT & MAINTENANCE"</h5>
                         <ul class="fee-table">
                             <li class="text-black"><b>1.</b> Fixed property fee
                                 <p class="text-secondary">Monthly fee applied to every single property.</p>
@@ -225,14 +232,14 @@
                                     property</small></p>
                             </li>
 
-                            <li th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}"
-                                class="text-black"><b>7.</b> 'Fund Repair' fee by property type
+                            <li class="text-black"
+                                th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}"><b>7.</b> 'Fund Repair' fee by property type
                                 <p class="text-secondary">'Fund Repair' fee applied according to the property type
                                     set.</p>
                                 <div class="frame">
 
-                                    <div th:each="propertyType: ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}"
-                                         class="text-black inline">
+                                    <div class="text-black inline"
+                                         th:each="propertyType: ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}">
                                         <i class="fa-solid fa-city"></i>
                                         <b th:text="${propertyType.getDescription()} + ', '"></b>
                                         <b th:text="${propertyType.getTotalFlatSpace()} + 'm2'"></b>
@@ -289,22 +296,22 @@
                         </ul>
                         <!--Modify/Set monthly fees button -->
                         <div class="modify-fee-button">
-                            <div th:if="${residentialEntity.getFee().getAdditionalFeeHabitable() == 0} and ${residentialEntity.getFee().getAdditionalFeeNonHabitable() == 0} and
+                            <div class="cancel-button text-center"
+                                 th:if="${residentialEntity.getFee().getAdditionalFeeHabitable() == 0} and ${residentialEntity.getFee().getAdditionalFeeNonHabitable() == 0} and
                                         ${residentialEntity.getFee().getAdultFee() == 0} and ${residentialEntity.getFee().getChildFee() == 0} and
                                         ${residentialEntity.getFee().getPetFee() == 0} and ${residentialEntity.getFee().getFixedFeeHabitable() == 0} and
                                         ${residentialEntity.getFee().getFixedFeeNonHabitable() == 0} and ${residentialEntity.getFee().getFundRepairHabitable() == 0} and
-                                        ${residentialEntity.getFee().getFundRepairNonHabitable() == 0}"
-                                 class="cancel-button text-center">
+                                        ${residentialEntity.getFee().getFundRepairNonHabitable() == 0}">
                                 <a class="form-control text-bg-danger"
                                    th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
                                     <p class="text-light">Set fees</p></a>
                             </div>
-                            <div th:if="${residentialEntity.getFee().getAdditionalFeeHabitable() > 0} or
+                            <div class="cancel-button text-center"
+                                 th:if="${residentialEntity.getFee().getAdditionalFeeHabitable() > 0} or
                                         ${residentialEntity.getFee().getAdditionalFeeNonHabitable() > 0} or ${residentialEntity.getFee().getAdultFee() > 0} or
                                         ${residentialEntity.getFee().getChildFee() > 0} or ${residentialEntity.getFee().getPetFee() > 0} or
                                         ${residentialEntity.getFee().getFixedFeeHabitable() > 0} or ${residentialEntity.getFee().getFixedFeeNonHabitable() > 0} or
-                                        ${residentialEntity.getFee().getFundRepairHabitable() > 0} or ${residentialEntity.getFee().getFundRepairNonHabitable() > 0}"
-                                 class="cancel-button text-center">
+                                        ${residentialEntity.getFee().getFundRepairHabitable() > 0} or ${residentialEntity.getFee().getFundRepairNonHabitable() > 0}">
                                 <a class="form-control text-bg-danger"
                                    th:href="@{/administration/fees/edit/{id}(id=${residentialEntity.getId()})}">
                                     <p class="text-light">Modify fees</p></a>

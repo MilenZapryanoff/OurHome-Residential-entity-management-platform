@@ -53,4 +53,6 @@ public interface ResidentialEntityService {
     void updatePicturePath(ResidentialEntity residentialEntity, String picturePath);
 
     void removeResidentialEntityPicture(ResidentialEntity residentialEntity) throws IOException;
+
+    ResidentialEntity findResidentialEntityByReportId(Long reportId);
 }

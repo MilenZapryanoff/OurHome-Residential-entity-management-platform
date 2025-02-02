@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -14,18 +13,27 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +46,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -51,255 +59,278 @@
             <div class="col-lg-12">
                 <h3>Summary</h3>
                 <span th:text="'Property №: ' + ${property.getNumber()}"></span>
-                <div th:if="${messageError}" class="err-msg">
+                <div class="err-msg" th:if="${messageError}">
                     <h5 class="text-light">Message not sent</h5>
                     <p class="text-light">Text length must be up to 2000 symbols!</p>
                 </div>
-                <div th:if="${messageSent}" class="success-msg"><h5 class="text-light">MESSAGE SENT!</h5></div>
+                <div class="success-msg" th:if="${messageSent}"><h5 class="text-light">MESSAGE SENT!</h5></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- ***** Condominium section ***** -->
-<div class="section single-property">
-    <div class="container">
-        <div class="row">
-            <!--Start of sub-menus-->
-            <div class="property-nav-bar">
-                <a th:href="@{/property}" class="nav-link"><i class="fa-solid fa-reply"></i></a>
-                <a href=#>Summary</a>
-                <a th:if="${property.isObtained()}" th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">Monthly fees</a>
-                <a th:unless="${property.isObtained()}" class="text-secondary">Monthly fees</a>
-                <a th:href="@{/property/details/{id}(id=${property.getId()})}">Property details</a>
-                <a th:if="${property.isObtained()}" th:href="@{/property/re/data/{id}(id=${property.getId()})}">Condominium</a>
-                <a th:unless="${property.isObtained()}" class="text-secondary">Condominium</a>
-                <div class="transition property-summary"></div>
-            </div>
-
-            <div class="col-lg-7">
-                <div class="accordion" id="accordionExample">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseOne" aria-expanded="true"
-                                    aria-controls="collapseOne">
-                                Property status:
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show"
-                             aria-labelledby="headingOne"
-                             data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div th:if="${property.isObtained()}">
-                                    <p>Property is
-                                        <strong class="text-success">Validated</strong>!
-                                    <p>You are authorized to access property date and Condominium reports.</p>
-                                    <p>If you need to change some of your property data, you can do it via Property
-                                        details
-                                        section.</p>
-                                    <p>Some data changes may need manager approve as some data may be involved in the
-                                        calculation of the monthly fee.</p>
-                                </div>
-
-                                <div th:if="${!property.isObtained() and !property.isRejected()}">
-                                    <p>Property is <strong
-                                            class="text-danger">waiting for Validation</strong> from Condominium manager!
-                                    <p>At this moment You still have no access to data and reports related to you
-                                        property.</p>
-                                    <p>If your registration does not get confirmed in a few days, you can
-                                        contact your Condominium Manager for assistance.</p>
-                                    <p>As soon as your registration gets approved you will get access property
-                                        data.</p>
-                                </div>
-
-                                <div th:if="${property.isRejected()}">
-                                    <p>This property is <strong class="text-danger">REJECTED</strong> from your manager!
-                                    </p>
-                                    <p>You do not have access to data and reports related to your property.</p>
-                                    <p>Please contact Condominium Manager to find out the reason for the
-                                        rejection.</p>
-                                    <p>You are able to edit and resend this property registration request or to Cancel
-                                        it and try again by adding new property.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseTwo" aria-expanded="false"
-                                    aria-controls="collapseTwo">
-                                Monthly fees
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                             data-bs-parent="#accordionExample">
-                            <div th:if="${property.isObtained()}" class="accordion-body">
-                                <p>You can access your <a
-                                        th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">monthly fees</a>
-                                    section to find out more details
-                                    about the fees your property is charged with.</p>
-                                <p>Fees are automatically applied in the
-                                    beginning of every new month. Fees are
-                                    calculated according to your Condominium fee policy.</p>
-                            </div>
-                            <div th:unless="${property.isObtained()}" class="accordion-body">
-                                <p>Monthly fees data is available only for Validated properties.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseThree" aria-expanded="false"
-                                    aria-controls="collapseThree">
-                                <a th:if="${property.isObtained()}">Unlink Property</a>
-                                <a th:unless="${property.isObtained()}">Registration request</a>
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse"
-                             aria-labelledby="headingThree"
-                             data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div th:if="${property.isObtained()}">
-                                    <p><b>Unlink property from your account.</b></p>
-                                    <p>This action will reset the ownership of this property.</p>
-                                    <p>Your property will remain active and no data will be lost.</p>
-                                    <p>Condominium manager will still be able to manage it as usual, and you will
-                                        still be able to link the property to your profile again later!</p>
-                                    <hr>
-                                    <form th:action="@{/property/delete/{id}(id=${property.getId()})}"
-                                          method="POST">
-                                        <input type="hidden"
-                                               name="readAllMessages"
-                                               th:value="${property.getId()}"/>
-                                        <button type="button" class="delete-button" style="padding: 8px 18px 8px 8px">
-                                            <div class="icon">
-                                                <svg class="top" viewBox="0 0 24 24">
-                                                    <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
-                                                </svg>
-                                                <svg class="bottom" viewBox="0 0 24 24">
-                                                    <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
-                                                </svg>
-                                            </div>
-                                            <div class="text">Unlink</div>
+<!-- ***** Property section ***** -->
+<div class="page-content">
+    <!--start of Sub-menu-->
+    <div class="menu-container">
+        <div th:replace="~{/en/fragments/prop-submenu}"></div>
+    </div>
+    <div class="content">
+        <div class="administration">
+            <div class="single-property">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button aria-controls="collapseOne" aria-expanded="true"
+                                                class="accordion-button"
+                                                data-bs-target="#collapseOne" data-bs-toggle="collapse"
+                                                type="button">
+                                            Property status:
                                         </button>
-                                    </form>
-                                </div>
-
-                                <div th:if="${!property.isObtained() or property.isRejected()}">
-                                    <p><b>Cancel property registration request!</b></p>
-                                    <p>This action will cancel property registration request.</p>
-                                    <p>Your property will remain active and no data will be lost.</p>
-                                    <p>Condominium manager will still be able to manage it as usual, and you will
-                                        still be able to create a new registration request later!</p>
-                                    <hr>
-                                    <form th:action="@{/property/delete/{id}(id=${property.getId()})}"
-                                          method="POST">
-                                        <input type="hidden"
-                                               name="readAllMessages"
-                                               th:value="${property.getId()}"/>
-                                        <button type="button" class="delete-button" style="padding: 8px 18px 8px 8px">
-                                            <div class="icon">
-                                                <svg class="top" viewBox="0 0 24 24">
-                                                    <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
-                                                </svg>
-                                                <svg class="bottom" viewBox="0 0 24 24">
-                                                    <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
-                                                </svg>
+                                    </h2>
+                                    <div aria-labelledby="headingOne" class="accordion-collapse collapse show"
+                                         data-bs-parent="#accordionExample"
+                                         id="collapseOne">
+                                        <div class="accordion-body">
+                                            <div th:if="${property.isObtained()}">
+                                                <p>Property is
+                                                    <strong class="text-success">Validated</strong>!
+                                                <p>You are authorized to access property date and Condominium
+                                                    reports.</p>
+                                                <p>If you need to change some of your property data, you can do it via
+                                                    Property
+                                                    details
+                                                    section.</p>
+                                                <p>Some data changes may need manager approve as some data may be
+                                                    involved
+                                                    in the
+                                                    calculation of the monthly fee.</p>
                                             </div>
-                                            <div class="text">Cancel</div>
+
+                                            <div th:if="${!property.isObtained() and !property.isRejected()}">
+                                                <p>Property is <strong
+                                                        class="text-danger">waiting for Validation</strong> from
+                                                    Condominium
+                                                    manager!
+                                                <p>At this moment You still have no access to data and reports related
+                                                    to
+                                                    you
+                                                    property.</p>
+                                                <p>If your registration does not get confirmed in a few days, you can
+                                                    contact your Condominium Manager for assistance.</p>
+                                                <p>As soon as your registration gets approved you will get access
+                                                    property
+                                                    data.</p>
+                                            </div>
+
+                                            <div th:if="${property.isRejected()}">
+                                                <p>This property is <strong class="text-danger">REJECTED</strong> from
+                                                    your
+                                                    manager!
+                                                </p>
+                                                <p>You do not have access to data and reports related to your
+                                                    property.</p>
+                                                <p>Please contact Condominium Manager to find out the reason for the
+                                                    rejection.</p>
+                                                <p>You are able to edit and resend this property registration request or
+                                                    to
+                                                    Cancel
+                                                    it and try again by adding new property.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button aria-controls="collapseTwo" aria-expanded="false"
+                                                class="accordion-button collapsed"
+                                                data-bs-target="#collapseTwo" data-bs-toggle="collapse"
+                                                type="button">
+                                            Monthly fees
                                         </button>
-                                    </form>
+                                    </h2>
+                                    <div aria-labelledby="headingTwo" class="accordion-collapse collapse"
+                                         data-bs-parent="#accordionExample"
+                                         id="collapseTwo">
+                                        <div class="accordion-body" th:if="${property.isObtained()}">
+                                            <p>You can access your <a
+                                                    th:href="@{/property/monthlyfees/{id}(id=${property.getId()})}">monthly
+                                                fees</a>
+                                                section to find out more details
+                                                about the fees your property is charged with.</p>
+                                            <p>Fees are automatically applied in the
+                                                beginning of every new month. Fees are
+                                                calculated according to your Condominium fee policy.</p>
+                                        </div>
+                                        <div class="accordion-body" th:unless="${property.isObtained()}">
+                                            <p>Monthly fees data is available only for Validated properties.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button aria-controls="collapseThree" aria-expanded="false"
+                                                class="accordion-button collapsed"
+                                                data-bs-target="#collapseThree" data-bs-toggle="collapse"
+                                                type="button">
+                                            <a th:if="${property.isObtained()}">Unlink Property</a>
+                                            <a th:unless="${property.isObtained()}">Registration request</a>
+                                        </button>
+                                    </h2>
+                                    <div aria-labelledby="headingThree" class="accordion-collapse collapse"
+                                         data-bs-parent="#accordionExample"
+                                         id="collapseThree">
+                                        <div class="accordion-body">
+                                            <div th:if="${property.isObtained()}">
+                                                <p><b>Unlink property from your account.</b></p>
+                                                <p>This action will reset the ownership of this property.</p>
+                                                <p>Your property will remain active and no data will be lost.</p>
+                                                <p>Condominium manager will still be able to manage it as usual, and you
+                                                    will
+                                                    still be able to link the property to your profile again later!</p>
+                                                <hr>
+                                                <form method="POST"
+                                                      th:action="@{/property/delete/{id}(id=${property.getId()})}">
+                                                    <input name="readAllMessages"
+                                                           th:value="${property.getId()}"
+                                                           type="hidden"/>
+                                                    <button class="delete-button" style="padding: 8px 18px 8px 8px"
+                                                            type="button">
+                                                        <div class="icon">
+                                                            <svg class="top" viewBox="0 0 24 24">
+                                                                <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
+                                                            </svg>
+                                                            <svg class="bottom" viewBox="0 0 24 24">
+                                                                <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="text">Unlink</div>
+                                                    </button>
+                                                </form>
+                                            </div>
+
+                                            <div th:if="${!property.isObtained() or property.isRejected()}">
+                                                <p><b>Cancel property registration request!</b></p>
+                                                <p>This action will cancel property registration request.</p>
+                                                <p>Your property will remain active and no data will be lost.</p>
+                                                <p>Condominium manager will still be able to manage it as usual, and you
+                                                    will
+                                                    still be able to create a new registration request later!</p>
+                                                <hr>
+                                                <form method="POST"
+                                                      th:action="@{/property/delete/{id}(id=${property.getId()})}">
+                                                    <input name="readAllMessages"
+                                                           th:value="${property.getId()}"
+                                                           type="hidden"/>
+                                                    <button class="delete-button" style="padding: 8px 18px 8px 8px"
+                                                            type="button">
+                                                        <div class="icon">
+                                                            <svg class="top" viewBox="0 0 24 24">
+                                                                <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
+                                                            </svg>
+                                                            <svg class="bottom" viewBox="0 0 24 24">
+                                                                <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="text">Cancel</div>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-5">
-                <div align="center" class="info-table">
-                    <a th:href="@{/property/details/{id}(id=${property.getId()})}"><img
-                            src="/images/property-avatar.jpg" alt="View details" title="View details"
-                            id="property-section-image"></a>
-                    <div class="main-content text-center">
+                        <div class="col-lg-5">
+                            <div align="center" class="info-table">
+                                <a th:href="@{/property/details/{id}(id=${property.getId()})}"><img
+                                        alt="View details" id="property-section-image" src="/images/property-avatar.jpg"
+                                        title="View details"></a>
+                                <div class="main-content text-center">
                            <span class="category text-bg-dark">
-                               <a th:href="@{/property/details/{id}(id=${property.getId()})}"
-                                  class="text-light">View details</a>
+                               <a class="text-light"
+                                  th:href="@{/property/details/{id}(id=${property.getId()})}">View details</a>
                                </span>
-                    </div>
-                    <div class="mt-3 rounded badge-warning">
-                        <ul>
-                            <li th:if="${property.isObtained()}" class="text-center">Registration status:
-                                <a class="text-success">Validated</a></li>
-                            <li th:unless="${property.isObtained() or property.isRejected()}" class="text-center">
-                                Registration status:
-                                <a class="text-secondary">Pending validation</a></li>
-                            <li th:if="${property.isRejected()}" class="text-center">Registration status:
-                                <a class="text-danger">Rejected</a></li>
-                            <li class="text-center">City:
-                                <a class="text-black"
-                                   th:text="${property.getResidentialEntity().getCity().getName()}"></a></li>
-                            <li class="text-center">Street name:
-                                <a class="text-black"
-                                   th:text="${property.getResidentialEntity().getStreetName()}"></a></li>
-                            <li class="text-center">Street №:
-                                <a class="text-black"
-                                   th:text="${property.getResidentialEntity().getStreetNumber()}"></a></li>
-                            <li>
-                                <br>
-                            </li>
-                        </ul>
+                                </div>
+                                <div class="mt-3 rounded badge-warning">
+                                    <ul>
+                                        <li class="text-dark text-center" th:if="${property.isObtained()}">Registration status:
+                                            <a class="text-success">Validated</a></li>
+                                        <li class="text-dark text-center"
+                                            th:unless="${property.isObtained() or property.isRejected()}">
+                                            Registration status:
+                                            <a class="text-secondary">Pending validation</a></li>
+                                        <li class="text-dark text-center" th:if="${property.isRejected()}">Registration status:
+                                            <a class="text-danger">Rejected</a></li>
+                                        <li class="text-dark text-center">City:
+                                            <a class="text-black"
+                                               th:text="${property.getResidentialEntity().getCity().getName()}"></a>
+                                        </li>
+                                        <li class="text-dark text-center">Street name:
+                                            <a class="text-black"
+                                               th:text="${property.getResidentialEntity().getStreetName()}"></a></li>
+                                        <li class="text-dark text-center">Street №:
+                                            <a class="text-black"
+                                               th:text="${property.getResidentialEntity().getStreetNumber()}"></a></li>
+                                        <li>
+                                            <br>
+                                        </li>
+                                    </ul>
 
-                        <button
-                                class="col-lg-12"
-                                onclick="openForm()">
-                            <input type="submit"
-                                   value="Contact manager"
-                                   class="form-control text-bg-danger"/>
-                        </button>
-                        <div class="form-popup" id="contactForm" style="border: none">
-                            <form id="message-popup"
-                                  th:action="@{/property/summary/messageToManager/{id} (id=${property.getId()})}"
-                                  th:method="POST"
-                                  class="form-container"
-                                  th:object="${sendMessageBindingModel}">
-                                <label for="receiverId" class="hidden"></label>
-                                <select class="form-control hidden"
-                                        id="receiverId"
-                                        th:field="*{receiverId}">
-                                    <option
-                                            th:value="${property.getResidentialEntity().getManager().getId()}">
-                                    </option>
-                                </select>
-                                <label for="senderId" class="hidden"></label>
-                                <select class="form-control hidden" id="senderId" th:field="*{senderId}">
-                                    <option th:value="${loggedUser.getId()}"></option>
-                                </select>
-                                <label for="messageText" class="small">Manager: <b
-                                        th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' + ${property.getResidentialEntity().getManager().getLastName()}"></b></label>
-                                <label for="messageText" class="small">Phone number: <b
-                                        th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b></label>
-                                <label for="messageText" class="small">Email: <b
-                                        th:text="${property.getResidentialEntity().getManager().getEmail()}"></b></label>
-                                <label for="messageText" class="small text-danger">Send message to your
-                                    manager: </label>
-                                <textarea type="text"
-                                       placeholder="Your message"
-                                       id="messageText" required
-                                       autocomplete="off"
-                                       th:field="*{message}"
-                                       th:errorclass="bg-danger"></textarea>
-                                <button type="submit"
-                                        class="btn">Send
-                                </button>
-                                <button type="button"
-                                        class="btn text-bg-danger"
-                                        onclick="closeForm()">
-                                    Close
-                                </button>
-                            </form>
+                                    <button
+                                            class="col-lg-12"
+                                            onclick="openForm()">
+                                        <input class="form-control text-bg-danger"
+                                               type="submit"
+                                               value="Contact manager"/>
+                                    </button>
+                                    <div class="form-popup" id="contactForm" style="border: none">
+                                        <form class="form-container"
+                                              id="message-popup"
+                                              th:action="@{/property/summary/messageToManager/{id} (id=${property.getId()})}"
+                                              th:method="POST"
+                                              th:object="${sendMessageBindingModel}">
+                                            <label class="hidden" for="receiverId"></label>
+                                            <select class="form-control hidden"
+                                                    id="receiverId"
+                                                    th:field="*{receiverId}">
+                                                <option
+                                                        th:value="${property.getResidentialEntity().getManager().getId()}">
+                                                </option>
+                                            </select>
+                                            <label class="hidden" for="senderId"></label>
+                                            <select class="form-control hidden" id="senderId" th:field="*{senderId}">
+                                                <option th:value="${loggedUser.getId()}"></option>
+                                            </select>
+                                            <label class="small" for="messageText">Manager: <b
+                                                    th:text="${property.getResidentialEntity().getManager().getFirstName()} + ' ' + ${property.getResidentialEntity().getManager().getLastName()}"></b></label>
+                                            <label class="small" for="messageText">Phone number: <b
+                                                    th:text="${property.getResidentialEntity().getManager().getPhoneNumber()}"></b></label>
+                                            <label class="small" for="messageText">Email: <b
+                                                    th:text="${property.getResidentialEntity().getManager().getEmail()}"></b></label>
+                                            <label class="small text-danger" for="messageText">Send message to your
+                                                manager: </label>
+                                            <textarea autocomplete="off"
+                                                      id="messageText"
+                                                      placeholder="Your message" required
+                                                      th:errorclass="bg-danger"
+                                                      th:field="*{message}"
+                                                      type="text"></textarea>
+                                            <button class="btn"
+                                                    type="submit">Send
+                                            </button>
+                                            <button class="btn text-bg-danger"
+                                                    onclick="closeForm()"
+                                                    type="button">
+                                                Close
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

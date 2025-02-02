@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -17,16 +16,24 @@
 
 
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 </head>
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -39,7 +46,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -50,7 +57,7 @@
         <div class="col-lg-4 offset-lg-4">
             <div class="section-heading text-center">
                 <h6>| Login </h6>
-                <strong th:if="${bad_credentials}" class="text-danger">Wrong username or password!</strong>
+                <strong class="text-danger" th:if="${bad_credentials}">Wrong username or password!</strong>
                 <p class="text-light" th:unless="${bad_credentials}">Please enter your email and password to access your
                     residential
                     entity
@@ -65,27 +72,27 @@
     <div class="input-content text-center">
         <div class="col-lg-3 center-form">
             <form id="input-form"
-                  th:method="POST"
-                  th:action="@{/login}">
+                  th:action="@{/login}"
+                  th:method="POST">
                 <fieldset>
                     <label for="email"><b>Email</b></label>
-                    <input type="email" name="email"
-                           th:value="${email}"
-                           id="email" placeholder="Enter your email..." pattern="[^ @]*@[^ @]*" required>
+                    <input id="email" name="email"
+                           pattern="[^ @]*@[^ @]*"
+                           placeholder="Enter your email..." required th:value="${email}" type="email">
                 </fieldset>
                 <fieldset>
                     <label for="password"><b>Password</b></label>
-                    <input type="password" name="password"
-                           th:value="${password}"
-                           id="password" placeholder="Enter your password..." required>
+                    <input id="password" name="password"
+                           placeholder="Enter your password..."
+                           required th:value="${password}" type="password">
                     <small class="fas fa-eye text-secondary fa-eye-slash" id="togglePassword"
                            style="margin-left: -35px; cursor: pointer;"></small>
                 </fieldset>
                 <fieldset>
-                    <input class="inp-cbx" name="rememberMe" id="rememberMe" type="checkbox" style="display: none"/>
+                    <input class="inp-cbx" id="rememberMe" name="rememberMe" style="display: none" type="checkbox"/>
                     <label class="cbx" for="rememberMe">
                         <span>
-                    <svg width="12px" height="10px" viewbox="0 0 12 10"><polyline
+                    <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
                             points="1.5 6 4.5 9 10.5 1"></polyline></svg>
                         </span>
                         <span>Remember me</span>
@@ -93,7 +100,7 @@
                 </fieldset>
 
                 <fieldset>
-                    <button type="submit" id="login" class="orange-button">Login</button>
+                    <button class="orange-button" id="login" type="submit">Login</button>
                 </fieldset>
                 <fieldset>
                     <br>

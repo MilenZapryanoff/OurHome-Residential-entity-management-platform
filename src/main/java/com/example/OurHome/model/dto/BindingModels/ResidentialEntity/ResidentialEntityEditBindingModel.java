@@ -1,6 +1,7 @@
 package com.example.OurHome.model.dto.BindingModels.ResidentialEntity;
 
 import com.example.OurHome.model.enums.CityName;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 public class ResidentialEntityEditBindingModel {
@@ -20,6 +21,10 @@ public class ResidentialEntityEditBindingModel {
 
     private String entrance;
 
+    private String facebookUrl;
+
+    @Email
+    private String email;
 
     public CityName getCity() {
         return city;
@@ -69,4 +74,19 @@ public class ResidentialEntityEditBindingModel {
         this.entrance = entrance;
     }
 
+    public String getFacebookUrl() {
+        return facebookUrl;
+    }
+
+    public void setFacebookUrl(String facebookUrl) {
+        this.facebookUrl = facebookUrl;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

@@ -20,6 +20,14 @@
     <link href="/css/navbar.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
 </head>
 
 <body>
@@ -48,7 +56,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Properties data</h3>
+            <h3>Самостоятелни обекти</h3>
             <div class="col-lg-12">
                 <span th:text="'Идентификатор на ЕС: ' + ${residentialEntity.getId()}"></span>
             </div>
@@ -89,7 +97,7 @@
                     <a class="button nav-link"
                        th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
                         <div class="text-center"><i class="fa-solid fa-gears"></i>
-                            <span>Типове самостоятелни обекти</span>
+                            <span>Категории самостоятелни обекти</span>
                         </div>
                     </a>
                 </div>
@@ -98,7 +106,7 @@
                     <!--Active registrations header-->
                     <div class="text-center">
                         <h4 class="category text-secondary"><i class="fa-solid fa-hourglass-half"></i> ИЗЧАКВАЩИ ЗАЯВКИ
-                            ЗА ПРОМЯНА НА ДАННИ</h4>
+                            ЗА ПРОМЯНА НА ДАННИ ЗА ИМОТ</h4>
                     </div>
 
                     <div class="due-amounts-header" style="padding: 10px 0">
@@ -125,23 +133,27 @@
                         <tr>
                             <th>
                                 <i class="fa-regular fa-calendar"></i>
-                                <p>Created on</p>
+                                <p>Дата на създаване</p>
                             </th>
                             <th>
                                 <i class="fa-solid fa-list-ol"></i>
-                                <p>Property №</p>
+                                <p>Имот №</p>
                             </th>
                             <th>
                                 <i class="fa-solid fa-stairs"></i>
-                                <p>Floor</p>
+                                <p>Етаж</p>
+                            </th>
+                            <th>
+                                <i class="fa-regular fa-building"></i>
+                                <p>Клас имот:</p>
                             </th>
                             <th th:if="${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId()).size() > 0}">
                                 <i class="fa-regular fa-building"></i>
-                                <p>Type</p>
+                                <p>Категория</p>
                             </th>
                             <th>
                                 <i class="fa-solid fa-user-large"></i>
-                                <p>Requester</p>
+                                <p>Заявител</p>
                             </th>
                             <th>
                                 <i class="fa-solid fa-at"></i>
@@ -149,13 +161,13 @@
                             </th>
                             <th>
                                 <i class="fa-solid fa-phone"></i>
-                                <p>Phone</p>
+                                <p>Телефон</p>
                             </th>
                             <th>
-                                <p>Property habitable</p>
+                                <p>Имотът е обитеам</p>
                             </th>
                             <th>
-                                <p>View request</p>
+                                <p>Виж заявка</p>
                             </th>
                         </tr>
                         <tr th:each="property: ${@propertyRepository.findPendingChangeRequestsByResidentialEntity(residentialEntity.getId())}">
@@ -167,12 +179,14 @@
                                 <p th:text="${property.getNumber()}"></p>
                             </td>
                             <td><p th:text="${property.getFloor()}"></p></td>
+                            <td>
+                                <p th:if="${property.getPropertyClass() != null}" th:text="${property.getPropertyClass().getName()}"></p>
+                                <p th:unless="${property.getPropertyClass() != null}">-</p>
+                            </td>
                             <td th:if="${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId()).size() > 0}">
                                 <p th:if="${property.getPropertyType()} != null"
                                    th:text="${property.getPropertyType().getDescription()}"></p>
-                                <p th:if="${property.getPropertyType()} == null"><i class="fa-solid fa-circle-info"
-                                                                                    style="color: rgba(222,193,1,0.86)"
-                                                                                    title="Not set"></i>
+                                <p th:if="${property.getPropertyType()} == null">-
                                 </p></td>
                             <td>
                                 <div class="user-avatar-small">
@@ -198,7 +212,7 @@
                             </td>
                             <td th:unless="${property.isNotHabitable()}">
                                 <img alt="Property is habitable" src="/images/check_yes.png"
-                                     style="width: 20px;" title="Property is habitable">
+                                     style="width: 20px;" title="Имотът е обитаем">
                             </td>
                             <td>
                                 <a th:href="@{/administration/property/pending/request/{id}(id=${property.getId()})}">

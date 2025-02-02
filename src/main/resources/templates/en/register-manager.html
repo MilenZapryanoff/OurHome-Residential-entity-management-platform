@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+      xmlns:th='http://www.thymeleaf.org'>
 
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
 
@@ -15,17 +14,25 @@
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/our-home.css">
-    <link rel="stylesheet" href="/css/owl.css">
-    <link rel="stylesheet" href="/css/animate.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 
 </head>
 <body>
 
 <!-- ***** Preloader Start ***** -->
-<div id="js-preloader" class="js-preloader">
+<div class="js-preloader" id="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -38,7 +45,7 @@
 <!-- ***** Preloader End ***** -->
 
 <!-- ***** Header ***** -->
-<div th:replace="~{fragments/header}" class="sub-header">
+<div class="sub-header" th:replace="~{fragments/header}">
 </div>
 
 <!-- ***** NavBar ***** -->
@@ -60,77 +67,77 @@
     <div class="input-content text-center">
         <div class="col-lg-5 center-form">
             <form id="input-form"
-                  th:method="POST"
                   th:action="@{/register/manager}"
+                  th:method="POST"
                   th:object="${managerRegisterBindingModel}">
                 <p>Please fill this form to complete your registration as Manager of a Condominium.</p>
                 <hr>
                 <fieldset>
                     <label for="firstName"><b>First Name</b></label>
-                    <p th:if="${#fields.hasErrors('firstName')}"
-                           th:errors="*{firstName}" class="text-danger">First name error message</p>
-                    <input type="text" id="firstName" placeholder="Enter your first Name..." autocomplete="on"
-                           required
+                    <p class="text-danger"
+                       th:errors="*{firstName}" th:if="${#fields.hasErrors('firstName')}">First name error message</p>
+                    <input autocomplete="on" id="firstName" placeholder="Enter your first Name..." required
+                           th:errorclass="bg-danger"
                            th:field="*{firstName}"
-                           th:errorclass="bg-danger">
+                           type="text">
                 </fieldset>
                 <fieldset>
                     <label for="lastName"><b>Last Name</b></label>
-                    <p th:if="${#fields.hasErrors('lastName')}"
-                           th:errors="*{lastName}" class="text-danger">Last name error message</p>
-                    <input type="text" id="lastName" placeholder="Enter your last Name..." autocomplete="on"
-                           required
+                    <p class="text-danger"
+                       th:errors="*{lastName}" th:if="${#fields.hasErrors('lastName')}">Last name error message</p>
+                    <input autocomplete="on" id="lastName" placeholder="Enter your last Name..." required
+                           th:errorclass="bg-danger"
                            th:field="*{lastName}"
-                           th:errorclass="bg-danger">
+                           type="text">
                 </fieldset>
                 <fieldset>
                     <label for="username"><b>Username</b></label>
-                    <p th:if="${#fields.hasErrors('username')}"
-                           th:errors="*{username}" class="text-danger">Username error message</p>
-                    <p th:if="${duplicatedUser}" class="text-danger">User already exists!</p>
-                    <input type="text" id="username" placeholder="Enter username..." autocomplete="on" required
+                    <p class="text-danger"
+                       th:errors="*{username}" th:if="${#fields.hasErrors('username')}">Username error message</p>
+                    <p class="text-danger" th:if="${duplicatedUser}">User already exists!</p>
+                    <input autocomplete="on" id="username" placeholder="Enter username..." required th:errorclass="bg-danger"
                            th:field="*{username}"
-                           th:errorclass="bg-danger">
+                           type="text">
                 </fieldset>
                 <fieldset>
                     <label for="email"><b>Email Address</b></label>
-                    <p th:if="${#fields.hasErrors('email')}"
-                           th:errors="*{email}" class="text-danger">Email error message</p>
-                    <p th:if="${duplicatedEmail}" class="text-danger">Email already exists!</p>
-                    <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*"
-                           placeholder="Enter your Email..."
+                    <p class="text-danger"
+                       th:errors="*{email}" th:if="${#fields.hasErrors('email')}">Email error message</p>
+                    <p class="text-danger" th:if="${duplicatedEmail}">Email already exists!</p>
+                    <input id="email" name="email" pattern="[^ @]*@[^ @]*" placeholder="Enter your Email..."
                            required=""
+                           th:errorclass="bg-danger"
                            th:field="*{email}"
-                           th:errorclass="bg-danger">
+                           type="text">
                 </fieldset>
                 <fieldset>
                     <label for="phoneNumber"><b>Phone number</b></label>
-                    <p th:if="${#fields.hasErrors('phoneNumber')}"
-                           th:errors="*{phoneNumber}" class="text-danger">Phone number error message</p>
-                    <input type="text" name="phoneNumber" id="phoneNumber" placeholder="Enter your phone number..."
+                    <p class="text-danger"
+                       th:errors="*{phoneNumber}" th:if="${#fields.hasErrors('phoneNumber')}">Phone number error message</p>
+                    <input id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number..." th:errorclass="bg-danger"
                            th:field="*{phoneNumber}"
-                           th:errorclass="bg-danger">
+                           type="text">
                 </fieldset>
                 <fieldset>
                     <label for="password"><b>Password</b></label>
-                    <p th:if="${#fields.hasErrors('password')}"
-                           th:errors="*{password}" class="text-danger">Password error message</p>
-                    <input type="password" id="password" placeholder="Enter your password..." required
+                    <p class="text-danger"
+                       th:errors="*{password}" th:if="${#fields.hasErrors('password')}">Password error message</p>
+                    <input id="password" placeholder="Enter your password..." required th:errorclass="bg-danger"
                            th:field="*{password}"
-                           th:errorclass="bg-danger">
+                           type="password">
                 </fieldset>
                 <fieldset>
                     <label for="confirmPassword"><b>Confirm password</b></label>
-                    <p th:if="${#fields.hasErrors('confirmPassword')}"
-                           th:errors="*{confirmPassword}" class="text-danger">Password error message</p>
-                    <small th:if="${noPasswordMatch}" class="text-danger">Confirm passwords do not match!</small>
-                    <input type="password" id="confirmPassword"
-                           placeholder="Confirm your password..." required
+                    <p class="text-danger"
+                       th:errors="*{confirmPassword}" th:if="${#fields.hasErrors('confirmPassword')}">Password error message</p>
+                    <small class="text-danger" th:if="${noPasswordMatch}">Confirm passwords do not match!</small>
+                    <input id="confirmPassword" placeholder="Confirm your password..."
+                           required th:errorclass="bg-danger"
                            th:field="*{confirmPassword}"
-                           th:errorclass="bg-danger">
+                           type="password">
                 </fieldset>
                 <fieldset>
-                    <button type="submit" id="form-submit" class="orange-button">
+                    <button class="orange-button" id="form-submit" type="submit">
                         Register now
                     </button>
                     <button class="orange-button" id="form-cancel" type="button">

@@ -20,6 +20,14 @@
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
 </head>
 
 <body>
@@ -105,7 +113,7 @@
                                             <p>Добре дошли във вашата дигитална Етажна собственост (ЕС)!</p>
                                             <p>За да използвате пълния набор от функционалности на платформата е
                                                 необходимо да
-                                                извършите необходимата параметризация на индивидуалните имоти в етажната
+                                                извършите първоначална параметризация на индивидуалните имоти в етажната
                                                 собственост.</p>
                                             <p>Може да използвате линка по-долу, за да започнете с параметризацията на
                                                 имотите.
@@ -296,7 +304,7 @@
                             <div class="mt-3 rounded badge-warning">
                                 <ul>
                                     <li>Населено място: <a class="text-black"
-                                                 th:text="${residentialEntity.getCity().getName()}"></a>
+                                                           th:text="${residentialEntity.getCity().getName()}"></a>
                                     </li>
                                     <li>Адрес: <a class="text-black" th:text="${residentialEntity.getStreetName()}"></a>
                                     </li>

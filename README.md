@@ -48,8 +48,8 @@ A platform that allows the registration of both home owners and residential enti
 <h2> How to start the app</h2>
   <li>First clone the repository to your local machine</li>
   <li>Configure your MySQL database by updating the application.yml file...</li>
-  <li>...or configure the following environment variables in IntelliJ Idea  
-  <li>  1) db_password=<your db password> [db username]  </li>
+  <li>...or configure the following environment variables in IntelliJ Idea  </li>
+  <li>  1) db_password=<your db password> [db username] </li>
   <li>  2) db_username=<your db username> [db password] </li>
   <li>  3) admin_pass=[default admin user in the DB] </li>
   <li> (Optional) if using contact email feature : </li>
@@ -78,6 +78,20 @@ A platform that allows the registration of both home owners and residential enti
 
 
 <h2>Updates</h2>
+
+<h4>v.2.25.0203</h4>
+  <ul>
+    <li>New features added:</li>
+    <li>1. Bug report functionality - now every user of the platform has the ability to report a problem with the platform.</li>
+    <li>2. Irregularity reports added = now every residential entity manager or owner of property can raise a report. Images can be attached. Manager can change the status of the report and set submit resolutions</li>
+    <li>3. Email service improvements and extensions - mails now sent as html instead of plain text.</li>
+    <li>4. Events calendar is now available for every residential entity - Events creation and notifications are now under development and full functionality will be delivered with the next version.</li>
+    <li>Main logo changed.</li>
+    <li>Favicon added.</li>
+    <li>Optimization of services and methods.</li>
+    <li>Additional data fields added for a residential entity.</li>
+    <li>Property owners side administration page improvements and design change.</li>
+</ul>
 
 
 <h4>v.2.25.0115</h4>
