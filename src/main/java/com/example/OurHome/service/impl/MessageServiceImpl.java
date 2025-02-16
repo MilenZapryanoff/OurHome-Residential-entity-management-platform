@@ -1,12 +1,9 @@
 package com.example.OurHome.service.impl;
 
-import com.example.OurHome.model.Entity.Message;
-import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.dto.BindingModels.ReportBug.ReportBugBindingModel;
+import com.example.OurHome.model.Entity.*;
 import com.example.OurHome.repo.MessageRepository;
 import com.example.OurHome.service.MessageService;
+import com.example.OurHome.service.NotificationService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,7 +16,8 @@ import java.util.List;
 @Service
 public class MessageServiceImpl implements MessageService {
 
-    private static final String WELCOME_MSG_USER_BG = "Благодарим Ви, за регистрацията в платформата OurHome! За да получите достъп до Вашата дигитална етажна собственост първо трябва да се регистрирате, като собственик на имот. След като Вашата регистрация бъде завършена ще получите пълен достъп до наличната информация!";
+    private final NotificationService notificationService;
+    private static final String WELCOME_MSG_USER_BG = "Благодарим Ви за регистрацията в платформата OurHome! За да получите достъп до Вашата дигитална етажна собственост първо трябва да се регистрирате, като собственик на имот. След като Вашата регистрация бъде завършена ще получите пълен достъп до наличната информация!";
     private static final String WELCOME_MSG_USER_ENG = "Thanks for your registration! To access your digital Condominium data you should first add a property. After your Condominium manager verifies your request you will get full access.";
     private static final String PENDING_REGISTRATION_BG = "Нова заявка за регистрация на дигитален имот, която изисква верификация от Ваша страна! Можете да достъпите заявката през меню Администрация -> Потребители -> Чакащи заявки";
     private static final String PENDING_REGISTRATION_ENG = "New digital property registration needs you verification! You can access the request via Administration panel";
@@ -27,208 +25,14 @@ public class MessageServiceImpl implements MessageService {
     private static final String SUCCESS_REGISTRATION_ENG = "New successful digital property registration!. Request is auto-confirmed as there is no data change in the registration request.No action needed from your side!";
     private static final String PROMOTED_MODERATOR_BG = "Вие получихте роля Модератор на етажна собственост. Този достъп Ви осигурява достъп до допълнителна информация и функционалности свързани с Вашата дигитална етажна собственост!";
     private static final String PROMOTED_MODERATOR_ENG = "You have been promoted as Moderator of Condominium. You can access all the data related to this Condominium via the Administration section!";
-
+    private static final String EVENT_MSG_BG = "Добавено е ново събитие в календара на Вашата етажна собственост. Информация за събитието ще откриете в меню Събития в административния панел!";
+    private static final String EVENT_MSG_ENG = "A new event has been added to the calendar of your condominium. You can find information about the event in the Events menu in the administrative panel!";
 
     private final MessageRepository messageRepository;
 
-    public MessageServiceImpl(MessageRepository messageRepository) {
+    public MessageServiceImpl(NotificationService notificationService, MessageRepository messageRepository) {
+        this.notificationService = notificationService;
         this.messageRepository = messageRepository;
-    }
-
-    /**
-     * Send a welcome message (notification) of each new user.
-     */
-    @Override
-    public void sendRegistrationMessageToUser(UserEntity userEntity) {
-
-        Message message = createMessage();
-        message.setReceiver(userEntity);
-
-        if (userEntity.getLanguage().getDescription().equals("bulgarian")) {
-            message.setText("Здравейте, " + userEntity.getFirstName() + "! " + WELCOME_MSG_USER_BG);
-        } else if (userEntity.getLanguage().getDescription().equals("english")) {
-            message.setText("Hello, " + userEntity.getFirstName() + "! " + WELCOME_MSG_USER_ENG);
-        }
-
-        messageRepository.save(message);
-    }
-
-    private static Message createMessage() {
-        Message message = new Message();
-        message.setDate(LocalDate.now());
-        message.setTime(Time.valueOf(LocalTime.now()));
-        message.setRead(false);
-        message.setArchived(false);
-        return message;
-    }
-
-    /**
-     * Send message (notification) to MANAGER of RE when new property (MANUAL-CONFIRM) registration happens.
-     * happens.
-     */
-    @Override
-    public void propertyPendingRegistrationMessageToManager(ResidentialEntity residentialEntity) {
-
-
-        Message message = createMessage();
-
-        UserEntity manager = residentialEntity.getManager();
-        message.setReceiver(manager);
-
-        if (manager.getLanguage().getDescription().equals("bulgarian")) {
-            message.setText("Етажна собственост " + residentialEntity.getId() + ": " +  PENDING_REGISTRATION_BG);
-        } else if (manager.getLanguage().getDescription().equals("english")) {
-            message.setText("Condominium " + residentialEntity.getId() + ": " +  PENDING_REGISTRATION_ENG);
-            message.setText(PENDING_REGISTRATION_ENG);
-        }
-
-        messageRepository.save(message);
-    }
-
-    /**
-     * Send message (notification) to MANAGER of RE when new property (AUTO-CONFIRM) registration happens.
-     * happens.
-     */
-    @Override
-    public void propertyRegistrationMessageToManager(ResidentialEntity residentialEntity) {
-
-        Message message = createMessage();
-
-        UserEntity manager = residentialEntity.getManager();
-        message.setReceiver(manager);
-
-        if (manager.getLanguage().getDescription().equals("bulgarian")) {
-
-            message.setText("Етажна собственост " + residentialEntity.getId() + ": " +  SUCCESS_REGISTRATION_BG);
-        } else if (manager.getLanguage().getDescription().equals("english")) {
-            message.setText("Condominium " + residentialEntity.getId() + ": " +  SUCCESS_REGISTRATION_ENG);
-        }
-
-        messageRepository.save(message);
-    }
-
-    /**
-     * Send message (notification) to MANAGER of RE when property modification performed by resident
-     */
-    @Override
-    public void propertyModificationMessageToManager(Property property) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "Data change for property № " + property.getNumber() + " in Condominium ID: "
-                                + property.getResidentialEntity().getId() + ". You can access the request via Administration panel",
-                        property.getResidentialEntity().getManager(),
-                        false,
-                        false));
-    }
-
-    /**
-     * Send message (notification) to RESIDENT when manager changes property data
-     */
-    @Override
-    public void propertyModificationMessageToResident(Property property) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "Your Condominium manager made changes for property №" + property.getNumber() + ". " +
-                                "You can track changes in Property section",
-                        property.getOwner(),
-                        false,
-                        false));
-    }
-
-    /**
-     * Send message (notification) to the RESIDENT, when his role has been changed to Moderator of RE.
-     *
-     * @param userEntity        carries information about the resident
-     * @param residentialEntity carries information about the RE
-     */
-    @Override
-    public void newModeratorMessage(UserEntity userEntity, ResidentialEntity residentialEntity) {
-
-        Message message = createMessage();
-
-        UserEntity manager = residentialEntity.getManager();
-        message.setReceiver(userEntity);
-        if (userEntity.getLanguage().getDescription().equals("bulgarian")) {
-            message.setText("Здравейте, " + userEntity.getFirstName() + "! " + PROMOTED_MODERATOR_BG);
-        } else if (userEntity.getLanguage().getDescription().equals("english")) {
-            message.setText("Hello, " + userEntity.getFirstName() + "! " + PROMOTED_MODERATOR_ENG);
-        }
-        messageRepository.save(message);
-    }
-
-    /**
-     * Send message (notification) to the OWNER, when his property registration request is approved by RE Manager.
-     *
-     * @param property carries information about the property. Allows message extend.
-     */
-    @Override
-    public void propertyRegistrationApprovedMessage(Property property) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "Your registration/modification request for property № " + property.getNumber() + " id Condominium ID: "
-                                + property.getResidentialEntity().getId() + " has been APPROVED. You can now access your data and reports.",
-                        property.getOwner(),
-                        false,
-                        false));
-    }
-
-    /**
-     * Send message (notification) to the OWNER, when his property is REJECTED from RE.
-     *
-     * @param property carries information about the property. Allows message extend.
-     */
-    @Override
-    public void propertyRejectedMessage(Property property) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "Your registration request for property № " + property.getNumber() + " id Condominium ID: "
-                                + property.getResidentialEntity().getId() + " has been REJECTED. You can contact your Condominium manager for more details " +
-                                "about the reason for this action. If you still have an access to the Condominium, You can edit the record and submit " +
-                                "it again.",
-                        property.getOwner(),
-                        false,
-                        false));
-    }
-
-    /**
-     * Send message (notification) to the OWNER, when his property is DELETED from RE.
-     *
-     * @param property carries information about the property. Allows message extend.
-     */
-    @Override
-    public void propertyDeletedMessageToOwner(Property property) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "Your property № " + property.getNumber() + " has been REMOVED from Condominium ID: "
-                                + property.getResidentialEntity().getId() + ". You can contact your Condominium manager for more details " +
-                                "about the reason for this action. If you still have an access to the Condominium, You can submit new " +
-                                "property registration request.",
-                        property.getOwner(),
-                        false,
-                        false));
-    }
-
-    @Override
-    public void propertyDeletedMessageToManager(Property property) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "Registration request for property № " + property.getNumber() + " in Condominium ID: "
-                                + property.getResidentialEntity().getId() + " has been Canceled by user.",
-                        property.getResidentialEntity().getManager(),
-                        false,
-                        false));
     }
 
 
@@ -335,10 +139,277 @@ public class MessageServiceImpl implements MessageService {
                         sender,
                         false,
                         false));
+
+        //create notification
+        notificationService.newMessageNotification(receiver);
     }
 
     /**
-     * New message to property owner for new monthly fee.
+     * Send SYSTEM welcome message to each new user.
+     */
+    @Override
+    public void sendRegistrationMessageToUser(UserEntity userEntity) {
+
+        Message message = createMessage(userEntity);
+        message.setText("Здравейте, " + userEntity.getFirstName() + "! " + WELCOME_MSG_USER_BG);
+        message.setTextEn("Hello, " + userEntity.getFirstName() + "! " + WELCOME_MSG_USER_ENG);
+
+        messageRepository.save(message);
+    }
+
+    /**
+     * Send SYSTEM message (+ notification) to MANAGER of RE when new property (MANUAL-CONFIRM) registration happens.
+     */
+    @Override
+    public void propertyPendingRegistrationMessageToManager(ResidentialEntity residentialEntity) {
+
+        Message message = createMessage(residentialEntity.getManager());
+        message.setText("Етажна собственост " + residentialEntity.getId() + ": " + PENDING_REGISTRATION_BG);
+        message.setTextEn("Condominium " + residentialEntity.getId() + ": " + PENDING_REGISTRATION_ENG);
+        messageRepository.save(message);
+
+        //send notification to Condominium manager for pending registration approval
+        notificationService.propertyPendingRegistrationMessageToManager(residentialEntity);
+    }
+
+    /**
+     * Send SYSTEM message to MANAGER of RE when new property (AUTO-CONFIRM) registration happens.
+     * happens.
+     */
+    @Override
+    public void propertyRegistrationMessageToManager(ResidentialEntity residentialEntity) {
+
+        Message message = createMessage(residentialEntity.getManager());
+        message.setText("Етажна собственост " + residentialEntity.getId() + ": " + SUCCESS_REGISTRATION_BG);
+        message.setTextEn("Condominium " + residentialEntity.getId() + ": " + SUCCESS_REGISTRATION_ENG);
+
+        messageRepository.save(message);
+    }
+
+    /**
+     * Send SYSTEM message (+ notification) to MANAGER of RE when property modification performed by resident
+     */
+    @Override
+    public void propertyModificationMessageToManager(Property property) {
+
+        Message message = createMessage(property.getResidentialEntity().getManager());
+        message.setText("Получена заявка за промяна на параметри по сомостоятелен обект №" + property.getNumber() + " в състава на етажна собственост с идентификатор "
+                + property.getResidentialEntity().getId() + ". Информация за заявката е налична в меню Администриране!");
+        message.setTextEn("Data change for property № " + property.getNumber() + " in Condominium ID: "
+                + property.getResidentialEntity().getId() + ". You can access the request via Administration panel!");
+
+        messageRepository.save(message);
+
+        //send notification to Condominium manager for pending property change-request
+        notificationService.propertyModificationNotificationToManager(property);
+    }
+
+    /**
+     * Send SYSTEM message (+ notification) to RESIDENT when manager changes property data
+     */
+    @Override
+    public void propertyModificationMessageToOwner(Property property) {
+
+        Message message = createMessage(property.getOwner());
+        message.setText("Извършена е промяна в параметрите на самостоятелен обект №" + property.getNumber() + " в състава на етажна собственост с идентификатор: " + property.getResidentialEntity().getId() +
+                ". Актуалини данни за вашия имот може да откриете в меню Моят имот");
+        message.setTextEn("A data change has been made for  individual property No. " + property.getNumber() +
+                " within the condominium property with ID: " + property.getResidentialEntity().getId() +
+                ". You can find more information in the 'My Property' menu.");
+        messageRepository.save(message);
+
+        //send notification to property owner for property data change
+        notificationService.propertyModificationNotificationToOwner(property);
+    }
+
+    /**
+     * Send SYSTEM message (notification) to the RESIDENT, when his role has been changed to Moderator of RE.
+     *
+     * @param userEntity        carries information about the resident
+     * @param residentialEntity carries information about the RE
+     */
+    @Override
+    public void newModeratorMessage(UserEntity userEntity, ResidentialEntity residentialEntity) {
+
+        Message message = createMessage(userEntity);
+        message.setText("Здравейте, " + userEntity.getFirstName() + "! " + PROMOTED_MODERATOR_BG);
+        message.setTextEn("Hello, " + userEntity.getFirstName() + "! " + PROMOTED_MODERATOR_ENG);
+
+        messageRepository.save(message);
+    }
+
+    /**
+     * Send SYSTEM message (+ notification) to the OWNER, when his property registration request is approved by RE Manager.
+     *
+     * @param property carries information about the property. Allows message extend.
+     */
+    @Override
+    public void propertyRegistrationApprovedMessage(Property property) {
+
+        Message message = createMessage(property.getOwner());
+        message.setText("Вашата заявка за регистрация за самостоятелен обект № " + property.getNumber() + " в състава на етажна собственост с идентификатор: "
+                + property.getResidentialEntity().getId() + " е ОДОБРЕНА! Разполагате с пълен достъп до информация касаеща Вашия самостоятелен обект и етажна собственост!");
+        message.setTextEn("Your registration request for property № " + property.getNumber() + " in Condominium ID: "
+                + property.getResidentialEntity().getId() + " has been APPROVED! You can now access your data and reports.");
+
+        messageRepository.save(message);
+
+        //send notification to property owner for property approval
+        notificationService.propertyRegistrationApprovedNotification(property);
+    }
+
+    /**
+     * Send SYSTEM message (+ notification) to OWNER when property change-request is APPROVED (with no changes)
+     *
+     * @param property hold the information about the property
+     */
+    @Override
+    public void propertyRegistrationApprovedWithNoChangesMessage(Property property) {
+        Message message = createMessage(property.getOwner());
+
+        message.setText("Вашата заявка за регистрация като собственик на самостоятелен обект № " + property.getNumber() + ", част от етажна собственост с идентификатор: "
+                + property.getResidentialEntity().getId() + " е ОДОБРЕНА. Установено е разминаване между данните от вашата заявка и тези, дефинирани в системата за този имот. " +
+                "Регистрацията Ви е одобрена, без да се взимат предвид данните от Вашата заявка! В случай на необходимост, може да проверите несъответствията с " +
+                "домоуправителя. При необходимост да изпратите заявка за промяна на параметри!");
+        message.setTextEn("Your registration request for property № " + property.getNumber() + " in Condominium ID: "
+                + property.getResidentialEntity().getId() + " has been APPROVED. Please note that there was a discrepancy " +
+                "between the data you provided and the system's preset data for this property. " +
+                "Your input data has been ignored, and no changes have been made to the system records. " +
+                "If necessary, you can verify the inconsistencies with the condominium manager or submit a request for data correction.");
+
+        messageRepository.save(message);
+
+        //send notification to property owner for property approval
+        notificationService.propertyRegistrationApprovedNotification(property);
+    }
+
+
+    /**
+     * Send SYSTEM message (+ notification) to the OWNER, when his property is REJECTED from RE.
+     *
+     * @param property carries information about the property. Allows message extend.
+     */
+    @Override
+    public void propertyRejectedMessage(Property property) {
+
+        Message message = createMessage(property.getOwner());
+        message.setText("Вашата заявка за регистрация на самостоятелен обект  № " + property.getNumber() + " в състава на етажна собственост с идентификатор : "
+                + property.getResidentialEntity().getId() + " е ОТХВЪРЛЕНА! За да разберете причината за това, моля да се свържите с Вашия домоуправител. " +
+                "В случай, че все още имате достъп до етажната собственост, може да коригирате и изпратите повторно заявката за регистрация!");
+        message.setTextEn("Your registration request for property № " + property.getNumber() + " in Condominium ID: "
+                + property.getResidentialEntity().getId() + " has been REJECTED. You can contact your Condominium manager for more details " +
+                "about the reason for this action. If you still have an access to the Condominium, You can edit the record and submit " +
+                "it again.");
+
+        messageRepository.save(message);
+
+        //send notification to property owner for property approval
+        notificationService.propertyRejectedNotification(property);
+    }
+
+    /**
+     * Send message to the OWNER, when manager REMOVES property owner!
+     *
+     * @param property carries information about the property. Allows message extend.
+     */
+    @Override
+    public void ownerRemovedMessageToOwner(Property property, UserEntity currentOwner) {
+
+        Message message = createMessage(currentOwner);
+
+        message.setText("Вие сте премахнат като собственик на самостоятелен обект № " + property.getNumber() + " в състатва на етажна собственост с идентификатор: "
+                + property.getResidentialEntity().getId() + ". За информация относно причината за това действие, моля да се обърнете към домоуправителя на дигиталната етажна собственост!");
+        message.setTextEn("You are removed as owner of individual unit No." + property.getNumber() + " in Condominium ID: "
+                + property.getResidentialEntity().getId() + ". You can contact your Condominium manager for more details " +
+                "about the reason for this action!");
+        messageRepository.save(message);
+    }
+
+
+    /**
+     * Send message to the OWNER, when his property is DELETED from RE.
+     *
+     * @param property carries information about the property. Allows message extend.
+     */
+    @Override
+    public void propertyDeletedMessageToOwner(Property property) {
+
+        Message message = createMessage(property.getOwner());
+
+        message.setText("Самостоятелен обект № " + property.getNumber() + " е премахнат от етажна собственост с идентификатор: "
+                + property.getResidentialEntity().getId() + ". За информация относно за причината за това действие, моля да се обърнете към домоуправителя на дигиталната етажна собственост!");
+        message.setTextEn("Your property № " + property.getNumber() + " has been REMOVED from Condominium ID: "
+                + property.getResidentialEntity().getId() + ". You can contact your Condominium manager for more details " +
+                "about the reason for this action. If you still have an access to the Condominium, You can submit new " +
+                "property registration request.");
+        messageRepository.save(message);
+    }
+
+
+    /**
+     * Send SYSTEM message to MANAGER, when property owner unlinks property from his profile
+     *
+     * @param property carries information about the property.
+     */
+    @Override
+    public void propertyDeletedMessageToManager(Property property, UserEntity currentOwner) {
+
+        String ownerName = currentOwner.getFirstName() + " " + currentOwner.getLastName();
+
+        Message message = createMessage(property.getResidentialEntity().getManager());
+        message.setText("Отказ на потребител " + ownerName + " от самостоятелен обект №" + property.getNumber() + " в състава на етажна собственост с идентификатор: "
+                + property.getResidentialEntity().getId() + ". До регистрацията на собственик, данните за този имот остават видими единствено за вас!");
+        message.setTextEn("User " + ownerName + " has withdrawn from the individual property No. " + property.getNumber() +
+                " within the condominium ID: " + property.getResidentialEntity().getId() +
+                ". Until an owner is registered, the data for this property will remain visible only to you!");
+
+        messageRepository.save(message);
+    }
+
+
+    /**
+     * Send SYSTEM message (+ notification) to OWNER when property change-request is APPROVED
+     *
+     * @param property hold the information about the property
+     */
+    @Override
+    public void propertyChangeRequestApprovedMessage(Property property) {
+
+        Message message = createMessage(property.getOwner());
+        message.setText("Вашата заявка за промяна на параметри по самостоятелен обект № " + property.getNumber() + " в състава на етажна собственост с идентификатор: "
+                + property.getResidentialEntity().getId() + " е одобрена. Промените са приложени!");
+        message.setTextEn("Your change request for property № " + property.getNumber() + " in Condominium ID: "
+                + property.getResidentialEntity().getId() + " has been APPROVED. Changes applied to your property!");
+
+        messageRepository.save(message);
+
+        //send notification to property owner for property change-request approval
+        notificationService.propertyChangeRequestApprovedNotification(property);
+    }
+
+    /**
+     * Send SYSTEM message (+ notification) to OWNER when property change-request is REJECTED
+     *
+     * @param property hold the information about the property
+     */
+    @Override
+    public void propertyChangeRequestRejectedMessage(Property property) {
+
+        Message message = createMessage(property.getOwner());
+        message.setText("Вашата заявка за промяна на параметри по самостоятелен обект № " + property.getNumber() + " в състава на етажна собственост с идентификатор: "
+                + property.getResidentialEntity().getId() + " е отхвърлена. Направените от Вас променя няма да влязат в сила! Може да изпратите повторна заявка в случай, че това е необходимо!");
+        message.setTextEn("Your change request for property № " + property.getNumber() + " in Condominium ID: "
+                + property.getResidentialEntity().getId() + " has been REJECTED. Your changes will not take affect. You can still send new change request if needed!");
+
+        messageRepository.save(message);
+
+        //send notification to property owner for property change-request approval
+        notificationService.propertyChangeRequestRejectedMessage(property);
+    }
+
+
+    /**
+     * New message (+ notification) to property OWNER for new monthly fee.
      *
      * @param property   Property
      * @param monthlyFee Monthly fee amount
@@ -351,72 +422,81 @@ public class MessageServiceImpl implements MessageService {
         int year = LocalDate.now().getYear();
 
         String messageText;
+        String messageTextEn;
+        Message message = createMessage(property.getOwner());
 
         if (dueAmount != null) {
-            messageText = "You have new monthly fee for " + month + " " + year + " for the amount of " +
+            messageText = "Имате нова месечна такса за " + month + " " + year + " за сумата от " +
+                    monthlyFee + "лв. за самостоятелн обект № " + property.getNumber() + "." +
+                    "\n" +
+                    "Информация за начислените такси и дължими суми може да откриете в меню Месечни такси! " +
+                    "Общата дължима сума за този самостоятелен обект е " + dueAmount + " лв.";
+            messageTextEn = "You have new monthly fee for " + month + " " + year + " for the amount of " +
                     monthlyFee + "лв. for property № " + property.getNumber() + "." +
                     "\n" +
                     "You can check details in your Property section." +
                     "Total due amount for your property is " + dueAmount + " лв.";
         } else {
-            messageText = "You have new monthly fee for " + month + " " + year + " for the amount of " +
+            messageText = "Имате нова месечна такса за " + month + " " + year + " за сумата от " +
+                    monthlyFee + "лв. за самостоятелн обект № " + property.getNumber() + "." +
+                    "\n" +
+                    "Информация за начислените такси и дължими суми може да откриете в менъ Месечни такси!" +
+                    "Към момента нямате натрупани текущи задължения!";
+            messageTextEn = "You have new monthly fee for " + month + " " + year + " for the amount of " +
                     monthlyFee + "лв. for property № " + property.getNumber() + "." +
                     "\n" +
                     "You can check details in your Property section." +
                     "You have no due amount";
         }
+        message.setText(messageText);
+        message.setTextEn(messageTextEn);
 
+        messageRepository.save(message);
 
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        messageText,
-                        property.getOwner(),
-                        false,
-                        false));
+        //send new fee notification to property owner
+        notificationService.newFeeNotificationToPropertyOwner(property, monthlyFee, dueAmount);
     }
 
+
+
+    /**
+     * New EVENT message (+ notification) for every VERIFIED property owner
+     *
+     * @param event             is the actual event triggering the notification
+     * @param residentialEntity is the current Residential entity where the event happens.
+     */
     @Override
-    public void propertyRegistrationApprovedWithNoChangesMessage(Property property) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "Your registration request for property № " + property.getNumber() + " in Condominium ID: "
-                                + property.getResidentialEntity().getId() + " has been APPROVED. Please note, that there " +
-                                "was a difference between your input data and the preset data for this property. " +
-                                " Your input data was ignored and no changes were made for this property." +
-                                "You can now access your property data and reports.",
-                        property.getOwner(),
-                        false,
-                        false));
+    public void newEventMessageToAllVerifiedPropertyOwners(Event event, ResidentialEntity residentialEntity) {
+        List<Message> newMessages = residentialEntity.getProperties().stream()
+                .filter(property -> property.isObtained() && property.getOwner() != null)
+                .map(property -> {
+                    Message message = createMessage(property.getOwner());
+                    message.setText(EVENT_MSG_BG);
+                    message.setTextEn(EVENT_MSG_ENG);
+                    return message;
+                })
+                .toList();
+
+        messageRepository.saveAll(newMessages);
+
+        //create notification for new event to all verified owners
+        notificationService.newEventNotificationToAllVerifiedPropertyOwners(event, residentialEntity);
     }
 
-    @Override
-    public void propertyChangeRequestApproved(Property property) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "Your change request for property № " + property.getNumber() + " in Condominium ID: "
-                                + property.getResidentialEntity().getId() + " has been APPROVED. Changes applied to your property!",
-                        property.getOwner(),
-                        false,
-                        false));
-    }
 
-    @Override
-    public void propertyChangeRequestRejected(Property property) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        "Your change request for property № " + property.getNumber() + " in Condominium ID: "
-                                + property.getResidentialEntity().getId() + " has been REJECTED. Your changes will not take affect. You can still send new change request if needed!",
-                        property.getOwner(),
-                        false,
-                        false));
+    /**
+     * New message template creation
+     *
+     * @return new message
+     */
+    private static Message createMessage(UserEntity receiver) {
+        Message message = new Message();
+        message.setDate(LocalDate.now());
+        message.setTime(Time.valueOf(LocalTime.now()));
+        message.setRead(false);
+        message.setArchived(false);
+        message.setReceiver(receiver);
+        return message;
     }
 
     @Override

@@ -39,9 +39,12 @@ class MessageServiceImplTestIT {
     private UserRepository userRepository;
     @Autowired
     private LanguageRepository languageRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @BeforeEach
     void setUp() {
+        notificationRepository.deleteAll();
         messageRepository.deleteAll();
         userRepository.deleteAll();
     }
@@ -49,6 +52,7 @@ class MessageServiceImplTestIT {
 
     @AfterEach
     void tearDown() {
+        notificationRepository.deleteAll();
         messageRepository.deleteAll();
         userRepository.deleteAll();
     }
@@ -251,13 +255,13 @@ class MessageServiceImplTestIT {
     }
 
     @Test
-    void testPropertyModificationMessageToResident() {
+    void testPropertyModificationMessageToOwner() {
         Property property = createTestData();
 
         List<UserEntity> allUsers = userRepository.findAll();
         Long userId = allUsers.get(1).getId();
 
-        messageServiceToTest.propertyModificationMessageToResident(property);
+        messageServiceToTest.propertyModificationMessageToOwner(property);
 
         List<Message> allMessages = messageRepository.findAll();
 
@@ -296,13 +300,13 @@ class MessageServiceImplTestIT {
     }
 
     @Test
-    void testPropertyDeletedMessageToOwner() {
+    void testOwnerRemovedMessageToOwner() {
         Property property = createTestData();
 
         List<UserEntity> allUsers = userRepository.findAll();
         Long userId = allUsers.get(1).getId();
 
-        messageServiceToTest.propertyDeletedMessageToOwner(property);
+        messageServiceToTest.ownerRemovedMessageToOwner(property, property.getOwner());
 
         List<Message> allMessages = messageRepository.findAll();
 
@@ -317,7 +321,7 @@ class MessageServiceImplTestIT {
         List<UserEntity> allUsers = userRepository.findAll();
         Long managerId = allUsers.get(0).getId();
 
-        messageServiceToTest.propertyDeletedMessageToManager(property);
+        messageServiceToTest.propertyDeletedMessageToManager(property, property.getResidentialEntity().getManager());
 
         List<Message> allMessages = messageRepository.findAll();
 

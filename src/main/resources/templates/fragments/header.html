@@ -1,36 +1,3 @@
-<!DOCTYPE html>
-<html lang='en'
-      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
-      xmlns:th='http://www.thymeleaf.org'>
-
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet">
-
-    <title>OurHome - Home management platform</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Additional CSS Files -->
-    <link href="/css/fontawesome.css" rel="stylesheet">
-    <link href="/css/our-home.css" rel="stylesheet">
-    <link href="/css/owl.css" rel="stylesheet">
-    <link href="/css/animate.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
-
-    <!-- Favicon -->
-    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
-    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
-    <link href="/favicon.ico" rel="shortcut icon"/>
-    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
-    <meta content="OurHome" name="apple-mobile-web-app-title"/>
-    <link href="/favicon/site.webmanifest" rel="manifest"/>
-</head>
-
-<body>
-
 <th:block sec:authorize="isAuthenticated()">
     <div class="sub-header" th:fragment="header">
         <div class="container">
@@ -41,18 +8,19 @@
                             <img alt="Avatar"
                                  th:if="${loggedUser.avatarPath != null}" th:src="@{${loggedUser.avatarPath}}">
                             <img alt="Default Avatar"
-                                 src="/avatars/default.jpg" th:unless="${loggedUser.avatarPath != null}">
-                        </a>
+                                 src="/avatars/default.jpg" th:unless="${loggedUser.avatarPath != null}"></a>
                     </button>
                 </div>
                 <div class="logged-user">
                     <p><b th:text="${loggedUser.getFirstName()} + ' ' + ${loggedUser.getLastName()}"></b></p>
                 </div>
+                <button class="toggle-btn" id="toggle-notifications">
+                    <i class="fa-regular fa-bell text-dark" style="margin-left: 10px"></i>
+                </button>
             </div>
         </div>
     </div>
 </th:block>
-<!-- ***** Sub-header End ***** -->
 
-</body>
-</html>
+<!--Notifications-->
+<div th:replace="~{fragments/notifications}"></div>

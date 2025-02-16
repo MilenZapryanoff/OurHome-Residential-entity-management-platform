@@ -126,7 +126,7 @@ public class PropertyServiceImpl implements PropertyService {
 
             if (verificationRequired) {
                 property.setPropertyRegisterRequest(newPropertyRegisterRequest);
-                //sending message to Condominium manager for pending approval
+
                 messageService.propertyPendingRegistrationMessageToManager(residentialEntity);
             } else {
                 property.setObtained(true);
@@ -142,15 +142,15 @@ public class PropertyServiceImpl implements PropertyService {
         }
         return false;
     }
-
     /**
      * Property owner remove. Property remains active.
-     * Performed by USER or MANAGER
+     * Performed by OWNER
      *
      * @param id property id
      */
     public void unlinkOwner(Long id, boolean deletedByManager) {
         Property property = getProperty(id);
+        UserEntity currentOwner = property.getOwner();
 
         if (property != null) {
 
@@ -176,9 +176,9 @@ public class PropertyServiceImpl implements PropertyService {
             propertyRepository.save(property);
 
             if (deletedByManager) {
-                messageService.propertyDeletedMessageToOwner(property);
+                messageService.ownerRemovedMessageToOwner(property, currentOwner);
             } else {
-                messageService.propertyDeletedMessageToManager(property);
+                messageService.propertyDeletedMessageToManager(property, currentOwner);
             }
         }
     }
@@ -246,6 +246,8 @@ public class PropertyServiceImpl implements PropertyService {
                 updatePropertyFee(property.getResidentialEntity(), property, property.getPropertyType());
             }
             propertyRepository.save(property);
+
+            messageService.propertyRegistrationApprovedMessage(property);
         }
     }
 
@@ -314,7 +316,7 @@ public class PropertyServiceImpl implements PropertyService {
 
             propertyRepository.save(property);
 
-            messageService.propertyChangeRequestApproved(property);
+            messageService.propertyChangeRequestApprovedMessage(property);
         }
     }
 
@@ -335,7 +337,7 @@ public class PropertyServiceImpl implements PropertyService {
             //set propertyChangeRequest to rejected
             propertyChangeRequestService.markChangeRequestAsRejected(propertyChangeRequest);
 
-            messageService.propertyChangeRequestRejected(property);
+            messageService.propertyChangeRequestRejectedMessage(property);
         }
 
     }
@@ -483,7 +485,7 @@ public class PropertyServiceImpl implements PropertyService {
 
         //sending message to owner if owner registration is completed
         if (property.isObtained()) {
-            messageService.propertyModificationMessageToResident(property);
+            messageService.propertyModificationMessageToOwner(property);
         }
 
         return true;
@@ -780,7 +782,7 @@ public class PropertyServiceImpl implements PropertyService {
 
             //if validation is required (input fee components data equals to property data)
             if (validationIsRequired(property.getId(), propertyEditBindingModel)) {
-                messageService.propertyModificationMessageToManager(property);
+                messageService.propertyPendingRegistrationMessageToManager(property.getResidentialEntity());
                 //if validation is not required (input fee components data equals to property data)
             } else {
                 property.setParkingAvailable(propertyRegisterRequest.isParkingAvailable());

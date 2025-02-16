@@ -83,12 +83,18 @@
             <th:block sec:authorize="isAnonymous()">
                 <p>Български език</p>
             </th:block>
+            <th:block sec:authorize="isAuthenticated()">
+                <button class="toggle-btn" id="toggle-notifications">
+                    <i class="fa-regular fa-bell text-dark" style="margin-left: 10px"></i>
+                </button>
+            </th:block>
         </div>
     </div>
 </div>
 
 <!-- ***** NavBar ***** -->
 <div th:replace="~{bg/fragments/navbar}"></div>
+
 
 <!-- ***** Main Banner Start ***** -->
 <div class="main-banner">
@@ -111,8 +117,10 @@
                 <h2>MAKE YOUR LIVING ENVIRONMENT BETTER</h2>
             </div>
         </div>
+
     </div>
 </div>
+
 
 <!-- ***** About us ***** -->
 <div class="container">
@@ -380,6 +388,9 @@
     </div>
 </div>
 
+<!--Notifications-->
+<div th:replace="~{fragments/notifications}"></div>
+
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
 </footer>
@@ -392,6 +403,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/notifications.js"></script>
 <script src="/js/lang-selector.js"></script>
 
 </body>

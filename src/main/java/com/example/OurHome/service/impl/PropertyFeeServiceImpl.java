@@ -9,6 +9,7 @@ import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBi
 import com.example.OurHome.repo.PropertyFeeRepository;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.service.MessageService;
+import com.example.OurHome.service.NotificationService;
 import com.example.OurHome.service.PropertyFeeService;
 import com.example.OurHome.service.ResidentialEntityService;
 import com.example.OurHome.service.events.PropertyCreationEvent;
@@ -30,13 +31,15 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     private final ModelMapper modelMapper;
     private final MessageService messageService;
     private final ResidentialEntityService residentialEntityService;
+    private final NotificationService notificationService;
 
-    public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper, MessageService messageService, ResidentialEntityService residentialEntityService) {
+    public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper, MessageService messageService, ResidentialEntityService residentialEntityService, NotificationService notificationService) {
         this.propertyFeeRepository = propertyFeeRepository;
         this.propertyRepository = propertyRepository;
         this.modelMapper = modelMapper;
         this.messageService = messageService;
         this.residentialEntityService = residentialEntityService;
+        this.notificationService = notificationService;
     }
 
     /**
@@ -134,8 +137,12 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
             newMonthlyFee.setDescription(now.getMonth() + " " + now.getYear());
             propertyFeeRepository.save(newMonthlyFee);
 
-            //send message to property owner
-            messageService.newFeeMessageToPropertyOwner(property, property.getTotalMonthlyFee(), checkTotalDueAmount(property.getId()));
+
+            //send message and notification only if there is an owner set (and verified)
+            if (property.getOwner() != null && property.isObtained()) {
+                //send message to property owner
+                messageService.newFeeMessageToPropertyOwner(property, property.getTotalMonthlyFee(), checkTotalDueAmount(property.getId()));
+            }
         }
     }
 

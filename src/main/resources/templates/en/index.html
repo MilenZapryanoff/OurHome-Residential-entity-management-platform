@@ -82,6 +82,11 @@
             <th:block sec:authorize="isAnonymous()">
                 <p>English</p>
             </th:block>
+            <th:block sec:authorize="isAuthenticated()">
+                <button class="toggle-btn" id="toggle-notifications">
+                    <i class="fa-regular fa-bell text-dark" style="margin-left: 10px"></i>
+                </button>
+            </th:block>
         </div>
     </div>
 </div>
@@ -377,6 +382,8 @@
     </div>
 </div>
 
+<!--Notifications-->
+<div th:replace="~{fragments/notifications}"></div>
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
@@ -390,6 +397,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/notifications.js"></script>
 <script src="/js/lang-selector.js"></script>
 
 </body>

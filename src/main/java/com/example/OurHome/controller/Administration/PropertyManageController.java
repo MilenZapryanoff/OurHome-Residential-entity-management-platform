@@ -250,7 +250,7 @@ public class PropertyManageController {
             return new ModelAndView("redirect:/administration/property/active/" + residentialEntity.getId());
         } else {
             //sending message (notification) to owner/resident
-            messageService.propertyModificationMessageToResident(propertyService.findPropertyById(id));
+            messageService.propertyModificationMessageToOwner(propertyService.findPropertyById(id));
 
             return view.addObject("editFailed", true);
         }

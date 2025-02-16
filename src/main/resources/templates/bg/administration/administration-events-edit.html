@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'>
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div class="js-preloader" id="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div class="sub-header" th:replace="~{fragments/header}">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/bg/fragments/navbar}"></div>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Създаване на нов сигнал</h3>
+            <div class="err-msg" th:if="${editFailed}">
+                <h5 class="text-light">Неуспешна промяна на сигнал!</h5>
+                <p class="text-light" th:text="${errorMsg}"></p>
+            </div>
+            <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
+        </div>
+    </div>
+</div>
+
+<!-- Property edit input form -->
+<div class="container">
+    <div class="input-content text-center">
+        <div class="col-lg-6 center-form">
+            <form enctype="multipart/form-data"
+                  id="input-form"
+                  th:action="@{/administration/events/edit/{id}(id=${id})}"
+                  th:method="POST"
+                  th:object="${eventEditBindingModel}">
+
+                <fieldset>
+                    <label for="title"><b>Описание на събитието</b></label><br>
+                    <p class="text-danger"
+                       th:errors="*{title}"
+                       th:if="${#fields.hasErrors('title')}">Description error message...</p>
+                    <input autocomplete="on" id="title"
+                           placeholder="Въведе описание на събитието..."
+                           required
+                           step="any"
+                           th:errorclass="bg-danger" th:field="*{title}"
+                           th:value="${eventEditBindingModel.getTitle()}"
+                           type="text">
+                </fieldset>
+                <fieldset>
+                    <label for="date"><b>Дата</b></label>
+                    <p class="text-danger"
+                       th:errors="*{date}"
+                       th:if="${#fields.hasErrors('date')}">Date error message...</p>
+                    <input id="date" required
+                           th:errorclass="bg-danger"
+                           th:field="*{date}"
+                           th:value="${eventEditBindingModel.getDate()}"
+                           th:type="date">
+                </fieldset>
+                <fieldset>
+                    <label for="timeFrom"><b>Начален час</b></label>
+                    <p class="text-danger"
+                       th:errors="*{timeFrom}"
+                       th:if="${#fields.hasErrors('timeFrom')}">Въведете начален час...</p>
+                    <input id="timeFrom"
+                           th:errorclass="bg-danger"
+                           th:field="*{timeFrom}"
+
+                           th:type="time">
+                </fieldset>
+                <fieldset>
+                    <label for="timeTo"><b>Краен час</b></label>
+                    <p class="text-danger"
+                       th:errors="*{timeTo}"
+                       th:if="${#fields.hasErrors('timeTo')}">Въведете краен час...</p>
+                    <input id="timeTo"
+                           th:errorclass="bg-danger"
+                           th:field="*{timeTo}"
+                           th:value="${eventEditBindingModel.getTimeTo()}"
+                           type="time">
+                </fieldset>
+                <fieldset>
+                    <button class="orange-button" id="form-submit"
+                            type="submit">Промени
+                    </button>
+                    <button type="button">
+                        <a class="orange-button"
+                           th:href="@{/administration/events/{id}(id=${residentialEntityId})}">
+                            <p class="text-light">Отказ</p>
+                        </a>
+                    </button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/notifications.js"></script>
+<script src="/js/report-image-upload.js"></script>
+
+
+</body>
+</html>

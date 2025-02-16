@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Controller
 public class ReportsController {
