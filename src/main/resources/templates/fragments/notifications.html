@@ -1,0 +1,336 @@
+<th:block sec:authorize="isAuthenticated()">
+
+    <div class="notification-container">
+
+        <div class="no-notifications hidden" id="no-notifications-message">
+            <div class="no-notifications-container">
+                <p th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'">Нямате нови известия!</p>
+                <p th:if="${loggedUser.getLanguage().getDescription()} == 'english'">No new notifications!</p>
+            </div>
+        </div>
+
+
+        <form th:action="@{/clearnotifications/{id} (id=${loggedUser.getId()})}"
+              th:method="POST">
+            <button class="clear-btn" id="clear-notifications" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                    type="submit"><i class="fa-regular fa-trash-can"></i> Изтрий всички
+            </button>
+            <button class="clear-btn" id="clear-notifications" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                    type="submit"><i class="fa-regular fa-trash-can"></i> Delete all
+            </button>
+        </form>
+
+        <div class="notification__cell"
+             th:each="notification: ${@notificationRepository.findAllNotificationsByUserId(loggedUser.getId())}">
+
+            <!--New MESSAGE received notification (O/M)-->
+            <div class="notification notification--yellow" th:if="${notification.getCategory()} == 'new-message'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/messages}"><i class="fa-regular fa-envelope"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                    <div class="notification__close">
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                    </div>
+            </div>
+
+            <!--New EVENT creation notification (O)-->
+            <div class="notification notification--blue" th:if="${notification.getCategory()} == 'new-event'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/property/events/{id}(id=${notification.getEventId()})}"><i
+                        class="fa-regular fa-calendar"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                <div class="notification__close">
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+
+            <!--New FEE notification (O)-->
+            <div class="notification notification--red" th:if="${notification.getCategory()} == 'new-fee'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/property/monthlyfees/{id}(id=${notification.getEventId()})}"><i
+                        class="fa-solid fa-hand-holding-dollar"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                <div class="notification__close">
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+
+            <!--New property REGISTRATION Request notification (M)-->
+            <div class="notification notification--green" th:if="${notification.getCategory()} == 'registration-request'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/administration/owners/pending/{id}(id=${notification.getEventId()})}"><i
+                        class="fa-solid fa-users"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                <div class="notification__close">
+                    <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                    <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+
+            <!--Property REGISTRATION Approved notification (O)-->
+            <div class="notification notification--purple" th:if="${notification.getCategory()} == 'registration-approval'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/property/summary/{id}(id=${notification.getEventId()})}"><i
+                        class="fa-solid fa-building"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                    <div class="notification__close">
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+
+            <!--Property REGISTRATION Rejected notification (O)-->
+            <div class="notification notification--purple" th:if="${notification.getCategory()} == 'registration-rejection'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/property/details/{id}(id=${notification.getEventId()})}"><i
+                        class="text-danger fa-solid fa-triangle-exclamation"></i></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                <div class="notification__close">
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+
+            <!--Property CHANGE REQUEST approval notification (O)-->
+            <div class="notification notification--purple" th:if="${notification.getCategory()} == 'change-approval'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/property/details/{id}(id=${notification.getEventId()})}"><i
+                        class="fa-solid fa-building"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                <div class="notification__close">
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+
+            <!--Property CHANGE REQUEST rejection notification (O)-->
+            <div class="notification notification--purple" th:if="${notification.getCategory()} == 'change-rejection'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/property/details/{id}(id=${notification.getEventId()})}"><i
+                        class="text-danger fa-solid fa-triangle-exclamation"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                <div class="notification__close">
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+
+            <!--Property DATA CHANGE notification (O)-->
+            <div class="notification notification--purple" th:if="${notification.getCategory()} == 'data-change'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/property/details/{id}(id=${notification.getEventId()})}"><i
+                        class="fa-solid fa-building"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                    <div class="notification__close">
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+
+            <!--Property CHANGE REQUEST notification (M)-->
+            <div class="notification notification--purple" th:if="${notification.getCategory()} == 'change-request'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/administration/property/change-requests/{id}(id=${notification.getEventId()})}"><i
+                        class="fa-solid fa-building"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                <div class="notification__close">
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                        <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+
+            <!--New REPORT creation notification (M)-->
+            <div class="notification notification--red" th:if="${notification.getCategory()} == 'new-report'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/administration/reports/{id}(id=${notification.getEventId()})}"><i class="text-warning fa-solid fa-triangle-exclamation"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                <div class="notification__close">
+                    <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                    <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+
+            <!--REPORT update notification (O)-->
+            <div class="notification notification--red" th:if="${notification.getCategory()} == 'report-update'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/property}"><i class="text-warning fa-solid fa-triangle-exclamation"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                <div class="notification__close">
+                    <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                    <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+
+            <!--New REPORT creation notification (Os)-->
+            <div class="notification notification--red" th:if="${notification.getCategory()} == 'report-notification'"
+                 th:data-notification-id="${notification.getId()}">
+
+                <a th:href="@{/property/reports/{id}(id=${notification.getEventId()})}"><i class="text-warning fa-solid fa-triangle-exclamation"></i></a>
+
+                <div class="notification__content">
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getTitleBG()}"></p>
+                    <p class="notification__type" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getTitleEN()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                       th:text="${notification.getDescriptionBG()}"></p>
+                    <p class="notification__message" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                       th:text="${notification.getDescriptionEN()}"></p>
+                </div>
+
+                <div class="notification__close">
+                    <i th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'" title="Изтрий известието" class="fa-regular fa-trash-can"></i>
+                    <i th:if="${loggedUser.getLanguage().getDescription()} == 'english'" title="Delete notification" class="fa-regular fa-trash-can"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>

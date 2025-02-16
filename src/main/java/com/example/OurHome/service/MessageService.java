@@ -1,10 +1,6 @@
 package com.example.OurHome.service;
 
-import com.example.OurHome.model.Entity.Message;
-import com.example.OurHome.model.Entity.Property;
-import com.example.OurHome.model.Entity.ResidentialEntity;
-import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.dto.BindingModels.ReportBug.ReportBugBindingModel;
+import com.example.OurHome.model.Entity.*;
 
 import java.math.BigDecimal;
 
@@ -21,7 +17,7 @@ public interface MessageService {
 
     void propertyModificationMessageToManager(Property property);
 
-    void propertyModificationMessageToResident(Property property);
+    void propertyModificationMessageToOwner(Property property);
 
     void propertyRegistrationApprovedMessage(Property property);
 
@@ -29,9 +25,11 @@ public interface MessageService {
 
     void propertyRejectedMessage(Property property);
 
+    void ownerRemovedMessageToOwner(Property property, UserEntity currentOwner);
+
     void propertyDeletedMessageToOwner(Property property);
 
-    void propertyDeletedMessageToManager(Property property);
+    void propertyDeletedMessageToManager(Property property, UserEntity currentOwner);
 
     void readMessage(Long id);
 
@@ -49,7 +47,9 @@ public interface MessageService {
 
     void newFeeMessageToPropertyOwner(Property property, BigDecimal monthlyFee, BigDecimal dueAmount);
 
-    void propertyChangeRequestApproved(Property property);
+    void propertyChangeRequestApprovedMessage(Property property);
 
-    void propertyChangeRequestRejected(Property property);
+    void propertyChangeRequestRejectedMessage(Property property);
+
+    void newEventMessageToAllVerifiedPropertyOwners(Event event, ResidentialEntity residentialEntityById);
 }

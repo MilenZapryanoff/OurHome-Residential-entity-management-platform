@@ -185,7 +185,7 @@ public class OwnersController {
     }
 
     /**
-     * Unlink property owner
+     * Unlink property owner from property when registration request is deleted. The owner remains part of the condominium, but the property ownership is reset to null.
      *
      * @param propertyManageBindingModel carries information about the entityId
      * @param id                         property id
@@ -195,7 +195,6 @@ public class OwnersController {
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView unlinkPropertyOwner(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
                                             @PathVariable("id") Long id) {
-
 
         propertyService.unlinkOwner(id, true);
 

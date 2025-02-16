@@ -61,5 +61,7 @@ public interface SecurityService {
     boolean checkReportUserViewAccess(Long reportId, Authentication authentication);
 
     boolean checkReportImageViewAccess(Long reportId, Authentication authentication);
+
+    boolean checkEventModeratorAccess(Long reportId, Authentication authentication);
 }
 

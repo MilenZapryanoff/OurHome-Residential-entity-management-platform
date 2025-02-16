@@ -8,6 +8,7 @@ import com.example.OurHome.model.dto.BindingModels.Reports.ReportAddBindingModel
 import com.example.OurHome.model.dto.BindingModels.Reports.ReportEditBindingModel;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.repo.ReportRepository;
+import com.example.OurHome.service.NotificationService;
 import com.example.OurHome.service.ReportService;
 import com.example.OurHome.service.ResidentialEntityService;
 import jakarta.transaction.Transactional;
@@ -35,12 +36,14 @@ public class ReportServiceImpl implements ReportService {
     private static final String PICTURE_PATH_DIR = "/reports-images/"; // Директория за качените файлове
     private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB в байтове
     private final PropertyRepository propertyRepository;
+    private final NotificationService notificationService;
 
-    public ReportServiceImpl(ModelMapper modelMapper, ResidentialEntityService residentialEntityService, ReportRepository reportRepository, PropertyRepository propertyRepository) {
+    public ReportServiceImpl(ModelMapper modelMapper, ResidentialEntityService residentialEntityService, ReportRepository reportRepository, PropertyRepository propertyRepository, NotificationService notificationService) {
         this.modelMapper = modelMapper;
         this.residentialEntityService = residentialEntityService;
         this.reportRepository = reportRepository;
         this.propertyRepository = propertyRepository;
+        this.notificationService = notificationService;
     }
 
     /**
@@ -49,10 +52,10 @@ public class ReportServiceImpl implements ReportService {
      *
      * @param reportAddBindingModel - input data
      * @param id                    - condominium id
-     * @param loggedUser            - currently logged user
+     * @param creator            - currently logged user
      */
     @Override
-    public void processReport(ReportAddBindingModel reportAddBindingModel, Long id, UserEntity loggedUser) {
+    public void processReport(ReportAddBindingModel reportAddBindingModel, Long id, UserEntity creator) {
         List<MultipartFile> images = Arrays.asList(
                 reportAddBindingModel.getImage1(),
                 reportAddBindingModel.getImage2(),
@@ -73,7 +76,7 @@ public class ReportServiceImpl implements ReportService {
         String imagePath3 = images.get(2) != null && !images.get(2).isEmpty() ? saveImage(images.get(2)) : null;
 
         // Създаване на сигнал с валидираните снимки
-        createReport(reportAddBindingModel, id, imagePath1, imagePath2, imagePath3, loggedUser);
+        createReport(reportAddBindingModel, id, imagePath1, imagePath2, imagePath3, creator);
     }
 
     /**
@@ -124,10 +127,10 @@ public class ReportServiceImpl implements ReportService {
      *
      * @param reportAddBindingModel - input data
      * @param id                    - condominium id
-     * @param loggedUser            - currently logged user
+     * @param creator            - currently logged user
      */
     @Override
-    public void createReport(ReportAddBindingModel reportAddBindingModel, Long id, String imagePath1, String imagePath2, String imagePath3, UserEntity loggedUser) {
+    public void createReport(ReportAddBindingModel reportAddBindingModel, Long id, String imagePath1, String imagePath2, String imagePath3, UserEntity creator) {
 
         // Създаване на нов обект Report
         Report report = new Report();
@@ -137,7 +140,7 @@ public class ReportServiceImpl implements ReportService {
         report.setSubCategory(reportAddBindingModel.getSubCategory());
         report.setPriority(reportAddBindingModel.getPriority());
         report.setSource(reportAddBindingModel.getSource());
-        report.setCreator(loggedUser);
+        report.setCreator(creator);
         report.setDescription(reportAddBindingModel.getDescription());
         report.setContactInfo(reportAddBindingModel.getContactInfo());
         report.setPublicReport(reportAddBindingModel.isPublicReport());
@@ -155,6 +158,16 @@ public class ReportServiceImpl implements ReportService {
 
         // Записване на обекта в базата
         reportRepository.save(report);
+
+        // Sending notification to MANAGER if the creator of the Report is NOT the same as the manager
+        if (!creator.getId().equals(residentialEntity.getManager().getId())) {
+            notificationService.newReportNotificationToManager(creator, residentialEntity);
+        }
+
+        // Sending notification to all property owners if the report is set as public
+        if (report.isPublicReport()) {
+            notificationService.newReportNotificationToAllOwners(creator, residentialEntity);
+        }
     }
 
     /**
@@ -184,9 +197,13 @@ public class ReportServiceImpl implements ReportService {
 
             // Записване на обекта в базата
             reportRepository.save(report);
+
+            //send notification to creator
+            if (!loggedUser.getId().equals(report.getCreator().getId())) {
+                notificationService.reportUpdateNotificationToCreator(loggedUser, report);
+            }
         }
     }
-
 
 
     /**
@@ -367,7 +384,6 @@ public class ReportServiceImpl implements ReportService {
             }
         }
     }
-
 
 
 }

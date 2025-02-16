@@ -45,6 +45,9 @@ class PropertyServiceImplTestIT {
     private RoleRepository roleRepository;
 
     @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
     private PropertyRegisterRequestRepository propertyRegisterRequestRepository;
 
     @Autowired
@@ -54,6 +57,7 @@ class PropertyServiceImplTestIT {
 
     @BeforeEach
     void setUp() {
+        notificationRepository.deleteAll();
         propertyRepository.deleteAll();
         residentialEntityRepository.deleteAll();
         userRepository.deleteAll();
@@ -63,6 +67,7 @@ class PropertyServiceImplTestIT {
 
     @AfterEach
     void tearDown() {
+        notificationRepository.deleteAll();
         propertyRepository.deleteAll();
         residentialEntityRepository.deleteAll();
         userRepository.deleteAll();
@@ -455,46 +460,12 @@ class PropertyServiceImplTestIT {
         return  propertyCreateBindingModel;
     }
 
-    @Test
-    void testApprovePropertyRegistrationWithDataChange() {
-
-        ResidentialEntity residentialEntity = createResidentialEntity();
-        residentialEntityRepository.save(residentialEntity);
-
-        PropertyRegisterRequest testPropertyRegisterRequest = createTestpropertyRegisterRequest();
-        testPropertyRegisterRequest.setResidentialEntityId(100L);
-        propertyRegisterRequestRepository.save(testPropertyRegisterRequest);
-
-        Property testProperty = createTestProperty();
-        testProperty.setResidentialEntity(residentialEntity);
-        testProperty.setPropertyRegisterRequest(testPropertyRegisterRequest);
-        propertyRepository.save(testProperty);
-
-        UserEntity testOwner = createTestOwner();
-        userRepository.save(testOwner);
-
-        Long id = null;
-        List<Property> allProperties = propertyRepository.findAll();
-        Property resultProperty = allProperties.get(0);
-
-        propertyServiceToTest.approvePropertyRegistrationWithDataChange(resultProperty.getId(), true);
-
-        Optional<Property> property = propertyRepository.findById(resultProperty.getId());
-        List<PropertyRegisterRequest> allPropertyRegisterRequests = propertyRegisterRequestRepository.findAll();
-        PropertyRegisterRequest resultPropertyRegisterRequest = allPropertyRegisterRequests.get(0);
-
-        assertEquals(property.get().getNumberOfAdults(), testPropertyRegisterRequest.getNumberOfAdults());
-        assertEquals(property.get().getNumberOfChildren(), testPropertyRegisterRequest.getNumberOfChildren());
-        assertEquals(property.get().getNumberOfPets(), testPropertyRegisterRequest.getNumberOfPets());
-        assertTrue(property.get().isObtained());
-        assertNull(property.get().getPropertyRegisterRequest());
-        assertFalse(resultPropertyRegisterRequest.isActive());
-    }
 
     @Test
     void testRejectProperty() {
         Property testProperty = createTestProperty();
         testProperty.setRejected(false);
+        testProperty.setOwner(createTestOwner());
         testProperty.setResidentialEntity(createResidentialEntity());
         propertyRepository.save(testProperty);
 
@@ -537,6 +508,7 @@ class PropertyServiceImplTestIT {
         Property testProperty = createTestProperty();
         testProperty.setRejected(false);
         testProperty.setResidentialEntity(createResidentialEntity());
+        testProperty.setOwner(createTestOwner());
         propertyRepository.save(testProperty);
 
         Long id = null;

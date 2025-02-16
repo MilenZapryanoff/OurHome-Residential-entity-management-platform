@@ -36,12 +36,15 @@ class PropertyFeeServiceImplTestIT {
     @Autowired
     private PropertyFeeRepository propertyFeeRepository;
     @Autowired
+    private NotificationRepository notificationRepository;
+    @Autowired
     private PropertyRepository propertyRepository;
     @Autowired
     private LanguageRepository languageRepository;
 
     @BeforeEach
     void setUp() {
+        notificationRepository.deleteAll();
         propertyFeeRepository.deleteAll();
         propertyRepository.deleteAll();
         residentialEntityRepository.deleteAll();
@@ -50,6 +53,7 @@ class PropertyFeeServiceImplTestIT {
 
     @AfterEach
     void tearDown() {
+        notificationRepository.deleteAll();
         propertyFeeRepository.deleteAll();
         propertyRepository.deleteAll();
         residentialEntityRepository.deleteAll();

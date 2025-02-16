@@ -79,6 +79,14 @@ A platform that allows the registration of both home owners and residential enti
 
 <h2>Updates</h2>
 
+<h4>v.2.25.0216</h4>
+  <ul>
+    <li>1. Events calendar is now fully integrated. Condominium manager can now create events for the owners of condominium properties.</li>
+    <li>2. Notifications functionality added. There are now various amount ot notifications for different events. Events are now available for property owners as well as condominium managers.
+        This will help with managing events and preventing users to miss important actions.</li>
+     <li>3. Rest-controller implemented for notifications deletion requests</li>
+</ul>
+
 <h4>v.2.25.0203</h4>
   <ul>
     <li>New features added:</li>

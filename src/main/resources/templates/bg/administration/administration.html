@@ -78,6 +78,7 @@
     </div>
 </div>
 
+
 <div class="properties" th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) == 0}">
     <p class="text-center" style="margin: 14em auto"
        th:if="${@residentialEntityRepository.countByManager_Id(userViewModel.getId()) == 0}">Нямате регистрирани
@@ -118,6 +119,7 @@
     </div>
 </div>
 
+
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
 </footer>
@@ -130,6 +132,7 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/notifications.js"></script>
 
 </body>
 </html>

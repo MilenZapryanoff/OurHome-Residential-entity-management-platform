@@ -19,7 +19,6 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -58,10 +57,14 @@
     <div class="container">
         <div class="row">
             <h3>Събития</h3>
-<!--            <div class="err-msg" th:if="${deleteFailed}">-->
-<!--                <h5 class="text-light">Неуспешно изтриване на сигнал!</h5>-->
-<!--                <p class="text-light" th:text="${errorMsg}"></p>-->
-<!--            </div>-->
+            <div class="err-msg" th:if="${addFailed}">
+                <h5 class="text-light">Неуспешно създаване на сигнал!</h5>
+                <p class="text-light" th:text="${errorMsg}"></p>
+            </div>
+            <div class="err-msg" th:if="${deletionFailed}">
+                <h5 class="text-light">Неуспешно изтривене на сигнал!</h5>
+                <p class="text-light" th:text="${errorMsg}"></p>
+            </div>
             <div class="col-lg-12">
                 <span th:text="'Идентификатор на ЕС: ' + ${residentialEntity.getId()}"></span>
             </div>
@@ -70,9 +73,7 @@
 </div>
 
 
-
-
-<!-- ***** Reports section ***** -->
+<!-- ***** Events section ***** -->
 <div class="page-content">
     <!--start of Sub-menu-->
     <div class="menu-container">
@@ -81,192 +82,234 @@
     <div class="content">
         <div class="container">
             <div class="administration">
-                <div class="info-table rounded-bottom" id="property-types">
-                    <!--Events header-->
+                <div class="info-table rounded">
+                    <!--Active registrations header-->
                     <div class="text-center">
                         <h4 class="category text-danger">Календар на етажната собственост</h4>
                         <br>
                         <p>Информация за всички планирани събития в календара на етажната собственост.</p>
                     </div>
-
-
-<!--                ФИЛТЪР-->
-                    <h4 class="text-center text-danger">Търсене</h4>
-                    <div class="col-10 text-center" id="filter" style="margin: 70px auto">
-                        <div id="input-form">
-                            <form th:action="@{/administration/events/{id} (id=${id})}"
-                                  th:method="POST"
-                                  th:object="${eventsFilterBindingModel}">
-                                <div class="input-content">
-                                    <div class="input-group">
-                                        <div class="col-4">
-<!--                                            <fieldset>-->
-<!--                                                <label for="periodStart"><b>Начало на период</b></label>-->
-<!--                                                <br>-->
-<!--                                                <small class="text-danger"-->
-<!--                                                       th:errors="*{periodStart}"-->
-<!--                                                       th:if="${#fields.hasErrors('periodStart')}">Fee start period-->
-<!--                                                    error...</small>-->
-<!--                                                <input id="periodStart"-->
-<!--                                                       th:errorclass="bg-danger"-->
-<!--                                                       th:field="*{periodStart}"-->
-<!--                                                       th:value="${expenseFilterBindingModel.getPeriodStart()}"-->
-<!--                                                       type="date">-->
-<!--                                            </fieldset>-->
-                                        </div>
-                                        <div class="col-4">
-<!--                                            <fieldset>-->
-<!--                                                <b>Общо разходи за този период</b><br>-->
-<!--                                                <h5 class="text-danger"-->
-<!--                                                    th:text="${expenseFilterBindingModel.getTotalExpensesAmount()} + ' лв.'"></h5>-->
-<!--                                                <br>-->
-<!--                                            </fieldset>-->
-                                        </div>
-                                        <div class="col-4">
-<!--                                            <fieldset>-->
-<!--                                                <label for="periodEnd"><b>Край на период</b></label>-->
-<!--                                                <br>-->
-<!--                                                <small class="text-danger"-->
-<!--                                                       th:errors="*{periodEnd}"-->
-<!--                                                       th:if="${#fields.hasErrors('periodEnd')}">Fee end-->
-<!--                                                    period error...</small>-->
-<!--                                                <input id="periodEnd"-->
-<!--                                                       th:errorclass="bg-danger"-->
-<!--                                                       th:field="*{periodEnd}"-->
-<!--                                                       th:value="${expenseFilterBindingModel.getPeriodEnd()}"-->
-<!--                                                       type="date">-->
-<!--                                            </fieldset>-->
-                                        </div>
-                                    </div>
-                                    <button class="orange-button col-lg-3" id="form-submit"
-                                            type="submit">Търси
-                                    </button>
-                                </div>
+                    <div class="due-amounts-header" style="padding: 10px 0">
+                        <!--Records counter-->
+                        <div class="main-content">
+                     <span class="category text-bg-success"
+                           style="padding: 1px 5px; border-radius: 5px"
+                           th:if="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} == 0"
+                           th:text="'0 предстоящи събития'"></span>
+                            <span class="category text-bg-success"
+                                  style="padding: 1px 5px; border-radius: 5px"
+                                  th:if="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} == 1"
+                                  th:text="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} + ' предстоящо събитие'"></span>
+                            <span class="category text-bg-success"
+                                  style="padding: 1px 5px; border-radius: 5px"
+                                  th:if="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} > 1"
+                                  th:text="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} + ' предстоящи събития'"></span>
+                        </div>
+                        <!--Add global fee button-->
+                        <div class="add-fee">
+                            <form th:action="@{/administration/events/add/{id} (id=${residentialEntity.getId()})}">
+                                <button type="submit">
+                                    <img alt="Създай ново събитие"
+                                         src="/images/add_button.png"
+                                         style="max-width: 20px;"
+                                         title="Създай ново събитие">
+                                    <p class="text-dark">
+                                        Създай ново събитие
+                                    </p>
+                                </button>
                             </form>
                         </div>
                     </div>
+                    <hr>
+                    <p class="text-center"
+                       th:if="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} == 0"><br>Не са
+                        открити предстоящи събития!</p>
+                    <!--Property types list-->
+                    <table class="table text-center"
+                           th:unless="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} == 0">
+                        <tr>
+                            <th style="width: 300px">
+                                <p>Описание</p>
+                            </th>
+                            <th>
+                                <p>Дата</p>
+                            </th>
+                            <th>
+                                <p>Оставащо време</p>
+                            </th>
+                            <th>
+                                <p>Начален час</p>
+                            </th>
+                            <th>
+                                <p>Краен час</p>
+                            </th>
+                            <th>
+                                <p>Промени</p>
+                            </th>
+                            <th>
+                                <p>Изтрий събитие</p>
+                            </th>
+                        </tr>
+                        <tr th:each="event: ${@eventRepository.findFutureReportsByRe(residentialEntity.getId())}">
+                            <td>
+                                <p th:text="${event.getTitle()}"></p>
+                            </td>
+                            <td>
+                                <p th:text="${#temporals.format(event.getDate(), 'dd MMM, yyyy')}"></p>
+                            </td>
+                            <td>
+                                <p class="text-danger"
+                                   th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} == 0">
+                                    Днес
+                                </p>
+                                <p class="text-danger"
+                                   th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} == 1"
+                                   th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} + ' ден'"></p>
+                                <p th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} > 1"
+                                   th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} + ' дни'"></p>
+                            </td>
+                            <td>
+                                <p th:if="${event.getTimeFrom() == null}">-</p>
+                                <p th:text="${#temporals.format(event.getTimeFrom(), 'HH:mm')} + 'ч.'"
+                                   th:unless="${event.getTimeFrom() == null}"></p>
+                            </td>
+                            <td>
+                                <p th:if="${event.getTimeTo() == null}">-</p>
+                                <p th:text="${#temporals.format(event.getTimeTo(), 'HH:mm')} + 'ч.'"
+                                   th:unless="${event.getTimeTo() == null}"></p>
+                            </td>
+                            <td>
+                                <form class="form-container"
+                                      th:action="@{/administration/events/edit/{id} (id=${event.getId()})}">
+                                    <button type="submit">
+                                        <i class="text-dark fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            <td align="center" class="table-image">
+                                <form class="form-container"
+                                      th:action="@{/administration/events/delete/{id} (id=${event.getId()})}"
+                                      th:method="POST">
+                                    <button class="delete-button" type="button">
+                                        <div class="icon">
+                                            <svg class="top" viewBox="0 0 24 24">
+                                                <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
+                                            </svg>
+                                            <svg class="bottom" viewBox="0 0 24 24">
+                                                <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="text">Изтрий</div>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
 
-
-
-
-
-
-
-
-                    <!--Events list-->
-<!--                    <div class="administration" id="expenses">-->
-
-<!--                        &lt;!&ndash;Expenses list section&ndash;&gt;-->
-<!--                        <div class="main-content"><span class="category text-bg-danger"-->
-<!--                                                        style="padding: 1px 5px; border-radius: 5px"-->
-<!--                                                        th:if="${expenseFilterBindingModel.getExpenseList().size()} == 0">0 записа</span>-->
-<!--                            <span class="category text-bg-success" style="padding: 1px 5px; border-radius: 5px"-->
-<!--                                  th:if="${expenseFilterBindingModel.getExpenseList().size()} == 1"-->
-<!--                                  th:text="${expenseFilterBindingModel.getExpenseList().size()} + ' запис'"></span>-->
-<!--                            <span class="category text-bg-success" style="padding: 1px 5px; border-radius: 5px"-->
-<!--                                  th:if="${expenseFilterBindingModel.getExpenseList().size()} > 1"-->
-<!--                                  th:text="${expenseFilterBindingModel.getExpenseList().size()} + ' записа'"></span>-->
-<!--                        </div>-->
-
-<!--                        <form class="row"-->
-<!--                              th:action="@{/administration/financial/expenses/add/{id} (id=${residentialEntity.getId()})}">-->
-<!--                            <button type="submit">-->
-<!--                                <img alt="Add monthly fee" src="/images/add_button.png"-->
-<!--                                     style="width: 19px;" title="Add monthly fee">-->
-<!--                                <span class="text-danger">Добави нов разход</span>-->
-<!--                            </button>-->
-<!--                        </form>-->
-<!--                        <hr>-->
-
-
-<!--                        <table id="expenses-table" style="width: 100%">-->
-<!--                            <tr class="text-center">-->
-<!--                                <th>-->
-<!--                                    <p>Сума</p>-->
-<!--                                </th>-->
-<!--                                <th>-->
-<!--                                    <p>Дата</p>-->
-<!--                                </th>-->
-<!--                                <th>-->
-<!--                                    <p>Описание</p>-->
-<!--                                </th>-->
-<!--                                <th>-->
-<!--                                    <p>Документ</p>-->
-<!--                                </th>-->
-<!--                                <th>-->
-<!--                                    <p>Виж детайли</p>-->
-<!--                                </th>-->
-<!--                                <th>-->
-<!--                                    <p>Промени</p>-->
-<!--                                </th>-->
-<!--                                <th>-->
-<!--                                    <p>Изтрий</p>-->
-<!--                                </th>-->
-<!--                            </tr>-->
-<!--                            <tr class="text-center"-->
-<!--                                th:each="expense: ${expenseFilterBindingModel.getExpenseList()}">-->
-<!--                                <td>-->
-<!--                                    <p th:text="${expense.getAmount()} + ' лв.'"></p>-->
-<!--                                </td>-->
-<!--                                <td>-->
-<!--                                    <p th:text="${#temporals.format(expense.getExpenseDate(), 'dd.MM.yyyy')}"></p>-->
-<!--                                </td>-->
-<!--                                <td>-->
-<!--                                    <p th:text="${expense.getDescription()}"></p>-->
-<!--                                </td>-->
-<!--                                <td>-->
-<!--                                    <a target="_blank"-->
-<!--                                       th:href="@{/expenses/details/{id} (id=${expense.getId()})}"-->
-<!--                                       th:if="${expense.getPicturePath()} != null">-->
-<!--                                        <img alt="Виж документ" src="/images/invoice.png" style="width: 19px;"-->
-<!--                                             title="Виж документ"></a>-->
-<!--                                </td>-->
-<!--                                <td>-->
-<!--                                    <a th:href="@{/administration/financial/expenses/details/{id} (id=${expense.getId()})}"><img-->
-<!--                                            alt="View details" src="/images/magnifier.png"-->
-<!--                                            style="width: 19px;" title="Виж детайли"></a>-->
-<!--                                </td>-->
-<!--                                <td>-->
-<!--                                    <form class="form-container"-->
-<!--                                          th:action="@{/administration/financial/expenses/edit/{id} (id=${expense.getId()})}">-->
-<!--                                        <button type="submit">-->
-<!--                                            <img alt="Промени" src="/images/edit.png" style="width: 19px;"-->
-<!--                                                 title="Промени">-->
-<!--                                        </button>-->
-<!--                                    </form>-->
-<!--                                </td>-->
-<!--                                <td align="center">-->
-<!--                                    <form class="form-container"-->
-<!--                                          th:action="@{/administration/financial/expenses/delete/{id} (id=${expense.getId()})}"-->
-<!--                                          th:method="POST">-->
-<!--                                        <button class="delete-button" type="button">-->
-<!--                                            <div class="icon">-->
-<!--                                                <svg class="top" viewBox="0 0 24 24">-->
-<!--                                                    <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>-->
-<!--                                                </svg>-->
-<!--                                                <svg class="bottom" viewBox="0 0 24 24">-->
-<!--                                                    <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>-->
-<!--                                                </svg>-->
-<!--                                            </div>-->
-<!--                                            <div class="text">Изтрий</div>-->
-<!--                                        </button>-->
-<!--                                    </form>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                        </table>-->
-<!--                    </div>-->
-
-
-
-
-
-
-
+                    <div class="accordion" id="accordionExample" style="padding: 50px 0 30px 0">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button aria-controls="collapseOne" aria-expanded="false"
+                                        class="accordion-button collapsed"
+                                        data-bs-target="#collapseOne" data-bs-toggle="collapse"
+                                        type="button">
+                                                <span class="text-secondary-emphasis">
+                                                    <i class="fa-regular fa-calendar-check"></i> Архив на събитията <sup
+                                                        th:text="${@eventRepository.countPastReportsByRe(residentialEntity.getId())}"></sup> </span>
+                                </button>
+                            </h2>
+                            <div aria-labelledby="headingOne" class="accordion-collapse collapse"
+                                 data-bs-parent="#accordionExample"
+                                 id="collapseOne">
+                                <div class="accordion-body text-dark">
+                                    <p class="text-center" th:if="${@eventRepository.countPastReportsByRe(residentialEntity.getId())} == 0">Не са открити архивирани събития!</p>
+                                    <table class="table text-center"
+                                           th:unless="${@eventRepository.countPastReportsByRe(residentialEntity.getId())} == 0">
+                                        <tr>
+                                            <th style="width: 300px">
+                                                <p>Описание</p>
+                                            </th>
+                                            <th>
+                                                <p>Дата</p>
+                                            </th>
+                                            <th>
+                                                <p>Изминали дни</p>
+                                            </th>
+                                            <th>
+                                                <p>Начален час</p>
+                                            </th>
+                                            <th>
+                                                <p>Краен час</p>
+                                            </th>
+                                            <th>
+                                                <p>Промени</p>
+                                            </th>
+                                            <th>
+                                                <p>Изтрий събитие</p>
+                                            </th>
+                                        </tr>
+                                        <tr th:each="event: ${@eventRepository.findPastReportsByRe(residentialEntity.getId())}">
+                                            <td>
+                                                <p th:text="${event.getTitle()}"></p>
+                                            </td>
+                                            <td>
+                                                <p th:text="${#temporals.format(event.getDate(), 'dd MMM, yyyy')}"></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-danger"
+                                                   th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} == -1"
+                                                   th:text="'Преди '+ ${T(java.time.temporal.ChronoUnit).DAYS.between(event.getDate(), T(java.time.LocalDate).now())} + ' ден'"></p>
+                                                <p class="text-danger"
+                                                   th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} < -1"
+                                                   th:text="'Преди '+ ${T(java.time.temporal.ChronoUnit).DAYS.between(event.getDate(), T(java.time.LocalDate).now())} + ' дни'"></p>
+                                            </td>
+                                            <td>
+                                                <p th:if="${event.getTimeFrom() == null}">-</p>
+                                                <p th:text="${#temporals.format(event.getTimeFrom(), 'HH:mm')} + 'ч.'"
+                                                   th:unless="${event.getTimeFrom() == null}"></p>
+                                            </td>
+                                            <td>
+                                                <p th:if="${event.getTimeTo() == null}">-</p>
+                                                <p th:text="${#temporals.format(event.getTimeTo(), 'HH:mm')} + 'ч.'"
+                                                   th:unless="${event.getTimeTo() == null}"></p>
+                                            </td>
+                                            <td>
+                                                <form class="form-container"
+                                                      th:action="@{/administration/events/edit/{id} (id=${event.getId()})}">
+                                                    <button type="submit">
+                                                        <i class="text-dark fa-regular fa-pen-to-square"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                            <td align="center" class="table-image">
+                                                <form class="form-container"
+                                                      th:action="@{/administration/events/delete/{id} (id=${event.getId()})}"
+                                                      th:method="POST">
+                                                    <button class="delete-button" type="button">
+                                                        <div class="icon">
+                                                            <svg class="top" viewBox="0 0 24 24">
+                                                                <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
+                                                            </svg>
+                                                            <svg class="bottom" viewBox="0 0 24 24">
+                                                                <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="text">Изтрий</div>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 <!--Custom pop-up confirmation window-->
 <div th:replace="~{bg/fragments/confirm-popup}">
@@ -284,8 +327,10 @@
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
+<script src="/js/notifications.js"></script>
 <script src="/js/confirm.js"></script>
 <script src="/js/buttons.js"></script>
+<script src="/js/calendar.js"></script>
 
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.example.OurHome.security.impl;
 
 import com.example.OurHome.model.Entity.*;
+import com.example.OurHome.repo.EventRepository;
 import com.example.OurHome.repo.ReportRepository;
 import com.example.OurHome.security.SecurityService;
 import com.example.OurHome.service.*;
@@ -8,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("securityService")
 public class SecurityServiceImpl implements SecurityService {
@@ -20,8 +22,9 @@ public class SecurityServiceImpl implements SecurityService {
     private final FinancialService financialService;
     private final PropertyTypeService propertyTypeService;
     private final ReportRepository reportRepository;
+    private final EventRepository eventRepository;
 
-    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, MessageService messageService, FinancialService financialService, PropertyTypeService propertyTypeService, ReportRepository reportRepository) {
+    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, MessageService messageService, FinancialService financialService, PropertyTypeService propertyTypeService, ReportRepository reportRepository, EventRepository eventRepository) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
@@ -30,6 +33,7 @@ public class SecurityServiceImpl implements SecurityService {
         this.financialService = financialService;
         this.propertyTypeService = propertyTypeService;
         this.reportRepository = reportRepository;
+        this.eventRepository = eventRepository;
     }
 
     @Override
@@ -207,5 +211,13 @@ public class SecurityServiceImpl implements SecurityService {
         ResidentialEntity residentialEntityByPropertyType = propertyTypeService.findResidentialEntityByPropertyType(propertyTypeId);
         return residentialEntityByPropertyType != null && residentialEntityByPropertyType.getManager().getId().equals(getUserEntity(authentication).getId());
     }
+
+    @Override
+    public boolean checkEventModeratorAccess(Long eventId, Authentication authentication) {
+        Event event = eventRepository.findById(eventId).orElse(null);
+        assert event != null;
+        return event.getResidentialEntity().getManager().getId().equals(getUserEntity(authentication).getId());
+    }
+
 }
 

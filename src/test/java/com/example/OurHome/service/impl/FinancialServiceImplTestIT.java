@@ -43,10 +43,13 @@ class FinancialServiceImplTestIT {
     private CityRepository cityRepository;
     @Autowired
     private LanguageRepository languageRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @BeforeEach
     void setUp() {
         residentialEntityRepository.deleteAll();
+        notificationRepository.deleteAll();
         userRepository.deleteAll();
         financialRepository.deleteAll();
     }
@@ -54,6 +57,7 @@ class FinancialServiceImplTestIT {
     @AfterEach
     void tearDown() {
         residentialEntityRepository.deleteAll();
+        notificationRepository.deleteAll();
         userRepository.deleteAll();
         financialRepository.deleteAll();
     }

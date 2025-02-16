@@ -58,6 +58,7 @@ public class MessageController {
                 userService.findUserById(sendMessageBindingModel.getReceiverId()),
                 userService.findUserById(sendMessageBindingModel.getSenderId()),
                 sendMessageBindingModel.getMessage());
+
         messageService.readMessage(messageId);
         sendMessageBindingModel.setMessage("");
 

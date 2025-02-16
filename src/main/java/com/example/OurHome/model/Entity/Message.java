@@ -12,16 +12,23 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
     private LocalDate date;
+
     @NotNull
     private Time time;
 
     @Column(columnDefinition = "TEXT")
     @NotNull
     private String text;
+
+    @Column(columnDefinition = "TEXT")
+    private String textEn;
+
     @ManyToOne
     private UserEntity receiver;
+
     @ManyToOne
     private UserEntity sender;
     private boolean isRead;
@@ -30,10 +37,11 @@ public class Message {
     public Message() {
     }
 
-    public Message(LocalDate date, Time time, String text, UserEntity receiver, boolean isRead, boolean isArchived) {
+    public Message(LocalDate date, Time time, String text, String textEn, UserEntity receiver, boolean isRead, boolean isArchived) {
         this.date = date;
         this.time = time;
         this.text = text;
+        this.textEn = textEn;
         this.receiver = receiver;
         this.isRead = isRead;
         this.isArchived = isArchived;
@@ -111,5 +119,13 @@ public class Message {
 
     public void setSender(UserEntity sender) {
         this.sender = sender;
+    }
+
+    public String getTextEn() {
+        return textEn;
+    }
+
+    public void setTextEn(String textEn) {
+        this.textEn = textEn;
     }
 }

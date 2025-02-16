@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
@@ -27,8 +26,9 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.authorizeHttpRequests(
-                authorizeRequests -> authorizeRequests
+        httpSecurity
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/delete-notification/**")) // 🔹 Игнориране на CSRF само за този ендпойнт
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/", "/index", "/contact").permitAll()
                         .requestMatchers("/register", "/register/**").permitAll()
@@ -40,33 +40,32 @@ public class SecurityConfiguration {
                         .requestMatchers("/uploadDocument/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers("/deleteDocument/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers("/administration", "/administration/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/delete-notification/**").authenticated()
                         .anyRequest().permitAll()
-        ).formLogin(formLogin -> {
-            formLogin.loginPage("/login")
-                    .usernameParameter("email")
-                    .passwordParameter("password")
-                    .defaultSuccessUrl("/index")
-                    .failureForwardUrl("/login/error");
-        }).logout(logout -> {
-            logout
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/")
-                    .invalidateHttpSession(true);
-        }).rememberMe(
-                rememberMe -> {
-                    rememberMe
-                            .key(rememberMeKey)
-                            .rememberMeParameter("rememberMe")
-                            .rememberMeCookieName("rememberMe");
-                }
-        );
+                )
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/index")
+                        .failureForwardUrl("/login/error")
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                )
+                .rememberMe(rememberMe -> rememberMe
+                        .key(rememberMeKey)
+                        .rememberMeParameter("rememberMe")
+                        .rememberMeCookieName("rememberMe")
+                );
 
         return httpSecurity.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
-        // This service translates between OurHome users and roles to spring security
         return new UserDetailServ(userRepository);
     }
 

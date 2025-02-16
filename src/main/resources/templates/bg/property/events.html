@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+>
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <title>OurHome - Home management platform</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link href="/css/fontawesome.css" rel="stylesheet">
+    <link href="/css/our-home.css" rel="stylesheet">
+    <link href="/css/owl.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+    <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+    <meta content="OurHome" name="apple-mobile-web-app-title"/>
+    <link href="/favicon/site.webmanifest" rel="manifest"/>
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div class="js-preloader" id="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header ***** -->
+<div class="sub-header" th:replace="~{fragments/header}">
+</div>
+
+<!-- ***** NavBar ***** -->
+<div th:replace="~{/bg/fragments/navbar}"></div>
+
+<!-- ***** BANNER *****-->
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <h3>Събития</h3>
+            <div class="col-lg-12">
+                <!--                <span th:text="'Идентификатор на ЕС: ' + ${residentialEntity.getId()}"></span>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ***** Events section ***** -->
+<div class="page-content">
+    <!--start of Sub-menu-->
+    <div class="menu-container">
+        <div th:replace="~{/bg/fragments/prop-submenu}"></div>
+    </div>
+    <div class="content">
+        <div class="container">
+            <div class="administration">
+                <div class="info-table rounded">
+                    <!--Active registrations header-->
+                    <div class="text-center">
+                        <h4 class="category text-danger">Календар на етажната собственост</h4>
+                        <br>
+                        <p>Информация за всички планирани събития в календара на етажната собственост.</p>
+                    </div>
+                    <div class="due-amounts-header" style="padding: 10px 0">
+                        <!--Records counter-->
+                        <div class="main-content">
+                     <span class="category text-bg-success"
+                           style="padding: 1px 5px; border-radius: 5px"
+                           th:if="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} == 0"
+                           th:text="'0 предстоящи събития'"></span>
+                            <span class="category text-bg-success"
+                                  style="padding: 1px 5px; border-radius: 5px"
+                                  th:if="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} == 1"
+                                  th:text="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} + ' предстоящо събитие'"></span>
+                            <span class="category text-bg-success"
+                                  style="padding: 1px 5px; border-radius: 5px"
+                                  th:if="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} > 1"
+                                  th:text="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} + ' предстоящи събития'"></span>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="text-center"
+                       th:if="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} == 0"><br>Не са
+                        открити предстоящи събития!</p>
+                    <!--Property types list-->
+                    <table class="table text-center"
+                           th:unless="${@eventRepository.countFutureReportsByRe(residentialEntity.getId())} == 0">
+                        <tr>
+                            <th style="width: 300px">
+                                <p>Описание</p>
+                            </th>
+                            <th>
+                                <p>Дата</p>
+                            </th>
+                            <th>
+                                <p>Оставащо време</p>
+                            </th>
+                            <th>
+                                <p>Начален час</p>
+                            </th>
+                            <th>
+                                <p>Краен час</p>
+                            </th>
+                        </tr>
+                        <tr th:each="event: ${@eventRepository.findFutureReportsByRe(residentialEntity.getId())}">
+                            <td>
+                                <p th:text="${event.getTitle()}"></p>
+                            </td>
+                            <td>
+                                <p th:text="${#temporals.format(event.getDate(), 'dd MMM, yyyy')}"></p>
+                            </td>
+                            <td>
+                                <p class="text-danger"
+                                   th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} == 0">
+                                    Днес
+                                </p>
+                                <p class="text-danger"
+                                   th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} == 1"
+                                   th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} + ' ден'"></p>
+                                <p th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} > 1"
+                                   th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} + ' дни'"></p>
+                            </td>
+                            <td>
+                                <p th:if="${event.getTimeFrom() == null}">-</p>
+                                <p th:text="${#temporals.format(event.getTimeFrom(), 'HH:mm')} + 'ч.'"
+                                   th:unless="${event.getTimeFrom() == null}"></p>
+                            </td>
+                            <td>
+                                <p th:if="${event.getTimeTo() == null}">-</p>
+                                <p th:text="${#temporals.format(event.getTimeTo(), 'HH:mm')} + 'ч.'"
+                                   th:unless="${event.getTimeTo() == null}"></p>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="accordion" id="accordionExample" style="padding: 50px 0 30px 0">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button aria-controls="collapseOne" aria-expanded="false"
+                                        class="accordion-button collapsed"
+                                        data-bs-target="#collapseOne" data-bs-toggle="collapse"
+                                        type="button">
+                                                <span class="text-secondary-emphasis">
+                                                    <i class="fa-regular fa-calendar-check"></i> Архив на събитията <sup
+                                                        th:text="${@eventRepository.countPastReportsByRe(residentialEntity.getId())}"></sup> </span>
+                                </button>
+                            </h2>
+                            <div aria-labelledby="headingOne" class="accordion-collapse collapse"
+                                 data-bs-parent="#accordionExample"
+                                 id="collapseOne">
+                                <div class="accordion-body text-dark">
+                                    <p class="text-center"
+                                       th:if="${@eventRepository.countPastReportsByRe(residentialEntity.getId())} == 0">
+                                        Не са открити архивирани събития!</p>
+                                    <table class="table text-center"
+                                           th:unless="${@eventRepository.countPastReportsByRe(residentialEntity.getId())} == 0">
+                                        <tr>
+                                            <th style="width: 300px">
+                                                <p>Описание</p>
+                                            </th>
+                                            <th>
+                                                <p>Дата</p>
+                                            </th>
+                                            <th>
+                                                <p>Изминали дни</p>
+                                            </th>
+                                            <th>
+                                                <p>Начален час</p>
+                                            </th>
+                                            <th>
+                                                <p>Краен час</p>
+                                            </th>
+                                        </tr>
+                                        <tr th:each="event: ${@eventRepository.findPastReportsByRe(residentialEntity.getId())}">
+                                            <td>
+                                                <p th:text="${event.getTitle()}"></p>
+                                            </td>
+                                            <td>
+                                                <p th:text="${#temporals.format(event.getDate(), 'dd MMM, yyyy')}"></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-danger"
+                                                   th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} == -1"
+                                                   th:text="'Преди '+ ${T(java.time.temporal.ChronoUnit).DAYS.between(event.getDate(), T(java.time.LocalDate).now())} + ' ден'"></p>
+                                                <p class="text-danger"
+                                                   th:if="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), event.getDate())} < -1"
+                                                   th:text="'Преди '+ ${T(java.time.temporal.ChronoUnit).DAYS.between(event.getDate(), T(java.time.LocalDate).now())} + ' дни'"></p>
+                                            </td>
+                                            <td>
+                                                <p th:if="${event.getTimeFrom() == null}">-</p>
+                                                <p th:text="${#temporals.format(event.getTimeFrom(), 'HH:mm')} + 'ч.'"
+                                                   th:unless="${event.getTimeFrom() == null}"></p>
+                                            </td>
+                                            <td>
+                                                <p th:if="${event.getTimeTo() == null}">-</p>
+                                                <p th:text="${#temporals.format(event.getTimeTo(), 'HH:mm')} + 'ч.'"
+                                                   th:unless="${event.getTimeTo() == null}"></p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Custom pop-up confirmation window-->
+<div th:replace="~{bg/fragments/confirm-popup}">
+</div>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/footer}">
+</footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/isotope.min.js"></script>
+<script src="/js/owl-carousel.js"></script>
+<script src="/js/counter.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/notifications.js"></script>
+<script src="/js/confirm.js"></script>
+<script src="/js/buttons.js"></script>
+
+</body>
+</html>
