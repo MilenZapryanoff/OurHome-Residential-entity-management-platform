@@ -92,16 +92,6 @@
                            type="text">
                 </fieldset>
                 <fieldset>
-                    <label for="username"><b>Потребителско име</b></label>
-                    <p class="text-danger"
-                       th:errors="*{username}" th:if="${#fields.hasErrors('username')}">Username error message</p>
-                    <p class="text-danger" th:if="${duplicatedUser}">Потребител с това име съществува!</p>
-                    <input autocomplete="on" id="username" placeholder="Въведете потребителско име..." required
-                           th:errorclass="bg-danger"
-                           th:field="*{username}"
-                           type="text">
-                </fieldset>
-                <fieldset>
                     <label for="email"><b>Имейл</b></label>
                     <p class="text-danger"
                        th:errors="*{email}" th:if="${#fields.hasErrors('email')}">Email error message</p>

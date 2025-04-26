@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 public class ResetPasswordBindingModel {
 
     @NotEmpty(message = "Field cannot be empty")
-    private String verificationCode;
+    private String resetCode;
     @NotEmpty(message = "Field cannot be empty")
     @Size(min = 3, max = 20, message = "Password length must be between 3 and 20 characters!")
     private String newPassword;
@@ -14,12 +14,12 @@ public class ResetPasswordBindingModel {
     @Size(min = 3, max = 20, message = "Password length must be between 3 and 20 characters!")
     private String confirmPassword;
 
-    public String getVerificationCode() {
-        return verificationCode;
+    public String getResetCode() {
+        return resetCode;
     }
 
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
+    public void setResetCode(String resetCode) {
+        this.resetCode = resetCode;
     }
 
     public String getNewPassword() {

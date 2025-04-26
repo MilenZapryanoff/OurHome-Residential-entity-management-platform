@@ -56,7 +56,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Properties data</h3>
+            <h3>Properties</h3>
             <div class="col-lg-12">
                 <span th:text="'Condominium ID: ' + ${residentialEntity.getId()}"></span>
             </div>
@@ -72,13 +72,22 @@
     </div>
     <div class="content">
         <div class="container">
+            <div class="text-center administration-header">
+                <h4 class="category">Individual units management</h4>
+                <br>
+                <p>In this section, you will find information on all Individual units within the digital condominium.</p>
+                <p>Here, you can manage both registration requests for Individual unit owners and requests for parameter changes</p>
+                <p>In the 'Property categories' menu, you can create a categorization of the Individual units within the digital condominium, which will allow you to use different rates when calculating the monthly fees.</p>
+            </div>
+
             <!--Active registrations section-->
             <div class="administration">
                 <!--Sub-menu buttons-->
                 <div class="table-nav-section">
                     <a class="button nav-link active"
                        href=#active-registrations>
-                        <div class="text-center"><i class="fa-regular fa-building"></i> <span>Properties</span>
+                        <div class="text-center"><i class="fa-regular fa-building"></i>
+                            <span>Properties</span>
                             <sup th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
                                  th:text="' '+ ${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())}">
                             </sup>
@@ -86,9 +95,25 @@
                         </div>
                     </a>
                     <a class="button nav-link"
+                       th:href="@{/administration/property/owners/pending/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><span>Owner registration requests</span>
+                            <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
+                                 th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
+                            </sup>
+                        </div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/property/owners/rejected/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><span>Rejected owner registration requests</span>
+                            <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                 th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
+                            </sup>
+                        </div>
+                    </a>
+                    <a class="button nav-link"
                        th:href="@{/administration/property/change-requests/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-screwdriver-wrench"></i>
-                            <span>Change requests</span>
+                        <div class="text-center"><i class="fa-solid fa-users-gear"></i>
+                            <span>Property data change</span>
                             <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
                                  th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
                             </sup>
@@ -96,17 +121,23 @@
                     </a>
                     <a class="button nav-link"
                        th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Property types</span>
+                        <div class="text-center"><i class="fa-solid fa-layer-group"></i>
+                            <span>Property categories</span>
                         </div>
                     </a>
                 </div>
-                <!--Active registrations table-->
+                <!--Properties section table-->
                 <div class="info-table rounded-bottom" id="active-registrations">
 
-                    <!--Active registrations header-->
+                    <!--Properties section header-->
                     <div class="text-center">
-                        <h4 class="category text-danger">LIST OF PROPERTIES</h4>
+                        <h4 class="category text-danger"><i class="fa-solid fa-city"></i> Registry of individual units</h4>
+                        <br>
+                        <p>The registry contains information on all Individual units within this condominium.</p>
+                        <p>From here, you can modify data for individual units, remove users as property owners, as well as obtain information on the existence of owner registration requests or requests for parameter changes on individual units.</p>
+                        <p>Hover your mouse over the event icons to learn more about the event.</p>
                     </div>
+
 
                     <div class="due-amounts-header" style="padding: 10px 0">
                         <!--Records counter-->
@@ -152,7 +183,7 @@
                                 <p>Owner control</p>
                             </th>
                             <th>
-                                <p>Class</p>
+                                <p>Type</p>
                             </th>
                             <th th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
                                 <p>Category</p>
@@ -218,7 +249,7 @@
                                 </form>
                                 <div th:if="${property.getPropertyRegisterRequest() != null} and ${property.isValidated()}">
                                     <form class="form-container"
-                                          th:action="@{/administration/owners/pending/{id}#pending-registrations (id=${residentialEntity.getId()})}"
+                                          th:action="@{/administration/property/owners/pending/{id}#pending-registrations (id=${residentialEntity.getId()})}"
                                           th:if="${property.getOwner() != null} AND ${!property.isObtained()} AND ${!property.isRejected()}">
                                         <button type="submit">
                                             <i class="fa-solid fa-triangle-exclamation warning"
@@ -226,7 +257,7 @@
                                         </button>
                                     </form>
                                     <form class="form-container"
-                                          th:action="@{/administration/owners/rejected/{id}#rejected-registrations (id=${residentialEntity.getId()})}"
+                                          th:action="@{/administration/property/owners/rejected/{id}#rejected-registrations (id=${residentialEntity.getId()})}"
                                           th:if="${property.isRejected()}">
                                         <button type="submit">
                                             <i class="fa-solid fa-triangle-exclamation text-danger"
@@ -236,11 +267,15 @@
                                 </div>
                             </td>
                             <td class="gray-field">
-                                <p th:if="${property.isObtained()}"
-                                   th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
-                                <p class="text-secondary"
-                                   th:if="${!property.isObtained()} and ${property.getOwner() != null}"
-                                   th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                                <a th:href="@{/administration/owners/details/{id}(id=${property.getOwner().getId()}, resId=${residentialEntity.getId()}, redirect=true)}"
+                                   th:if="${property.isObtained()}">
+                                    <p th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                                </a>
+                                <a th:href="@{/administration/owners/details/{id}(id=${property.getOwner().getId()}, resId=${residentialEntity.getId()}, redirect=true)}"
+                                   th:if="${!property.isObtained()} and ${property.getOwner() != null}">
+                                    <p class="text-secondary"
+                                       th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
+                                </a>
                                 <p th:if="(${!property.isObtained()} and ${property.getOwner() == null})">
                                     <i class="fa-solid fa-user-large-slash help" style="font-size: 0.85em"
                                        title="No registered owner for this property"></i>
@@ -248,12 +283,12 @@
                             </td>
                             <td class="gray-field">
                                 <p th:if="${property.getOwner() != null} AND ${!property.isObtained()} AND ${!property.isRejected()}">
-                                    <a th:href="@{/administration/owners/pending/{id}#pending-registrations (id=${id})}">
+                                    <a th:href="@{/administration/property/owners/pending/{id}#pending-registrations (id=${id})}">
                                         <i class="fa-solid fa-user-clock warning"
                                            title="Pending owner registration request for this property"></i></a>
                                 </p>
                                 <p th:if="${property.isRejected()}">
-                                    <a th:href="@{/administration/owners/rejected/{id}#rejected-registrations (id=${id})}">
+                                    <a th:href="@{/administration/property/owners/rejected/{id}#rejected-registrations (id=${id})}">
                                         <i class="fa-solid fa-user-gear text-danger"
                                            title="Rejected owner registration for this property"></i></a>
                                 </p>

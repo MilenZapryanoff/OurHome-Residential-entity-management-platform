@@ -2,10 +2,9 @@ package com.example.OurHome.controller;
 
 import com.example.OurHome.model.Entity.UserEntity;
 import com.example.OurHome.model.dto.BindingModels.User.ProfileEditBindingModel;
+import com.example.OurHome.model.dto.BindingModels.User.ProfileNotificationsEditBindingModel;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.UserService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,10 +33,15 @@ public class ProfileController {
     @GetMapping("/profile")
     public ModelAndView profile(@CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
+        UserViewModel currentUser = getUserViewModel();
+
+        ProfileNotificationsEditBindingModel profileNotificationsEditBindingModel = userService.mapProfileNotificationEditBindingModel(currentUser);
+
         ModelAndView view = resolveView(lang) ?
                 new ModelAndView("bg/profile") : new ModelAndView("en/profile");
 
-        view.addObject("userViewModel", getUserViewModel());
+        view.addObject("userViewModel", currentUser)
+                .addObject("profileNotificationsEditBindingModel", profileNotificationsEditBindingModel);
 
         return view;
     }
@@ -128,17 +132,11 @@ public class ProfileController {
                                     BindingResult bindingResult,
                                     @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
-
         ModelAndView view = resolveView(lang) ?
                 new ModelAndView("bg/profile-edit") : new ModelAndView("en/profile-edit");
 
         if (bindingResult.hasErrors()) {
             return view;
-        }
-
-        if (!getUserViewModel().getUsername().equals(profileEditBindingModel.getUsername()) &&
-                userService.duplicatedUsernameCheck(profileEditBindingModel.getUsername())) {
-            return view.addObject("duplicatedEmail", true);
         }
 
         if (profileEditBindingModel.getNewPassword().isEmpty() &&
@@ -152,6 +150,27 @@ public class ProfileController {
         }
 
         userService.editProfile(id, profileEditBindingModel, true);
+        return new ModelAndView("redirect:/profile");
+    }
+
+    /**
+     * User email notifications edit request
+     *
+     * @param id                      logged user id
+     * @param profileNotificationsEditBindingModel binding model bearing email notification settings
+     * @return resultView
+     */
+    @PostMapping("/profile/updateNotificationSettings/{id}")
+ //   @PreAuthorize("@securityService.checkProfileEditAccess(#id, authentication)")
+    public ModelAndView profileNotificationsEdit(@PathVariable("id") Long id,
+                                    @Valid ProfileNotificationsEditBindingModel profileNotificationsEditBindingModel,
+                                    @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/profile-edit") : new ModelAndView("en/profile-edit");
+
+        userService.updateEmailNotificationsSettings(id, profileNotificationsEditBindingModel);
+
         return new ModelAndView("redirect:/profile");
     }
 

@@ -1,12 +1,14 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.Expense;
+import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseAddBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Financial.ExpenseFilterBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Financial.IncomesBindingModel;
 import com.example.OurHome.repo.FinancialRepository;
+import com.example.OurHome.repo.PropertyFeeRepository;
 import com.example.OurHome.service.FinancialService;
 import com.example.OurHome.service.ResidentialEntityService;
 import org.modelmapper.ModelMapper;
@@ -29,12 +31,14 @@ public class FinancialServiceImpl implements FinancialService {
     private final FinancialRepository financialRepository;
     private final ResidentialEntityService residentialEntityService;
     private final ModelMapper modelMapper;
+    private final PropertyFeeRepository propertyFeeRepository;
     private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
 
-    public FinancialServiceImpl(FinancialRepository financialRepository, ModelMapper modelMapper, ResidentialEntityService residentialEntityService) {
+    public FinancialServiceImpl(FinancialRepository financialRepository, ModelMapper modelMapper, ResidentialEntityService residentialEntityService, PropertyFeeRepository propertyFeeRepository) {
         this.financialRepository = financialRepository;
         this.modelMapper = modelMapper;
         this.residentialEntityService = residentialEntityService;
+        this.propertyFeeRepository = propertyFeeRepository;
     }
 
     public Expense findById(Long id) {
@@ -70,11 +74,27 @@ public class FinancialServiceImpl implements FinancialService {
     public IncomesBindingModel mapIncomesBindingModel(Long id) {
         IncomesBindingModel incomesBindingModel = new IncomesBindingModel();
 
-        residentialEntityService.findResidentialEntityById(id).ifPresent(residentialEntity -> {
-            incomesBindingModel.setIncomesAmount(residentialEntity.getIncomesTotalAmount());
-            incomesBindingModel.setIncomesFundRepair(residentialEntity.getIncomesFundRepair());
-            incomesBindingModel.setIncomesFundMm(residentialEntity.getIncomesFundMm());
-        });
+        BigDecimal expectedTotalFundMmMonthlyIncome = BigDecimal.ZERO;
+        BigDecimal expectedTotalFundRepairMonthlyIncome = BigDecimal.ZERO;
+        BigDecimal expectedTotalMonthlyIncome = BigDecimal.ZERO;
+
+        ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityById(id).orElse(null);
+
+        assert residentialEntity != null;
+        List<Property> properties = residentialEntity.getProperties();
+        for (Property property : properties) {
+            expectedTotalFundMmMonthlyIncome = expectedTotalFundMmMonthlyIncome.add(property.getMonthlyFeeFundMm());
+            expectedTotalFundRepairMonthlyIncome = expectedTotalFundRepairMonthlyIncome.add(property.getMonthlyFeeFundRepair());
+            expectedTotalMonthlyIncome = expectedTotalMonthlyIncome.add(property.getTotalMonthlyFee());
+        }
+
+        incomesBindingModel.setIncomesAmount(residentialEntity.getIncomesTotalAmount());
+        incomesBindingModel.setIncomesFundRepair(residentialEntity.getIncomesFundRepair());
+        incomesBindingModel.setIncomesFundMm(residentialEntity.getIncomesFundMm());
+        incomesBindingModel.setUnpaidFeesAmount(propertyFeeRepository.findAllUnpaidFeesByResidentialEntityID(id));
+        incomesBindingModel.setExpectedTotalFundMmMonthlyIncome(expectedTotalFundMmMonthlyIncome);
+        incomesBindingModel.setExpectedTotalFundRepairMonthlyIncome(expectedTotalFundRepairMonthlyIncome);
+        incomesBindingModel.setExpectedTotalMonthlyIncome(expectedTotalMonthlyIncome);
 
         return incomesBindingModel;
     }

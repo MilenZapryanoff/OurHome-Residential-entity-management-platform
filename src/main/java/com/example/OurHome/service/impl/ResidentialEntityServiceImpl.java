@@ -9,10 +9,7 @@ import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.Residential
 import com.example.OurHome.model.dto.BindingModels.ResidentialEntity.ResidentialEntityRegisterBindingModel;
 import com.example.OurHome.repo.CityRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
-import com.example.OurHome.service.FeeService;
-import com.example.OurHome.service.PropertyChangeRequestService;
-import com.example.OurHome.service.PropertyService;
-import com.example.OurHome.service.ResidentialEntityService;
+import com.example.OurHome.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,8 +38,9 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     private final PropertyRegisterRequestServiceImpl propertyRegisterRequestService;
     private final PropertyChangeRequestService propertyChangeRequestService;
     private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
+    private LogService logService;
 
-    public ResidentialEntityServiceImpl(ModelMapper modelMapper, CityRepository cityRepository, FeeService feeService, ResidentialEntityRepository residentialEntityRepository, PasswordEncoder passwordEncoder, PropertyService propertyService, PropertyRegisterRequestServiceImpl propertyRegisterRequestService, PropertyChangeRequestService propertyChangeRequestService) {
+    public ResidentialEntityServiceImpl(ModelMapper modelMapper, CityRepository cityRepository, FeeService feeService, ResidentialEntityRepository residentialEntityRepository, PasswordEncoder passwordEncoder, PropertyService propertyService, PropertyRegisterRequestServiceImpl propertyRegisterRequestService, PropertyChangeRequestService propertyChangeRequestService, LogService logService) {
         this.modelMapper = modelMapper;
         this.cityRepository = cityRepository;
         this.feeService = feeService;
@@ -51,6 +49,7 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
         this.propertyService = propertyService;
         this.propertyRegisterRequestService = propertyRegisterRequestService;
         this.propertyChangeRequestService = propertyChangeRequestService;
+        this.logService = logService;
     }
 
     /**
@@ -61,50 +60,62 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     @Override
     public boolean newResidentialEntity(ResidentialEntityRegisterBindingModel residentialEntityRegisterBindingModel, UserEntity loggedUser) {
 
-        Long numberOfApartments = residentialEntityRegisterBindingModel.getNumberOfApartments();
+        try {
+            Long numberOfApartments = residentialEntityRegisterBindingModel.getNumberOfApartments();
 
-        ResidentialEntity newResidentialEntity = modelMapper.map(residentialEntityRegisterBindingModel, ResidentialEntity.class);
+            ResidentialEntity newResidentialEntity = modelMapper.map(residentialEntityRegisterBindingModel, ResidentialEntity.class);
 
-        newResidentialEntity.setFee(feeService.createFee(newResidentialEntity));
-        newResidentialEntity.setIncomesFundMm(DEFAULT_AMOUNT);
-        newResidentialEntity.setIncomesFundRepair(DEFAULT_AMOUNT);
-        newResidentialEntity.setIncomesTotalAmount(DEFAULT_AMOUNT);
-        newResidentialEntity.setManager(loggedUser);
-        newResidentialEntity.setIncomesVisible(true);
-        newResidentialEntity.setExpensesVisible(true);
-        newResidentialEntity.setBankDetailsSet(false);
-        newResidentialEntity.setCity(cityRepository.findByName(residentialEntityRegisterBindingModel.getCity()));
+            newResidentialEntity.setFee(feeService.createFee(newResidentialEntity));
+            newResidentialEntity.setIncomesFundMm(DEFAULT_AMOUNT);
+            newResidentialEntity.setIncomesFundRepair(DEFAULT_AMOUNT);
+            newResidentialEntity.setIncomesTotalAmount(DEFAULT_AMOUNT);
+            newResidentialEntity.setManager(loggedUser);
+            newResidentialEntity.setIncomesVisible(true);
+            newResidentialEntity.setExpensesVisible(true);
+            newResidentialEntity.setBankDetailsSet(false);
+            newResidentialEntity.setCity(cityRepository.findByName(residentialEntityRegisterBindingModel.getCity()));
 
-        //generating a random 8-digit code user as residentialEntity ID
-        Long generatedRandomId = new Random().nextLong(9999999, 100000000);
-        newResidentialEntity.setId(generatedRandomId);
+            //generating a random 8-digit code user as residentialEntity ID
+            Long generatedRandomId = new Random().nextLong(9999999, 100000000);
+            newResidentialEntity.setId(generatedRandomId);
 
-        //creation of access code hint
-        String accessCode = residentialEntityRegisterBindingModel.getAccessCode();
-        newResidentialEntity.setAccessCode(passwordEncoder.encode(accessCode));
-        newResidentialEntity.setAccessCodeHint(createAccessCodeHint(accessCode));
+            //creation of access code hint
+            String accessCode = residentialEntityRegisterBindingModel.getAccessCode();
+            newResidentialEntity.setAccessCode(passwordEncoder.encode(accessCode));
+            newResidentialEntity.setAccessCodeHint(createAccessCodeHint(accessCode));
 
-        residentialEntityRepository.save(newResidentialEntity);
+            residentialEntityRepository.save(newResidentialEntity);
 
-        propertyService.createAllProperties(newResidentialEntity, numberOfApartments);
+            propertyService.createAllProperties(newResidentialEntity, numberOfApartments);
 
-        return residentialEntityRepository.countById(generatedRandomId) != 0;
+            logService.info("✅[newResidentialEntity] New condominium with id:{} successfully CREATED!", generatedRandomId);
+
+            return residentialEntityRepository.countById(generatedRandomId) != 0;
+        } catch (Exception e) {
+            logService.error("❌[newResidentialEntity] Problem with creation of condominium by user:{}! {}", loggedUser.getId(), e);
+            return false;
+        }
     }
 
     @Override
     public void deleteResidentialEntity(Long id) {
-        ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityById(id);
+        try {
+            ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityById(id);
 
-        List<Property> residentialEntityProperties = residentialEntity.getProperties();
-        propertyService.deleteAllProperties(residentialEntityProperties);
+            List<Property> residentialEntityProperties = residentialEntity.getProperties();
+            propertyService.deleteAllProperties(residentialEntityProperties);
 
-        if (!residentialEntity.getPropertyTypes().isEmpty()) {
-            //detach register/change requests from propertyTypes.
-            propertyRegisterRequestService.deleteAllRegistrationRequests(id);
-            propertyChangeRequestService.deleteAllRegistrationRequests(id);
+            if (!residentialEntity.getPropertyTypes().isEmpty()) {
+                //detach register/change requests from propertyTypes.
+                propertyRegisterRequestService.deleteAllRegistrationRequests(id);
+                propertyChangeRequestService.deleteAllRegistrationRequests(id);
+            }
+
+            residentialEntityRepository.deleteById(id);
+            logService.info("✅[deleteResidentialEntity] Condominium with id:{} successfully DELETED!", id);
+        } catch (Exception e) {
+            logService.error("❌[deleteResidentialEntity] Failed to delete condominium with id:{}! {}", id, e);
         }
-
-        residentialEntityRepository.deleteById(id);
     }
 
     public boolean checkIfUserIsResidentialEntityModerator(Long residentialEntityId, Long residentId) {
@@ -175,40 +186,53 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
 
     @Override
     public void addPaymentAmountToIncomes(PropertyFee propertyFee, Property property) {
-        ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityByPropertyId(property.getId());
+        try {
+            ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityByPropertyId(property.getId());
 
-        BigDecimal currentFundMm = residentialEntity.getIncomesFundMm();
-        BigDecimal currentFundRepair = residentialEntity.getIncomesFundRepair();
-        BigDecimal currentTotalAmount = residentialEntity.getIncomesTotalAmount();
+            BigDecimal currentFundMm = residentialEntity.getIncomesFundMm();
+            BigDecimal currentFundRepair = residentialEntity.getIncomesFundRepair();
+            BigDecimal currentTotalAmount = residentialEntity.getIncomesTotalAmount();
 
-        residentialEntity.setIncomesFundMm(currentFundMm.
-                add(propertyFee.getFundMmAmount()));
-        residentialEntity.setIncomesFundRepair(currentFundRepair
-                .add(propertyFee.getFundRepairAmount()));
-        residentialEntity.setIncomesTotalAmount(currentTotalAmount
-                .add(propertyFee.getFundMmAmount())
-                .add(propertyFee.getFundRepairAmount()));
+            residentialEntity.setIncomesFundMm(currentFundMm.
+                    add(propertyFee.getFundMmAmount()));
+            residentialEntity.setIncomesFundRepair(currentFundRepair
+                    .add(propertyFee.getFundRepairAmount()));
+            residentialEntity.setIncomesTotalAmount(currentTotalAmount
+                    .add(propertyFee.getFundMmAmount())
+                    .add(propertyFee.getFundRepairAmount()));
 
-        residentialEntityRepository.save(residentialEntity);
+            residentialEntityRepository.save(residentialEntity);
+
+            logService.info("✅[addPaymentAmountToIncomes <-] Fee for property id:{} successfully added to incomes!", property.getId());
+        } catch (Exception e) {
+            logService.error("❌[addPaymentAmountToIncomes <-] Failed to add fee for property id:{} to incomes. {}", property.getId(), e);
+            throw new IllegalArgumentException(e);
+        }
     }
 
     @Override
     public void reversePaymentAmountFromIncomes(PropertyFee propertyFee, Property property) {
-        ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityByPropertyId(property.getId());
+        try {
+            ResidentialEntity residentialEntity = residentialEntityRepository.findResidentialEntityByPropertyId(property.getId());
 
-        BigDecimal currentFundMm = residentialEntity.getIncomesFundMm();
-        BigDecimal currentFundRepair = residentialEntity.getIncomesFundRepair();
-        BigDecimal currentTotalAmount = residentialEntity.getIncomesTotalAmount();
+            BigDecimal currentFundMm = residentialEntity.getIncomesFundMm();
+            BigDecimal currentFundRepair = residentialEntity.getIncomesFundRepair();
+            BigDecimal currentTotalAmount = residentialEntity.getIncomesTotalAmount();
 
-        residentialEntity.setIncomesFundMm(currentFundMm
-                .subtract(propertyFee.getFundMmAmount()));
-        residentialEntity.setIncomesFundRepair(currentFundRepair
-                .subtract(propertyFee.getFundRepairAmount()));
-        residentialEntity.setIncomesTotalAmount(currentTotalAmount
-                .subtract(propertyFee.getFundMmAmount())
-                .subtract(propertyFee.getFundRepairAmount()));
+            residentialEntity.setIncomesFundMm(currentFundMm
+                    .subtract(propertyFee.getFundMmAmount()));
+            residentialEntity.setIncomesFundRepair(currentFundRepair
+                    .subtract(propertyFee.getFundRepairAmount()));
+            residentialEntity.setIncomesTotalAmount(currentTotalAmount
+                    .subtract(propertyFee.getFundMmAmount())
+                    .subtract(propertyFee.getFundRepairAmount()));
 
-        residentialEntityRepository.save(residentialEntity);
+            residentialEntityRepository.save(residentialEntity);
+            logService.info("✅[reversePaymentAmountFromIncomes <-] Sum of monthly fee id:{} successfully REVERSED from incomes!", propertyFee.getId());
+        } catch (Exception e) {
+            logService.error("❌[reversePaymentAmountFromIncomes <-] Failed REVERSE sum of monthly fee id:{} to incomes", propertyFee.getId(), e);
+            throw new IllegalArgumentException(e);
+        }
     }
 
 
@@ -387,6 +411,11 @@ public class ResidentialEntityServiceImpl implements ResidentialEntityService {
     @Override
     public ResidentialEntity findResidentialEntityByReportId(Long reportId) {
         return residentialEntityRepository.findResidentialEntityByReportId(reportId);
+    }
+
+    @Override
+    public List<ResidentialEntity> findAllResidentialEntities() {
+        return residentialEntityRepository.findAll();
     }
 
 

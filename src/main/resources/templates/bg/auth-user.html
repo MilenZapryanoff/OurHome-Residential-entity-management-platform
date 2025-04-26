@@ -72,10 +72,10 @@
                     <div class="col-lg-12">
                         <p style="padding-bottom: 30px">Моля въведете идентификатор на етажна собственост (ЕС) и код за
                             достъп за да се регистрирате като собственик на имот.</p>
-                        <p class="text-danger" th:if="${badResidentialEntity}">Грешен идентификатор на етажна
-                            собственост или код за достъп!<br></p>
                         <fieldset>
                             <label for="residentialId"><b>Идентификатор на ЕС</b></label>
+                            <p class="text-danger" th:if="${badResidentialEntity}">Грешен идентификатор на етажна
+                                собственост или код за достъп!<br></p>
                             <p class="text-danger"
                                th:errors="*{residentialId}" th:if="${#fields.hasErrors('residentialId')}">Residential Id
                                 error message</p>

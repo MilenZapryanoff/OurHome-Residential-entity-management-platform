@@ -32,10 +32,12 @@ public class PropertyServiceImpl implements PropertyService {
     private final ResidentialEntityRepository residentialEntityRepository;
     private final PropertyRegisterRequestService propertyRegisterRequestService;
     private final PropertyChangeRequestService propertyChangeRequestService;
+    private final NotificationService notificationService;
     private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
+    private final LogService logService;
 
 
-    public PropertyServiceImpl(ModelMapper modelMapper, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService, ApplicationEventPublisher applicationEventPublisher, ResidentialEntityRepository residentialEntityRepository, PropertyRegisterRequestService propertyRegisterRequestService, PropertyChangeRequestService propertyChangeRequestService) {
+    public PropertyServiceImpl(ModelMapper modelMapper, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService, ApplicationEventPublisher applicationEventPublisher, ResidentialEntityRepository residentialEntityRepository, PropertyRegisterRequestService propertyRegisterRequestService, PropertyChangeRequestService propertyChangeRequestService, NotificationService notificationService, LogService logService) {
         this.modelMapper = modelMapper;
         this.propertyRepository = propertyRepository;
         this.messageService = messageService;
@@ -44,6 +46,8 @@ public class PropertyServiceImpl implements PropertyService {
         this.residentialEntityRepository = residentialEntityRepository;
         this.propertyRegisterRequestService = propertyRegisterRequestService;
         this.propertyChangeRequestService = propertyChangeRequestService;
+        this.notificationService = notificationService;
+        this.logService = logService;
     }
 
     /**
@@ -142,6 +146,7 @@ public class PropertyServiceImpl implements PropertyService {
         }
         return false;
     }
+
     /**
      * Property owner remove. Property remains active.
      * Performed by OWNER
@@ -152,34 +157,31 @@ public class PropertyServiceImpl implements PropertyService {
         Property property = getProperty(id);
         UserEntity currentOwner = property.getOwner();
 
-        if (property != null) {
+        //if property has a pending registration request then invalidate it.
+        if (property.getPropertyRegisterRequest() != null) {
+            clearPendingPropertyRegisterRequests(property);
+        }
+        //if property has a pending change request then invalidate it.
+        if (property.getPropertyChangeRequest() != null) {
+            clearPendingPropertyChangeRequests(property);
+        }
 
-            //if property has a pending registration request then invalidate it.
-            if (property.getPropertyRegisterRequest() != null) {
-                clearPendingPropertyRegisterRequests(property);
-            }
-            //if property has a pending change request then invalidate it.
-            if (property.getPropertyChangeRequest() != null) {
-                clearPendingPropertyChangeRequests(property);
-            }
+        //reset property to no-owner
+        property.setOwner(null);
+        property.setRejected(false);
+        property.setObtained(false);
 
-            //reset property to no-owner
-            property.setOwner(null);
-            property.setRejected(false);
-            property.setObtained(false);
+        //reset personal property data
+        //If some of the fields becomes usable by RE Manager in some stage, personal data deletion may have to be removed!
+        property.setNumberOfRooms(String.valueOf(0));
+        property.setParkingAvailable(false);
 
-            //reset personal property data
-            //If some of the fields becomes usable by RE Manager in some stage, personal data deletion may have to be removed!
-            property.setNumberOfRooms(String.valueOf(0));
-            property.setParkingAvailable(false);
+        propertyRepository.save(property);
 
-            propertyRepository.save(property);
-
-            if (deletedByManager) {
-                messageService.ownerRemovedMessageToOwner(property, currentOwner);
-            } else {
-                messageService.propertyDeletedMessageToManager(property, currentOwner);
-            }
+        if (deletedByManager) {
+            messageService.ownerRemovedMessageToOwner(property, currentOwner);
+        } else {
+            messageService.propertyDeletedMessageToManager(property, currentOwner);
         }
     }
 
@@ -298,25 +300,35 @@ public class PropertyServiceImpl implements PropertyService {
         Property property = getProperty(propertyId);
 
         if (property != null && property.isValidated()) {
-            PropertyChangeRequest propertyChangeRequest = property.getPropertyChangeRequest();
+            try {
+                PropertyChangeRequest propertyChangeRequest = property.getPropertyChangeRequest();
 
-            //invalidate property request
-            propertyChangeRequestService.invalidateRequest(propertyChangeRequest);
-            property.setPropertyChangeRequest(null);
+                //invalidate property request
+                propertyChangeRequestService.invalidateRequest(propertyChangeRequest);
+                property.setPropertyChangeRequest(null);
 
-            property.setFloor(propertyChangeRequest.getFloor());
-            property.setNumberOfAdults(propertyChangeRequest.getNumberOfAdults());
-            property.setNumberOfChildren(propertyChangeRequest.getNumberOfChildren());
-            property.setNumberOfPets(propertyChangeRequest.getNumberOfPets());
-            property.setNotHabitable(propertyChangeRequest.isNotHabitable());
-            property.setPropertyType(propertyChangeRequest.getPropertyType());
+                property.setFloor(propertyChangeRequest.getFloor());
+                property.setNumberOfAdults(propertyChangeRequest.getNumberOfAdults());
+                property.setNumberOfChildren(propertyChangeRequest.getNumberOfChildren());
+                property.setNumberOfPets(propertyChangeRequest.getNumberOfPets());
+                property.setNotHabitable(propertyChangeRequest.isNotHabitable());
+                property.setPropertyType(propertyChangeRequest.getPropertyType());
 
-            // Update (recalculate) property fee
-            updatePropertyFee(property.getResidentialEntity(), property, property.getPropertyType());
+                // Update (recalculate) property fee
+                updatePropertyFee(property.getResidentialEntity(), property, property.getPropertyType());
 
-            propertyRepository.save(property);
+                propertyRepository.save(property);
 
+                logService.info("✅[approvePropertyChangeRequest ->] Change request for property id: {} APPROVED", property.getId());
+            } catch (Exception e) {
+                logService.error("❌[approvePropertyChangeRequest ->] Failed to APPROVE change request for property id: {}! {}", property.getId(), e);
+                return;
+            }
+
+            //send message to owner
             messageService.propertyChangeRequestApprovedMessage(property);
+            //send notification to property owner for property change-request approval
+            notificationService.propertyChangeRequestApprovedNotification(property);
         }
     }
 
@@ -330,16 +342,23 @@ public class PropertyServiceImpl implements PropertyService {
     public void rejectPropertyChangeRequest(Long propertyId) {
 
         Property property = getProperty(propertyId);
-
         if (property != null && property.isValidated()) {
-            PropertyChangeRequest propertyChangeRequest = property.getPropertyChangeRequest();
+            try {
+                PropertyChangeRequest propertyChangeRequest = property.getPropertyChangeRequest();
+                //set propertyChangeRequest to rejected
+                propertyChangeRequestService.markChangeRequestAsRejected(propertyChangeRequest);
 
-            //set propertyChangeRequest to rejected
-            propertyChangeRequestService.markChangeRequestAsRejected(propertyChangeRequest);
+                logService.info("✅[rejectPropertyChangeRequest ->] Change request for property id: {} REJECTED", property.getId());
+            } catch (Exception e) {
+                logService.error("❌[rejectPropertyChangeRequest ->] Failed to REJECT change request for property id: {}! {}", property.getId(), e);
+                return;
+            }
 
+            //send message to property owner
             messageService.propertyChangeRequestRejectedMessage(property);
+            //send notification to property owner for property change-request approval
+            notificationService.propertyChangeRequestRejectedNotification(property);
         }
-
     }
 
     /**
@@ -350,13 +369,22 @@ public class PropertyServiceImpl implements PropertyService {
      */
     @Override
     public void rejectProperty(Long id) {
+
         Property property = getProperty(id);
         if (property != null) {
+            try {
+                property.setRejected(true);
+                propertyRepository.save(property);
+                logService.info("✅[rejectProperty ->] Registration of property: {} REJECTED!", property.getId());
+            } catch (Exception e) {
+                logService.error("❌[rejectProperty ->] Failed REJECT registration of property: {}", property.getId(), e);
+                return;
+            }
 
-            property.setRejected(true);
-            propertyRepository.save(property);
-
+            //send message to property owner for property rejection
             messageService.propertyRejectedMessage(property);
+            //send notification to property owner for property rejection
+            notificationService.propertyRejectedNotification(property);
         }
     }
 
@@ -417,11 +445,16 @@ public class PropertyServiceImpl implements PropertyService {
      */
     @Override
     public void turnAllPropertiesFeesOn(ResidentialEntity residentialEntity) {
-        List<Property> allProperties = residentialEntity.getProperties();
+        try {
+            List<Property> allProperties = residentialEntity.getProperties();
 
-        if (!allProperties.isEmpty()) {
-            allProperties.forEach(property -> property.setAutoFee(true));
-            propertyRepository.saveAll(allProperties);
+            if (!allProperties.isEmpty()) {
+                allProperties.forEach(property -> property.setAutoFee(true));
+                propertyRepository.saveAll(allProperties);
+            }
+            logService.info("✅[turnAllPropertiesFeesOn] All automatic monthly fees for condominium id: {} TURNED ON", residentialEntity.getId());
+        } catch (Exception e) {
+            logService.error("❌[turnAllPropertiesFeesOn] Failed to TURN ON all automatic monthly fees for condominium id: {}", residentialEntity.getId(), e);
         }
     }
 
@@ -433,11 +466,16 @@ public class PropertyServiceImpl implements PropertyService {
      */
     @Override
     public void turnAllPropertiesFeesOff(ResidentialEntity residentialEntity) {
-        List<Property> allProperties = residentialEntity.getProperties();
+        try {
+            List<Property> allProperties = residentialEntity.getProperties();
 
-        if (!allProperties.isEmpty()) {
-            allProperties.forEach(property -> property.setAutoFee(false));
-            propertyRepository.saveAll(allProperties);
+            if (!allProperties.isEmpty()) {
+                allProperties.forEach(property -> property.setAutoFee(false));
+                propertyRepository.saveAll(allProperties);
+            }
+            logService.info("✅[turnAllPropertiesFeesOff] All automatic monthly fees for condominium id: {} TURNED OFF", residentialEntity.getId());
+        } catch (Exception e) {
+            logService.error("❌[turnAllPropertiesFeesOff] Failed to TURN OFF all automatic monthly fees for condominium id: {}!, {}", residentialEntity.getId(), e);
         }
     }
 
@@ -481,7 +519,6 @@ public class PropertyServiceImpl implements PropertyService {
         property.setPropertyType(propertyType);
 
         propertyRepository.save(property);
-
 
         //sending message to owner if owner registration is completed
         if (property.isObtained()) {
@@ -584,8 +621,19 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public void changeAutoFeeGeneration(Property property) {
-        property.setAutoFee(!property.isAutoFee());
-        propertyRepository.save(property);
+        try {
+            if (property.isAutoFee()) {
+                property.setAutoFee(false);
+                logService.info("✅[changeAutoFeeGeneration] Automatic monthly fee generation for property id: {} TURNED OFF", property.getId());
+            } else {
+                property.setAutoFee(true);
+                logService.info("✅[changeAutoFeeGeneration] Automatic monthly fee generation for property id: {} TURNED ON", property.getId());
+            }
+            propertyRepository.save(property);
+
+        } catch (Exception e) {
+            logService.error("❌[changeAutoFeeGeneration] Failed to toggle automatic monthly fees for property id: {}", property.getId(), e);
+        }
     }
 
     @Override
@@ -620,7 +668,7 @@ public class PropertyServiceImpl implements PropertyService {
 
         property.setAdditionalPropertyFee(Objects.requireNonNullElse(additionalPropertyFee, BigDecimal.ZERO));
         updateTotalMonthlyFee(property);
-        
+
         propertyRepository.save(property);
     }
 
@@ -668,31 +716,36 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public void createAllProperties(ResidentialEntity newResidentialEntity, Long numberOfApartments) {
 
-        List<Property> properties = new ArrayList<>();
+        try {
+            List<Property> properties = new ArrayList<>();
 
-        for (int i = 1; i <= numberOfApartments; i++) {
+            for (int i = 1; i <= numberOfApartments; i++) {
 
-            Property newProperty = new Property();
-            newProperty.setAdditionalPropertyFee(DEFAULT_AMOUNT);
-            newProperty.setAutoFee(true);
-            newProperty.setNumber(i);
-            newProperty.setNumberOfAdults(0);
-            newProperty.setNumberOfChildren(0);
-            newProperty.setNumberOfPets(0);
-            newProperty.setFloor(String.valueOf(0));
-            newProperty.setNumberOfRooms(String.valueOf(0));
-            newProperty.setResidentialEntity(newResidentialEntity);
-            newProperty.setObtained(false);
-            newProperty.setMonthlyFeeFundMm(feeService.calculateFundMm(newProperty.getResidentialEntity(), newProperty));
-            newProperty.setMonthlyFeeFundRepair(feeService.calculateFundRepair(newProperty.getResidentialEntity(), newProperty));
-            newProperty.setValidated(false);
+                Property newProperty = new Property();
+                newProperty.setAdditionalPropertyFee(DEFAULT_AMOUNT);
+                newProperty.setAutoFee(true);
+                newProperty.setNumber(i);
+                newProperty.setNumberOfAdults(0);
+                newProperty.setNumberOfChildren(0);
+                newProperty.setNumberOfPets(0);
+                newProperty.setFloor(String.valueOf(0));
+                newProperty.setNumberOfRooms(String.valueOf(0));
+                newProperty.setResidentialEntity(newResidentialEntity);
+                newProperty.setObtained(false);
+                newProperty.setMonthlyFeeFundMm(feeService.calculateFundMm(newProperty.getResidentialEntity(), newProperty));
+                newProperty.setMonthlyFeeFundRepair(feeService.calculateFundRepair(newProperty.getResidentialEntity(), newProperty));
+                newProperty.setValidated(false);
 
-            //update totalMonthlyFee
-            updateTotalMonthlyFee(newProperty);
+                //update totalMonthlyFee
+                updateTotalMonthlyFee(newProperty);
 
-            properties.add(newProperty);
+                properties.add(newProperty);
+            }
+            propertyRepository.saveAll(properties);
+
+        } catch (Exception e) {
+            throw new IllegalArgumentException("❌ [createAllProperties] Failed to create properties for residential entity: " + newResidentialEntity, e);
         }
-        propertyRepository.saveAll(properties);
     }
 
     @Override
@@ -839,8 +892,8 @@ public class PropertyServiceImpl implements PropertyService {
     private void updateTotalMonthlyFee(Property property) {
         property.setTotalMonthlyFee(
                 Objects.requireNonNullElse(property.getMonthlyFeeFundMm(), BigDecimal.ZERO)
-                .add(property.getMonthlyFeeFundRepair())
-                .add(property.getAdditionalPropertyFee()));
+                        .add(property.getMonthlyFeeFundRepair())
+                        .add(property.getAdditionalPropertyFee()));
     }
 
     /**

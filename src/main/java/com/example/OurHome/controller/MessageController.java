@@ -8,6 +8,7 @@ import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.ResidentialEntityService;
 import com.example.OurHome.service.UserService;
+import com.example.OurHome.service.email.EmailService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,11 +21,13 @@ public class MessageController {
     private final MessageService messageService;
 
     private final ResidentialEntityService residentialEntityService;
+    private final EmailService emailService;
 
-    public MessageController(UserService userService, MessageService messageService, ResidentialEntityService residentialEntityService) {
+    public MessageController(UserService userService, MessageService messageService, ResidentialEntityService residentialEntityService, EmailService emailService) {
         this.userService = userService;
         this.messageService = messageService;
         this.residentialEntityService = residentialEntityService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/messages")
@@ -138,16 +141,23 @@ public class MessageController {
                                     @PathVariable("id") Long id,
                                     @CookieValue(value = "lang",defaultValue = "bg") String lang) {
 
+
+        UserEntity recipient = userService.findUserById(id);
+        UserEntity sender = userService.findUserById(getUserViewModel().getId());
+        String message = residentManageBindingModel.getMessage();
+
         ModelAndView view = resolveView(lang) ?
-                new ModelAndView("bg/administration/administration-owners") : new ModelAndView("en/administration/administration-owners");
+                new ModelAndView("bg/administration/administration-owners-details") : new ModelAndView("en/administration/administration-owners-details");
 
-        view.addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()));
+        view.addObject("residentialEntity", getResidentialEntity(residentManageBindingModel.getEntityId()))
+        .addObject("resident", recipient)    ;
 
-        if (residentManageBindingModel.getMessage().length() > 2000) {
+        if (message.length() > 2000) {
             return view.addObject("messageError", true);
         }
 
-        messageService.sendMessage(userService.findUserById(id), userService.findUserById(getUserViewModel().getId()), residentManageBindingModel.getMessage());
+        messageService.sendMessage(recipient, sender, message);
+
         residentManageBindingModel.setMessage("");
 
         return view.addObject("messageSent", true);

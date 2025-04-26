@@ -55,4 +55,6 @@ public interface ResidentialEntityService {
     void removeResidentialEntityPicture(ResidentialEntity residentialEntity) throws IOException;
 
     ResidentialEntity findResidentialEntityByReportId(Long reportId);
+
+    List<ResidentialEntity> findAllResidentialEntities();
 }

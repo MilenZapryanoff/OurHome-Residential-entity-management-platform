@@ -244,7 +244,6 @@ class FinancialServiceImplTestIT {
         manager.setEmail("test@test.test");
         manager.setFirstName("Test");
         manager.setLastName("Test");
-        manager.setUsername("testerManager");
         manager.setPassword("testPassword");
         manager.setPhoneNumber("0777777777");
         manager.setRegistrationDateTime(LocalDateTime.now());

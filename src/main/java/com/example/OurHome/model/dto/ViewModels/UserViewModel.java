@@ -11,7 +11,6 @@ public class UserViewModel {
     private Long id;
     private String firstName;
     private String lastName;
-    private String username;
     private Long pendingPropertyApproval;
     private String email;
     private String phoneNumber;
@@ -22,6 +21,10 @@ public class UserViewModel {
     private Role role;
     private boolean validated;
     private Language language;
+    boolean messageEmail;
+    boolean newFeeEmail;
+    boolean eventEmail;
+    boolean reportEmail;
 
     private String avatarPath;
 
@@ -53,14 +56,6 @@ public class UserViewModel {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPhoneNumber() {
@@ -149,5 +144,37 @@ public class UserViewModel {
 
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    public boolean isMessageEmail() {
+        return messageEmail;
+    }
+
+    public void setMessageEmail(boolean messageEmail) {
+        this.messageEmail = messageEmail;
+    }
+
+    public boolean isNewFeeEmail() {
+        return newFeeEmail;
+    }
+
+    public void setNewFeeEmail(boolean newFeeEmail) {
+        this.newFeeEmail = newFeeEmail;
+    }
+
+    public boolean isEventEmail() {
+        return eventEmail;
+    }
+
+    public void setEventEmail(boolean eventEmail) {
+        this.eventEmail = eventEmail;
+    }
+
+    public boolean isReportEmail() {
+        return reportEmail;
+    }
+
+    public void setReportEmail(boolean reportEmail) {
+        this.reportEmail = reportEmail;
     }
 }

@@ -48,7 +48,7 @@
 </div>
 
 <!-- ***** NavBar ***** -->
-<div th:replace="~{/en/fragments/navbar}"></div>
+<div th:replace="~{en/fragments/navbar}"></div>
 
 <!--BANNER start-->
 <div class="page-heading header-text">
@@ -60,7 +60,7 @@
                         <br>
                     </div>
                 </div>
-                <h3>Profile details</h3>
+                <h3>Profile</h3>
                 <p class="category text-white"
                    th:text="${loggedUser.getFirstName()} + ' ' + ${loggedUser.getLastName()}"></p>
                 <h5 class="text-danger" th:if="${errorMessage}" th:text="${errorMessage.toString()}">
@@ -73,6 +73,7 @@
 <!-- ***** Profile section ***** -->
 <div class="container">
     <div class="property" style="padding-top: 80px;: ">
+
         <div class="tab-content" id="myTabContent">
             <div aria-labelledby="profile-tab" class="tab-pane fade show active"
                  id="profile">
@@ -83,18 +84,20 @@
                                 <li>
                                     <div class="avatar-container">
                                         <img alt="Avatar"
-                                             th:if="${loggedUser.avatarPath != null}" th:src="@{${loggedUser.avatarPath}}">
+                                             th:if="${loggedUser.avatarPath != null}"
+                                             th:src="@{${loggedUser.avatarPath}}">
                                         <img alt="Default Avatar"
                                              src="/avatars/default.jpg" th:unless="${loggedUser.avatarPath != null}">
                                     </div>
                                     <div class="row">
                                         <form enctype="multipart/form-data" id="avatarForm"
                                               method="post" th:action="@{/uploadAvatar}">
-                                            <input accept="image/*" id="avatarInput" name="avatar" style="display: none;"
+                                            <input accept="image/*" id="avatarInput" name="avatar"
+                                                   style="display: none;"
                                                    type="file">
                                             <div class="col-lg-12 text-center">
                                                 <button id="uploadButton" type="button">
-                                                    <small class="text-info-emphasis">Upload new picture <i
+                                                    <small class="text-info-emphasis">Upload picture <i
                                                             class="fa-solid fa-arrow-up-from-bracket"></i></small>
                                                 </button>
                                             </div>
@@ -125,19 +128,17 @@
 
 
                                 </li>
-                                <li class="text-black" th:unless="${loggedUser.isValidated()}"><b>Status
-                                    :</b>
-                                    <p>INACTIVE</p>
+                                <li class="text-black">
+                                    <b>Status:</b>
+                                    <p th:unless="${loggedUser.isValidated()}">Inactive</p>
+                                    <p th:if="${loggedUser.isValidated()}">Active</p>
                                 </li>
-                                <li class="text-black" th:if="${loggedUser.isValidated()}"><b>Status
-                                    :</b>
-                                    <p>ACTIVE</p>
-                                </li>
-                                <li class="text-black"><b>User type:</b>
-                                    <p th:text="${loggedUser.getRole().getName()}"></p>
+                                <li class="text-black"><b>Profile type:</b>
+                                    <p th:if="${loggedUser.getRole().getName()} == 'RESIDENT'">Property owner</p>
+                                    <p th:if="${loggedUser.getRole().getName()} == 'MANAGER'">Condominium manager</p>
                                 </li>
                                 <li class="text-black"
-                                    th:if="${loggedUser.getRole().getName()} == 'RESIDENT'"><b>Member of Condominiums:</b>
+                                    th:if="${loggedUser.getRole().getName()} == 'RESIDENT'"><b>Digital condominiums you are part of:</b>
                                     <p th:text="${loggedUser.getResidentialEntities().size()}"></p>
                                 </li>
                                 <li class="text-black"
@@ -145,23 +146,29 @@
                                     <p th:text="${loggedUser.getProperties().size()}"></p>
                                 </li>
                                 <li class="text-black"
-                                    th:if="${loggedUser.getRole().getName()} == 'MANAGER'"><b>Managed Condominiums:</b>
-                                    <p>
-                                        <a th:href="@{/administration}"
-                                           th:text="${@residentialEntityRepository.countByManager_Id(loggedUser.getId())}">Брой управлявани ЕС</a>
+                                    th:if="${loggedUser.getRole().getName()} == 'MANAGER' and ${@residentialEntityRepository.countByManager_Id(loggedUser.getId())} > 0">
+                                    <b>Manager of digital condominium:</b>
+                                    <p th:each="condominium: ${@residentialEntityRepository.findAllByManager_Id(loggedUser.getId())}">
+                                        <a th:href="@{/administration/summary/{id}(id=${condominium.getId()})}"
+                                           th:text="${condominium.getCity().getName()} + ', ' + ${condominium.getStreetName()} + ' ' +  ${condominium.getStreetNumber()}"></a>
                                     </p>
                                 </li>
-                                <li class="text-black"><b>Account created on:</b>
-                                    <p th:text="${#temporals.format(loggedUser.getRegistrationDateTime(), 'dd.MM.yyyy, HH:mm')}"></p>
+                                <li class="text-black"><b>Created on:</b>
+                                    <p th:text="${#temporals.format(loggedUser.getRegistrationDateTime(), 'dd.MM.yyyy, HH:mm')} + 'ч.'"></p>
                                 </li>
                                 <li class="text-black"><b>Preferred language for system messages:</b>
-                                    <form id="langSelector" style="padding-right: 15px" th:action="@{/setSystemMessagesLanguage}"
+                                    <form id="langSelector" style="padding-right: 15px"
+                                          th:action="@{/setSystemMessagesLanguage}"
                                           th:method="POST">
                                         <div id="dropdown">
                                             <img alt="Български"
-                                                 src="/images/bg-flag.png" th:if="${userViewModel.getLanguage().getDescription() == 'bulgarian'}" title="Български">
+                                                 src="/images/bg-flag.png"
+                                                 th:if="${userViewModel.getLanguage().getDescription() == 'bulgarian'}"
+                                                 title="Български">
                                             <img alt="English"
-                                                 src="/images/en-flag.png" th:if="${userViewModel.getLanguage().getDescription() == 'english'}" title="English">
+                                                 src="/images/en-flag.png"
+                                                 th:if="${userViewModel.getLanguage().getDescription() == 'english'}"
+                                                 title="English">
                                         </div>
                                         <ul id="dropdown-menu">
                                             <li onclick="selectLanguage('bg')" style="padding: 5px; cursor: pointer;">
@@ -182,22 +189,85 @@
                     <div class="col-lg-8">
                         <div class="info-table">
                             <ul>
-                                <li class="text-black"><b>Firstname :</b>
+                                <li class="text-black"><b>First Name :</b>
                                     <p th:text="${loggedUser.getFirstName()}"></p>
                                 </li>
-                                <li class="text-black"><b>Lastname :</b>
+                                <li class="text-black"><b>Last Name :</b>
                                     <p th:text="${loggedUser.getLastName()}"></p>
                                 </li>
-
-                                <li class="text-black"><b>Username :</b>
-                                    <p th:text="${loggedUser.getUsername()}"></p>
-                                </li>
-                                <li class="text-black"><b>Email :</b>
+                                <li class="text-black"><b>E-mail :</b>
                                     <p th:text="${loggedUser.getEmail()}"></p>
                                 </li>
                                 <li class="text-black"><b>Phone number:</b>
                                     <p th:text="${loggedUser.getPhoneNumber()}"></p>
                                 </li>
+                            </ul>
+                        </div>
+                        <div class="info-table" style="margin-top: 15px">
+                            <ul>
+                                <form id="input-form"
+                                      th:action="@{/profile/updateNotificationSettings/{id}(id=${loggedUser.getId()})}"
+                                      th:method="POST"
+                                      th:object="${profileNotificationsEditBindingModel}">
+                                    <li class="text-danger"><i class="fa-solid fa-envelopes-bulk"></i><b> E-mail settings</b></li>
+                                    <i class="fa-solid fa-envelope-circle-check"></i>
+                                    <fieldset>
+                                        <input class="inp-cbx" hidden="hidden" id="messageEmail"
+                                               name="parkingAvailable"
+                                               th:field="*{messageEmail}"
+                                               type="checkbox">
+                                        <label class="cbx" for="messageEmail">
+                                                <span>
+                                            <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                                                    points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                                                </span>
+                                            <small>Receive an email notification about a new message</small>
+                                        </label>
+                                    </fieldset>
+                                    <fieldset th:if="${loggedUser.getRole().getName()} == 'RESIDENT'">
+                                        <input class="inp-cbx" hidden="hidden" id="newFeeEmail"
+                                               name="parkingAvailable"
+                                               th:field="*{newFeeEmail}"
+                                               type="checkbox">
+                                        <label class="cbx" for="newFeeEmail">
+                                                <span>
+                                            <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                                                    points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                                                </span>
+                                            <small>Receive an email notification about a new monthly fee</small>
+                                        </label>
+                                    </fieldset>
+                                    <fieldset th:if="${loggedUser.getRole().getName()} == 'RESIDENT'">
+                                        <input class="inp-cbx" hidden="hidden" id="eventEmail"
+                                               name="parkingAvailable"
+                                               th:field="*{eventEmail}"
+                                               type="checkbox">
+                                        <label class="cbx" for="eventEmail">
+                                                <span>
+                                            <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                                                    points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                                                </span>
+                                            <small>Receive an email notification about a new calendar event</small>
+                                        </label>
+                                    </fieldset>
+                                    <fieldset>
+                                        <input class="inp-cbx" hidden="hidden" id="reportEmail"
+                                               name="parkingAvailable"
+                                               th:field="*{reportEmail}"
+                                               type="checkbox">
+                                        <label class="cbx" for="reportEmail">
+                                                <span>
+                                            <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                                                    points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                                                </span>
+                                            <small>Receive an email notification about a new irregularity report</small>
+                                        </label>
+                                    </fieldset>
+                                    <fieldset class="text-center">
+                                        <button id="update-button">Save
+                                        </button>
+                                    </fieldset>
+                                </form>
                             </ul>
                         </div>
                     </div>

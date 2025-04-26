@@ -24,11 +24,12 @@ public class UserEntity {
     private String lastName;
 
     @Column(nullable = false)
-    @Size(min = 3, max = 20)
-    private String username;
-
-    @Column(nullable = false)
     private LocalDateTime registrationDateTime;
+
+    boolean messageEmail;
+    boolean newFeeEmail;
+    boolean eventEmail;
+    boolean reportEmail;
 
     @Column
     private String phoneNumber;
@@ -53,7 +54,7 @@ public class UserEntity {
 
     private boolean validated;
 
-    private String validationCode;
+    private String resetCode;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     private List<ResidentialEntity> residentialEntities;
@@ -118,14 +119,6 @@ public class UserEntity {
         return email;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String userName) {
-        this.username = userName;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -187,12 +180,12 @@ public class UserEntity {
         this.moderatedResidentialEntities = moderatedResidentialEntities;
     }
 
-    public String getValidationCode() {
-        return validationCode;
+    public String getResetCode() {
+        return resetCode;
     }
 
-    public void setValidationCode(String validationCode) {
-        this.validationCode = validationCode;
+    public void setResetCode(String validationCode) {
+        this.resetCode = validationCode;
     }
 
     public List<Message> getSentMessages() {
@@ -241,5 +234,37 @@ public class UserEntity {
 
     public void setLanguage(@NotNull Language language) {
         this.language = language;
+    }
+
+    public boolean isMessageEmail() {
+        return messageEmail;
+    }
+
+    public void setMessageEmail(boolean messageEmail) {
+        this.messageEmail = messageEmail;
+    }
+
+    public boolean isNewFeeEmail() {
+        return newFeeEmail;
+    }
+
+    public void setNewFeeEmail(boolean newFeeEmail) {
+        this.newFeeEmail = newFeeEmail;
+    }
+
+    public boolean isEventEmail() {
+        return eventEmail;
+    }
+
+    public void setEventEmail(boolean eventEmail) {
+        this.eventEmail = eventEmail;
+    }
+
+    public boolean isReportEmail() {
+        return reportEmail;
+    }
+
+    public void setReportEmail(boolean reportEmail) {
+        this.reportEmail = reportEmail;
     }
 }

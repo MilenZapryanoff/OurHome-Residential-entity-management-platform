@@ -2558,6 +2558,7 @@ table {
 
 .success-msg {
     background-color: rgba(33, 135, 84, 0.58);
+    padding: 0 20px;
     margin: 0 auto;
     max-width: 700px;
     border-radius: 5px;
@@ -3624,6 +3625,129 @@ Table nav bars
     padding: 5px;
 }
 
+#update-button {
+    background-color: #000000;
+    padding: 8px 16px;
+    color: white;
+    border-radius: 5px;
+    transition: 500ms ease all;
+    font-size: 1rem;
+}
+
+
+#update-button:hover {
+    background-color: #d33141;
+    transition: 500ms ease all;
+}
+
+
+/*
+---------------------------------------------
+Financial -> Incomes
+---------------------------------------------
+*/
+
+
+.expected-incomes {
+    display: flex;
+    justify-content: center;
+}
+
+.expected-incomes-container {
+    border: 1px solid #e7e7e7;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    max-width: 30%;
+    transition: all 0.8s ease;
+}
+
+.expected-incomes-container:hover {
+    background-color: rgba(208, 208, 208, 0.25);
+    transition: all 0.8s ease;
+}
+
+
+.accumulated-incomes {
+    display: flex;
+    justify-content: center;
+}
+
+.accumulated-incomes-container {
+    border: 1px solid #e7e7e7;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    max-width: 30%;
+    transition: all 0.8s ease;
+}
+
+.accumulated-incomes-container:hover {
+    background-color: rgba(73, 171, 58, 0.25);
+    transition: all 0.8s ease;
+}
+
+.unpaid-incomes {
+    display: flex;
+    justify-content: center;
+}
+
+.unpaid-incomes-container {
+    border: 1px solid #e7e7e7;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    max-width: 50%;
+    transition: all 0.8s ease;
+}
+
+.unpaid-incomes-container:hover {
+    background-color: rgba(215, 43, 59, 0.19);
+    transition: all 0.8s ease;
+}
+
+.deposited-incomes {
+    display: flex;
+    justify-content: center;
+}
+
+.deposited-incomes-container-main {
+    border: 1px solid #e7e7e7;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    width: 70%;
+    transition: all 0.8s ease;
+}
+.deposited-incomes-container-secondary {
+    border: 1px solid #e7e7e7;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    transition: all 0.8s ease;
+    width: 30%;
+}
+
+.deposited-incomes-container-main:hover {
+    background-color: rgba(57, 116, 239, 0.11);
+    transition: all 0.8s ease;
+}
+
+.deposited-incomes-container-secondary:hover {
+    background-color: rgba(57, 116, 239, 0.11);
+    transition: all 0.8s ease;
+}
+
+#blocked-overpayments {
+    display: flex;
+    background-color: white;
+    border: 1px solid #e7e7e7;
+    border-radius: 10px;
+}
+
+#income-list li {
+    padding: 60px 0;
+}
 
 /*
 ---------------------------------------------
@@ -3668,7 +3792,6 @@ body {
     .header-area .main-nav .nav li:last-child {
         background-color: black;
     }
-
 
     #dropdown img {
         width: 23px;
@@ -3799,7 +3922,41 @@ body {
     .properties .item {
         max-width: 450px;
     }
+
+    .expected-incomes {
+        flex-direction: column;
+        align-content: center;
+    }
+
+    .expected-incomes-container {
+        max-width: 90%;
+    }
+
+    .accumulated-incomes {
+        flex-direction: column;
+        align-content: center;
+    }
+
+    .accumulated-incomes-container {
+        max-width: 90%;
+    }
+
+    .unpaid-incomes-container {
+        max-width: 90%;
+    }
+
+    .deposited-incomes {
+        display: flex;
+        flex-direction: column;
+    }
+    .deposited-incomes-container-main {
+        width: 100%;
+    }
+    .deposited-incomes-container-secondary {
+        width: 100%;
+    }
 }
+
 
 @media (max-width: 1200px) {
 

@@ -1,13 +1,13 @@
 package com.example.OurHome.service.impl;
 
-import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.model.Entity.PropertyFee;
 import com.example.OurHome.repo.PropertyFeeRepository;
 import com.example.OurHome.repo.PropertyRepository;
-import com.example.OurHome.service.FinancialService;
+import com.example.OurHome.service.LogService;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.NotificationService;
 import com.example.OurHome.service.ResidentialEntityService;
+import com.example.OurHome.service.email.EmailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +17,7 @@ import org.modelmapper.ModelMapper;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,14 +34,17 @@ class PropertyFeeServiceImplTest {
     private MessageService mockMessageService;
     @Mock
     private NotificationService mockNotificationService;
-
     @Mock
     private ResidentialEntityService mockResidentialEntityService;
+    @Mock
+    private LogService mockLogService;
+    @Mock
+    private EmailService mockemailService;
 
     @BeforeEach
     void setUp() {
-        serviceToTest = new PropertyFeeServiceImpl(mockPropertyFeeRepository,mockPropertyRepository,
-                mockModelMapper, mockMessageService, mockResidentialEntityService, mockNotificationService);
+        serviceToTest = new PropertyFeeServiceImpl(mockPropertyFeeRepository, mockPropertyRepository, mockModelMapper,
+                mockMessageService, mockResidentialEntityService, mockNotificationService, mockLogService, mockemailService);
     }
 
     @Test

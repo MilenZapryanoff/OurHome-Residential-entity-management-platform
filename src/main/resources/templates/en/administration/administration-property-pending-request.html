@@ -114,8 +114,13 @@
                                             class="fa-solid fa-circle-check text-success"></i></b>
                                 </li>
                                 <li class="text-black text-center"
-                                    th:if="${property.getPropertyType() != null}"><i class="fa-solid fa-building"></i> Property type:
+                                    th:if="${property.getPropertyType() != null}"><i class="fa-solid fa-building"></i>
+                                    Category:
                                     <b th:text="${property.getPropertyType().getDescription()}"></b>
+                                </li>
+                                <li class="text-black text-center"
+                                    th:if="${property.getPropertyType() == null}"><i class="fa-solid fa-building"></i>
+                                    Category: <b>None</b>
                                 </li>
                             </ul>
                         </div>
@@ -163,114 +168,141 @@
                                                         between property preset data and owner request data!</p>
                                                 </li>
                                                 <li>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.getNumber() != property.getPropertyChangeRequest().getNumber()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-list-ol"></i> Property №:
-                                                        <b th:text="${property.getPropertyChangeRequest().getNumber()}"></b>
-                                                    </p>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.getFloor() != property.getPropertyChangeRequest().getFloor()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-stairs"></i> Property floor number:
-                                                        <b th:text="${property.getPropertyChangeRequest().getFloor()}"></b>
-                                                    </p>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.getNumberOfAdults() != property.getPropertyChangeRequest().getNumberOfAdults()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-person"></i> Number of adults:
-                                                        <b th:text="${property.getPropertyChangeRequest().getNumberOfAdults()}"></b>
-                                                    </p>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.getNumberOfChildren() != property.getPropertyChangeRequest().getNumberOfChildren()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-child"></i> Number of children:
-                                                        <b th:text="${property.getPropertyChangeRequest().getNumberOfChildren()}"></b>
-                                                    </p>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.getNumberOfPets() != property.getPropertyChangeRequest().getNumberOfPets()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-dog"></i> Number of pets:
-                                                        <b th:text="${property.getPropertyChangeRequest().getNumberOfPets()}"></b>
-
-                                                    </p>
-                                                    <p class="text-black text-center">
-                                                        <b th:if="${property.isNotHabitable() != property.getPropertyChangeRequest().isNotHabitable()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-house-chimney-user"></i> Property is
-                                                        habitable:
-                                                        <b th:if="${property.getPropertyChangeRequest().isNotHabitable()}"><i
-                                                                class="fa-solid fa-circle-xmark text-danger"></i></b>
-                                                        <b th:unless="${property.getPropertyChangeRequest().isNotHabitable()}"><i
-                                                                class="fa-solid fa-circle-check text-success"></i></b>
-                                                    </p>
-                                                    <p class="text-black text-center"
-                                                       th:if="${property.getPropertyChangeRequest().getPropertyType() != null}">
-                                                        <b th:if="${property.getPropertyType() != property.getPropertyChangeRequest().getPropertyType()}">
-                                                            <i class="fa-solid fa-triangle-exclamation text-danger help"
-                                                               title="Difference between property data and registration request data"></i></b>
-                                                        <i class="fa-solid fa-building">
-                                                        </i> Property type:
-                                                        <b th:text="${property.getPropertyChangeRequest.getPropertyType().getDescription()}"></b>
-                                                    </p>
+                                                    <div class="text-center">
+                                                        <p class="text-bg-danger"
+                                                           th:if="${property.getNumber() != property.getPropertyChangeRequest().getNumber()}">
+                                                            <i class="fa-solid fa-list-ol"></i> Property №: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumber()}"></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getNumber() != property.getPropertyChangeRequest().getNumber()}">
+                                                            <i class="fa-solid fa-list-ol"></i> Property №: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumber()}"></b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <p class="text-bg-danger"
+                                                           th:if="${property.getFloor() != property.getPropertyChangeRequest().getFloor()}">
+                                                            <i class="fa-solid fa-stairs"></i> Floor: <b
+                                                                th:text="${property.getPropertyChangeRequest().getFloor()}"></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getFloor() != property.getPropertyChangeRequest().getFloor()}">
+                                                            <i class="fa-solid fa-stairs"></i> Floor: <b
+                                                                th:text="${property.getPropertyChangeRequest().getFloor()}"></b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <p class="text-bg-danger"
+                                                           th:if="${property.getNumberOfAdults() != property.getPropertyChangeRequest().getNumberOfAdults()}">
+                                                            <i class="fa-solid fa-person"></i> Number of adults: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfAdults()}"></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getNumberOfAdults() != property.getPropertyChangeRequest().getNumberOfAdults()}">
+                                                            <i class="fa-solid fa-person"></i> Number of adults: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfAdults()}"></b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <p class="text-bg-danger"
+                                                           th:if="${property.getNumberOfChildren() != property.getPropertyChangeRequest().getNumberOfChildren()}">
+                                                            <i class="fa-solid fa-child"></i> Number of children: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfChildren()}"></b>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getNumberOfChildren() != property.getPropertyChangeRequest().getNumberOfChildren()}">
+                                                            <i class="fa-solid fa-child"></i> Number of children: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfChildren()}"></b>
+                                                    </div>
+                                                    <div class="text-black text-center">
+                                                        <p class="text-bg-danger"
+                                                           th:if="${property.getNumberOfPets() != property.getPropertyChangeRequest().getNumberOfPets()}">
+                                                            <i class="fa-solid fa-dog"></i> Number of pets: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfPets()}"></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getNumberOfPets() != property.getPropertyChangeRequest().getNumberOfPets()}">
+                                                            <i class="fa-solid fa-dog"></i> Number of pets: <b
+                                                                th:text="${property.getPropertyChangeRequest().getNumberOfPets()}"></b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <p class="text-bg-danger"
+                                                           th:if="${property.isNotHabitable() != property.getPropertyChangeRequest().isNotHabitable()}">
+                                                            <i class="fa-solid fa-house-chimney-user"></i> Property is
+                                                            habitable:
+                                                            <b th:if="${property.getPropertyChangeRequest().isNotHabitable()}"><i
+                                                                    class="fa-solid fa-circle-xmark text-white"></i></b>
+                                                            <b th:unless="${property.getPropertyChangeRequest().isNotHabitable()}"><i
+                                                                    class="fa-solid fa-circle-check text-success"></i></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.isNotHabitable() != property.getPropertyChangeRequest().isNotHabitable()}">
+                                                            <i class="fa-solid fa-house-chimney-user"></i> Property is
+                                                            habitable:
+                                                            <b th:if="${property.getPropertyChangeRequest().isNotHabitable()}"><i
+                                                                    class="fa-solid fa-circle-xmark text-danger"></i></b>
+                                                            <b th:unless="${property.getPropertyChangeRequest().isNotHabitable()}"><i
+                                                                    class="fa-solid fa-circle-check text-success"></i></b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="text-center"
+                                                         th:if="${property.getPropertyChangeRequest().getPropertyType() != null}">
+                                                        <p class="text-bg-danger"
+                                                           th:if="${property.getPropertyType() != property.getPropertyChangeRequest().getPropertyType()}">
+                                                            <i class="fa-solid fa-building"></i> Category: <b
+                                                                th:text="${property.getPropertyChangeRequest().getPropertyType().getDescription()}"></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getPropertyType() != property.getPropertyChangeRequest().getPropertyType()}">
+                                                            <i class="fa-solid fa-building"></i> Category: <b
+                                                                th:text="${property.getPropertyChangeRequest().getPropertyType().getDescription()}"></b>
+                                                        </p>
+                                                        <br>
+                                                    </div>
+                                                    <div class="text-center"
+                                                         th:if="${property.getPropertyChangeRequest().getPropertyType() == null}">
+                                                        <p class="text-dark">
+                                                            <i class="fa-solid fa-building"></i> Category: <b>None</b>
+                                                        </p>
+                                                        <br>
+                                                    </div>
+                                                    <br>
                                                 </li>
                                             </ul>
-                                        </div>
-
-                                        <div class="buttons-container">
-                                            <form class="form-container"
-                                                  th:action="@{/administration/property/pending/request/approve/{id} (id=${property.getId()})}"
-                                                  th:method="POST"
-                                                  th:object="${propertyManageBindingModel}">
-                                                <div class="custom-dialog"
-                                                     style="display: none;" th:id="'customDialog_' + ${property.getId()}">
-                                                    <p th:id="'customDialogText_' + ${property.getId()}"></p>
-                                                    <button class="custom-dialog-ok"
-                                                            th:onclick="'closeCustomDialog(\'' + ${property.getId()} + '\')'">
-                                                        OK
-                                                    </button>
-                                                </div>
-                                                <label class="hidden" for="entityId-approve-with-change"></label>
-                                                <select class="form-control hidden" id="entityId-approve-with-change"
-                                                        th:field="*{entityId}">
-                                                    <option th:value="${property.getResidentialEntity().getId()}"></option>
-                                                </select>
-                                                <button id="approve-change-request"
-                                                        th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property approved.\')'"
-                                                        title="This action will set property owner and modify existing data!"
-                                                        type="submit">
-                                                    <p>Approve change request</p>
-                                                </button>
-                                            </form>
-                                            <form class="form-container"
-                                                  th:action="@{/administration/property/pending/request/reject/{id} (id=${property.getId()})}"
-                                                  th:method="POST"
-                                                  th:object="${propertyManageBindingModel}">
-                                                <label class="hidden" for="entityId-reject"></label>
-                                                <select class="form-control hidden" id="entityId-reject"
-                                                        th:field="*{entityId}">
-                                                    <option th:value="${property.getResidentialEntity().getId()}"></option>
-                                                </select>
-                                                <button class="text-center" id="reject"
-                                                        th:onclick="'openCustomDialog(\'' + ${property.getId()} + '\', \'Property rejected.\')'"
-                                                        type="submit"><p>Reject change request</p>
-                                                </button>
-                                            </form>
                                         </div>
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="text-center">
-                                        <p>Approving change request will apply new data to this property.</p>
-                                        <p>Rejecting request will discard all changes. Property owner will be able to
-                                            edit and resend change request again.</p>
-                                    </div>
+                                    <p><b class="text-danger">You can choose one of the following options:</b></p>
+                                    <br>
+                                    <p><b>Approve Request</b></p>
+                                    <p><i class="fa-regular fa-check-circle text-success"></i> The property data will be
+                                        updated according to the details provided in the parameter change request!</p>
+                                    <br>
+                                    <p><b>Reject Request</b></p>
+                                    <p><i class="fa-regular fa-xmark-circle text-danger"></i> The property data will
+                                        remain unchanged!</p>
+                                    <br>
+                                    <form id="input-form"
+                                          th:action="@{/administration/property/pending/request/process/{id}(id=${property.getId()})}"
+                                          th:method="POST"
+                                          th:object="${propertyManageBindingModel}">
+                                        <label for="action" hidden="hidden"></label>
+                                        <select class="form-control" id="action"
+                                                th:field="*{action}">
+                                            <option th:text="'Approve'"
+                                                    th:value="approveWithChange">
+                                            </option>
+                                            <option th:text="'Reject'"
+                                                    th:value="reject">
+                                            </option>
+                                        </select>
+                                        <button id="request-process-button"
+                                                type="submit">Confirm
+                                        </button>
+                                    </form>
+
                                 </li>
                             </ul>
                         </div>

@@ -11,8 +11,6 @@ public class ManagerRegisterBindingModel {
     @Size(min = 2, max = 20, message = "Last name must be between 2 and 20 characters!")
     private String lastName;
 
-    @Size(min = 2, max = 20, message = "Username length must be between 2 and 20 characters!")
-    private String username;
 
     @Email
     @NotEmpty(message = "Email cannot be empty!")
@@ -42,14 +40,6 @@ public class ManagerRegisterBindingModel {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {

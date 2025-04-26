@@ -35,4 +35,7 @@ public interface PropertyFeeRepository extends JpaRepository<PropertyFee, Long> 
 
     @Query("SELECT f FROM property_fees f where f.isPaid = false and (f.overpaidAmountStart - f.overpaidAmountEnd) > 0 and f.property.residentialEntity.id=:residentialEntityId")
     List<PropertyFee> findFeesWithBlockedOverpayments(Long residentialEntityId);
+
+    @Query("SELECT SUM(f.dueAmount) FROM property_fees f where f.isPaid = false and f.property.residentialEntity.id=:residentialEntityId")
+    BigDecimal findAllUnpaidFeesByResidentialEntityID(Long residentialEntityId);
 }

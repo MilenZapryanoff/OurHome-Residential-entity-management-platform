@@ -59,19 +59,6 @@
             <div class="col-lg-12">
                 <span th:text="'Идентификатор на ЕС: ' + ${residentialEntity.getId()}"></span>
             </div>
-
-            <div class="err-msg" th:if="${messageError}">
-                <h5 class="text-light">Неуспешно изпращане!</h5>
-                <p class="text-light">Съобщението не може да бъде повече от 2000 символа!</p>
-            </div>
-            <div class="success-msg" th:if="${messageSent}">
-                <h5 class="text-light">Съобщението е изпратено!</h5>
-            </div>
-
-            <div class="success-msg" th:if="${residentRemoved}">
-                <h5 class="text-light">Потребителят е успешно премахнат от Дигиталната Етажна Собственост!</h5>
-                <p class="text-light">Собствеността на дигиталния имот е обновена!</p>
-            </div>
         </div>
     </div>
 </div>
@@ -83,26 +70,6 @@
     </div>
     <div class="content">
         <div class="container">
-            <div class="text-center administration-header">
-                <h4 class="category">Регистър на потребителите</h4>
-                <br>
-                <p>Секцията с потребители съдържа информация за всички регистрирани потребители с достъп до настоящата
-                    Дигиталната Етажна Собственост (ДЕС), чакащите заявки за регистрация като собственик на дигитален
-                    имот, както и информация за отхвърлените заявки.</p>
-                <p>Всеки потребител с достъп до Дигиталната Етажна Собственост (ДЕС) може да заявки собственост върху
-                    Дигитален имот.</p>
-                <p>Всички заявки за регистрации на собственици на дигитални имоти, за които е сработил защитен механизъм
-                    за верификация може да откриете в секция <a
-                            th:href="@{/administration/owners/pending/{id}#active-registrations(id=${residentialEntity.getId()})}">Чакащи
-                        заявки</a>.</p>
-                <p>При одобрение на регистрацията, собствеността върху дигиталния имот се обновява. В случай, че по
-                    някаква причина отхвърлите дадена заявка за регистрация, то собствеността на дигиталния имот остава
-                    непроменена.</p>
-                <p>Информация за всички отхвърлени заявки за регистрации може да откриете в <a
-                        th:href="@{/administration/owners/rejected/{id}#active-registrations(id=${residentialEntity.getId()})}">Отхвърлени
-                    заявки</a>.</p>
-            </div>
-
             <!--Owners table-->
             <div class="administration">
                 <!--Submenu nav buttons-->
@@ -111,41 +78,36 @@
                        id="active-registrations">
                         <div class="text-center">
                             <i class="fa-solid fa-user-check"></i> <span>Потребители с достъп до Дигитална ЕС</span>
-                            <sup th:if="${residentialEntity.getResidents().size()} > 0"
-                                 th:text="'  '+ ${residentialEntity.getResidents().size()}">
-                            </sup>
                         </div>
                     </a>
-                    <a class="button nav-link"
-                       th:href="@{/administration/owners/pending/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-hourglass-half"></i> <span>Чакащи заявки</span>
-                            <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
-                                 th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
-                            </sup>
-                        </div>
-                    </a>
-                    <a class="button nav-link"
-                       th:href="@{/administration/owners/rejected/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-ban"></i> <span>Отхврълени заявки</span>
-                            <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
-                                 th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
-                            </sup>
-                        </div>
-                    </a>
+
                 </div>
 
                 <div class="info-table bottom-rounded">
-                    <div class="text-center">
-                        <h4 class="category">Списък на потребители с достъп до Дигитална ЕС</h4>
-                        <br>
-                        <p>Този регистъра съдържа информация за всички потребители с достъп до Дигиталната Етажна
-                            Собственост (ДЕС) независимо дали имат регистриран достъп до дигитален имот.</p>
-                        <p>Като домоуправител може да изпращате съобщения до всеки един потребител и да управлявате
-                            достъпа на потребителите до ДЕС, като им предоставяте специални права.
-                            Може да ограничите достъпа на даден потребител до ДЕС чрез опцията за премахване на
-                            потребител.</p>
-                        <br>
-                    </div>
+                    <h4 class="category text-center">Списък на потребители с достъп до Дигитална ЕС</h4>
+                    <br>
+                    <p>Този регистър съдържа информация за всички регистрирани потребители с достъп до настоящата
+                        Дигиталната Етажна Собственост.</p>
+                    <p>Всеки потребител с достъп до Дигиталната Етажна Собственост може да заявки собственост върху
+                        Дигитален имот.</p>
+                    <p>Всички заявки за регистрации на собственици на дигитални имоти, за които е сработил защитен
+                        механизъм
+                        за верификация може да откриете в секция <a
+                                th:href="@{/administration/property/owners/pending/{id}#active-registrations(id=${residentialEntity.getId()})}">Чакащи
+                            заявки</a>.</p>
+                    <p>При одобрение на регистрацията, собствеността върху дигиталния имот се обновява. В случай, че по
+                        някаква причина отхвърлите дадена заявка за регистрация, то собствеността на дигиталния имот
+                        остава
+                        непроменена.</p>
+                    <p>Информация за всички отхвърлени заявки за регистрации може да откриете в <a
+                            th:href="@{/administration/property/owners/rejected/{id}#active-registrations(id=${residentialEntity.getId()})}">Отхвърлени
+                        заявки</a>.</p>
+                    <br>
+                    <p>Като домоуправител може да изпращате съобщения до всеки един потребител и да управлявате
+                        достъпа на потребителите до дигиталната етажна собственост, като им предоставяте специални
+                        права.
+                        Може да премахнете достъпа на даден потребител чрез опцията за премахване на потребител.</p>
+                    <br>
                     <!--Start of counter-->
                     <div class="tabs-content">
                         <div class="tab-content" id="myTabContent">
@@ -169,15 +131,17 @@
                     </div>
 
                     <!--Start of table-->
-                    <p class="text-center" th:if="${residentialEntity.getResidents().size()} == 0">Няма регистрирани
+                    <p class="text-center" th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} == 0">Няма регистрирани
                         потребители</p>
-                    <table class="text-center" id="owners-table" th:if="${residentialEntity.getResidents().size()} > 0">
+                    <table class="table text-center"
+                           id="pending-requests"
+                           th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0">
                         <tr>
                             <th>
                                 <p>Собвеник на имот №</p>
                             </th>
                             <th>
-                                <p>Avatar</p>
+                                <p>Профилна снимка</p>
                             </th>
                             <th>
                                 <p>Име</p>
@@ -186,26 +150,16 @@
                                 <p>Фамилия</p>
                             </th>
                             <th>
-                                <p>Потребител</p>
-                            </th>
-                            <th>
                                 <p>Имейл</p>
                             </th>
                             <th>
-                                <p>Тел. номер</p>
+                                <p>Права на потребител</p>
                             </th>
                             <th>
-                                <p>Тип профил</p>
-                            </th>
-                            <th>
-                                <p>Изпрати съобщение</p>
-                            </th>
-                            <th style="padding-left: 10px">
-                                <p>Премахни потребител</p>
+                                <p>Виж детайли</p>
                             </th>
                         </tr>
-                        <tr class="text-center"
-                            th:each="resident : ${residentialEntity.getResidents()}">
+                        <tr th:each="resident : ${residentialEntity.getResidents()}">
                             <td th:if="${@propertyRepository.findAllUserObtainedProperties(resident.getId(), residentialEntity.getId()).size() > 0}">
                                 <p th:each="property : ${@propertyRepository.findAllUserObtainedProperties(resident.getId(), residentialEntity.getId())}"
                                    th:text="'№'+ ${property.getNumber()}"></p>
@@ -231,97 +185,17 @@
                                 <p th:text="${resident.getLastName()}"></p>
                             </td>
                             <td>
-                                <p th:text="${resident.getUsername()}"></p>
-                            </td>
-                            <td>
                                 <p th:text="${resident.getEmail()}"></p>
                             </td>
                             <td>
-                                <p th:text="${resident.getPhoneNumber()}"></p>
+                                <p th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}" th:text="Потребител"></p>
+                                <p class="text-danger" th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}" th:text="Модератор"></p>
                             </td>
-                            <!-- START: Roles change button-->
-                            <td style="padding: 5px 10px">
-                                <form class="form-container"
-                                      th:action="@{/administration/owners/edit_role/{id} (id=${resident.getId()})}"
-                                      th:method="POST"
-                                      th:object="${residentManageBindingModel}">
-                                    <fieldset style="padding-top: 15px">
-                                        <label class="hidden" for="userId">Role change</label>
-                                        <select class="form-control hidden" id="userId" th:field="*{userId}">
-                                            <option th:value="${resident.getId()}"></option>
-                                        </select>
-                                        <label class="hidden" for="entityId"></label>
-                                        <select class="form-control hidden" id="entityId" th:field="*{entityId}">
-                                            <option th:value="${residentialEntity.getId()}"></option>
-                                        </select>
-                                        <button class="form-control"
-                                                th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}"
-                                                title="Направи модератор"
-                                                type="submit"><small>Потребител</small>
-                                        </button>
-                                        <button class="form-control text-bg-danger"
-                                                th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}"
-                                                title="Премахни права на модератор"
-                                                type="submit"><small class="text-light">Модератор</small>
-                                        </button>
-                                        <br>
-                                    </fieldset>
-                                </form>
-                            </td>
-                            <!-- START: Message button-->
-                            <td style="min-width: 250px">
-                                <form class="form-container"
-                                      th:action="@{/administration/owners/message/{id}(id=${resident.getId()})}"
-                                      th:method="POST"
-                                      th:object="${residentManageBindingModel}">
-
-                                    <label class="hidden" for="entityIdMessage"></label>
-                                    <select class="form-control hidden"
-                                            id="entityIdMessage"
-                                            th:field="*{entityId}">
-                                        <option th:value="${residentialEntity.getId()}"></option>
-                                    </select>
-
-                                    <div class="input-container">
-                                        <label>
-                                    <textarea class="messageText"
-                                              required
-                                              th:errorclass="bg-danger"
-                                              th:field="*{message}"
-                                              th:placeholder="'Изпрати съобщение до ' + ${resident.getFirstName()}"
-                                              type="text">
-                                    </textarea>
-                                        </label>
-                                        <button class="send-message-button modal-button" hidden="hidden" title="Изпрати съобщение"
-                                                type="button">
-                                        </button>
-                                    </div>
-                                </form>
-                            </td>
-                            <!-- START: Delete button-->
                             <td>
-                                <form th:action="@{/administration/owners/delete/{id} (id=${resident.getId()})}"
-                                      th:method="POST"
-                                      th:object="${residentManageBindingModel}">
-                                    <label class="hidden"
-                                           for="entityIdDeleteResident"></label>
-                                    <select class="form-control hidden"
-                                            id="entityIdDeleteResident"
-                                            th:field="*{entityId}">
-                                        <option th:value="${residentialEntity.getId()}"></option>
-                                    </select>
-                                    <button class="delete-button" type="button">
-                                        <div class="icon">
-                                            <svg class="top" viewBox="0 0 24 24">
-                                                <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
-                                            </svg>
-                                            <svg class="bottom" viewBox="0 0 24 24">
-                                                <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="text">Изтрий</div>
-                                    </button>
-                                </form>
+                                <a th:href="@{/administration/owners/details/{id}(id=${resident.getId()}, resId=${residentialEntity.getId()})}">
+                                    <small class="magnifier-expand">
+                                        <i class="fa-solid fa-magnifying-glass-plus"></i></small>
+                                </a>
                             </td>
                         </tr>
                     </table>

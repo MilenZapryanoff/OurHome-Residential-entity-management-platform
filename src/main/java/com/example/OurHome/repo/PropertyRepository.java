@@ -46,6 +46,9 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     @Query("SELECT p FROM properties p where p.owner.id=:residentId AND p.residentialEntity.id=:residentialEntityId AND p.isObtained = true")
     List<Property> findAllUserObtainedProperties(Long residentId, Long residentialEntityId);
 
+    @Query("SELECT p FROM properties p where p.owner.id=:residentId AND p.residentialEntity.id=:residentialEntityId AND p.isObtained = false")
+    List<Property> findAllUserRequestedProperties(Long residentId, Long residentialEntityId);
+
     @Query("SELECT p FROM properties p where p.owner.id=:residentId AND p.residentialEntity.id=:residentialEntityId")
     List<Property> findAllUserProperties(Long residentId, Long residentialEntityId);
 

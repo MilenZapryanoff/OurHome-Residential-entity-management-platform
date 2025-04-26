@@ -2,8 +2,10 @@ package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.*;
 import com.example.OurHome.repo.MessageRepository;
+import com.example.OurHome.service.LogService;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.NotificationService;
+import com.example.OurHome.service.email.EmailService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,10 +31,14 @@ public class MessageServiceImpl implements MessageService {
     private static final String EVENT_MSG_ENG = "A new event has been added to the calendar of your condominium. You can find information about the event in the Events menu in the administrative panel!";
 
     private final MessageRepository messageRepository;
+    private final EmailService emailService;
+    private final LogService logService;
 
-    public MessageServiceImpl(NotificationService notificationService, MessageRepository messageRepository) {
+    public MessageServiceImpl(NotificationService notificationService, MessageRepository messageRepository, EmailService emailService, LogService logService) {
         this.notificationService = notificationService;
         this.messageRepository = messageRepository;
+        this.emailService = emailService;
+        this.logService = logService;
     }
 
 
@@ -57,12 +63,19 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void archiveMessage(Long id) {
-        Message message = messageRepository.findById(id).orElse(null);
-        if (message != null) {
-            message.setArchived(true);
-            message.setRead(true);
-            messageRepository.save(message);
+        try {
+            Message message = messageRepository.findById(id).orElse(null);
+            if (message != null) {
+                message.setArchived(true);
+                message.setRead(true);
+                messageRepository.save(message);
+            }
+            logService.info("✅[archiveMessage] Message id:{} successfully ARCHIVED!", id);
+        } catch (Exception e) {
+            logService.error("❌[archiveMessage] Failed to archive message id:{}! {}", id, e);
         }
+
+
     }
 
     /**
@@ -72,7 +85,12 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void deleteMessage(Long id) {
-        messageRepository.deleteById(id);
+        try {
+            messageRepository.deleteById(id);
+            logService.info("✅[deleteMessage] Message id:{} successfully DELETED!", id);
+        } catch (Exception e) {
+            logService.error("❌[deleteMessage] Failed to delete message id:{}! {}", id, e);
+        }
     }
 
     /**
@@ -82,9 +100,14 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void deleteAllMessages(Long id) {
-        List<Message> notArchivedMessages = messageRepository.findArchivedMessagesByUserId(id);
-        if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
-            messageRepository.deleteAll(notArchivedMessages);
+        try {
+            List<Message> notArchivedMessages = messageRepository.findArchivedMessagesByUserId(id);
+            if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
+                messageRepository.deleteAll(notArchivedMessages);
+            }
+            logService.info("✅[deleteAllMessages] All messages of user:{} successfully DELETED!", id);
+        } catch (Exception e) {
+            logService.error("❌[deleteAllMessages] Failed to DELETE all messages of user:{}! {}", id, e);
         }
     }
 
@@ -95,11 +118,16 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void readAllMessages(Long id) {
-        List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesByUserId(id);
+        try {
+            List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesByUserId(id);
 
-        if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
-            notArchivedMessages.forEach(message -> message.setRead(true));
-            messageRepository.saveAll(notArchivedMessages);
+            if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
+                notArchivedMessages.forEach(message -> message.setRead(true));
+                messageRepository.saveAll(notArchivedMessages);
+            }
+            logService.info("✅[readAllMessages] All messages of user:{} successfully MARKED as read!", id);
+        } catch (Exception e) {
+            logService.error("❌[readAllMessages] Failed to mark all messages of user:{} as read! {}", id, e);
         }
     }
 
@@ -110,14 +138,19 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void archiveAllMessages(Long id) {
-        List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesByUserId(id);
+        try {
+            List<Message> notArchivedMessages = messageRepository.findNotArchivedMessagesByUserId(id);
 
-        if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
-            notArchivedMessages.forEach(message -> {
-                message.setArchived(true);
-                message.setRead(true);
-            });
-            messageRepository.saveAll(notArchivedMessages);
+            if (notArchivedMessages != null && !notArchivedMessages.isEmpty()) {
+                notArchivedMessages.forEach(message -> {
+                    message.setArchived(true);
+                    message.setRead(true);
+                });
+                messageRepository.saveAll(notArchivedMessages);
+            }
+            logService.info("✅[archiveAllMessages] All messages of user:{} successfully ARCHIVED!", id);
+        } catch (Exception e) {
+            logService.error("❌[archiveAllMessages] Failed to archive all messages of user: {}! {}", id, e);
         }
     }
 
@@ -130,18 +163,28 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void sendMessage(UserEntity receiver, UserEntity sender, String message) {
-        messageRepository.save(
-                new Message(
-                        LocalDate.now(),
-                        Time.valueOf(LocalTime.now()),
-                        message,
-                        receiver,
-                        sender,
-                        false,
-                        false));
+        try {
+            messageRepository.save(
+                    new Message(
+                            LocalDate.now(),
+                            Time.valueOf(LocalTime.now()),
+                            message,
+                            receiver,
+                            sender,
+                            false,
+                            false));
+            logService.info("✅[sendMessage ->] New message successfully created. Receiver id: {}, Sender id: {}", receiver.getId(), sender.getId());
+        } catch (Exception e) {
+            logService.error("❌[sendMessage->] Failed to create new message! Receiver id: {}, Sender id: {}", receiver.getId(), sender.getId());
+            return;
+        }
 
-        //create notification
+        //send message receiver notification
         notificationService.newMessageNotification(receiver);
+        //send message receiver email
+        if (receiver.isMessageEmail()) {
+            emailService.newMessageEmailNotification(receiver, sender, message);
+        }
     }
 
     /**
@@ -291,20 +334,22 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void propertyRejectedMessage(Property property) {
+        try {
+            Message message = createMessage(property.getOwner());
+            message.setText("Вашата заявка за регистрация на самостоятелен обект  № " + property.getNumber() + " в състава на етажна собственост с идентификатор : "
+                    + property.getResidentialEntity().getId() + " е ОТХВЪРЛЕНА! За да разберете причината за това, моля да се свържите с Вашия домоуправител. " +
+                    "В случай, че все още имате достъп до етажната собственост, може да коригирате и изпратите повторно заявката за регистрация!");
+            message.setTextEn("Your registration request for property № " + property.getNumber() + " in Condominium ID: "
+                    + property.getResidentialEntity().getId() + " has been REJECTED. You can contact your Condominium manager for more details " +
+                    "about the reason for this action. If you still have an access to the Condominium, You can edit the record and submit " +
+                    "it again.");
 
-        Message message = createMessage(property.getOwner());
-        message.setText("Вашата заявка за регистрация на самостоятелен обект  № " + property.getNumber() + " в състава на етажна собственост с идентификатор : "
-                + property.getResidentialEntity().getId() + " е ОТХВЪРЛЕНА! За да разберете причината за това, моля да се свържите с Вашия домоуправител. " +
-                "В случай, че все още имате достъп до етажната собственост, може да коригирате и изпратите повторно заявката за регистрация!");
-        message.setTextEn("Your registration request for property № " + property.getNumber() + " in Condominium ID: "
-                + property.getResidentialEntity().getId() + " has been REJECTED. You can contact your Condominium manager for more details " +
-                "about the reason for this action. If you still have an access to the Condominium, You can edit the record and submit " +
-                "it again.");
+            messageRepository.save(message);
 
-        messageRepository.save(message);
-
-        //send notification to property owner for property approval
-        notificationService.propertyRejectedNotification(property);
+            logService.info("✅[-> propertyRejectedMessage] Registration rejection MESSAGE to user:{}, owner of property: {}", property.getOwner().getId(), property.getId());
+        } catch (Exception e) {
+            logService.error("❌[-> propertyRejectedMessage] Failed to sent registration rejection MESSAGE to user:{}, owner of property: {}! {}", property.getOwner().getId(), property.getId(), e);
+        }
     }
 
     /**
@@ -374,17 +419,18 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void propertyChangeRequestApprovedMessage(Property property) {
+        try {
+            Message message = createMessage(property.getOwner());
+            message.setText("Вашата заявка за промяна на параметри по самостоятелен обект № " + property.getNumber() + " в състава на етажна собственост с идентификатор: "
+                    + property.getResidentialEntity().getId() + " е одобрена. Промените са приложени!");
+            message.setTextEn("Your change request for property № " + property.getNumber() + " in Condominium ID: "
+                    + property.getResidentialEntity().getId() + " has been APPROVED. Changes applied to your property!");
 
-        Message message = createMessage(property.getOwner());
-        message.setText("Вашата заявка за промяна на параметри по самостоятелен обект № " + property.getNumber() + " в състава на етажна собственост с идентификатор: "
-                + property.getResidentialEntity().getId() + " е одобрена. Промените са приложени!");
-        message.setTextEn("Your change request for property № " + property.getNumber() + " in Condominium ID: "
-                + property.getResidentialEntity().getId() + " has been APPROVED. Changes applied to your property!");
-
-        messageRepository.save(message);
-
-        //send notification to property owner for property change-request approval
-        notificationService.propertyChangeRequestApprovedNotification(property);
+            messageRepository.save(message);
+            logService.info("✅[-> propertyChangeRequestApprovedMessage] Approve change request MESSAGE for property id: {} sent", property.getId());
+        } catch (Exception e) {
+            logService.error("❌[-> propertyChangeRequestApprovedMessage] Failed to send change request approve MESSAGE for property id: {}! {}", property.getId(), e);
+        }
     }
 
     /**
@@ -395,68 +441,75 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void propertyChangeRequestRejectedMessage(Property property) {
 
-        Message message = createMessage(property.getOwner());
-        message.setText("Вашата заявка за промяна на параметри по самостоятелен обект № " + property.getNumber() + " в състава на етажна собственост с идентификатор: "
-                + property.getResidentialEntity().getId() + " е отхвърлена. Направените от Вас променя няма да влязат в сила! Може да изпратите повторна заявка в случай, че това е необходимо!");
-        message.setTextEn("Your change request for property № " + property.getNumber() + " in Condominium ID: "
-                + property.getResidentialEntity().getId() + " has been REJECTED. Your changes will not take affect. You can still send new change request if needed!");
+        try {
+            Message message = createMessage(property.getOwner());
+            message.setText("Вашата заявка за промяна на параметри по самостоятелен обект № " + property.getNumber() + " в състава на етажна собственост с идентификатор: "
+                    + property.getResidentialEntity().getId() + " е отхвърлена. Направените от Вас променя няма да влязат в сила! Може да изпратите повторна заявка в случай, че това е необходимо!");
+            message.setTextEn("Your change request for property № " + property.getNumber() + " in Condominium ID: "
+                    + property.getResidentialEntity().getId() + " has been REJECTED. Your changes will not take affect. You can still send new change request if needed!");
 
-        messageRepository.save(message);
+            messageRepository.save(message);
 
-        //send notification to property owner for property change-request approval
-        notificationService.propertyChangeRequestRejectedMessage(property);
+            logService.info("✅[-> propertyChangeRequestRejectedMessage] Rejected change request MESSAGE for property id: {} sent", property.getId());
+        } catch (Exception e) {
+            logService.error("❌[-> propertyChangeRequestRejectedMessage] Failed to send change request reject MESSAGE for property id: {}! {}", property.getId(), e);
+        }
     }
 
 
     /**
      * New message (+ notification) to property OWNER for new monthly fee.
      *
-     * @param property   Property
-     * @param monthlyFee Monthly fee amount
-     * @param dueAmount  Total due amount
+     * @param property       Property
+     * @param monthlyFee     Monthly fee amount
+     * @param totalDueAmount Total due amount
      */
     @Override
-    public void newFeeMessageToPropertyOwner(Property property, BigDecimal monthlyFee, BigDecimal dueAmount) {
+    public void newFeeMessageToPropertyOwner(Property property, BigDecimal monthlyFee, BigDecimal totalDueAmount) {
 
-        Month month = LocalDate.now().getMonth();
-        int year = LocalDate.now().getYear();
+        UserEntity propertyOwner = property.getOwner();
 
-        String messageText;
-        String messageTextEn;
-        Message message = createMessage(property.getOwner());
+        try {
+            Month month = LocalDate.now().getMonth();
+            int year = LocalDate.now().getYear();
 
-        if (dueAmount != null) {
-            messageText = "Имате нова месечна такса за " + month + " " + year + " за сумата от " +
-                    monthlyFee + "лв. за самостоятелн обект № " + property.getNumber() + "." +
-                    "\n" +
-                    "Информация за начислените такси и дължими суми може да откриете в меню Месечни такси! " +
-                    "Общата дължима сума за този самостоятелен обект е " + dueAmount + " лв.";
-            messageTextEn = "You have new monthly fee for " + month + " " + year + " for the amount of " +
-                    monthlyFee + "лв. for property № " + property.getNumber() + "." +
-                    "\n" +
-                    "You can check details in your Property section." +
-                    "Total due amount for your property is " + dueAmount + " лв.";
-        } else {
-            messageText = "Имате нова месечна такса за " + month + " " + year + " за сумата от " +
-                    monthlyFee + "лв. за самостоятелн обект № " + property.getNumber() + "." +
-                    "\n" +
-                    "Информация за начислените такси и дължими суми може да откриете в менъ Месечни такси!" +
-                    "Към момента нямате натрупани текущи задължения!";
-            messageTextEn = "You have new monthly fee for " + month + " " + year + " for the amount of " +
-                    monthlyFee + "лв. for property № " + property.getNumber() + "." +
-                    "\n" +
-                    "You can check details in your Property section." +
-                    "You have no due amount";
+            String messageText;
+            String messageTextEn;
+            Message message = createMessage(propertyOwner);
+
+            if (totalDueAmount != null) {
+                messageText = "Имате нова месечна такса за " + month + " " + year + " за сумата от " +
+                        monthlyFee + "лв. за самостоятелн обект № " + property.getNumber() + "." +
+                        "\n" +
+                        "Информация за начислените такси и дължими суми може да откриете в меню Месечни такси! " +
+                        "Общата дължима сума за този самостоятелен обект е " + totalDueAmount + " лв.";
+                messageTextEn = "You have new monthly fee for " + month + " " + year + " for the amount of " +
+                        monthlyFee + "лв. for property № " + property.getNumber() + "." +
+                        "\n" +
+                        "You can check details in your Property section." +
+                        "Total due amount for your property is " + totalDueAmount + " лв.";
+            } else {
+                messageText = "Имате нова месечна такса за " + month + " " + year + " за сумата от " +
+                        monthlyFee + "лв. за самостоятелн обект № " + property.getNumber() + "." +
+                        "\n" +
+                        "Информация за начислените такси и дължими суми може да откриете в меню Месечни такси!" +
+                        "Към момента нямате натрупани текущи задължения!";
+                messageTextEn = "You have new monthly fee for " + month + " " + year + " for the amount of " +
+                        monthlyFee + "лв. for property № " + property.getNumber() + "." +
+                        "\n" +
+                        "You can check details in your Property section." +
+                        "You have no due amount";
+            }
+            message.setText(messageText);
+            message.setTextEn(messageTextEn);
+
+            messageRepository.save(message);
+
+            logService.info("✅[-> newFeeMessageToPropertyOwner] New monthly fee MESSAGE successfully created for user: {}, owner of property id: {}", propertyOwner.getId(), property.getId());
+        } catch (Exception e) {
+            logService.error("❌[-> newFeeMessageToPropertyOwner] Failed to create a MESSAGE for new monthly fee for user: {}, owner of property id: {}! {}", propertyOwner.getId(), property.getId(), e);
         }
-        message.setText(messageText);
-        message.setTextEn(messageTextEn);
-
-        messageRepository.save(message);
-
-        //send new fee notification to property owner
-        notificationService.newFeeNotificationToPropertyOwner(property, monthlyFee, dueAmount);
     }
-
 
 
     /**
@@ -467,20 +520,22 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public void newEventMessageToAllVerifiedPropertyOwners(Event event, ResidentialEntity residentialEntity) {
-        List<Message> newMessages = residentialEntity.getProperties().stream()
-                .filter(property -> property.isObtained() && property.getOwner() != null)
-                .map(property -> {
-                    Message message = createMessage(property.getOwner());
-                    message.setText(EVENT_MSG_BG);
-                    message.setTextEn(EVENT_MSG_ENG);
-                    return message;
-                })
-                .toList();
+        try {
+            List<Message> newMessages = residentialEntity.getProperties().stream()
+                    .filter(property -> property.isObtained() && property.getOwner() != null)
+                    .map(property -> {
+                        Message message = createMessage(property.getOwner());
+                        message.setText(EVENT_MSG_BG);
+                        message.setTextEn(EVENT_MSG_ENG);
+                        return message;
+                    })
+                    .toList();
 
-        messageRepository.saveAll(newMessages);
-
-        //create notification for new event to all verified owners
-        notificationService.newEventNotificationToAllVerifiedPropertyOwners(event, residentialEntity);
+            messageRepository.saveAll(newMessages);
+            logService.info("✅[-> newEventMessageToAllVerifiedPropertyOwners] Successfully created new event MESSAGE for all users of condominium id: {}", residentialEntity.getId());
+        } catch (Exception e) {
+            logService.error("❌[-> newEventMessageToAllVerifiedPropertyOwners] Failed to create new event MESSAGE for all users in condominium id: {}", residentialEntity.getId(), e);
+        }
     }
 
 

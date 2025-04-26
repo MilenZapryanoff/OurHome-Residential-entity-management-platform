@@ -8,10 +8,8 @@ import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeAddGlo
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
 import com.example.OurHome.repo.PropertyFeeRepository;
 import com.example.OurHome.repo.PropertyRepository;
-import com.example.OurHome.service.MessageService;
-import com.example.OurHome.service.NotificationService;
-import com.example.OurHome.service.PropertyFeeService;
-import com.example.OurHome.service.ResidentialEntityService;
+import com.example.OurHome.service.*;
+import com.example.OurHome.service.email.EmailService;
 import com.example.OurHome.service.events.PropertyCreationEvent;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -32,14 +30,18 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     private final MessageService messageService;
     private final ResidentialEntityService residentialEntityService;
     private final NotificationService notificationService;
+    private final LogService logService;
+    private final EmailService emailService;
 
-    public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper, MessageService messageService, ResidentialEntityService residentialEntityService, NotificationService notificationService) {
+    public PropertyFeeServiceImpl(PropertyFeeRepository propertyFeeRepository, PropertyRepository propertyRepository, ModelMapper modelMapper, MessageService messageService, ResidentialEntityService residentialEntityService, NotificationService notificationService, LogService logService, EmailService emailService) {
         this.propertyFeeRepository = propertyFeeRepository;
         this.propertyRepository = propertyRepository;
         this.modelMapper = modelMapper;
         this.messageService = messageService;
         this.residentialEntityService = residentialEntityService;
         this.notificationService = notificationService;
+        this.logService = logService;
+        this.emailService = emailService;
     }
 
     /**
@@ -104,45 +106,53 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
     @Transactional
     public void createPeriodicalMonthlyFee(Property property) {
 
-        PropertyFee newMonthlyFee = new PropertyFee();
-        LocalDate now = LocalDate.now();
+        try {
+            PropertyFee newMonthlyFee = new PropertyFee();
+            LocalDate now = LocalDate.now();
 
-        BigDecimal overpayment = property.getOverpayment();
-        BigDecimal additionalPropertyFee = property.getAdditionalPropertyFee();
+            BigDecimal overpayment = property.getOverpayment();
+            BigDecimal additionalPropertyFee = property.getAdditionalPropertyFee();
 
-        //TODO: additional property fee (individual fee) is fixed as fundMM component!
-        // To add separation of additional property fee to FundRepair and FundMM.
-        BigDecimal fundMm = property.getMonthlyFeeFundMm().add(additionalPropertyFee);
+            //TODO: additional property fee (individual fee) is fixed as fundMM component!
+            // To add separation of additional property fee to FundRepair and FundMM.
+            BigDecimal fundMm = property.getMonthlyFeeFundMm().add(additionalPropertyFee);
 
-        BigDecimal fundRepair = property.getMonthlyFeeFundRepair();
-        BigDecimal totalMonthlyFee = fundMm.add(fundRepair);
+            BigDecimal fundRepair = property.getMonthlyFeeFundRepair();
+            BigDecimal totalMonthlyFee = fundMm.add(fundRepair);
 
-        newMonthlyFee.setFundMmAmount(fundMm);
-        newMonthlyFee.setFundRepairAmount(fundRepair);
+            newMonthlyFee.setFundMmAmount(fundMm);
+            newMonthlyFee.setFundRepairAmount(fundRepair);
 
-        //if totalMonthlyFee for this property is not 0.00, a new monthly fee will be created
-        if (totalMonthlyFee.compareTo(BigDecimal.ZERO) > 0) {
+            //if totalMonthlyFee for this property is not 0.00, a new monthly fee will be created
+            if (totalMonthlyFee.compareTo(BigDecimal.ZERO) > 0) {
 
-            if (overpayment.compareTo(BigDecimal.ZERO) == 0) {
-                //Setting of monthly fee if NO overpayment
-                setMonthlyFeeWithoutOverpayment(newMonthlyFee, totalMonthlyFee);
-            } else {
-                //Setting a monthly fee in case of overpayment
-                setMonthlyFeeWithOverpayment(property, overpayment, totalMonthlyFee, newMonthlyFee);
+                if (overpayment.compareTo(BigDecimal.ZERO) == 0) {
+                    //Setting of monthly fee if NO overpayment
+                    setMonthlyFeeWithoutOverpayment(newMonthlyFee, totalMonthlyFee);
+                } else {
+                    //Setting a monthly fee in case of overpayment
+                    setMonthlyFeeWithOverpayment(property, overpayment, totalMonthlyFee, newMonthlyFee);
+                }
+
+                newMonthlyFee.setPeriodStart(now.withDayOfMonth(1));
+                newMonthlyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
+                newMonthlyFee.setProperty(property);
+                newMonthlyFee.setResidentialEntity(property.getResidentialEntity());
+                newMonthlyFee.setDescription(now.getMonth() + " " + now.getYear());
+                propertyFeeRepository.save(newMonthlyFee);
             }
+            logService.info("✅[createPeriodicalMonthlyFee ->] New monthly fee successfully created for property id: {}, condominium id: {}", property.getId(), property.getResidentialEntity().getId());
+        } catch (Exception e) {
+            logService.error("❌[createPeriodicalMonthlyFee ->] Failed to create a monthly fee for property id: {}, condominium id{}! {}", property.getId(), property.getResidentialEntity().getId(), e);
+        }
 
-            newMonthlyFee.setPeriodStart(now.withDayOfMonth(1));
-            newMonthlyFee.setPeriodEnd(now.withDayOfMonth(now.lengthOfMonth()));
-            newMonthlyFee.setProperty(property);
-            newMonthlyFee.setDescription(now.getMonth() + " " + now.getYear());
-            propertyFeeRepository.save(newMonthlyFee);
+        //send NOTIFICATIONS if there is a verified owner set
+        if (property.getOwner() != null && property.isObtained()) {
+            //send message to property owner
+            messageService.newFeeMessageToPropertyOwner(property, property.getTotalMonthlyFee(), checkTotalDueAmount(property.getId()));
 
-
-            //send message and notification only if there is an owner set (and verified)
-            if (property.getOwner() != null && property.isObtained()) {
-                //send message to property owner
-                messageService.newFeeMessageToPropertyOwner(property, property.getTotalMonthlyFee(), checkTotalDueAmount(property.getId()));
-            }
+            //send new fee notification to property owner
+            notificationService.newFeeNotificationToPropertyOwner(property, property.getTotalMonthlyFee(), checkTotalDueAmount(property.getId()));
         }
     }
 
@@ -259,12 +269,29 @@ public class PropertyFeeServiceImpl implements PropertyFeeService {
 
         Property property = propertyRepository.findById(propertyFee.getProperty().getId()).orElse(null);
 
+        if (property == null) {
+            logService.info("❌ [changePaymentStatus ->] Property id:{} not found!", propertyFee.getProperty().getId());
+            return;
+        }
+
         if (!propertyFee.isPaid()) {
-            propertyFee.setPaid(true);
-            residentialEntityService.addPaymentAmountToIncomes(propertyFee, property);
+            try {
+                propertyFee.setPaid(true);
+                residentialEntityService.addPaymentAmountToIncomes(propertyFee, property);
+                logService.info("✅[<- changePaymentStatus] Monthly fee id:{} for property id:{} successfully MARKED as paid!", propertyFee.getId(), property.getId());
+            } catch (Exception e) {
+                logService.error("❌[<- changePaymentStatus] Failed to MARK fee id:{} for property id:{} as paid! {}", propertyFee.getProperty().getId(), e);
+                return;
+            }
         } else {
-            propertyFee.setPaid(false);
-            residentialEntityService.reversePaymentAmountFromIncomes(propertyFee, property);
+            try {
+                propertyFee.setPaid(false);
+                residentialEntityService.reversePaymentAmountFromIncomes(propertyFee, property);
+                logService.info("✅[<- changePaymentStatus] Monthly fee id:{} for property id:{} successfully MARKED as unpaid!", propertyFee.getId(), property.getId());
+            } catch (Exception e) {
+                logService.error("❌[<- changePaymentStatus] Failed to MARK fee id:{} for property id:{} as unpaid! {}", propertyFee.getProperty().getId(), e);
+                return;
+            }
         }
         propertyFeeRepository.save(propertyFee);
     }
