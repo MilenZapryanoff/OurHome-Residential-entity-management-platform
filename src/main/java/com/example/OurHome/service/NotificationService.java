@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 
 public interface NotificationService {
 
+    Notification findById(Long notificationId);
+
     void newEventNotificationToAllVerifiedPropertyOwners(Event event, ResidentialEntity residentialEntity);
 
     void newFeeNotificationToPropertyOwner(Property property, BigDecimal feeAmount, BigDecimal totalDueAmount);
@@ -24,7 +26,7 @@ public interface NotificationService {
 
     void propertyChangeRequestApprovedNotification(Property property);
 
-    void propertyChangeRequestRejectedMessage(Property property);
+    void propertyChangeRequestRejectedNotification(Property property);
 
     void deleteAllUserNotifications(Long userId);
 

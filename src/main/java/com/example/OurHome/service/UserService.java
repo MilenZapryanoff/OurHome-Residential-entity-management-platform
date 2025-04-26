@@ -2,10 +2,7 @@ package com.example.OurHome.service;
 
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.dto.BindingModels.User.ManagerRegisterBindingModel;
-import com.example.OurHome.model.dto.BindingModels.User.ProfileEditBindingModel;
-import com.example.OurHome.model.dto.BindingModels.User.UserAuthBindingModel;
-import com.example.OurHome.model.dto.BindingModels.User.UserRegisterBindingModel;
+import com.example.OurHome.model.dto.BindingModels.User.*;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,8 +13,6 @@ public interface UserService {
     boolean passwordsMatch(String password, String confirmPassword);
 
     boolean preRegistrationEmailCheck(String email);
-
-    boolean duplicatedUsernameCheck(String username);
 
     void registerUser(UserRegisterBindingModel userRegisterBindingModel, Long residentialEntityId);
 
@@ -39,11 +34,11 @@ public interface UserService {
 
     void removeResidentFromResidentialEntity(Long id, ResidentialEntity residentialEntity);
 
-    void sendVerificationCode(UserEntity user);
+    void sendResetCode(UserEntity user);
 
     void resetPassword(UserEntity user, String newPassword);
 
-    boolean verificationCodeMatch(UserEntity user, String verificationCode);
+    boolean resetCodeMatch(UserEntity user, String resetCode);
 
     String saveAvatar(MultipartFile file, Long userId) throws IOException;
 
@@ -53,9 +48,13 @@ public interface UserService {
 
     void editProfile(Long id, ProfileEditBindingModel profileEditBindingModel, Boolean passwordChange);
 
-    void cleanUpPasswordRestoreVerificationCodes();
+    void cleanUpPasswordResetCodes();
 
     void removeAvatar(Long loggedUserId) throws IOException;
 
     void setSystemMessagesLanguage(String lang, UserViewModel userViewModel);
+
+    ProfileNotificationsEditBindingModel mapProfileNotificationEditBindingModel(UserViewModel currentUser);
+
+    void updateEmailNotificationsSettings(Long id, ProfileNotificationsEditBindingModel profileNotificationsEditBindingModel);
 }

@@ -55,12 +55,12 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Edit Property type</h3>
+            <h3>Настройка на категория</h3>
             <p class="category text-black" th:class="text-light"
                th:text="'Propery Type : ' + ${propertyTypeEditBindingModel.getDescription()}"
                th:unless="${editFailed}"></p>
             <div class="err-msg" th:if="${editFailed}">
-                <h5 class="text-light">Edit failed!</h5>
+                <h5 class="text-light">Неуспешна промяна!</h5>
             </div>
         </div>
     </div>
@@ -77,7 +77,7 @@
                   th:object="${propertyTypeEditBindingModel}">
                 <div class="col-lg-12">
                     <fieldset>
-                        <label for="description"><b>Description</b></label>
+                        <label for="description"><b>Описание на категория</b></label>
                         <small class="text-danger"
                                th:errors="*{description}"
                                th:if="${#fields.hasErrors('description')}">Description error message</small>
@@ -89,7 +89,7 @@
                                type="text">
                     </fieldset>
                     <fieldset hidden="hidden">
-                        <label for="commonPartsPercentage"><b>Common Parts percentage (%)</b></label>
+                        <label for="commonPartsPercentage"><b>Процент от общи части (%)</b></label>
                         <small class="text-danger"
                                th:errors="*{commonPartsPercentage}"
                                th:if="${#fields.hasErrors('commonPartsPercentage')}">Common parts error message</small>
@@ -101,7 +101,7 @@
                                type="text">
                     </fieldset>
                     <fieldset hidden="hidden">
-                        <label for="totalFlatSpace"><b>Total flat space (square meters)</b></label>
+                        <label for="totalFlatSpace"><b>Площ на самостоятелен обект (в кв.м.)</b></label>
                         <small class="text-danger"
                                th:errors="*{totalFlatSpace}"
                                th:if="${#fields.hasErrors('totalFlatSpace')}">Total flat space error message</small>
@@ -113,7 +113,7 @@
                                type="text">
                     </fieldset>
                     <fieldset>
-                        <label for="fundRepairHabitable"><b>Fund Repair amount</b> (habitable)</label>
+                        <label for="fundRepairHabitable"><b>Фонд "Ремонт"</b> (обитаем)</label>
                         <small class="text-danger"
                                th:errors="*{fundRepairHabitable}"
                                th:if="${#fields.hasErrors('fundRepairHabitable')}">Fund repair error message</small>
@@ -125,7 +125,7 @@
                                type="text">
                     </fieldset>
                     <fieldset>
-                        <label for="fundRepairNotHabitable"><b>Fund Repair amount</b> (non-habitable)</label>
+                        <label for="fundRepairNotHabitable"><b>Фонд "Ремонт"</b> (необитаем)</label>
                         <small class="text-danger"
                                th:errors="*{fundRepairNotHabitable}"
                                th:if="${#fields.hasErrors('fundRepairNotHabitable')}">Fund repair error message</small>
@@ -138,12 +138,12 @@
                     </fieldset>
                     <fieldset>
                         <button class="orange-button" id="form-submit"
-                                type="submit">Submit
+                                type="submit">Потвърди
                         </button>
                         <button class="orange-button" id="form-cancel-act"
                                 type="button">
                             <a th:href="@{/administration/fees/edit/{id}#post-nav(id=${residentialEntity.getId()})}">
-                                <div class="text-light">Cancel</div>
+                                <div class="text-light">Отказ</div>
                             </a>
                         </button>
                     </fieldset>

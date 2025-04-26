@@ -84,7 +84,7 @@ public class EventController {
                                  @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         try {
-            // Извикваме сервиза за обработка и валидиране на данните
+            // Извикваме сервиза за създаване на Event
             eventService.createEvent(eventAddBindingModel, id);
         } catch (IllegalArgumentException e) {
             // Обработка на грешка
@@ -119,7 +119,6 @@ public class EventController {
             // Извикваме сервиза за обработка и валидиране на данните
             eventService.deleteEvent(event);
         } catch (IllegalArgumentException e) {
-            // Обработка на грешка
 
             return new ModelAndView(lang + "/administration/administration-events-add")
                     .addObject("eventAddBindingModel", eventAddBindingModel)

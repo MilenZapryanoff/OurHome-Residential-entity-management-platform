@@ -170,7 +170,7 @@
                                                     th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId()) == 0}">0</strong>
                                             pending registration requests for your Condominium.
                                             <br>
-                                            <a th:href="@{/administration/owners/pending/{id}(id=${residentialEntity.getId()})}"
+                                            <a th:href="@{/administration/property/owners/pending/{id}(id=${residentialEntity.getId()})}"
                                                th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId()) > 0}">Review
                                                 requests!</a>
                                         </p>

@@ -110,75 +110,148 @@
                                 забранен!</p>
                         </li>
                     </ul>
-
-                    <div class="info-table rounded col-lg-11" style="margin-top: 30px">
-                        <ul>
+                    <div class="info-table rounded col-lg-11" style="margin-top: 50px">
+                        <ul id="income-list">
                             <li class="text-center">
-                                <h5 class="text-danger">Приходи на етажната собственост</h5>
+                                <h5 class="text-secondary-emphasis">Очаквани месечни приходи</h5>
+                                <p class="text-secondary">Информация за очаквани месечни постъпления в етажната
+                                    собственост спрямо дефинираните месечни ставки и параметри на самостоятелни
+                                    обекти.</p>
+                                <form th:object="${incomesBindingModel}">
+                                    <div class="expected-incomes">
+                                        <div class="expected-incomes-container">
+                                            <fieldset>
+                                                <p><b>Фонд 'Етажна собственост''</b></p>
+                                                <small class="text-secondary">Очаквани постъпления по фонд 'Етажна
+                                                    собственост' от всички самостоятелни обекти в състава на етажната
+                                                    собствнеост.
+                                                </small>
+                                                <div class="incomes-container">
+                                                    <label class="text-secondary" for="expected-fund-mm"></label>
+                                                    <input class="text-center" id="expected-fund-mm"
+                                                           placeholder="Total amount..." readonly
+                                                           required step="any" style="font-weight: bold"
+                                                           th:errorclass="bg-danger"
+                                                           th:field="*{expectedTotalFundMmMonthlyIncome}"
+                                                           th:value="${incomesBindingModel.getExpectedTotalFundMmMonthlyIncome()}"
+                                                           type="number">
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="expected-incomes-container">
+                                            <fieldset>
+                                                <p><b>Фонд 'Ремонт'</b></p>
+                                                <small class="text-secondary">Очаквани постъпления по фонд 'Ремонт' от
+                                                    всички самостоятелни обекти в състава на етажната собствнеост.
+                                                </small>
+                                                <div class="incomes-container">
+                                                    <label class="text-secondary" for="expected-fund-repair"></label>
+                                                    <input class="text-center" id="expected-fund-repair"
+                                                           placeholder="Total amount..." readonly
+                                                           required step="any" style="font-weight: bold"
+                                                           th:errorclass="bg-danger"
+                                                           th:field="*{expectedTotalFundRepairMonthlyIncome}"
+                                                           th:value="${incomesBindingModel.getExpectedTotalFundRepairMonthlyIncome()}"
+                                                           type="number">
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="expected-incomes-container">
+                                            <fieldset>
+                                                <p><b>ОБЩО</b></p>
+                                                <small class="text-secondary">Очаквани общо постъпления от всички
+                                                    самостоятелни обекти в състава на етажната собствнеост.
+                                                </small>
+                                                <div class="incomes-container">
+                                                    <label class="text-secondary" for="expected-total"></label>
+                                                    <input class="text-center" id="expected-total"
+                                                           placeholder="Total amount..." readonly
+                                                           required step="any" style="font-weight: bold"
+                                                           th:errorclass="bg-danger"
+                                                           th:field="*{expectedTotalMonthlyIncome}"
+                                                           th:value="${incomesBindingModel.getExpectedTotalMonthlyIncome()}"
+                                                           type="number">
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                            <li class="text-center" >
+                                <h5 class="text-success">Реализирани приходи от такси</h5>
                                 <p class="text-secondary">Информация за агрегираните суми по различните пера на
                                     дигиталната етажна собственост.</p>
-                            </li>
-                            <li class="text-center">
                                 <form id="input-form"
                                       th:action="@{/administration/financial/incomes/edit/{id}(id=${residentialEntity.getId()})}"
                                       th:method="POST"
                                       th:object="${incomesBindingModel}">
-                                    <fieldset>
-                                        <p class="text-dark"><b class="text-danger">Фонд "Ремонт"</b></p>
-                                        <small class="text-secondary">Събраните суми във фонд "Ремонт" обикновено са
-                                            предназначен за разходи свързани с ремонти на всяка етажна собственост.<br>
-                                            <b>Можете ръчно да обновите тази сума!</b>
-                                        </small>
-                                        <div class="incomes-container">
-                                            <label class="text-secondary" for="fund-repair-incomes"></label>
-                                            <input autocomplete="on" class="form-control-sm"
-                                                   id="fund-repair-incomes"
-                                                   placeholder="Fund Repair..." required
-                                                   step="any"
-                                                   style="background-color: #ffffff"
-                                                   th:errorclass="bg-danger"
-                                                   th:field="*{incomesFundRepair}"
-                                                   th:value="${incomesBindingModel.getIncomesFundRepair()}"
-                                                   type="number">
+                                    <div class="accumulated-incomes">
+                                        <div class="accumulated-incomes-container">
+                                            <fieldset>
+                                                <p class="text-success"><b>Фонд 'Етажна собственост'</b></p>
+                                                <small class="text-secondary">Събраните суми във фонд "Етажна
+                                                    собственост"
+                                                    обикновено са предназначен за общите разходи на всяка етажна
+                                                    собственост.<br>
+                                                    <small class="text-danger">Възможност за ръчно обновяване на сумата!</small>
+                                                </small>
+                                                <div class="incomes-container">
+                                                    <label class="text-secondary" for="fund-mm-incomes"></label>
+                                                    <input autocomplete="on" class="text-center" id="fund-mm-incomes"
+                                                           placeholder="Fund Management & Maintenance..."
+                                                           required
+                                                           step="any" style="background-color: #ffffff"
+                                                           th:errorclass="bg-danger"
+                                                           th:field="*{incomesFundMm}"
+                                                           th:value="${incomesBindingModel.getIncomesFundMm()}"
+                                                           type="number">
+                                                </div>
+                                            </fieldset>
                                         </div>
-                                    </fieldset>
-                                    <hr>
-                                    <fieldset>
-                                        <p class="text-dark"><b class="text-danger">Фонд "Етажна собственост"</b></p>
-                                        <small class="text-secondary">Събраните суми във фонд "Етажна собственост"
-                                            обикновено са предназначен за общите разходи на всяка етажна
-                                            собственост.<br>
-                                            <b>Можете ръчно да обновите тази сума!</b>
-                                        </small>
-                                        <div class="incomes-container">
-                                            <label class="text-secondary" for="fund-mm-incomes"></label>
-                                            <input autocomplete="on" class="form-control-sm" id="fund-mm-incomes"
-                                                   placeholder="Fund Management & Maintenance..."
-                                                   required
-                                                   step="any" style="background-color: #ffffff"
-                                                   th:errorclass="bg-danger"
-                                                   th:field="*{incomesFundMm}"
-                                                   th:value="${incomesBindingModel.getIncomesFundMm()}"
-                                                   type="number">
+                                        <div class="accumulated-incomes-container">
+                                            <fieldset>
+                                                <p class="text-success"><b>Фонд 'Ремонт'</b></p>
+                                                <small class="text-secondary">Събраните суми във фонд "Ремонт"
+                                                    обикновено са
+                                                    предназначен за разходи свързани с ремонти на всяка етажна
+                                                    собственост.<br>
+                                                    <small th:class="text-danger">Възможност за ръчно обновяване на сумата!</small>
+                                                </small>
+                                                <div class="incomes-container">
+                                                    <label class="text-secondary" for="fund-repair-incomes"></label>
+                                                    <input autocomplete="on" class="text-center"
+                                                           id="fund-repair-incomes"
+                                                           placeholder="Fund Repair..." required
+                                                           step="any"
+                                                           style="background-color: #ffffff"
+                                                           th:errorclass="bg-danger"
+                                                           th:field="*{incomesFundRepair}"
+                                                           th:value="${incomesBindingModel.getIncomesFundRepair()}"
+                                                           type="number">
+                                                </div>
+                                            </fieldset>
                                         </div>
-                                    </fieldset>
-                                    <hr>
-                                    <fieldset>
-                                        <p class="text-dark"><b class="text-danger">ОБЩО</b></p>
-                                        <small class="text-secondary">Общата сума формирана от сбора на Фонд "ЕС" и фонд
-                                            "Ремонт"
-                                        </small>
-                                        <div class="incomes-container">
-                                            <label class="text-secondary" for="incomes"></label>
-                                            <input class="form-control-sm" id="incomes"
-                                                   placeholder="Total amount..." readonly
-                                                   required step="any" style="font-weight: bold"
-                                                   th:errorclass="bg-danger"
-                                                   th:field="*{incomesAmount}"
-                                                   th:value="${incomesBindingModel.getIncomesAmount()}"
-                                                   type="number">
+                                        <div class="accumulated-incomes-container">
+                                            <fieldset>
+                                                <p class="text-success"><b>ОБЩО</b></p>
+                                                <small class="text-secondary">Общата сума формирана от сбора на Фонд
+                                                    'Етажна собственост' и фонд 'Ремонт' </small>
+                                                <small class="text-secondary">В случай на необходимост, имате възможност
+                                                    за ръчна корекция на акумилираните суми!</small>
+
+                                                <div class="incomes-container">
+                                                    <label class="text-secondary" for="incomes"></label>
+                                                    <input class="text-center" id="incomes"
+                                                           placeholder="Total amount..." readonly
+                                                           required step="any" style="font-weight: bold"
+                                                           th:errorclass="bg-danger"
+                                                           th:field="*{incomesAmount}"
+                                                           th:value="${incomesBindingModel.getIncomesAmount()}"
+                                                           type="number">
+                                                </div>
+                                            </fieldset>
                                         </div>
-                                    </fieldset>
+                                    </div>
                                     <br>
                                     <fieldset>
                                         <button class="form-control text-bg-dark" id="form-submit"
@@ -190,111 +263,141 @@
                                     </fieldset>
                                 </form>
                             </li>
-                        </ul>
-
-                    </div>
-                    <div class="info-table rounded col-lg-11" style="margin: 50px 0">
-                        <ul>
                             <li class="text-center">
-                                <fieldset>
-                                    <p class="text-dark"><b class="text-dark">Депозити</b></p>
-                                    <p class="text-secondary">Предплатени суми за бъдещи отчетни периоди.
-                                        <br>Депозираните средства по индивидуалните партиди ще бъдат използвани за
-                                        покриване на бъдещи задължения.</p>
-                                    <div class="incomes-container">
-                                        <label class="text-secondary" for="overpaid-amounts"></label>
-                                        <input class="form-control-sm" id="overpaid-amounts"
-                                               placeholder="Total amount..." readonly
-                                               step="any"
-                                               th:value="${@propertyRepository.sumOfAllOverpayments(residentialEntity.getId())}"
-                                               type="number">
+                                <h5 class="text-info-emphasis">Депозити</h5>
+                                <p class="text-secondary">Предплатени суми за бъдещи периоди!</p>
+                                <p class="text-secondary">Депозираните средства по индивидуалните партиди ще бъдат използвани за покриване на бъдещи задължения.</p>
+                                <div class="deposited-incomes">
+                                    <div class="deposited-incomes-container-secondary">
+                                        <fieldset>
+                                            <p><b class="text-info-emphasis">Предплатени суми</b>
+                                                <br>Депозираните средства по индивидуалните партиди ще бъдат използвани
+                                                за
+                                                покриване на бъдещи задължения!</p>
+                                            <div class="incomes-container">
+                                                <label class="text-secondary" for="overpaid-amounts"></label>
+                                                <input class="text-center" id="overpaid-amounts"
+                                                       placeholder="Total amount..." readonly
+                                                       step="any"
+                                                       th:value="${@propertyRepository.sumOfAllOverpayments(residentialEntity.getId())}"
+                                                       type="number">
+                                            </div>
+                                        </fieldset>
                                     </div>
-                                </fieldset>
-                                <fieldset>
-                                    <p class="text-secondary">Сума на блокирани депозити изчакващи пълно плащане на
-                                        дължимите такси (при месечни такси с частично покриетие на депозит).
-                                        <br>Блокираните суми ще бъдат прехврълени по съответните баланси веднага щом
-                                        месечната такса бъде изцяло платена.</p>
-
-                                    <div class="incomes-container">
-                                        <label class="text-secondary" for="blocked-overpaid-amounts"></label>
-                                        <input class="form-control-sm" id="blocked-overpaid-amounts"
-                                               placeholder="Total amount..." readonly
-                                               step="any"
-                                               th:value="${@propertyFeeRepository.sumOfAllBlockedOverpayments(residentialEntity.getId())}"
-                                               type="number">
+                                    <div class="deposited-incomes-container-main">
+                                        <fieldset>
+                                            <p><b class="text-info-emphasis">Блокирани депозити</b></p>
+                                            <p>Депозити, използвани за частично покриване на начислена такса.</p>
+                                            <p>До плащане на остатъка от дължимата такса, сумите от депозит стоят като
+                                                блокирани. След маркиране на месечната такса, като платена сумата от
+                                                депозита се освобождава и прехвърля към съответния фонд на ЕС.</p>
+                                            <div class="incomes-container">
+                                                <label class="text-secondary" for="blocked-overpaid-amounts"></label>
+                                                <input class="text-center" id="blocked-overpaid-amounts"
+                                                       placeholder="Total amount..." readonly
+                                                       step="any"
+                                                       th:value="${@propertyFeeRepository.sumOfAllBlockedOverpayments(residentialEntity.getId())}"
+                                                       type="number">
+                                            </div>
+                                            <div class="accordion-header" id="heading">
+                                                <button aria-expanded="false"
+                                                        data-bs-target="#collapse"
+                                                        data-bs-toggle="collapse"
+                                                        onclick="feeComponentMagnifierChange()"
+                                                        type="button">
+                                                    <small class="text-secondary-emphasis">Виж всички блокирани депозити от частично
+                                                        платени такси
+                                                        <small class="magnifier-expand">
+                                                            <i class="fa-solid fa-magnifying-glass-plus"
+                                                               id="fee-component"></i>
+                                                        </small>
+                                                    </small>
+                                                </button>
+                                            </div>
+                                            <div class="accordion-collapse collapse" id="collapse">
+                                                <table class="table text-center" id="blocked-overpayments" style="margin: 0 auto">
+                                                    <tr>
+                                                        <th><p>Имот №</p></th>
+                                                        <th><p>Собственик</p></th>
+                                                        <th><p>Идентификатор на такса</p></th>
+                                                        <th><p>Описание на таксата</p></th>
+                                                        <th><p>Сума</p></th>
+                                                        <th><p>Сума от депозит</p></th>
+                                                        <th><p>Дължима такса</p></th>
+                                                        <th><p>Статус</p></th>
+                                                        <th><p>Виж такса</p></th>
+                                                    </tr>
+                                                    <tr th:each="propertyFee: ${@propertyFeeRepository.findFeesWithBlockedOverpayments(residentialEntity.getId())}">
+                                                        <td>
+                                                            <p th:text="${propertyFee.getProperty().getNumber()}"></p>
+                                                        </td>
+                                                        <td>
+                                                            <p th:if="${propertyFee.getProperty().isObtained()}"
+                                                               th:text="${propertyFee.getProperty().getOwner().getFirstName()} + ' ' + ${propertyFee.getProperty().getOwner().getLastName()}"></p>
+                                                            <p th:unless="${propertyFee.getProperty().isObtained()}">
+                                                                -</p>
+                                                        </td>
+                                                        <td><p th:text="${propertyFee.getId()}"></p></td>
+                                                        <td><p th:text="${propertyFee.getDescription()}"></p></td>
+                                                        <td><p th:text="${propertyFee.getFeeAmount()}"></p></td>
+                                                        <td>
+                                                            <p class="text-info-emphasis"
+                                                               th:text="${propertyFee.getOverpaidAmountStart() - propertyFee.getOverpaidAmountEnd()}"></p>
+                                                        </td>
+                                                        <td><p class="text-danger"
+                                                               th:text="${propertyFee.getDueAmount()}"></p></td>
+                                                        <td>
+                                                            <img alt="Таксата е платена"
+                                                                 src="/images/check_yes.png"
+                                                                 style="width: 20px;"
+                                                                 th:if="${propertyFee.isPaid()}"
+                                                                 title="Таксата е платена">
+                                                            <img alt="Таксата не е платена"
+                                                                 src="/images/check_no.png"
+                                                                 style="width: 20px;"
+                                                                 th:unless="${propertyFee.isPaid()}"
+                                                                 title="Таксата не е платена">
+                                                        </td>
+                                                        <td>
+                                                            <a th:href="@{/administration/fees/details/{id} (id=${propertyFee.getProperty().getId()})}">
+                                                                <img
+                                                                        alt="Виж детайли"
+                                                                        src="/images/magnifier.png"
+                                                                        style="width: 20px;"
+                                                                        title="Виж детайли"></a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </fieldset>
                                     </div>
-                                    <div class="accordion-header" id="heading">
-                                        <button aria-expanded="false"
-                                                data-bs-target="#collapse"
-                                                data-bs-toggle="collapse"
-                                                onclick="feeComponentMagnifierChange()"
-                                                type="button">
-                                            <small class="text-danger">Блокирани депозити от частично платени такси
-                                                <small class="magnifier-expand">
-                                                    <i class="fa-solid fa-magnifying-glass-plus"
-                                                       id="fee-component"></i>
+                                </div>
+                            </li>
+                            <li class="text-center">
+                                <h5 class="text-danger">Неплатени такси</h5>
+                                <p class="text-secondary">Информация за общия обем начислени но все още неплатени
+                                    такси!</p>
+                                <form th:object="${incomesBindingModel}">
+                                    <div class="unpaid-incomes">
+                                        <div class="unpaid-incomes-container">
+                                            <fieldset>
+                                                <p><b>Общо неплатена сума</b></p>
+                                                <small class="text-secondary">Сумата е формирана от всички начиследни, неплатени месечни такси по самостоятелни обекти в състава на етажната собственост!
                                                 </small>
-                                            </small>
-                                        </button>
-                                    </div>
-                                    <div class="accordion-collapse collapse" id="collapse">
-                                        <div class="table" style="padding-top: 20px">
-                                            <table class="table text-center" id="blocked-overpayments">
-                                                <tr>
-                                                    <th><p>Имот №</p></th>
-                                                    <th><p>Собственик</p></th>
-                                                    <th><p>Идентификатор на такса</p></th>
-                                                    <th><p>Описание на таксата</p></th>
-                                                    <th><p>Сума</p></th>
-                                                    <th style="background-color: #efefef"><p>Сума от депозит</p></th>
-                                                    <th><p>Дължима такса</p></th>
-                                                    <th><p>Статус</p></th>
-                                                    <th><p>Виж такса</p></th>
-                                                </tr>
-                                                <tr th:each="propertyFee: ${@propertyFeeRepository.findFeesWithBlockedOverpayments(residentialEntity.getId())}">
-                                                    <td><p th:text="${propertyFee.getProperty().getNumber()}"></p>
-                                                    </td>
-                                                    <td>
-                                                        <p th:if="${propertyFee.getProperty().isObtained()}"
-                                                           th:text="${propertyFee.getProperty().getOwner().getFirstName()} + ' ' + ${propertyFee.getProperty().getOwner().getLastName()}"></p>
-                                                        <p th:unless="${propertyFee.getProperty().isObtained()}">
-                                                            -</p>
-                                                    </td>
-                                                    <td><p th:text="${propertyFee.getId()}"></p></td>
-                                                    <td><p th:text="${propertyFee.getDescription()}"></p></td>
-                                                    <td><p th:text="${propertyFee.getFeeAmount()}"></p></td>
-                                                    <td style="background-color: #efefef">
-                                                        <p class="text-success-emphasis"
-                                                           th:text="${propertyFee.getOverpaidAmountStart() - propertyFee.getOverpaidAmountEnd()}"></p>
-                                                    </td>
-                                                    <td><p class="text-danger"
-                                                           th:text="${propertyFee.getDueAmount()}"></p></td>
-                                                    <td>
-                                                        <img alt="Таксата е платена"
-                                                             src="/images/check_yes.png"
-                                                             style="width: 20px;"
-                                                             th:if="${propertyFee.isPaid()}"
-                                                             title="Таксата е платена">
-                                                        <img alt="Таксата не е платена"
-                                                             src="/images/check_no.png"
-                                                             style="width: 20px;"
-                                                             th:unless="${propertyFee.isPaid()}"
-                                                             title="Таксата не е платена">
-                                                    </td>
-                                                    <td>
-                                                        <a th:href="@{/administration/fees/details/{id} (id=${propertyFee.getProperty().getId()})}">
-                                                            <img
-                                                                    alt="Виж детайли"
-                                                                    src="/images/magnifier.png"
-                                                                    style="width: 20px;"
-                                                                    title="Виж детайли"></a>
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                                <div class="incomes-container">
+                                                    <label class="text-secondary" for="unpaid"></label>
+                                                    <input class="text-center" id="unpaid"
+                                                           placeholder="Total amount..." readonly
+                                                           required step="any" style="font-weight: bold"
+                                                           th:errorclass="bg-danger"
+                                                           th:field="*{unpaidFeesAmount}"
+                                                           th:value="${incomesBindingModel.getUnpaidFeesAmount()}"
+                                                           type="number">
+                                                </div>
+                                            </fieldset>
                                         </div>
                                     </div>
-                                </fieldset>
+                                </form>
                             </li>
                         </ul>
                     </div>

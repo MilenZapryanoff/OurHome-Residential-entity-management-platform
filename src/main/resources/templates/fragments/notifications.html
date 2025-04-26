@@ -10,13 +10,18 @@
         </div>
 
 
-        <form th:action="@{/clearnotifications/{id} (id=${loggedUser.getId()})}"
-              th:method="POST">
-            <button class="clear-btn" id="clear-notifications" th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
-                    type="submit"><i class="fa-regular fa-trash-can"></i> Изтрий всички
+        <form th:action="@{/clearnotifications/{id} (id=${loggedUser.getId()})}" th:method="POST">
+            <button class="clear-btn" id="clear-notifications"
+                    th:data-user-id="${loggedUser.getId()}"
+                    th:if="${loggedUser.getLanguage().getDescription()} == 'bulgarian'"
+                    type="button">
+                <i class="fa-regular fa-trash-can"></i> Изтрий всички
             </button>
-            <button class="clear-btn" id="clear-notifications" th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
-                    type="submit"><i class="fa-regular fa-trash-can"></i> Delete all
+            <button class="clear-btn" id="clear-notifications"
+                    th:data-user-id="${loggedUser.getId()}"
+                    th:if="${loggedUser.getLanguage().getDescription()} == 'english'"
+                    type="button">
+                <i class="fa-regular fa-trash-can"></i> Delete all
             </button>
         </form>
 
@@ -98,7 +103,7 @@
             <div class="notification notification--green" th:if="${notification.getCategory()} == 'registration-request'"
                  th:data-notification-id="${notification.getId()}">
 
-                <a th:href="@{/administration/owners/pending/{id}(id=${notification.getEventId()})}"><i
+                <a th:href="@{/administration/property/owners/pending/{id}(id=${notification.getEventId()})}"><i
                         class="fa-solid fa-users"></i></a>
 
                 <div class="notification__content">

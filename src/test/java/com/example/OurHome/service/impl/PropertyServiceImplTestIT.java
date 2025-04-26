@@ -651,7 +651,6 @@ class PropertyServiceImplTestIT {
         manager.setEmail("test@test.test");
         manager.setFirstName("Test");
         manager.setLastName("Test");
-        manager.setUsername("testerManager");
         manager.setPassword("testPassword");
         manager.setPhoneNumber("0777777777");
         manager.setRegistrationDateTime(LocalDateTime.now());
@@ -685,7 +684,6 @@ class PropertyServiceImplTestIT {
         user.setEmail("test@mail.bg");
         user.setFirstName("Test");
         user.setLastName("Test");
-        user.setUsername("tester");
         user.setPassword("testPassword");
         user.setPhoneNumber("0666666666");
         user.setRegistrationDateTime(LocalDateTime.now());

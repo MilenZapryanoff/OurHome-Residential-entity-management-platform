@@ -64,8 +64,6 @@ public class RegisterController {
 
         if (bindingResult.hasErrors()) {
             return view;
-        } else if (userService.duplicatedUsernameCheck(userRegisterBindingModel.getUsername())) {
-            return view.addObject("duplicatedUser", true);
         } else if (userService.preRegistrationEmailCheck(userRegisterBindingModel.getEmail())) {
             return view.addObject("duplicatedEmail", true);
         } else if (!userService.passwordsMatch(userRegisterBindingModel.getPassword(), userRegisterBindingModel.getConfirmPassword())) {
@@ -101,8 +99,6 @@ public class RegisterController {
 
         if (bindingResult.hasErrors()) {
             return view;
-        } else if (userService.duplicatedUsernameCheck(managerRegisterBindingModel.getUsername())) {
-            return view.addObject("duplicatedUser", true);
         } else if (userService.preRegistrationEmailCheck(managerRegisterBindingModel.getEmail())) {
             return view.addObject("duplicatedEmail", true);
         } else if (!userService.passwordsMatch(managerRegisterBindingModel.getPassword(), managerRegisterBindingModel.getConfirmPassword())) {

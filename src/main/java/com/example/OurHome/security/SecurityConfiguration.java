@@ -28,6 +28,7 @@ public class SecurityConfiguration {
 
         httpSecurity
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/delete-notification/**")) // 🔹 Игнориране на CSRF само за този ендпойнт
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/delete-all-notifications/**")) // 🔹 Игнориране на CSRF само за този ендпойнт
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/", "/index", "/contact").permitAll()
@@ -41,6 +42,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/deleteDocument/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers("/administration", "/administration/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers("/delete-notification/**").authenticated()
+                        .requestMatchers("/delete-all-notifications/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(formLogin -> formLogin

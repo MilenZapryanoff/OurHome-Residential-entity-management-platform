@@ -9,7 +9,6 @@ public class ProfileEditBindingModel {
     @Size(min = 3, max = 20, message = "First name must be between 3 and 20 symbols")
     private String lastName;
     @Size(min = 3, max = 20, message = "First name must be between 3 and 20 symbols")
-    private String username;
     private String phoneNumber;
     private String newPassword;
     private String confirmPassword;
@@ -29,14 +28,6 @@ public class ProfileEditBindingModel {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPhoneNumber() {

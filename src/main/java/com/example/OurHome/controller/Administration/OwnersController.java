@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Optional;
+
 @Controller
 public class OwnersController {
 
@@ -30,14 +32,16 @@ public class OwnersController {
     }
 
     /**
+     * View list of users with access to condominium
+     *
      * @param id Condominium (RE) id
      * @return view administration-owners
      */
     @GetMapping("/administration/owners/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
-    public ModelAndView residentialEntityOwnersDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
-                                                       @PathVariable("id") Long id,
-                                                       @CookieValue(value = "lang", defaultValue = "bg") String lang) {
+    public ModelAndView residentialEntityOwners(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
+                                                @PathVariable("id") Long id,
+                                                @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ModelAndView view = resolveView(lang) ?
                 new ModelAndView("bg/administration/administration-owners") : new ModelAndView("en/administration/administration-owners");
@@ -45,20 +49,43 @@ public class OwnersController {
         return view.addObject("residentialEntity", getResidentialEntity(id));
     }
 
+
+    /**
+     * View user detailed information
+     *
+     * @param id user id
+     * @return view administration-owners-details
+     */
+    @GetMapping("/administration/owners/details/{id}")
+    @PreAuthorize("@securityService.checkResidentDetailsModeratorAccess(#id, authentication)")
+    public ModelAndView residentialEntityOwnersDetails(@ModelAttribute("residentManageBindingModel") ResidentManageBindingModel residentManageBindingModel,
+                                                       @PathVariable("id") Long id,
+                                                       @CookieValue(value = "lang", defaultValue = "bg") String lang,
+                                                       @RequestParam(value = "resId", required = false) Long resId,
+                                                       @RequestParam(value = "redirect", required = false) boolean redirect) {
+
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-owners-details") : new ModelAndView("en/administration/administration-owners-details");
+
+        return view.addObject("resident", userService.findUserById(id))
+                .addObject("residentialEntity", getResidentialEntity(resId))
+                .addObject("redirect", redirect);
+    }
+
     /**
      * Owners details in Administration
      *
      * @param id property id
      * @return view administration- pending owner registrations
      */
-    @GetMapping("/administration/owners/pending/{id}")
+    @GetMapping("/administration/property/owners/pending/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityPendingOwnerRegistrations(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
                                                                    @PathVariable("id") Long id,
                                                                    @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ModelAndView view = resolveView(lang) ?
-                new ModelAndView("bg/administration/administration-owners-pending") : new ModelAndView("en/administration/administration-owners-pending");
+                new ModelAndView("bg/administration/administration-property-owners-pending") : new ModelAndView("en/administration/administration-property-owners-pending");
 
         return view.addObject("residentialEntity", getResidentialEntity(id));
     }
@@ -69,14 +96,14 @@ public class OwnersController {
      * @param id property id
      * @return view administration- pending owner registrations
      */
-    @GetMapping("/administration/owners/pending/request/{id}")
+    @GetMapping("/administration/property/owners/pending/request/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
     public ModelAndView propertyOwnerRegistrationRequest(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
                                                          @PathVariable("id") Long id,
                                                          @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ModelAndView view = resolveView(lang) ?
-                new ModelAndView("bg/administration/administration-owners-pending-request") : new ModelAndView("en/administration/administration-owners-pending-request");
+                new ModelAndView("bg/administration/administration-property-owners-pending-request") : new ModelAndView("en/administration/administration-property-owners-pending-request");
 
         return view.addObject("property", getProperty(id));
     }
@@ -87,14 +114,14 @@ public class OwnersController {
      * @param id property id
      * @return view administration- rejected properties
      */
-    @GetMapping("/administration/owners/rejected/{id}")
+    @GetMapping("/administration/property/owners/rejected/{id}")
     @PreAuthorize("@securityService.checkResidentialEntityModeratorAccess(#id, authentication)")
     public ModelAndView residentialEntityRejectedOwnerRegistrations(@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel propertyManageBindingModel,
                                                                     @PathVariable("id") Long id,
                                                                     @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         ModelAndView view = resolveView(lang) ?
-                new ModelAndView("bg/administration/administration-owners-rejected") : new ModelAndView("en/administration/administration-owners-rejected");
+                new ModelAndView("bg/administration/administration-property-owners-rejected") : new ModelAndView("en/administration/administration-property-owners-rejected");
 
         return view.addObject("residentialEntity", getResidentialEntity(id));
     }
@@ -105,7 +132,7 @@ public class OwnersController {
      *
      * @param propertyManageBindingModel carries information about the entityId
      * @param id                         property id
-     * @return "redirect:/administration/owners/pending/{entityId}"
+     * @return "redirect:/administration/property/owners/pending/{entityId}"
      */
     @PostMapping("/administration/owners/process-request/{id}")
     @PreAuthorize("@securityService.checkPropertyModeratorAccess(#id, authentication)")
@@ -124,9 +151,8 @@ public class OwnersController {
             propertyService.rejectProperty(id);
         }
 
-        return new ModelAndView("redirect:/administration/owners/pending/" + property.getResidentialEntity().getId() + "#pending-registrations");
+        return new ModelAndView("redirect:/administration/property/owners/pending/" + property.getResidentialEntity().getId() + "#pending-registrations");
     }
-
 
 
     /**
@@ -141,7 +167,8 @@ public class OwnersController {
     @PreAuthorize("@securityService.checkResidentModeratorAccess(#id, authentication)")
     public ModelAndView changeUserRole(@ModelAttribute("residentManageBindingModel")
                                        @Valid ResidentManageBindingModel residentManageBindingModel,
-                                       @PathVariable("id") Long id) {
+                                       @PathVariable("id") Long id,
+                                       @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
         boolean userIsModerator = residentialEntityService.checkIfUserIsResidentialEntityModerator(residentManageBindingModel.getEntityId(), residentManageBindingModel.getUserId());
 
@@ -151,7 +178,17 @@ public class OwnersController {
             userService.removeModerator(id, residentManageBindingModel.getEntityId());
         }
 
-        return new ModelAndView("redirect:/administration/owners/" + residentManageBindingModel.getEntityId() + "#post-action-nav");
+        ModelAndView view = resolveView(lang) ?
+                new ModelAndView("bg/administration/administration-owners-details") : new ModelAndView("en/administration/administration-owners-details");
+
+        ResidentialEntity residentialEntityById = residentialEntityService.findResidentialEntityById(residentManageBindingModel.getEntityId()).orElse(null);
+
+
+        view.addObject("residentialEntity", residentialEntityById)
+                .addObject("resident", userService.findUserById(id))
+                .addObject("userPrivilegesChanged", true);
+
+        return view;
     }
 
     /**
@@ -198,7 +235,7 @@ public class OwnersController {
 
         propertyService.unlinkOwner(id, true);
 
-        return new ModelAndView("redirect:/administration/owners/rejected/" + propertyManageBindingModel.getEntityId() + "#rejected-registration");
+        return new ModelAndView("redirect:/administration/property/owners/rejected/" + propertyManageBindingModel.getEntityId() + "#rejected-registration");
     }
 
 
@@ -224,6 +261,7 @@ public class OwnersController {
 
     /**
      * Language resolver
+     *
      * @param lang This value shows the language
      * @return boolean
      */

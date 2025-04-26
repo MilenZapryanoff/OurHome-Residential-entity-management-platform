@@ -1,17 +1,14 @@
 package com.example.OurHome.service.impl;
 
-import com.example.OurHome.model.Entity.Language;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.model.Entity.UserEntity;
-import com.example.OurHome.model.dto.BindingModels.User.ManagerRegisterBindingModel;
-import com.example.OurHome.model.dto.BindingModels.User.ProfileEditBindingModel;
-import com.example.OurHome.model.dto.BindingModels.User.UserAuthBindingModel;
-import com.example.OurHome.model.dto.BindingModels.User.UserRegisterBindingModel;
+import com.example.OurHome.model.dto.BindingModels.User.*;
 import com.example.OurHome.model.dto.ViewModels.UserViewModel;
 import com.example.OurHome.repo.LanguageRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
 import com.example.OurHome.repo.RoleRepository;
 import com.example.OurHome.repo.UserRepository;
+import com.example.OurHome.service.LogService;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.UserService;
 import com.example.OurHome.service.email.EmailService;
@@ -31,7 +28,6 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -47,8 +43,9 @@ public class UserServiceImpl implements UserService {
     private final MessageService messageService;
     private final EmailService emailService;
     private final LanguageRepository languageRepository;
+    private final LogService logService;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder, ModelMapper modelMapper, UserRepository userRepository, ResidentialEntityToken residentialEntityToken, UserToken userToken, ResidentialEntityRepository residentialEntityRepository, RoleRepository roleRepository, MessageService messageService, EmailService emailService, LanguageRepository languageRepository) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, ModelMapper modelMapper, UserRepository userRepository, ResidentialEntityToken residentialEntityToken, UserToken userToken, ResidentialEntityRepository residentialEntityRepository, RoleRepository roleRepository, MessageService messageService, EmailService emailService, LanguageRepository languageRepository, LogService logService) {
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
@@ -59,6 +56,7 @@ public class UserServiceImpl implements UserService {
         this.messageService = messageService;
         this.emailService = emailService;
         this.languageRepository = languageRepository;
+        this.logService = logService;
     }
 
     /**
@@ -85,18 +83,6 @@ public class UserServiceImpl implements UserService {
         return checkEmail != null;
     }
 
-    /**
-     * PRE-REGISTRATION:
-     * username duplicate check
-     *
-     * @return boolean
-     */
-
-    @Override
-    public boolean duplicatedUsernameCheck(String username) {
-        UserEntity checkUser = userRepository.findByUsername(username).orElse(null);
-        return checkUser != null;
-    }
 
     /**
      * RESIDENT REGISTRATION implementation
@@ -245,22 +231,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendVerificationCode(UserEntity user) {
-        Long verificationCode = new Random().nextLong(99999999, 1000000000);
+    public void sendResetCode(UserEntity user) {
+        Long resetCode = new Random().nextLong(99999999, 1000000000);
 
-        user.setValidationCode(passwordEncoder.encode(String.valueOf(verificationCode)));
+        user.setResetCode(passwordEncoder.encode(String.valueOf(resetCode)));
 
         //TODO: on some stage to change isValidated field to hasActiveRestorePassword because this stands behind the idea of this boolean
         user.setValidated(false);
         userRepository.save(user);
 
-        emailService.sendResetPasswordEmail(user.getEmail(), String.valueOf(verificationCode));
+        emailService.sendResetPasswordEmail(user, String.valueOf(resetCode));
     }
 
     @Override
     public void resetPassword(UserEntity user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
-        user.setValidationCode(null);
+        user.setResetCode(null);
         user.setValidated(true);
         userRepository.save(user);
 
@@ -268,8 +254,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean verificationCodeMatch(UserEntity user, String verificationCode) {
-        return passwordEncoder.matches(verificationCode, user.getValidationCode());
+    public boolean resetCodeMatch(UserEntity user, String resetCode) {
+        return passwordEncoder.matches(resetCode, user.getResetCode());
     }
 
 
@@ -330,7 +316,7 @@ public class UserServiceImpl implements UserService {
                     throw new IllegalArgumentException("Invalid file type!");
                 }
 
-                String fileName = "avatar-" + user.getId() + "-" + user.getUsername() + fileExtension;
+                String fileName = "avatar-" + user.getId() + "-" + user.getFirstName() + user.getLastName() + fileExtension;
                 Path filePath = Paths.get(uploadDirectory, fileName);
 
                 try {
@@ -404,10 +390,10 @@ public class UserServiceImpl implements UserService {
      * restore a new verification code will be issued and send to user's email.
      */
     @Override
-    public void cleanUpPasswordRestoreVerificationCodes() {
-        List<UserEntity> allUsersWithVerificationCode = userRepository.findAllUsersWithVerificationCode();
-        for (UserEntity userEntity : allUsersWithVerificationCode) {
-            userEntity.setValidationCode(null);
+    public void cleanUpPasswordResetCodes() {
+        List<UserEntity> allUsersWithResetCodes = userRepository.findAllUsersWithResetCode();
+        for (UserEntity userEntity : allUsersWithResetCodes) {
+            userEntity.setResetCode(null);
             userEntity.setValidated(true);
             userRepository.save(userEntity);
         }
@@ -445,7 +431,8 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Method for setting system messages languege. This setting is different from global language!
-     * @param lang is the selected FE language
+     *
+     * @param lang          is the selected FE language
      * @param userViewModel is the current instance of users logged in
      */
     @Override
@@ -453,13 +440,36 @@ public class UserServiceImpl implements UserService {
 
         UserEntity user = userRepository.findByEmail(userViewModel.getEmail()).orElse(null);
 
-        if ("bg".equals(lang) && user != null) {
-            user.setLanguage(languageRepository.findLanguageByDescription("bulgarian"));
-        } else if ("en".equals(lang) && user != null) {
-            user.setLanguage(languageRepository.findLanguageByDescription("english"));
+        if (user != null) {
+            if ("bg".equals(lang)) {
+                user.setLanguage(languageRepository.findLanguageByDescription("bulgarian"));
+            } else if ("en".equals(lang)) {
+                user.setLanguage(languageRepository.findLanguageByDescription("english"));
+            }
+            userRepository.save(user);
         }
+    }
 
-        userRepository.save(user);
+    @Override
+    public ProfileNotificationsEditBindingModel mapProfileNotificationEditBindingModel(UserViewModel currentUser) {
+        return modelMapper.map(currentUser, ProfileNotificationsEditBindingModel.class);
+    }
+
+    @Override
+    public void updateEmailNotificationsSettings(Long id, ProfileNotificationsEditBindingModel profileNotificationsEditBindingModel) {
+        try {
+            UserEntity user = userRepository.findById(id).orElse(null);
+            if (user != null) {
+                user.setMessageEmail(profileNotificationsEditBindingModel.isMessageEmail());
+                user.setNewFeeEmail(profileNotificationsEditBindingModel.isNewFeeEmail());
+                user.setEventEmail(profileNotificationsEditBindingModel.isEventEmail());
+                user.setReportEmail(profileNotificationsEditBindingModel.isReportEmail());
+                userRepository.save(user);
+            }
+            logService.info("✅[updateEmailNotificationsSettings] Successfully updated email notification settings for user: {}", id);
+        } catch (Exception e) {
+            logService.error("❌[updateEmailNotificationsSettings] Failed to update email notification settings for user: {}! {}", id, e);
+        }
     }
 
 

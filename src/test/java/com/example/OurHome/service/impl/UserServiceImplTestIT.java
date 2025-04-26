@@ -56,7 +56,6 @@ class UserServiceImplTestIT {
     @Test
     void testUserRegistration() {
         UserRegisterBindingModel userRegisterBindingModel = new UserRegisterBindingModel();
-        userRegisterBindingModel.setUsername("testUser");
         userRegisterBindingModel.setPassword("password");
         userRegisterBindingModel.setFirstName("Test");
         userRegisterBindingModel.setLastName("Test");
@@ -67,15 +66,13 @@ class UserServiceImplTestIT {
 
         userServiceToTest.registerUser(userRegisterBindingModel, residentialEntity.getId());
 
-        UserEntity registeredUser = userRepository.findByUsername("testUser").orElse(null);
+        UserEntity registeredUser = userRepository.findByEmail("Test@test.bg").orElse(null);
         assertNotNull(registeredUser, "User should be registered");
-        assertEquals("testUser", registeredUser.getUsername(), "Username should match");
     }
 
     @Test
     void testRegisterManager() {
         ManagerRegisterBindingModel managerRegisterBindingModel = new ManagerRegisterBindingModel();
-        managerRegisterBindingModel.setUsername("testUser");
         managerRegisterBindingModel.setPassword("password");
         managerRegisterBindingModel.setFirstName("Test");
         managerRegisterBindingModel.setLastName("Test");

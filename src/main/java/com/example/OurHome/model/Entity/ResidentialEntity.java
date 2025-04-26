@@ -84,10 +84,10 @@ public class ResidentialEntity {
     @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
     private List<Property> properties;
 
-    @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Report> reports;
 
-    @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE )
     private List<Event> events;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "residentialEntities")

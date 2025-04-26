@@ -60,8 +60,6 @@
             <p class="category text-white"
                th:text="${loggedUser.getFirstName()} + ' ' + ${loggedUser.getLastName()}"></p>
             <h5 class="text-danger" th:if="${unsuccessfulEdit}">Нещо се обърка!></h5>
-            <h5 class="text-danger" th:if="${duplicatedEmail}"
-                th:text="'Потребителско име '+ ${profileEditBindingModel.getUsername()} + ' е заето!'"></h5>
             <h5 class="text-danger" th:if="${noPasswordsMatch}">Паролата не съвпада</h5>
         </div>
     </div>
@@ -103,19 +101,6 @@
                                th:errorclass="bg-danger"
                                th:field="*{lastName}"
                                th:value="${loggedUser.getLastName()}"
-                               type="text">
-                    </fieldset>
-                    <fieldset>
-                        <label for="username"><b>Потребителско име</b></label>
-                        <p class="text-danger"
-                           th:errors="*{username}"
-                           th:if="${#fields.hasErrors('username')}">Username error
-                            message</p>
-                        <input id="username"
-                               placeholder="Въведете потребителско име..."
-                               th:errorclass="bg-danger"
-                               th:field="*{username}"
-                               th:value="${loggedUser.getUsername()}"
                                type="text">
                     </fieldset>
                     <fieldset>

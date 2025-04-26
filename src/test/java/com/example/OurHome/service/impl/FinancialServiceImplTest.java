@@ -3,6 +3,7 @@ package com.example.OurHome.service.impl;
 import com.example.OurHome.model.Entity.Expense;
 import com.example.OurHome.model.Entity.ResidentialEntity;
 import com.example.OurHome.repo.FinancialRepository;
+import com.example.OurHome.repo.PropertyFeeRepository;
 import com.example.OurHome.service.ResidentialEntityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,12 +34,14 @@ class FinancialServiceImplTest {
     private ModelMapper mockModelMapper;
     @Mock
     private PasswordEncoder mockPasswordEncoder;
+    @Mock
+    private PropertyFeeRepository mockPropertyFeeRepository;
 
 
     @BeforeEach
     void setUp() {
         mockFinancialRepository.deleteAll();
-        serviceToTest = new FinancialServiceImpl(mockFinancialRepository, mockModelMapper, residentialEntityService);
+        serviceToTest = new FinancialServiceImpl(mockFinancialRepository, mockModelMapper, residentialEntityService, mockPropertyFeeRepository);
     }
 
     @Test

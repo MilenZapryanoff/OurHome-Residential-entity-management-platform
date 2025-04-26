@@ -124,8 +124,12 @@
                                 </li>
                                 <li class="text-black text-center"
                                     th:if="${property.getPropertyType() != null}"><i class="fa-solid fa-building"></i>
-                                    Property type:
+                                    Категория самостоятелен обект:
                                     <b th:text="${property.getPropertyType().getDescription()}"></b>
+                                </li>
+                                <li class="text-black text-center"
+                                    th:if="${property.getPropertyType() == null}"><i class="fa-solid fa-building"></i>
+                                    Категория самостоятелен обект: <b>Няма</b>
                                 </li>
                             </ul>
                         </div>
@@ -178,7 +182,7 @@
                                                 </li>
                                                 <li>
                                                     <div class="text-center">
-                                                        <p class="text-danger"
+                                                        <p class="text-bg-danger"
                                                            th:if="${property.getNumber() != property.getPropertyChangeRequest().getNumber()}">
                                                             <i class="fa-solid fa-list-ol"></i> Имот №: <b
                                                                 th:text="${property.getPropertyChangeRequest().getNumber()}"></b>
@@ -190,7 +194,7 @@
                                                         </p>
                                                     </div>
                                                     <div class="text-center">
-                                                        <p class="text-danger"
+                                                        <p class="text-bg-danger"
                                                            th:if="${property.getFloor() != property.getPropertyChangeRequest().getFloor()}">
                                                             <i class="fa-solid fa-stairs"></i> Етаж: <b
                                                                 th:text="${property.getPropertyChangeRequest().getFloor()}"></b>
@@ -202,7 +206,7 @@
                                                         </p>
                                                     </div>
                                                     <div class="text-center">
-                                                        <p class="text-danger"
+                                                        <p class="text-bg-danger"
                                                            th:if="${property.getNumberOfAdults() != property.getPropertyChangeRequest().getNumberOfAdults()}">
                                                             <i class="fa-solid fa-person"></i> Брой възрастни: <b
                                                                 th:text="${property.getPropertyChangeRequest().getNumberOfAdults()}"></b>
@@ -214,7 +218,7 @@
                                                         </p>
                                                     </div>
                                                     <div class="text-center">
-                                                        <p class="text-danger"
+                                                        <p class="text-bg-danger"
                                                            th:if="${property.getNumberOfChildren() != property.getPropertyChangeRequest().getNumberOfChildren()}">
                                                             <i class="fa-solid fa-child"></i> Брой деца: <b
                                                                 th:text="${property.getPropertyChangeRequest().getNumberOfChildren()}"></b>
@@ -224,7 +228,7 @@
                                                                 th:text="${property.getPropertyChangeRequest().getNumberOfChildren()}"></b>
                                                     </div>
                                                     <div class="text-black text-center">
-                                                        <p class="text-danger"
+                                                        <p class="text-bg-danger"
                                                            th:if="${property.getNumberOfPets() != property.getPropertyChangeRequest().getNumberOfPets()}">
                                                             <i class="fa-solid fa-dog"></i> Брой дом. любимци: <b
                                                                 th:text="${property.getPropertyChangeRequest().getNumberOfPets()}"></b>
@@ -236,12 +240,12 @@
                                                         </p>
                                                     </div>
                                                     <div class="text-center">
-                                                        <p class="text-danger"
+                                                        <p class="text-bg-danger"
                                                            th:if="${property.isNotHabitable() != property.getPropertyChangeRequest().isNotHabitable()}">
                                                             <i class="fa-solid fa-house-chimney-user"></i> Имотът е
                                                             обитаем:
                                                             <b th:if="${property.getPropertyChangeRequest().isNotHabitable()}"><i
-                                                                    class="fa-solid fa-circle-xmark text-danger"></i></b>
+                                                                    class="fa-solid fa-circle-xmark text-white"></i></b>
                                                             <b th:unless="${property.getPropertyChangeRequest().isNotHabitable()}"><i
                                                                     class="fa-solid fa-circle-check text-success"></i></b>
                                                         </p>
@@ -253,6 +257,29 @@
                                                                     class="fa-solid fa-circle-xmark text-danger"></i></b>
                                                             <b th:unless="${property.getPropertyChangeRequest().isNotHabitable()}"><i
                                                                     class="fa-solid fa-circle-check text-success"></i></b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="text-center"
+                                                         th:if="${property.getPropertyChangeRequest().getPropertyType() != null}">
+                                                        <p class="text-bg-danger"
+                                                           th:if="${property.getPropertyType() != property.getPropertyChangeRequest().getPropertyType()}">
+                                                            <i class="fa-solid fa-building"></i> Категория самостоятелен
+                                                            обект: <b
+                                                                th:text="${property.getPropertyChangeRequest().getPropertyType().getDescription()}"></b>
+                                                        </p>
+                                                        <p class="text-dark"
+                                                           th:unless="${property.getPropertyType() != property.getPropertyChangeRequest().getPropertyType()}">
+                                                            <i class="fa-solid fa-building"></i> Категория самостоятелен
+                                                            обект: <b
+                                                                th:text="${property.getPropertyChangeRequest().getPropertyType().getDescription()}"></b>
+                                                        </p>
+                                                        <br>
+                                                    </div>
+                                                    <div class="text-center"
+                                                         th:if="${property.getPropertyChangeRequest().getPropertyType() == null}">
+                                                        <p class="text-dark">
+                                                            <i class="fa-solid fa-building"></i> Категория самостоятелен
+                                                            обект: <b>Няма</b>
                                                         </p>
                                                         <br>
                                                     </div>

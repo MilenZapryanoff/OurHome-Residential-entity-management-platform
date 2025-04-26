@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Ново съобщение в OurHome.bg</title>
+    <style>
+        /* Глобални стилове */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Контейнерът на email-а */
+        .email-container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+
+        /* Бутон */
+        .button {
+            display: inline-block;
+            background-color: #DC3545;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        /* Рамка около съобщението */
+        .message-box {
+            display: flex;
+            flex-direction: column;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 4px solid #DC3545;
+            margin: 10px 0;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        /* Responsive стилове */
+        @media screen and (max-width: 480px) {
+            .email-container {
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .button {
+                font-size: 14px;
+                padding: 10px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<table class="email-container" role="presentation">
+    <tr>
+        <td align="center">
+            <h2 style="color: #2c3e50;">📩 Нова месечна такса</h2>
+            <hr style="border: 1px solid #ddd;">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p style="color: #333;">Здравейте!</p>
+            <div class="message-box">
+                <p th:text="'Имате нова месечна такса за имот в състава на Етажна собственост с идентификатор: ' + ${residentialEntity.getId()} + '. Адрес: ' + ${residentialEntity.getStreetName()} + ', ' + ${residentialEntity.getStreetNumber()}"></p>
+            </div>
+            <p>Информация за всички месечни такси по вашия имот ще откриете в секция <strong>"Месечни такси"</strong> в
+                платформата OurHome.bg</p>
+            <p>За директна връзка към секцията използвайте бутон "Към месечни такси".</p>
+            <p style="text-align: center; margin: 20px 0;">
+                <a class="button" th:href="${feesLink}">Към месечни такси</a>
+            </p>
+            <hr style="border: 1px solid #ddd;">
+            <p><strong>📌 Важно:</strong><br>
+                Този имейл е генериран автоматично. <strong>Моля, не отговаряйте на него!</strong>
+            </p>
+            <p>Ако имате въпроси или нужда от съдействие, можете да се свържете с нашия екип за поддръжка на:
+                <a style="color: #DC3545;" th:href="'mailto:office.ourhome@gmail.com'">office.ourhome@gmail.com</a>
+            </p>
+            <p style="text-align: center; color: #888; font-size: 12px;">С уважение,<br>Екипът на
+                <strong>OurHome.bg</strong></p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

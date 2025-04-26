@@ -15,11 +15,18 @@ import java.util.stream.Collectors;
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final LogService logService;
 
-    public NotificationServiceImpl(NotificationRepository notificationRepository) {
+    public NotificationServiceImpl(NotificationRepository notificationRepository, LogService logService) {
         this.notificationRepository = notificationRepository;
+        this.logService = logService;
     }
 
+
+    @Override
+    public Notification findById(Long notificationId) {
+        return notificationRepository.findById(notificationId).orElse(null);
+    }
 
     /**
      * Create notification for OWNERS when a new EVENT is created
@@ -29,23 +36,29 @@ public class NotificationServiceImpl implements NotificationService {
      */
     @Override
     public void newEventNotificationToAllVerifiedPropertyOwners(Event event, ResidentialEntity residentialEntity) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM, yyyy");
-        String eventDate = event.getDate().format(formatter);
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM, yyyy");
+            String eventDate = event.getDate().format(formatter);
 
-        List<Notification> newNotifications = residentialEntity.getProperties().stream()
-                .filter(property -> property.getOwner() != null && property.isObtained())
-                .map(property -> createNotification(
-                        property.getOwner(),
-                        property.getId(),
-                        "new-event",
-                        "Календар",
-                        "Ново събитие за " + eventDate + " в календара на вашата етажна собственост!",
-                        "Calendar",
-                        "New condominium event has been created for " + eventDate + "!"
-                ))
-                .collect(Collectors.toList());
+            List<Notification> newNotifications = residentialEntity.getProperties().stream()
+                    .filter(property -> property.getOwner() != null && property.isObtained())
+                    .map(property -> createNotification(
+                            property.getOwner(),
+                            property.getId(),
+                            "new-event",
+                            "Календар",
+                            "Ново събитие за " + eventDate + " в календара на вашата етажна собственост!",
+                            "Calendar",
+                            "New condominium event has been created for " + eventDate + "!"
+                    ))
+                    .collect(Collectors.toList());
 
-        notificationRepository.saveAll(newNotifications);
+            notificationRepository.saveAll(newNotifications);
+
+            logService.info("✅[-> newEventNotificationToAllVerifiedPropertyOwners] Successfully created new event NOTIFICATION for all users of condominium id: {}", residentialEntity.getId());
+        } catch (Exception e) {
+            logService.error("❌[-> newEventNotificationToAllVerifiedPropertyOwners] Failed to create new event NOTIFICATION for all users in condominium id: {}", residentialEntity.getId(), e);
+        }
     }
 
     /**
@@ -57,15 +70,20 @@ public class NotificationServiceImpl implements NotificationService {
      */
     @Override
     public void newFeeNotificationToPropertyOwner(Property property, BigDecimal feeAmount, BigDecimal totalDueAmount) {
-        notificationRepository.save(createNotification(
-                property.getOwner(),
-                property.getId(),
-                "new-fee",
-                "Такси",
-                "Имате начислена нова такса в размер на " + feeAmount + "лв.",
-                "Fees",
-                "New monthly fee for " + feeAmount + " BGN."
-        ));
+        try {
+            notificationRepository.save(createNotification(
+                    property.getOwner(),
+                    property.getId(),
+                    "new-fee",
+                    "Такси",
+                    "Имате начислена нова такса в размер на " + feeAmount + "лв.",
+                    "Fees",
+                    "New monthly fee for " + feeAmount + " BGN."
+            ));
+            logService.info("✅[-> newFeeNotificationToPropertyOwner] New monthly fee NOTIFICATION successfully created for user: {}, owner of property id: {}", property.getOwner().getId(), property.getId());
+        } catch (Exception e) {
+            logService.error("❌[-> newFeeNotificationToPropertyOwner] Failed to create a NOTIFICATION for new monthly fee for user: {}, owner of property id: {}", property.getOwner().getId(), property.getId(), e);
+        }
     }
 
 
@@ -94,15 +112,20 @@ public class NotificationServiceImpl implements NotificationService {
      */
     @Override
     public void newMessageNotification(UserEntity receiver) {
-        notificationRepository.save(createNotification(
-                receiver,
-                null,
-                "new-message",
-                "Съобщения",
-                "Имате получено ново съобщение",
-                "Messages",
-                "You have a new message"
-        ));
+        try {
+            notificationRepository.save(createNotification(
+                    receiver,
+                    null,
+                    "new-message",
+                    "Съобщения",
+                    "Имате получено ново съобщение",
+                    "Messages",
+                    "You have a new message"
+            ));
+            logService.info("✅[-> newMessageNotification] New NOTIFICATION created for user with id: {}", receiver.getId());
+        } catch (Exception e) {
+            logService.error("❌[-> newMessageNotification] Failed to create new NOTIFICATION for user with id: {}", receiver.getId(), e);
+        }
     }
 
     /**
@@ -161,7 +184,6 @@ public class NotificationServiceImpl implements NotificationService {
         ));
     }
 
-
     /**
      * Create notification for property OWNER when manager rejects registration request
      *
@@ -169,15 +191,20 @@ public class NotificationServiceImpl implements NotificationService {
      */
     @Override
     public void propertyRejectedNotification(Property property) {
-        notificationRepository.save(createNotification(
-                property.getOwner(),
-                property.getId(),
-                "registration-rejection",
-                "Регистрация",
-                "Отхвърлена заявка за регистрация на самостоятелен обек №" + property.getNumber() + " в състава на етажна собственост с идентификатор: " + property.getResidentialEntity().getId(),
-                "Registration",
-                "Rejected registration for property " + property.getNumber() + " in condominium ID " + property.getResidentialEntity().getId()
-        ));
+        try {
+            notificationRepository.save(createNotification(
+                    property.getOwner(),
+                    property.getId(),
+                    "registration-rejection",
+                    "Регистрация",
+                    "Отхвърлена заявка за регистрация на самостоятелен обек №" + property.getNumber() + " в състава на етажна собственост с идентификатор: " + property.getResidentialEntity().getId(),
+                    "Registration",
+                    "Rejected registration for property " + property.getNumber() + " in condominium ID " + property.getResidentialEntity().getId()
+            ));
+            logService.info("✅[-> propertyRejectedNotification] Registration rejection NOTIFICATION to user:{}, owner of property: {}", property.getOwner().getId(), property.getId());
+        } catch (Exception e) {
+            logService.error("❌[-> propertyRejectedNotification] Failed to sent registration rejection NOTIFICATION to user:{}, owner of property: {}", property.getOwner().getId(), property.getId(), e);
+        }
     }
 
     /**
@@ -187,15 +214,20 @@ public class NotificationServiceImpl implements NotificationService {
      */
     @Override
     public void propertyChangeRequestApprovedNotification(Property property) {
-        notificationRepository.save(createNotification(
-                property.getOwner(),
-                property.getId(),
-                "change-approval",
-                "Имот",
-                "Одобрена заявка за промяна по параметри на самостоятелен обек №" + property.getNumber() + " в състава на етажна собственост с идентификатор: " + property.getResidentialEntity().getId(),
-                "Property",
-                "Rejected registration for property " + property.getNumber() + " in condominium ID " + property.getResidentialEntity().getId()
-        ));
+        try {
+            notificationRepository.save(createNotification(
+                    property.getOwner(),
+                    property.getId(),
+                    "change-approval",
+                    "Имот",
+                    "Одобрена заявка за промяна по параметри на самостоятелен обек №" + property.getNumber() + " в състава на етажна собственост с идентификатор: " + property.getResidentialEntity().getId(),
+                    "Property",
+                    "Rejected registration for property " + property.getNumber() + " in condominium ID " + property.getResidentialEntity().getId()
+            ));
+            logService.info("✅[-> propertyChangeRequestApprovedNotification] Approved change request NOTIFICATION for property id: {} sent", property.getId());
+        } catch (Exception e) {
+            logService.error("❌[-> propertyChangeRequestApprovedNotification] Failed to send change request approve NOTIFICATION for property id: {}", property.getId(), e);
+        }
     }
 
     /**
@@ -204,16 +236,23 @@ public class NotificationServiceImpl implements NotificationService {
      * @param property is the property entity
      */
     @Override
-    public void propertyChangeRequestRejectedMessage(Property property) {
-        notificationRepository.save(createNotification(
-                property.getOwner(),
-                property.getId(),
-                "change-rejection",
-                "Имот",
-                "Отхвърлена заявка за промяна по параметри на самостоятелен обек №" + property.getNumber() + " в състава на етажна собственост с идентификатор: " + property.getResidentialEntity().getId(),
-                "Property",
-                "Rejected registration for property " + property.getNumber() + " in condominium ID " + property.getResidentialEntity().getId()
-        ));
+    public void propertyChangeRequestRejectedNotification(Property property) {
+
+        try {
+            notificationRepository.save(createNotification(
+                    property.getOwner(),
+                    property.getId(),
+                    "change-rejection",
+                    "Имот",
+                    "Отхвърлена заявка за промяна по параметри на самостоятелен обек №" + property.getNumber() + " в състава на етажна собственост с идентификатор: " + property.getResidentialEntity().getId(),
+                    "Property",
+                    "Rejected registration for property " + property.getNumber() + " in condominium ID " + property.getResidentialEntity().getId()
+            ));
+
+            logService.info("✅[-> propertyChangeRequestRejectedNotification] Rejected change request NOTIFICATION for property id: {} sent", property.getId());
+        } catch (Exception e) {
+            logService.error("❌[-> propertyChangeRequestRejectedNotification] Failed to send change request reject NOTIFICATION for property id: {}", property.getId(), e);
+        }
     }
 
     /**
@@ -285,7 +324,7 @@ public class NotificationServiceImpl implements NotificationService {
                 report.getId(),
                 "report-update",
                 "Сигнали",
-                "Обновен статус по ваш сигнал за нередност от свързан с етажна собственост с идентификатор " + report.getCreator().getId(),
+                "Обновен статус по ваш сигнал за нередност от свързан с етажна собственост с идентификатор " + report.getResidentialEntity().getId(),
                 "Reports",
                 "Updated status of your report related to the condominium with ID " + report.getResidentialEntity().getId()
         ));

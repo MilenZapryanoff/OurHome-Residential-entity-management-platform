@@ -57,7 +57,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Регистър потребители</h3>
+            <h3>Самостоятелни обекти</h3>
             <div class="col-lg-12">
                 <span th:text="'Идентификатор на ЕС: ' + ${residentialEntity.getId()}"></span>
             </div>
@@ -65,7 +65,7 @@
     </div>
 </div>
 
-<!-- ***** Rejected owners section ***** -->
+<!-- ***** Condominium section ***** -->
 <div class="page-content">
     <!--start of Sub-menu-->
     <div class="menu-container">
@@ -74,57 +74,62 @@
     <div class="content">
         <div class="container">
             <div class="text-center administration-header">
-                <h4 class="category">Регистър на потребителите</h4>
+                <h4 class="category">Управление на самостоятелни обекти</h4>
                 <br>
-                <p>Секцията с потребители съдържа информация за всички регистрирани потребители с достъп до настоящата
-                    Дигиталната Етажна Собственост (ДЕС), чакащите заявки за регистрация като собственик на дигитален
-                    имот, както и информация за отхвърлените заявки.</p>
-                <p>Всеки потребител с достъп до Дигиталната Етажна Собственост (ДЕС) може да заявки собственост върху
-                    Дигитален имот.</p>
-                <p>Всички заявки за регистрации на собственици на дигитални имоти, за които е сработил защитен механизъм
-                    за верификация може да откриете в секция <a
-                            th:href="@{/administration/owners/pending/{id}#active-registrations(id=${residentialEntity.getId()})}">Чакащи
-                        заявки</a>.</p>
-                <p>При одобрение на регистрацията, собствеността върху дигиталния имот се обновява. В случай, че по
-                    някаква причина отхвърлите дадена заявка за регистрация, то собствеността на дигиталния имот остава
-                    непроменена.</p>
-                <p>Информация за всички отхвърлени заявки за регистрации може да откриете в <a
-                        th:href="@{/administration/owners/rejected/{id}#active-registrations(id=${residentialEntity.getId()})}">Отхвърлени
-                    заявки</a>.</p>
+                <p>В тази секция ще откриете информация за всички самостоятелни обекти в състава на дигиталната етажна собственост.</p>
+                <p>От тук може да управлявате, както заявките за регистрация на собственик на самостоятелен обект, така и заявки за промяна на параметри.</p>
+                <p>В меню 'Категории обекти' може да създадете категоризация на самостоятелните обекти в състава на дигиталната етажна собственост, което ще ви позволи
+                    използването на различни ставки при формиране на месечните такси.</p>
             </div>
 
-            <!--Rejected registrations table-->
+            <!--Active registrations section-->
             <div class="administration">
-                <!--Submenu nav buttons-->
+                <!--Sub-menu buttons-->
                 <div class="table-nav-section">
                     <a class="button nav-link"
-                       th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-user-check"></i> <span>Потребители с достъп до дигитална ЕС</span>
-                            <sup th:if="${residentialEntity.getResidents().size()} > 0"
-                                 th:text="'  '+ ${residentialEntity.getResidents().size()}"></sup>
+                       th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-regular fa-building"></i>
+                            <span>Самостоятелни обекти</span>
+                            <sup th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                 th:text="' '+ ${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())}">
+                            </sup>
+
                         </div>
                     </a>
-                    <a class="nav-link button"
-                       th:href="@{/administration/owners/pending/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-hourglass-half"></i> <span>Чакащи заявки</span>
+                    <a class="button nav-link"
+                       th:href="@{/administration/property/owners/pending/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><span>Заявки за регистрация на собственик</span>
                             <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
                                  th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
                             </sup>
                         </div>
                     </a>
-                    <a class="nav-link button active" href="#rejected-registration"
-                       id="rejected-registration">
-                        <div class="text-center"><i class="fa-solid fa-ban"></i> <span>Отхврълени заявки</span>
+                    <a class="button nav-link active"
+                       th:href="@{/administration/property/owners/rejected/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><span>Отхврълени заявки за регистрация на собственик</span>
                             <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
                                  th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
                             </sup>
                         </div>
                     </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/property/change-requests/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-users-gear"></i> <span>Промяна на данни за имот</span>
+                            <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
+                                 th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
+                            </sup>
+                        </div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-layer-group"></i> <span>Категории обекти</span>
+                        </div>
+                    </a>
                 </div>
-                <!--Rejected registrations header-->
+                <!--Rejected owner registration requests table-->
                 <div class="info-table rounded-bottom" id="rejected-registrations">
                     <div class="text-center">
-                        <h4 class="category text-danger"><i class="fa-solid fa-ban"></i> Отхвърлени заявки за
+                        <h4 class="category text-danger"><i class="fa-solid fa-user-xmark"></i> Отхвърлени заявки за
                             регистрация на собственик
                         </h4>
                         <br>

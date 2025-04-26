@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service("securityService")
 public class SecurityServiceImpl implements SecurityService {
@@ -23,8 +22,9 @@ public class SecurityServiceImpl implements SecurityService {
     private final PropertyTypeService propertyTypeService;
     private final ReportRepository reportRepository;
     private final EventRepository eventRepository;
+    private final NotificationService notificationService;
 
-    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, MessageService messageService, FinancialService financialService, PropertyTypeService propertyTypeService, ReportRepository reportRepository, EventRepository eventRepository) {
+    public SecurityServiceImpl(UserService userService, ResidentialEntityService residentialEntityService, PropertyService propertyService, PropertyFeeService propertyFeeService, MessageService messageService, FinancialService financialService, PropertyTypeService propertyTypeService, ReportRepository reportRepository, EventRepository eventRepository, NotificationService notificationService) {
         this.userService = userService;
         this.residentialEntityService = residentialEntityService;
         this.propertyService = propertyService;
@@ -34,6 +34,7 @@ public class SecurityServiceImpl implements SecurityService {
         this.propertyTypeService = propertyTypeService;
         this.reportRepository = reportRepository;
         this.eventRepository = eventRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -219,5 +220,26 @@ public class SecurityServiceImpl implements SecurityService {
         return event.getResidentialEntity().getManager().getId().equals(getUserEntity(authentication).getId());
     }
 
+    @Override
+    public boolean checkResidentDetailsModeratorAccess(Long userId, Authentication authentication) {
+        UserEntity loggedUser = getUserEntity(authentication);
+        return residentialEntityService.findResidentialEntitiesByManagerId(loggedUser.getId())
+                .stream()
+                .flatMap(residentialEntity -> residentialEntity.getResidents().stream())
+                .anyMatch(resident -> resident.getId().equals(userId));
+    }
+
+    public boolean checkAllUserNotificationsControl(Long userId, Authentication authentication) {
+        UserEntity loggedUser = getUserEntity(authentication);
+        return userId.equals(loggedUser.getId());
+    }
+
+    @Override
+    public boolean checkSingleNotificationsControl(Long notificationId, Authentication authentication) {
+        UserEntity loggedUser = getUserEntity(authentication);
+        Notification notification = notificationService.findById(notificationId);
+
+        return notification.getUser().getId().equals(loggedUser.getId());
+    }
 }
 

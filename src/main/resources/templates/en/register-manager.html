@@ -91,15 +91,6 @@
                            type="text">
                 </fieldset>
                 <fieldset>
-                    <label for="username"><b>Username</b></label>
-                    <p class="text-danger"
-                       th:errors="*{username}" th:if="${#fields.hasErrors('username')}">Username error message</p>
-                    <p class="text-danger" th:if="${duplicatedUser}">User already exists!</p>
-                    <input autocomplete="on" id="username" placeholder="Enter username..." required th:errorclass="bg-danger"
-                           th:field="*{username}"
-                           type="text">
-                </fieldset>
-                <fieldset>
                     <label for="email"><b>Email Address</b></label>
                     <p class="text-danger"
                        th:errors="*{email}" th:if="${#fields.hasErrors('email')}">Email error message</p>

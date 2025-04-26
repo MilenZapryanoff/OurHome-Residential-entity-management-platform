@@ -63,6 +63,14 @@ class PropertyFeeServiceImplTestIT {
     @Test
     void testCreateMonthlyFeeWithoutOverpayment() {
         Property property = createTestProperty();
+
+        ResidentialEntity newResidentialEntity = createResidentialEntity();
+        residentialEntityRepository.save(newResidentialEntity);
+
+        List<ResidentialEntity> allResidentialEntities = residentialEntityRepository.findAll();
+        ResidentialEntity residentialEntityFromDb = residentialEntityRepository.findById(allResidentialEntities.get(0).getId()).orElse(null);
+        property.setResidentialEntity(residentialEntityFromDb);
+
         propertyRepository.save(property);
 
         propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
@@ -76,8 +84,16 @@ class PropertyFeeServiceImplTestIT {
     @Test
     void testCreateMonthlyFeeWithOverpaymentLowerThanMonthlyFee() {
         Property property = createTestProperty();
+        ResidentialEntity newResidentialEntity = createResidentialEntity();
+        residentialEntityRepository.save(newResidentialEntity);
+
+        List<ResidentialEntity> allResidentialEntities = residentialEntityRepository.findAll();
+        ResidentialEntity residentialEntityFromDb = residentialEntityRepository.findById(allResidentialEntities.get(0).getId()).orElse(null);
+        property.setResidentialEntity(residentialEntityFromDb);
+
         property.setOverpayment(BigDecimal.valueOf(5));
         propertyRepository.save(property);
+
 
         propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
 
@@ -109,6 +125,14 @@ class PropertyFeeServiceImplTestIT {
     void testCreateMonthlyFeeWithOverpaymentHigherThanMonthlyFee() {
         Property property = createTestProperty();
         property.setOverpayment(BigDecimal.valueOf(15));
+
+        ResidentialEntity newResidentialEntity = createResidentialEntity();
+        residentialEntityRepository.save(newResidentialEntity);
+
+        List<ResidentialEntity> allResidentialEntities = residentialEntityRepository.findAll();
+        ResidentialEntity residentialEntityFromDb = residentialEntityRepository.findById(allResidentialEntities.get(0).getId()).orElse(null);
+        property.setResidentialEntity(residentialEntityFromDb);
+
         propertyRepository.save(property);
 
         propertyFeeServiceToTest.createPeriodicalMonthlyFee(property);
@@ -320,7 +344,6 @@ class PropertyFeeServiceImplTestIT {
         manager.setEmail("test@test.test");
         manager.setFirstName("Test");
         manager.setLastName("Test");
-        manager.setUsername("testerManager");
         manager.setPassword("testPassword");
         manager.setPhoneNumber("0777777777");
         manager.setRegistrationDateTime(LocalDateTime.now());

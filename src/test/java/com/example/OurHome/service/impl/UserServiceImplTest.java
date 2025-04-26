@@ -8,6 +8,7 @@ import com.example.OurHome.repo.LanguageRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
 import com.example.OurHome.repo.RoleRepository;
 import com.example.OurHome.repo.UserRepository;
+import com.example.OurHome.service.LogService;
 import com.example.OurHome.service.MessageService;
 import com.example.OurHome.service.email.EmailService;
 import com.example.OurHome.service.tokens.ResidentialEntityToken;
@@ -57,12 +58,14 @@ class UserServiceImplTest {
     private EmailService mockEmailService;
     @Captor
     private ArgumentCaptor<UserEntity> userEntityCaptor;
+    @Mock
+    private LogService mockLogService;
 
     @BeforeEach
     void setUp() {
         serviceToTest = new UserServiceImpl(mockPasswordEncoder, mockModelMapper, mockUserRepository,
                 mockResidentialEntityToken, mockUserToken, mockResidentialEntityRepository, mockRoleRepository,
-                mockMessageService, mockEmailService, mockLanguageRepository);
+                mockMessageService, mockEmailService, mockLanguageRepository, mockLogService);
     }
 
 
@@ -80,42 +83,34 @@ class UserServiceImplTest {
         assertFalse(serviceToTest.preRegistrationEmailCheck("test@test.com"), "Email does not exist");
     }
 
-    @Test
-    void duplicatedUsernameCheck() {
-        when(mockUserRepository.findByUsername("testUser")).thenReturn(Optional.of(new UserEntity()));
-
-        assertTrue(serviceToTest.duplicatedUsernameCheck("testUser"), "Duplicated user");
-        assertFalse(serviceToTest.duplicatedUsernameCheck("testUser1"), "Not duplicated user");
-    }
 
     @Test
     void findUserByEmail() {
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("Test");
+        userEntity.setFirstName("Test");
 
         when(mockUserRepository.findByEmail("test@test.bg")).thenReturn(Optional.of(userEntity));
 
         UserEntity user = serviceToTest.findUserByEmail("test@test.bg");
 
-        assertEquals("Test", user.getUsername());
+        assertEquals("Test", user.getFirstName());
     }
 
     @Test
     void findUserById() {
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("Test");
+        userEntity.setFirstName("Test");
 
         when(mockUserRepository.findById(101L)).thenReturn(Optional.of(userEntity));
 
         UserEntity user = serviceToTest.findUserById(101L);
 
-        assertEquals("Test", user.getUsername());
+        assertEquals("Test", user.getFirstName());
     }
 
     @Test
     void createModerator() {
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("Test");
 
         ResidentialEntity residentialEntity = new ResidentialEntity();
         residentialEntity.setAccessCode("TestAccessCode");
@@ -140,7 +135,6 @@ class UserServiceImplTest {
     @Test
     void removeModerator() {
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("Test");
 
         ResidentialEntity residentialEntity = new ResidentialEntity();
         residentialEntity.setId(101L);
@@ -182,7 +176,7 @@ class UserServiceImplTest {
     void resetPassword() {
         String newPassword = "newPassword123";
         UserEntity user = new UserEntity();
-        user.setValidationCode("validationCode");
+        user.setResetCode("validationCode");
         user.setValidated(false);
 
         when(mockPasswordEncoder.encode(newPassword)).thenReturn("encodedPassword");
@@ -191,17 +185,17 @@ class UserServiceImplTest {
         serviceToTest.resetPassword(user, newPassword);
 
         assertEquals("encodedPassword", user.getPassword());
-        assertNull(user.getValidationCode());
+        assertNull(user.getResetCode());
         assertTrue(user.isValidated());
         verify(mockUserRepository, times(1)).save(user);
     }
 
     @Test
-    void verificationCodeMatch() {
+    void resetCodeMatch() {
         UserEntity userEntity = new UserEntity();
-        userEntity.setValidationCode(mockPasswordEncoder.encode("password"));
+        userEntity.setResetCode(mockPasswordEncoder.encode("password"));
 
-        assertFalse(serviceToTest.verificationCodeMatch(userEntity, "differentPassword"));
+        assertFalse(serviceToTest.resetCodeMatch(userEntity, "differentPassword"));
     }
 
     @Test
@@ -252,7 +246,6 @@ class UserServiceImplTest {
         ProfileEditBindingModel expectedProfileEditBindingModel = new ProfileEditBindingModel();
         expectedProfileEditBindingModel.setFirstName(userEntity.getFirstName());
         expectedProfileEditBindingModel.setLastName(userEntity.getLastName());
-        expectedProfileEditBindingModel.setUsername(userEntity.getUsername());
         expectedProfileEditBindingModel.setPhoneNumber(userEntity.getPhoneNumber());
 
         when(mockUserRepository.findById(1L)).thenReturn(Optional.of(userEntity));
@@ -265,7 +258,6 @@ class UserServiceImplTest {
         assertNotNull(profileEditBindingModel);
         assertEquals("User", profileEditBindingModel.getFirstName());
         assertEquals("Test", profileEditBindingModel.getLastName());
-        assertEquals("tester", profileEditBindingModel.getUsername());
         assertEquals("0885", profileEditBindingModel.getPhoneNumber());
     }
 
@@ -278,7 +270,6 @@ class UserServiceImplTest {
 
         UserEntity existingUser = new UserEntity();
         existingUser.setId(userId);
-        existingUser.setUsername("existingUser");
 
         when(mockUserRepository.findById(userId)).thenReturn(java.util.Optional.of(existingUser));
         when(mockPasswordEncoder.encode(profileEditBindingModel.getNewPassword())).thenReturn("encodedPassword");
@@ -294,27 +285,27 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testCleanUpPasswordRestoreVerificationCodes() {
+    void testCleanUpPasswordResetCodes() {
 
         List<UserEntity> usersWithCodes = new ArrayList<>();
         UserEntity user1 = new UserEntity();
         user1.setId(1L);
-        user1.setValidationCode("someVerificationCode1");
+        user1.setResetCode("someResetCode1");
         usersWithCodes.add(user1);
 
         UserEntity user2 = new UserEntity();
         user2.setId(2L);
-        user2.setValidationCode("someVerificationCode2");
+        user2.setResetCode("someResetCode2");
         usersWithCodes.add(user2);
 
-        when(mockUserRepository.findAllUsersWithVerificationCode()).thenReturn(usersWithCodes);
+        when(mockUserRepository.findAllUsersWithResetCode()).thenReturn(usersWithCodes);
 
-        serviceToTest.cleanUpPasswordRestoreVerificationCodes();
+        serviceToTest.cleanUpPasswordResetCodes();
 
         verify(mockUserRepository, times(2)).save(userEntityCaptor.capture());
 
         List<UserEntity> capturedUsers = userEntityCaptor.getAllValues();
-        assertTrue(capturedUsers.stream().allMatch(user -> user.getValidationCode() == null));
+        assertTrue(capturedUsers.stream().allMatch(user -> user.getResetCode() == null));
     }
 
     @Test
@@ -322,7 +313,6 @@ class UserServiceImplTest {
         Long userId = 1L;
         UserEntity user = new UserEntity();
         user.setId(userId);
-        user.setUsername("testUser");
 
         MockMultipartFile file = new MockMultipartFile(
                 "image",
@@ -344,7 +334,6 @@ class UserServiceImplTest {
         Long userId = 1L;
         UserEntity user = new UserEntity();
         user.setId(userId);
-        user.setUsername("testUser");
 
         MockMultipartFile file = new MockMultipartFile(
                 "image",
@@ -371,7 +360,6 @@ class UserServiceImplTest {
         userEntity.setId(1L);
         userEntity.setFirstName("User");
         userEntity.setLastName("Test");
-        userEntity.setUsername("tester");
         userEntity.setPhoneNumber("0885");
         userEntity.setPassword("testPassword");
         return userEntity;

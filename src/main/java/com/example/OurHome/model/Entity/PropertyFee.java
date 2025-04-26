@@ -51,6 +51,9 @@ public class PropertyFee {
     @ManyToOne
     private Property property;
 
+    @ManyToOne
+    private ResidentialEntity residentialEntity;
+
     public Long getId() {
         return id;
     }
@@ -161,5 +164,13 @@ public class PropertyFee {
 
     public void setNonFinancial(boolean nonFinancial) {
         this.nonFinancial = nonFinancial;
+    }
+
+    public ResidentialEntity getResidentialEntity() {
+        return residentialEntity;
+    }
+
+    public void setResidentialEntity(ResidentialEntity residentialEntity) {
+        this.residentialEntity = residentialEntity;
     }
 }
