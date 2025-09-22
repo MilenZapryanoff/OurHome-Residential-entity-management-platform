@@ -3,6 +3,7 @@ package com.example.OurHome.service.impl;
 import com.example.OurHome.model.Entity.Property;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
+import com.example.OurHome.repo.ResidentsRepository;
 import com.example.OurHome.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,19 +24,17 @@ class PropertyServiceImplTest {
 
     private PropertyServiceImpl serviceToTest;
     @Mock
-    private PropertyRepository mockPropertyRepository;
-    @Mock
     private ModelMapper mockModelMapper;
     @Mock
-    private ResidentialEntityRepository residentialEntityRepository;
-    @Mock
-    private FeeServiceImpl mockFeeService;
+    private PropertyRepository mockPropertyRepository;
     @Mock
     private MessageServiceImpl mockMessageService;
     @Mock
-    private PasswordEncoder mockPasswordEncoder;
+    private FeeServiceImpl mockFeeService;
     @Mock
     private ApplicationEventPublisher mockAapplicationEventPublisher;
+    @Mock
+    private ResidentialEntityRepository residentialEntityRepository;
     @Mock
     private PropertyRegisterRequestService mockPropertyRegisterRequestService;
     @Mock
@@ -43,13 +42,20 @@ class PropertyServiceImplTest {
     @Mock
     private NotificationService mockNotificationService;
     @Mock
+    private ResidentsService mockResidentsService;
+    @Mock
+    ResidentsRepository mockResidentsRepository;
+    @Mock
+    private PasswordEncoder mockPasswordEncoder;
+     @Mock
     private LogService mockLogService;
 
 
     @BeforeEach
     void setUp() {
-        serviceToTest = new PropertyServiceImpl(mockModelMapper, mockPropertyRepository,  mockMessageService, mockFeeService, mockAapplicationEventPublisher,
-                residentialEntityRepository, mockPropertyRegisterRequestService, mockPropertyChangeRequestService, mockNotificationService, mockLogService);
+        serviceToTest = new PropertyServiceImpl(mockModelMapper,  mockPropertyRepository,  mockMessageService,  mockFeeService,  mockAapplicationEventPublisher,
+                residentialEntityRepository,  mockPropertyRegisterRequestService,
+                mockPropertyChangeRequestService,  mockNotificationService, mockResidentsService, mockLogService, mockResidentsRepository);
     }
 
     @Test

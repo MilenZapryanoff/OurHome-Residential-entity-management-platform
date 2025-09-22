@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,13 +82,14 @@ public class ResidentialEntity {
     @Column
     private String picturePath;
 
+
     @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER)
     private List<Property> properties;
 
     @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Report> reports;
 
-    @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE )
+    @OneToMany(mappedBy = "residentialEntity", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Event> events;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "residentialEntities")

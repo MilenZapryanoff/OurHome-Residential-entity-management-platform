@@ -5,6 +5,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 public class Fee {
@@ -21,8 +22,12 @@ public class Fee {
     private BigDecimal fundRepairHabitable;
     private BigDecimal fundRepairNonHabitable;
 
+    @Column
+    private int monthlyFeeDate;
+
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "fee")
     private ResidentialEntity residentialEntity;
+
 
     public Long getId() {
         return id;
@@ -110,5 +115,13 @@ public class Fee {
 
     public void setFundRepairNonHabitable(BigDecimal fundRepairNonHabitable) {
         this.fundRepairNonHabitable = fundRepairNonHabitable;
+    }
+
+    public int getMonthlyFeeDate() {
+        return monthlyFeeDate;
+    }
+
+    public void setMonthlyFeeDate(int monthlyFeeDate) {
+        this.monthlyFeeDate = monthlyFeeDate;
     }
 }

@@ -18,7 +18,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -54,7 +54,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Properties</h3>
+            <h3>Users registry</h3>
             <div class="col-lg-12">
                 <span th:text="'Condominium ID: ' + ${residentialEntity.getId()}"></span>
             </div>
@@ -79,59 +79,40 @@
 <div class="page-content">
     <!--start of Sub-menu-->
     <div class="menu-container">
-        <div th:replace="~{/bg/fragments/adm-submenu}"></div>
+        <div th:replace="~{/en/fragments/adm-submenu}"></div>
     </div>
     <div class="content">
         <div class="container">
             <div class="text-center administration-header">
-                <h4 class="category">Individual units management</h4>
+                <h4 class="category">User access Management</h4>
                 <br>
-                <p>In this section, you will find information on all Individual units within the digital condominium.</p>
-                <p>Here, you can manage both registration requests for Individual unit owners and requests for parameter changes</p>
-                <p>In the 'Property categories' menu, you can create a categorization of the Individual units within the digital condominium, which will allow you to use different rates when calculating the monthly fees.</p>
+                <p>This section provides information about all users with access to the Digital Condominium.</p>
+                <p>From the <b>Pending Registration Requests</b> menu, you can manage incoming user requests for access to information about individual properties.</p>
             </div>
 
             <!--Active registrations section-->
             <div class="administration">
                 <!--Sub-menu buttons-->
                 <div class="table-nav-section">
-                    <a class="button nav-link"
-                       th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-regular fa-building"></i>
-                            <span>Properties</span>
-                            <sup th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
-                                 th:text="' '+ ${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())}">
-                            </sup>
-
+                    <a class="button nav-link" th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center">
+                            <i class="fa-solid fa-user-check"></i> <span>Users with access to the Digital condominium</span>
                         </div>
                     </a>
-                    <a class="button nav-link active"
-                       th:href="@{/administration/property/owners/pending/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><span>Owner registration requests</span>
+                    <a class="button active nav-link"
+                       href=#pending-registrations id="pending-registrations">
+                        <div class="text-center"><i class="fa-solid fa-user-plus"></i> <span>Pending user access requests</span>
                             <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
                                  th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
                             </sup>
                         </div>
                     </a>
                     <a class="button nav-link"
-                       th:href="@{/administration/property/owners/rejected/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><span>Rejected owner registration requests</span>
+                       th:href="@{/administration/owners/rejected/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-user-xmark"></i> <span>Rejected user access requests</span>
                             <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
                                  th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
                             </sup>
-                        </div>
-                    </a>
-                    <a class="button nav-link"
-                       th:href="@{/administration/property/change-requests/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-users-gear"></i> <span>Property data change</span>
-                            <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
-                                 th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
-                            </sup>
-                        </div>
-                    </a>
-                    <a class="button nav-link"
-                       th:href="@{/administration/property/types/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-layer-group"></i> <span>Property categories</span>
                         </div>
                     </a>
                 </div>
@@ -140,15 +121,16 @@
 
                     <!--Pending registrations header-->
                     <div class="text-center">
-                        <h4 class="category text-danger"><i class="fa-solid fa-user-plus"></i> Registration Requests for Digital Property Owners Pending Approval</h4>
+                        <h4 class="category text-danger"><i class="fa-solid fa-user-plus"></i> Pending property data access requests</h4>
                         <br>
-                        <p>This registry contains all user registration requests as owners of digital properties where the automatic property acquisition mechanism has not been triggered. The reason for this is that discrepancies have been detected between the property data entered by the user and the data previously specified by you.</p>
-                        <p>As the property manager of the digital condominium, you can approve or reject any registration request for ownership!</p>
+                        <p>The register contains all access requests for digital properties where the automatic permission mechanism has not been triggered. The reason is detected discrepancies between the property data entered by the user and the data you have predefined.</p>
+                        <p>As the building manager of the digital condominium, you can approve or reject each access request!</p>
                         <p th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0">
                             <br>
-                            Review the registration request by selecting the <i class="fa-solid fa-magnifying-glass-plus"></i> symbol.</p>
+                            Review the registration request by selecting the <i class="fa-solid fa-magnifying-glass-plus"></i> icon.</p>
                         <br>
                     </div>
+
 
 
                     <!--Records counter-->
@@ -244,16 +226,16 @@
                                 <p th:text="${property.getOwner().getPhoneNumber()}"></p>
                             </td>
                             <td th:if="${property.getPropertyRegisterRequest().isNotHabitable()}">
-                                <img alt="Property is not habitable"
+                                <img alt="Property is not occupied"
                                      src="/images/check_no.png"
-                                     style="width: 20px;" title="Property is not habitable">
+                                     style="width: 20px;" title="Property is not occupied">
                             </td>
                             <td th:unless="${property.getPropertyRegisterRequest().isNotHabitable()}">
-                                <img alt="Property is habitable" src="/images/check_yes.png"
-                                     style="width: 20px;" title="Property is habitable">
+                                <img alt="Property is occupied" src="/images/check_yes.png"
+                                     style="width: 20px;" title="Property is occupied">
                             </td>
                             <td>
-                                <a th:href="@{/administration/property/owners/pending/request/{id}(id=${property.getId()})}">
+                                <a th:href="@{/administration/owners/pending/request/{id}(id=${property.getId()})}">
                                     <small class="magnifier-expand">
                                         <i class="fa-solid fa-magnifying-glass-plus"></i></small>
                                 </a>

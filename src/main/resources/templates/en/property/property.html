@@ -16,7 +16,7 @@
     <link href="/css/our-home.css" rel="stylesheet">
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -98,13 +98,13 @@
                             th:text="${property.getOwner().firstName} + ' ' + ${property.getOwner().lastName}"></span>
                     </li>
                     <li>Monthly fee: <span
-                            th:text="${property.getTotalMonthlyFee()} + ' лв.'"></span></li>
+                            th:text="${property.getTotalMonthlyFee()} + ' EUR'"></span></li>
                     <li th:if="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} != null">
                         Total due amount: <span class="text-danger"
-                                                th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"></span>
+                                                th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' EUR'"></span>
                     </li>
                     <li th:unless="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} != null">
-                        Total due amount: <span class="text-success">0.00 лв.</span></li>
+                        Total due amount: <span class="text-success">0.00 EUR</span></li>
                 </ul>
                 <div class="main-button">
                     <div class="main-button">

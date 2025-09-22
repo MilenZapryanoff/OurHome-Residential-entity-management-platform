@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'>
 <head>
 
@@ -17,7 +17,7 @@
     <link href="/css/our-home.css" rel="stylesheet">
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+    <link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -54,12 +54,12 @@
 <!-- ***** BANNER *****-->
 <div class="page-heading header-text">
     <div class="container">
-        <h3>Edit property data</h3>
+        <h3>Промяна на данни</h3>
         <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
         <div class="err-msg" th:if="${editFailed}">
-            <h5 class="text-light">Edit failed!</h5>
+            <h5 class="text-light">Нещо се обърка!</h5>
             <p class="text-light"
-               th:text="'Something went wrong with data change of property №' + ${propertyEditBindingModel.getNumber()}"></p>
+               th:text="'Проблем при промяната на данни за самостоятелен обект №' + ${propertyEditBindingModel.getNumber()}"></p>
         </div>
     </div>
 </div>
@@ -73,25 +73,26 @@
                   th:method="POST"
                   th:object="${propertyEditBindingModel}">
                 <div class="col-lg-12">
-                    <p th:if="${property.isRejected()}">Your can now edit registration request data and resend it for
-                        approval.<br>
-                        By submitting the form your request will be sent to Condominium manager for approval.
+                    <p th:if="${property.isRejected()}">Можете да коригирате Вашата заявка за промяна на данни и да я
+                        изпратите повторно!<br>
+                        Заявката трябва да бъде одобрена от домоуправителя за да влязат в сила промените.
                     </p>
-                    <p th:unless="${property.isRejected()}">Please note, that some property <br>changes like <b>Inhabitants
-                        information,
-                        property number, floor number or property type</b> (<i>if option available</i>) may affect your
-                        monthly fee calculations. <br>New data must be approved by Condominium Manager.<br>
+                    <p th:unless="${property.isRejected()}">Моля, да имате предвид, че промяната на <br> някои данни,
+                        като информация за <b>обитатели на имота,
+                            номер на самостоятелен обект, етаж или тип на имота</b> (<i>в случай, че опцията е
+                            достъпна</i>) изискват одобрение от домоуправител.
+                        <br>Промяната на параметри ще влезе в сила след верификация от домоуправителя.<br>
                     </p>
                     <br>
                     <hr>
-                    <h5>Property information</h5>
+                    <h5>Информация за самостоятел обект</h5>
                     <br>
                     <fieldset>
-                        <label for="number"><b>Property №</b></label>
+                        <label for="number"><b>Имот №</b></label>
                         <p class="text-danger"
                            th:errors="*{number}"
                            th:if="${#fields.hasErrors('number')}">Property № error message</p>
-                        <input id="number" placeholder="Enter Property №..."
+                        <input id="number" placeholder="Въведете номер на имот..."
                                readonly="readonly"
                                th:errorclass="bg-danger"
                                th:field="*{number}"
@@ -99,12 +100,12 @@
                                type="number">
                     </fieldset>
                     <fieldset>
-                        <label for="floor"><b>Floor number</b></label>
+                        <label for="floor"><b>Етаж</b></label>
                         <p class="text-danger"
                            th:errors="*{floor}"
                            th:if="${#fields.hasErrors('floor')}">Floor error message</p>
                         <input autocomplete="on" id="floor"
-                               placeholder="Enter floor..."
+                               placeholder="Въведете етаж..."
                                required
                                th:errorclass="bg-danger" th:field="*{floor}"
                                th:value="${propertyEditBindingModel.getFloor()}"
@@ -112,7 +113,7 @@
                     </fieldset>
                     <fieldset
                             th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0 and !property.isRejected()}">
-                        <label for="propertyTypeId"><b>Property type</b></label>
+                        <label for="propertyTypeId"><b>Тип на имот</b></label>
                         <select class="form-control" id="propertyTypeId"
                                 th:field="*{propertyType}">
                             <option class="text-secondary" th:if="${property.getPropertyType() != null}"
@@ -128,11 +129,11 @@
                     </fieldset>
                     <br>
                     <fieldset>
-                        <label for="numberOfRooms"><b>Number of rooms</b> (optional)</label>
+                        <label for="numberOfRooms"><b>Брой стаи</b> (незадължително)</label>
                         <p class="text-danger"
                            th:errors="*{numberOfRooms}" th:if="${#fields.hasErrors('numberOfRooms')}">Rooms error
                             message</p>
-                        <input id="numberOfRooms" placeholder="Enter number of rooms..." th:errorclass="bg-danger"
+                        <input id="numberOfRooms" placeholder="Въведе брой на стаите..." th:errorclass="bg-danger"
                                th:field="*{numberOfRooms}"
                                type="number">
                     </fieldset>
@@ -146,42 +147,42 @@
                     <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
                             points="1.5 6 4.5 9 10.5 1"></polyline></svg>
                         </span>
-                            <span><b>Parking available</b> (optional)</span>
+                            <span><b>Наличие на паркомясто/гараж</b> (незадължително)</span>
                         </label>
                     </fieldset>
                     <br>
-                    <h5>Inhabitants information</h5>
+                    <h5>Информация за обитатели</h5>
                     <hr>
 
                     <fieldset>
-                        <label for="numberOfAdults"><b>Number of adults</b></label>
+                        <label for="numberOfAdults"><b>Брой възрастни</b></label>
                         <p class="text-danger"
                            th:errors="*{numberOfAdults}"
                            th:if="${#fields.hasErrors('numberOfAdults')}">Adults number error message</p>
                         <input autocomplete="on" id="numberOfAdults"
-                               placeholder="Enter number of adults..."
+                               placeholder="Въведе брой възрастни..."
                                required th:errorclass="bg-danger"
                                th:field="*{numberOfAdults}"
                                th:value="${propertyEditBindingModel.getNumberOfAdults()}"
                                type="number">
                     </fieldset>
                     <fieldset>
-                        <label for="numberOfChildren"><b>Number of children</b></label>
+                        <label for="numberOfChildren"><b>Брой деца</b></label>
                         <p class="text-danger"
                            th:errors="*{numberOfChildren}"
                            th:if="${#fields.hasErrors('numberOfChildren')}">Children error message</p>
-                        <input id="numberOfChildren" placeholder="Enter number of children..."
+                        <input id="numberOfChildren" placeholder="Въведете брой деца..."
                                th:errorclass="bg-danger"
                                th:field="*{numberOfChildren}"
                                th:value="${propertyEditBindingModel.getNumberOfChildren()}"
                                type="number">
                     </fieldset>
                     <fieldset>
-                        <label for="numberOfPets"><b>Number of pets</b></label>
+                        <label for="numberOfPets"><b>Брой домашни любимци</b></label>
                         <p class="text-danger"
                            th:errors="*{numberOfPets}"
                            th:if="${#fields.hasErrors('numberOfPets')}">Number of pets message</p>
-                        <input id="numberOfPets" placeholder="Enter number of pets ..."
+                        <input id="numberOfPets" placeholder="Въведете брой на дом. любимци..."
                                required
                                th:errorclass="bg-danger"
                                th:field="*{numberOfPets}"
@@ -198,16 +199,16 @@
                     <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
                             points="1.5 6 4.5 9 10.5 1"></polyline></svg>
                         </span>
-                            <span><b>Property is not habitable</b></span>
+                            <span><b>Имотът е необитаем</b></span>
                         </label>
                     </fieldset>
                     <fieldset>
                         <button class="orange-button" id="form-submit"
-                                type="submit">Submit
+                                type="submit">Потвърди
                         </button>
                         <button class="orange-button" id="form-cancel" type="button">
                             <a th:href="@{/property/details/{id}(id=${property.getId()})}">
-                                <div class="text-light">Cancel</div>
+                                <div class="text-light">Отказ</div>
                             </a>
                         </button>
                     </fieldset>
@@ -230,7 +231,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/notifications.js"></script>
-<script src="/js/input-data-control.js"></script>
+<script src="/js/resetNumberOfResidents.js"></script>
 
 </body>
 </html>

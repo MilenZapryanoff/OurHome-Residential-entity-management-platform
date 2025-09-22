@@ -1772,6 +1772,22 @@ Property Style
     margin-top: 30px;
 }
 
+/*
+---------------------------------------------
+Property edit in admin section
+---------------------------------------------
+*/
+
+.property-details {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 50px 20px 50px;
+}
+
+.property-details h6{
+    /*margin-bottom: 40px;*/
+}
+
 
 /*
 ---------------------------------------------
@@ -3719,6 +3735,7 @@ Financial -> Incomes
     width: 70%;
     transition: all 0.8s ease;
 }
+
 .deposited-incomes-container-secondary {
     border: 1px solid #e7e7e7;
     padding: 10px;
@@ -3949,9 +3966,11 @@ body {
         display: flex;
         flex-direction: column;
     }
+
     .deposited-incomes-container-main {
         width: 100%;
     }
+
     .deposited-incomes-container-secondary {
         width: 100%;
     }

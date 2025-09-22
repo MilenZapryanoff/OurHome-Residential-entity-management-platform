@@ -19,7 +19,7 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
 
     private final NotificationService notificationService;
-    private static final String WELCOME_MSG_USER_BG = "Благодарим Ви за регистрацията в платформата OurHome! За да получите достъп до Вашата дигитална етажна собственост първо трябва да се регистрирате, като собственик на имот. След като Вашата регистрация бъде завършена ще получите пълен достъп до наличната информация!";
+    private static final String WELCOME_MSG_USER_BG = "Благодарим Ви за регистрацията в платформата OurHome! За да получите достъп до Вашата дигитална етажна собственост първо трябва да заявите достъп до информация на самостоятелен обект. След като Вашата регистрация бъде завършена ще получите пълен достъп до наличната информация!";
     private static final String WELCOME_MSG_USER_ENG = "Thanks for your registration! To access your digital Condominium data you should first add a property. After your Condominium manager verifies your request you will get full access.";
     private static final String PENDING_REGISTRATION_BG = "Нова заявка за регистрация на дигитален имот, която изисква верификация от Ваша страна! Можете да достъпите заявката през меню Администрация -> Потребители -> Чакащи заявки";
     private static final String PENDING_REGISTRATION_ENG = "New digital property registration needs you verification! You can access the request via Administration panel";
@@ -290,9 +290,9 @@ public class MessageServiceImpl implements MessageService {
     public void propertyRegistrationApprovedMessage(Property property) {
 
         Message message = createMessage(property.getOwner());
-        message.setText("Вашата заявка за регистрация за самостоятелен обект № " + property.getNumber() + " в състава на етажна собственост с идентификатор: "
+        message.setText("Вашата заявка за достъп до информация за самостоятелен обект № " + property.getNumber() + " в състава на етажна собственост с идентификатор: "
                 + property.getResidentialEntity().getId() + " е ОДОБРЕНА! Разполагате с пълен достъп до информация касаеща Вашия самостоятелен обект и етажна собственост!");
-        message.setTextEn("Your registration request for property № " + property.getNumber() + " in Condominium ID: "
+        message.setTextEn("Your data access request for property № " + property.getNumber() + " in Condominium ID: "
                 + property.getResidentialEntity().getId() + " has been APPROVED! You can now access your data and reports.");
 
         messageRepository.save(message);
@@ -310,11 +310,11 @@ public class MessageServiceImpl implements MessageService {
     public void propertyRegistrationApprovedWithNoChangesMessage(Property property) {
         Message message = createMessage(property.getOwner());
 
-        message.setText("Вашата заявка за регистрация като собственик на самостоятелен обект № " + property.getNumber() + ", част от етажна собственост с идентификатор: "
+        message.setText("Вашата заявка за достъп до информация за самостоятелен обект № " + property.getNumber() + ", част от етажна собственост с идентификатор: "
                 + property.getResidentialEntity().getId() + " е ОДОБРЕНА. Установено е разминаване между данните от вашата заявка и тези, дефинирани в системата за този имот. " +
                 "Регистрацията Ви е одобрена, без да се взимат предвид данните от Вашата заявка! В случай на необходимост, може да проверите несъответствията с " +
                 "домоуправителя. При необходимост да изпратите заявка за промяна на параметри!");
-        message.setTextEn("Your registration request for property № " + property.getNumber() + " in Condominium ID: "
+        message.setTextEn("Your data access request for property № " + property.getNumber() + " in Condominium ID: "
                 + property.getResidentialEntity().getId() + " has been APPROVED. Please note that there was a discrepancy " +
                 "between the data you provided and the system's preset data for this property. " +
                 "Your input data has been ignored, and no changes have been made to the system records. " +
@@ -336,10 +336,10 @@ public class MessageServiceImpl implements MessageService {
     public void propertyRejectedMessage(Property property) {
         try {
             Message message = createMessage(property.getOwner());
-            message.setText("Вашата заявка за регистрация на самостоятелен обект  № " + property.getNumber() + " в състава на етажна собственост с идентификатор : "
+            message.setText("Вашата заявка за достъп до самостоятелен обект  № " + property.getNumber() + " в състава на етажна собственост с идентификатор : "
                     + property.getResidentialEntity().getId() + " е ОТХВЪРЛЕНА! За да разберете причината за това, моля да се свържите с Вашия домоуправител. " +
                     "В случай, че все още имате достъп до етажната собственост, може да коригирате и изпратите повторно заявката за регистрация!");
-            message.setTextEn("Your registration request for property № " + property.getNumber() + " in Condominium ID: "
+            message.setTextEn("Your data access request for property № " + property.getNumber() + " in Condominium ID: "
                     + property.getResidentialEntity().getId() + " has been REJECTED. You can contact your Condominium manager for more details " +
                     "about the reason for this action. If you still have an access to the Condominium, You can edit the record and submit " +
                     "it again.");
@@ -362,10 +362,10 @@ public class MessageServiceImpl implements MessageService {
 
         Message message = createMessage(currentOwner);
 
-        message.setText("Вие сте премахнат като собственик на самостоятелен обект № " + property.getNumber() + " в състатва на етажна собственост с идентификатор: "
-                + property.getResidentialEntity().getId() + ". За информация относно причината за това действие, моля да се обърнете към домоуправителя на дигиталната етажна собственост!");
-        message.setTextEn("You are removed as owner of individual unit No." + property.getNumber() + " in Condominium ID: "
-                + property.getResidentialEntity().getId() + ". You can contact your Condominium manager for more details " +
+        message.setText("Вашият достъп до информация за самостоятелен обект № " + property.getNumber() + " в състатва на етажна собственост с идентификатор: "
+                + property.getResidentialEntity().getId() + " е преустановен. За информация относно причината за това действие, моля да се обърнете към домоуправителя на дигиталната етажна собственост!");
+        message.setTextEn("Your access to individual unit No." + property.getNumber() + " in Condominium ID: "
+                + property.getResidentialEntity().getId() + " has been removed. You can contact your Condominium manager for more details " +
                 "about the reason for this action!");
         messageRepository.save(message);
     }
@@ -403,10 +403,10 @@ public class MessageServiceImpl implements MessageService {
 
         Message message = createMessage(property.getResidentialEntity().getManager());
         message.setText("Отказ на потребител " + ownerName + " от самостоятелен обект №" + property.getNumber() + " в състава на етажна собственост с идентификатор: "
-                + property.getResidentialEntity().getId() + ". До регистрацията на собственик, данните за този имот остават видими единствено за вас!");
+                + property.getResidentialEntity().getId() + ". До регистрацията на потребител, данните за този имот остават видими единствено за вас!");
         message.setTextEn("User " + ownerName + " has withdrawn from the individual property No. " + property.getNumber() +
                 " within the condominium ID: " + property.getResidentialEntity().getId() +
-                ". Until an owner is registered, the data for this property will remain visible only to you!");
+                ". Until an user is registered, the data for this property will remain visible only to you!");
 
         messageRepository.save(message);
     }
@@ -479,23 +479,23 @@ public class MessageServiceImpl implements MessageService {
 
             if (totalDueAmount != null) {
                 messageText = "Имате нова месечна такса за " + month + " " + year + " за сумата от " +
-                        monthlyFee + "лв. за самостоятелн обект № " + property.getNumber() + "." +
+                        monthlyFee + " EUR за самостоятелн обект № " + property.getNumber() + "." +
                         "\n" +
                         "Информация за начислените такси и дължими суми може да откриете в меню Месечни такси! " +
-                        "Общата дължима сума за този самостоятелен обект е " + totalDueAmount + " лв.";
+                        "Общата дължима сума за този самостоятелен обект е " + totalDueAmount + " EUR";
                 messageTextEn = "You have new monthly fee for " + month + " " + year + " for the amount of " +
-                        monthlyFee + "лв. for property № " + property.getNumber() + "." +
+                        monthlyFee + " EUR for property № " + property.getNumber() + "." +
                         "\n" +
                         "You can check details in your Property section." +
-                        "Total due amount for your property is " + totalDueAmount + " лв.";
+                        "Total due amount for your property is " + totalDueAmount + " EUR";
             } else {
                 messageText = "Имате нова месечна такса за " + month + " " + year + " за сумата от " +
-                        monthlyFee + "лв. за самостоятелн обект № " + property.getNumber() + "." +
+                        monthlyFee + " EUR за самостоятелн обект № " + property.getNumber() + "." +
                         "\n" +
                         "Информация за начислените такси и дължими суми може да откриете в меню Месечни такси!" +
                         "Към момента нямате натрупани текущи задължения!";
                 messageTextEn = "You have new monthly fee for " + month + " " + year + " for the amount of " +
-                        monthlyFee + "лв. for property № " + property.getNumber() + "." +
+                        monthlyFee + " EUR for property № " + property.getNumber() + "." +
                         "\n" +
                         "You can check details in your Property section." +
                         "You have no due amount";

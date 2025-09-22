@@ -53,6 +53,7 @@ public class FeeServiceImpl implements FeeService {
         fee.setAdditionalFeeNonHabitable(DEFAULT_AMOUNT);
         fee.setFundRepairHabitable(DEFAULT_AMOUNT);
         fee.setFundRepairNonHabitable(DEFAULT_AMOUNT);
+        fee.setMonthlyFeeDate(01);
         feeRepository.save(fee);
 
         return fee;

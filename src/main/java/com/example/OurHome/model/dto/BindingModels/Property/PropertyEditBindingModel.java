@@ -1,10 +1,15 @@
 package com.example.OurHome.model.dto.BindingModels.Property;
 
 import com.example.OurHome.model.Entity.PropertyClass;
+import com.example.OurHome.model.dto.BindingModels.AddressBook.AdultBindingModel;
+import com.example.OurHome.model.dto.BindingModels.AddressBook.ChildBindingModel;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PropertyEditBindingModel {
 
@@ -35,55 +40,61 @@ public class PropertyEditBindingModel {
 
     private PropertyClass propertyClass;
 
+    private String ownerFullName;
+    private String ownerPhone;
+    private String ownerEmail;
+
+    private List<AdultBindingModel> adults;
+    private List<ChildBindingModel> children;
+
     public PropertyEditBindingModel() {
+        adults = new ArrayList<>();
+        children = new ArrayList<>();
     }
 
+    @NotNull
+    @Positive(message = "Property number must be a positive digit")
     public int getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(@NotNull @Positive(message = "Property number must be a positive digit") int number) {
         this.number = number;
     }
 
-    public String getFloor() {
+    public @NotNull String getFloor() {
         return floor;
     }
 
-    public void setFloor(String floor) {
+    public void setFloor(@NotNull String floor) {
         this.floor = floor;
     }
 
+    @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
     public int getNumberOfAdults() {
         return numberOfAdults;
     }
 
-    public void setNumberOfAdults(int numberOfAdults) {
+    public void setNumberOfAdults(@PositiveOrZero(message = "Number of adults must be a positive digit or 0") int numberOfAdults) {
         this.numberOfAdults = numberOfAdults;
     }
 
+    @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
     public int getNumberOfChildren() {
         return numberOfChildren;
     }
 
-    public void setNumberOfChildren(int numberOfChildren) {
+    public void setNumberOfChildren(@PositiveOrZero(message = "Number of adults must be a positive digit or 0") int numberOfChildren) {
         this.numberOfChildren = numberOfChildren;
     }
 
+    @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
     public int getNumberOfPets() {
         return numberOfPets;
     }
 
-    public void setNumberOfPets(int numberOfPets) {
+    public void setNumberOfPets(@PositiveOrZero(message = "Number of adults must be a positive digit or 0") int numberOfPets) {
         this.numberOfPets = numberOfPets;
-    }
-
-    public boolean isNotHabitable() {
-        return notHabitable;
-    }
-
-    public void setNotHabitable(boolean notHabitable) {
-        this.notHabitable = notHabitable;
     }
 
     public String getNumberOfRooms() {
@@ -102,6 +113,14 @@ public class PropertyEditBindingModel {
         this.parkingAvailable = parkingAvailable;
     }
 
+    public boolean isNotHabitable() {
+        return notHabitable;
+    }
+
+    public void setNotHabitable(boolean notHabitable) {
+        this.notHabitable = notHabitable;
+    }
+
     public Long getPropertyType() {
         return propertyType;
     }
@@ -116,5 +135,45 @@ public class PropertyEditBindingModel {
 
     public void setPropertyClass(PropertyClass propertyClass) {
         this.propertyClass = propertyClass;
+    }
+
+    public String getOwnerFullName() {
+        return ownerFullName;
+    }
+
+    public void setOwnerFullName(String ownerFullName) {
+        this.ownerFullName = ownerFullName;
+    }
+
+    public String getOwnerPhone() {
+        return ownerPhone;
+    }
+
+    public void setOwnerPhone(String ownerPhone) {
+        this.ownerPhone = ownerPhone;
+    }
+
+    public String getOwnerEmail() {
+        return ownerEmail;
+    }
+
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail;
+    }
+
+    public List<AdultBindingModel> getAdults() {
+        return adults;
+    }
+
+    public void setAdults(List<AdultBindingModel> adults) {
+        this.adults = adults;
+    }
+
+    public List<ChildBindingModel> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<ChildBindingModel> children) {
+        this.children = children;
     }
 }

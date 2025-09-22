@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'
 >
 <head>
@@ -19,7 +19,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -76,10 +76,11 @@
             <div class="text-center administration-header">
                 <h4 class="category">Управление на самостоятелни обекти</h4>
                 <br>
-                <p>В тази секция ще откриете информация за всички самостоятелни обекти в състава на дигиталната етажна собственост.</p>
-                <p>От тук може да управлявате, както заявките за регистрация на собственик на самостоятелен обект, така и заявки за промяна на параметри.</p>
-                <p>В меню 'Категории обекти' може да създадете категоризация на самостоятелните обекти в състава на дигиталната етажна собственост, което ще ви позволи
-                    използването на различни ставки при формиране на месечните такси.</p>
+                <p>В тази секция ще откриете информация за всички самостоятелни обекти в състава на Дигиталната етажна
+                    собственост.</p>
+                <p>От тук можете да управлявате, всички заявки за промяна на параметри на Дигитален имот, за които е нужна верификация от Домоуправител.</p>
+                <p>В меню 'Категории обекти' може да създадете категоризация на самостоятелните обекти в състава на
+                    Дигиталната етажна собственост, което ще ви позволи използването на различни ставки при формиране на месечните такси.</p>
             </div>
 
             <div class="administration">
@@ -93,25 +94,9 @@
                             </sup>
                         </div>
                     </a>
-                    <a class="button nav-link"
-                       th:href="@{/administration/property/owners/pending/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><span>Заявки за регистрация на собственик</span>
-                            <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
-                                 th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
-                            </sup>
-                        </div>
-                    </a>
-                    <a class="button nav-link"
-                       th:href="@{/administration/property/owners/rejected/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><span>Отхврълени заявки за регистрация на собственик</span>
-                            <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
-                                 th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
-                            </sup>
-                        </div>
-                    </a>
-                    <a class="button nav-link"
+                                        <a class="button nav-link"
                        th:href="@{/administration/property/change-requests/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><i class="fa-solid fa-users-gear"></i> <span>Промяна на данни за имот</span>
+                        <div class="text-center"><i class="fa-solid fa-users-gear"></i> <span>Зявки за промяна на данни за имот</span>
                             <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
                                  th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
                             </sup>

@@ -19,7 +19,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -55,7 +55,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Owners registry</h3>
+            <h3>Users registry</h3>
             <div class="col-lg-12">
                 <span th:text="'Condominium ID: ' + ${residentialEntity.getId()}"></span>
             </div>
@@ -63,14 +63,21 @@
     </div>
 </div>
 
-<!-- ***** Active owners section ***** -->
+<!-- ***** Active users section ***** -->
 <div class="page-content">
     <div class="menu-container">
         <div th:replace="~{/en/fragments/adm-submenu}"></div>
     </div>
     <div class="content">
         <div class="container">
-            <!--Owners table-->
+            <div class="text-center administration-header">
+                <h4 class="category">User access Management</h4>
+                <br>
+                <p>This section provides information about all users with access to the Digital Condominium.</p>
+                <p>From the <b>Pending Registration Requests</b> menu, you can manage incoming user requests for access to information about individual properties.</p>
+            </div>
+
+            <!--Users table-->
             <div class="administration">
                 <!--Submenu nav buttons-->
                 <div class="table-nav-section">
@@ -80,28 +87,43 @@
                             <i class="fa-solid fa-user-check"></i> <span>Users with access to digital condominium</span>
                         </div>
                     </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/owners/pending/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-user-plus"></i> <span>Pending user access requests</span>
+                            <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
+                                 th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
+                            </sup>
+                        </div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/owners/rejected/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-user-xmark"></i> <span>Rejected user access requests</span>
+                            <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                 th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
+                            </sup>
+                        </div>
+                    </a>
+
 
                 </div>
 
                 <div class="info-table bottom-rounded">
-                    <h4 class="category text-center">OWNERS REGISTRY</h4>
+                    <h4 class="category text-center text-danger">Users with access to the Digital condominium</h4>
                     <br>
-                    <p>Owners section contains information about all users with access to the Condominium.</p>
-                    <p>Every user with access to this Condominium can request an ownership of a property. You will find
-                        such
-                        requests in <a
-                                th:href="@{/administration/property/owners/pending/{id}#active-registrations(id=${residentialEntity.getId()})}">Pending
-                            requests</a> section.</p>
-                    <p>If request is approved, the owner of this property updates. Otherwise, if registration request is
-                        rejected by you, the property ownership won't be changed.</p>
-                    <p>
-                        <a th:href="@{/administration/property/owners/rejected/{id}#active-registrations(id=${residentialEntity.getId()})}">Rejected
-                            requests</a>
-                        section contains information about such requests.</p>
+                    <p>The register contains information about all registered users who have access to the current Digital Condominium.</p>
+                    <p>Each user with access to the Digital Condominium can request access to information about a specific Digital Property.</p>
+                    <p>All information access requests that triggered a verification security mechanism can be found in the section <a
+                            th:href="@{/administration/owners/pending/{id}#active-registrations(id=${residentialEntity.getId()})}">Pending
+                        Registration Requests</a>.</p>
+                    <p>If the request is approved, the user is granted access to the information for the specific Digital Property. If you reject the request, it is recorded in the registry of rejected requests and the user does not receive access to the requested information!</p>
+                    <p>Information about all rejected registration requests can be found in the section <a
+                            th:href="@{/administration/owners/rejected/{id}#active-registrations(id=${residentialEntity.getId()})}">Rejected
+                        Registration Requests</a>.</p>
                     <br>
-                    <p>You can remove users from the Condominium by clicking "Remove" button. Condominium
-                        Access code can be changed as well. This will prevent unauthorized access.</p>
+                    <p>As a building manager, you can send messages to each user and manage their access to the digital condominium by granting them special permissions.
+                        You can revoke a user’s access by using the remove user option.</p>
                     <br>
+
                     <!--Start of counter-->
                     <div class="tabs-content">
                         <div class="tab-content" id="myTabContent">
@@ -126,13 +148,13 @@
 
                     <!--Start of table-->
                     <p class="text-center" th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} == 0">No registered
-                        residents</p>
+                        resident</p>
                     <table class="table text-center"
                            id="pending-requests"
                            th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0">
                         <tr>
                             <th>
-                                <p>Owner of property №</p>
+                                <p>Property №</p>
                             </th>
                             <th>
                                 <p>Avatar</p>

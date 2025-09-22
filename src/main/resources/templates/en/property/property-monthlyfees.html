@@ -18,7 +18,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -86,7 +86,7 @@
                                     <li class="text-dark">
                                         Monthly fee:
                                         <div class="info-box">
-                                            <p th:text="${property.getTotalMonthlyFee()} + ' лв.'"></p>
+                                            <p th:text="${property.getTotalMonthlyFee()} + ' EUR'"></p>
                                         </div>
                                     </li>
                                     <li th:if="${property.getTotalMonthlyFee()} > 0">
@@ -116,7 +116,7 @@
                                                         </div>
                                                         <div class="fee-calc">
                                                             <p>Fixed fee: <b
-                                                                    th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' лв.'"></b>
+                                                                    th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -130,11 +130,11 @@
                                                                     th:text="${property.getNumberOfAdults()}"></strong>
                                                             </p>
                                                             <p>Adult fee: <strong
-                                                                    th:text="${property.getResidentialEntity().getFee().getAdultFee() + 'лв.'}"></strong>
+                                                                    th:text="${property.getResidentialEntity().getFee().getAdultFee() + ' EUR'}"></strong>
                                                         </div>
                                                         <div class="fee-calc">
                                                             <p>Total amt.:
-                                                                <b th:text="${property.getNumberOfAdults()}*${property.getResidentialEntity().getFee().getAdultFee()} + ' лв.'"></b>
+                                                                <b th:text="${property.getNumberOfAdults()}*${property.getResidentialEntity().getFee().getAdultFee()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -148,11 +148,11 @@
                                                                     th:text="${property.getNumberOfChildren()}"></strong>
                                                             </p>
                                                             <p>Child fee: <strong
-                                                                    th:text="${property.getResidentialEntity().getFee().getChildFee() + 'лв.'}"></strong>
+                                                                    th:text="${property.getResidentialEntity().getFee().getChildFee() + ' EUR'}"></strong>
                                                         </div>
                                                         <div class="fee-calc">
                                                             <p>Total amt.:
-                                                                <b th:text="${property.getNumberOfChildren()}*${property.getResidentialEntity().getFee().getChildFee()} + ' лв.'"></b>
+                                                                <b th:text="${property.getNumberOfChildren()}*${property.getResidentialEntity().getFee().getChildFee()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -166,11 +166,11 @@
                                                                     th:text="${property.getNumberOfPets()}"></strong>
                                                             </p>
                                                             <p>Pet fee: <strong
-                                                                    th:text="${property.getResidentialEntity().getFee().getPetFee() + 'лв.'}"></strong>
+                                                                    th:text="${property.getResidentialEntity().getFee().getPetFee() + ' EUR'}"></strong>
                                                         </div>
                                                         <div class="fee-calc">
                                                             <p>Total amt.:
-                                                                <b th:text="${property.getNumberOfPets()}*${property.getResidentialEntity().getFee().getPetFee()} + ' лв.'"></b>
+                                                                <b th:text="${property.getNumberOfPets()}*${property.getResidentialEntity().getFee().getPetFee()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -181,7 +181,7 @@
                                                         </div>
                                                         <div class="fee-calc">
                                                             <p>Other fee:
-                                                                <b th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
+                                                                <b th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -194,7 +194,7 @@
                                                             <p>Fixed fee:</p>
                                                             <p>(non-habitable)</p>
                                                             <p>
-                                                                <b th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
+                                                                <b th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -207,7 +207,7 @@
                                                             <p>Other fee: </p>
                                                             <p>(non-habitable)</p>
                                                             <p>
-                                                                <b th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
+                                                                <b th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -218,7 +218,7 @@
                                                         </div>
                                                         <div class="fee-calc">
                                                             <p>Individual fee: <b
-                                                                    th:text="${property.getAdditionalPropertyFee()} + ' лв.'"></b>
+                                                                    th:text="${property.getAdditionalPropertyFee()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -230,7 +230,7 @@
                                                         </div>
                                                         <div class="fee-calc">
                                                             <p>Adjustment fee: <b class="text-danger"
-                                                                                  th:text="${property.getAdditionalPropertyFee()} + ' лв.'"></b>
+                                                                                  th:text="${property.getAdditionalPropertyFee()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -245,7 +245,7 @@
                                                         </div>
                                                         <div class="fee-calc">
                                                             <p>Fund Repair fee (non-habitable): <b
-                                                                    th:text="${property.getPropertyType().getFundRepairNotHabitable()} + ' лв.'"></b>
+                                                                    th:text="${property.getPropertyType().getFundRepairNotHabitable()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -256,7 +256,7 @@
                                                         </div>
                                                         <div class="fee-calc">
                                                             <p>Fund Repair fee (habitable): <b
-                                                                    th:text="${property.getPropertyType().getFundRepairHabitable()} + ' лв.'"></b>
+                                                                    th:text="${property.getPropertyType().getFundRepairHabitable()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -270,7 +270,7 @@
                                                         </div>
                                                         <div class="fee-calc">
                                                             <p>Fund Repair fee (non-habitable): <b
-                                                                    th:text="${property.getResidentialEntity().getFee().getFundRepairNonHabitable()} + ' лв.'"></b>
+                                                                    th:text="${property.getResidentialEntity().getFee().getFundRepairNonHabitable()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -281,7 +281,7 @@
                                                         </div>
                                                         <div class="fee-calc">
                                                             <p>Fund Repair fee (habitable): <b
-                                                                    th:text="${property.getResidentialEntity().getFee().getFundRepairHabitable()} + ' лв.'"></b>
+                                                                    th:text="${property.getResidentialEntity().getFee().getFundRepairHabitable()} + ' EUR'"></b>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -292,7 +292,7 @@
                                     <li class="text-dark">
                                         Prepaid amount:
                                         <div class="info-box">
-                                            <p th:text="${property.getOverpayment()} + ' лв.'"></p>
+                                            <p th:text="${property.getOverpayment()} + ' EUR'"></p>
                                         </div>
                                     </li>
                                     <li class="text-dark">
@@ -314,7 +314,7 @@
                                                     onclick="feesHistoryMagnifierChange()"
                                                     type="button">
                                                 <p class="text-danger"
-                                                   th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"
+                                                   th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' EUR'"
                                                    title="View fees"></p>
                                             </button>
                                         </div>
@@ -330,7 +330,7 @@
                                                     data-bs-toggle="collapse"
                                                     onclick="feesHistoryMagnifierChange()"
                                                     type="button">
-                                                <p class="text-success" title="View fees">0.00 лв.</p>
+                                                <p class="text-success" title="View fees">0.00 EUR</p>
                                             </button>
                                         </div>
                                     </li>
@@ -370,19 +370,19 @@
                                                         <td><p th:text="${propertyFee.getFeeAmount()}"></p></td>
                                                         <td>
                                                             <p th:if="${propertyFee.getOverpaidAmountStart()} > 0"
-                                                               th:text="${propertyFee.getOverpaidAmountStart()} + ' лв.'">
+                                                               th:text="${propertyFee.getOverpaidAmountStart()} + ' EUR'">
                                                             <p th:unless="${propertyFee.getOverpaidAmountStart()} > 0">
                                                                 -</p>
                                                         </td>
                                                         <td>
                                                             <p class="text-danger due-amount-field"
                                                                th:if="${!propertyFee.isPaid() and propertyFee.getDueAmount() > 0 }"
-                                                               th:text="${propertyFee.getDueAmount()} + ' лв.'">
+                                                               th:text="${propertyFee.getDueAmount()} + ' EUR'">
                                                             <p class="due-amount-field"
                                                                th:if="${!propertyFee.isPaid() and propertyFee.getOverpaidAmountStart() >= propertyFee.getFeeAmount()}"
-                                                               th:text="'0.00 лв.'">
+                                                               th:text="'0.00 EUR'">
                                                             <p th:if="${propertyFee.isPaid()}"
-                                                               th:text="'0.00 лв.'">
+                                                               th:text="'0.00 EUR'">
                                                         </td>
                                                         <td>
                                                             <p th:text="${#temporals.format(propertyFee.getPeriodStart(), 'dd-MMM-yyyy')}"></p>

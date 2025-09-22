@@ -10,6 +10,8 @@ import com.example.OurHome.service.email.EmailService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,52 +32,76 @@ public class NewMonthlyFeeScheduler {
         this.logService = logService;
     }
 
-    // This expression triggers the method on the first day of every month at 06:00:00 (intended for PROD)
-    @Scheduled(cron = "0 0 6 1 * *")
+    // This expression triggers the method every day at 04:00:00 (intended for PROD)
+    //@Scheduled(cron = "0 55 23 * * *", zone = "Europe/Sofia")
 
     // This expression triggers the method on every 50 sec. (intended for TEST)
-    //@Scheduled(cron = "*/50 * * * * *")
+    @Scheduled(cron = "*/50 * * * * *")
     public void newMonthlyFee() {
-
         try {
             List<ResidentialEntity> allResidentialEntities = residentialEntityService.findAllResidentialEntities();
 
             if (allResidentialEntities.isEmpty()) {
-                logService.warn("⚠️[NewMonthlyFeeScheduler] No Condominiums found. Skipping new monthly fees email notification.");
+                logService.warn("⚠️[NewMonthlyFeeScheduler] No Condominiums found! Skipping monthly fees generation!");
                 return;
             }
 
-            List<String> bccEmails = new ArrayList<>();
+            LocalDate today = LocalDate.now();
 
             for (ResidentialEntity residentialEntity : allResidentialEntities) {
 
-                List<Property> allProperties = residentialEntity.getProperties();
-                if (!allProperties.isEmpty()) {
+                Integer scheduledDay = null;
+                try {
+                    scheduledDay = residentialEntity.getFee() != null
+                            ? residentialEntity.getFee().getMonthlyFeeDate()
+                            : null;
+                } catch (Exception e) {
+                    logService.error("❌[NewMonthlyFeeScheduler] FAILED TO DETERMINATE scheduledDay FOR CONDOMINIUM ID: " + residentialEntity.getId() + " !", e);
+                }
 
+                //пропускаме генерирането на месечни такси за имотите в тази етажна собственост ако датата не съвпада.
+                if (!shouldRunToday(today, scheduledDay)) {
+                    continue;
+                }
+
+                List<String> bccEmails = new ArrayList<>();
+                List<Property> allProperties = residentialEntity.getProperties();
+
+                if (allProperties != null && !allProperties.isEmpty()) {
                     for (Property property : allProperties) {
                         if (property.isValidated() && property.isAutoFee()) {
                             propertyFeeService.createPeriodicalMonthlyFee(property);
 
-                            //collecting all property owners emails
-                            if (property.getOwner() != null && property.isObtained() && property.getOwner().isEventEmail()) {
+                            if (property.getOwner() != null
+                                    && property.isObtained()
+                                    && property.getOwner().isEventEmail()) {
                                 bccEmails.add(property.getOwner().getEmail());
                             }
-
                         }
                     }
                 }
 
-                //send new fee email to property owner if email list is not empty
                 if (!bccEmails.isEmpty()) {
                     emailService.newFeeEmailNotification(bccEmails, residentialEntity);
                 }
+
+                logService.info("🔄[NewMonthlyFeeScheduler] AUTOMATIC MONTHLY FEE GENERATION SUCCESSFULLY EXECUTED FOR CONDOMINIUM ID: {} ON {}!",
+                        residentialEntity.getId(), today);
             }
 
-            logService.info("\uD83D\uDD04[NewMonthlyFeeScheduler] AUTOMATIC FEE CYCLE SUCCESSFULLY EXECUTED!");
         } catch (Exception e) {
-            logService.error("❌[NewMonthlyFeeScheduler] FAILED TO EXECUTE AUTOMATIC FEE CYCLE! {}", e);
+            logService.error("❌[NewMonthlyFeeScheduler] FAILED TO EXECUTE AUTOMATIC FEE CYCLE!", e);
         }
-
-
     }
+
+    private boolean shouldRunToday(LocalDate today, Integer scheduledDay) {
+
+        if (scheduledDay == null) return false;
+        // Нормализиране, ако по някаква причина в БД е попаднало невалидно число
+        int safeDay = Math.max(1, Math.min(scheduledDay, 31));
+        int lastDay = YearMonth.from(today).lengthOfMonth();
+        int effective = Math.min(safeDay, lastDay); // ако е 31, а месецът има 30 → 30; ако февруари има 28 → 28/29
+        return today.getDayOfMonth() == effective;
+    }
+
 }

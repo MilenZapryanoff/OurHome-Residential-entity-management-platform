@@ -18,7 +18,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -137,7 +137,7 @@
                                                             <fieldset>
                                                                 <b>Total expenses for selected period</b><br>
                                                                 <h5 class="text-danger"
-                                                                    th:text="${expenseFilterBindingModel.getTotalExpensesAmount()} + ' лв.'"></h5>
+                                                                    th:text="${expenseFilterBindingModel.getTotalExpensesAmount()} + ' EUR'"></h5>
                                                                 <br>
                                                             </fieldset>
                                                         </div>
@@ -192,7 +192,7 @@
                                                     <th><p>Document</p></th>
                                                 </tr>
                                                 <tr th:each="expense : ${expenseFilterBindingModel.getExpenseList()}">
-                                                    <td><p th:text="${expense.getAmount()} + ' лв.'"></p></td>
+                                                    <td><p th:text="${expense.getAmount()} + ' EUR'"></p></td>
                                                     <td>
                                                         <p th:text="${#temporals.format(expense.getExpenseDate(), 'dd.MM.yyyy')}"></p>
                                                     </td>

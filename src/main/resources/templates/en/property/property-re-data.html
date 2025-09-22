@@ -18,7 +18,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -172,8 +172,13 @@
                                             <h5>Habitable property fee components</h5>
                                         </li>
                                         <li class="text-black">
+                                            <p><i class="fa-solid fa-calendar-days"></i> Day of month for monthly fee generation: <b
+                                                    th:text="${property.getResidentialEntity().getFee().getMonthlyFeeDate()}"></b>
+                                            </p>
+                                        </li>
+                                        <li class="text-black">
                                             <p>Fixed fee: <b
-                                                    th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' лв.'"></b>
+                                                    th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' EUR'"></b>
                                             </p>
                                             <p class="text-secondary">
                                                 <i class="fa-solid fa-house-chimney"></i><small> applies per
@@ -182,7 +187,7 @@
                                         </li>
                                         <li class="text-black">
                                             <p>Adult fee: <b
-                                                    th:text="${property.getResidentialEntity().getFee().getAdultFee()} + ' лв.'"></b>
+                                                    th:text="${property.getResidentialEntity().getFee().getAdultFee()} + ' EUR'"></b>
                                             </p>
                                             <p class="text-secondary">
                                                 <i class="fa-solid fa-person"></i><small> applies per adult</small>
@@ -190,7 +195,7 @@
                                         </li>
                                         <li class="text-black">
                                             <p>Child fee: <b
-                                                    th:text="${property.getResidentialEntity().getFee().getChildFee()} + ' лв.'"></b>
+                                                    th:text="${property.getResidentialEntity().getFee().getChildFee()} + ' EUR'"></b>
                                             </p>
                                             <p class="text-secondary">
                                                 <i class="fa-solid fa-child"></i><small> applies per child</small>
@@ -198,7 +203,7 @@
                                         </li>
                                         <li class="text-black">
                                             <p>Pet fee: <b
-                                                    th:text="${property.getResidentialEntity().getFee().getPetFee()} + ' лв.'"></b>
+                                                    th:text="${property.getResidentialEntity().getFee().getPetFee()} + ' EUR'"></b>
                                             </p>
                                             <p class="text-secondary">
                                                 <i class="fa-solid fa-dog"></i><small> applies per pet</small>
@@ -206,7 +211,7 @@
                                         </li>
                                         <li class="text-black">
                                             <p>Other Condominium fee: <b
-                                                    th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
+                                                    th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' EUR'"></b>
                                             </p>
                                             <p class="text-secondary">
                                                 <i class="fa-solid fa-gem"></i><small> applies per property</small>
@@ -217,7 +222,7 @@
                                         </li>
                                         <li class="text-black">
                                             <p>Fixed fee: <b
-                                                    th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
+                                                    th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' EUR'"></b>
                                             </p>
                                             <p class="text-secondary">
                                                 <i class="fa-solid fa-house"></i><small> applies per property</small>
@@ -225,7 +230,7 @@
                                         </li>
                                         <li class="text-black">
                                             <p>Other Condominium fee: <b
-                                                    th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
+                                                    th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' EUR'"></b>
                                             </p>
                                             <p class="text-secondary">
                                                 <i class="fa-solid fa-gem"></i><small> applies per property</small>
@@ -236,7 +241,7 @@
                                         </li>
                                         <li class="text-black">
                                             <p>Individual property specific fee: <b
-                                                    th:text="${property.getAdditionalPropertyFee()} + ' лв.'"></b></p>
+                                                    th:text="${property.getAdditionalPropertyFee()} + ' EUR'"></b></p>
                                             <p class="text-secondary">
                                                 <i class="fa-solid fa-gears"></i><small> applies for this property
                                                 only</small>

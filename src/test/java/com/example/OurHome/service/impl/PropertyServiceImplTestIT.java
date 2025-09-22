@@ -284,6 +284,9 @@ class PropertyServiceImplTestIT {
         propertyEditBindingModel.setNumberOfChildren(20);
         propertyEditBindingModel.setNumberOfPets(20);
         propertyEditBindingModel.setNotHabitable(true);
+        propertyEditBindingModel.setOwnerFullName("");
+        propertyEditBindingModel.setOwnerPhone("");
+        propertyEditBindingModel.setOwnerEmail("");
 
         Long id = null;
         List<Property> all = propertyRepository.findAll();
@@ -318,10 +321,11 @@ class PropertyServiceImplTestIT {
         PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
         propertyEditBindingModel.setFloor(String.valueOf(10));
         propertyEditBindingModel.setNumber(10);
-        propertyEditBindingModel.setNumberOfAdults(20);
-        propertyEditBindingModel.setNumberOfChildren(20);
         propertyEditBindingModel.setNumberOfPets(20);
         propertyEditBindingModel.setNotHabitable(false);
+        propertyEditBindingModel.setOwnerFullName("");
+        propertyEditBindingModel.setOwnerPhone("");
+        propertyEditBindingModel.setOwnerEmail("");
 
         List<Property> allProperties = propertyRepository.findAll();
 
@@ -331,9 +335,7 @@ class PropertyServiceImplTestIT {
         assertNotNull(property);
         assertEquals(propertyEditBindingModel.getFloor(), property.get().getFloor());
         assertEquals(propertyEditBindingModel.getNumber(), property.get().getNumber());
-        assertEquals(propertyEditBindingModel.getNumberOfChildren(), property.get().getNumberOfChildren());
         assertEquals(propertyEditBindingModel.getNumberOfPets(), property.get().getNumberOfPets());
-        assertEquals(propertyEditBindingModel.getNumberOfAdults(),property.get().getNumberOfAdults());
         assertTrue(property.get().isValidated());
     }
 
@@ -362,6 +364,9 @@ class PropertyServiceImplTestIT {
         propertyEditBindingModel.setNumberOfChildren(20);
         propertyEditBindingModel.setNumberOfPets(20);
         propertyEditBindingModel.setNotHabitable(false);
+        propertyEditBindingModel.setOwnerFullName("");
+        propertyEditBindingModel.setOwnerPhone("");
+        propertyEditBindingModel.setOwnerEmail("");
 
         Long id = null;
         List<Property> all = propertyRepository.findAll();
@@ -381,8 +386,6 @@ class PropertyServiceImplTestIT {
         assertNotNull(property);
         assertEquals(propertyEditBindingModel.getFloor(), property.get().getFloor());
         assertEquals(propertyEditBindingModel.getNumber(), property.get().getNumber());
-        assertEquals(propertyEditBindingModel.getNumberOfAdults(), property.get().getNumberOfAdults());
-        assertEquals(propertyEditBindingModel.getNumberOfChildren(), property.get().getNumberOfChildren());
         assertEquals(propertyEditBindingModel.getNumberOfPets(), property.get().getNumberOfPets());
         assertEquals(propertyEditBindingModel.isNotHabitable(), property.get().isNotHabitable());
         assertTrue(property.get().isValidated());
@@ -402,6 +405,9 @@ class PropertyServiceImplTestIT {
         propertyEditBindingModel.setNumberOfChildren(20);
         propertyEditBindingModel.setNumberOfPets(20);
         propertyEditBindingModel.setNotHabitable(true);
+        propertyEditBindingModel.setOwnerFullName("");
+        propertyEditBindingModel.setOwnerPhone("");
+        propertyEditBindingModel.setOwnerEmail("");
 
         Long id = null;
         List<Property> all = propertyRepository.findAll();
@@ -442,8 +448,6 @@ class PropertyServiceImplTestIT {
 
         assertEquals(propertyCreateBindingModel.getFloor(), newProperty.getFloor());
         assertEquals(propertyCreateBindingModel.getNumber(), newProperty.getNumber());
-        assertEquals(propertyCreateBindingModel.getNumberOfAdults(), newProperty.getNumberOfAdults());
-        assertEquals(propertyCreateBindingModel.getNumberOfChildren(), newProperty.getNumberOfChildren());
         assertEquals(propertyCreateBindingModel.getNumberOfPets(), newProperty.getNumberOfPets());
         assertEquals(propertyCreateBindingModel.isNotHabitable(), newProperty.isNotHabitable());
 
@@ -453,10 +457,11 @@ class PropertyServiceImplTestIT {
         PropertyCreateBindingModel propertyCreateBindingModel = new PropertyCreateBindingModel();
         propertyCreateBindingModel.setFloor("89");
         propertyCreateBindingModel.setNumber(89);
-        propertyCreateBindingModel.setNumberOfAdults(22);
-        propertyCreateBindingModel.setNumberOfChildren(22);
         propertyCreateBindingModel.setNumberOfPets(22);
         propertyCreateBindingModel.setNotHabitable(true);
+        propertyCreateBindingModel.setOwnerFullName("");
+        propertyCreateBindingModel.setOwnerEmail("");
+        propertyCreateBindingModel.setOwnerPhone("");
         return  propertyCreateBindingModel;
     }
 

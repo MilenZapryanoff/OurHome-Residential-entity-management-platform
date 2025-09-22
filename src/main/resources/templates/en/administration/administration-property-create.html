@@ -17,7 +17,7 @@
     <link href="/css/our-home.css" rel="stylesheet">
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+    <link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -55,12 +55,12 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Create new property</h3>
+            <h3>Create new digital property</h3>
             <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
             <div class="err-msg" th:if="${duplicatedProperty}">
-                <h5 class="text-light">Property creation failed!</h5>
+                <h5 class="text-light">New digital property creation failed!</h5>
                 <p class="text-light"
-                   th:text="'Property №' + ${propertyCreateBindingModel.getNumber()} + ' already exists in this Condominium!'"></p>
+                   th:text="'Property №' + ${propertyCreateBindingModel.getNumber()} + ' is already registered in this Condominium!'"></p>
             </div>
         </div>
     </div>
@@ -70,111 +70,366 @@
 <!-- Property create input form -->
 <div class="container">
     <div class="input-content text-center">
-        <div class="col-lg-6 center-form">
+        <div class="col-lg-12 center-form">
             <form id="input-form"
                   th:action="@{/administration/property/create/{id}(id=${residentialEntity.getId()})}"
                   th:method="POST"
                   th:object="${propertyCreateBindingModel}">
-                <div class="col-lg-12">
-                    <fieldset>
-                        <label for="number"><b>Property №</b></label>
-                        <p class="text-danger"
-                           th:errors="*{number}"
-                           th:if="${#fields.hasErrors('number')}">Property № error message</p>
-                        <input autocomplete="on" id="number"
-                               placeholder="Enter property №..."
-                               required
-                               th:errorclass="bg-danger" th:field="*{number}"
-                               th:value="${propertyCreateBindingModel.getNumber()}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <label for="floor"><b>Floor</b></label>
-                        <p class="text-danger"
-                           th:errors="*{floor}"
-                           th:if="${#fields.hasErrors('floor')}">Floor error message</p>
-                        <input autocomplete="on" id="floor"
-                               placeholder="Enter floor..."
-                               required
-                               th:errorclass="bg-danger" th:field="*{floor}"
-                               th:value="${propertyCreateBindingModel.getFloor()}"
-                               type="text">
-                    </fieldset>
-                    <fieldset>
-                        <label for="propertyTypeId"><b>Category</b></label>
-                        <select class="form-control" id="propertyClassId"
-                                th:field="*{propertyClass}">
-                            <option th:if="${propertyCreateBindingModel.getPropertyClass() == null}" th:text="'---'"
-                                    th:value="''"></option>
-                            <option th:each="propertyClass : ${@propertyClassRepository.findAll()}"
-                                    th:text="${propertyClass.name}"
-                                    th:value="${propertyClass.getId()}">
-                            </option>
-                            <option th:if="${propertyCreateBindingModel.getPropertyClass() != null}" th:text="'---'"
-                                    th:value="''"></option>
-                        </select>
-                        <br>
-                    </fieldset>
-                    <fieldset th:if="${residentialEntity.getPropertyTypes().size() > 0}">
-                        <label for="propertyTypeId"><b>Тype</b></label>
-                        <select class="form-control" id="propertyTypeId"
-                                th:field="*{propertyType}">
-                            <option th:text="'---'" th:value="''"></option>
-                            <option th:each="propertyType : ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}"
-                                    th:text="${propertyType.description}"
-                                    th:value="${propertyType.getId()}">
-                            </option>
-                        </select>
-                        <br>
-                    </fieldset>
-                    <fieldset>
-                        <label for="numberOfAdults"><b>Number of adults</b></label>
-                        <p class="text-danger"
-                           th:errors="*{numberOfAdults}"
-                           th:if="${#fields.hasErrors('numberOfAdults')}">Adults number error message</p>
-                        <input autocomplete="on" id="numberOfAdults"
-                               placeholder="Enter number of adults..."
-                               required th:errorclass="bg-danger"
-                               th:field="*{numberOfAdults}"
-                               th:value="${propertyCreateBindingModel.getNumberOfAdults()}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <label for="numberOfChildren"><b>Number of children</b></label>
-                        <p class="text-danger"
-                           th:errors="*{numberOfChildren}"
-                           th:if="${#fields.hasErrors('numberOfChildren')}">Children error message</p>
-                        <input autocomplete="on" id="numberOfChildren"
-                               placeholder="Enter number of children..."
-                               required th:errorclass="bg-danger"
-                               th:field="*{numberOfChildren}"
-                               th:value="${propertyCreateBindingModel.getNumberOfChildren()}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <label for="numberOfPets"><b>Number of pets</b></label>
-                        <p class="text-danger"
-                           th:errors="*{numberOfPets}"
-                           th:if="${#fields.hasErrors('numberOfPets')}">Number of pets error</p>
-                        <input autocomplete="on" id="numberOfPets"
-                               placeholder="Enter number of pets ..."
-                               required th:errorclass="bg-danger"
-                               th:field="*{numberOfPets}"
-                               th:value="${propertyCreateBindingModel.getNumberOfPets()}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <label for="isNotHabitable"><b>Property is not habitable</b></label>
-                        <input id="isNotHabitable" name="isNotHabitable"
-                               th:field="*{notHabitable}"
-                               type="checkbox">
-                    </fieldset>
+                <div class="row">
+                    <h6><i class="fa-solid fa-sliders"></i> Property details</h6>
+                    <div class="property-details">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <fieldset>
+                                    <label for="number"><b>Property №</b></label>
+                                    <p class="text-danger"
+                                       th:errors="*{number}"
+                                       th:if="${#fields.hasErrors('number')}">Property error message</p>
+                                    <input id="number" placeholder="Enter property number..."
+                                           required th:errorclass="bg-danger"
+                                           th:field="*{number}"
+                                           th:value="${propertyCreateBindingModel.getNumber()}"
+                                           type="number">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset>
+                                    <label for="floor"><b>Floor</b></label>
+                                    <p class="text-danger"
+                                       th:errors="*{floor}"
+                                       th:if="${#fields.hasErrors('floor')}">Floor error message</p>
+                                    <input autocomplete="on" id="floor"
+                                           placeholder="Enter floor..."
+                                           required
+                                           th:errorclass="bg-danger" th:field="*{floor}"
+                                           th:value="${propertyCreateBindingModel.getFloor()}"
+                                           type="text">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset>
+                                    <label for="propertyTypeId"><b>Property type</b></label>
+                                    <select class="form-control" id="propertyClassId"
+                                            th:field="*{propertyClass}">
+                                        <option th:if="${propertyCreateBindingModel.getPropertyClass() == null}"
+                                                th:text="'---'"
+                                                th:value="''"></option>
+                                        <option th:each="propertyClass : ${@propertyClassRepository.findAll()}"
+                                                th:text="${propertyClass.name}"
+                                                th:value="${propertyClass.getId()}">
+                                        </option>
+                                        <option th:if="${propertyCreateBindingModel.getPropertyClass() != null}"
+                                                th:text="'---'"
+                                                th:value="''"></option>
+                                    </select>
+                                    <br>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset th:if="${residentialEntity.getPropertyTypes().size() > 0}">
+                                    <label for="propertyTypeId"><b>Property category </b></label>
+                                    <select class="form-control" id="propertyTypeId"
+                                            th:field="*{propertyType}">
+                                        <option th:text="'---'" th:value="''"></option>
+                                        <option th:each="propertyType : ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}"
+                                                th:text="${propertyType.description}"
+                                                th:value="${propertyType.getId()}">
+                                        </option>
+                                    </select>
+                                    <br>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion" id="accordionExample" style="padding: 40px">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <p aria-controls="collapseOne" aria-expanded="false"
+                                   class="accordion-button collapsed"
+                                   data-bs-target="#collapseTwo" data-bs-toggle="collapse" type="button">
+                                    <span><i class="fa-regular fa-address-book" style="font-size: 20px"></i> Address book data</span>
+                                </p>
+                            </h2>
+                            <div aria-labelledby="headingTwo" class="accordion-collapse collapse"
+                                 data-bs-parent="#accordionExample"
+                                 id="collapseTwo">
+                                <div class="accordion-body">
+                                    <h6>Owner and occupants data</h6>
+                                    <div class="property-details">
+                                        <div class="row">
+                                            <div class="message">
+                                                <div class="input-content text-center user-container"
+                                                     style="padding: 30px 0">
+                                                    <div class="">
+                                                        <div class="center-form rounded" style="margin-bottom: 30px">
+                                                            <h6 class="rounded"
+                                                                style="margin-top: 30px; background-color: #d0d0d0">
+                                                                Owner's data</h6>
+                                                            <div class="row">
+                                                                <div class="col-lg-4">
+                                                                    <fieldset>
+                                                                        <br>
+                                                                        <label for="ownerFirstName"><i
+                                                                                class="fa-solid fa-user"></i> <b>Full
+                                                                            name:</b></label>
+                                                                        <input id="ownerFirstName"
+                                                                               placeholder="Enter full name..."
+                                                                               th:field="*{ownerFullName}"
+                                                                               type="text">
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <fieldset>
+                                                                        <br>
+                                                                        <label for="ownerPhone"><i
+                                                                                class="fa-solid fa-phone"></i> <b>Phone
+                                                                            number:</b></label>
+                                                                        <input id="ownerPhone"
+                                                                               placeholder="Enter phone number..."
+                                                                               th:field="*{ownerPhone}"
+                                                                               type="tel">
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <fieldset>
+                                                                        <br>
+                                                                        <label for="ownerEmail"><i
+                                                                                class="fa-solid fa-envelope"></i>
+                                                                            <b>E-mail:</b> (optional)</label>
+                                                                        <input id="ownerEmail"
+                                                                               placeholder="Enter e-mail..."
+                                                                               th:field="*{ownerEmail}"
+                                                                               type="email">
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-lg-12" style="display: flex">
+                                                                    <fieldset
+                                                                            style="display:flex;align-content: center; margin: 0 auto">
+                                                                        <input class="inp-cbx" id="rememberMe"
+                                                                               name="rememberMe"
+                                                                               style="display: none"
+                                                                               type="checkbox"/>
+                                                                        <label class="cbx" for="rememberMe">
+                                                            <span>
+                                                        <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                                                                points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                                                            </span>
+                                                                            <span>Owner occupies the property</span>
+                                                                        </label>
+                                                                    </fieldset>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <h6 class="rounded"
+                                                        style="margin-bottom: 50px; background-color: #d0d0d0">
+                                                        Occupants data
+                                                    </h6>
+                                                    <fieldset>
+                                                        <input class="inp-cbx" hidden="hidden" id="isNotHabitable"
+                                                               name="isNotHabitable"
+                                                               th:field="*{notHabitable}"
+                                                               th:value="${propertyCreateBindingModel.notHabitable}"
+                                                               type="checkbox">
+                                                        <label class="cbx" for="isNotHabitable">
+                                            <span>
+                                        <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                                                points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                                            </span>
+                                                            <span><b>The property is not occupied</b></span>
+                                                        </label>
+                                                    </fieldset>
+                                                    <br>
+                                                    <div class="resident-and-pets-section">
+                                                        <div class="center-form rounded">
+                                                            <div style="margin: 0 auto">
+                                                                <h6 class="text-danger-emphasis"
+                                                                    style="margin-top: 10px">
+                                                                    1. ADULTS
+                                                                </h6>
+                                                            </div>
+
+                                                            <p class="text-center" style="color: #646464">
+                                                                This section contains information about the number of
+                                                                <b>adult</b> inhabitants of this property. Leave blank
+                                                                in property is not occupied!</p>
+                                                            <br>
+                                                            <div id="resident-container">
+                                                                <div class="resident row" style="position: relative;"
+                                                                     th:each="adult, iterStat : *{adults}">
+                                                                    <div style="width: 18px">
+                                                                        <a class="remove-btn btn btn-sm btn-danger"
+                                                                           style="position: absolute; right: 45px; top: 10px;"
+                                                                           type="button">✕</a>
+                                                                    </div>
+                                                                    <b><i class="fa-solid fa-user text-danger"><sup
+                                                                            th:text="${iterStat.index + 1}"></sup></i></b>
+                                                                    <div class="col-lg-4">
+                                                                        <fieldset><br>
+                                                                            <label><b>Full name:</b></label>
+                                                                            <input placeholder="Enter full name..."
+                                                                                   th:field="*{adults[__${iterStat.index}__].name}"
+                                                                                   type="text">
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="col-lg-4">
+                                                                        <fieldset><br>
+                                                                            <label><i class="fa-solid fa-phone"></i> <b>Phone
+                                                                                number:</b></label>
+                                                                            <input placeholder="Enter phone number..."
+                                                                                   th:field="*{adults[__${iterStat.index}__].phone}"
+                                                                                   type="tel">
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="col-lg-4">
+                                                                        <fieldset><br>
+                                                                            <label><i class="fa-solid fa-envelope"></i>
+                                                                                <b>E-mail:</b></label>
+                                                                            <input placeholder="Enter e-mail..."
+                                                                                   th:field="*{adults[__${iterStat.index}__].email}"
+                                                                                   type="email">
+                                                                        </fieldset>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <button id="addResident"
+                                                                    style="margin: 30px 0; width: 200px" type="button">
+                                                                <i class="fa-solid fa-user-plus"></i> Add adult
+                                                            </button>
+                                                            <hr>
+                                                            <!-- Деца -->
+                                                            <div style="margin: 0 auto">
+                                                                <h6 class="text-danger-emphasis"
+                                                                    style="margin-top: 10px">
+                                                                    2. CHILDREN
+                                                                </h6>
+                                                            </div>
+                                                            <div class="col-lg-12 center-form rounded">
+                                                                <p class="text-center" style="color: #646464">This
+                                                                    section contains information about the number
+                                                                    of children <b>inhabitants</b> of this property.
+                                                                    Leave blank in property is not occupied!</p>
+                                                                <div id="children-container">
+                                                                    <br>
+                                                                    <div class="child row" style="position: relative;"
+                                                                         th:each="child, iterStat : *{children}">
+                                                                        <div style="width: 18px">
+                                                                            <a class="remove-btn btn btn-sm btn-danger"
+                                                                               style="position: absolute; right: 45px; top: 10px;"
+                                                                               type="button">✕</a>
+                                                                        </div>
+                                                                        <b><i class="fa-solid fa-child text-danger"><sup
+                                                                                th:text="${iterStat.index + 1}"></sup></i></b>
+                                                                        <div class="col-lg-6">
+                                                                            <fieldset><br>
+                                                                                <label><b>Full name:</b></label>
+                                                                                <input placeholder="Enter full name..."
+                                                                                       th:field="*{children[__${iterStat.index}__].name}"
+                                                                                       type="text">
+                                                                            </fieldset>
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <fieldset><br>
+                                                                                <label><b>Age:</b></label>
+                                                                                <input placeholder="Enter age..."
+                                                                                       th:field="*{children[__${iterStat.index}__].age}"
+                                                                                       type="text">
+                                                                            </fieldset>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <button id="addChild"
+                                                                        style="margin: 30px 0; width: 150px"
+                                                                        type="button">
+                                                                    <i class="fa-solid fa-child"></i>
+                                                                    Add child
+                                                                </button>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="col-lg-12 center-form rounded">
+                                                                <div class="col-lg-12" style="margin: 0 auto">
+                                                                    <h6 class="text-danger-emphasis"
+                                                                        style="margin-top: 30px">3. PETS</h6>
+                                                                </div>
+                                                                <small class="text-center" style="color: #646464">This
+                                                                    section provides information about pets residing on
+                                                                    the property that may need to be taken out.</small>
+                                                                <br>
+                                                                <div>
+                                                                    <br>
+                                                                    <fieldset>
+                                                                        <div class="col-lg-3" style="margin: 0 auto">
+                                                                            <label><b>Number of pets:</b>
+                                                                                <input placeholder="Enter number of pets..."
+                                                                                       required
+                                                                                       style="margin: 0"
+                                                                                       th:field="*{numberOfPets}"
+                                                                                       type="number">
+                                                                            </label>
+                                                                        </div>
+                                                                    </fieldset>
+                                                                    <p class="text-center"
+                                                                       style="color: #646464; font-size: 12px"><b>Enter
+                                                                        0 if you do not have a pet that needs to be
+                                                                        taken out!</b></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <h6>Summary of Occupants in the Individual Unit</h6>
+                                                    <div class="fee-container">
+                                                        <div class="fee-component text-center res-entity">
+                                                            <div class="fee-category">
+                                                                <i class="fa-solid fa-person"></i>
+                                                            </div>
+                                                            <div class="fee-sum">
+                                                                <p style="font-size: 0.8rem; font-weight: 500">Number of
+                                                                    adults: <h6
+                                                                    class="text-danger" id="resident-count"
+                                                                    th:text="*{adults.size()}"></h6>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="fee-component text-center res-entity">
+                                                            <div class="fee-category">
+                                                                <i class="fa-solid fa-child"></i>
+                                                            </div>
+                                                            <div class="fee-sum">
+                                                                <p style="font-size: 0.8rem; font-weight: 500">Number of
+                                                                    children: <h6
+                                                                    class="text-danger" id="child-count"
+                                                                    th:text="*{children.size()}"></h6>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="fee-component text-center res-entity">
+                                                            <div class="fee-category">
+                                                                <i class="fa-solid fa-dog"></i>
+                                                            </div>
+                                                            <div class="fee-sum">
+                                                                <p style="font-size: 0.8rem; font-weight: 500">Number of
+                                                                    pets: <h6
+                                                                    class="text-danger" id="pet-count"
+                                                                    th:text="*{numberOfPets}"></h6>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <fieldset>
                         <button class="orange-button" id="form-submit"
                                 type="submit">Submit
                         </button>
                         <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}">
-                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Cancel
+                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Back
                             </button>
                         </a>
                     </fieldset>
@@ -183,7 +438,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
@@ -198,8 +452,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/notifications.js"></script>
-<script src="/js/input-data-control.js"></script>
-
+<script src="/js/addressBook.js"></script>
 
 </body>
 </html>

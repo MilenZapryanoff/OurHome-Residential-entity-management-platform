@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'>
 <head>
 
@@ -17,7 +17,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+    <link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -81,7 +81,8 @@
                     </a>
                     <a class="button nav-link active"
                        href=#re-fees>
-                        <div class="text-center"><i class="fa-solid fa-gears"></i> <span>Ставки на етажна собственост</span>
+                        <div class="text-center"><i class="fa-solid fa-gears"></i>
+                            <span>Ставки на етажна собственост</span>
                         </div>
                     </a>
                     <a class="button nav-link"
@@ -93,8 +94,10 @@
                     <div class="text-center" id="re-fees">
                         <h4 class="text-danger">Параметризация на ставки</h4>
                         <hr>
-                        <p style="padding-bottom: 40px">В тази секция ще откриете информация за ставките на дигиталната етажна собственост.<br>
-                            Автоматичните месечни такси по имоти се изчисляват въз основа на ставките приети от общото събрание на етажната собственост.<br>
+                        <p style="padding-bottom: 40px">В тази секция ще откриете информация за ставките на дигиталната
+                            етажна собственост.<br>
+                            Автоматичните месечни такси по имоти се изчисляват въз основа на ставките приети от общото
+                            събрание на етажната собственост.<br>
                             Промените в ставките ще окажат влияние на месечните такси за следващ отчетен период.</p>
                     </div>
                     <form id="input-form" style="margin: 0; padding: 0"
@@ -147,7 +150,8 @@
                                                            for="fixedFeeNonHabitable"></label>
                                                 </fieldset>
                                             </div>
-                                            <p class="text-secondary">Твърда такса, която се начислява на всеки имот от етажната собственост.</p>
+                                            <p class="text-secondary">Твърда такса, която се начислява на всеки имот от
+                                                етажната собственост.</p>
                                             <p class="text-secondary"><i
                                                     class="fa-solid fa-house"></i><small>
                                                 прилага се към имота</small></p>
@@ -169,7 +173,8 @@
                                                 <label class="text-secondary"
                                                        for="adultFee"></label>
                                             </fieldset>
-                                            <p class="text-secondary">Такса възрастен според приетите от ОС такси. Начислява се на бр. възрастни обитаващи самостоятелния обект.</p>
+                                            <p class="text-secondary">Такса възрастен според приетите от ОС такси.
+                                                Начислява се на бр. възрастни обитаващи самостоятелния обект.</p>
                                             <p class="text-secondary"><i
                                                     class="fa-solid fa-person"></i><small>
                                                 прилага се спрямо брой възрастни обитаващи имота</small></p>
@@ -191,7 +196,8 @@
                                                 <label class="text-secondary"
                                                        for="childFee"></label>
                                             </fieldset>
-                                            <p class="text-secondary">Такса дете според приетите от ОС такси. Начислява се на бр. деца обитаващи самостоятелния обект.</p>
+                                            <p class="text-secondary">Такса дете според приетите от ОС такси. Начислява
+                                                се на бр. деца обитаващи самостоятелния обект.</p>
                                             <p class="text-secondary"><i
                                                     class="fa-solid fa-child"></i><small>
                                                 прилага се спрямо брой деца обитаващи имота</small>
@@ -214,7 +220,8 @@
                                                 <label class="text-secondary"
                                                        for="petFee"></label>
                                             </fieldset>
-                                            <p class="text-secondary">Такса домашен любимец според приетите от ОС такси. Начислява се на бр. домашни любимци обитаващи самостоятелния обект</p>
+                                            <p class="text-secondary">Такса домашен любимец според приетите от ОС такси.
+                                                Начислява се на бр. домашни любимци обитаващи самостоятелния обект</p>
                                             <p class="text-secondary"><i
                                                     class="fa-solid fa-dog"></i><small>
                                                 прилага се спрямо брой дом. любимци обитаващи имота</small></p>
@@ -260,7 +267,9 @@
                                                            for="additionalFeeNonHabitable"></label>
                                                 </fieldset>
                                             </div>
-                                            <p class="text-secondary">Възможност за дефиниране на допълнителна такса за всички самостоятелни единици в етажната собственост. Например целево събиране на средства или др.</p>
+                                            <p class="text-secondary">Възможност за дефиниране на допълнителна такса за
+                                                всички самостоятелни единици в етажната собственост. Например целево
+                                                събиране на средства или др.</p>
 
                                             <p class="text-secondary"><i
                                                     class="fa-solid fa-house"></i><small>
@@ -268,9 +277,13 @@
                                         </li>
                                         <li class="text-danger"><i
                                                 class="fa-solid fa-info-circle"></i> Формиране на месечна такса по имот:
-                                            <p class="text-secondary">Фонт "Етажна собственост" е предназначен да покрива месечните разходи на етажната собственост.</p>
-                                            <p class="text-secondary">Всяка етажна собственост определя своите месечни такси според приетите на общо събрание правила и ставки.</p>
-                                            <p class="text-secondary">Дефинирането на ставки по отделните пера Ви дава възможност за автоматично калкулиране и начисляване на месечни такси по самостоятелните единици.
+                                            <p class="text-secondary">Фонт "Етажна собственост" е предназначен да
+                                                покрива месечните разходи на етажната собственост.</p>
+                                            <p class="text-secondary">Всяка етажна собственост определя своите месечни
+                                                такси според приетите на общо събрание правила и ставки.</p>
+                                            <p class="text-secondary">Дефинирането на ставки по отделните пера Ви дава
+                                                възможност за автоматично калкулиране и начисляване на месечни такси по
+                                                самостоятелните единици.
                                             </p>
                                         </li>
                                     </ul>
@@ -282,7 +295,8 @@
                                             class="fa-solid fa-screwdriver-wrench"></i></h5>
                                     <ul class="fee-table">
                                         <li class="text-black"><b>6.</b> Фиксирана такса
-                                            <p class="text-secondary">Прилага се за всички самостоятелни единици без дефинирана категория!</p>
+                                            <p class="text-secondary">Прилага се за всички самостоятелни единици без
+                                                дефинирана категория!</p>
                                             <div class="frame">
                                                 <div class="text-black inline"><b>А.</b>
                                                     Обитаем имот:
@@ -332,7 +346,8 @@
                                         <li class="text-black"
                                             th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
                                             <b>7.</b> Фиксирана такса според категорията на имота
-                                            <p class="text-secondary">Прилага се според дефинираните ставки по категория на самостоятелния обект</p>
+                                            <p class="text-secondary">Прилага се според дефинираните ставки по категория
+                                                на самостоятелния обект</p>
                                             <div class="frame">
                                                 <div class="text-black inline"
                                                      th:each="propertyType: ${@propertyTypeRepository.findPropertyTypesByRE(residentialEntity.getId())}">
@@ -348,33 +363,79 @@
                                                     <div class="section" style="padding: 3px 15px">
                                                         <p><b>А.</b> Обитаем имот</p>
                                                         <div class="info-box">
-                                                            <i th:text="${propertyType.getFundRepairHabitable()} + ' лв.'"></i>
+                                                            <i th:text="${propertyType.getFundRepairHabitable()} + ' EUR'"></i>
                                                         </div>
                                                     </div>
                                                     <div class="section" style="padding: 3px 15px">
                                                         <p><b>Б.</b> Необитаем имот</p>
                                                         <div class="info-box">
-                                                            <i th:text="${propertyType.getFundRepairNotHabitable()} + ' лв.'"></i>
+                                                            <i th:text="${propertyType.getFundRepairNotHabitable()} + ' EUR'"></i>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <p class="text-secondary"><i class="fa-solid fa-house"></i><small>
                                                 прилага се към имота</small></p>
+                                        </li>
+                                        <li class="text-black">
+                                            <b>8.</b> Дата за начисляване на таксата
+                                            <p class="text-secondary">Избира се ден от месеца на който да се начислява
+                                                таксата!</p>
 
+                                            <fieldset>
+                                                <p class="text-danger"
+                                                   th:errors="*{monthlyFeeDate}"
+                                                   th:if="${#fields.hasErrors('monthlyFeeDate')}">Other fee error
+                                                    message</p>
+
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input
+                                                            class="form-control-sm flex-grow-1"
+                                                            id="monthlyFeeDate"
+                                                            max="31"
+                                                            min="1"
+                                                            oninput="updateMonthlyFeeLabel(this.value)"
+                                                            required
+                                                            step="1"
+                                                            th:errorclass="bg-danger"
+                                                            th:field="*{monthlyFeeDate}"
+                                                            th:value="${feeEditBindingModel.monthlyFeeDate != null ? feeEditBindingModel.monthlyFeeDate : 1}"
+                                                            type="range"
+                                                    />
+                                                    <span class="badge text-bg-danger"
+                                                          id="monthlyFeeDateLabel"
+                                                          style="min-width:3ch; text-align:center;">01</span>
+                                                </div>
+                                                <input id="originalMonthlyFeeDate"
+                                                       th:value="${feeEditBindingModel.monthlyFeeDate != null ? feeEditBindingModel.monthlyFeeDate : 1}"
+                                                       type="hidden">
+                                                <label class="text-secondary mt-1 d-block" for="monthlyFeeDate"></label>
+                                            </fieldset>
+
+
+                                            <p class="text-secondary-emphasis">
+                                                <i class="fa-solid fa-house"></i>
+                                                <small>Плъзни, за да избереш ден от месеца (от 01 до 31). <p
+                                                        class="text-danger-emphasis">Таксите се начисляват в края на
+                                                    деня!</p></small>
+                                            </p>
                                         </li>
                                         <li class="text-danger"><i
                                                 class="fa-solid fa-info-circle"></i>
                                             Формиране на месечни такси:
-                                            <p class="text-secondary">Промени по месечните ставки ще окажат влияние при формирането на месечни такси по самостоятелни единици за бъдещи периоди.</p>
+                                            <p class="text-secondary">Промени по месечните ставки ще окажат влияние при
+                                                формирането на месечни такси по самостоятелни единици за бъдещи
+                                                периоди.</p>
                                             <br>
                                             <p class="text-secondary">Месечните такси се формират както следва:</p>
                                             <p class="text-secondary"><b>I. Фонд "Етажна собственост"</b></p>
                                             <p class="text-secondary">За обитаем имот - 1А+2+3+4+5А</p>
                                             <p class="text-secondary">За необитаем имот - 1Б+5Б</p>
                                             <p class="text-secondary"><b>II. Фонд "Ремонт" </b></p>
-                                            <p class="text-secondary">За обитаем имот - 6A <b>или</b> 7A (ако е избрана категория)</p>
-                                            <p class="text-secondary">За необитаем имот - 6Б <b>или</b> 7Б (ако е избрана категория)</p>
+                                            <p class="text-secondary">За обитаем имот - 6A <b>или</b> 7A (ако е избрана
+                                                категория)</p>
+                                            <p class="text-secondary">За необитаем имот - 6Б <b>или</b> 7Б (ако е
+                                                избрана категория)</p>
                                         </li>
                                     </ul>
                                     <div class="col-lg-12">
@@ -409,7 +470,8 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/notifications.js"></script>
-
+<script src="/js/monthlyFeeDateSlider.js"></script>
+<script src="/js/monthlyFeeChangeToPastHalt.js"></script>
 
 </body>
 </html>

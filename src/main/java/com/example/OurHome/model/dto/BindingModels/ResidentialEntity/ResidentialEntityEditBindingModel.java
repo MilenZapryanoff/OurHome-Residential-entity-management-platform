@@ -1,8 +1,11 @@
 package com.example.OurHome.model.dto.BindingModels.ResidentialEntity;
 
 import com.example.OurHome.model.enums.CityName;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDate;
 
 public class ResidentialEntityEditBindingModel {
 

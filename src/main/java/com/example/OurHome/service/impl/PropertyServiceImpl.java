@@ -1,6 +1,8 @@
 package com.example.OurHome.service.impl;
 
 import com.example.OurHome.model.Entity.*;
+import com.example.OurHome.model.dto.BindingModels.AddressBook.AdultBindingModel;
+import com.example.OurHome.model.dto.BindingModels.AddressBook.ChildBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyCreateBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyEditBindingModel;
 import com.example.OurHome.model.dto.BindingModels.Property.PropertyRegisterBindingModel;
@@ -8,6 +10,7 @@ import com.example.OurHome.model.dto.BindingModels.PropertyFee.OverpaymentBindin
 import com.example.OurHome.model.dto.BindingModels.PropertyFee.PropertyFeeEditBindingModel;
 import com.example.OurHome.repo.PropertyRepository;
 import com.example.OurHome.repo.ResidentialEntityRepository;
+import com.example.OurHome.repo.ResidentsRepository;
 import com.example.OurHome.service.*;
 import com.example.OurHome.service.events.PropertyCreationEvent;
 import jakarta.transaction.Transactional;
@@ -33,11 +36,15 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyRegisterRequestService propertyRegisterRequestService;
     private final PropertyChangeRequestService propertyChangeRequestService;
     private final NotificationService notificationService;
+    private final ResidentsService residentsService;
     private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.valueOf(0.00);
     private final LogService logService;
+    private final ResidentsRepository residentsRepository;
 
 
-    public PropertyServiceImpl(ModelMapper modelMapper, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService, ApplicationEventPublisher applicationEventPublisher, ResidentialEntityRepository residentialEntityRepository, PropertyRegisterRequestService propertyRegisterRequestService, PropertyChangeRequestService propertyChangeRequestService, NotificationService notificationService, LogService logService) {
+    public PropertyServiceImpl(ModelMapper modelMapper, PropertyRepository propertyRepository, MessageService messageService, FeeService feeService, ApplicationEventPublisher applicationEventPublisher,
+                               ResidentialEntityRepository residentialEntityRepository, PropertyRegisterRequestService propertyRegisterRequestService,
+                               PropertyChangeRequestService propertyChangeRequestService, NotificationService notificationService, ResidentsService residentsService, LogService logService, ResidentsRepository residentsRepository) {
         this.modelMapper = modelMapper;
         this.propertyRepository = propertyRepository;
         this.messageService = messageService;
@@ -47,7 +54,9 @@ public class PropertyServiceImpl implements PropertyService {
         this.propertyRegisterRequestService = propertyRegisterRequestService;
         this.propertyChangeRequestService = propertyChangeRequestService;
         this.notificationService = notificationService;
+        this.residentsService = residentsService;
         this.logService = logService;
+        this.residentsRepository = residentsRepository;
     }
 
     /**
@@ -487,25 +496,45 @@ public class PropertyServiceImpl implements PropertyService {
      * @param propertyEditBindingModel the binding model with the data returning from frontend
      * @param propertyType             propertyType if set
      */
+
     @Override
     public boolean editProperty(Long id, PropertyEditBindingModel propertyEditBindingModel, PropertyType propertyType) {
+
+        String ownerFullName = propertyEditBindingModel.getOwnerFullName();
+        String ownerPhone = propertyEditBindingModel.getOwnerPhone();
+        String ownerEmail = propertyEditBindingModel.getOwnerEmail();
 
         Property property = getProperty(id);
         ResidentialEntity residentialEntity = property.getResidentialEntity();
 
-        //fail data change request if trying to duplicate existing property number AND NOT an owned-property.
+        //reject data change request if trying to duplicate existing property number AND NOT an owned-property.
         if (propertyRepository.countPropertiesByNumber(propertyEditBindingModel.getNumber()) > 0
                 && propertyEditBindingModel.getNumber() != (property.getNumber())) {
             return false;
         }
-        //reset inhabitants count if property not habitable
-        modelMapper.map(propertyEditBindingModel, property);
+
+        property.setNumber(propertyEditBindingModel.getNumber());
+        property.setPropertyClass(propertyEditBindingModel.getPropertyClass());
+        property.setFloor(propertyEditBindingModel.getFloor());
+
+        if (propertyEditBindingModel.getAdults().isEmpty() && propertyEditBindingModel.getChildren().isEmpty() && propertyEditBindingModel.getNumberOfPets() == 0) {
+            property.setNotHabitable(true);
+        } else {
+            property.setNotHabitable(propertyEditBindingModel.isNotHabitable());
+        }
 
         if (property.isNotHabitable()) {
-            property.setNumberOfPets(0);
-            property.setNumberOfChildren(0);
             property.setNumberOfAdults(0);
+            property.setNumberOfChildren(0);
+            property.setNumberOfPets(0);
+        } else {
+            property.setNumberOfAdults(propertyEditBindingModel.getAdults().size());
+            property.setNumberOfChildren(propertyEditBindingModel.getChildren().size());
+            property.setNumberOfPets(propertyEditBindingModel.getNumberOfPets());
         }
+
+        //update address book
+        residentsService.updateAddressBook(property, ownerFullName, ownerPhone, ownerEmail, propertyEditBindingModel);
 
         // Update (recalculate) property fee
         updatePropertyFee(residentialEntity, property, propertyType);
@@ -679,9 +708,11 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     /**
-     * Create single RE properties
+     * Create single RE property
      *
      * @param propertyCreateBindingModel property params from manager input
+     * @param residentialEntity the condominium where the property belongs
+     * @param propertyType type of property
      */
     @Override
     public void createSingleProperty(PropertyCreateBindingModel propertyCreateBindingModel, ResidentialEntity residentialEntity, PropertyType propertyType) {
@@ -694,15 +725,21 @@ public class PropertyServiceImpl implements PropertyService {
         newProperty.setMonthlyFeeFundRepair(feeService.calculateFundRepair(newProperty.getResidentialEntity(), newProperty));
         newProperty.setAdditionalPropertyFee(DEFAULT_AMOUNT);
         newProperty.setValidated(true);
-
+        newProperty.setOwner(null);
         if (propertyType != null) {
             newProperty.setPropertyType(propertyType);
         }
+
+        //calculation of number of occupants according to the input data about residents
+        calculateNumberOfOccupants(propertyCreateBindingModel, newProperty);
 
         //update totalMonthlyFee
         updateTotalMonthlyFee(newProperty);
 
         propertyRepository.save(newProperty);
+
+        //initialization of address book data with the input data about owner and residents
+        initializeAddressBookData(propertyCreateBindingModel, residentialEntity.getId());
 
         //publish event to create first fee.
         publishEvent(newProperty);
@@ -762,14 +799,126 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public PropertyEditBindingModel mapPropertyToEditBindingModel(Property property) {
 
-        PropertyEditBindingModel propertyEditBindingModel = new PropertyEditBindingModel();
-
-        if (property != null) {
-            propertyEditBindingModel = modelMapper.map(property, PropertyEditBindingModel.class);
+        if (property == null) {
+            return new PropertyEditBindingModel(); // празен модел при null
         }
-        return propertyEditBindingModel;
+
+        PropertyEditBindingModel model = modelMapper.map(property, PropertyEditBindingModel.class);
+
+        //adding address book data
+        for (Resident resident : property.getResidents()) {
+            if (resident.isOwner()) {
+                model.setOwnerFullName(resident.getName());
+                model.setOwnerPhone(resident.getPhone());
+                model.setOwnerEmail(resident.getEmail());
+            } else if (resident.isAdult()) {
+                model.getAdults().add(mapToAdultBindingModel(resident));
+            } else {
+                model.getChildren().add(mapToChildBindingModel(resident));
+            }
+        }
+        return model;
     }
 
+    /**
+     * Private method for initialization of address book data for this property
+     *
+     * @param propertyCreateBindingModel data from user input
+     * @param residentialEntityId        is the ID of the Residential entity
+     */
+    private void initializeAddressBookData(PropertyCreateBindingModel propertyCreateBindingModel, Long residentialEntityId) {
+
+        Property property = propertyRepository.findByPropertyNumberAndResidentialEntityId(propertyCreateBindingModel.getNumber(), residentialEntityId);
+
+        if (property != null) {
+
+            List<Resident> newResidents = new ArrayList<>();
+
+            //Step 1: Adding Adults to residents list
+            if (!propertyCreateBindingModel.getAdults().isEmpty()) {
+
+                List<AdultBindingModel> adults = propertyCreateBindingModel.getAdults();
+
+                for (AdultBindingModel adult : adults) {
+
+                    Resident resident = new Resident();
+                    resident.setAdult(true);
+                    resident.setName(adult.getName());
+                    resident.setPhone(adult.getPhone());
+                    resident.setEmail(adult.getEmail());
+                    resident.setProperty(property);
+
+                    newResidents.add(resident);
+                }
+            }
+
+            //Step 2: Adding Children to residents list
+            if (!propertyCreateBindingModel.getChildren().isEmpty()) {
+
+                List<ChildBindingModel> children = propertyCreateBindingModel.getChildren();
+
+                for (ChildBindingModel child : children) {
+
+                    Resident resident = new Resident();
+                    resident.setAdult(false);
+                    resident.setName(child.getName());
+                    resident.setAge(child.getAge());
+                    resident.setProperty(property);
+
+                    newResidents.add(resident);
+                }
+            }
+
+            //Step 3: Adding residentOwner to residents list
+            if (!propertyCreateBindingModel.getOwnerFullName().isEmpty() || !propertyCreateBindingModel.getOwnerPhone().isEmpty() || !propertyCreateBindingModel.getOwnerEmail().isEmpty()) {
+
+                Resident residentOwner = new Resident();
+                residentOwner.setAdult(true);
+                residentOwner.setOwner(true);
+                residentOwner.setName(propertyCreateBindingModel.getOwnerFullName());
+                residentOwner.setPhone(propertyCreateBindingModel.getOwnerPhone());
+                residentOwner.setEmail(propertyCreateBindingModel.getOwnerEmail());
+                residentOwner.setProperty(property);
+
+                newResidents.add(residentOwner);
+            }
+            residentsRepository.saveAll(newResidents);
+        }
+    }
+
+    /**
+     * Private method for calculation of number of occupants for a property.
+     *
+     * @param propertyCreateBindingModel input data from user.
+     * @param newProperty the new property that is creating
+     */
+    private static void calculateNumberOfOccupants(PropertyCreateBindingModel propertyCreateBindingModel, Property newProperty) {
+
+        if (propertyCreateBindingModel.getAdults().isEmpty() && propertyCreateBindingModel.getChildren().isEmpty() && propertyCreateBindingModel.getNumberOfPets() == 0) {
+            //if there are no occupants, the property is automatically set as not occupied/habitable
+            newProperty.setNotHabitable(true);
+        } else {
+            //defining number of occupants by type
+            newProperty.setNumberOfAdults(propertyCreateBindingModel.getAdults().size());
+            newProperty.setNumberOfChildren(propertyCreateBindingModel.getChildren().size());
+            newProperty.setNumberOfPets(propertyCreateBindingModel.getNumberOfPets());
+        }
+    }
+
+    private AdultBindingModel mapToAdultBindingModel(Resident resident) {
+        AdultBindingModel adult = new AdultBindingModel();
+        adult.setName(resident.getName());
+        adult.setPhone(resident.getPhone());
+        adult.setEmail(resident.getEmail());
+        return adult;
+    }
+
+    private ChildBindingModel mapToChildBindingModel(Resident resident) {
+        ChildBindingModel child = new ChildBindingModel();
+        child.setName(resident.getName());
+        child.setAge(resident.getAge());
+        return child;
+    }
 
     @Override
     public boolean checkPropertiesForOwnersSet(Long residentialEntityId) {

@@ -17,7 +17,7 @@
     <link href="/css/our-home.css" rel="stylesheet">
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -107,8 +107,9 @@
                     <input id="timeFrom"
                            th:errorclass="bg-danger"
                            th:field="*{timeFrom}"
-
-                           th:type="time">
+                           th:value="${eventEditBindingModel.getTimeFrom()}"
+                           placeholder="HH:MM"
+                           pattern="^([01]\d|2[0-3]):([0-5]\d)$">
                 </fieldset>
                 <fieldset>
                     <label for="timeTo"><b>End time</b></label>
@@ -119,7 +120,8 @@
                            th:errorclass="bg-danger"
                            th:field="*{timeTo}"
                            th:value="${eventEditBindingModel.getTimeTo()}"
-                           type="time">
+                           placeholder="HH:MM"
+                           pattern="^([01]\d|2[0-3]):([0-5]\d)$">
                 </fieldset>
                 <fieldset>
                     <button class="orange-button" id="form-submit"

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
->
+      xmlns:th='http://www.thymeleaf.org'>
 <head>
 
     <meta charset="utf-8">
@@ -18,7 +17,7 @@
     <link href="/css/our-home.css" rel="stylesheet">
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+    <link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -54,121 +53,350 @@
 <!--Single property BANNER-->
 <div class="page-heading header-text">
     <div class="container">
-        <h3>Register now</h3>
+        <h3>roperty Registration</h3>
         <h4 class="text-light"><i class="fa-regular fa-building"></i></h4>
         <div class="err-msg" th:if="${registrationFailed}">
-            <h5 class="text-light">Property registration failed!</h5>
+            <h5 class="text-light">Registration failed!</h5>
             <p class="text-light"
-               th:text="'A problem occured with the registration of Property №' + ${propertyRegisterBindingModel.getNumber()}"></p>
-            <p class="text-light">Please contact your Condominium manager for further information.</p>
+               th:text="'There was a problem registering property № ' + ${propertyRegisterBindingModel.getNumber()}"></p>
+            <p class="text-light">Make sure you enter a valid property number!</p>
         </div>
     </div>
 </div>
 
+
 <div class="container">
     <div class="input-content text-center">
-        <div class="col-lg-5 center-form">
+        <div class="col-lg-12 center-form">
             <form id="input-form"
                   th:action="@{/property/add}"
                   th:method="POST"
                   th:object="${propertyRegisterBindingModel}">
-                <div class="col-lg-12">
-                    <h5 class="text-danger">Property information</h5>
-                    <br>
-                    <fieldset>
-                        <label for="residentialEntity"><b>Condominium</b></label>
-                        <select class="form-control" id="residentialEntity"
-                                th:field="*{residentialEntity}">
-                            <option th:each="residentialEntity : ${loggedUser.getResidentialEntities()}"
-                                    th:text="'ID: '+ ${residentialEntity.getId()} + ' - ' + ${residentialEntity.getCity().getName()} + |, | + ${residentialEntity.getStreetName()} + ' №' +
-                                ${residentialEntity.getStreetNumber()} + ' ' + ${residentialEntity.getEntrance()}"
-                                    th:value="${residentialEntity.getId()}">
-                            </option>
-                        </select>
-                        <a class="small" th:href="@{/property/add/new}">Add new Condominium</a>
-                    </fieldset>
-                    <fieldset>
-                        <br>
-                        <label for="number"><b>Property №</b></label>
-                        <p class="text-danger"
-                           th:errors="*{number}" th:if="${#fields.hasErrors('number')}">Property № error message</p>
-                        <input id="number" placeholder="Enter your property №..." required th:errorclass="bg-danger"
-                               th:field="*{number}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <label for="floor"><b>Floor number</b></label>
-                        <p class="text-danger"
-                           th:errors="*{floor}" th:if="${#fields.hasErrors('floor')}">Floor error message</p>
-                        <input id="floor" placeholder="Enter floor..." required th:errorclass="bg-danger"
-                               th:field="*{floor}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <label for="numberOfRooms"><b>Number of rooms</b></label>
-                        <p class="text-danger"
-                           th:errors="*{numberOfRooms}" th:if="${#fields.hasErrors('numberOfRooms')}">Rooms error message</p>
-                        <input id="numberOfRooms" placeholder="Enter number of rooms..." required th:errorclass="bg-danger"
-                               th:field="*{numberOfRooms}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <input class="inp-cbx" hidden="hidden" id="parkingAvailable" name="parkingAvailable"
-                               th:field="*{parkingAvailable}"
-                               type="checkbox">
-                        <label class="cbx" for="parkingAvailable">
-                        <span>
-                    <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
-                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>
-                        </span>
-                            <span><b>Parking available</b> (optional)</span>
-                        </label>
-                    </fieldset>
-                    <h5 class="text-danger">Inhabitants information</h5>
+                <div class="row">
+                    <div class="property-details">
+                        <div class="row">
+                            <div class="col-lg-8 center-form" style="margin-bottom: 40px">
+                                <fieldset>
+                                    <label for="residentialEntity"><b>Digital Condominium</b></label>
+                                    <select class="form-control" id="residentialEntity"
+                                            th:field="*{residentialEntity}">
+                                        <option th:each="residentialEntity : ${loggedUser.getResidentialEntities()}"
+                                                th:text="'ID: '+ ${residentialEntity.getId()} + ' - ' + ${residentialEntity.getCity().getName()} + |, | + ${residentialEntity.getStreetName()} + ' № ' +
+                                ${residentialEntity.getStreetNumber()} + ' entrance ' + ${residentialEntity.getEntrance()}"
+                                                th:value="${residentialEntity.getId()}">
+                                        </option>
+                                    </select>
+                                    <a class="small" th:href="@{/property/add/new}">Join a new condominium</a>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset>
+                                    <label for="number"><b>Property №</b></label>
+                                    <p class="text-danger"
+                                       th:errors="*{number}" th:if="${#fields.hasErrors('number')}">Property № error
+                                        message</p>
+                                    <input id="number" placeholder="Enter property number..."
+                                           required style="background-color: rgba(255,94,108,0.45)"
+                                           th:errorclass="bg-danger"
+                                           th:field="*{number}"
+                                           type="number">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset>
+                                    <label for="floor"><b>Floor</b></label>
+                                    <p class="text-danger"
+                                       th:errors="*{floor}" th:if="${#fields.hasErrors('floor')}">Floor error
+                                        message</p>
+                                    <input id="floor" placeholder="Enter floor number..."
+                                           required style="background-color: rgba(255,94,108,0.45)"
+                                           th:errorclass="bg-danger"
+                                           th:field="*{floor}"
+                                           type="number">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset>
+                                    <label for="numberOfRooms"><b>Number of rooms</b><p><small class="text-secondary">This information will be visible only to you!</small></p></label>
+
+                                    <p class="text-danger"
+                                       th:errors="*{numberOfRooms}" th:if="${#fields.hasErrors('numberOfRooms')}">Rooms
+                                        error
+                                        message</p>
+                                    <input id="numberOfRooms" placeholder="Enter number of rooms..."
+                                           th:errorclass="bg-danger"
+                                           th:field="*{numberOfRooms}"
+                                           type="number">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset style="margin-top: 40px">
+                                    <input class="inp-cbx" hidden="hidden" id="parkingAvailable" name="parkingAvailable"
+                                           th:field="*{parkingAvailable}"
+                                           type="checkbox">
+                                    <label class="cbx" for="parkingAvailable">
+                                                            <span>
+                                                        <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                                                                points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                                                            </span>
+                                        <span><b>Parking space/garage available</b></span>
+                                    </label>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
                     <hr>
-                    <fieldset>
-                        <label for="numberOfAdults"><b>Number of adults </b><small>(over 7yo)</small></label>
-                        <p class="text-danger"
-                           th:errors="*{numberOfAdults}" th:if="${#fields.hasErrors('numberOfAdults')}">Adults error message</p>
-                        <input autocomplete="on" id="numberOfAdults" placeholder="Enter number of adults..."
-                               required th:errorclass="bg-danger"
-                               th:field="*{numberOfAdults}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <label for="numberOfChildren"><b>Number of children </b><small>(under 7yo)</small></label>
-                        <p class="text-danger"
-                           th:errors="*{numberOfChildren}" th:if="${#fields.hasErrors('numberOfAdults')}">Children error message</p>
-                        <input autocomplete="on" id="numberOfChildren" placeholder="Enter number of children... (0 or more)"
-                               required th:errorclass="bg-danger"
-                               th:field="*{numberOfChildren}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <label for="numberOfPets"><b>Number of pets</b></label>
-                        <p class="text-danger"
-                           th:errors="*{numberOfPets}" th:if="${#fields.hasErrors('numberOfPets')}">Adults error message</p>
-                        <input autocomplete="on" id="numberOfPets" placeholder="Enter number of pets...(0 or more)"
-                               required th:errorclass="bg-danger"
-                               th:field="*{numberOfPets}"
-                               type="number">
-                    </fieldset>
-                    <div class="col-lg-12">
-                        <fieldset>
-                            <input class="inp-cbx" hidden="hidden" id="isNotHabitable" name="isNotHabitable"
-                                   th:field="*{notHabitable}"
-                                   type="checkbox">
-                            <label class="cbx" for="isNotHabitable">
-                        <span>
-                    <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
-                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>
-                        </span>
-                                <span><b>Property not habitable</b></span>
-                            </label>
-                        </fieldset>
+                    <h6>Information about the owner, residents and users of the property</h6>
+                    <div class="property-details">
+                        <div class="row">
+                            <div class="message">
+                                <div class="input-content text-center user-container"
+                                     style="padding: 30px 0">
+                                    <div class="">
+                                        <div class="center-form rounded" style="margin-bottom: 30px">
+                                            <h6 class="rounded"
+                                                style="margin-top: 30px; background-color: #d0d0d0">
+                                                Owner details</h6>
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <fieldset>
+                                                        <br>
+                                                        <label for="ownerFirstName"><i
+                                                                class="fa-solid fa-user"></i> <b>Full Name:</b></label>
+                                                        <input id="ownerFirstName"
+                                                               placeholder="Enter full name..."
+                                                               th:field="*{ownerFullName}"
+                                                               type="text">
+                                                    </fieldset>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <fieldset>
+                                                        <br>
+                                                        <label for="ownerPhone"><i
+                                                                class="fa-solid fa-phone"></i> <b>Phone number</b></label>
+                                                        <input id="ownerPhone"
+                                                               placeholder="Enter phone number..."
+                                                               th:field="*{ownerPhone}"
+                                                               type="tel">
+                                                    </fieldset>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <fieldset>
+                                                        <br>
+                                                        <label for="ownerEmail"><i
+                                                                class="fa-solid fa-envelope"></i>
+                                                            <b>Email:</b> (optional)</label>
+                                                        <input id="ownerEmail"
+                                                               placeholder="Enter e-mail..."
+                                                               th:field="*{ownerEmail}"
+                                                               type="email">
+                                                    </fieldset>
+                                                </div>
+                                                <div class="col-lg-12" style="display: flex">
+                                                    <fieldset
+                                                            style="display:flex;align-content: center; margin: 0 auto">
+                                                        <input class="inp-cbx" id="rememberMe"
+                                                               name="rememberMe"
+                                                               style="display: none"
+                                                               type="checkbox"/>
+                                                        <label class="cbx" for="rememberMe">
+                                                            <span>
+                                                        <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                                                                points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                                                            </span>
+                                                            <span>The owner resides in the property</span>
+                                                        </label>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 class="rounded"
+                                        style="margin-bottom: 50px; background-color: #d0d0d0">
+                                        Residents / users of the property
+                                    </h6>
+                                    <fieldset>
+                                        <input class="inp-cbx" hidden="hidden" id="isNotHabitable"
+                                               name="isNotHabitable"
+                                               th:field="*{notHabitable}"
+                                               type="checkbox">
+                                        <label class="cbx" for="isNotHabitable">
+                                            <span>
+                                        <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                                                points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                                            </span>
+                                            <span><b>The property is uninhabited</b></span>
+                                        </label>
+                                    </fieldset>
+                                    <br>
+                                    <div class="resident-and-pets-section">
+                                        <div class="center-form rounded">
+                                            <div style="margin: 0 auto">
+                                                <h6 class="text-danger-emphasis"
+                                                    style="margin-top: 10px">
+                                                    1. ADULTS
+                                                </h6>
+                                            </div>
+
+                                            <p class="text-center" style="color: #646464">This section contains information about the number of <b>adults</b> residing in the property. Leave blank if the property is currently uninhabited!</p>
+                                            <br>
+                                            <div id="resident-container">
+                                                <div class="resident row" style="position: relative;"
+                                                     th:each="adult, iterStat : *{adults}">
+                                                    <div style="width: 18px">
+                                                        <a class="remove-btn btn btn-sm btn-danger"
+                                                           style="position: absolute; right: 45px; top: 10px;"
+                                                           type="button">✕</a>
+                                                    </div>
+                                                    <b><i class="fa-solid fa-user text-danger"><sup
+                                                            th:text="${iterStat.index + 1}"></sup></i></b>
+                                                    <div class="col-lg-4">
+                                                        <fieldset><br>
+                                                            <label><b>Full name:</b></label>
+                                                            <input placeholder="Enter full name..."
+                                                                   th:field="*{adults[__${iterStat.index}__].name}"
+                                                                   type="text">
+                                                        </fieldset>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <fieldset><br>
+                                                            <label><i class="fa-solid fa-phone"></i> <b>Phone number:</b></label>
+                                                            <input placeholder="Enter phone number..."
+                                                                   th:field="*{adults[__${iterStat.index}__].phone}"
+                                                                   type="tel">
+                                                        </fieldset>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <fieldset><br>
+                                                            <label><i class="fa-solid fa-envelope"></i>
+                                                                <b>Email:</b></label>
+                                                            <input placeholder="Enter e-mail..."
+                                                                   th:field="*{adults[__${iterStat.index}__].email}"
+                                                                   type="email">
+                                                        </fieldset>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button id="addResident"
+                                                    style="margin: 30px 0; width: 200px" type="button">
+                                                <i class="fa-solid fa-user-plus"></i> Add adult
+                                            </button>
+                                            <hr>
+                                            <!-- Деца -->
+                                            <div style="margin: 0 auto">
+                                                <h6 class="text-danger-emphasis"
+                                                    style="margin-top: 10px">
+                                                    2. CHILDREN
+                                                </h6>
+                                            </div>
+                                            <div class="col-lg-12 center-form rounded">
+                                                <p class="text-center" style="color: #646464">This section contains information about the number of <b>children</b> residing in the property. Leave blank if there are no children living in this property!</p>
+                                                <div id="children-container">
+                                                    <br>
+                                                    <div class="child row" style="position: relative;"
+                                                         th:each="child, iterStat : *{children}">
+                                                        <div style="width: 18px">
+                                                            <a class="remove-btn btn btn-sm btn-danger"
+                                                               style="position: absolute; right: 45px; top: 10px;"
+                                                               type="button">✕</a>
+                                                        </div>
+                                                        <b><i class="fa-solid fa-child text-danger"><sup
+                                                                th:text="${iterStat.index + 1}"></sup></i></b>
+                                                        <div class="col-lg-6">
+                                                            <fieldset><br>
+                                                                <label><b>Full name:</b></label>
+                                                                <input placeholder="Enter full name..."
+                                                                       th:field="*{children[__${iterStat.index}__].name}"
+                                                                       type="text">
+                                                            </fieldset>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <fieldset><br>
+                                                                <label><b>Age:</b></label>
+                                                                <input placeholder="Enter child age..."
+                                                                       th:field="*{children[__${iterStat.index}__].age}"
+                                                                       type="text">
+                                                            </fieldset>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button id="addChild"
+                                                        style="margin: 30px 0; width: 150px"
+                                                        type="button">
+                                                    <i class="fa-solid fa-child"></i>
+                                                    Add child
+                                                </button>
+                                            </div>
+                                            <hr>
+                                            <div class="col-lg-12 center-form rounded">
+                                                <div class="col-lg-12" style="margin: 0 auto">
+                                                    <h6 class="text-danger-emphasis"
+                                                        style="margin-top: 30px">3. PETS</h6>
+                                                </div>
+                                                <small class="text-center" style="color: #646464">his section contains information about the pets residing in the property that require registration!</small>
+                                                <br>
+                                                <div>
+                                                    <br>
+                                                    <fieldset>
+                                                        <div class="col-lg-3" style="margin: 0 auto">
+                                                            <label><b>Number of pets:</b>
+                                                                <input placeholder="Enter number of pets..."
+                                                                       required
+                                                                       style="margin: 0"
+                                                                       th:field="*{numberOfPets}"
+                                                                       type="number">
+                                                            </label>
+                                                        </div>
+                                                    </fieldset>
+                                                    <p class="text-center"
+                                                       style="color: #646464; font-size: 12px"><b>Enter 0 if you don’t have a pet requiring registration!</b></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <h6>Summary data for property residents</h6>
+                                    <div class="fee-container">
+                                        <div class="fee-component text-center res-entity">
+                                            <div class="fee-category">
+                                                <i class="fa-solid fa-person"></i>
+                                            </div>
+                                            <div class="fee-sum">
+                                                <p style="font-size: 0.8rem; font-weight: 500">Number of adults: <h6
+                                                    class="text-danger" id="resident-count"
+                                                    th:text="*{adults.size()}"></h6>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="fee-component text-center res-entity">
+                                            <div class="fee-category">
+                                                <i class="fa-solid fa-child"></i>
+                                            </div>
+                                            <div class="fee-sum">
+                                                <p style="font-size: 0.8rem; font-weight: 500">Number of children: <h6
+                                                    class="text-danger" id="child-count"
+                                                    th:text="*{children.size()}"></h6>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="fee-component text-center res-entity">
+                                            <div class="fee-category">
+                                                <i class="fa-solid fa-dog"></i>
+                                            </div>
+                                            <div class="fee-sum">
+                                                <p style="font-size: 0.8rem; font-weight: 500">Number of pets: <h6
+                                                    class="text-danger" id="pet-count"
+                                                    th:text="*{numberOfPets}"></h6>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <fieldset>
-                        <button class="orange-button" id="form-submit" th:href="@{/property}">Add
+                        <button class="orange-button" id="form-submit" th:href="@{/property}">Submit
                         </button>
                         <button class="orange-button" id="form-cancel" type="button">
                             <a href=/property>
@@ -181,6 +409,129 @@
         </div>
     </div>
 </div>
+
+<!--============================================================================================================================================================-->
+
+<!--<div class="container">-->
+<!--    <div class="input-content text-center">-->
+<!--        <div class="col-lg-5 center-form">-->
+<!--            <form id="input-form"-->
+<!--                  th:action="@{/property/add}"-->
+<!--                  th:method="POST"-->
+<!--                  th:object="${propertyRegisterBindingModel}">-->
+<!--                <div class="col-lg-12">-->
+<!--                    <h5 class="text-danger">Информация за дигитален имот</h5>-->
+<!--                    <br>-->
+<!--                    <fieldset>-->
+<!--                        <label for="residentialEntity"><b>Дигитална Етажна Собственост (ДЕС)</b></label>-->
+<!--                        <select class="form-control" id="residentialEntity"-->
+<!--                                th:field="*{residentialEntity}">-->
+<!--                            <option th:each="residentialEntity : ${loggedUser.getResidentialEntities()}"-->
+<!--                                    th:text="'ID: '+ ${residentialEntity.getId()} + ' - ' + ${residentialEntity.getCity().getName()} + |, | + ${residentialEntity.getStreetName()} + ' №' +-->
+<!--                                ${residentialEntity.getStreetNumber()} + ' ' + ${residentialEntity.getEntrance()}"-->
+<!--                                    th:value="${residentialEntity.getId()}">-->
+<!--                            </option>-->
+<!--                        </select>-->
+<!--                        <a class="small" th:href="@{/property/add/new}">Присъедини се към нова етажна собственост</a>-->
+<!--                    </fieldset>-->
+<!--                    <fieldset>-->
+<!--                        <br>-->
+<!--                        <label for="number"><b>Имот №</b></label>-->
+<!--                        <p class="text-danger"-->
+<!--                           th:errors="*{number}" th:if="${#fields.hasErrors('number')}">Property № error message</p>-->
+<!--                        <input id="number" placeholder="Въведете номер на имот..." required th:errorclass="bg-danger"-->
+<!--                               th:field="*{number}"-->
+<!--                               type="number">-->
+<!--                    </fieldset>-->
+<!--                    <fieldset>-->
+<!--                        <label for="floor"><b>Етаж</b></label>-->
+<!--                        <p class="text-danger"-->
+<!--                           th:errors="*{floor}" th:if="${#fields.hasErrors('floor')}">Floor error message</p>-->
+<!--                        <input id="floor" placeholder="Въведете етаж..." required th:errorclass="bg-danger"-->
+<!--                               th:field="*{floor}"-->
+<!--                               type="number">-->
+<!--                    </fieldset>-->
+<!--                    <fieldset>-->
+<!--                        <label for="numberOfRooms"><b>Брой стаи</b></label>-->
+<!--                        <p class="text-danger"-->
+<!--                           th:errors="*{numberOfRooms}" th:if="${#fields.hasErrors('numberOfRooms')}">Rooms error-->
+<!--                            message</p>-->
+<!--                        <input id="numberOfRooms" placeholder="Въведете брой стаи..." required th:errorclass="bg-danger"-->
+<!--                               th:field="*{numberOfRooms}"-->
+<!--                               type="number">-->
+<!--                    </fieldset>-->
+<!--                    <fieldset>-->
+<!--                        <input class="inp-cbx" hidden="hidden" id="parkingAvailable" name="parkingAvailable"-->
+<!--                               th:field="*{parkingAvailable}"-->
+<!--                               type="checkbox">-->
+<!--                        <label class="cbx" for="parkingAvailable">-->
+<!--                        <span>-->
+<!--                    <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline-->
+<!--                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>-->
+<!--                        </span>-->
+<!--                            <span><b>Наличен паркинг</b> (незадължително)</span>-->
+<!--                        </label>-->
+<!--                    </fieldset>-->
+<!--                    <h5 class="text-danger">Информация за обитатели</h5>-->
+<!--                    <hr>-->
+<!--                    <fieldset>-->
+<!--                        <label for="numberOfAdults"><b>Брой възрастни </b></label>-->
+<!--                        <p class="text-danger"-->
+<!--                           th:errors="*{numberOfAdults}" th:if="${#fields.hasErrors('numberOfAdults')}">Adults error-->
+<!--                            message</p>-->
+<!--                        <input autocomplete="on" id="numberOfAdults" placeholder="Въведете брой възрастни..."-->
+<!--                               required th:errorclass="bg-danger"-->
+<!--                               th:field="*{numberOfAdults}"-->
+<!--                               type="number">-->
+<!--                    </fieldset>-->
+<!--                    <fieldset>-->
+<!--                        <label for="numberOfChildren"><b>Брой деца </b></label>-->
+<!--                        <p class="text-danger"-->
+<!--                           th:errors="*{numberOfChildren}" th:if="${#fields.hasErrors('numberOfAdults')}">Children error-->
+<!--                            message</p>-->
+<!--                        <input autocomplete="on" id="numberOfChildren" placeholder="Въведете брой деца... (0 or more)"-->
+<!--                               required th:errorclass="bg-danger"-->
+<!--                               th:field="*{numberOfChildren}"-->
+<!--                               type="number">-->
+<!--                    </fieldset>-->
+<!--                    <fieldset>-->
+<!--                        <label for="numberOfPets"><b>Брой дом. любимци</b></label>-->
+<!--                        <p class="text-danger"-->
+<!--                           th:errors="*{numberOfPets}" th:if="${#fields.hasErrors('numberOfPets')}">Adults error-->
+<!--                            message</p>-->
+<!--                        <input autocomplete="on" id="numberOfPets" placeholder="Брой дом. любимци...(0 or more)"-->
+<!--                               required th:errorclass="bg-danger"-->
+<!--                               th:field="*{numberOfPets}"-->
+<!--                               type="number">-->
+<!--                    </fieldset>-->
+<!--                    <div class="col-lg-12">-->
+<!--                        <fieldset>-->
+<!--                            <input class="inp-cbx" hidden="hidden" id="isNotHabitable" name="isNotHabitable"-->
+<!--                                   th:field="*{notHabitable}"-->
+<!--                                   type="checkbox">-->
+<!--                            <label class="cbx" for="isNotHabitable">-->
+<!--                        <span>-->
+<!--                    <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline-->
+<!--                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>-->
+<!--                        </span>-->
+<!--                                <span><b>Имотът е необитаем</b></span>-->
+<!--                            </label>-->
+<!--                        </fieldset>-->
+<!--                    </div>-->
+<!--                    <fieldset>-->
+<!--                        <button class="orange-button" id="form-submit" th:href="@{/property}">Потвърди-->
+<!--                        </button>-->
+<!--                        <button class="orange-button" id="form-cancel" type="button">-->
+<!--                            <a href=/property>-->
+<!--                                <div class="text-light">Отказ</div>-->
+<!--                            </a>-->
+<!--                        </button>-->
+<!--                    </fieldset>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 
 <!-- Footer -->
@@ -196,7 +547,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/notifications.js"></script>
-<script src="/js/input-data-control.js"></script>
+<script src="/js/addressBook.js"></script>
 
 </body>
 </html>

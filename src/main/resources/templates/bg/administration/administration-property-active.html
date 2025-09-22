@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'>
 <head>
 
@@ -18,7 +18,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+    <link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -74,13 +74,11 @@
             <div class="text-center administration-header">
                 <h4 class="category">Управление на самостоятелни обекти</h4>
                 <br>
-                <p>В тази секция ще откриете информация за всички самостоятелни обекти в състава на дигиталната етажна
+                <p>В тази секция ще откриете информация за всички самостоятелни обекти в състава на Дигиталната етажна
                     собственост.</p>
-                <p>От тук може да управлявате, както заявките за регистрация на собственик на самостоятелен обект, така
-                    и заявки за промяна на параметри.</p>
+                <p>От тук можете да управлявате, всички заявки за промяна на параметри на Дигитален имот, за които е нужна верификация от Домоуправител.</p>
                 <p>В меню 'Категории обекти' може да създадете категоризация на самостоятелните обекти в състава на
-                    дигиталната етажна собственост, което ще ви позволи
-                    използването на различни ставки при формиране на месечните такси.</p>
+                    Дигиталната етажна собственост, което ще ви позволи използването на различни ставки при формиране на месечните такси.</p>
             </div>
 
             <!--Active registrations section-->
@@ -98,25 +96,9 @@
                         </div>
                     </a>
                     <a class="button nav-link"
-                       th:href="@{/administration/property/owners/pending/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><span>Заявки за регистрация на собственик</span>
-                            <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
-                                 th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
-                            </sup>
-                        </div>
-                    </a>
-                    <a class="button nav-link"
-                       th:href="@{/administration/property/owners/rejected/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><span>Отхврълени заявки за регистрация на собственик</span>
-                            <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
-                                 th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
-                            </sup>
-                        </div>
-                    </a>
-                    <a class="button nav-link"
                        th:href="@{/administration/property/change-requests/{id}(id=${residentialEntity.getId()})}">
                         <div class="text-center"><i class="fa-solid fa-users-gear"></i>
-                            <span>Промяна на данни за имот</span>
+                            <span>Заявки за промяна на данни за имот</span>
                             <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
                                  th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
                             </sup>
@@ -137,11 +119,9 @@
                     <br>
                     <p>Регистъра съдържа информация за всички самостоятелни обекти в състава на тази етажна
                         собственост.</p>
-                    <p>От тук може да променяте данни по индивидуалните обекти, да премахвате потребители, като
-                        собственици на имоти, както и да получавате информация
-                        за наличие на заявки за регистрация на собственик или заявки за промяна на параметри по
-                        индивидуални обекти.</p>
-                    <p>Задръжте курсора на мишката върху символите за събитие, за да разберете повече за събитието.</p>
+                    <p>От тук може да променяте данни по индивидуалните обекти, да премахвате достъп на потребители до
+                        самостоятелни обекти, както и да управлявате заявки за промяна на параметри по тези обекти.</p>
+                    <p>Задръжте курсора на мишката върху символите за събитие, за да разберете повече за текущото състояние.</p>
 
                     <div class="due-amounts-header" style="padding: 10px 0">
                         <!--Records counter-->
@@ -178,13 +158,13 @@
                                 <p>Статус на имот</p>
                             </th>
                             <th class="gray-field">
-                                <p>Собственик</p>
+                                <p>Потреб. достъп</p>
                             </th>
                             <th class="gray-field">
-                                <p>Статус собств.</p>
+                                <p>Статус достъп</p>
                             </th>
                             <th class="gray-field">
-                                <p>Контрол собств.</p>
+                                <p>Контрол достъп</p>
                             </th>
                             <th>
                                 <p>Клас</p>
@@ -209,10 +189,7 @@
                                 <p>Имотът е обитаем</p>
                             </th>
                             <th>
-                                <p>Промени</p>
-                            </th>
-                            <th>
-                                <p>Изтрий</p>
+                                <p>Управление</p>
                             </th>
                         </tr>
                         <tr th:each="property: ${@propertyRepository.findAllPropertiesByResidentialEntity(residentialEntity.getId())}">
@@ -248,24 +225,24 @@
                                       th:if="${property.getPropertyChangeRequest() != null} and ${property.getPropertyChangeRequest().isRejected() == false} and ${property.isValidated()}">
                                     <button type="submit">
                                         <i class="fa-solid fa-triangle-exclamation text-danger"
-                                           title="Заявка от собственик за промяна на данни"></i>
+                                           title="Заявка от потребител за промяна на данни"></i>
                                     </button>
                                 </form>
                                 <div th:if="${property.getPropertyRegisterRequest() != null} and ${property.isValidated()}">
                                     <form class="form-container"
-                                          th:action="@{/administration/property/owners/pending/{id}#pending-registrations (id=${residentialEntity.getId()})}"
+                                          th:action="@{/administration/owners/pending/{id}#pending-registrations (id=${residentialEntity.getId()})}"
                                           th:if="${property.getOwner() != null} AND ${!property.isObtained()} AND ${!property.isRejected()}">
                                         <button type="submit">
                                             <i class="fa-solid fa-triangle-exclamation warning"
-                                               title="Чакаща заявка за регистрация на собственик"></i>
+                                               title="Чакаща заявка за регистрация на потребител"></i>
                                         </button>
                                     </form>
                                     <form class="form-container"
-                                          th:action="@{/administration/property/owners/rejected/{id}#rejected-registrations (id=${residentialEntity.getId()})}"
+                                          th:action="@{/administration/owners/rejected/{id}#rejected-registrations (id=${residentialEntity.getId()})}"
                                           th:if="${property.isRejected()}">
                                         <button type="submit">
                                             <i class="fa-solid fa-triangle-exclamation text-danger"
-                                               title="Отхвърлена заявка за регистрация на собственик"></i>
+                                               title="Отхвърлена заявка за регистрация на потребител"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -282,22 +259,22 @@
                                 </a>
                                 <p th:if="(${!property.isObtained()} and ${property.getOwner() == null})">
                                     <i class="fa-solid fa-user-large-slash help" style="font-size: 0.85em"
-                                       title="Този дигитален имот няма регистриран собственик"></i>
+                                       title="Този дигитален имот няма регистриран потребител"></i>
                                 </p>
                             </td>
                             <td class="gray-field">
                                 <p th:if="${property.getOwner() != null} AND ${!property.isObtained()} AND ${!property.isRejected()}">
-                                    <a th:href="@{/administration/property/owners/pending/{id}#pending-registrations (id=${id})}">
+                                    <a th:href="@{/administration/owners/pending/{id}#pending-registrations (id=${id})}">
                                         <i class="fa-solid fa-user-clock warning"
-                                           title="Чакаща заявка за регистрация на собственик"></i></a>
+                                           title="Чакаща заявка за регистрация на потребител"></i></a>
                                 </p>
                                 <p th:if="${property.isRejected()}">
-                                    <a th:href="@{/administration/property/owners/rejected/{id}#rejected-registrations (id=${id})}">
+                                    <a th:href="@{/administration/owners/rejected/{id}#rejected-registrations (id=${id})}">
                                         <i class="fa-solid fa-user-gear text-danger"
-                                           title="Отхвърлена заявка за регистрация на собственик"></i></a>
+                                           title="Отхвърлена заявка за регистрация на потребител"></i></a>
                                 </p>
                                 <p class="help" th:if="${property.getOwner()} != null and ${property.isObtained()}"
-                                   title="Успешна регистрация на собственик!">OK</p>
+                                   title="Успешна регистрация на потребител!">OK</p>
                                 <p th:if="${property.getOwner()} == null and ${!property.isObtained()}">-</p>
                             </td>
                             <td class="gray-field">
@@ -315,7 +292,7 @@
                                     <button class="modal-button" type="button">
                                         <p>
                                             <i class="table-button"
-                                               title="Премахни този потребител като собственик на имота">
+                                               title="Премахни достъпа на този потребител до имота">
                                                 <i class="fa-solid fa-user-xmark"></i>
                                             </i>
                                         </p>
@@ -326,13 +303,14 @@
                             <td>
                                 <p th:if="${property.getPropertyClass() != null}"
                                    th:text="${property.getPropertyClass().getName()}"></p>
-                                <p th:if="${property.getPropertyClass() == null}">-</p>
+                                <p class="help" th:if="${property.getPropertyClass() == null}"
+                                   title="Не е избран клас на имота">-</p>
                             </td>
                             <td th:if="${@propertyTypeRepository.countPropertyTypesByRE(residentialEntity.getId()) > 0}">
                                 <p th:if="${property.getPropertyType()} != null"
                                    th:text="${property.getPropertyType().getDescription()}"></p>
                                 <p class="help" th:if="${property.getPropertyType()} == null"
-                                   title="Не е избран тип на имота.">-</p>
+                                   title="Не е избрана категория на имота">-</p>
                             </td>
                             <td>
                                 <p th:text="${property.getFloor()}"></p>
@@ -386,36 +364,8 @@
                                     </button>
                                 </form>
                             </td>
-                            <td>
-                                <form class="form-container"
-                                      data-popup-description="Желаете ли да изтриете този имот?"
-                                      data-popup-detail="Това действие е необратимо и информацията ще бъде трайно изгубена."
-                                      th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"
-                                      th:method="POST"
-                                      th:object="${propertyManageBindingModel}">
-                                    <label class="hidden" for="activeEntityIdDelete"></label>
-                                    <select class="form-control hidden" id="activeEntityIdDelete"
-                                            th:field="*{entityId}">
-                                        <option th:text="${residentialEntity.getId()}"
-                                                th:value="${residentialEntity.getId()}"></option>
-                                    </select>
-                                    <button class="delete-button" type="button">
-                                        <div class="icon">
-                                            <svg class="top" viewBox="0 0 24 24">
-                                                <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
-                                            </svg>
-                                            <svg class="bottom" viewBox="0 0 24 24">
-                                                <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="text">Изтрий</div>
-                                    </button>
-                                </form>
-                            </td>
-
                         </tr>
                     </table>
-
                     <p class="text-center"
                        th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} == 0">
                         No records found</p>
@@ -434,16 +384,15 @@
 </footer>
 
 <!-- Scripts -->
-<!-- Bootstrap core JavaScript -->
 <script src="/jquery/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/isotope.min.js"></script>
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
-<script src="/js/notifications.js"></script>
 <script src="/js/confirm.js"></script>
 <script src="/js/buttons.js"></script>
+<script src="/js/notifications.js"></script>
 
 </body>
 </html>

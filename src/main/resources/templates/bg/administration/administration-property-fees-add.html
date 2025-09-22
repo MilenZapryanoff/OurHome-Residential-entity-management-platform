@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'>
 <head>
 
@@ -17,7 +17,7 @@
     <link href="/css/our-home.css" rel="stylesheet">
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -59,7 +59,7 @@
             </h3>
             <div class="err-msg" th:if="${feeCreationFailed}">
                 <h5 class="text-light">Неуспешно създаване на такса!</h5>
-                <p class="text-light">Сумата на таксата не може да бъде 0.00лв.!<br>Поне един от компонентите трябва да бъде по-голям от 0.00лв.!</p>
+                <p class="text-light">Сумата на таксата не може да бъде 0.00 EUR!<br>Поне един от компонентите трябва да бъде по-голям от 0.00 EUR!</p>
             </div>
         </div>
     </div>
@@ -103,7 +103,7 @@
                     <fieldset>
                         <label for="feeAmount"><b>Обща сума на таксата</b></label>
                         <p>Сумата в това поле представлява сбор от отделните пера!</p>
-                        <p>Сумата в поне едно от двете пера формиращи общата такса трябва да е по-голяма от 0.00лв.</p>
+                        <p>Сумата в поне едно от двете пера формиращи общата такса трябва да е по-голяма от 0.00 EUR</p>
                         <p class="text-danger"
                            th:errors="*{feeAmount}"
                            th:if="${#fields.hasErrors('feeAmount')}">Monthly fee error message</p>
@@ -189,8 +189,7 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/notifications.js"></script>
-<script src="/js/input-data-control.js"></script>
-
+<script src="/js/feeAmountDynamicCalculation.js"></script>
 
 </body>
 </html>

@@ -25,10 +25,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("SELECT COUNT(e) FROM events e where e.residentialEntity.id=:residentialEntityId and e.date >= CAST(NOW() AS DATE)")
     Long countFutureReportsByRe(@Param("residentialEntityId") Long id);
 
-    @Query("SELECT e FROM events e WHERE e.residentialEntity.id = :residentialEntityId AND e.date < CAST(NOW() AS DATE) ORDER BY e.date DESC")
+    @Query("SELECT e FROM events e WHERE e.residentialEntity.id = :residentialEntityId AND e.date < CAST(NOW() AS DATE) ORDER BY e.date DESC, e.timeFrom DESC")
     List<Event> findPastReportsByRe(@Param("residentialEntityId") Long id);
 
-    @Query("SELECT e FROM events e WHERE e.residentialEntity.id = :residentialEntityId AND e.date >= CAST(NOW() AS DATE) ORDER BY e.date ASC")
+    @Query("SELECT e FROM events e WHERE e.residentialEntity.id = :residentialEntityId AND e.date >= CAST(NOW() AS DATE) ORDER BY e.date ASC, e.timeFrom ASC")
     List<Event> findFutureReportsByRe(@Param("residentialEntityId") Long id);
 
 }

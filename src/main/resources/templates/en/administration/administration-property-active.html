@@ -18,7 +18,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -75,9 +75,9 @@
             <div class="text-center administration-header">
                 <h4 class="category">Individual units management</h4>
                 <br>
-                <p>In this section, you will find information on all Individual units within the digital condominium.</p>
-                <p>Here, you can manage both registration requests for Individual unit owners and requests for parameter changes</p>
-                <p>In the 'Property categories' menu, you can create a categorization of the Individual units within the digital condominium, which will allow you to use different rates when calculating the monthly fees.</p>
+                <p>This section provides information about all individual properties that are part of the Digital Condominium.</p>
+                <p>Here, you can manage all Digital unit data change requests that require verification by the Condominium manager.</p>
+                <p>In the 'Property categories' menu, you can create a categorization of the individual properties within the Digital Condominium, which will allow you to apply different rates when calculating the monthly fees.</p>
             </div>
 
             <!--Active registrations section-->
@@ -95,25 +95,9 @@
                         </div>
                     </a>
                     <a class="button nav-link"
-                       th:href="@{/administration/property/owners/pending/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><span>Owner registration requests</span>
-                            <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
-                                 th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
-                            </sup>
-                        </div>
-                    </a>
-                    <a class="button nav-link"
-                       th:href="@{/administration/property/owners/rejected/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><span>Rejected owner registration requests</span>
-                            <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
-                                 th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
-                            </sup>
-                        </div>
-                    </a>
-                    <a class="button nav-link"
                        th:href="@{/administration/property/change-requests/{id}(id=${residentialEntity.getId()})}">
                         <div class="text-center"><i class="fa-solid fa-users-gear"></i>
-                            <span>Property data change</span>
+                            <span>Property data change requests</span>
                             <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
                                  th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
                             </sup>
@@ -130,13 +114,12 @@
                 <div class="info-table rounded-bottom" id="active-registrations">
 
                     <!--Properties section header-->
-                    <div class="text-center">
-                        <h4 class="category text-danger"><i class="fa-solid fa-city"></i> Registry of individual units</h4>
-                        <br>
-                        <p>The registry contains information on all Individual units within this condominium.</p>
-                        <p>From here, you can modify data for individual units, remove users as property owners, as well as obtain information on the existence of owner registration requests or requests for parameter changes on individual units.</p>
-                        <p>Hover your mouse over the event icons to learn more about the event.</p>
-                    </div>
+                    <h4 class="text-danger text-center"><i class="fa-solid fa-city"></i> Register of Individual Properties</h4>
+                    <br>
+                    <p>The register contains information about all individual properties within this condominium.</p>
+                    <p>From here, you can edit data related to individual properties, revoke user access to specific properties, and manage requests for changes to their parameters.</p>
+                    <p>Hover your mouse over the event icons to learn more about the current status.</p>
+
 
 
                     <div class="due-amounts-header" style="padding: 10px 0">
@@ -174,13 +157,13 @@
                                 <p>Property Status</p>
                             </th>
                             <th class="gray-field">
-                                <p>Owner</p>
+                                <p>User access</p>
                             </th>
                             <th class="gray-field">
-                                <p>Owner status</p>
+                                <p>Access status</p>
                             </th>
                             <th class="gray-field">
-                                <p>Owner control</p>
+                                <p>Access control</p>
                             </th>
                             <th>
                                 <p>Type</p>
@@ -205,10 +188,7 @@
                                 <p>Property habitable</p>
                             </th>
                             <th>
-                                <p>Options</p>
-                            </th>
-                            <th>
-                                <p>Delete property</p>
+                                <p>Edit</p>
                             </th>
                         </tr>
                         <tr th:each="property: ${@propertyRepository.findAllPropertiesByResidentialEntity(residentialEntity.getId())}">
@@ -249,7 +229,7 @@
                                 </form>
                                 <div th:if="${property.getPropertyRegisterRequest() != null} and ${property.isValidated()}">
                                     <form class="form-container"
-                                          th:action="@{/administration/property/owners/pending/{id}#pending-registrations (id=${residentialEntity.getId()})}"
+                                          th:action="@{/administration/owners/pending/{id}#pending-registrations (id=${residentialEntity.getId()})}"
                                           th:if="${property.getOwner() != null} AND ${!property.isObtained()} AND ${!property.isRejected()}">
                                         <button type="submit">
                                             <i class="fa-solid fa-triangle-exclamation warning"
@@ -257,7 +237,7 @@
                                         </button>
                                     </form>
                                     <form class="form-container"
-                                          th:action="@{/administration/property/owners/rejected/{id}#rejected-registrations (id=${residentialEntity.getId()})}"
+                                          th:action="@{/administration/owners/rejected/{id}#rejected-registrations (id=${residentialEntity.getId()})}"
                                           th:if="${property.isRejected()}">
                                         <button type="submit">
                                             <i class="fa-solid fa-triangle-exclamation text-danger"
@@ -283,12 +263,12 @@
                             </td>
                             <td class="gray-field">
                                 <p th:if="${property.getOwner() != null} AND ${!property.isObtained()} AND ${!property.isRejected()}">
-                                    <a th:href="@{/administration/property/owners/pending/{id}#pending-registrations (id=${id})}">
+                                    <a th:href="@{/administration/owners/pending/{id}#pending-registrations (id=${id})}">
                                         <i class="fa-solid fa-user-clock warning"
                                            title="Pending owner registration request for this property"></i></a>
                                 </p>
                                 <p th:if="${property.isRejected()}">
-                                    <a th:href="@{/administration/property/owners/rejected/{id}#rejected-registrations (id=${id})}">
+                                    <a th:href="@{/administration/owners/rejected/{id}#rejected-registrations (id=${id})}">
                                         <i class="fa-solid fa-user-gear text-danger"
                                            title="Rejected owner registration for this property"></i></a>
                                 </p>
@@ -354,10 +334,10 @@
                             <td th:if="${property.isValidated()}">
                                 <i class="fa-regular fa-xmark-circle help text-danger"
                                    th:if="${property.isNotHabitable()}"
-                                   title="Property is not habitable"></i>
+                                   title="Property is not occupied"></i>
                                 <i class="fa-regular fa-check-circle text-success-emphasis help"
                                    th:unless="${property.isNotHabitable()}"
-                                   title="Property is habitable"></i>
+                                   title="Property is occupied"></i>
                             </td>
                             <td th:unless="${property.isValidated()}">-</td>
                             <td>
@@ -380,42 +360,12 @@
                                              style="width: 20px;"
                                              title="Edit property">
                                     </button>
-
                                     <button th:unless="${property.isValidated()}" type="submit">
                                         <i class="fa-solid fa-gear text-dark"
                                            title="Set property data"></i>
                                     </button>
                                 </form>
                             </td>
-                            <td>
-                                <form class="form-container"
-                                      th:action="@{/administration/property/delete/{id} (id=${property.getId()})}"
-                                      th:method="POST"
-                                      th:object="${propertyManageBindingModel}">
-                                    <label class="hidden"
-                                           for="activeEntityIdDelete"></label>
-                                    <select class="form-control hidden"
-                                            id="activeEntityIdDelete"
-                                            th:field="*{entityId}">
-                                        <option
-                                                th:text="${residentialEntity.getId()}"
-                                                th:value="${residentialEntity.getId()}">
-                                        </option>
-                                    </select>
-                                    <button class="delete-button" type="button">
-                                        <div class="icon">
-                                            <svg class="top" viewBox="0 0 24 24">
-                                                <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
-                                            </svg>
-                                            <svg class="bottom" viewBox="0 0 24 24">
-                                                <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="text">Delete</div>
-                                    </button>
-                                </form>
-                            </td>
-
                         </tr>
                     </table>
 
@@ -429,7 +379,7 @@
     </div>
 </div>
 
-<!--custom pop-up confirmation window-->
+<!--Custom pop-up confirmation window-->
 <div th:replace="~{en/fragments/confirm-popup}">
 </div>
 
@@ -438,16 +388,15 @@
 </footer>
 
 <!-- Scripts -->
-<!-- Bootstrap core JavaScript -->
 <script src="/jquery/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/isotope.min.js"></script>
 <script src="/js/owl-carousel.js"></script>
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
-<script src="/js/notifications.js"></script>
 <script src="/js/confirm.js"></script>
 <script src="/js/buttons.js"></script>
+<script src="/js/notifications.js"></script>
 
 </body>
 </html>

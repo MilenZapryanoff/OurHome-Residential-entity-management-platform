@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'>
 <head>
 
@@ -17,7 +17,7 @@
     <link href="/css/our-home.css" rel="stylesheet">
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+    <link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -55,7 +55,7 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3 th:if="${property.isValidated()}">Промяна на имот</h3>
+            <h3 th:if="${property.isValidated()}">Промяна на данни за имот</h3>
             <h3 th:unless="${property.isValidated()}">Параметризация на имот</h3>
             <p class="category text-black" th:class="text-light" th:text="'Имот №: ' + ${property.getNumber()}"
                th:unless="${editFailed}"></p>
@@ -71,132 +71,448 @@
 <!-- Property edit input form -->
 <div class="container">
     <div class="input-content text-center">
-        <div class="col-lg-6 center-form">
+        <div class="col-lg-12 center-form">
             <form id="input-form"
                   th:action="@{/administration/property/edit/{id}(id=${property.getId()})}"
                   th:method="POST"
                   th:object="${propertyEditBindingModel}">
-                <div class="col-lg-12">
-                    <fieldset>
-                        <label for="number"><b>Имот №</b></label>
-                        <p class="text-danger"
-                           th:errors="*{number}"
-                           th:if="${#fields.hasErrors('number')}">Property error message</p>
-                        <input id="number" placeholder="Въведете номер на имот..."
-                               required th:errorclass="bg-danger"
-                               th:field="*{number}"
-                               th:value="${propertyEditBindingModel.getNumber()}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <label for="propertyTypeId"><b>Клас на имота</b></label>
-                        <select class="form-control" id="propertyClassId"
-                                th:field="*{propertyClass}">
-                            <option th:if="${propertyEditBindingModel.getPropertyClass() == null}" th:text="'---'"
-                                    th:value="''"></option>
-                            <option th:each="propertyClass : ${@propertyClassRepository.findAll()}"
-                                    th:text="${propertyClass.name}"
-                                    th:value="${propertyClass.getId()}">
-                            </option>
-                            <option th:if="${propertyEditBindingModel.getPropertyClass() != null}" th:text="'---'"
-                                    th:value="''"></option>
-                        </select>
-                        <br>
-                    </fieldset>
-                    <fieldset th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0}">
-                        <label for="propertyTypeId"><b>Категория на имота</b></label>
-                        <select class="form-control" id="propertyTypeId"
-                                th:field="*{propertyType}">
-                            <option class="text-secondary" th:if="${property.getPropertyType() != null}"
-                                    th:text="${property.getPropertyType().getDescription()} + ' (Selected)'"
-                                    th:value="${property.getPropertyType().getId()}"></option>
-                            <option th:if="${property.getPropertyType() == null}" th:text="'---'"
-                                    th:value="''"></option>
-                            <option th:each="propertyType : ${@propertyTypeRepository.findPropertyTypesByRE(property.getResidentialEntity().getId())}"
-                                    th:text="${propertyType.description}"
-                                    th:value="${propertyType.getId()}">
-                            </option>
-                            <option th:if="${property.getPropertyType() != null}" th:text="'---'"
-                                    th:value="''"></option>
-                        </select>
-                        <br>
-                    </fieldset>
-                    <fieldset>
-                        <label for="floor"><b>Етаж</b></label>
-                        <p class="text-danger"
-                           th:errors="*{floor}"
-                           th:if="${#fields.hasErrors('floor')}">Floor error message</p>
-                        <input autocomplete="on" id="floor"
-                               placeholder="Въведете етаж..."
-                               required
-                               th:errorclass="bg-danger" th:field="*{floor}"
-                               th:value="${propertyEditBindingModel.getFloor()}"
-                               type="text">
-                    </fieldset>
-                    <fieldset>
-                        <label for="numberOfAdults"><b>Брой възрастни</b></label>
-                        <p class="text-danger"
-                           th:errors="*{numberOfAdults}"
-                           th:if="${#fields.hasErrors('numberOfAdults')}">Adults number error message</p>
-                        <input autocomplete="on" id="numberOfAdults"
-                               placeholder="Въведете брой на възрастни..."
-                               required th:errorclass="bg-danger"
-                               th:field="*{numberOfAdults}"
-                               th:value="${propertyEditBindingModel.getNumberOfAdults()}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <label for="numberOfChildren"><b>Брой деца</b></label>
-                        <p class="text-danger"
-                           th:errors="*{numberOfChildren}"
-                           th:if="${#fields.hasErrors('numberOfChildren')}">Children error message</p>
-                        <input autocomplete="on" id="numberOfChildren"
-                               placeholder="Въведете брой деца..."
-                               required th:errorclass="bg-danger"
-                               th:field="*{numberOfChildren}"
-                               th:value="${propertyEditBindingModel.getNumberOfChildren()}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <label for="numberOfPets"><b>Брой на дом. любимци</b></label>
-                        <p class="text-danger"
-                           th:errors="*{numberOfPets}"
-                           th:if="${#fields.hasErrors('numberOfPets')}">Number of pets message</p>
-                        <input autocomplete="on" id="numberOfPets"
-                               placeholder="Въведете брой на дом. любимци ..."
-                               required th:errorclass="bg-danger"
-                               th:field="*{numberOfPets}"
-                               th:value="${propertyEditBindingModel.getNumberOfPets()}"
-                               type="number">
-                    </fieldset>
-                    <fieldset>
-                        <input class="inp-cbx" hidden="hidden" id="isNotHabitable" name="isNotHabitable"
-                               th:field="*{notHabitable}"
-                               th:value="${property.notHabitable}"
-                               type="checkbox">
-                        <label class="cbx" for="isNotHabitable">
-                        <span>
-                    <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
-                            points="1.5 6 4.5 9 10.5 1"></polyline></svg>
-                        </span>
-                            <span><b>Имотът е необитаем</b></span>
-                        </label>
-                    </fieldset>
+                <div class="row">
+                    <h6><i class="fa-solid fa-sliders"></i> Параметри на самостоятелен обект</h6>
+                    <div class="property-details">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <fieldset>
+                                    <label for="number"><b>Имот №</b></label>
+                                    <p class="text-danger"
+                                       th:errors="*{number}"
+                                       th:if="${#fields.hasErrors('number')}">Property error message</p>
+                                    <input id="number" placeholder="Въведете номер на имот..."
+                                           required th:errorclass="bg-danger"
+                                           th:field="*{number}"
+                                           th:value="${propertyEditBindingModel.getNumber()}"
+                                           type="number">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset>
+                                    <label for="floor"><b>Етаж</b></label>
+                                    <p class="text-danger"
+                                       th:errors="*{floor}"
+                                       th:if="${#fields.hasErrors('floor')}">Floor error message</p>
+                                    <input autocomplete="on" id="floor"
+                                           placeholder="Въведете етаж..."
+                                           required
+                                           th:errorclass="bg-danger" th:field="*{floor}"
+                                           th:value="${propertyEditBindingModel.getFloor()}"
+                                           type="text">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset>
+                                    <label for="propertyTypeId"><b>Клас на имота</b></label>
+                                    <select class="form-control" id="propertyClassId"
+                                            th:field="*{propertyClass}">
+                                        <option th:if="${propertyEditBindingModel.getPropertyClass() == null}"
+                                                th:text="'---'"
+                                                th:value="''"></option>
+                                        <option th:each="propertyClass : ${@propertyClassRepository.findAll()}"
+                                                th:text="${propertyClass.name}"
+                                                th:value="${propertyClass.getId()}">
+                                        </option>
+                                        <option th:if="${propertyEditBindingModel.getPropertyClass() != null}"
+                                                th:text="'---'"
+                                                th:value="''"></option>
+                                    </select>
+                                    <br>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset
+                                        th:if="${property.getResidentialEntity().getPropertyTypes().size() > 0}">
+                                    <label for="propertyTypeId"><b>Категория на имота</b></label>
+                                    <select class="form-control" id="propertyTypeId"
+                                            th:field="*{propertyType}">
+                                        <option class="text-secondary"
+                                                th:if="${property.getPropertyType() != null}"
+                                                th:text="${property.getPropertyType().getDescription()} + ' (Selected)'"
+                                                th:value="${property.getPropertyType().getId()}"></option>
+                                        <option th:if="${property.getPropertyType() == null}"
+                                                th:text="'---'"
+                                                th:value="''"></option>
+                                        <option th:each="propertyType : ${@propertyTypeRepository.findPropertyTypesByRE(property.getResidentialEntity().getId())}"
+                                                th:text="${propertyType.description}"
+                                                th:value="${propertyType.getId()}">
+                                        </option>
+                                        <option th:if="${property.getPropertyType() != null}"
+                                                th:text="'---'"
+                                                th:value="''"></option>
+                                    </select>
+                                    <br>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion" id="accordionExample" style="padding: 40px">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <p aria-controls="collapseOne" aria-expanded="false"
+                                   class="accordion-button collapsed"
+                                   data-bs-target="#collapseTwo" data-bs-toggle="collapse" type="button">
+                                    <span><i class="fa-regular fa-address-book" style="font-size: 20px"></i> Данни за домова книга</span>
+                                </p>
+                            </h2>
+                            <div aria-labelledby="headingTwo" class="accordion-collapse collapse"
+                                 data-bs-parent="#accordionExample"
+                                 id="collapseTwo">
+                                <div class="accordion-body">
+                                    <h6>Информация за собственик, обитатели и позлватели на самостоятелен обект</h6>
+                                    <div class="property-details">
+                                        <div class="row">
+                                            <div class="message">
+                                                <div class="input-content text-center user-container"
+                                                     style="padding: 30px 0">
+                                                    <div class="">
+                                                        <div class="center-form rounded" style="margin-bottom: 30px">
+                                                            <h6 class="rounded"
+                                                                style="margin-top: 30px; background-color: #d0d0d0">
+                                                                Данни за
+                                                                собственик</h6>
+                                                            <div class="row">
+                                                                <div class="col-lg-4">
+                                                                    <fieldset>
+                                                                        <br>
+                                                                        <label for="ownerFirstName"><i
+                                                                                class="fa-solid fa-user"></i> <b>Три
+                                                                            имена:</b></label>
+                                                                        <input id="ownerFirstName"
+                                                                               placeholder="Въведете три имена..."
+                                                                               th:field="*{ownerFullName}"
+                                                                               type="text">
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <fieldset>
+                                                                        <br>
+                                                                        <label for="ownerPhone"><i
+                                                                                class="fa-solid fa-phone"></i> <b>Тел.
+                                                                            номер:</b></label>
+                                                                        <input id="ownerPhone"
+                                                                               placeholder="Въведете тел. за контакт..."
+                                                                               th:field="*{ownerPhone}"
+                                                                               type="tel">
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <fieldset>
+                                                                        <br>
+                                                                        <label for="ownerEmail"><i
+                                                                                class="fa-solid fa-envelope"></i>
+                                                                            <b>Email:</b> (незадължително)</label>
+                                                                        <input id="ownerEmail"
+                                                                               placeholder="Въведете email за контакт..."
+                                                                               th:field="*{ownerEmail}"
+                                                                               type="email">
+                                                                    </fieldset>
+                                                                </div>
+                                                                <div class="col-lg-12" style="display: flex">
+                                                                    <fieldset
+                                                                            style="display:flex;align-content: center; margin: 0 auto">
+                                                                        <input class="inp-cbx" id="rememberMe"
+                                                                               name="rememberMe"
+                                                                               style="display: none"
+                                                                               type="checkbox"/>
+                                                                        <label class="cbx" for="rememberMe">
+                                                            <span>
+                                                        <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                                                                points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                                                            </span>
+                                                                            <span>Собственикът обитава имота</span>
+                                                                        </label>
+                                                                    </fieldset>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <h6 class="rounded"
+                                                        style="margin-bottom: 50px; background-color: #d0d0d0">
+                                                        Данни за обитатели/ползватели на имота
+                                                    </h6>
+                                                    <fieldset>
+                                                        <input class="inp-cbx" hidden="hidden" id="isNotHabitable"
+                                                               name="isNotHabitable"
+                                                               th:field="*{notHabitable}"
+                                                               th:value="${property.notHabitable}"
+                                                               type="checkbox">
+                                                        <label class="cbx" for="isNotHabitable">
+                                            <span>
+                                        <svg height="10px" viewbox="0 0 12 10" width="12px"><polyline
+                                                points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+                                            </span>
+                                                            <span><b>Имотът е необитаем</b></span>
+                                                        </label>
+                                                    </fieldset>
+                                                    <br>
+                                                    <div class="resident-and-pets-section">
+                                                        <div class="center-form rounded">
+                                                            <div style="margin: 0 auto">
+                                                                <h6 class="text-danger-emphasis"
+                                                                    style="margin-top: 10px">
+                                                                    1. ВЪЗРАСТНИ
+                                                                </h6>
+                                                            </div>
+
+                                                            <p class="text-center" style="color: #646464">Секцията
+                                                                съдържа
+                                                                информация за
+                                                                броя обитаващи
+                                                                имота <b>възрастни</b> лица. Оставете празно в случай,
+                                                                че имота е
+                                                                необитаем
+                                                                към този момент!</p>
+                                                            <br>
+                                                            <div id="resident-container">
+                                                                <div class="resident row" style="position: relative;"
+                                                                     th:each="adult, iterStat : *{adults}">
+                                                                    <div style="width: 18px">
+                                                                        <a class="remove-btn btn btn-sm btn-danger"
+                                                                           style="position: absolute; right: 45px; top: 10px;"
+                                                                           type="button">✕</a>
+                                                                    </div>
+                                                                    <b><i class="fa-solid fa-user text-danger"><sup
+                                                                            th:text="${iterStat.index + 1}"></sup></i></b>
+                                                                    <div class="col-lg-4">
+                                                                        <fieldset><br>
+                                                                            <label><b>Три имена:</b></label>
+                                                                            <input placeholder="Въведете три имена..."
+                                                                                   th:field="*{adults[__${iterStat.index}__].name}"
+                                                                                   type="text">
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="col-lg-4">
+                                                                        <fieldset><br>
+                                                                            <label><i class="fa-solid fa-phone"></i> <b>Тел.
+                                                                                номер:</b></label>
+                                                                            <input placeholder="Въведете тел. за контакт..."
+                                                                                   th:field="*{adults[__${iterStat.index}__].phone}"
+                                                                                   type="tel">
+                                                                        </fieldset>
+                                                                    </div>
+                                                                    <div class="col-lg-4">
+                                                                        <fieldset><br>
+                                                                            <label><i class="fa-solid fa-envelope"></i>
+                                                                                <b>Email:</b></label>
+                                                                            <input placeholder="Въведете email за контакт..."
+                                                                                   th:field="*{adults[__${iterStat.index}__].email}"
+                                                                                   type="email">
+                                                                        </fieldset>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <button id="addResident"
+                                                                    style="margin: 30px 0; width: 200px" type="button">
+                                                                <i class="fa-solid fa-user-plus"></i> Добави възрастен
+                                                            </button>
+                                                            <hr>
+                                                            <!-- Деца -->
+                                                            <div style="margin: 0 auto">
+                                                                <h6 class="text-danger-emphasis"
+                                                                    style="margin-top: 10px">
+                                                                    2. ДЕЦА
+                                                                </h6>
+                                                            </div>
+                                                            <div class="col-lg-12 center-form rounded">
+                                                                <p class="text-center" style="color: #646464">Секцията
+                                                                    съдържа
+                                                                    информация за брой
+                                                                    обитаващи имота <b>деца</b>. Оставете празно в
+                                                                    случай, че не живеят
+                                                                    деца
+                                                                    в този имот! </p>
+                                                                <div id="children-container">
+                                                                    <br>
+                                                                    <div class="child row" style="position: relative;"
+                                                                         th:each="child, iterStat : *{children}">
+                                                                        <div style="width: 18px">
+                                                                            <a class="remove-btn btn btn-sm btn-danger"
+                                                                               style="position: absolute; right: 45px; top: 10px;"
+                                                                               type="button">✕</a>
+                                                                        </div>
+                                                                        <b><i class="fa-solid fa-child text-danger"><sup
+                                                                                th:text="${iterStat.index + 1}"></sup></i></b>
+                                                                        <div class="col-lg-6">
+                                                                            <fieldset><br>
+                                                                                <label><b>Три имена:</b></label>
+                                                                                <input placeholder="Въведете три имена..."
+                                                                                       th:field="*{children[__${iterStat.index}__].name}"
+                                                                                       type="text">
+                                                                            </fieldset>
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <fieldset><br>
+                                                                                <label><b>Възраст:</b></label>
+                                                                                <input placeholder="Въведете възраст на детето..."
+                                                                                       th:field="*{children[__${iterStat.index}__].age}"
+                                                                                       type="text">
+                                                                            </fieldset>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <button id="addChild"
+                                                                        style="margin: 30px 0; width: 150px"
+                                                                        type="button">
+                                                                    <i class="fa-solid fa-child"></i>
+                                                                    Добави дете
+                                                                </button>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="col-lg-12 center-form rounded">
+                                                                <div class="col-lg-12" style="margin: 0 auto">
+                                                                    <h6 class="text-danger-emphasis"
+                                                                        style="margin-top: 30px">3. ДОМАШНИ
+                                                                        ЛЮБИМЦИ</h6>
+                                                                </div>
+                                                                <small class="text-center" style="color: #646464">Секцията
+                                                                    съдържа
+                                                                    информация
+                                                                    за обитаващите имота домашни любимци подлежащи на
+                                                                    извеждане!</small>
+                                                                <br>
+                                                                <div>
+                                                                    <br>
+                                                                    <fieldset>
+                                                                        <div class="col-lg-3" style="margin: 0 auto">
+                                                                            <label><b>Брой домашни любимци:</b>
+                                                                                <input placeholder="Въведете брой домашни любимци..."
+                                                                                       required
+                                                                                       style="margin: 0"
+                                                                                       th:field="*{numberOfPets}"
+                                                                                       type="number">
+                                                                            </label>
+                                                                        </div>
+                                                                    </fieldset>
+                                                                    <p class="text-center"
+                                                                       style="color: #646464; font-size: 12px"><b>Въведете
+                                                                        0 в случай, че не разполагате с домашен любимец
+                                                                        подлежащ
+                                                                        на извеждане!</b></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <h6>Обобщени данни за обитатели на самостоятелен обект</h6>
+                                                    <div class="fee-container">
+                                                        <div class="fee-component text-center res-entity">
+                                                            <div class="fee-category">
+                                                                <i class="fa-solid fa-person"></i>
+                                                            </div>
+                                                            <div class="fee-sum">
+                                                                <p style="font-size: 0.8rem; font-weight: 500">Брой
+                                                                    възрастни: <h6
+                                                                    class="text-danger" id="resident-count"
+                                                                    th:text="*{adults.size()}"></h6>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="fee-component text-center res-entity">
+                                                            <div class="fee-category">
+                                                                <i class="fa-solid fa-child"></i>
+                                                            </div>
+                                                            <div class="fee-sum">
+                                                                <p style="font-size: 0.8rem; font-weight: 500">Брой
+                                                                    деца: <h6
+                                                                    class="text-danger" id="child-count"
+                                                                    th:text="*{children.size()}"></h6>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="fee-component text-center res-entity">
+                                                            <div class="fee-category">
+                                                                <i class="fa-solid fa-dog"></i>
+                                                            </div>
+                                                            <div class="fee-sum">
+                                                                <p style="font-size: 0.8rem; font-weight: 500">Бр. дом.
+                                                                    любимци: <h6
+                                                                    class="text-danger" id="pet-count"
+                                                                    th:text="*{numberOfPets}"></h6>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <p aria-controls="collapseTwo" aria-expanded="false"
+                                   class="accordion-button collapsed"
+                                   data-bs-target="#collapseThree" data-bs-toggle="collapse" type="button">
+                                    <span><i class="fa-solid fa-trash"></i> Изтриване на самостоятелен обект</span>
+                                </p>
+                            </h2>
+                            <div aria-labelledby="headingThree" class="accordion-collapse collapse"
+                                 data-bs-parent="#accordionExample"
+                                 id="collapseThree">
+                                <div class="accordion-body">
+                                    <div class="row text-center">
+                                        <h5 style="padding: 10px 0">Изтриване на самостоятелен
+                                            обект</h5>
+                                        <p>Използвайте бутон <b>Изтрий</b> в случай, зе искате да
+                                            премахнете този самостоятекен обект от състава на дигиталната етажна
+                                            собственост!</p>
+                                        <p><b class="text-danger-emphasis">ВНИМАНИЕ!</b>
+                                            Това действие ще премахне цялата налична
+                                            информация за този самостоятелен обект, както и информацията касаеща
+                                            домовата книга</p>
+                                        <button class="delete-button"
+                                                form="deletePropertyForm"
+                                                id="deletePropertyBtn"
+                                                style="width: 100px; height: 26px; margin: 30px auto"
+                                                type="button">
+                                            <div class="icon">
+                                                <svg class="top" viewBox="0 0 24 24">
+                                                    <path d="M15,3.75 C15.5522847,3.75 16,4.19771525 16,4.75 L16,5.75 L18.25,5.75 C18.6642136,5.75 19,6.08578644 19,6.5 C19,6.91421356 18.6642136,7.25 18.25,7.25 L5.75,7.25 C5.33578644,7.25 5,6.91421356 5,6.5 C5,6.08578644 5.33578644,5.75 5.75,5.75 L8,5.75 L8,4.75 C8,4.19771525 8.44771525,3.75 9,3.75 L15,3.75 Z M14,5 L10,5 C9.72385763,5 9.5,5.22385763 9.5,5.5 C9.5,5.74545989 9.67687516,5.94960837 9.91012437,5.99194433 L10,6 L14,6 C14.2761424,6 14.5,5.77614237 14.5,5.5 C14.5,5.25454011 14.3231248,5.05039163 14.0898756,5.00805567 L14,5 Z"></path>
+                                                </svg>
+                                                <svg class="bottom" viewBox="0 0 24 24">
+                                                    <path d="M7.02498527,8.25 L16.9751371,8.25 C17.5411532,8.25 18,8.69771525 18,9.25 C18,9.2951932 17.9968602,9.34033442 17.9906022,9.3851132 L16.6878729,18.7066989 C16.6389095,19.0569074 16.4041276,19.3558931 16.0703039,19.4931212 C14.8428392,19.9977071 13.4860916,20.25 12.0000612,20.25 C10.5140229,20.25 9.1572688,19.9977044 7.92979891,19.4931132 C7.59597391,19.3558774 7.36118974,19.0568881 7.31224574,18.7066728 L6.00952014,9.3851132 C5.93304388,8.83789281 6.32568685,8.33379079 6.88651275,8.25916983 C6.93240487,8.25306363 6.97866843,8.25 7.02498527,8.25 Z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text">Изтрий</div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                     <fieldset>
                         <button class="orange-button" id="form-submit"
-                                type="submit">Потвърди
+                                type="submit">Запази
                         </button>
                         <a th:href="@{/administration/property/active/{id}(id=${property.getResidentialEntity().getId()})}">
-                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Отказ
+                            <button class="orange-button text-light" id="form-cancel-rej" type="button">Назад
                             </button>
                         </a>
                     </fieldset>
                 </div>
             </form>
+            <form class="d-none"
+                  id="deletePropertyForm"
+                  method="post" th:action="@{/administration/property/delete/{id}(id=${property.getId()})}">
+                <!-- CSRF за Spring Security -->
+                <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden">
+            </form>
         </div>
     </div>
 </div>
 
+<!--Custom pop-up confirmation window-->
+<div th:replace="~{bg/fragments/confirm-popup}">
+</div>
 
 <!-- Footer -->
 <footer th:replace="~{fragments/footer}">
@@ -211,8 +527,9 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/notifications.js"></script>
-<script src="/js/input-data-control.js"></script>
-
+<script src="/js/confirm.js"></script>
+<script src="/js/buttons.js"></script>
+<script src="/js/addressBook.js"></script>
 
 </body>
 </html>
