@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'>
 <head>
 
@@ -18,7 +18,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -111,12 +111,12 @@
                                         <p class="text-secondary">Monthly fee applied to every single property.</p>
                                         <div class="text-black inline"><b>A.</b> habitable property:
                                             <div class="info-box">
-                                                <i th:text="${residentialEntity.getFee().getFixedFeeHabitable()} + ' лв.'"></i>
+                                                <i th:text="${residentialEntity.getFee().getFixedFeeHabitable()} + ' EUR'"></i>
                                             </div>
                                         </div>
                                         <div class="text-black inline"><b>B.</b> non-habitable property:
                                             <div class="info-box">
-                                                <i th:text="${residentialEntity.getFee().getFixedFeeNonHabitable()} + ' лв.'"></i>
+                                                <i th:text="${residentialEntity.getFee().getFixedFeeNonHabitable()} + ' EUR'"></i>
                                             </div>
                                         </div>
                                         <p class="text-secondary"><i class="fa-solid fa-house"></i><small> applies per
@@ -124,7 +124,7 @@
                                     </li>
                                     <li class="text-black"><b>2.</b> Adult fee:
                                         <div class="info-box" style="font-size: 0.9em">
-                                            <i th:text="${residentialEntity.getFee().getAdultFee()} + ' лв.'"></i>
+                                            <i th:text="${residentialEntity.getFee().getAdultFee()} + ' EUR'"></i>
                                         </div>
                                         <p class="text-secondary">Monthly fee for each adult person living in the
                                             property.</p>
@@ -133,7 +133,7 @@
                                     </li>
                                     <li class="text-black"><b>3.</b> Child fee:
                                         <div class="info-box" style="font-size: 0.9em">
-                                            <i th:text="${residentialEntity.getFee().getChildFee()} + ' лв.'"></i>
+                                            <i th:text="${residentialEntity.getFee().getChildFee()} + ' EUR'"></i>
                                         </div>
                                         <p class="text-secondary">Monthly fee for each child living in the property.</p>
                                         <p class="text-secondary"><i class="fa-solid fa-child"></i><small> applies per
@@ -142,7 +142,7 @@
                                     </li>
                                     <li class="text-black"><b>4.</b> Pet fee:
                                         <div class="info-box" style="font-size: 0.9em">
-                                            <i th:text="${residentialEntity.getFee().getPetFee()} + ' лв.'"></i>
+                                            <i th:text="${residentialEntity.getFee().getPetFee()} + ' EUR'"></i>
                                         </div>
                                         <p class="text-secondary">Monthly fee for a pet living in the property.</p>
                                         <p class="text-secondary"><i class="fa-solid fa-dog"></i><small> applies per
@@ -153,12 +153,12 @@
                                         <p class="text-secondary">Custom fee applied to every single property.</p>
                                         <div class="text-black inline"><b>A.</b> habitable property:
                                             <div class="info-box">
-                                                <i th:text="${residentialEntity.getFee().getAdditionalFeeHabitable()} + ' лв.'"></i>
+                                                <i th:text="${residentialEntity.getFee().getAdditionalFeeHabitable()} + ' EUR'"></i>
                                             </div>
                                         </div>
                                         <div class="text-black inline"><b>B.</b> non-habitable property:
                                             <div class="info-box">
-                                                <i th:text="${residentialEntity.getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></i>
+                                                <i th:text="${residentialEntity.getFee().getAdditionalFeeNonHabitable()} + ' EUR'"></i>
                                             </div>
                                         </div>
                                         <p class="text-secondary"><i class="fa-solid fa-house"></i><small> applies per
@@ -202,7 +202,7 @@
                                         <div class="frame">
                                             <div class="text-black inline"><b>A.</b> habitable property:
                                                 <div class="info-box">
-                                                    <i th:text="${residentialEntity.getFee().getFundRepairHabitable()} + ' лв.'"></i>
+                                                    <i th:text="${residentialEntity.getFee().getFundRepairHabitable()} + ' EUR'"></i>
                                                 </div>
                                                 <div class="property-counter">
                                                     <p class="text-secondary" style="font-size: 0.8em"
@@ -221,7 +221,7 @@
                                             </div>
                                             <div class="text-black inline"><b>B.</b> non-habitable property:
                                                 <div class="info-box">
-                                                    <i th:text="${residentialEntity.getFee().getFundRepairNonHabitable()} + ' лв.'"></i>
+                                                    <i th:text="${residentialEntity.getFee().getFundRepairNonHabitable()} + ' EUR'"></i>
                                                 </div>
                                                 <div class="property-counter">
                                                     <p class="text-secondary" style="font-size: 0.8em"
@@ -259,7 +259,7 @@
                                                 <div class="section" style="padding: 3px 15px">
                                                     <p><b>A.</b> habitable property</p>
                                                     <div class="info-box">
-                                                        <i th:text="${propertyType.getFundRepairHabitable()} + ' лв.'"></i>
+                                                        <i th:text="${propertyType.getFundRepairHabitable()} + ' EUR'"></i>
                                                     </div>
                                                     <div class="property-counter">
                                                         <p class="text-secondary" style="font-size: 0.8em"
@@ -280,7 +280,7 @@
                                                 <div class="section" style="padding: 3px 15px">
                                                     <p><b>B.</b> non-habitable property</p>
                                                     <div class="info-box">
-                                                        <i th:text="${propertyType.getFundRepairNotHabitable()} + ' лв.'"></i>
+                                                        <i th:text="${propertyType.getFundRepairNotHabitable()} + ' EUR'"></i>
                                                     </div>
                                                     <div class="property-counter">
                                                         <p class="text-secondary" style="font-size: 0.8em"

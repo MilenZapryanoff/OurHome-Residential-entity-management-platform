@@ -230,30 +230,27 @@ public class PropertyManageController {
                                                       BindingResult bindingResult,
                                                       @CookieValue(value = "lang", defaultValue = "bg") String lang) {
 
+        Property property = getProperty(id);
+
         ModelAndView view = resolveView(lang) ?
                 new ModelAndView("bg/administration/administration-property-edit") : new ModelAndView("en/administration/administration-property-edit");
 
-       view.addObject("property", getProperty(id));
+        view.addObject("property", property);
 
         if (bindingResult.hasErrors()) {
             return view;
         }
-
-        ResidentialEntity residentialEntity = residentialEntityService.findResidentialEntityByPropertyId(id);
 
         PropertyType propertyType = null;
         if (propertyEditBindingModel.getPropertyType() != null) {
             propertyType = propertyTypeService.findById(propertyEditBindingModel.getPropertyType());
         }
 
-        if (propertyService.editProperty(id, propertyEditBindingModel, propertyType)) {
-            return new ModelAndView("redirect:/administration/property/active/" + residentialEntity.getId());
-        } else {
-            //sending message (notification) to owner/resident
-            messageService.propertyModificationMessageToOwner(propertyService.findPropertyById(id));
-
+        if (!propertyService.editProperty(id, propertyEditBindingModel, propertyType)) {
             return view.addObject("editFailed", true);
         }
+
+        return new ModelAndView("redirect:/administration/property/active/" + property.getResidentialEntity().getId());
     }
 
     /**
@@ -269,16 +266,15 @@ public class PropertyManageController {
     (@ModelAttribute("propertyManageBindingModel") PropertyManageBindingModel
              propertyManageBindingModel, @PathVariable("id") Long id) {
 
-        boolean rejected = propertyService.findPropertyById(id).isRejected();
+        Property property = propertyService.findPropertyById(id);
         propertyService.deleteProperty(id, true);
 
-        if (rejected) {
+        if (property.isRejected()) {
             return new ModelAndView("redirect:/administration/property/rejected/" + propertyManageBindingModel.getEntityId() + "#rejected-registrations");
         } else {
-            return new ModelAndView("redirect:/administration/property/active/" + propertyManageBindingModel.getEntityId() + "#active-registrations");
+            return new ModelAndView("redirect:/administration/property/active/" + property.getResidentialEntity().getId() + "#active-registrations");
         }
     }
-
 
     /**
      * Method returns a ResidentialEntity

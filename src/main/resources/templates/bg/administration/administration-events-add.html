@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'>
 <head>
 
@@ -17,7 +17,7 @@
     <link href="/css/our-home.css" rel="stylesheet">
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -55,9 +55,9 @@
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
-            <h3>Създаване на нов сигнал</h3>
+            <h3>Създаване на ново събитие</h3>
             <div class="err-msg" th:if="${addFailed}">
-                <h5 class="text-light">Неуспешно създаване на сигнал!</h5>
+                <h5 class="text-light">Неуспешно създаване на събитие!</h5>
                 <p class="text-light" th:text="${errorMsg}"></p>
             </div>
             <h4 class="text-light"><i class="fa-regular fa-pen-to-square"></i></h4>
@@ -108,7 +108,10 @@
                            th:errorclass="bg-danger"
                            th:field="*{timeFrom}"
                            th:value="${eventAddBindingModel.getTimeFrom()}"
-                           type="time">
+                           placeholder="HH:MM"
+                           pattern="^([01]\d|2[0-3]):([0-5]\d)$"
+                           required
+                    >
                 </fieldset>
                 <fieldset>
                     <label for="timeTo"><b>Краен час</b></label>
@@ -119,7 +122,9 @@
                            th:errorclass="bg-danger"
                            th:field="*{timeTo}"
                            th:value="${eventAddBindingModel.getTimeTo()}"
-                           type="time">
+                           placeholder="HH:MM"
+                           pattern="^([01]\d|2[0-3]):([0-5]\d)$"
+                    >
                 </fieldset>
                 <fieldset>
                     <button class="orange-button" id="form-submit"

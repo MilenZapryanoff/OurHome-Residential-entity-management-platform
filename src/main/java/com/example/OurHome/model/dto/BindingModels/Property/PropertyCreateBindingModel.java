@@ -1,10 +1,15 @@
 package com.example.OurHome.model.dto.BindingModels.Property;
 
 import com.example.OurHome.model.Entity.PropertyClass;
+import com.example.OurHome.model.dto.BindingModels.AddressBook.AdultBindingModel;
+import com.example.OurHome.model.dto.BindingModels.AddressBook.ChildBindingModel;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PropertyCreateBindingModel {
 
@@ -16,12 +21,6 @@ public class PropertyCreateBindingModel {
     @Positive(message = "Floor № must be a positive digit")
     private String floor;
 
-    @PositiveOrZero(message = "Number of adults must be a positive digit or 0")
-    private int numberOfAdults;
-
-    @PositiveOrZero(message = "Number of children must be a positive digit or 0")
-    private int numberOfChildren;
-
     @PositiveOrZero(message = "Number of pets must be a positive digit or 0")
     private int numberOfPets;
 
@@ -31,7 +30,17 @@ public class PropertyCreateBindingModel {
 
     private Long propertyType;
 
+    private String ownerFullName;
+    private String ownerPhone;
+    private String ownerEmail;
+
+    private List<AdultBindingModel> adults;
+    private List<ChildBindingModel> children;
+
+
     public PropertyCreateBindingModel() {
+        adults = new ArrayList<>();
+        children = new ArrayList<>();
     }
 
     public int getNumber() {
@@ -48,22 +57,6 @@ public class PropertyCreateBindingModel {
 
     public void setFloor(String floor) {
         this.floor = floor;
-    }
-
-    public int getNumberOfAdults() {
-        return numberOfAdults;
-    }
-
-    public void setNumberOfAdults(int numberOfAdults) {
-        this.numberOfAdults = numberOfAdults;
-    }
-
-    public int getNumberOfChildren() {
-        return numberOfChildren;
-    }
-
-    public void setNumberOfChildren(int numberOfChildren) {
-        this.numberOfChildren = numberOfChildren;
     }
 
     public int getNumberOfPets() {
@@ -96,5 +89,45 @@ public class PropertyCreateBindingModel {
 
     public void setPropertyClass(PropertyClass propertyClass) {
         this.propertyClass = propertyClass;
+    }
+
+    public String getOwnerFullName() {
+        return ownerFullName;
+    }
+
+    public void setOwnerFullName(String ownerFullName) {
+        this.ownerFullName = ownerFullName;
+    }
+
+    public String getOwnerPhone() {
+        return ownerPhone;
+    }
+
+    public void setOwnerPhone(String ownerPhone) {
+        this.ownerPhone = ownerPhone;
+    }
+
+    public String getOwnerEmail() {
+        return ownerEmail;
+    }
+
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail;
+    }
+
+    public List<AdultBindingModel> getAdults() {
+        return adults;
+    }
+
+    public void setAdults(List<AdultBindingModel> adults) {
+        this.adults = adults;
+    }
+
+    public List<ChildBindingModel> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<ChildBindingModel> children) {
+        this.children = children;
     }
 }

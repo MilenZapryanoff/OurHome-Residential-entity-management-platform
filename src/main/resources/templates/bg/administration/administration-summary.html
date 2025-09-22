@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'
 >
 <head>
@@ -19,7 +19,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -160,15 +160,13 @@
                                      data-bs-parent="#accordionExample"
                                      id="collapseTwo">
                                     <div class="accordion-body">
-                                        <p>Всеки собственик на имот от Етажната собственост (ЕС) може да се регистрира в
-                                            платформата за да получава актуална информация касаеща неговия имот.
+                                        <p>Всеки собственик/ползвател на имот от Етажната собственост (ЕС) може да се регистрира в
+                                            платформата за да получава актуална информация касаеща неговия самостоятелен обект.
                                         </p>
-                                        <p>В случай, че при регистрацията на имот собственика посочи данни, различни от
+                                        <p>В случай, че при регистрацията на имот потребителят посочи данни, различни от
                                             предварително въведенети от домоуправител данни ще е необходима
                                             допълнителна валидация на регистрацията от Ваша страна.
-                                        <p>При съвпадение в данните от заявката за регистрация потребителят ще бъде
-                                            автоматично
-                                            вписан, като собственик на имота.
+                                        <p>При съвпадение в данните от заявката за регистрация потребителя ще получи достъп до данните за избрания самостоятелен обект
                                         </p>
 
                                         <hr>
@@ -181,7 +179,7 @@
                                                     th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId()) == 0}">0</strong>
                                             чакащи заявки за регистрация на имот към вашата Етажна собственост (ЕС).
                                             <br>
-                                            <a th:href="@{/administration/property/owners/pending/{id}(id=${residentialEntity.getId()})}"
+                                            <a th:href="@{/administration/owners/pending/{id}(id=${residentialEntity.getId()})}"
                                                th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId()) > 0}">Преглед
                                                 на заявки!</a>
                                         </p>
@@ -327,7 +325,6 @@
                                         <br>
                                     </li>
                                 </ul>
-
                             </div>
                         </div>
                     </div>
@@ -358,7 +355,6 @@
 <script src="/js/buttons.js"></script>
 <script src="/js/confirm.js"></script>
 <script src="/js/residence-picture.js"></script>
-
 
 </body>
 </html>

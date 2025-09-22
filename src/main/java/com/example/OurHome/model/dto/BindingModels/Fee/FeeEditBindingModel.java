@@ -1,9 +1,11 @@
 package com.example.OurHome.model.dto.BindingModels.Fee;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class FeeEditBindingModel {
 
@@ -42,6 +44,10 @@ public class FeeEditBindingModel {
     @NotNull(message = "Fund Repair cannot be null")
     @DecimalMin(value = "0.0", message = "Fee must be greater than or equal to zero")
     private BigDecimal fundRepairNonHabitable;
+
+    @NotNull
+    @Column
+    private int monthlyFeeDate;
 
     public BigDecimal getFixedFeeHabitable() {
         return fixedFeeHabitable;
@@ -113,5 +119,14 @@ public class FeeEditBindingModel {
 
     public void setFundRepairNonHabitable(BigDecimal fundRepairNonHabitable) {
         this.fundRepairNonHabitable = fundRepairNonHabitable;
+    }
+
+    @NotNull
+    public int getMonthlyFeeDate() {
+        return monthlyFeeDate;
+    }
+
+    public void setMonthlyFeeDate(@NotNull int monthlyFeeDate) {
+        this.monthlyFeeDate = monthlyFeeDate;
     }
 }

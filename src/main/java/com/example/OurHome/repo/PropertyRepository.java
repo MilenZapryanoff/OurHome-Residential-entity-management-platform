@@ -90,5 +90,4 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
 
     @Query("SELECT COUNT(p) FROM properties p where p.residentialEntity.id=:id AND p.propertyChangeRequest is not null AND p.propertyChangeRequest.isRejected = false")
     Long countPropertiesWithActiveChangeRequest(@Param("id") Long id);
-
 }

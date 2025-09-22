@@ -19,7 +19,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -373,13 +373,13 @@
                                                     <div class="section" style="padding: 3px 15px">
                                                         <p><b>A.</b> habitable property</p>
                                                         <div class="info-box">
-                                                            <i th:text="${propertyType.getFundRepairHabitable()} + ' лв.'"></i>
+                                                            <i th:text="${propertyType.getFundRepairHabitable()} + ' EUR'"></i>
                                                         </div>
                                                     </div>
                                                     <div class="section" style="padding: 3px 15px">
                                                         <p><b>B.</b> non-habitable property</p>
                                                         <div class="info-box">
-                                                            <i th:text="${propertyType.getFundRepairNotHabitable()} + ' лв.'"></i>
+                                                            <i th:text="${propertyType.getFundRepairNotHabitable()} + ' EUR'"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -387,8 +387,48 @@
                                             <p class="text-secondary"><i class="fa-solid fa-house"></i><small>
                                                 applies
                                                 per property type</small></p>
-
                                         </li>
+                                        <li class="text-black">
+                                            <b>8.</b> Fee charging date
+                                            <p class="text-secondary">Select the day of the month on which the fee will be charged!</p>
+
+                                            <fieldset>
+                                                <p class="text-danger"
+                                                   th:errors="*{monthlyFeeDate}"
+                                                   th:if="${#fields.hasErrors('monthlyFeeDate')}">Other fee error message</p>
+
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <input
+                                                            class="form-control-sm flex-grow-1"
+                                                            id="monthlyFeeDate"
+                                                            max="31"
+                                                            min="1"
+                                                            oninput="updateMonthlyFeeLabel(this.value)"
+                                                            required
+                                                            step="1"
+                                                            th:errorclass="bg-danger"
+                                                            th:field="*{monthlyFeeDate}"
+                                                            th:value="${feeEditBindingModel.monthlyFeeDate != null ? feeEditBindingModel.monthlyFeeDate : 1}"
+                                                            type="range"
+                                                    />
+                                                    <span class="badge text-bg-danger"
+                                                          id="monthlyFeeDateLabel"
+                                                          style="min-width:3ch; text-align:center;">01</span>
+                                                </div>
+                                                <input id="originalMonthlyFeeDate"
+                                                       th:value="${feeEditBindingModel.monthlyFeeDate != null ? feeEditBindingModel.monthlyFeeDate : 1}"
+                                                       type="hidden">
+                                                <label class="text-secondary mt-1 d-block" for="monthlyFeeDate"></label>
+                                            </fieldset>
+
+                                            <p class="text-secondary-emphasis">
+                                                <i class="fa-solid fa-house"></i>
+                                                <small>Drag to select a day of the month (from 01 to 31).
+                                                    <p class="text-danger-emphasis">Fees are charged at the end of the selected day!</p>
+                                                </small>
+                                            </p>
+                                        </li>
+
                                         <li class="text-danger"><i
                                                 class="fa-solid fa-info-circle"></i>
                                             Applying monthly fees
@@ -450,7 +490,8 @@
 <script src="/js/counter.js"></script>
 <script src="/js/custom.js"></script>
 <script src="/js/notifications.js"></script>
-
+<script src="/js/monthlyFeeDateSlider.js"></script>
+<script src="/js/monthlyFeeChangeToPastHalt.js"></script>
 
 </body>
 </html>

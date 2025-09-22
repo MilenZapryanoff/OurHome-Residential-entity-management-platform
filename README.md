@@ -23,7 +23,7 @@ A platform that allows the registration of both home owners and residential enti
   <li>There are integrated some automatic messages (notifications) for some events, and on next stage there will be also an option for messages from person to person.</li>
   <li>There are no limits of apartments (properties) that one user can have, even in different residential entities. 
   There is also a possibility, one manager to manage different residential entities.</li>
-  <li>Manager can change residential entity data whenever he needs. Also, can delete an residential entity if there are no registered residents in it.</li>
+  <li>Manager can change residential entity data whenever he needs. Also, can delete an residential entity if there are no registered resident in it.</li>
   <li>Messages (notifications) can be archived or deleted.</li>
   <li>Only Residential entity manager can edit a part of property data as number of adults living in apartment, number of children, number of pets, property number and property floor. Also the amount of monthly taxes</li>
   <li>Only owner can view and edin personal property data.</li>
@@ -78,6 +78,17 @@ A platform that allows the registration of both home owners and residential enti
 
 
 <h2>Updates</h2>
+
+<h4>v.2.25.0922</h4>
+  <ul>
+    <li>1. Added setting for every Residential entity on whick the automatic fee generation to be executed. Now the manager can choose a day of the month on which this will happen.</li>
+    <li>2. Address book implemented. Now manager can manage the address book data for every property. Data for adults, children and pets is now supported. Instead of manually enter number of occupants, these numbers are automatically calculated according to de entered data in address book.</li>
+    <li>3. Now property owners with access to property in a Residential entity can also manage address book data.</li>
+    <li>4. Bug fixes and improvements</li>
+    <li>5. Additional DB tables and associations added.</li>
+    <li>6. Email notifications for events implemented.</li>
+    <li>7. Email notifications for monthly fees improved.</li>
+</ul>
 
 <h4>v.2.25.0216</h4>
   <ul>

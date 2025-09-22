@@ -8,7 +8,7 @@
             <a th:href="@{/administration/summary/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/summary/')} ? 'text-danger' : ''" class="fa-solid fa-sliders"></i><span>Status</span></a>
         </li>
         <li class="menu-bar__item">
-            <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/owners/')} ? 'text-danger' : ''" class="fa-solid fa-users"></i><span>Owners</span></a>
+            <a th:href="@{/administration/owners/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/owners/')} ? 'text-danger' : ''" class="fa-solid fa-users"></i><span>Users</span></a>
         </li>
         <li class="menu-bar__item">
             <a th:href="@{/administration/property/active/{id}(id=${residentialEntity.getId()})}" class="menu-bar__link"><i th:classappend="${currentURI.startsWith('/administration/property/')} ? 'text-danger' : ''" class="fa-solid fa-building"></i><span>Properties</span></a>

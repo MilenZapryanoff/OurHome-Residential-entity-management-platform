@@ -18,7 +18,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
     <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml"/>
     <link href="/favicon.ico" rel="shortcut icon"/>
@@ -66,20 +66,16 @@
 <div class="page-content">
     <!--start of Sub-menu-->
     <div class="menu-container">
-        <div th:replace="~{/bg/fragments/adm-submenu}"></div>
+        <div th:replace="~{/en/fragments/adm-submenu}"></div>
     </div>
     <div class="content">
         <div class="container">
             <div class="text-center administration-header">
                 <h4 class="category">Individual units management</h4>
                 <br>
-                <p>In this section, you will find information on all Individual units within the digital
-                    condominium.</p>
-                <p>Here, you can manage both registration requests for Individual unit owners and requests for
-                    parameter changes</p>
-                <p>In the 'Property categories' menu, you can create a categorization of the Individual units within
-                    the digital condominium, which will allow you to use different rates when calculating the monthly
-                    fees.</p>
+                <p>This section provides information about all individual properties that are part of the Digital Condominium.</p>
+                <p>Here, you can manage all Digital unit data change requests that require verification by the Condominium manager.</p>
+                <p>In the 'Property categories' menu, you can create a categorization of the individual properties within the Digital Condominium, which will allow you to apply different rates when calculating the monthly fees.</p>
             </div>
 
             <div class="administration">
@@ -94,25 +90,9 @@
                         </div>
                     </a>
                     <a class="button nav-link"
-                       th:href="@{/administration/property/owners/pending/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><span>Owner registration requests</span>
-                            <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
-                                 th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
-                            </sup>
-                        </div>
-                    </a>
-                    <a class="button nav-link"
-                       th:href="@{/administration/property/owners/rejected/{id}(id=${residentialEntity.getId()})}">
-                        <div class="text-center"><span>Rejected owner registration requests</span>
-                            <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
-                                 th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
-                            </sup>
-                        </div>
-                    </a>
-                    <a class="button nav-link"
                        th:href="@{/administration/property/change-requests/{id}(id=${residentialEntity.getId()})}">
                         <div class="text-center"><i class="fa-solid fa-users-gear"></i>
-                            <span>Property data change</span>
+                            <span>Property data change requests</span>
                             <sup th:if="${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())} > 0"
                                  th:text="' '+ ${@propertyRepository.countPropertiesWithActiveChangeRequest(residentialEntity.getId())}">
                             </sup>

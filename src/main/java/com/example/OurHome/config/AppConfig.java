@@ -36,13 +36,20 @@ public class AppConfig {
                 mapper.skip(Property::setPropertyType));
 
         modelMapper.typeMap(PropertyCreateBindingModel.class, Property.class).addMappings(mapper ->
-                    mapper.skip(Property::setPropertyType));
+                mapper.skip(Property::setPropertyType));
 
         modelMapper.typeMap(PropertyChangeRequest.class, PropertyEditBindingModel.class).addMappings(mapper ->
-            mapper.skip(PropertyEditBindingModel::setPropertyType));
+                mapper.skip(PropertyEditBindingModel::setPropertyType));
 
         modelMapper.typeMap(PropertyEditBindingModel.class, PropertyChangeRequest.class).addMappings(mapper ->
                 mapper.skip(PropertyChangeRequest::setPropertyType));
+
+        modelMapper.typeMap(Property.class, PropertyEditBindingModel.class).addMappings(mapper -> {
+                    mapper.skip(PropertyEditBindingModel::setOwnerFullName);
+                    mapper.skip(PropertyEditBindingModel::setOwnerEmail);
+                    mapper.skip(PropertyEditBindingModel::setOwnerPhone);
+                }
+        );
 
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
 

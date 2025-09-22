@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'>
 <head>
 
@@ -18,7 +18,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -135,7 +135,7 @@
                                 <p>Имот №</p>
                             </th>
                             <th>
-                                <p>Собственик</p>
+                                <p>Потребител</p>
                             </th>
                             <th>
                                 <p>Сума на месечна такса</p>
@@ -188,16 +188,16 @@
                                    th:text="${property.getOwner().getFirstName()} + ' ' + ${property.getOwner().getLastName()}"></p>
                                 <p th:unless="${property.isObtained()}"><i
                                         class="fa-solid fa-user-large-slash text-secondary"
-                                        title="Not assigned"></i>
+                                        title="Няма регистриран потребител"></i>
                                 </p>
                             </td>
                             <td>
                                 <p th:if="${!property.isValidated()}">Изчаква параметризация</p>
-                                <p th:text="${property.getTotalMonthlyFee()} + ' лв.'"
+                                <p th:text="${property.getTotalMonthlyFee()} + ' EUR'"
                                    th:unless="${!property.isValidated()}"></p>
                             </td>
                             <td th:if="${property.getOverpayment()} > 0">
-                                <p th:text="${property.getOverpayment()} + ' лв.'"></p>
+                                <p th:text="${property.getOverpayment()} + ' EUR'"></p>
                             </td>
                             <td th:unless="${property.getOverpayment()} > 0">
                                 <p>-</p>
@@ -252,10 +252,10 @@
                             </td>
                             <td th:if="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">
                                 <p class="text-danger"
-                                   th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' лв.'"></p>
+                                   th:text="${@propertyFeeRepository.sumOfUnpaidFees(property.getId())} + ' EUR'"></p>
                             </td>
                             <td th:unless="${@propertyFeeRepository.countUnpaidFeesByProperty(property.getId())} > 0">
-                                <p>0.00 лв.</p>
+                                <p>0.00 EUR</p>
                             </td>
                             <td>
                                 <a th:href="@{/administration/fees/details/{id} (id=${property.getId()})}"><img

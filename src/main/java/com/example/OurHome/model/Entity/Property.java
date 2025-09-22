@@ -1,7 +1,6 @@
 package com.example.OurHome.model.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -86,8 +85,12 @@ public class Property {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "property",cascade = CascadeType.REMOVE)
     private List<PropertyFee> propertyFees;
 
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Resident> residents;
+
     public Property() {
         propertyFees = new ArrayList<>();
+        residents = new ArrayList<>();
         this.overpayment = BigDecimal.valueOf(0);
     }
 
@@ -289,5 +292,13 @@ public class Property {
 
     public void setPropertyClass(PropertyClass propertyClass) {
         this.propertyClass = propertyClass;
+    }
+
+    public List<Resident> getResidents() {
+        return residents;
+    }
+
+    public void setResidents(List<Resident> residents) {
+        this.residents = residents;
     }
 }

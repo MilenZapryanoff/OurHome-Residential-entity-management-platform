@@ -76,7 +76,7 @@ public class NotificationServiceImpl implements NotificationService {
                     property.getId(),
                     "new-fee",
                     "Такси",
-                    "Имате начислена нова такса в размер на " + feeAmount + "лв.",
+                    "Имате начислена нова такса в размер на " + feeAmount + " EUR",
                     "Fees",
                     "New monthly fee for " + feeAmount + " BGN."
             ));
@@ -197,7 +197,7 @@ public class NotificationServiceImpl implements NotificationService {
                     property.getId(),
                     "registration-rejection",
                     "Регистрация",
-                    "Отхвърлена заявка за регистрация на самостоятелен обек №" + property.getNumber() + " в състава на етажна собственост с идентификатор: " + property.getResidentialEntity().getId(),
+                    "Отхвърлена заявка за регистрация на самостоятелен обект №" + property.getNumber() + " в състава на етажна собственост с идентификатор: " + property.getResidentialEntity().getId(),
                     "Registration",
                     "Rejected registration for property " + property.getNumber() + " in condominium ID " + property.getResidentialEntity().getId()
             ));

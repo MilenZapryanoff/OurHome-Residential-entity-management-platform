@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'
 >
 <head>
@@ -19,7 +19,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+    <link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -70,6 +70,15 @@
     </div>
     <div class="content">
         <div class="container">
+            <div class="text-center administration-header">
+                <h4 class="category">Управление на достъп до информация</h4>
+                <br>
+                <p>В секцията ще откриете информация за всички потребители с достъп до Дигиталната етажна
+                    собственост.</p>
+                <p>От меню <b>Чакащи заявки за регистрация</b> може да управлявате входящите заявки за регистрация на
+                    потребители до информация за самостоятелни обекти.</p>
+            </div>
+
             <!--Owners table-->
             <div class="administration">
                 <!--Submenu nav buttons-->
@@ -77,31 +86,46 @@
                     <a class="button active nav-link" href=#active-registrations
                        id="active-registrations">
                         <div class="text-center">
-                            <i class="fa-solid fa-user-check"></i> <span>Потребители с достъп до Дигитална ЕС</span>
+                            <i class="fa-solid fa-user-check"></i>
+                            <span>Всички потребители с достъп до Дигитална ЕС</span>
                         </div>
                     </a>
-
+                    <a class="button nav-link"
+                       th:href="@{/administration/owners/pending/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-user-plus"></i> <span>Чакащи заявки за регистрация</span>
+                            <sup th:if="${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())} > 0"
+                                 th:text="'  '+ ${@propertyRepository.countPendingPropertyObtainsByResidentialEntity(residentialEntity.getId())}">
+                            </sup>
+                        </div>
+                    </a>
+                    <a class="button nav-link"
+                       th:href="@{/administration/owners/rejected/{id}(id=${residentialEntity.getId()})}">
+                        <div class="text-center"><i class="fa-solid fa-user-xmark"></i> <span>Отхврълени заявки за регистрация</span>
+                            <sup th:if="${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())} > 0"
+                                 th:text="'  '+ ${@propertyRepository.countRejectedPropertiesByResidentialEntity(residentialEntity.getId())}">
+                            </sup>
+                        </div>
+                    </a>
                 </div>
 
                 <div class="info-table bottom-rounded">
                     <h4 class="category text-center">Списък на потребители с достъп до Дигитална ЕС</h4>
                     <br>
-                    <p>Този регистър съдържа информация за всички регистрирани потребители с достъп до настоящата
+                    <p>Регистъра съдържа информация за всички регистрирани потребители с достъп до настоящата
                         Дигиталната Етажна Собственост.</p>
-                    <p>Всеки потребител с достъп до Дигиталната Етажна Собственост може да заявки собственост върху
-                        Дигитален имот.</p>
-                    <p>Всички заявки за регистрации на собственици на дигитални имоти, за които е сработил защитен
+                    <p>Всеки потребител с достъп до Дигиталната Етажна Собственост може да заявки достъп до
+                        информация за даден Дигитален имот.</p>
+                    <p>Всички заявки за достъп до информация, за които е сработил защитен
                         механизъм
                         за верификация може да откриете в секция <a
-                                th:href="@{/administration/property/owners/pending/{id}#active-registrations(id=${residentialEntity.getId()})}">Чакащи
-                            заявки</a>.</p>
-                    <p>При одобрение на регистрацията, собствеността върху дигиталния имот се обновява. В случай, че по
-                        някаква причина отхвърлите дадена заявка за регистрация, то собствеността на дигиталния имот
-                        остава
-                        непроменена.</p>
+                                th:href="@{/administration/owners/pending/{id}#active-registrations(id=${residentialEntity.getId()})}">Чакащи
+                            заявки за регистрация</a>.</p>
+                    <p>При одобрение на заявката, на потребителя се предоставя достъп до информацията за конкретния
+                        Дигитален имот. В случай, че отхвърлите заявката, същата се записва в регистъра с отхврълените
+                        заявки и потребителя не получава достъп до исканата информация!</p>
                     <p>Информация за всички отхвърлени заявки за регистрации може да откриете в <a
-                            th:href="@{/administration/property/owners/rejected/{id}#active-registrations(id=${residentialEntity.getId()})}">Отхвърлени
-                        заявки</a>.</p>
+                            th:href="@{/administration/owners/rejected/{id}#active-registrations(id=${residentialEntity.getId()})}">Отхвърлени
+                        заявки за регистрация</a>.</p>
                     <br>
                     <p>Като домоуправител може да изпращате съобщения до всеки един потребител и да управлявате
                         достъпа на потребителите до дигиталната етажна собственост, като им предоставяте специални
@@ -131,14 +155,16 @@
                     </div>
 
                     <!--Start of table-->
-                    <p class="text-center" th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} == 0">Няма регистрирани
+                    <p class="text-center"
+                       th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} == 0">
+                        Няма регистрирани
                         потребители</p>
                     <table class="table text-center"
                            id="pending-requests"
                            th:if="${@propertyRepository.countAllPropertiesByResidentialEntity(residentialEntity.getId())} > 0">
                         <tr>
                             <th>
-                                <p>Собвеник на имот №</p>
+                                <p>Достъп до имот №</p>
                             </th>
                             <th>
                                 <p>Профилна снимка</p>
@@ -188,8 +214,11 @@
                                 <p th:text="${resident.getEmail()}"></p>
                             </td>
                             <td>
-                                <p th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}" th:text="Потребител"></p>
-                                <p class="text-danger" th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}" th:text="Модератор"></p>
+                                <p th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) == 0}"
+                                   th:text="Потребител"></p>
+                                <p class="text-danger"
+                                   th:if="${@residentialEntityRepository.isUserModeratorOfResidentialEntity(residentialEntity.getId(), resident.getId()) > 0}"
+                                   th:text="Модератор"></p>
                             </td>
                             <td>
                                 <a th:href="@{/administration/owners/details/{id}(id=${resident.getId()}, resId=${residentialEntity.getId()})}">

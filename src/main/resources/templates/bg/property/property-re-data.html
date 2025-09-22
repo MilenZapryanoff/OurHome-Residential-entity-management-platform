@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'
+<html lang='bg'
       xmlns:th='http://www.thymeleaf.org'>
 <head>
 
@@ -18,7 +18,7 @@
     <link href="/css/owl.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/navbar.css" rel="stylesheet">
-    <link href="https://unpkg.com/swiper@7/swiper-bundle.min.css" rel="stylesheet"/>
+<link href="/css/swiper-bundle.min.css" rel="stylesheet"/>
 
     <!-- Favicon -->
     <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
@@ -175,8 +175,13 @@
                                         <h5>Компоненти на таксата (обитаеми самостоятелни обекти)</h5>
                                     </li>
                                     <li class="text-black">
+                                        <p><i class="fa-solid fa-calendar-days"></i> Дата от месеца за генериране на месечната такса: <b
+                                                th:text="${property.getResidentialEntity().getFee().getMonthlyFeeDate()}"></b>
+                                        </p>
+                                    </li>
+                                    <li class="text-black">
                                         <p>Фиксирана такса: <b
-                                                th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' лв.'"></b>
+                                                th:text="${property.getResidentialEntity().getFee().getFixedFeeHabitable()} + ' EUR'"></b>
                                         </p>
                                         <p class="text-secondary">
                                             <i class="fa-solid fa-house-chimney"></i><small> прилага се на самостоятелен обект</small>
@@ -184,7 +189,7 @@
                                     </li>
                                     <li class="text-black">
                                         <p>Такса възрастен: <b
-                                                th:text="${property.getResidentialEntity().getFee().getAdultFee()} + ' лв.'"></b>
+                                                th:text="${property.getResidentialEntity().getFee().getAdultFee()} + ' EUR'"></b>
                                         </p>
                                         <p class="text-secondary">
                                             <i class="fa-solid fa-person"></i><small> прилага се на възрастен</small>
@@ -192,7 +197,7 @@
                                     </li>
                                     <li class="text-black">
                                         <p>Такса дете: <b
-                                                th:text="${property.getResidentialEntity().getFee().getChildFee()} + ' лв.'"></b>
+                                                th:text="${property.getResidentialEntity().getFee().getChildFee()} + ' EUR'"></b>
                                         </p>
                                         <p class="text-secondary">
                                             <i class="fa-solid fa-child"></i><small> прилага се на дете</small>
@@ -200,7 +205,7 @@
                                     </li>
                                     <li class="text-black">
                                         <p>Такса дом. любимец: <b
-                                                th:text="${property.getResidentialEntity().getFee().getPetFee()} + ' лв.'"></b>
+                                                th:text="${property.getResidentialEntity().getFee().getPetFee()} + ' EUR'"></b>
                                         </p>
                                         <p class="text-secondary">
                                             <i class="fa-solid fa-dog"></i><small> прилага се на дом. любимец</small>
@@ -208,7 +213,7 @@
                                     </li>
                                     <li class="text-black">
                                         <p>Допълнителна такса: <b
-                                                th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' лв.'"></b>
+                                                th:text="${property.getResidentialEntity().getFee().getAdditionalFeeHabitable()} + ' EUR'"></b>
                                         </p>
                                         <p class="text-secondary">
                                             <i class="fa-solid fa-gem"></i><small> прилага се на самостоятелен обект</small>
@@ -219,7 +224,7 @@
                                     </li>
                                     <li class="text-black">
                                         <p>Фиксирана такса: <b
-                                                th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' лв.'"></b>
+                                                th:text="${property.getResidentialEntity().getFee().getFixedFeeNonHabitable()} + ' EUR'"></b>
                                         </p>
                                         <p class="text-secondary">
                                             <i class="fa-solid fa-house"></i><small> прилага се на самостоятелен обект</small>
@@ -227,7 +232,7 @@
                                     </li>
                                     <li class="text-black">
                                         <p>Друга такса: <b
-                                                th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' лв.'"></b>
+                                                th:text="${property.getResidentialEntity().getFee().getAdditionalFeeNonHabitable()} + ' EUR'"></b>
                                         </p>
                                         <p class="text-secondary">
                                             <i class="fa-solid fa-gem"></i><small> прилага се на самостоятелен обект</small>
@@ -238,7 +243,7 @@
                                     </li>
                                     <li class="text-black">
                                         <p>Специфична за имота такса: <b
-                                                th:text="${property.getAdditionalPropertyFee()} + ' лв.'"></b></p>
+                                                th:text="${property.getAdditionalPropertyFee()} + ' EUR'"></b></p>
                                         <p class="text-secondary">
                                             <i class="fa-solid fa-gears"></i><small> прилага се само за този
                                             самостоятелен обект</small>
